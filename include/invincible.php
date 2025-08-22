@@ -1,5 +1,6 @@
 <?php
-require_once __DIR__ . '/bootstrap_pdo.php';
+require_once __DIR__ . '/runtime_safe.php';
+require_once __DIR__ . '/mysql_compat.php';
 
 
 declare(strict_types = 1);
@@ -45,5 +46,5 @@ function invincible(int $userid, bool $invincible = true)
     $session = $container->get(Session::class);
     $session->set('is-info', "{$user['username']} is $display Invincible");
     header('Location: ' . $_SERVER['PHP_SELF'] . '?id=' . $userid);
-    die();
+    app_halt();
 }

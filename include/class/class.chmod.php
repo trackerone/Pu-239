@@ -1,5 +1,6 @@
 <?php
-require_once __DIR__ . '/bootstrap_pdo.php';
+require_once __DIR__ . '/../runtime_safe.php';
+require_once __DIR__ . '/../mysql_compat.php';
 
 
 declare(strict_types = 1);

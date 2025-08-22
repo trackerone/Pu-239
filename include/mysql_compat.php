@@ -1,4 +1,7 @@
 <?php
+require_once __DIR__ . '/runtime_safe.php';
+require_once __DIR__ . '/mysql_compat.php';
+
 if (!defined('MYSQL_COMPAT_LOADED')) define('MYSQL_COMPAT_LOADED', true);
 class MysqlCompat {
     private static $pdo=null,$dsn=null,$user=null,$pass=null,$db=null;

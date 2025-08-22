@@ -1,5 +1,6 @@
 <?php
-require_once __DIR__ . '/bootstrap_pdo.php';
+require_once __DIR__ . '/runtime_safe.php';
+require_once __DIR__ . '/mysql_compat.php';
 
 
 declare(strict_types = 1);
@@ -152,7 +153,7 @@ function sqlerr($file = '', $line = '')
     $the_error = ((is_object($mysqli)) ? mysqli_error($mysqli) : (($___mysqli_res = mysqli_connect_error()) ? $___mysqli_res : false));
     $the_error_no = ((is_object($mysqli)) ? mysqli_errno($mysqli) : (($___mysqli_res = mysqli_connect_errno()) ? $___mysqli_res : false));
     if (!$site_config['db']['debug']) {
-        die();
+        app_halt();
     } elseif ($site_config['paths']['sql_error_log'] && $site_config['db']['debug']) {
         $_error_string = "\n===================================================";
         $_error_string .= "\n Date: " . date('r');
@@ -182,7 +183,7 @@ function sqlerr($file = '', $line = '')
                    <form name='mysql'><textarea rows=\"15\" cols=\"60\">" . htmlsafechars($the_error) . '</textarea></form><br>We apologise for any inconvenience</blockquote></body></html>';
         echo $out;
     }
-    die();
+    app_halt();
 }
 
 /**
