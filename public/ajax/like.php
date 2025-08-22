@@ -1,6 +1,5 @@
 <?php
-require_once __DIR__ . '/../../include/runtime_safe.php';
-require_once __DIR__ . '/../../include/mysql_compat.php';
+require_once __DIR__ . '/bootstrap_pdo.php';
 
 
 declare(strict_types = 1);
@@ -46,11 +45,11 @@ function comment_like_unlike(array $fields, array $user)
     header('content-type: application/json');
     if (!array_key_exists($type, $fields)) {
         echo json_encode(['label' => _('Invalid Data Type')]);
-        app_halt();
+        die();
     }
     if (!is_int($id)) {
         echo json_encode(['label' => _('Invalid ID')]);
-        app_halt();
+        die();
     }
 
     if ($type === 'torrent') {
@@ -104,5 +103,5 @@ function comment_like_unlike(array $fields, array $user)
     $data['class'] = "tot-$id";
 
     echo json_encode($data);
-    app_halt();
+    die();
 }

@@ -1,6 +1,5 @@
 <?php
-require_once __DIR__ . '/../../include/runtime_safe.php';
-require_once __DIR__ . '/../../include/mysql_compat.php';
+require_once __DIR__ . '/bootstrap_pdo.php';
 
 
 declare(strict_types = 1);
@@ -14,13 +13,13 @@ global $container;
 
 if (empty($user)) {
     echo json_encode(['vote' => 'invalid']);
-    app_halt();
+    die();
 }
 $id = (int) $_POST['id'];
 $voted = $_POST['voted'];
 if (empty($id) || !isset($voted)) {
     echo json_encode(['voted' => 'invalid']);
-    app_halt();
+    die();
 }
 $fluent = $container->get(Database::class);
 if ($voted === 'yes') {
@@ -34,7 +33,7 @@ if ($voted === 'yes') {
                ->where('offer_id = ?', $id)
                ->execute();
         echo json_encode(['voted' => 'no']);
-        app_halt();
+        die();
     } catch (Exception $e) {
         // TODO
     }
@@ -45,7 +44,7 @@ if ($voted === 'yes') {
                ->where('offer_id = ?', $id)
                ->execute();
         echo json_encode(['voted' => 0]);
-        app_halt();
+        die();
     } catch (Exception $e) {
         // TODO
     }
@@ -60,10 +59,10 @@ if ($voted === 'yes') {
                ->values($values)
                ->execute();
         echo json_encode(['voted' => 'yes']);
-        app_halt();
+        die();
     } catch (Exception $e) {
         // TODO
     }
 }
 echo json_encode(['voted' => 'invalid']);
-app_halt();
+die();
