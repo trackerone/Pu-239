@@ -1,4 +1,6 @@
 <?php
+require_once __DIR__ . '/runtime_safe.php';
+
 
 declare(strict_types = 1);
 
@@ -62,4 +64,4 @@ echo json_encode([
     'round' => $cleanup['round'],
     'game' => $cleanup['game'],
 ]);
-die();
+app_halt();

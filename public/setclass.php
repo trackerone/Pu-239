@@ -1,4 +1,6 @@
 <?php
+require_once __DIR__ . '/runtime_safe.php';
+
 
 declare(strict_types = 1);
 
@@ -31,7 +33,7 @@ if (isset($_GET['action']) && htmlsafechars($_GET['action']) === 'editclass') {
     $cache = $container->get(Cache::class);
     $cache->delete('chat_users_list_');
     header("Location: {$site_config['paths']['baseurl']}/" . $returnto);
-    die();
+    app_halt();
 }
 
 $HTMLOUT .= "

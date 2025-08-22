@@ -1,4 +1,6 @@
 <?php
+require_once __DIR__ . '/runtime_safe.php';
+
 
 declare(strict_types = 1);
 
@@ -47,7 +49,7 @@ if (empty($user)) {
 } elseif ($user['paranoia'] === 3 && !has_access($viewer['class'], UC_STAFF, 'coder') && $user['id'] != $viewer['id']) {
     stderr(_('Error'), '<span><img src="' . $site_config['paths']['images_baseurl'] . 'smilies/tinfoilhat.gif" alt="' . _('I wear a tin-foil hat!') . '" class="tooltipper" title="' . _('I wear a tin-foil hat!') . '">
        ' . _('This members paranoia settings are at tinfoil hat levels!!!') . ' <img src="' . $site_config['paths']['images_baseurl'] . 'smilies/tinfoilhat.gif" alt="' . _('I wear a tin-foil hat!') . '" class="tooltipper" title="' . _('I wear a tin-foil hat!') . '"></span>');
-    die();
+    app_halt();
 }
 if (isset($_GET['delete_hit_and_run']) && has_access($viewer['class'], UC_STAFF, 'coder')) {
     $delete_me = isset($_GET['delete_hit_and_run']) ? (int) $_GET['delete_hit_and_run'] : 0;
@@ -62,7 +64,7 @@ if (isset($_GET['delete_hit_and_run']) && has_access($viewer['class'], UC_STAFF,
         stderr(_('Error'), _('H&R not deleted!'));
     }
     header("Location: {$_SERVER['PHP_SELF']}?id={$user['id']}&completed=1");
-    die();
+    app_halt();
 }
 $session = $container->get(Session::class);
 if (isset($_GET['force_logout']) && ($viewer['id'] != $user['id'] && has_access($viewer['class'], UC_STAFF, 'coder') || has_access($viewer['class'], UC_MAX, ''))) {

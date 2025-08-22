@@ -1,4 +1,6 @@
 <?php
+require_once __DIR__ . '/runtime_safe.php';
+
 
 declare(strict_types = 1);
 
@@ -480,7 +482,7 @@ class User
         }
         if ($redirect) {
             header('Location: ' . $this->site_config['paths']['baseurl'] . '/login.php');
-            die();
+            app_halt();
         }
     }
 
@@ -560,7 +562,7 @@ class User
         }
         $this->session->set('is-success', _('Password has been reset'));
         header('Location: ' . $this->site_config['paths']['baseurl']);
-        die();
+        app_halt();
     }
 
     /**

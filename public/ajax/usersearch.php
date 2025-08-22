@@ -1,4 +1,6 @@
 <?php
+require_once __DIR__ . '/runtime_safe.php';
+
 
 declare(strict_types = 1);
 
@@ -16,9 +18,9 @@ if (!empty($term)) {
     $users = $users_class->search_by_username($term);
     if (!empty($users)) {
         echo json_encode($users);
-        die();
+        app_halt();
     }
 }
 $status = ['data' => _('Invalid Request')];
 echo json_encode($status);
-die();
+app_halt();

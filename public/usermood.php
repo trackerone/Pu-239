@@ -1,4 +1,6 @@
 <?php
+require_once __DIR__ . '/runtime_safe.php';
+
 
 declare(strict_types = 1);
 
@@ -11,7 +13,7 @@ global $container, $site_config;
 $HTMLOUT = '';
 
 if (!isset($user['id'])) {
-    die(_('log in to use this feature!'));
+    app_halt(_('log in to use this feature!'));
 }
 $more = $user['perms'] & UNLOCK_MORE_MOODS ? 2 : 1;
 if (isset($_GET['id'])) {
@@ -37,7 +39,7 @@ if (isset($_GET['id'])) {
       // -->
       </script>";
     } else {
-        die(_('Hmmm. Invalid Mood choice.'));
+        app_halt(_('Hmmm. Invalid Mood choice.'));
     }
 }
 $body_class = 'background-16 skin-2';

@@ -1,4 +1,6 @@
 <?php
+require_once __DIR__ . '/runtime_safe.php';
+
 
 declare(strict_types = 1);
 
@@ -25,7 +27,7 @@ $nfo = $torrent->get_items([
     'id',
 ], $id);
 if (empty($nfo) || empty($nfo['nfo'])) {
-    die(_('Puke'));
+    app_halt(_('Puke'));
 }
 
 $HTMLOUT = "

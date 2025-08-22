@@ -1,4 +1,6 @@
 <?php
+require_once __DIR__ . '/runtime_safe.php';
+
 
 declare(strict_types = 1);
 
@@ -72,7 +74,7 @@ if ($user['tenpercent'] === 'no') {
 }
 if ($user['tenpercent'] === 'yes') {
     stderr(_('Error'), 'It appears that you have already used your 10% addition');
-    die();
+    app_halt();
 }
 $HTMLOUT .= "<h1 class='has-text-centered'>10&#37;</h1>" . main_div("
 <p><b>How it works:</b></p>

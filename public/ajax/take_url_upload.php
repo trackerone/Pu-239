@@ -1,4 +1,6 @@
 <?php
+require_once __DIR__ . '/runtime_safe.php';
+
 
 declare(strict_types = 1);
 
@@ -15,13 +17,13 @@ global $container, $site_config;
 header('content-type: application/json');
 if (empty($user['id'])) {
     echo json_encode(['msg' => _('Invalid ID')]);
-    die();
+    app_halt();
 }
 
 $url = $_POST['url'];
 if (!filter_var($url, FILTER_VALIDATE_URL)) {
     echo json_encode(['msg' => _('This does not appear to be a valid URL.')]);
-    die();
+    app_halt();
 }
 $username = $user['username'];
 $SaLt = $site_config['salt']['one'];
@@ -43,17 +45,17 @@ make_month(BITBUCKET_DIR);
 $image = fetch($url);
 if (!$image) {
     echo json_encode(['msg' => _('There was an error trying to fetch the image.')]);
-    die();
+    app_halt();
 }
 if (!file_put_contents($temppath, $image)) {
     echo json_encode(['msg' => _('There was an error trying to save the image to BitBucket.')]);
-    die();
+    app_halt();
 }
 
 $it1 = exif_imagetype($temppath);
 if (!in_array($it1, $site_config['images']['exif'])) {
     echo json_encode(['msg' => _('Invalid file extension. jpg, gif, png and webp only.')]);
-    die();
+    app_halt();
 }
 switch ($it1) {
     case 1:
@@ -74,12 +76,12 @@ $path = $bucketdir . $USERSALT . '_' . $rand . $ext;
 $pathlink = $bucketlink . $USERSALT . '_' . $rand . $ext;
 if (!rename($temppath, $path)) {
     echo json_encode(['msg' => _('Upload failed to save image.')]);
-    die();
+    app_halt();
 }
 
 if (!file_exists($path)) {
     echo json_encode(['msg' => _('Upload failed to save image.')]);
-    die();
+    app_halt();
 }
 $image_proxy = $container->get(ImageProxy::class);
 $image_proxy->optimize_image($path, '', false);
@@ -90,8 +92,8 @@ if (!empty($image)) {
         'msg' => _('Success! Paste the following url to Poster.'),
         'url' => $image,
     ]);
-    die();
+    app_halt();
 } else {
     echo json_encode(['msg' => _('Unknown failure occurred')]);
-    die();
+    app_halt();
 }

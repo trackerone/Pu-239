@@ -1,4 +1,6 @@
 <?php
+require_once __DIR__ . '/runtime_safe.php';
+
 
 declare(strict_types = 1);
 
@@ -18,7 +20,7 @@ if (empty($_GET['id'])) {
     $session = $container->get(Session::class);
     $session->set('is-warning', 'Invalid Information');
     header("Location: {$site_config['paths']['baseurl']}/index.php");
-    die();
+    app_halt();
 }
 $id = (int) $_GET['id'];
 if (!is_valid_id($id)) {

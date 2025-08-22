@@ -1,4 +1,6 @@
 <?php
+require_once __DIR__ . '/runtime_safe.php';
+
 
 declare(strict_types = 1);
 
@@ -12,13 +14,13 @@ global $container;
 
 if (empty($user) || $user['class'] < UC_STAFF) {
     echo json_encode(['pick' => 'csrf']);
-    die();
+    app_halt();
 }
 $pick = (int) $_POST['pick'];
 $id = (int) $_POST['id'];
 if (!isset($pick) || empty($id)) {
     echo json_encode(['pick' => 'invalid']);
-    die();
+    app_halt();
 }
 
 $staff_picks = $pick === 0 ? TIME_NOW : 0;
@@ -36,9 +38,9 @@ if ($result) {
     $cache->delete('staff_picks_');
     $data['staff_pick'] = $staff_picks;
     echo json_encode($data);
-    die();
+    app_halt();
 } else {
     $data['staff_pick'] = 'fail';
     echo json_encode($data);
-    die();
+    app_halt();
 }

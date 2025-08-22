@@ -1,4 +1,6 @@
 <?php
+require_once __DIR__ . '/runtime_safe.php';
+
 
 declare(strict_types = 1);
 
@@ -37,7 +39,7 @@ if (isset($_GET['clear_new']) && $_GET['clear_new'] == 1) {
     ];
     $users_class->update($set, $user['id']);
     header("Location: {$site_config['paths']['baseurl']}/browse.php");
-    die();
+    app_halt();
 }
 
 $count = $fluent->from('torrents AS t')

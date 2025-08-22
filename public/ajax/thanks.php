@@ -1,4 +1,6 @@
 <?php
+require_once __DIR__ . '/runtime_safe.php';
+
 
 declare(strict_types = 1);
 
@@ -14,13 +16,13 @@ global $container;
 if (empty($_POST)) {
     stderr(_('Error'), _('Access Not Allowed'));
     header("Location: {$site_config['paths']['baseurl']}");
-    die();
+    app_halt();
 }
 
 if (!isset($user)) {
     stderr(_('Error'), _("You can't add a thank you on your own torrent"));
     header("Location: {$site_config['paths']['baseurl']}");
-    die();
+    app_halt();
 }
 
 $uid = $user['id'];

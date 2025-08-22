@@ -1,4 +1,6 @@
 <?php
+require_once __DIR__ . '/runtime_safe.php';
+
 
 declare(strict_types = 1);
 
@@ -112,7 +114,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 } else {
     header('Location: 404.html');
-    die();
+    app_halt();
 }
 
 $title = _('New Announcement');

@@ -1,4 +1,6 @@
 <?php
+require_once __DIR__ . '/runtime_safe.php';
+
 
 declare(strict_types = 1);
 
@@ -28,7 +30,7 @@ $stdfoot = [
 ];
 $id = $_GET['id'];
 if (empty($id)) {
-    die();
+    app_halt();
 }
 $id = (int) $id;
 $cache = $container->get(Cache::class);
@@ -39,7 +41,7 @@ if ((isset($_GET['unedit']) && $_GET['unedit'] == 1) && $user['class'] >= UC_STA
         $returl .= '&returnto=' . urlencode($_POST['returnto']);
     }
     header("Refresh: 1; url=$returl");
-    die();
+    app_halt();
 }
 $fluent = $container->get(Database::class);
 $row = $fluent->from('torrents')

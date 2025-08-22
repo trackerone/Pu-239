@@ -1,4 +1,6 @@
 <?php
+require_once __DIR__ . '/runtime_safe.php';
+
 
 declare(strict_types = 1);
 
@@ -22,7 +24,7 @@ if (empty($user) || !has_access($user['class'], UC_SYSOP, 'coder')) {
     write_log($user['username'] . ' has attempted to access Adminer');
     write_info($user['username'] . ' has attempted to access a Staff Page');
     header("Location: {$site_config['paths']['baseurl']}");
-    die();
+    app_halt();
 } else {
     write_info($user['username'] . ' has accessed a Staff Page: Adminer');
     $html = "<iframe src='{$site_config['paths']['baseurl']}/ajax/view_sql.php?username={$user['username']}&db={$site_config['db']['database']}' id='iframe_adminer' name='iframe_adminer' onload='resizeIframe(this)' class='iframe'></iframe>";

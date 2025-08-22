@@ -1,4 +1,6 @@
 <?php
+require_once __DIR__ . '/runtime_safe.php';
+
 
 declare(strict_types = 1);
 
@@ -64,7 +66,7 @@ if ($action === 'add') {
         ];
         $users_class->update($set, $userid);
         header("Refresh: 0; url=userdetails.php?id=$userid&viewcomm=$newid#comm$newid");
-        die();
+        app_halt();
     } else {
         $userid = (int) $_GET['userid'];
         if (!is_valid_id($userid)) {
@@ -141,7 +143,7 @@ if ($action === 'add') {
         } else {
             header("Location: {$_SERVER['PHP_SELF']}?id={$userid}#comments");
         }
-        die();
+        app_halt();
     }
     $referer = !empty($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : '';
     $HTMLOUT .= '
@@ -200,7 +202,7 @@ if ($action === 'add') {
     } else {
         header("Location: {$_SERVER['PHP_SELF']}?id={$userid}#comments");
     }
-    die();
+    app_halt();
 } elseif ($action === 'vieworiginal') {
     if (!has_access($user['class'], UC_STAFF, 'coder')) {
         stderr(_('Error'), 'Permission denied.');
@@ -234,4 +236,4 @@ if ($action === 'add') {
 } else {
     stderr(_('Error'), 'Unknown action');
 }
-die();
+app_halt();

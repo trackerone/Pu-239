@@ -1,4 +1,6 @@
 <?php
+require_once __DIR__ . '/runtime_safe.php';
+
 
 declare(strict_types = 1);
 
@@ -12,7 +14,7 @@ $user = check_user_status();
 global $container, $site_config;
 
 if (empty($_POST['id']) && empty($_GET['id'])) {
-    die();
+    app_halt();
 }
 $id = !empty($_GET['id']) ? (int) $_GET['id'] : (int) $_POST['id'];
 if (!is_valid_id($id)) {

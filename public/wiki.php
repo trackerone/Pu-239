@@ -1,4 +1,6 @@
 <?php
+require_once __DIR__ . '/runtime_safe.php';
+
 
 declare(strict_types = 1);
 
@@ -160,7 +162,7 @@ if (isset($_GET['action'])) {
         $mode = 'id';
         $id = (int) $_GET['id'];
         if (!is_valid_id($id)) {
-            die();
+            app_halt();
         }
     }
     if (isset($_GET['letter'])) {
@@ -243,7 +245,7 @@ if ($action === 'add') {
             $session->set('is-warning', _('Wiki Item Has [b]NOT[/b] Been Deleted'));
         }
         header('Location: ' . $_SERVER['PHP_SELF']);
-        die();
+        app_halt();
     } else {
         $HTMLOUT .= navmenu() . stdmsg(_('Error'), _('Access Denied'));
     }

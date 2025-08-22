@@ -1,4 +1,6 @@
 <?php
+require_once __DIR__ . '/runtime_safe.php';
+
 
 declare(strict_types = 1);
 
@@ -20,7 +22,7 @@ $session = $container->get(Session::class);
 if (!has_access($user['class'], UC_STAFF, 'coder')) {
     $session->set('is-danger', _("You can't use this!"));
     header('Location: ' . $site_config['paths']['baseurl']);
-    die();
+    app_halt();
 }
 $valid_do = [
     'view',
@@ -44,16 +46,16 @@ switch ($do) {
                 header('Refresh: 2; url=' . $_SERVER['PHP_SELF']);
                 $session->set('is-success', _('The messege(s) you selected were deleted!'));
                 header("Location: {$_SERVER['PHP_SELF']}");
-                die();
+                app_halt();
             } else {
                 $session->set('is-warning', _('There was an error with the query please contact the staff!'));
                 header("Location: {$_SERVER['PHP_SELF']}");
-                die();
+                app_halt();
             }
         } else {
             $session->set('is-warning', _('Something was wrong, I have no idea what!'));
             header("Location: {$_SERVER['PHP_SELF']}");
-            die();
+            app_halt();
         }
         break;
 
@@ -62,7 +64,7 @@ switch ($do) {
             if ($reply && empty($message)) {
                 $session->set('is-warning', _("You didn't write any message for the user!"));
                 header("Location: {$_SERVER['PHP_SELF']}");
-                die();
+                app_halt();
             }
             $q1 = sql_query('SELECT s.msg,s.sender,s.subject,u.username FROM staffmessages AS s LEFT JOIN users AS u ON s.sender=u.id WHERE s.id IN (' . implode(', ', $id) . ')') or sqlerr(__FILE__, __LINE__);
             $a = mysqli_fetch_assoc($q1);
@@ -83,16 +85,16 @@ switch ($do) {
                 $cache->delete('staff_mess_');
                 $session->set('is-success', _('The messege(s) you selected were set as answered!'));
                 header("Location: {$_SERVER['PHP_SELF']}");
-                die();
+                app_halt();
             } else {
                 $session->set('is-warning', _('There was an error with the query please contact the staff!'));
                 header("Location: {$_SERVER['PHP_SELF']}");
-                die();
+                app_halt();
             }
         } else {
             $session->set('is-warning', _('Something was wrong, I have no idea what!'));
             header("Location: {$_SERVER['PHP_SELF']}");
-            die();
+            app_halt();
         }
         break;
 
@@ -135,12 +137,12 @@ switch ($do) {
             } else {
                 $session->set('is-warning', _('There is message with this id'));
                 header("Location: {$_SERVER['PHP_SELF']}");
-                die();
+                app_halt();
             }
         } else {
             $session->set('is-warning', _('Something was wrong, I have no idea what!'));
             header("Location: {$_SERVER['PHP_SELF']}");
-            die();
+            app_halt();
         }
         break;
 
@@ -151,16 +153,16 @@ switch ($do) {
                 header('Refresh: 2; url=' . $_SERVER['PHP_SELF']);
                 $session->set('is-success', _('The messege(s) you selected were Reset for someone else to deal with!'));
                 header("Location: {$_SERVER['PHP_SELF']}");
-                die();
+                app_halt();
             } else {
                 $session->set('is-warning', _('There was an error with the query please contact the staff!'));
                 header("Location: {$_SERVER['PHP_SELF']}");
-                die();
+                app_halt();
             }
         } else {
             $session->set('is-warning', _('Something was wrong, I have no idea what!'));
             header("Location: {$_SERVER['PHP_SELF']}");
-            die();
+            app_halt();
         }
         break;
 
@@ -176,7 +178,7 @@ switch ($do) {
         if (!$count_msgs) {
             $session->set('is-warning', _('There are no messages for the staff'));
             header('Location: ' . $site_config['paths']['baseurl']);
-            die();
+            app_halt();
         } else {
             $HTMLOUT .= "
                     <h1 class='has-text-centered'>" . _('Staff Box - messages sent by users') . "</h1>
