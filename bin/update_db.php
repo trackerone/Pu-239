@@ -1,5 +1,5 @@
 <?php
-require_once __DIR__ . '/bootstrap_pdo.php';
+require_once __DIR__ . '/../include/runtime_safe.php';
 
 
 declare(strict_types = 1);
@@ -67,7 +67,7 @@ function update_database(array $argv, array $sql_updates, bool $all)
     $fluent = $container->get(Database::class);
     $qid = array_search($argv[2], array_column($sql_updates, 'id'));
     if (empty($qid)) {
-        die("{$argv[2]} is an invalid ID\n");
+        app_halt("{$argv[2]} is an invalid ID\n");
     }
     $id = (int) $sql_updates[$qid]['id'];
     $sql = $sql_updates[$qid]['query'];
@@ -120,7 +120,7 @@ function update_database(array $argv, array $sql_updates, bool $all)
         }
         if ($all) {
             if (!empty($msg)) {
-                die(implode("\n", $comment) . "\n");
+                app_halt(implode("\n", $comment) . "\n");
             }
             echo implode("\n", $comment) . "\n";
 
@@ -180,7 +180,7 @@ function get_updates(array $argv, array $sql_updates, bool $all)
             echo "To run all queries:\nphp {$argv[0]} complete\n\n";
             echo "To run query:\nphp {$argv[0]} run {$update['id']}\n\n";
             echo "To ignore query:\nphp {$argv[0]} ignore {$update['id']}\n\n";
-            die();
+            app_halt('Exit called');
         }
     }
 

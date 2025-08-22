@@ -1,5 +1,5 @@
 <?php
-require_once __DIR__ . '/bootstrap_pdo.php';
+require_once __DIR__ . '/../include/runtime_safe.php';
 
 
 declare(strict_types = 1);
@@ -210,7 +210,7 @@ if (isset($_GET['act'])) {
             $session->set('is-success', _('Successfully Edited'));
         }
         header("Location: {$site_config['paths']['baseurl']}/staffpanel.php?tool=themes&action=themes");
-        die();
+        app_halt('Exit called');
     }
     if ($act === 5) {
         if (!isset($_GET['id'])) {
@@ -222,11 +222,11 @@ if (isset($_GET['act'])) {
         }
         if (!isset($_GET['sure'])) {
             header('Location: ' . $_SERVER['PHP_SELF'] . '?tool=themes');
-            die();
+            app_halt('Exit called');
         }
         if (isset($_GET['sure']) && $_GET['sure'] != 1) {
             header('Location: ' . $_SERVER['PHP_SELF'] . '?tool=themes');
-            die();
+            app_halt('Exit called');
         }
 
         $fluent->deleteFrom('stylesheets')
@@ -244,7 +244,7 @@ if (isset($_GET['act'])) {
         clear_template_cache();
         $session->set('is-success', _('Successfully Deleted'));
         header("Location: {$site_config['paths']['baseurl']}/staffpanel.php?tool=themes&action=themes");
-        die();
+        app_halt('Exit called');
     }
     if ($act === 6) {
         if (!isset($_POST['id'])) {
@@ -276,7 +276,7 @@ if (isset($_GET['act'])) {
         clear_template_cache();
         $session->set('is-success', _('Successfully Edited'));
         header("Location: {$site_config['paths']['baseurl']}/staffpanel.php?tool=themes&action=themes");
-        die();
+        app_halt('Exit called');
     }
     if ($act === 7) {
         if (!isset($_GET['id'])) {
@@ -301,7 +301,7 @@ if (isset($_GET['act'])) {
         clear_template_cache();
         $session->set('is-success', _('Successfully Added'));
         header('Location: ' . $_SERVER['PHP_SELF'] . '?tool=themes&action=themes');
-        die();
+        app_halt('Exit called');
     }
 }
 

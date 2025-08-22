@@ -1,5 +1,5 @@
 <?php
-require_once __DIR__ . '/bootstrap_pdo.php';
+require_once __DIR__ . '/../include/runtime_safe.php';
 
 
 declare(strict_types = 1);
@@ -82,7 +82,7 @@ switch ($action) {
             unset($pm_values, $user_values, $user_updates, $count);
         }
         header('Location: ' . $_SERVER['PHP_SELF'] . '?tool=mass_bonus_for_members&action=mass_bonus_for_members&GB=1');
-        die();
+        app_halt('Exit called');
         break;
 
     case 'karma':
@@ -121,7 +121,7 @@ switch ($action) {
             unset($pm_values, $user_values, $user_updates, $count);
         }
         header('Location: ' . $_SERVER['PHP_SELF'] . '?tool=mass_bonus_for_members&action=mass_bonus_for_members&karma=1');
-        die();
+        app_halt('Exit called');
         break;
 
     case 'freeslots':
@@ -160,7 +160,7 @@ switch ($action) {
             unset($pm_values, $user_values, $user_updates, $count);
         }
         header('Location: ' . $_SERVER['PHP_SELF'] . '?tool=mass_bonus_for_members&action=mass_bonus_for_members&freeslots=1');
-        die();
+        app_halt('Exit called');
         break;
 
     case 'invite':
@@ -199,7 +199,7 @@ switch ($action) {
             unset($pm_values, $user_values, $user_updates, $count);
         }
         header('Location: ' . $_SERVER['PHP_SELF'] . '?tool=mass_bonus_for_members&action=mass_bonus_for_members&invites=1');
-        die();
+        app_halt('Exit called');
         break;
 
     case 'pm':
@@ -228,7 +228,7 @@ switch ($action) {
             unset($pm_values, $count);
         }
         header('Location: ' . $_SERVER['PHP_SELF'] . '?tool=mass_bonus_for_members&action=mass_bonus_for_members&pm=1');
-        die();
+        app_halt('Exit called');
         break;
 }
 

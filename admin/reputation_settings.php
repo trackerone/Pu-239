@@ -1,5 +1,5 @@
 <?php
-require_once __DIR__ . '/bootstrap_pdo.php';
+require_once __DIR__ . '/../include/runtime_safe.php';
 
 
 declare(strict_types = 1);
@@ -16,7 +16,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     unset($_POST['submit']);
     //print_r($_POST);
     rep_cache();
-    exit;
+app_halt('Exit called');
 }
 
 function rep_cache()
@@ -236,5 +236,5 @@ function redirect($url, $text, $time = 2)
 </body>
 </html>';
     echo $html;
-    exit;
+app_halt('Exit called');
 }

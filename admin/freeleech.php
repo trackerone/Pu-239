@@ -1,5 +1,5 @@
 <?php
-require_once __DIR__ . '/bootstrap_pdo.php';
+require_once __DIR__ . '/../include/runtime_safe.php';
 
 
 declare(strict_types = 1);
@@ -18,7 +18,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (isset($_POST['remove'])) {
         update_event((int) $_POST['expires'], TIME_NOW);
         header("Location: {$site_config['paths']['baseurl']}/staffpanel.php?tool=freeleech");
-        die();
+        app_halt('Exit called');
     }
     $fl['modifier'] = isset($_POST['modifier']) ? (int) $_POST['modifier'] : false;
     if (isset($_POST['expires']) && (int) $_POST['expires'] === 255) {
@@ -40,7 +40,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
     set_event($fl['modifier'], TIME_NOW, $fl['expires'], (int) $fl['setby'], $fl['title']);
     header("Location: {$site_config['paths']['baseurl']}/staffpanel.php?tool=freeleech");
-    die();
+    app_halt('Exit called');
 }
 $HTMLOUT .= '<h1 class="has-text-centered">' . _('Current Freeleech Status') . '</h1>';
 if (isset($free) && (count($free) < 1)) {

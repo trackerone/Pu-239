@@ -1,5 +1,5 @@
 <?php
-require_once __DIR__ . '/bootstrap_pdo.php';
+require_once __DIR__ . '/../include/runtime_safe.php';
 
 
 declare(strict_types = 1);
@@ -13,7 +13,7 @@ clear_di_cache();
 cleanup(get_webserver_user());
 if (!empty($argv[1]) && !is_array($argv[1])) {
     $cache->delete($argv[1]);
-    die("Cache: {$argv[1]} cleared\n");
+    app_halt("Cache: {$argv[1]} cleared\n");
 } else {
     if ($site_config['cache']['driver'] === 'file' && file_exists($site_config['files']['path'])) {
         passthru("sudo rm -r {$site_config['files']['path']}");
@@ -23,5 +23,5 @@ if (!empty($argv[1]) && !is_array($argv[1])) {
             $database = " [DB:{$site_config['redis']['database']}]";
         }
     }
-    die(ucfirst($site_config['cache']['driver']) . " Cache{$database} was flushed\n");
+    app_halt(ucfirst($site_config['cache']['driver']) . " Cache{$database} was flushed\n");
 }

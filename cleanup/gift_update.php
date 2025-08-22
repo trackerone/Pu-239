@@ -1,5 +1,5 @@
 <?php
-require_once __DIR__ . '/bootstrap_pdo.php';
+require_once __DIR__ . '/../include/runtime_safe.php';
 
 
 declare(strict_types = 1);
@@ -25,7 +25,7 @@ function gift_update($data)
 
     $time_start = microtime(true);
     if (Christmas()) {
-        die();
+        app_halt('Exit called');
     }
     $fluent = $container->get(Database::class);
     $query = $fluent->from('users')

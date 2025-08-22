@@ -1,5 +1,5 @@
 <?php
-require_once __DIR__ . '/bootstrap_pdo.php';
+require_once __DIR__ . '/../include/runtime_safe.php';
 
 
 declare(strict_types = 1);
@@ -41,7 +41,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         if ($sql) {
             header("Location: {$_SERVER['PHP_SELF']}?tool=bonusmanage");
-            die();
+            app_halt('Exit called');
         } else {
             stderr(_('Error'), _('Something went wrong with the sql query'));
         }

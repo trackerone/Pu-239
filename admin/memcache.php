@@ -1,5 +1,5 @@
 <?php
-require_once __DIR__ . '/bootstrap_pdo.php';
+require_once __DIR__ . '/../include/runtime_safe.php';
 
 
 declare(strict_types = 1);
@@ -42,7 +42,7 @@ if (extension_loaded('memcached')) {
         $MEMCACHE_SERVERS[] = "unix://{$site_config['memcached']['socket']}";
     }
 } else {
-    die('<h1>Error</h1><p>php-memcached is not available</p>');
+    app_halt('<h1>Error</h1><p>php-memcached is not available</p>');
 }
 
 ////////// END OF DEFAULT CONFIG AREA /////////////////////////////////////////////////////////////
@@ -96,7 +96,7 @@ function sendMemcacheCommand(string $server, int $port, string $command)
     try {
         $s = fsockopen($server, $port);
     } catch (Exception $e) {
-        die("Can't connect to: {$server}:{$port}\n" . $e->getMessage());
+        app_halt("Can't connect to: {$server}:{$port}\n" . $e->getMessage());
     }
     fwrite($s, $command . "\r\n");
     $buf = '';
@@ -576,7 +576,7 @@ if (isset($_GET['IMG'])) {
     }
     header('Content-type: image/png');
     imagepng($image);
-    exit;
+app_halt('Exit called');
 }
 $HTMLOUT = getMenu();
 switch ($_GET['op']) {

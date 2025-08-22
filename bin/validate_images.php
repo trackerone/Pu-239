@@ -1,5 +1,5 @@
 <?php
-require_once __DIR__ . '/bootstrap_pdo.php';
+require_once __DIR__ . '/../include/runtime_safe.php';
 
 
 declare(strict_types = 1);
@@ -12,7 +12,7 @@ global $container, $site_config;
 
 set_time_limit(18000);
 if (!isset($argv[1]) || ($argv[1] !== 'validate' && $argv[1] !== 'optimize' && $argv[1] !== 'purge')) {
-    die("This script can validate, optimize and delete all images found in public/images/proxy\n\nTo run:\n{$argv[0]} [purge|validate|optimize]\n\n");
+    app_halt("This script can validate, optimize and delete all images found in public/images/proxy\n\nTo run:\n{$argv[0]} [purge|validate|optimize]\n\n");
 }
 foreach ($argv as $arg) {
     $optimize = $arg === 'optimize' ? true : false;
