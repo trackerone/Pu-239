@@ -1,4 +1,6 @@
 <?php
+require_once __DIR__ . '/runtime_safe.php';
+
 
 declare(strict_types = 1);
 
@@ -43,7 +45,7 @@ if (isset($_POST['buttonval']) && $_POST['buttonval'] === 'Save as draft') {
         stderr(_('Error'), _("Draft wasn't saved!"));
     }
     header('Location: ' . $_SERVER['PHP_SELF'] . '?action=view_mailbox&box=-2&new_draft=1');
-    die();
+    app_halt();
 }
 
 $message = $messages_class->get_by_id($pm_id);

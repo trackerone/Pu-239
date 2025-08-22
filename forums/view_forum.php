@@ -1,4 +1,6 @@
 <?php
+require_once __DIR__ . '/runtime_safe.php';
+
 
 declare(strict_types = 1);
 
@@ -56,7 +58,7 @@ $sub_forums_stuff = '';
 
 foreach ($query as $sub_forums_arr) {
     if ($sub_forums_arr['min_class_read'] > $CURUSER['class']) {
-        die();
+        app_halt();
     }
 
     $where = $CURUSER['class'] < UC_STAFF ? 'posts.status = "ok" AND topics.status = "ok"' : $CURUSER['class'] < $site_config['forum_config']['min_delete_view_class'] ? 'posts.status != "deleted"  AND topics.status != "deleted"' : '';

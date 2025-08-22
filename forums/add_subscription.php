@@ -1,4 +1,6 @@
 <?php
+require_once __DIR__ . '/runtime_safe.php';
+
 
 declare(strict_types = 1);
 
@@ -20,4 +22,4 @@ if ($arr[0] > 0) {
 
 sql_query('INSERT INTO `subscriptions` (`user_id`, `topic_id`) VALUES (' . sqlesc($CURUSER['id']) . ', ' . sqlesc($topic_id) . ')') or sqlerr(__FILE__, __LINE__);
 header('Location: ' . $_SERVER['PHP_SELF'] . '?action=view_topic&topic_id=' . $topic_id . '&s=1');
-die();
+app_halt();

@@ -1,4 +1,6 @@
 <?php
+require_once __DIR__ . '/runtime_safe.php';
+
 
 declare(strict_types = 1);
 
@@ -86,7 +88,7 @@ switch ($action) {
             sql_query('INSERT INTO forum_poll_votes (`poll_id`, `user_id`, `options`, `added`) VALUES (' . sqlesc($arr_poll['poll_id']) . ', ' . sqlesc($CURUSER['id']) . ', 666, ' . $added . ')') or sqlerr(__FILE__, __LINE__);
             //=== all went well, send them back!
             header('Location: ' . $_SERVER['PHP_SELF'] . '?action=view_topic&topic_id=' . $topic_id);
-            die();
+            app_halt();
         } else {
             //=== if single vote (not array)
             if (is_valid_poll_vote($post_vote)) {
@@ -107,7 +109,7 @@ switch ($action) {
             }
             //=== all went well, send them back!
             header('Location: ' . $_SERVER['PHP_SELF'] . '?action=view_topic&topic_id=' . $topic_id);
-            die();
+            app_halt();
         } //=== end of else
         break; //=== end casting a vote(s)
     //=== resetting vote ============================================================================================//
@@ -154,7 +156,7 @@ switch ($action) {
         sql_query('DELETE FROM forum_poll_votes WHERE poll_id=' . sqlesc($arr_poll['poll_id']) . ' AND user_id=' . sqlesc($CURUSER['id'])) or sqlerr(__FILE__, __LINE__);
         //=== all went well, send them back!
         header('Location: ' . $_SERVER['PHP_SELF'] . '?action=view_topic&topic_id=' . $topic_id);
-        die();
+        app_halt();
         break;
     //=== adding a poll ============================================================================================//
 
@@ -204,7 +206,7 @@ switch ($action) {
             }
             //=== all went well, send them back!
             header('Location: ' . $_SERVER['PHP_SELF'] . '?action=view_topic&topic_id=' . $topic_id);
-            die();
+            app_halt();
         } //=== end of posting poll to DB
         //=== ok looks like they can be here
         //=== options for amount of options lol
@@ -316,7 +318,7 @@ switch ($action) {
         }
         //=== all went well, send them back!
         header('Location: ' . $_SERVER['PHP_SELF'] . '?action=view_topic & topic_id=' . $topic_id);
-        die();
+        app_halt();
         break; //=== end delete poll
     //=== reseting a poll ============================================================================================//
 
@@ -341,7 +343,7 @@ switch ($action) {
         }
         //=== all went well, send them back!
         header('Location: ' . $_SERVER['PHP_SELF'] . '?action=view_topic & topic_id=' . $topic_id);
-        die();
+        app_halt();
         break; //=== end reset poll
     //=== closing a poll ============================================================================================//
 
@@ -366,7 +368,7 @@ switch ($action) {
         }
         //=== all went well, send them back!
         header('Location: ' . $_SERVER['PHP_SELF'] . '?action=view_topic&topic_id=' . $topic_id);
-        die();
+        app_halt();
         break; //=== end of poll close
     //=== opening a poll  (either after it was closed, or timed out) ===============================================================================//
 
@@ -392,7 +394,7 @@ switch ($action) {
         }
         //=== all went well, send them back!
         header('Location: ' . $_SERVER['PHP_SELF'] . '?action=view_topic&topic_id=' . $topic_id);
-        die();
+        app_halt();
         break; //=== end of open poll
     //=== edit a poll ============================================================================================//
 
@@ -437,7 +439,7 @@ switch ($action) {
             sql_query('DELETE FROM forum_poll_votes WHERE poll_id=' . sqlesc($poll_id)) or sqlerr(__FILE__, __LINE__);
             //=== send them back!
             header('Location: ' . $_SERVER['PHP_SELF'] . '?action=view_topic&topic_id=' . $topic_id);
-            die();
+            app_halt();
         } //=== end of posting poll to DB
         //=== get poll stuff to edit
         $res_edit = sql_query('SELECT * FROM forum_poll WHERE id=' . sqlesc($poll_id)) or sqlerr(__FILE__, __LINE__);
@@ -544,5 +546,5 @@ switch ($action) {
     default:
         //=== at the end of the day, if they are messing about doing what they shouldn't, let's give then what for!
         stderr(_('Error'), _('O teach me how I should forget to think.'));
-        die();
+        app_halt();
 } //=== end switch all actions

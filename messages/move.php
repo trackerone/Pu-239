@@ -1,4 +1,6 @@
 <?php
+require_once __DIR__ . '/runtime_safe.php';
+
 
 declare(strict_types = 1);
 
@@ -17,4 +19,4 @@ if (!$result) {
 $cache = $container->get(Cache::class);
 $cache->delete('inbox_' . $CURUSER['id']);
 header('Location: ' . $_SERVER['PHP_SELF'] . '?action=view_mailbox&singlemove=1&box=' . $mailbox);
-die();
+app_halt();

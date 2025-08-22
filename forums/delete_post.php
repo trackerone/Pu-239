@@ -1,4 +1,6 @@
 <?php
+require_once __DIR__ . '/runtime_safe.php';
+
 
 declare(strict_types = 1);
 
@@ -98,7 +100,7 @@ if ($sanity_check > 0) {
         }
     }
     header('Location: ' . $_SERVER['PHP_SELF'] . '?action=view_topic&topic_id=' . $topic_id);
-    die();
+    app_halt();
 } else {
     global $page;
 

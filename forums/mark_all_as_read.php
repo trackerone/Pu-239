@@ -1,4 +1,6 @@
 <?php
+require_once __DIR__ . '/runtime_safe.php';
+
 
 declare(strict_types = 1);
 
@@ -25,7 +27,7 @@ function redirect()
     } else {
         header('Location: ' . $_SERVER['PHP_SELF'] . '?m=1');
     }
-    die();
+    app_halt();
 }
 
 /**

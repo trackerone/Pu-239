@@ -1,4 +1,6 @@
 <?php
+require_once __DIR__ . '/runtime_safe.php';
+
 
 declare(strict_types = 1);
 
@@ -66,7 +68,7 @@ $classes_allowed = (strpos($lottery_config['class_allowed'], '|') ? explode('|',
 if (!(is_array($classes_allowed) ? in_array($CURUSER['class'], $classes_allowed) : $CURUSER['class'] == $classes_allowed)) {
     $session->set('is-danger', _('Your class is not allowed to play in this lottery'));
     header('Location: ' . $site_config['paths']['baseurl']);
-    die();
+    app_halt();
 }
 //some default values
 $lottery['total_pot'] = 0;

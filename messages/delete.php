@@ -1,4 +1,6 @@
 <?php
+require_once __DIR__ . '/runtime_safe.php';
+
 
 declare(strict_types = 1);
 
@@ -30,4 +32,4 @@ if (($message['receiver'] == $CURUSER['id'] || $message['sender'] == $CURUSER['i
 }
 
 header("Location: {$_SERVER['PHP_SELF']}?action=view_mailbox&deleted=1");
-die();
+app_halt();

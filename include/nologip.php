@@ -1,4 +1,6 @@
 <?php
+require_once __DIR__ . '/runtime_safe.php';
+
 
 declare(strict_types = 1);
 
@@ -51,5 +53,5 @@ function nologip(int $userid, bool $nologip = true)
     $session = $container->get(Session::class);
     $session->set('is-info', "{$user['username']} is $display Logging IP");
     header('Location: ' . $_SERVER['PHP_SELF'] . '?id=' . $userid);
-    die();
+    app_halt();
 }

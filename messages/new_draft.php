@@ -1,4 +1,6 @@
 <?php
+require_once __DIR__ . '/runtime_safe.php';
+
 
 declare(strict_types = 1);
 
@@ -35,7 +37,7 @@ if (!empty($_POST['buttonval']) && $_POST['buttonval'] === 'Save draft') {
         stderr(_('Error'), _("Message wasn't saved!"));
     }
     header('Location: ' . $_SERVER['PHP_SELF'] . '?action=view_message&new_draft=1&id=' . $new_draft_id);
-    die();
+    app_halt();
 }
 
 $HTMLOUT .= $top_links . '

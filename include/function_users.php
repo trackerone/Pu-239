@@ -1,4 +1,6 @@
 <?php
+require_once __DIR__ . '/runtime_safe.php';
+
 
 declare(strict_types = 1);
 
@@ -734,6 +736,6 @@ function show_error(string $heading, string $message)
         get_template();
         stderr($heading, $message, 'bottom20');
     } else {
-        die($message);
+        app_halt($message);
     }
 }

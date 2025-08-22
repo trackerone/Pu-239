@@ -1,4 +1,6 @@
 <?php
+require_once __DIR__ . '/runtime_safe.php';
+
 
 declare(strict_types = 1);
 
@@ -127,7 +129,7 @@ if (isset($_POST['buttonval']) && $_POST['buttonval'] === _('Send')) {
     } else {
         header('Location: ' . $_SERVER['PHP_SELF'] . '?action=view_mailbox&sent=1');
     }
-    die();
+    app_halt();
 }
 
 $receiver = isset($_GET['receiver']) ? (int) $_GET['receiver'] : (isset($_POST['receiver']) ? (int) $_POST['receiver'] : 0);
