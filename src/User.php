@@ -1,6 +1,5 @@
 <?php
-require_once __DIR__ . '/../include/runtime_safe.php';
-require_once __DIR__ . '/../include/mysql_compat.php';
+require_once __DIR__ . '/bootstrap_pdo.php';
 
 
 declare(strict_types = 1);
@@ -483,7 +482,7 @@ class User
         }
         if ($redirect) {
             header('Location: ' . $this->site_config['paths']['baseurl'] . '/login.php');
-            app_halt();
+            die();
         }
     }
 
@@ -563,7 +562,7 @@ class User
         }
         $this->session->set('is-success', _('Password has been reset'));
         header('Location: ' . $this->site_config['paths']['baseurl']);
-        app_halt();
+        die();
     }
 
     /**

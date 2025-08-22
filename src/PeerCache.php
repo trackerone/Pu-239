@@ -1,6 +1,5 @@
 <?php
-require_once __DIR__ . '/../include/runtime_safe.php';
-require_once __DIR__ . '/../include/mysql_compat.php';
+require_once __DIR__ . '/bootstrap_pdo.php';
 
 
 declare(strict_types = 1);
@@ -34,7 +33,7 @@ class PeerCache extends TransactionalStore
         $this->container = $c;
         $this->env = $this->container->get('env');
         if (!extension_loaded('memcached')) {
-            app_halt('<h1>Error</h1><p>php-memcached is not available</p>');
+            die('<h1>Error</h1><p>php-memcached is not available</p>');
         }
         $client = $this->container->get(Memcached::class);
         $client = new PrefixKeys($client, $this->env['peer_cache']['prefix']);

@@ -1,6 +1,5 @@
 <?php
-require_once __DIR__ . '/../include/runtime_safe.php';
-require_once __DIR__ . '/../include/mysql_compat.php';
+require_once __DIR__ . '/bootstrap_pdo.php';
 
 
 declare(strict_types = 1);
@@ -40,7 +39,7 @@ if (isset($_POST['action2'])) {
             ];
             $users_class->update($set, $CURUSER['id']);
             header('Location: ' . $_SERVER['PHP_SELF'] . '?action=edit_mailboxes&pm=1');
-            app_halt();
+            die();
 
         case 'add':
             if ($_POST['new'] === '') {
@@ -71,7 +70,7 @@ if (isset($_POST['action2'])) {
                 $worked = '&boxes=1';
             }
             header('Location: ' . $_SERVER['PHP_SELF'] . '?action=edit_mailboxes' . $worked);
-            app_halt();
+            die();
             break;
 
         case 'edit_boxes':
@@ -109,7 +108,7 @@ if (isset($_POST['action2'])) {
                 }
             }
             header('Location: ' . $_SERVER['PHP_SELF'] . '?action=edit_mailboxes' . $deleted . $worked);
-            app_halt();
+            die();
             break;
 
         case 'message_settings':
@@ -159,7 +158,7 @@ if (isset($_POST['action2'])) {
             $users_class->getUserFromId($CURUSER['id'], true);
             $worked = '&pms=1';
             header('Location: ' . $_SERVER['PHP_SELF'] . '?action=edit_mailboxes' . $worked);
-            app_halt();
+            die();
     }
 }
 

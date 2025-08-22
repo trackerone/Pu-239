@@ -1,6 +1,5 @@
 <?php
-require_once __DIR__ . '/../include/runtime_safe.php';
-require_once __DIR__ . '/../include/mysql_compat.php';
+require_once __DIR__ . '/bootstrap_pdo.php';
 
 
 declare(strict_types = 1);
@@ -49,7 +48,7 @@ class Cache extends TransactionalStore
         switch ($this->env['cache']['driver']) {
             case 'couchbase':
                 if (!extension_loaded(couchbase)) {
-                    app_halt('<h1>Error</h1><p>php-couchbase is not available</p>');
+                    die('<h1>Error</h1><p>php-couchbase is not available</p>');
                 }
                 $cluster = new CouchbaseCluster('couchbase://localhost');
                 $bucket = $cluster->openBucket('default');
@@ -59,7 +58,7 @@ class Cache extends TransactionalStore
 
             case 'apcu':
                 if (!extension_loaded('apcu')) {
-                    app_halt('<h1>Error</h1><p>php-apcu is not available</p>');
+                    die('<h1>Error</h1><p>php-apcu is not available</p>');
                 }
                 $this->cache = new Apc();
 
@@ -67,7 +66,7 @@ class Cache extends TransactionalStore
 
             case 'memcached':
                 if (!extension_loaded('memcached')) {
-                    app_halt('<h1>Error</h1><p>php-memcached is not available</p>');
+                    die('<h1>Error</h1><p>php-memcached is not available</p>');
                 }
                 $this->cache = $this->container->get(Memcached::class);
 
@@ -75,7 +74,7 @@ class Cache extends TransactionalStore
 
             case 'redis':
                 if (!extension_loaded('redis')) {
-                    app_halt('<h1>Error</h1><p>php-redis is not available</p>');
+                    die('<h1>Error</h1><p>php-redis is not available</p>');
                 }
                 $this->cache = $this->container->get(Redis::class);
 
@@ -87,7 +86,7 @@ class Cache extends TransactionalStore
 
             case 'file':
                 if (!class_exists('Flysystem')) {
-                    app_halt('<h1>Error</h1><p>Class Flysystem is not available</p>');
+                    die('<h1>Error</h1><p>Class Flysystem is not available</p>');
                 }
 
                 $adapter = new Local($this->env['files']['path'], LOCK_EX);
@@ -96,7 +95,7 @@ class Cache extends TransactionalStore
                 break;
 
             default:
-                app_halt('Invalid Adaptor: ' . $this->env['cache']['driver'] . '<br>Valid choices: memory, file, apcu, memcached, redis, couchbase');
+                die('Invalid Adaptor: ' . $this->env['cache']['driver'] . '<br>Valid choices: memory, file, apcu, memcached, redis, couchbase');
         }
         $this->cache = new PrefixKeys($this->cache, $this->env['cache']['prefix']);
         $this->cache = new BufferedStore($this->cache);
