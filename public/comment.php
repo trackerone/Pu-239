@@ -1,6 +1,5 @@
 <?php
-require_once __DIR__ . '/../include/runtime_safe.php';
-require_once __DIR__ . '/../include/mysql_compat.php';
+require_once __DIR__ . '/bootstrap_pdo.php';
 
 
 declare(strict_types = 1);
@@ -136,7 +135,7 @@ if ($action === 'add') {
         }
         $session->set('is-success', _('Your comment has been posted'));
         header("Refresh: 0; url=$locale_link.php?id=$id$extra_link&viewcomm=$newid#comm$newid");
-        app_halt();
+        die();
     }
     $id = isset($_GET['tid']) ? (int) $_GET['tid'] : 0;
     if (!is_valid_id($id)) {
@@ -221,7 +220,7 @@ if ($action === 'add') {
         }
         $session->set('is-success', _('The comment has been updated'));
         header("Refresh: 0; url=$locale_link.php?id=" . (int) $arr['tid'] . "$extra_link&viewcomm=$commentid#comm$commentid");
-        app_halt();
+        die();
     }
     $HTMLOUT = '';
     $HTMLOUT .= "<h1 class='has-text-centered'>" . _fe("Edit comment to '{0}'", format_comment($arr[$name])) . "</h1>
@@ -278,7 +277,7 @@ if ($action === 'add') {
     }
     $session->set('is-success', _('The comment has been deleted'));
     header("Refresh: 0; url=$locale_link.php?id=$tid$extra_link");
-    app_halt();
+    die();
 } elseif ($action === 'vieworiginal') {
     if ($user['class'] < UC_STAFF) {
         stderr(_('Error'), _('Permission denied.'));

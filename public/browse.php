@@ -1,6 +1,5 @@
 <?php
-require_once __DIR__ . '/../include/runtime_safe.php';
-require_once __DIR__ . '/../include/mysql_compat.php';
+require_once __DIR__ . '/bootstrap_pdo.php';
 
 
 declare(strict_types = 1);
@@ -40,7 +39,7 @@ if (isset($_GET['clear_new']) && $_GET['clear_new'] == 1) {
     ];
     $users_class->update($set, $user['id']);
     header("Location: {$site_config['paths']['baseurl']}/browse.php");
-    app_halt();
+    die();
 }
 
 $count = $fluent->from('torrents AS t')

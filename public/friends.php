@@ -1,6 +1,5 @@
 <?php
-require_once __DIR__ . '/../include/runtime_safe.php';
-require_once __DIR__ . '/../include/mysql_compat.php';
+require_once __DIR__ . '/bootstrap_pdo.php';
 
 
 declare(strict_types = 1);
@@ -68,7 +67,7 @@ if ($action === 'add') {
         }
         sql_query("INSERT INTO $table_is VALUES (0, " . sqlesc($userid) . ', ' . sqlesc($targetid) . ", 'no')") or sqlerr(__FILE__, __LINE__);
         stderr(_('Request Added!'), _fe('The user will be informed of your Friend Request, you will be informed via PM upon confirmation.<br><br>{0}Go to your Friends List{1}', "<a href='{$site_config['paths']['baseurl']}/friends.php?id=$userid#$frag'><b>", '</b></a>'));
-        app_halt();
+        die();
     }
     if ($type === 'block') {
         $r = sql_query("SELECT id FROM $table_is WHERE userid=" . sqlesc($userid) . " AND $field_is = " . sqlesc($targetid)) or sqlerr(__FILE__, __LINE__);
@@ -83,7 +82,7 @@ if ($action === 'add') {
         $cache->delete('user_friends_' . $targetid);
         $cache->delete('user_friends_' . $userid);
         header("Location: {$site_config['paths']['baseurl']}/friends.php?id=$userid#$frag");
-        app_halt();
+        die();
     }
 }
 //== action == confirm
@@ -182,7 +181,7 @@ if ($action === 'confirm') {
         stderr(_('Error'), _('Invalid type.'));
     }
     header('Location: friends.php');
-    app_halt();
+    die();
 }
 
 $res = sql_query('SELECT * FROM users WHERE id = ' . sqlesc($userid)) or sqlerr(__FILE__, __LINE__);

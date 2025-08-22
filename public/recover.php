@@ -1,6 +1,5 @@
 <?php
-require_once __DIR__ . '/../include/runtime_safe.php';
-require_once __DIR__ . '/../include/mysql_compat.php';
+require_once __DIR__ . '/bootstrap_pdo.php';
 
 
 declare(strict_types = 1);
@@ -23,7 +22,7 @@ get_template();
 $auth = $container->get(Auth::class);
 if ($auth->isLoggedIn()) {
     header("Location: {$site_config['paths']['baseurl']}");
-    app_halt();
+    die();
 }
 if (!$site_config['mail']['smtp_enable'] || $site_config['mail']['smtp_password'] === 'gmail password' || $site_config['mail']['smtp_username'] === 'gmail username') {
     stderr(_('Error'), _('Mail functions have not been enabled.'));
@@ -42,7 +41,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && !isset($_POST['selector'])) {
     if ($validation->fails()) {
         write_log(_fe('{0} has tried to reset password using invalid data. ', getip(0)) . json_encode($post, JSON_PRETTY_PRINT));
         header("Location: {$_SERVER['PHP_SELF']}");
-        app_halt();
+        die();
     }
     $email = trim($post['email']);
     $user->create_reset($email);
@@ -58,7 +57,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && !isset($_POST['selector'])) {
     if ($validation->fails()) {
         write_log(_fe('{0} has tried to reset password using invalid data. ', getip(0)) . json_encode($post, JSON_PRETTY_PRINT));
         header("Location: {$_SERVER['PHP_SELF']}");
-        app_halt();
+        die();
     }
     $user->reset_password($post, false);
 } elseif ($_SERVER['REQUEST_METHOD'] === 'GET' && !empty($_GET)) {
@@ -71,7 +70,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && !isset($_POST['selector'])) {
     if ($validation->fails()) {
         write_log(_fe('{0} has tried to reset password using invalid data. ', getip(0)) . json_encode($get, JSON_PRETTY_PRINT));
         header("Location: {$_SERVER['PHP_SELF']}");
-        app_halt();
+        die();
     }
     try {
         $auth->canResetPasswordOrThrow($get['selector'], $get['token']);

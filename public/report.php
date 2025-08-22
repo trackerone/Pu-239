@@ -1,6 +1,5 @@
 <?php
-require_once __DIR__ . '/../include/runtime_safe.php';
-require_once __DIR__ . '/../include/mysql_compat.php';
+require_once __DIR__ . '/bootstrap_pdo.php';
 
 
 declare(strict_types = 1);
@@ -92,7 +91,7 @@ if (isset($_POST['do_it'])) {
     $session = $container->get(Session::class);
     $session->set('is-success', _fe('{0} with id: {1} report sent.', str_replace('_', ' ', $type), $id));
     header("Location: {$site_config['paths']['baseurl']}");
-    app_halt();
+    die();
 }
 
 $HTMLOUT .= main_div("
