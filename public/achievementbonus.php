@@ -1,5 +1,5 @@
 <?php
-require_once __DIR__ . '/bootstrap_pdo.php';
+require_once __DIR__ . '/../include/runtime_safe.php';
 
 
 declare(strict_types = 1);
@@ -22,7 +22,7 @@ $achieve_points = $usersachiev->get_count($user['id']);
 if (empty($achieve_points)) {
     $session->set('is-warning', _("It appears that you don't have any Achievement Bonus Points available to spend."));
     header("Location: {$site_config['paths']['baseurl']}/achievementhistory.php?id={$user['id']}");
-    die();
+    app_halt('Exit called');
 }
 $users_class = $container->get(User::class);
 $ach_bonus = $container->get(Ach_bonus::class);
@@ -105,9 +105,9 @@ if (!empty($msg)) {
     $usersachiev->update($update, $user['id']);
     $session->set('is-success', $msg);
     header("Location: {$site_config['paths']['baseurl']}/achievementhistory.php?id={$user['id']}");
-    die();
+    app_halt('Exit called');
 } else {
     $session->set('is-warning', _('Invalid data'));
     header("Location: {$site_config['paths']['baseurl']}/achievementhistory.php?id={$user['id']}");
-    die();
+    app_halt('Exit called');
 }

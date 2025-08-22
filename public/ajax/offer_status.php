@@ -1,5 +1,5 @@
 <?php
-require_once __DIR__ . '/bootstrap_pdo.php';
+require_once __DIR__ . '/../../include/runtime_safe.php';
 
 
 declare(strict_types = 1);
@@ -13,13 +13,13 @@ global $container;
 
 if (empty($user) || !has_access($user['class'], UC_STAFF, '')) {
     echo json_encode(['status' => 'invalid']);
-    die();
+    app_halt('Exit called');
 }
 $id = (int) $_POST['id'];
 $status = $_POST['status'];
 if (empty($id) || !isset($status)) {
     echo json_encode(['status' => 'invalid']);
-    die();
+    app_halt('Exit called');
 }
 $fluent = $container->get(Database::class);
 $to_status = 'pending';
@@ -37,10 +37,10 @@ try {
            ->where('id = ?', $id)
            ->execute();
     echo json_encode(['status' => $to_status]);
-    die();
+    app_halt('Exit called');
 } catch (Exception $e) {
     //TODO
 }
 
 echo json_encode(['voted' => 'invalid']);
-die();
+app_halt('Exit called');

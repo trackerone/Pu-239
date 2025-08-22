@@ -1,5 +1,5 @@
 <?php
-require_once __DIR__ . '/bootstrap_pdo.php';
+require_once __DIR__ . '/../../include/runtime_safe.php';
 
 
 declare(strict_types = 1);
@@ -18,10 +18,10 @@ if (!empty($tid)) {
     $descr = $torrents_class->format_descr($tid);
     if (!empty($descr)) {
         echo json_encode(['descr' => $descr]);
-        die();
+        app_halt('Exit called');
     }
 }
 echo json_encode([
     'fail' => 'invalid',
 ]);
-die();
+app_halt('Exit called');

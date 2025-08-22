@@ -1,5 +1,5 @@
 <?php
-require_once __DIR__ . '/bootstrap_pdo.php';
+require_once __DIR__ . '/../include/runtime_safe.php';
 
 
 declare(strict_types = 1);
@@ -38,7 +38,7 @@ if (isset($_POST['action']) === 'add' && has_access($user['class'], UC_SYSOP, 'c
     $credit = ($_POST['credit']);
     sql_query('INSERT INTO modscredits (name, description,  category,  pu239lnk,  status, credit) VALUES(' . sqlesc($name) . ', ' . sqlesc($description) . ', ' . sqlesc($category) . ', ' . sqlesc($link) . ', ' . sqlesc($status) . ', ' . sqlesc($credit) . ')') or sqlerr(__FILE__, __LINE__);
     header("Location: {$_SERVER['PHP_SELF']}");
-    die();
+    app_halt('Exit called');
 }
 
 if ($action === 'delete' && has_access($user['class'], UC_SYSOP, 'coder')) {
@@ -47,7 +47,7 @@ if ($action === 'delete' && has_access($user['class'], UC_SYSOP, 'coder')) {
     }
     sql_query("DELETE FROM modscredits where id='$id'") or sqlerr(__FILE__, __LINE__);
     header("Location: {$_SERVER['PHP_SELF']}");
-    die();
+    app_halt('Exit called');
 }
 
 if ($action === 'edit' && has_access($user['class'], UC_SYSOP, 'coder')) {
@@ -155,7 +155,7 @@ if ($action === 'edit' && has_access($user['class'], UC_SYSOP, 'coder')) {
 
     sql_query('UPDATE modscredits SET name = ' . sqlesc($name) . ', category = ' . sqlesc($category) . ', status = ' . sqlesc($modstatus) . ',  pu239lnk = ' . sqlesc($link) . ', credit = ' . sqlesc($credit) . ', description = ' . sqlesc($description) . ' WHERE id=' . sqlesc($id)) or sqlerr(__FILE__, __LINE__);
     header("Location: {$_SERVER['PHP_SELF']}");
-    die();
+    app_halt('Exit called');
 }
 
 $res = sql_query('SELECT * FROM modscredits') or sqlerr(__FILE__, __LINE__);

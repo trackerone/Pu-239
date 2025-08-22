@@ -1,5 +1,5 @@
 <?php
-require_once __DIR__ . '/bootstrap_pdo.php';
+require_once __DIR__ . '/../../include/runtime_safe.php';
 
 
 declare(strict_types = 1);
@@ -29,7 +29,7 @@ $poster = empty($poster) ? '' : $poster;
 $tvmaze_data = tvmaze($tvmazeid, $tid, $season, $episode, $poster);
 if (!empty($tvmaze_data)) {
     echo json_encode(['content' => $tvmaze_data]);
-    die();
+    app_halt('Exit called');
 }
 echo json_encode(['fail' => 'invalid']);
-die();
+app_halt('Exit called');

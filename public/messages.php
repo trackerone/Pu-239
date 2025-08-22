@@ -1,5 +1,5 @@
 <?php
-require_once __DIR__ . '/bootstrap_pdo.php';
+require_once __DIR__ . '/../include/runtime_safe.php';
 
 
 declare(strict_types = 1);
@@ -105,7 +105,7 @@ if (isset($_GET['change_pm_number'])) {
     } else {
         header('Location: ' . $_SERVER['PHP_SELF'] . '?action=view_mailbox&pm=1&box=' . $mailbox);
     }
-    die();
+    app_halt('Exit called');
 }
 
 if (isset($_GET['show_pm_avatar'])) {
@@ -124,7 +124,7 @@ if (isset($_GET['show_pm_avatar'])) {
     } else {
         header('Location: ' . $_SERVER['PHP_SELF'] . '?action=view_mailbox&box=' . $mailbox);
     }
-    die();
+    app_halt('Exit called');
 }
 $session = $container->get(Session::class);
 isset($_GET['deleted']) ? $session->set('is-success', _('Message deleted!')) : null;

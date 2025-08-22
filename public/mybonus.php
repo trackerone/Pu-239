@@ -1,5 +1,5 @@
 <?php
-require_once __DIR__ . '/bootstrap_pdo.php';
+require_once __DIR__ . '/../include/runtime_safe.php';
 
 
 declare(strict_types = 1);
@@ -579,7 +579,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $messages_class->insert($msgs_buffer);
     }
     header("Location: {$_SERVER['PHP_SELF']}");
-    die();
+    app_halt('Exit called');
 }
 
 $HTMLOUT = "

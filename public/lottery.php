@@ -1,5 +1,5 @@
 <?php
-require_once __DIR__ . '/bootstrap_pdo.php';
+require_once __DIR__ . '/../include/runtime_safe.php';
 
 
 declare(strict_types = 1);
@@ -12,7 +12,7 @@ global $site_config;
 
 if ($user['game_access'] !== 1 || $user['status'] !== 0) {
     stderr(_('Error'), _('Your gaming rights have been disabled.'), 'bottom20');
-    die();
+    app_halt('Exit called');
 }
 
 $HTMLOUT = '';

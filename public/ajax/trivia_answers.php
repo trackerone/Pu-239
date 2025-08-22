@@ -1,5 +1,5 @@
 <?php
-require_once __DIR__ . '/bootstrap_pdo.php';
+require_once __DIR__ . '/../../include/runtime_safe.php';
 
 
 declare(strict_types = 1);
@@ -64,4 +64,4 @@ echo json_encode([
     'round' => $cleanup['round'],
     'game' => $cleanup['game'],
 ]);
-die();
+app_halt('Exit called');

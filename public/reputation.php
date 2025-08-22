@@ -1,5 +1,5 @@
 <?php
-require_once __DIR__ . '/bootstrap_pdo.php';
+require_once __DIR__ . '/../include/runtime_safe.php';
 
 
 declare(strict_types = 1);
@@ -415,7 +415,7 @@ function rep_output($msg = '', $html = '')
 </html>";
 
     echo $htmlout;
-    die();
+    app_halt('Exit called');
 }
 
 /**

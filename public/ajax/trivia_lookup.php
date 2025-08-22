@@ -1,5 +1,5 @@
 <?php
-require_once __DIR__ . '/bootstrap_pdo.php';
+require_once __DIR__ . '/../../include/runtime_safe.php';
 
 
 declare(strict_types = 1);
@@ -16,7 +16,7 @@ global $container;
 header('content-type: application/json');
 if (empty($curuser)) {
     echo json_encode(['fail' => 'csrf']);
-    die();
+    app_halt('Exit called');
 }
 
 $table = trivia_table();
@@ -27,7 +27,7 @@ $cache = $container->get(Cache::class);
 $data = $cache->get('trivia_current_question_');
 if (empty($data)) {
     echo json_encode(['fail' => 'invalid']);
-    die();
+    app_halt('Exit called');
 }
 $fluent = $container->get(Database::class);
 $user = $fluent->from('triviausers')
@@ -48,7 +48,7 @@ if (!empty($user)) {
         'round' => $cleanup['round'],
         'game' => $cleanup['game'],
     ]);
-    die();
+    app_halt('Exit called');
 }
 
 $question = $output = '';
@@ -76,8 +76,8 @@ if (!empty($output)) {
         'round' => $cleanup['round'],
         'game' => $cleanup['game'],
     ]);
-    die();
+    app_halt('Exit called');
 }
 
 echo json_encode(['fail' => 'invalid']);
-die();
+app_halt('Exit called');

@@ -1,5 +1,5 @@
 <?php
-require_once __DIR__ . '/bootstrap_pdo.php';
+require_once __DIR__ . '/../include/runtime_safe.php';
 
 
 declare(strict_types = 1);
@@ -618,7 +618,7 @@ function why_die(string $why)
 {
     if (!empty($_SERVER['HTTP_REFERER'])) {
         header("Location: {$_SERVER['HTTP_REFERER']}");
-        die();
+        app_halt('Exit called');
     }
-    die($why);
+    app_halt($why);
 }

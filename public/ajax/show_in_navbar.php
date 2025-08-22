@@ -1,5 +1,5 @@
 <?php
-require_once __DIR__ . '/bootstrap_pdo.php';
+require_once __DIR__ . '/../../include/runtime_safe.php';
 
 
 declare(strict_types = 1);
@@ -15,12 +15,12 @@ global $container;
 
 if (empty($user) || $user['class'] < UC_STAFF) {
     echo json_encode(['show_in_navbar' => 'class']);
-    die();
+    app_halt('Exit called');
 }
 
 if (!isset($_POST['show']) || empty($_POST['id'])) {
     echo json_encode(['show_in_navbar' => 'invalid']);
-    die();
+    app_halt('Exit called');
 }
 
 $show = $_POST['show'] == 0 ? 1 : 0;
@@ -38,9 +38,9 @@ if ($result) {
     $cache->delete('staff_panels_' . $class);
     $data['show_in_navbar'] = $show;
     echo json_encode($data);
-    die();
+    app_halt('Exit called');
 } else {
     $data['show_in_navbar'] = 'fail';
     echo json_encode($data);
-    die();
+    app_halt('Exit called');
 }

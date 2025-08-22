@@ -1,5 +1,5 @@
 <?php
-require_once __DIR__ . '/bootstrap_pdo.php';
+require_once __DIR__ . '/../../include/runtime_safe.php';
 
 
 declare(strict_types = 1);
@@ -16,13 +16,13 @@ global $container;
 if (empty($_POST)) {
     stderr(_('Error'), _('Access Not Allowed'));
     header("Location: {$site_config['paths']['baseurl']}");
-    die();
+    app_halt('Exit called');
 }
 
 if (!isset($user)) {
     stderr(_('Error'), _("You can't add a thank you on your own torrent"));
     header("Location: {$site_config['paths']['baseurl']}");
-    die();
+    app_halt('Exit called');
 }
 
 $uid = $user['id'];

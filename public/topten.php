@@ -1,5 +1,5 @@
 <?php
-require_once __DIR__ . '/bootstrap_pdo.php';
+require_once __DIR__ . '/../include/runtime_safe.php';
 
 
 declare(strict_types = 1);
@@ -117,7 +117,7 @@ if (isset($_GET['view']) && $_GET['view'] === 't') {
         "<a href='{$_SERVER['PHP_SELF']}'>$title</a>",
     ];
     echo stdhead($title, [], 'page-wrapper', $breadcrumbs) . wrapper($HTMLOUT) . stdfoot();
-    die();
+    app_halt('Exit called');
 }
 if (isset($_GET['view']) && $_GET['view'] === 'c') {
     $view = isset($_GET['c']) ? strip_tags($_GET['c']) : '';
@@ -186,7 +186,7 @@ if (isset($_GET['view']) && $_GET['view'] === 'c') {
         "<a href='{$_SERVER['PHP_SELF']}'>$title</a>",
     ];
     echo stdhead($title, [], 'page-wrapper', $breadcrumbs) . wrapper($HTMLOUT) . stdfoot();
-    die();
+    app_halt('Exit called');
 }
 // Default display / Top Users
 $table = "<div class='article padding20'><div class='article_header'><h2>Top 10 Uploaders</h2></div>";
