@@ -1,6 +1,5 @@
 <?php
-require_once __DIR__ . '/../include/runtime_safe.php';
-require_once __DIR__ . '/../include/mysql_compat.php';
+require_once __DIR__ . '/bootstrap_pdo.php';
 
 
 declare(strict_types = 1);
@@ -67,7 +66,7 @@ if ($action === 'add') {
         ];
         $users_class->update($set, $userid);
         header("Refresh: 0; url=userdetails.php?id=$userid&viewcomm=$newid#comm$newid");
-        app_halt();
+        die();
     } else {
         $userid = (int) $_GET['userid'];
         if (!is_valid_id($userid)) {
@@ -144,7 +143,7 @@ if ($action === 'add') {
         } else {
             header("Location: {$_SERVER['PHP_SELF']}?id={$userid}#comments");
         }
-        app_halt();
+        die();
     }
     $referer = !empty($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : '';
     $HTMLOUT .= '
@@ -203,7 +202,7 @@ if ($action === 'add') {
     } else {
         header("Location: {$_SERVER['PHP_SELF']}?id={$userid}#comments");
     }
-    app_halt();
+    die();
 } elseif ($action === 'vieworiginal') {
     if (!has_access($user['class'], UC_STAFF, 'coder')) {
         stderr(_('Error'), 'Permission denied.');
@@ -237,4 +236,4 @@ if ($action === 'add') {
 } else {
     stderr(_('Error'), 'Unknown action');
 }
-app_halt();
+die();

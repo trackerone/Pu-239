@@ -1,6 +1,5 @@
 <?php
-require_once __DIR__ . '/../include/runtime_safe.php';
-require_once __DIR__ . '/../include/mysql_compat.php';
+require_once __DIR__ . '/bootstrap_pdo.php';
 
 
 declare(strict_types = 1);
@@ -83,7 +82,7 @@ if (isset($data['action'])) {
                 $session->set('is-danger', _('You do not have access to delete this comment'));
             }
             header('Location: ' . $_SERVER['PHP_SELF'] . '?action=view_request&id=' . $tid);
-            app_halt();
+            die();
         case 'edit':
             $edit_comment = true;
             $cid = isset($data['cid']) ? (int) $data['cid'] : 0;
@@ -176,7 +175,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if ($validation->fails()) {
             $errors = $validation->errors();
             stderr(_('Error'), $errors->firstOfAll()['name']);
-            app_halt();
+            die();
         }
         $id = isset($_POST['id']) ? (int) $_POST['id'] : 0;
         $bounties = $bounty_class->get_sum($id);
@@ -193,7 +192,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $user_class->update($update, $owner['id']);
         }
         header('Location: ' . $_SERVER['PHP_SELF'] . '?action=view_request&id=' . $id);
-        app_halt();
+        die();
     } elseif ($add_bounty) {
         $validation = $validator->validate($_POST, [
             'id' => 'required|numeric',
@@ -202,7 +201,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if ($validation->fails()) {
             $errors = $validation->errors();
             stderr(_('Error'), $errors->firstOfAll()['name']);
-            app_halt();
+            die();
         }
         $id = isset($_POST['id']) ? (int) $_POST['id'] : 0;
         $bounty = isset($_POST['bounty']) ? (int) $_POST['bounty'] : 0;
@@ -214,7 +213,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             ];
             $bounty_id = $bounty_class->add($values);
             header('Location: ' . $_SERVER['PHP_SELF'] . '?action=view_request&id=' . $id);
-            app_halt();
+            die();
         }
     } elseif ($post_comment) {
         $validation = $validator->validate($_POST, [
@@ -224,7 +223,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if ($validation->fails()) {
             $errors = $validation->errors();
             stderr(_('Error'), $errors->firstOfAll()['name']);
-            app_halt();
+            die();
         }
         $id = isset($_POST['id']) ? (int) $_POST['id'] : 0;
         $values = [
@@ -243,7 +242,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $session->set('is-warning', _('Comment Not Added'));
         }
         header('Location: ' . $_SERVER['PHP_SELF'] . '?action=view_request&id=' . $id);
-        app_halt();
+        die();
     } elseif ($edit_comment) {
         $validation = $validator->validate($_POST, [
             'id' => 'required|numeric',
@@ -253,7 +252,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if ($validation->fails()) {
             $errors = $validation->errors();
             stderr(_('Error'), $errors->firstOfAll()['name']);
-            app_halt();
+            die();
         }
         $cid = isset($_POST['cid']) ? (int) $_POST['cid'] : 0;
         $comment = $comment_class->get_comment_by_id($cid);
@@ -271,7 +270,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
         $id = isset($_POST['id']) ? (int) $_POST['id'] : 0;
         header('Location: ' . $_SERVER['PHP_SELF'] . '?action=view_request&id=' . $id);
-        app_halt();
+        die();
     } else {
         $validation = $validator->validate($_POST, [
             'type' => 'required|numeric',
@@ -284,7 +283,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if ($validation->fails()) {
             $errors = $validation->errors();
             stderr(_('Error'), $errors->firstOfAll()['name']);
-            app_halt();
+            die();
         }
         $values = [
             'category' => (int) $_POST['type'],
@@ -300,7 +299,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $session->unset('post_request_data');
                 $session->set('is-success', _fe('Request: {0} Added', format_comment($_POST['name'])));
                 header('Location: ' . $_SERVER['PHP_SELF']);
-                app_halt();
+                die();
             }
         } elseif ($edit) {
             $values['updated'] = $dt;
@@ -308,7 +307,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             if ($request_class->update($values, (int) $_POST['id'])) {
                 $session->set('is-success', _fe('Request: {0} Updated', format_comment($_POST['name'])));
                 header('Location: ' . $_SERVER['PHP_SELF']);
-                app_halt();
+                die();
             }
         }
     }

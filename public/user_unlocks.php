@@ -1,6 +1,5 @@
 <?php
-require_once __DIR__ . '/../include/runtime_safe.php';
-require_once __DIR__ . '/../include/mysql_compat.php';
+require_once __DIR__ . '/bootstrap_pdo.php';
 
 
 declare(strict_types = 1);
@@ -21,7 +20,7 @@ if (!is_valid_id($id) || $user['class'] < UC_STAFF) {
 $got_moods = $user['opt2'] & class_user_options_2::GOT_MOODS === class_user_options_2::GOT_MOODS;
 if ($user['class'] < UC_STAFF && $got_moods) {
     stderr(_('Error'), "Time shall unfold what plighted cunning hides\n\nWho cover faults, at last shame them derides.... Yer simply no tall enough.");
-    app_halt();
+    die();
 }
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $updateset = [];
@@ -52,7 +51,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         'perms' => $row['perms'],
     ], $site_config['expires']['user_cache']);
     header('Location: ' . $_SERVER['PHP_SELF']);
-    app_halt();
+    die();
 }
 $checkbox_unlock_moods = $user['perms'] & UNLOCK_MORE_MOODS ? 'checked' : '';
 $checkbox_unlock_stealth = $user['perms'] & PERMS_STEALTH ? 'checked' : '';
