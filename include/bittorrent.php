@@ -1,6 +1,5 @@
 <?php
-require_once __DIR__ . '/runtime_safe.php';
-require_once __DIR__ . '/mysql_compat.php';
+require_once __DIR__ . '/bootstrap_pdo.php';
 
 
 declare(strict_types = 1);
@@ -63,11 +62,11 @@ if (!$cores) {
 
 $load = sys_getloadavg();
 if ($load[0] > $cores * 2) {
-    app_halt("Load is too high. Don't continuously refresh, or you will just make the problem last longer");
+    die("Load is too high. Don't continuously refresh, or you will just make the problem last longer");
 }
 
 if (preg_match('/(?:\< *(?:java|script)|script\:|\+document\.)/i', serialize(array_merge($_SERVER, $_GET, $_POST, $_COOKIE)))) {
-    app_halt('Forbidden');
+    die('Forbidden');
 }
 
 /**
@@ -430,7 +429,7 @@ function stderr($heading, $text, ?string $outer_class = null, ?string $inner_cla
         ];
     }
     echo stdhead($title, [], 'page_wrapper', $breadcrumbs) . stdmsg($heading, $text, $outer_class, $inner_class) . stdfoot();
-    app_halt();
+    die();
 }
 
 /**
@@ -690,7 +689,7 @@ function parked($user)
         $session->set('is-warning', _('Your account is currently parked.'));
         if (!preg_match('/(usercp|takeeditcp)/', $_SERVER['REQUEST_URI'])) {
             header('Location: ' . $site_config['paths']['baseurl'] . '/usercp.php?action=security');
-            app_halt();
+            die();
         }
     }
 }
@@ -710,7 +709,7 @@ function suspended($user)
         $session->set('is-warning', _('Your account is currently suspended.'));
         if (!preg_match('/messages/', $_SERVER['REQUEST_URI'])) {
             header('Location: ' . $site_config['paths']['baseurl'] . '/messages.php');
-            app_halt();
+            die();
         }
     }
 }
@@ -769,7 +768,7 @@ function check_user_status(string $type = 'browse')
         $session = $container->get(Session::class);
         if (!$site_config['site']['online']) {
             if ($users_data['class'] < UC_STAFF) {
-                app_halt('Site is down for maintenance, please check back again later... thanks<br>');
+                die('Site is down for maintenance, please check back again later... thanks<br>');
             } elseif ($users_data['class'] >= UC_STAFF) {
                 $session->set('is-danger', 'Site is currently offline, only staff can access site.');
             }
@@ -802,7 +801,7 @@ function check_user_status(string $type = 'browse')
             $returnto = '?returnto=' . urlencode($_SERVER['REQUEST_URI']);
         }
         header("Location: {$site_config['paths']['baseurl']}/login.php" . $returnto);
-        app_halt();
+        die();
     }
 
     if (empty($users_data)) {
@@ -952,7 +951,7 @@ function array_msort(array $array, array $cols)
         $eval .= '$colarr[\'' . $col . '\'],' . $order . ',';
     }
     $eval = substr($eval, 0, -1) . ');';
-    safe_eval($eval);
+    eval($eval);
     $ret = [];
     foreach ($colarr as $col => $arr) {
         foreach ($arr as $k => $v) {
@@ -1089,7 +1088,7 @@ function valid_username(string $username, bool $ajax = false, bool $in_use = fal
     if ($validation->fails()) {
         if ($ajax) {
             echo "<div class='has-text-danger bottom20'><i class='icon-thumbs-down icon' aria-hidden='true'></i>" . _('Username too long or too short') . '</div> 3 - 64 characters';
-            app_halt();
+            die();
         } else {
             stderr(_('Error'), _('Username too long or too short'));
         }
@@ -1097,7 +1096,7 @@ function valid_username(string $username, bool $ajax = false, bool $in_use = fal
     if (!preg_match("/^[\p{L}\p{M}\p{N}]+$/u", urldecode($username))) {
         if ($ajax) {
             echo "<div class='has-text-danger'><i class='icon-thumbs-down icon' aria-hidden='true'></i>" . _('Invalid characters used.') . '</div>';
-            app_halt();
+            die();
         }
 
         return false;
@@ -1105,7 +1104,7 @@ function valid_username(string $username, bool $ajax = false, bool $in_use = fal
     if (preg_match('/' . urldecode($username) . '/i', strtolower(implode('|', $site_config['site']['badwords'])))) {
         if ($ajax) {
             echo "<div class='has-text-danger bottom20'><i class='icon-thumbs-down icon' aria-hidden='true'></i>" . _('Username not allowed.') . '</div>';
-            app_halt();
+            die();
         }
 
         return false;
@@ -1115,14 +1114,14 @@ function valid_username(string $username, bool $ajax = false, bool $in_use = fal
         if ($user->get_count_by_username(htmlsafechars($username))) {
             if ($ajax) {
                 echo "<div class='has-text-danger tooltipper bottom20' title='" . _('Username is not Available') . "'><i class='icon-thumbs-down icon' aria-hidden='true'></i>" . _fe('Sorry... Username - {0} is already in use.', format_comment($_GET['wantusername'])) . '</div>';
-                app_halt();
+                die();
             }
 
             return false;
         } else {
             if ($ajax) {
                 echo "<div class='has-text-success tooltipper bottom20' title='" . _('Username is Available') . "'><i class='icon-thumbs-up icon' aria-hidden='true'></i><b>" . _('Username is Available') . '</b></div>';
-                app_halt();
+                die();
             }
         }
     }
@@ -1661,6 +1660,6 @@ function clear_di_cache()
 }
 
 if (!file_exists(TEMPLATE_DIR . get_stylesheet() . DIRECTORY_SEPARATOR . 'files.php')) {
-    app_halt('Please run php bin/uglify.php to generate the required files');
+    die('Please run php bin/uglify.php to generate the required files');
 }
 require_once TEMPLATE_DIR . get_stylesheet() . DIRECTORY_SEPARATOR . 'files.php';

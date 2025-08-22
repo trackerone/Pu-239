@@ -1,6 +1,5 @@
 <?php
-require_once __DIR__ . '/runtime_safe.php';
-require_once __DIR__ . '/mysql_compat.php';
+require_once __DIR__ . '/bootstrap_pdo.php';
 
 
 declare(strict_types = 1);
@@ -26,6 +25,6 @@ $builder->useAnnotations(false);
 try {
     $container = $builder->build();
 } catch (Exception $e) {
-    app_halt("try 'composer install', then check that definitions.php matches src directory");
+    die("try 'composer install', then check that definitions.php matches src directory");
 }
 require_once CONFIG_DIR . 'session.php';

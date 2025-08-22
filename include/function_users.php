@@ -1,6 +1,5 @@
 <?php
-require_once __DIR__ . '/runtime_safe.php';
-require_once __DIR__ . '/mysql_compat.php';
+require_once __DIR__ . '/bootstrap_pdo.php';
 
 
 declare(strict_types = 1);
@@ -737,6 +736,6 @@ function show_error(string $heading, string $message)
         get_template();
         stderr($heading, $message, 'bottom20');
     } else {
-        app_halt($message);
+        die($message);
     }
 }

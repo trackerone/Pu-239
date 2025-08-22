@@ -1,6 +1,5 @@
 <?php
-require_once __DIR__ . '/../include/runtime_safe.php';
-require_once __DIR__ . '/../include/mysql_compat.php';
+require_once __DIR__ . '/bootstrap_pdo.php';
 
 
 declare(strict_types = 1);
@@ -59,7 +58,7 @@ $sub_forums_stuff = '';
 
 foreach ($query as $sub_forums_arr) {
     if ($sub_forums_arr['min_class_read'] > $CURUSER['class']) {
-        app_halt();
+        die();
     }
 
     $where = $CURUSER['class'] < UC_STAFF ? 'posts.status = "ok" AND topics.status = "ok"' : $CURUSER['class'] < $site_config['forum_config']['min_delete_view_class'] ? 'posts.status != "deleted"  AND topics.status != "deleted"' : '';

@@ -1,6 +1,5 @@
 <?php
-require_once __DIR__ . '/../include/runtime_safe.php';
-require_once __DIR__ . '/../include/mysql_compat.php';
+require_once __DIR__ . '/bootstrap_pdo.php';
 
 
 declare(strict_types = 1);
@@ -147,7 +146,7 @@ if (isset($_POST['button']) && $_POST['button'] === 'Edit') {
         write_log('' . $CURUSER['username'] . ' ' . _('edited a post by') . ' ' . htmlsafechars($arr_post['username']) . '. ' . _('Here is the') . ' <a class="is-link" href="' . $site_config['paths']['baseurl'] . '/forums.php?action=view_post_history&amp;post_id=' . $post_id . '&amp;forum_id=' . (int) $arr_post['forum_id'] . '&amp;topic_id=' . $topic_id . '">' . _('Link') . '</a> ' . _('to the post history') . '', $CURUSER['id']);
     }
     header('Location: ' . $_SERVER['PHP_SELF'] . '?action=view_topic&topic_id=' . $topic_id . ($extension_error !== 0 ? '&ee=' . $extension_error : '') . ($size_error !== 0 ? '&se=' . $size_error : ''));
-    app_halt();
+    die();
 }
 $HTMLOUT .= '
 	<h1 class="has-text-centered">' . _('Edit post by') . ': ' . format_username((int) $arr_post['user_id']) . ' ' . _('In topic') . ' 

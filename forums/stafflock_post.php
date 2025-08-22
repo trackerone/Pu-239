@@ -1,6 +1,5 @@
 <?php
-require_once __DIR__ . '/../include/runtime_safe.php';
-require_once __DIR__ . '/../include/mysql_compat.php';
+require_once __DIR__ . '/bootstrap_pdo.php';
 
 
 declare(strict_types = 1);
@@ -40,11 +39,11 @@ if ($mode === 'lock') {
     sql_query("UPDATE posts SET status = 'postlocked', staff_lock = 1 WHERE id = " . sqlesc($post_id)) or sqlerr(__FILE__, __LINE__);
     //=== ok, all done here, send them back! \o/
     header('Location: ' . $_SERVER['PHP_SELF'] . '?action=view_topic&post_id=' . $post_id . '&topic_id=' . $topic_id);
-    app_halt();
+    die();
 }
 if ($mode === 'unlock') {
     sql_query("UPDATE posts SET status = 'ok', staff_lock = 0 WHERE id = " . sqlesc($post_id)) or sqlerr(__FILE__, __LINE__);
     //=== ok, all done here, send them back! \o/
     header('Location: ' . $_SERVER['PHP_SELF'] . '?action=view_topic&post_id=' . $post_id . '&topic_id=' . $topic_id);
-    app_halt();
+    die();
 }
