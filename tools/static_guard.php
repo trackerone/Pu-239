@@ -1,10 +1,8 @@
 <?php
 /**
- * Static guard: fails the build if risky patterns are found.
- * Usage:
- *   php tools/static_guard.php
+ * Static guard: fails CI if risky patterns exist.
+ * Run locally (optional): php tools/static_guard.php
  */
-
 $root = __DIR__ . '/../';
 $rii = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($root));
 
@@ -21,7 +19,6 @@ $patterns = [
 foreach ($rii as $file) {
     if ($file->isDir()) continue;
     $path = $file->getPathname();
-    // Only scan PHP files
     if (!preg_match('/\.php$/i', $path)) continue;
 
     $rel = substr($path, strlen($root));
