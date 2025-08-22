@@ -1,4 +1,6 @@
 <?php
+require_once __DIR__ . '/bootstrap_pdo.php';
+
 /** Adminer - Compact database management
 * @link https://www.adminer.org/
 * @author Jakub Vrana, https://www.vrana.cz/
@@ -231,10 +233,10 @@ connect($O,$V,$G){if(ini_bool("mysql.allow_local_infile")){$this->error=sprintf(
 false;}$this->_link=@mysql_connect(($O!=""?$O:ini_get("mysql.default_host")),("$O$V"!=""?$V:ini_get("mysql.default_user")),("$O$V$G"!=""?$G:ini_get("mysql.default_password")),true,131072);if($this->_link)$this->server_info=mysql_get_server_info($this->_link);else$this->error=mysql_error();return(bool)$this->_link;}function
 set_charset($La){if(function_exists('mysql_set_charset')){if(mysql_set_charset($La,$this->_link))return
 true;mysql_set_charset('utf8',$this->_link);}return$this->query("SET NAMES $La");}function
-quote($cg){return"'"./*TODO:param*/ $cg,$this->_link."'";}function
+quote($cg){return"'".mysql_real_escape_string($cg,$this->_link)."'";}function
 select_db($sb){return
 mysql_select_db($sb,$this->_link);}function
-query($I,$Sg=false){$J=@($Sg?mysql_unbuffered_query($I,$this->_link):mysql_query($I,$this->_link));$this->error="";if(!$J){$this->errno=mysql_errno($this->_link);$this->error=mysql_error($this->_link);return
+query($I,$Sg=false){$J=@($Sg?mysql_unbuffered_query($I,$this->_link):DB::run("?", [$I]));$this->error="";if(!$J){$this->errno=mysql_errno($this->_link);$this->error=mysql_error($this->_link);return
 false;}if($J===true){$this->affected_rows=mysql_affected_rows($this->_link);$this->info=mysql_info($this->_link);return
 true;}return
 new
@@ -247,11 +249,11 @@ result($I,$l=0){$J=$this->query($I);if(!$J||!$J->num_rows)return
 false;return
 mysql_result($J->_result,0,$l);}}class
 Min_Result{var$num_rows,$_result,$_offset=0;function
-__construct($J){$this->_result=$J;$this->num_rows=($J)->rowCount();}function
+__construct($J){$this->_result=$J;$this->num_rows=mysql_num_rows($J);}function
 fetch_assoc(){return
-($this->_result)->fetch(\PDO::FETCH_ASSOC);}function
+mysql_fetch_assoc($this->_result);}function
 fetch_row(){return
-($this->_result)->fetch(\PDO::FETCH_NUM);}function
+mysql_fetch_row($this->_result);}function
 fetch_field(){$K=mysql_fetch_field($this->_result,$this->_offset++);$K->orgtable=$K->table;$K->orgname=$K->name;$K->charsetnr=($K->blob?63:0);return$K;}function
 __destruct(){mysql_free_result($this->_result);}}}elseif(extension_loaded("pdo_mysql")){class
 Min_DB
