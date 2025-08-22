@@ -1,5 +1,5 @@
 <?php
-require_once __DIR__ . '/bootstrap_pdo.php';
+require_once __DIR__ . '/../include/runtime_safe.php';
 
 
 declare(strict_types = 1);
@@ -100,7 +100,7 @@ if ($sanity_check > 0) {
         }
     }
     header('Location: ' . $_SERVER['PHP_SELF'] . '?action=view_topic&topic_id=' . $topic_id);
-    die();
+    app_halt('Exit called');
 } else {
     global $page;
 

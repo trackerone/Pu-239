@@ -1,5 +1,5 @@
 <?php
-require_once __DIR__ . '/bootstrap_pdo.php';
+require_once __DIR__ . '/../include/runtime_safe.php';
 
 
 declare(strict_types = 1);
@@ -28,4 +28,4 @@ $fluent->insertInto('read_posts', $values)
 $cache->delete('last_read_post_' . $topic_id . '_' . $user['id']);
 $cache->delete('sv_last_read_post_' . $topic_id . '_' . $user['id']);
 header('Location: ' . $_SERVER['PHP_SELF'] . '?action=view_unread_posts');
-die();
+app_halt('Exit called');

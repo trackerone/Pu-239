@@ -1,5 +1,5 @@
 <?php
-require_once __DIR__ . '/bootstrap_pdo.php';
+require_once __DIR__ . '/../include/runtime_safe.php';
 
 
 declare(strict_types = 1);
@@ -55,7 +55,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
         $session->set('is-success', _('Lottery configuration was saved!'));
         header("Location: {$_SERVER['PHP_SELF']}");
-        die();
+        app_halt('Exit called');
     } else {
         $session->set('is-warning', _('There was an error while executing the update query.'));
     }

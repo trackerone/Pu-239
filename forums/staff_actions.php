@@ -1,5 +1,5 @@
 <?php
-require_once __DIR__ . '/bootstrap_pdo.php';
+require_once __DIR__ . '/../include/runtime_safe.php';
 
 
 declare(strict_types = 1);
@@ -46,7 +46,7 @@ if ($topic_id > 0) {
     $arr_check = mysqli_fetch_row($res_check);
     if ($user['class'] < $arr_check[0]) {
         stderr(_('Error'), _('Bad ID.'));
-        exit();
+        app_halt('Exit called');
     }
 }
 switch ($staff_action) {
@@ -78,7 +78,7 @@ switch ($staff_action) {
                 stderr(_('Error'), _('Nothing deleted!'));
             }
             header('Location: ' . $_SERVER['PHP_SELF'] . '?action=view_topic&topic_id=' . $topic_id);
-            die();
+            app_halt('Exit called');
         }
         break;
 
@@ -98,7 +98,7 @@ switch ($staff_action) {
                 stderr(_('Error'), _('Nothing removed from the trash!'));
             }
             header('Location: ' . $_SERVER['PHP_SELF'] . '?action=view_topic&topic_id=' . $topic_id);
-            die();
+            app_halt('Exit called');
         }
         break;
 
@@ -137,7 +137,7 @@ switch ($staff_action) {
                 stderr(_('Error'), _('Topic not split!'));
             }
             header('Location: ' . $_SERVER['PHP_SELF'] . '?action=view_topic&topic_id=' . $new_topic_id);
-            die();
+            app_halt('Exit called');
         }
         break;
 
@@ -171,7 +171,7 @@ switch ($staff_action) {
                 stderr(_('Error'), _('Posts were NOT merged!'));
             }
             header('Location: ' . $_SERVER['PHP_SELF'] . '?action=view_topic&topic_id=' . $topic_to_merge_with);
-            die();
+            app_halt('Exit called');
         }
         break;
 
@@ -223,7 +223,7 @@ switch ($staff_action) {
                 sql_query('UPDATE forums SET post_count = post_count + ' . sqlesc($count) . ' WHERE id=' . sqlesc($arr_to['forum_id'])) or sqlerr(__FILE__, __LINE__);
             }
             header('Location: ' . $_SERVER['PHP_SELF'] . '?action=view_topic&topic_id=' . $topic_to_append_to);
-            die();
+            app_halt('Exit called');
         }
         break;
 
@@ -243,7 +243,7 @@ switch ($staff_action) {
                 stderr(_('Error'), _('Nothing sent to recycle bin!'));
             }
             header('Location: ' . $_SERVER['PHP_SELF'] . '?action=view_topic&topic_id=' . $topic_id);
-            die();
+            app_halt('Exit called');
         }
         break;
 
@@ -263,7 +263,7 @@ switch ($staff_action) {
                 stderr(_('Error'), _('Nothing removed from the recycle bin!'));
             }
             header('Location: ' . $_SERVER['PHP_SELF'] . '?action=view_topic&topic_id=' . $topic_id);
-            die();
+            app_halt('Exit called');
         }
         break;
 
@@ -290,7 +290,7 @@ switch ($staff_action) {
             }
         }
         header('Location: ' . $_SERVER['PHP_SELF'] . '?action=view_topic&topic_id=' . $topic_id . '&count=' . $count);
-        die();
+        app_halt('Exit called');
         break;
 
     case 'set_pinned':
@@ -300,7 +300,7 @@ switch ($staff_action) {
         sql_query('UPDATE topics SET sticky = "' . ($_POST['pinned'] === 'yes' ? 'yes' : 'no') . '" WHERE id=' . sqlesc($topic_id)) or sqlerr(__FILE__, __LINE__);
         clr_forums_cache($topic_id);
         header('Location: ' . $_SERVER['PHP_SELF'] . '?action=view_topic&topic_id=' . $topic_id);
-        die();
+        app_halt('Exit called');
         break;
 
     case 'set_locked':
@@ -310,7 +310,7 @@ switch ($staff_action) {
         sql_query('UPDATE topics SET locked = "' . ($_POST['locked'] === 'yes' ? 'yes' : 'no') . '" WHERE id=' . sqlesc($topic_id)) or sqlerr(__FILE__, __LINE__);
         clr_forums_cache($topic_id);
         header('Location: ' . $_SERVER['PHP_SELF'] . '?action=view_topic&topic_id=' . $topic_id);
-        die();
+        app_halt('Exit called');
         break;
 
     case 'move_topic':
@@ -323,7 +323,7 @@ switch ($staff_action) {
         sql_query('UPDATE topics SET forum_id=' . sqlesc($forum_id) . ' WHERE id=' . sqlesc($topic_id)) or sqlerr(__FILE__, __LINE__);
         clr_forums_cache($topic_id);
         header('Location: ' . $_SERVER['PHP_SELF'] . '?action=view_topic&topic_id=' . $topic_id);
-        die();
+        app_halt('Exit called');
         break;
 
     case 'rename_topic':
@@ -334,7 +334,7 @@ switch ($staff_action) {
         sql_query('UPDATE topics SET topic_name = ' . sqlesc($new_topic_name) . ' WHERE id=' . sqlesc($topic_id)) or sqlerr(__FILE__, __LINE__);
         clr_forums_cache($topic_id);
         header('Location: ' . $_SERVER['PHP_SELF'] . '?action=view_topic&topic_id=' . $topic_id);
-        die();
+        app_halt('Exit called');
         break;
 
     case 'change_topic_desc':
@@ -342,7 +342,7 @@ switch ($staff_action) {
         sql_query('UPDATE topics SET topic_desc = ' . sqlesc($new_topic_desc) . ' WHERE id=' . sqlesc($topic_id)) or sqlerr(__FILE__, __LINE__);
         clr_forums_cache($topic_id);
         header('Location: ' . $_SERVER['PHP_SELF'] . '?action=view_topic&topic_id=' . $topic_id);
-        die();
+        app_halt('Exit called');
         break;
 
     case 'merge_topic':
@@ -366,7 +366,7 @@ switch ($staff_action) {
         }
         sql_query('DELETE FROM topics WHERE id=' . sqlesc($topic_id)) or sqlerr(__FILE__, __LINE__);
         header('Location: ' . $_SERVER['PHP_SELF'] . '?action=view_topic&topic_id=' . $topic_to_merge_with);
-        die();
+        app_halt('Exit called');
         break;
 
     case 'move_to_recycle_bin':
@@ -375,7 +375,7 @@ switch ($staff_action) {
         sql_query('DELETE FROM subscriptions WHERE topic_id=' . sqlesc($topic_id)) or sqlerr(__FILE__, __LINE__);
         clr_forums_cache($topic_id);
         header('Location: ' . $_SERVER['PHP_SELF'] . ($_POST['status'] == 'yes' ? '?action=view_forum&forum_id=' . $forum_id : '?action=view_topic&topic_id=' . $topic_id));
-        die();
+        app_halt('Exit called');
         break;
 
     case 'delete_topic':
@@ -391,7 +391,7 @@ switch ($staff_action) {
         if ($site_config['forum_config']['delete_for_real']) {
             sql_query('UPDATE topics SET status = "deleted" WHERE id=' . sqlesc($topic_id)) or sqlerr(__FILE__, __LINE__);
             header('Location: ' . $_SERVER['PHP_SELF']);
-            die();
+            app_halt('Exit called');
         } else {
             $res_count = sql_query('SELECT post_count, forum_id, poll_id FROM topics WHERE id=' . sqlesc($topic_id)) or sqlerr(__FILE__, __LINE__);
             $arr_count = mysqli_fetch_assoc($res_count);
@@ -408,7 +408,7 @@ switch ($staff_action) {
                 $cache->delete('forum_last_post_' . $arr_count['forum_id'] . '_' . $i);
             }
             header('Location: ' . $_SERVER['PHP_SELF']);
-            die();
+            app_halt('Exit called');
         }
         break;
 
@@ -419,6 +419,6 @@ switch ($staff_action) {
         sql_query('UPDATE forums SET post_count = post_count + ' . sqlesc($arr_count[0]) . ', topic_count = topic_count + 1 WHERE id=' . sqlesc($arr_count['forum_id'])) or sqlerr(__FILE__, __LINE__);
         clr_forums_cache($topic_id);
         header('Location: ' . $_SERVER['PHP_SELF'] . '?action=view_topic&topic_id=' . $topic_id);
-        die();
+        app_halt('Exit called');
         break;
 }

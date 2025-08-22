@@ -1,5 +1,5 @@
 <?php
-require_once __DIR__ . '/bootstrap_pdo.php';
+require_once __DIR__ . '/../include/runtime_safe.php';
 
 
 declare(strict_types = 1);
@@ -77,7 +77,7 @@ class Settings
             if (!empty($staff['is_staff'])) {
                 $this->cache->set('is_staff_', $staff, 86400);
             } else {
-                die("You don't have any users defined as STAFF");
+                app_halt("You don't have any users defined as STAFF");
             }
         }
 

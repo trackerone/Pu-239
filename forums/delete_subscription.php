@@ -1,5 +1,5 @@
 <?php
-require_once __DIR__ . '/bootstrap_pdo.php';
+require_once __DIR__ . '/../include/runtime_safe.php';
 
 
 declare(strict_types = 1);
@@ -11,7 +11,7 @@ if ($topic_id > 0) {
     sql_query('DELETE FROM subscriptions WHERE topic_id = ' . sqlesc($topic_id) . ' AND user_id = ' . sqlesc($CURUSER['id'])) or sqlerr(__FILE__, __LINE__);
     //=== ok, all done here, send them back! \o/
     header('Location: ' . $_SERVER['PHP_SELF'] . '?action=view_topic&topic_id=' . $topic_id . '&s=0');
-    die();
+    app_halt('Exit called');
 }
 if (isset($_POST['remove'])) {
     $_POST['remove'] = isset($_POST['remove']) ? $_POST['remove'] : [];
@@ -28,4 +28,4 @@ if (isset($_POST['remove'])) {
     }
 }
 header('Location: ' . $_SERVER['PHP_SELF'] . '?action=subscriptions');
-die();
+app_halt('Exit called');
