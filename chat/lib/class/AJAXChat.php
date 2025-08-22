@@ -1,5 +1,6 @@
 <?php
-require_once __DIR__ . '/runtime_safe.php';
+require_once __DIR__ . '/../../../include/runtime_safe.php';
+require_once __DIR__ . '/../../../include/mysql_compat.php';
 
 
 declare(strict_types = 1);
@@ -2761,7 +2762,7 @@ class AJAXChat
      */
     public function getChatViewXMLMessages()
     {
-        $xml = '<?xml version="1.0" encoding="UTF-8"?>';
+        $xml = '<?php xml version="1.0" encoding="UTF-8"?>';
         $xml .= '<root>';
         $xml .= $this->getInfoMessagesXML();
         $xml .= $this->getChatViewOnlineUsersXML([$this->getChannel()]);
@@ -2963,7 +2964,7 @@ class AJAXChat
      */
     public function getTeaserViewXMLMessages()
     {
-        $xml = '<?xml version="1.0" encoding="UTF-8"?>';
+        $xml = '<?php xml version="1.0" encoding="UTF-8"?>';
         $xml .= '<root>';
         $xml .= $this->getInfoMessagesXML();
         $xml .= $this->getTeaserViewMessagesXML();
@@ -3065,7 +3066,7 @@ class AJAXChat
      */
     public function getLogsViewXMLMessages()
     {
-        $xml = '<?xml version="1.0" encoding="UTF-8"?>';
+        $xml = '<?php xml version="1.0" encoding="UTF-8"?>';
         $xml .= '<root>';
         $xml .= $this->getInfoMessagesXML();
         $xml .= $this->getLogsViewMessagesXML();
@@ -3250,7 +3251,7 @@ class AJAXChat
      */
     public function getLogoutXMLMessage()
     {
-        $xml = '<?xml version="1.0" encoding="UTF-8"?>';
+        $xml = '<?php xml version="1.0" encoding="UTF-8"?>';
         $xml .= '<root>';
         $xml .= '<infos>';
         $xml .= '<info type="logout">';
