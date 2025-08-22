@@ -1,4 +1,6 @@
 <?php
+require_once __DIR__ . '/runtime_safe.php';
+
 
 declare(strict_types = 1);
 
@@ -23,7 +25,7 @@ function gift_update($data)
 
     $time_start = microtime(true);
     if (Christmas()) {
-        die();
+        app_halt();
     }
     $fluent = $container->get(Database::class);
     $query = $fluent->from('users')

@@ -1,4 +1,6 @@
 <?php
+require_once __DIR__ . '/runtime_safe.php';
+
 
 declare(strict_types = 1);
 
@@ -12,7 +14,7 @@ global $site_config;
 $rep_set_cache = CACHE_DIR . 'rep_settings_cache.php';
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     unset($_POST['submit']);
-    //print_r($_POST);
+    //debug_log($_POST);
     rep_cache();
     exit;
 }

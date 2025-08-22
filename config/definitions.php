@@ -1,4 +1,6 @@
 <?php
+require_once __DIR__ . '/runtime_safe.php';
+
 
 declare(strict_types = 1);
 
@@ -32,7 +34,7 @@ return [
             $mysqli = new mysqli($env['db']['host'], $env['db']['username'], $env['db']['password'], $env['db']['database'], $env['db']['port']);
         }
         if ($mysqli->connect_error) {
-            die('Connect Error (' . $mysqli->connect_errno . ') ' . $mysqli->connect_error);
+            app_halt('Connect Error (' . $mysqli->connect_errno . ') ' . $mysqli->connect_error);
         }
 
         return $mysqli;

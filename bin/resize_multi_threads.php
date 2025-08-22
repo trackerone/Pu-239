@@ -1,4 +1,6 @@
 <?php
+require_once __DIR__ . '/runtime_safe.php';
+
 
 declare(strict_types = 1);
 
@@ -50,7 +52,7 @@ echo "$persons images from the photo table\n";
 if (isset($argv[1]) && $argv[1] === 'count') {
     echo "threads: $threads\n";
     echo "limit: $limit\n";
-    die();
+    app_halt();
 }
 if ($threads < 2) {
     passthru('php ' . BIN_DIR . "optimize_resize_images.php $limit 0");
@@ -59,7 +61,7 @@ if ($threads < 2) {
         $pid = pcntl_fork();
 
         if ($pid == -1) {
-            die("Error forking...\n");
+            app_halt("Error forking...\n");
         }
         if ($pid) {
             echo "PID $pid started\n";
@@ -67,7 +69,7 @@ if ($threads < 2) {
         } else {
             $offset = $i === 1 ? 0 : ($i - 1) * $limit;
             exec('php ' . BIN_DIR . "optimize_resize_images.php $limit $offset");
-            exit();
+            app_halt('Exit called');
         }
     }
 

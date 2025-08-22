@@ -1,4 +1,6 @@
 <?php
+require_once __DIR__ . '/runtime_safe.php';
+
 
 declare(strict_types = 1);
 
@@ -114,7 +116,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $cache->delete('site_blocks_');
     sleep(3);
     header('Location: ' . $_SERVER['PHP_SELF'] . '?tool=block.settings');
-    die();
+    app_halt();
 }
 
 $HTMLOUT = "

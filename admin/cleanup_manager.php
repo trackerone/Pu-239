@@ -1,4 +1,6 @@
 <?php
+require_once __DIR__ . '/runtime_safe.php';
+
 
 declare(strict_types = 1);
 
@@ -66,7 +68,7 @@ function resettimer()
     sql_query("UPDATE cleanup SET clean_time = $timestamp WHERE clean_time > 0");
     $session->set('is-success', 'Cleanup Time Set to ' . get_date((int) $timestamp, 'LONG'));
     cleanup_show_main();
-    die();
+    app_halt();
 }
 
 /**
@@ -106,7 +108,7 @@ function manualclean($params)
     }
 
     cleanup_show_main();
-    die();
+    app_halt();
 }
 
 /**
@@ -331,7 +333,7 @@ function cleanup_take_edit($params)
     }
     sql_query("UPDATE cleanup SET function_name = {$params['function_name']}, clean_title = {$params['clean_title']}, clean_desc = {$params['clean_desc']}, clean_file = {$params['clean_file']}, clean_time = {$params['clean_time']}, clean_increment = {$params['clean_increment']}, clean_log = {$params['clean_log']}, clean_on = {$params['clean_on']} WHERE clean_id={$params['cid']}");
     cleanup_show_main();
-    die();
+    app_halt();
 }
 
 /**
@@ -464,7 +466,7 @@ function cleanup_take_new($params)
     } else {
         stderr(_('Error'), _('Something went horridly wrong'));
     }
-    die();
+    app_halt();
 }
 
 /**
@@ -495,7 +497,7 @@ function cleanup_take_delete($params)
     } else {
         stderr(_('Error'), _('Something went horridly wrong'));
     }
-    die();
+    app_halt();
 }
 
 /**
@@ -544,5 +546,5 @@ function cleanup_take_unlock($params)
     } else {
         stderr(_('Error'), _('Error'));
     }
-    die();
+    app_halt();
 }

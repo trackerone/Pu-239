@@ -1,4 +1,6 @@
 <?php
+require_once __DIR__ . '/runtime_safe.php';
+
 
 declare(strict_types = 1);
 
@@ -7,7 +9,7 @@ require_once BIN_DIR . 'functions.php';
 global $site_config, $site_config;
 
 if (empty($BLOCKS)) {
-    die('BLOCKS are empty');
+    app_halt('BLOCKS are empty');
 }
 
 $start = microtime(true);

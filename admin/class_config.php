@@ -1,4 +1,6 @@
 <?php
+require_once __DIR__ . '/runtime_safe.php';
+
 
 declare(strict_types = 1);
 
@@ -304,7 +306,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     run_uglify();
     $cache->flushDB();
     header('Location: ' . $_SERVER['PHP_SELF'] . '?tool=class_config');
-    die();
+    app_halt();
 }
 $HTMLOUT .= "
         <h1 class='has-text-centered top20'>" . _fe('User Class Settings for Template {0}', $style) . "</h1>

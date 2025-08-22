@@ -1,4 +1,6 @@
 <?php
+require_once __DIR__ . '/runtime_safe.php';
+
 
 declare(strict_types = 1);
 
@@ -10,20 +12,20 @@ use Pu239\Cache;
 use Pu239\Database;
 
 if (empty($argv[1])) {
-    die("To install please run\n\nphp {$argv[0]} install\n");
+    app_halt("To install please run\n\nphp {$argv[0]} install\n");
 }
 
 exec('which composer', $composer);
 if (empty($composer)) {
-    die("Please install composer\nhttps://getcomposer.org/download/\n\n");
+    app_halt("Please install composer\nhttps://getcomposer.org/download/\n\n");
 }
 exec('which npm', $npm);
 if (empty($npm)) {
-    die("Please install nodejs\nhttps://nodejs.org/en/download/package-manager/\n\n");
+    app_halt("Please install nodejs\nhttps://nodejs.org/en/download/package-manager/\n\n");
 }
 exec('which npx', $npx);
 if (empty($npx)) {
-    die("Please install npx\nsudo npm -ig npx\n\n");
+    app_halt("Please install npx\nsudo npm -ig npx\n\n");
 }
 
 if (count($argv) === 13) {
@@ -110,7 +112,7 @@ $config = str_replace([
 ], $config);
 
 if (!file_put_contents(CONFIG_DIR . 'config.php', $config)) {
-    die(CONFIG_DIR . 'config.php file could not be saved, check your permissions.');
+    app_halt(CONFIG_DIR . 'config.php file could not be saved, check your permissions.');
 }
 
 $production = false;
@@ -149,7 +151,7 @@ foreach ($sources as $name => $source) {
     echo 'Importing: ' . $name . "\n";
     exec("gunzip < '$source' | /usr/bin/mysql -u'{$site_config['db']['username']}' -h '{$site_config['db']['host']}' -p'{$site_config['db']['password']}' {$site_config['db']['database']}", $output, $status);
     if ($status != 0) {
-        die("There was an error while working with database, at step: {$name}\n");
+        app_halt("There was an error while working with database, at step: {$name}\n");
     }
 }
 
@@ -157,7 +159,7 @@ $timestamp = strtotime('today midnight');
 $query = "UPDATE cleanup SET clean_time = $timestamp WHERE clean_time > 0";
 $stmt = $pdo->query($query);
 if (!$stmt->execute()) {
-    die("There was an error while working with database, at step: {$name}\n");
+    app_halt("There was an error while working with database, at step: {$name}\n");
 }
 
 foreach ($vars['site'] as $key => $value) {

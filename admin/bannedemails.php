@@ -1,4 +1,6 @@
 <?php
+require_once __DIR__ . '/runtime_safe.php';
+
 
 declare(strict_types = 1);
 
@@ -26,7 +28,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
     sql_query('INSERT INTO bannedemails (added, addedby, comment, email) VALUES(' . TIME_NOW . ', ' . sqlesc($CURUSER['id']) . ', ' . sqlesc($comment) . ', ' . sqlesc($email) . ')') or sqlerr(__FILE__, __LINE__);
     header('Location: ' . $_SERVER['PHP_SELF'] . '?tool=bannedemails');
-    die();
+    app_halt();
 }
 $HTMLOUT .= "
     <h1 class='has-text-centered'>" . _('Add Ban') . "</h1>

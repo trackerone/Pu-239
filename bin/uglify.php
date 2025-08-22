@@ -1,4 +1,6 @@
 <?php
+require_once __DIR__ . '/runtime_safe.php';
+
 
 declare(strict_types = 1);
 
@@ -433,7 +435,7 @@ function run_uglify($argv = [])
 function process_js($key, $list, $purpose, $jstmp, $folder, $js_ext)
 {
     if (empty($list)) {
-        die("$key array can not be empty\n");
+        app_halt("$key array can not be empty\n");
     }
 
     $files = [];
@@ -482,7 +484,7 @@ function process_js($key, $list, $purpose, $jstmp, $folder, $js_ext)
 function process_css($key, $list, $spurpose, $csstmp, $folder, $css_ext)
 {
     if (empty($list)) {
-        die("$key array can not be empty\n");
+        app_halt("$key array can not be empty\n");
     }
     $files = [];
     foreach ($list as $file) {
@@ -643,7 +645,7 @@ function can_delete(string $file, bool $delete)
                 $msg = _fe('{0}Unable to modify file:{1}.{2}Please check your permissions.{3}sudo chown -R {4}.{5}sudo php bin/set_perms.php', $br, $file, $br, $br, $user_group, $br);
             }
             if (php_sapi_name() === 'cli') {
-                die($msg);
+                app_halt($msg);
             } else {
                 stderr(_('Error'), $msg);
             }

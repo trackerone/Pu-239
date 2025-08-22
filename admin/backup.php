@@ -1,4 +1,6 @@
 <?php
+require_once __DIR__ . '/runtime_safe.php';
+
 
 declare(strict_types = 1);
 
@@ -169,7 +171,7 @@ if (empty($mode)) {
         write_log($CURUSER['username'] . '(' . get_user_class_name((int) $CURUSER['class']) . ') ' . _('successfully backed-up the database.'));
     }
     header('Location: ' . $_SERVER['PHP_SELF'] . '?tool=backup');
-    die();
+    app_halt();
 } elseif ($mode === 'delete') {
     $ids = (isset($_POST['ids']) ? $_POST['ids'] : (isset($_GET['id']) ? [
         $_GET['id'],
@@ -212,7 +214,7 @@ if (empty($mode)) {
         $location = 'noselection';
     }
     header('Location: ' . $_SERVER['PHP_SELF'] . '?tool=backup&mode=' . $location);
-    die();
+    app_halt();
 } else {
     stderr(_('Error'), _('Unknown action!'));
 }

@@ -1,4 +1,6 @@
 <?php
+require_once __DIR__ . '/runtime_safe.php';
+
 
 declare(strict_types = 1);
 
@@ -39,7 +41,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         if ($sql) {
             header("Location: {$_SERVER['PHP_SELF']}?tool=bonusmanage");
-            die();
+            app_halt();
         } else {
             stderr(_('Error'), _('Something went wrong with the sql query'));
         }

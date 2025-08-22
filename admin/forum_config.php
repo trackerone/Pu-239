@@ -1,4 +1,6 @@
 <?php
+require_once __DIR__ . '/runtime_safe.php';
+
 
 declare(strict_types = 1);
 
@@ -32,7 +34,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['do_it'])) {
            ->execute();
     $cache->delete('forum_config_');
     header('Location: ' . $_SERVER['PHP_SELF'] . '?tool=forum_config');
-    die();
+    app_halt();
 }
 $main_links = "
             <div class='bottom20'>

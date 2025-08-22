@@ -1,4 +1,6 @@
 <?php
+require_once __DIR__ . '/runtime_safe.php';
+
 
 declare(strict_types = 1);
 
@@ -8,7 +10,7 @@ $class = get_access(basename($_SERVER['REQUEST_URI']));
 class_check($class);
 if (file_exists(CACHE_DIR . 'goaccess.html')) {
     require_once CACHE_DIR . 'goaccess.html';
-    die();
+    app_halt();
 } else {
     stderr(_('Error'), 'Is goaccess installed?');
 }
