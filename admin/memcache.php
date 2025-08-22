@@ -1,6 +1,5 @@
 <?php
-require_once __DIR__ . '/../include/runtime_safe.php';
-require_once __DIR__ . '/../include/mysql_compat.php';
+require_once __DIR__ . '/bootstrap_pdo.php';
 
 
 declare(strict_types = 1);
@@ -43,7 +42,7 @@ if (extension_loaded('memcached')) {
         $MEMCACHE_SERVERS[] = "unix://{$site_config['memcached']['socket']}";
     }
 } else {
-    app_halt('<h1>Error</h1><p>php-memcached is not available</p>');
+    die('<h1>Error</h1><p>php-memcached is not available</p>');
 }
 
 ////////// END OF DEFAULT CONFIG AREA /////////////////////////////////////////////////////////////
@@ -97,7 +96,7 @@ function sendMemcacheCommand(string $server, int $port, string $command)
     try {
         $s = fsockopen($server, $port);
     } catch (Exception $e) {
-        app_halt("Can't connect to: {$server}:{$port}\n" . $e->getMessage());
+        die("Can't connect to: {$server}:{$port}\n" . $e->getMessage());
     }
     fwrite($s, $command . "\r\n");
     $buf = '';

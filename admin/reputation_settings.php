@@ -1,6 +1,5 @@
 <?php
-require_once __DIR__ . '/../include/runtime_safe.php';
-require_once __DIR__ . '/../include/mysql_compat.php';
+require_once __DIR__ . '/bootstrap_pdo.php';
 
 
 declare(strict_types = 1);
@@ -15,7 +14,7 @@ global $site_config;
 $rep_set_cache = CACHE_DIR . 'rep_settings_cache.php';
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     unset($_POST['submit']);
-    //debug_log($_POST);
+    //print_r($_POST);
     rep_cache();
     exit;
 }

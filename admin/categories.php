@@ -1,6 +1,5 @@
 <?php
-require_once __DIR__ . '/../include/runtime_safe.php';
-require_once __DIR__ . '/../include/mysql_compat.php';
+require_once __DIR__ . '/bootstrap_pdo.php';
 
 
 declare(strict_types = 1);
@@ -105,7 +104,7 @@ function move_cat($params)
     $cache->delete('categories');
     if ($results) {
         header("Location: {$_SERVER['PHP_SELF']}?tool=categories");
-        app_halt();
+        die();
     } else {
         stderr(_('Error'), _('There was an error deleting the category'));
     }
@@ -212,7 +211,7 @@ function add_cat($params)
         stderr(_('Error'), _('That category does not exist or has been deleted'));
     } else {
         header("Location: {$_SERVER['PHP_SELF']}?tool=categories");
-        app_halt();
+        die();
     }
 }
 
@@ -258,7 +257,7 @@ function delete_cat($params)
     $cache->delete('categories');
     if ($results) {
         header("Location: {$_SERVER['PHP_SELF']}?tool=categories");
-        app_halt();
+        die();
     } else {
         stderr(_('Error'), _('There was an error deleting the category'));
     }
@@ -368,10 +367,10 @@ function edit_cat($params)
         $cache->delete('genrelist_ordered_');
         $cache->delete('categories');
         header("Location: {$_SERVER['PHP_SELF']}?tool=categories");
-        app_halt();
+        die();
     } else {
         header("Location: {$_SERVER['PHP_SELF']}?tool=categories");
-        app_halt();
+        die();
     }
 }
 
@@ -629,7 +628,7 @@ function reorder_cats(bool $redirect = true)
 
     if ($redirect) {
         header("Location: {$_SERVER['PHP_SELF']}?tool=categories");
-        app_halt();
+        die();
     }
 }
 

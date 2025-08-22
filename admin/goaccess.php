@@ -1,6 +1,5 @@
 <?php
-require_once __DIR__ . '/../include/runtime_safe.php';
-require_once __DIR__ . '/../include/mysql_compat.php';
+require_once __DIR__ . '/bootstrap_pdo.php';
 
 
 declare(strict_types = 1);
@@ -11,7 +10,7 @@ $class = get_access(basename($_SERVER['REQUEST_URI']));
 class_check($class);
 if (file_exists(CACHE_DIR . 'goaccess.html')) {
     require_once CACHE_DIR . 'goaccess.html';
-    app_halt();
+    die();
 } else {
     stderr(_('Error'), 'Is goaccess installed?');
 }

@@ -1,6 +1,5 @@
 <?php
-require_once __DIR__ . '/../include/runtime_safe.php';
-require_once __DIR__ . '/../include/mysql_compat.php';
+require_once __DIR__ . '/bootstrap_pdo.php';
 
 
 declare(strict_types = 1);
@@ -459,10 +458,10 @@ function makepoll()
         }
     }
     if (count($questions) > $site_config['poll']['max_questions']) {
-        app_halt('poll_to_many');
+        die('poll_to_many');
     }
     if ($choices_count > ($site_config['poll']['max_questions'] * $site_config['poll']['max_choices_per_question'])) {
-        app_halt('poll_to_many');
+        die('poll_to_many');
     }
     if (isset($_POST['mode']) && $_POST['mode'] == 'poll_update') {
         $questions['total_votes'] = $poll_total_votes;
