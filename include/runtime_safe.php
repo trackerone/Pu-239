@@ -1,3 +1,25 @@
 <?php
-function debug_log($v){error_log('[DEBUG] '.(is_scalar($v)?var_export($v,true):print_r($v,true)));}
-function app_halt($m='Application halted'){error_log('[HALT] '.$m);throw new \RuntimeException($m);} function safe_eval($c){error_log('[BLOCKED eval]');return null;}
+if (!function_exists('debug_log')) {
+    function debug_log($value) {
+        $debug = getenv('APP_DEBUG');
+        if ($debug && strtolower($debug) !== 'false' && $debug !== '0') {
+            if (is_array($value) || is_object($value)) error_log('[DEBUG] ' . print_r($value, true));
+            else error_log('[DEBUG] ' . var_export($value, true));
+        }
+    }
+}
+if (!function_exists('app_halt')) {
+    function app_halt($message = 'Application halted') {
+        if (is_array($message) || is_object($message)) $message = print_r($message, true);
+        error_log('[HALT] ' . (string)$message);
+        throw new \RuntimeException((string)$message);
+    }
+}
+if (!function_exists('safe_eval')) {
+    function safe_eval($code) {
+        error_log('[BLOCKED eval] Attempted to eval:');
+        $preview = is_string($code) ? substr($code, 0, 120) : '[non-string]';
+        error_log($preview);
+        return null;
+    }
+}
