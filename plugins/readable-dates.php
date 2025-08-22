@@ -1,4 +1,7 @@
-<?php declare(strict_types=1);
+<?php
+require_once __DIR__ . '/../include/runtime_safe.php';
+require_once __DIR__ . '/../include/mysql_compat.php';
+ declare(strict_types=1);
 
 /** This plugin replaces UNIX timestamps with human-readable dates in your local format.
  * Mouse click on the date field reveals timestamp back.

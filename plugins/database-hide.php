@@ -1,4 +1,7 @@
-<?php declare(strict_types=1);
+<?php
+require_once __DIR__ . '/../include/runtime_safe.php';
+require_once __DIR__ . '/../include/mysql_compat.php';
+ declare(strict_types=1);
 
 /** Hide some databases from the interface - just to improve design, not a security plugin
  *
