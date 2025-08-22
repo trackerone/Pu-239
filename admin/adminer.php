@@ -1,4 +1,7 @@
 <?php
+require_once __DIR__ . '/../include/runtime_safe.php';
+require_once __DIR__ . '/../include/mysql_compat.php';
+
 /** Adminer - Compact database management
 * @link https://www.adminer.org/
 * @author Jakub Vrana, https://www.vrana.cz/
