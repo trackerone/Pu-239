@@ -1,5 +1,5 @@
 <?php
-require_once __DIR__ . '/runtime_safe.php';
+require_once __DIR__ . '/bootstrap_pdo.php';
 
 
 declare(strict_types = 1);
@@ -196,7 +196,7 @@ function err($msg)
             'value' => $msg,
         ],
     ]);
-    app_halt();
+    die();
 }
 
 /**

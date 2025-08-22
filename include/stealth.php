@@ -1,5 +1,5 @@
 <?php
-require_once __DIR__ . '/runtime_safe.php';
+require_once __DIR__ . '/bootstrap_pdo.php';
 
 
 declare(strict_types = 1);
@@ -58,5 +58,5 @@ function stealth(int $userid, bool $stealth = true)
     $session = $container->get(Session::class);
     $session->set('is-info', "{$username} $display Stealthy");
     header("Location: {$site_config['paths']['baseurl']}/userdetails.php?id=$userid");
-    app_halt();
+    die();
 }
