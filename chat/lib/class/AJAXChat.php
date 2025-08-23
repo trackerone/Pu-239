@@ -1,6 +1,4 @@
 <?php
-require_once __DIR__ . '/../../../include/runtime_safe.php';
-
 
 declare(strict_types = 1);
 
@@ -104,7 +102,7 @@ class AJAXChat
         $config = null;
         if (!include(AJAX_CHAT_PATH . 'lib' . DIRECTORY_SEPARATOR . '/config.php')) {
             echo '<strong>Error:</strong> Could not find a config.php file in "' . AJAX_CHAT_PATH . 'lib' . DIRECTORY_SEPARATOR . '". Check to make sure the file exists.';
-            app_halt('Exit called');
+            die();
         }
         $this->_config = &$config;
 

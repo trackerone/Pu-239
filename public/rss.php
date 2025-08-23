@@ -1,6 +1,4 @@
 <?php
-require_once __DIR__ . '/../include/runtime_safe.php';
-
 
 declare(strict_types = 1);
 
@@ -206,5 +204,5 @@ function format_rss($data, ?string $torrent_pass)
 
     header('Content-Type: application/xml');
     echo $rss;
-    app_halt('Exit called');
+    die();
 }
