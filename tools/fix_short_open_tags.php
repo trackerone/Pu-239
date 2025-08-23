@@ -1,16 +1,16 @@
 <?php
 /**
  * tools/fix_short_open_tags.php
- * Converts short open tags to full '<?php ' for targeted files WITHOUT having the short tag in this source.
+ * Converts short open tags to full form in target files.
+ * Implementation avoids embedding the literal short tag in this source.
  */
 $root = realpath(__DIR__ . '/../');
 $targets = [
     'chat/lib/class/AJAXChat.php',
     'public/rss.php',
 ];
-$lt = '<';
-$qm = '?';
-$pattern = '/' . $lt . $qm . '(?!php|=)/'; // effectively '/<\?(?!php|=)/'
+$lt = '<'; $qm = '?';
+$pattern = '/' . $lt . $qm . '(?!php|=)/'; // equivalent to '/<\?(?!php|=)/'
 $changed = 0;
 foreach ($targets as $rel) {
     $path = $root . '/' . $rel;
@@ -24,4 +24,4 @@ foreach ($targets as $rel) {
         $changed++;
     }
 }
-if ($changed === 0) echo "No short tags found.\n";
+echo $changed ? "Changed {$changed} file(s).\n" : "No changes.\n";
