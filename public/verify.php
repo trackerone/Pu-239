@@ -1,6 +1,8 @@
 <?php
 require_once __DIR__ . '/../include/runtime_safe.php';
 
+require_once __DIR__ . '/../include/bootstrap_pdo.php';
+
 
 declare(strict_types = 1);
 
@@ -25,28 +27,28 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (empty($url)) {
         $session->set('is-warning', _('Invalid Page Requested.'));
         header("Location: {$site_config['paths']['baseurl']}/index.php");
-        app_halt('Exit called');
+        die();
     }
     try {
         if ($auth->reconfirmPassword($_POST['password'])) {
             $session->set('is-success', _('Your identity has been confirmed.'));
             $session->set('auth_remembered', false, false);
             header("Location: {$url}");
-            app_halt('Exit called');
+            die();
         } else {
             $auth->logOutEverywhere();
             $session->set('is-danger', _('Password verification failed.'));
             header("Location: {$site_config['paths']['baseurl']}/login.php");
-            app_halt('Exit called');
+            die();
         }
     } catch (NotLoggedInException $e) {
         $session->set('is-danger', _('The user is not signed in.'));
         header("Location: {$site_config['paths']['baseurl']}/login.php");
-        app_halt('Exit called');
+        die();
     } catch (TooManyRequestsException $e) {
         $session->set('is-danger', _('Too many requests from your IP..'));
         header("Location: {$site_config['paths']['baseurl']}/index.php");
-        app_halt('Exit called');
+        die();
     }
 }
 $HTMLOUT = "

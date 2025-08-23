@@ -1,6 +1,8 @@
 <?php
 require_once __DIR__ . '/../include/runtime_safe.php';
 
+require_once __DIR__ . '/../include/bootstrap_pdo.php';
+
 
 declare(strict_types = 1);
 
@@ -48,10 +50,10 @@ if (isset($_SERVER['REQUEST_URI'])) {
     header('Expires: ' . $img['ex_date']);
     header('Cache-Control: private, max-age=604800');
     if ($img['stop']) {
-        app_halt('Exit called');
+        die();
     }
     header('Last-Modified: ' . $img['lm_date']);
     header('Content-type: image/' . $pi['extension']);
     readfile($image);
-    app_halt('Exit called');
+    die();
 }

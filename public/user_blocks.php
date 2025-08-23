@@ -1,6 +1,8 @@
 <?php
 require_once __DIR__ . '/../include/runtime_safe.php';
 
+require_once __DIR__ . '/../include/bootstrap_pdo.php';
+
 
 declare(strict_types = 1);
 
@@ -30,7 +32,7 @@ $user = $users_class->getUserFromId($id);
 if ($user['class'] < UC_STAFF && $user['got_blocks'] === 'no') {
     $session->set('is-link', 'You will have to unlock this before you can access it.');
     header('Location: ' . $site_config['paths']['baseurl'] . '/index.php');
-    app_halt('Exit called');
+    die();
 }
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -442,7 +444,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $session->set('is-success', 'User Blocks Successfully Updated');
         unset($_POST);
         header('Location: ' . $_SERVER['PHP_SELF']);
-        app_halt('Exit called');
+        die();
     }
 }
 

@@ -1,6 +1,8 @@
 <?php
 require_once __DIR__ . '/../include/runtime_safe.php';
 
+require_once __DIR__ . '/../include/bootstrap_pdo.php';
+
 
 declare(strict_types = 1);
 
@@ -27,7 +29,7 @@ $nfo = $torrent->get_items([
     'id',
 ], $id);
 if (empty($nfo) || empty($nfo['nfo'])) {
-    app_halt(_('Puke'));
+    die(_('Puke'));
 }
 
 $HTMLOUT = "

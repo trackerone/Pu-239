@@ -1,6 +1,8 @@
 <?php
 require_once __DIR__ . '/../include/runtime_safe.php';
 
+require_once __DIR__ . '/../include/bootstrap_pdo.php';
+
 
 declare(strict_types = 1);
 
@@ -21,10 +23,10 @@ global $container, $site_config;
 
 if (isset($_SERVER['QUERY_STRING']) && $_SERVER['QUERY_STRING'] === 'reset=1') {
     header('Location: ' . $_SERVER['PHP_SELF'] . '?tool=op&reset=1');
-    app_halt('Exit called');
+    die();
 } elseif (isset($_SERVER['REQUEST_URI']) && $_SERVER['REQUEST_URI'] === '/staffpanel.php?') {
     header('Location: ' . $_SERVER['PHP_SELF'] . '?tool=op');
-    app_halt('Exit called');
+    die();
 }
 $session = $container->get(Session::class);
 $radiance = $container->get(Radiance::class);
@@ -129,7 +131,7 @@ if (in_array($tool, $staff_tools) && file_exists(ADMIN_DIR . $staff_tools[$tool]
                 write_log("$page " . _('in the staff panel was') . " $action by $user_bbcode");
             }
             header('Location: ' . $_SERVER['PHP_SELF']);
-            app_halt('Exit called');
+            die();
         } else {
             stderr(_('Error'), _('There was a database error, please retry.'));
         }
@@ -137,7 +139,7 @@ if (in_array($tool, $staff_tools) && file_exists(ADMIN_DIR . $staff_tools[$tool]
         $cache->flushDB();
         $session->set('is-success', _fe('You flushed the {0} cache', ucfirst($site_config['cache']['driver'])));
         header('Location: ' . $_SERVER['PHP_SELF']);
-        app_halt('Exit called');
+        die();
     } elseif ($action === 'uglify' && has_access($user['class'], UC_SYSOP, 'coder')) {
         toggle_site_status(true);
         $result = run_uglify();
@@ -150,14 +152,14 @@ if (in_array($tool, $staff_tools) && file_exists(ADMIN_DIR . $staff_tools[$tool]
             $session->set('is-warning', _('uglify.php failed'));
         }
         header('Location: ' . $_SERVER['PHP_SELF']);
-        app_halt('Exit called');
+        die();
     } elseif ($action === 'clear_ajaxchat' && has_access($user['class'], UC_SYSOP, 'coder')) {
         $fluent->deleteFrom('ajax_chat_messages')
                ->where('id>0')
                ->execute();
         $session->set('is-success', 'You deleted [i]all[/i] messages in AJAX Chat.');
         header('Location: ' . $_SERVER['PHP_SELF']);
-        app_halt('Exit called');
+        die();
     } elseif ($action === 'radiance_start' && has_access($user['class'], UC_SYSOP, 'coder')) {
         if (empty($radiance->start_radiance())) {
             $session->set('is-success', 'Radiance has started.');
@@ -165,7 +167,7 @@ if (in_array($tool, $staff_tools) && file_exists(ADMIN_DIR . $staff_tools[$tool]
             $session->set('is-danger', 'Radiance has failed to start, please check it manually.');
         }
         header('Location: ' . $_SERVER['PHP_SELF']);
-        app_halt('Exit called');
+        die();
     } elseif ($action === 'radiance_reload' && has_access($user['class'], UC_SYSOP, 'coder')) {
         if (empty($radiance->reload_radiance('SIGUSR1'))) {
             $session->set('is-success', 'You have reloaded radiance.');
@@ -173,7 +175,7 @@ if (in_array($tool, $staff_tools) && file_exists(ADMIN_DIR . $staff_tools[$tool]
             $session->set('is-danger', 'Radiance has failed to reload, please check it manually.');
         }
         header('Location: ' . $_SERVER['PHP_SELF']);
-        app_halt('Exit called');
+        die();
     } elseif ($action === 'toggle_status' && has_access($user['class'], UC_SYSOP, 'coder')) {
         if (toggle_site_status($site_config['site']['online'])) {
             $session->set('is-success', _('Site is Online.'));
@@ -181,7 +183,7 @@ if (in_array($tool, $staff_tools) && file_exists(ADMIN_DIR . $staff_tools[$tool]
             $session->set('is-success', _('Site is Offline.'));
         }
         header('Location: ' . $_SERVER['PHP_SELF']);
-        app_halt('Exit called');
+        die();
     } elseif (($action === 'add' && has_access($user['class'], UC_MAX, 'coder')) || ($action === 'edit' && is_valid_id($id) && $user['class'] >= UC_MAX)) {
         $names = [
             'page_name',
@@ -306,7 +308,7 @@ if (in_array($tool, $staff_tools) && file_exists(ADMIN_DIR . $staff_tools[$tool]
                     }
                     $session->set('is-success', "'{$page_name}' " . ucwords($action) . 'ed Successfully');
                     header('Location: ' . $_SERVER['PHP_SELF']);
-                    app_halt('Exit called');
+                    die();
                 }
             }
         }

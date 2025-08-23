@@ -1,6 +1,8 @@
 <?php
 require_once __DIR__ . '/../include/runtime_safe.php';
 
+require_once __DIR__ . '/../include/bootstrap_pdo.php';
+
 
 declare(strict_types = 1);
 
@@ -19,7 +21,7 @@ global $container, $site_config;
 $auth = $container->get(Auth::class);
 if ($auth->isLoggedIn()) {
     header("Location: {$site_config['paths']['baseurl']}");
-    app_halt('Exit called');
+    die();
 }
 get_template();
 $bans_class = $container->get(Ban::class);
@@ -39,7 +41,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if ($validation->fails()) {
         write_log(_fe('{0} has tried to login using invalid data. ', getip(0)) . json_encode($post, JSON_PRETTY_PRINT));
         header("Location: {$_SERVER['PHP_SELF']}");
-        app_halt('Exit called');
+        die();
     }
     $user_class = $container->get(User::class);
     if ($user_class->login($post['email'], $post['password'], (int) isset($post['remember']) ? 1 : 0)) {
@@ -61,11 +63,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $returnto = get_return_to($post['returnto']);
             if (!empty($returnto)) {
                 header("Location: {$returnto}");
-                app_halt('Exit called');
+                die();
             }
         }
         header("Location: {$site_config['paths']['baseurl']}");
-        app_halt('Exit called');
+        die();
     } else {
         unset($_POST, $_GET, $_FILES);
     }

@@ -1,6 +1,8 @@
 <?php
 require_once __DIR__ . '/../include/runtime_safe.php';
 
+require_once __DIR__ . '/../include/bootstrap_pdo.php';
+
 
 declare(strict_types = 1);
 
@@ -162,7 +164,7 @@ if (isset($_GET['action'])) {
         $mode = 'id';
         $id = (int) $_GET['id'];
         if (!is_valid_id($id)) {
-            app_halt('Exit called');
+            die();
         }
     }
     if (isset($_GET['letter'])) {
@@ -245,7 +247,7 @@ if ($action === 'add') {
             $session->set('is-warning', _('Wiki Item Has [b]NOT[/b] Been Deleted'));
         }
         header('Location: ' . $_SERVER['PHP_SELF']);
-        app_halt('Exit called');
+        die();
     } else {
         $HTMLOUT .= navmenu() . stdmsg(_('Error'), _('Access Denied'));
     }

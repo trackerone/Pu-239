@@ -1,6 +1,8 @@
 <?php
 require_once __DIR__ . '/../include/runtime_safe.php';
 
+require_once __DIR__ . '/../include/bootstrap_pdo.php';
+
 
 declare(strict_types = 1);
 
@@ -24,7 +26,7 @@ if ($auth->isLoggedIn()) {
     $auth->logOutEverywhere();
     $auth->destroySession();
     header('Location: ' . $site_config['paths']['baseurl'] . $_SERVER['REQUEST_URI']);
-    app_halt('Exit called');
+    die();
 }
 get_template();
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -50,7 +52,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $session->set('is-warning', _('Invalid information provided, please try again.'));
         write_log(getip(0) . ' has used invalid data to signup. ' . json_encode($post, JSON_PRETTY_PRINT));
         header("Location: {$_SERVER['PHP_SELF']}");
-        app_halt('Exit called');
+        die();
     } else {
         $data = [
             'email' => $post['email'],
@@ -131,7 +133,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
     $session->unset('signup_variables');
     header("Location: {$site_config['paths']['baseurl']}/login.php");
-    app_halt('Exit called');
+    die();
 }
 $invite = $email = '';
 $promo = false;

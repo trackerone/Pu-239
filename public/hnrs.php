@@ -1,6 +1,8 @@
 <?php
 require_once __DIR__ . '/../include/runtime_safe.php';
 
+require_once __DIR__ . '/../include/bootstrap_pdo.php';
+
 
 declare(strict_types = 1);
 
@@ -54,20 +56,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if (!$torrent) {
             $session->set('is-danger', _('Invalid ID'));
             header("Location: {$_SERVER['PHP_SELF']}");
-            app_halt('Exit called');
+            die();
         }
         $snatched_class = $container->get(Snatched::class);
         $snatched = $snatched_class->get_snatched((int) $_POST['userid'], (int) $_POST['tid']);
         if (!$snatched || $snatched['id'] != $_POST['sid']) {
             $session->set('is-danger', _('Invalid ID'));
             header("Location: {$_SERVER['PHP_SELF']}");
-            app_halt('Exit called');
+            die();
         }
         if (!empty($_POST['seed'])) {
             if ($cost > $bp) {
                 $session->set('is-danger', _('You do not have enough bonus points!'));
                 header("Location: {$_SERVER['PHP_SELF']}");
-                app_halt('Exit called');
+                die();
             }
             $set = [
                 'hit_and_run' => 0,
@@ -89,7 +91,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             if ($diff < $bytes) {
                 $session->set('is-danger', _('You do not have enough upload credit!'));
                 header("Location: {$_SERVER['PHP_SELF']}");
-                app_halt('Exit called');
+                die();
             }
             $set = [
                 'hit_and_run' => 0,

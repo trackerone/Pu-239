@@ -1,6 +1,8 @@
 <?php
 require_once __DIR__ . '/../include/runtime_safe.php';
 
+require_once __DIR__ . '/../include/bootstrap_pdo.php';
+
 
 declare(strict_types = 1);
 
@@ -33,7 +35,7 @@ if (isset($_GET['action']) && htmlsafechars($_GET['action']) === 'editclass') {
     $cache = $container->get(Cache::class);
     $cache->delete('chat_users_list_');
     header("Location: {$site_config['paths']['baseurl']}/" . $returnto);
-    app_halt('Exit called');
+    die();
 }
 
 $HTMLOUT .= "

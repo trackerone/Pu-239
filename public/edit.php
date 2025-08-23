@@ -1,6 +1,8 @@
 <?php
 require_once __DIR__ . '/../include/runtime_safe.php';
 
+require_once __DIR__ . '/../include/bootstrap_pdo.php';
+
 
 declare(strict_types = 1);
 
@@ -30,7 +32,7 @@ $stdfoot = [
 ];
 $id = $_GET['id'];
 if (empty($id)) {
-    app_halt('Exit called');
+    die();
 }
 $id = (int) $id;
 $cache = $container->get(Cache::class);
@@ -41,7 +43,7 @@ if ((isset($_GET['unedit']) && $_GET['unedit'] == 1) && $user['class'] >= UC_STA
         $returl .= '&returnto=' . urlencode($_POST['returnto']);
     }
     header("Refresh: 1; url=$returl");
-    app_halt('Exit called');
+    die();
 }
 $fluent = $container->get(Database::class);
 $row = $fluent->from('torrents')
