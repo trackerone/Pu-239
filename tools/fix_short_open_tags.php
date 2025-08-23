@@ -1,14 +1,16 @@
 <?php
 /**
  * tools/fix_short_open_tags.php
- * Converts short open tags to full '<?php ' for targeted files WITHOUT having '<?' in this file.
+ * Converts short open tags to full '<?php ' for targeted files WITHOUT having the short tag in this source.
  */
 $root = realpath(__DIR__ . '/../');
 $targets = [
     'chat/lib/class/AJAXChat.php',
     'public/rss.php',
 ];
-$pattern = '/<' . '\?(?!php|=)/'; // built dynamically to avoid literal '<?' in this source
+$lt = '<';
+$qm = '?';
+$pattern = '/' . $lt . $qm . '(?!php|=)/'; // effectively '/<\?(?!php|=)/'
 $changed = 0;
 foreach ($targets as $rel) {
     $path = $root . '/' . $rel;
