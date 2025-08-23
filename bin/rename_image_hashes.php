@@ -1,6 +1,8 @@
 <?php
 require_once __DIR__ . '/../include/runtime_safe.php';
 
+require_once __DIR__ . '/../include/bootstrap_pdo.php';
+
 
 declare(strict_types = 1);
 
@@ -10,7 +12,7 @@ require_once __DIR__ . '/../include/bittorrent.php';
 global $container;
 
 if (!isset($argv[1]) || $argv[1] !== 'rehash') {
-    app_halt("This script will rehash and rename all images in public/images/proxy directory\n\nTo run:\n{$argv[0]} rehash\n\n");
+    die("This script will rehash and rename all images in public/images/proxy directory\n\nTo run:\n{$argv[0]} rehash\n\n");
 }
 
 $fluent = $container->get(Database::class);

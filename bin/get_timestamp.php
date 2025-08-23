@@ -1,5 +1,7 @@
 <?php
-require_once __DIR__ . '/bootstrap_pdo.php';
+require_once __DIR__ . '/../include/runtime_safe.php';
+
+require_once __DIR__ . '/../include/bootstrap_pdo.php';
 
 
 echo time() . "\n";
