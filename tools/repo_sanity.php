@@ -6,6 +6,6 @@
 $root = __DIR__ . '/../';
 if (file_exists($root . 'include/mysql_compat.php')) {
     echo "Repo sanity failed:\n- include/mysql_compat.php should be deleted from the repo.\n";
-    exit(1);
+    return 1;
 }
 echo "Repo sanity: OK\n";
