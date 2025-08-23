@@ -1,76 +1,80 @@
 {
-    "require": {
-        "php": ">=7.3.0",
-        "ext-bz2": "*",
-        "ext-ctype": "*",
-        "ext-curl": "*",
-        "ext-dom": "*",
-        "ext-exif": "*",
-        "ext-fileinfo": "*",
-        "ext-gd": "*",
-        "ext-gettext": "*",
-        "ext-iconv": "*",
-        "ext-imagick": "*",
-        "ext-intl": "*",
-        "ext-json": "*",
-        "ext-libxml": "*",
-        "ext-mbstring": "*",
-        "ext-mysqli": "*",
-        "ext-pcntl": "*",
-        "ext-pdo": "*",
-        "ext-posix": "*",
-        "ext-readline": "*",
-        "ext-simplexml": "*",
-        "ext-sockets": "*",
-        "ext-xml": "*",
-        "ext-zend-opcache": "*",
-        "ext-zip": "*",
-        "ext-zlib": "*",
-        "amnuts/opcache-gui": "^2.4",
-        "aura/sql": "^3.0",
-        "biblys/isbn": "^2.1.0",
-        "blocktrail/cryptojs-aes-php": "^0.1.0",
-        "delight-im/auth": "^8.1",
-        "delight-im/i18n": "^1.0",
-        "envms/fluentpdo": "^2.2",
-        "erusev/parsedown": "^1.7",
-        "guzzlehttp/guzzle": "^6.3",
-        "hellogerard/jobby": "^3.4",
-        "imdbphp/imdbphp": "^6.2",
-        "intervention/image": "^2.4",
-        "matthiasmullie/scrapbook": "^1.4",
-        "php-curl-class/php-curl-class": "^8.5",
-        "php-di/php-di": "^6.0",
-        "phpmailer/phpmailer": "^6.0",
-        "rakit/validation": "^1.1",
-        "scriptotek/google-books": "^0.2.4",
-        "sebastian/version": "^2.0",
-        "spatie/image": "^1.7",
-        "spatie/image-optimizer": "^1.1",
-        "umpirsky/composer-permissions-handler": "^1.6"
-    },
-    "autoload": {
-        "psr-4": {
-            "Pu239\\": "src"
-        }
-    },
-    "config": {
-        "sort-packages": true
-    },
-    "scripts": {
-        "cleanup": [
-            "vendor/friendsofphp/php-cs-fixer/php-cs-fixer fix --show-progress=dots -vvv"
-        ],
-        "post-install-cmd": [
-            "composer dump-autoload -a"
-        ],
-        "post-update-cmd": [
-            "composer dump-autoload -a"
-        ]
-    },
-    "require-dev": {
-        "friendsofphp/php-cs-fixer": "^2.14",
-        "roave/security-advisories": "dev-latest",
-        "symfony/var-dumper": "^5.2"
+  "require": {
+    "php": ">=7.3.0",
+    "ext-bz2": "*",
+    "ext-ctype": "*",
+    "ext-curl": "*",
+    "ext-dom": "*",
+    "ext-exif": "*",
+    "ext-fileinfo": "*",
+    "ext-gd": "*",
+    "ext-gettext": "*",
+    "ext-iconv": "*",
+    "ext-imagick": "*",
+    "ext-intl": "*",
+    "ext-json": "*",
+    "ext-libxml": "*",
+    "ext-mbstring": "*",
+    "ext-mysqli": "*",
+    "ext-pcntl": "*",
+    "ext-pdo": "*",
+    "ext-posix": "*",
+    "ext-readline": "*",
+    "ext-simplexml": "*",
+    "ext-sockets": "*",
+    "ext-xml": "*",
+    "ext-zend-opcache": "*",
+    "ext-zip": "*",
+    "ext-zlib": "*",
+    "amnuts/opcache-gui": "^2.4",
+    "aura/sql": "^3.0",
+    "biblys/isbn": "^2.1.0",
+    "blocktrail/cryptojs-aes-php": "^0.1.0",
+    "delight-im/auth": "^8.1",
+    "delight-im/i18n": "^1.0",
+    "envms/fluentpdo": "^2.2",
+    "erusev/parsedown": "^1.7",
+    "guzzlehttp/guzzle": "^6.3",
+    "hellogerard/jobby": "^3.4",
+    "imdbphp/imdbphp": "^6.2",
+    "intervention/image": "^2.4",
+    "matthiasmullie/scrapbook": "^1.4",
+    "php-curl-class/php-curl-class": "^8.5",
+    "php-di/php-di": "^6.0",
+    "phpmailer/phpmailer": "^6.0",
+    "rakit/validation": "^1.1",
+    "scriptotek/google-books": "^0.2.4",
+    "sebastian/version": "^2.0",
+    "spatie/image": "^1.7",
+    "spatie/image-optimizer": "^1.1",
+    "umpirsky/composer-permissions-handler": "^1.6"
+  },
+  "autoload": {
+    "psr-4": {
+      "Pu239\\": "src"
     }
+  },
+  "config": {
+    "sort-packages": true
+  },
+  "scripts": {
+    "cleanup": [
+      "vendor/friendsofphp/php-cs-fixer/php-cs-fixer fix --show-progress=dots -vvv"
+    ],
+    "post-install-cmd": [
+      "composer dump-autoload -a"
+    ],
+    "post-update-cmd": [
+      "composer dump-autoload -a"
+    ]
+  },
+  "require-dev": {
+    "friendsofphp/php-cs-fixer": "^2.14",
+    "roave/security-advisories": "dev-latest",
+    "symfony/var-dumper": "^5.2"
+  },
+  "name": "trackerone/pu-239",
+  "description": "Pu-239 application (migrated to PDO, modernized).",
+  "license": "proprietary",
+  "type": "project"
 }
