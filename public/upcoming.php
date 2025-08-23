@@ -1,8 +1,6 @@
 <?php
 require_once __DIR__ . '/../include/runtime_safe.php';
 
-require_once __DIR__ . '/../include/bootstrap_pdo.php';
-
 
 declare(strict_types = 1);
 
@@ -74,7 +72,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if ($validation->fails()) {
         $errors = $validation->errors();
         stderr(_('Error'), $errors->firstOfAll()['name']);
-        die();
+        app_halt('Exit called');
     }
     $values = [
         'category' => (int) $_POST['type'],
@@ -91,13 +89,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $session->unset('post_data');
             $session->set('is-success', _fe('Recipe: {0} Added', format_comment($_POST['name'])));
             header('Location: ' . $_SERVER['PHP_SELF']);
-            die();
+            app_halt('Exit called');
         }
     } elseif ($edit) {
         if ($cooker_class->update($values, (int) $_POST['id'])) {
             $session->set('is-success', _fe('Recipe: {0} Updated', format_comment($_POST['name'])));
             header('Location: ' . $_SERVER['PHP_SELF']);
-            die();
+            app_halt('Exit called');
         }
     }
 }

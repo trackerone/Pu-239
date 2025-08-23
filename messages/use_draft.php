@@ -1,8 +1,6 @@
 <?php
 require_once __DIR__ . '/../include/runtime_safe.php';
 
-require_once __DIR__ . '/../include/bootstrap_pdo.php';
-
 
 declare(strict_types = 1);
 
@@ -99,13 +97,13 @@ if (isset($_POST['buttonval']) && $_POST['buttonval'] == $save_or_edit) {
         } else {
             header('Location: ' . $_SERVER['PHP_SELF'] . '?action=view_mailbox&sent=1');
         }
-        die();
+        app_halt('Exit called');
     }
     if (mysqli_affected_rows($mysqli) === 0) {
         stderr(_('Error'), _("Draft wasn't saved!"));
     }
     header('Location: ' . $_SERVER['PHP_SELF'] . '?action=view_mailbox&box=-2&new_draft=1');
-    die();
+    app_halt('Exit called');
 }
 
 if (isset($_POST['buttonval'])) {

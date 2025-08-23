@@ -1,8 +1,6 @@
 <?php
 require_once __DIR__ . '/../include/runtime_safe.php';
 
-require_once __DIR__ . '/../include/bootstrap_pdo.php';
-
 
 declare(strict_types = 1);
 
@@ -59,7 +57,7 @@ if ($user['class'] < $site_config['allowed']['play']) {
     stderr(_('Error'), _fe('Sorry, you must be a {0} to play in the casino!', $site_config['class_names'][$site_config['allowed']['play']]), 'bottom20');
 } elseif ($user['game_access'] !== 1 || $user['status'] !== 0) {
     stderr(_('Error'), _('Your gaming rights have been disabled.'), 'bottom20');
-    die();
+    app_halt('Exit called');
 } elseif ($user['uploaded'] < 1073741824 * 100) {
     stderr('Sorry,', "You must have at least {$min_text} upload credit to play.", 'bottom20');
 }
@@ -291,7 +289,7 @@ if (isset($color_options[$post_color], $number_options[$post_number]) || isset($
                 $casino_bets->delete_bet($tbet['id']);
             }
             stderr(_('You got it'), '<h2>' . _('You won the bet') . ', ' . htmlsafechars($nogb) . ' ' . _('has been credited to your account') . ', at ' . format_username($tbet['userid']) . '</a> ' . _('expense') . "!</h2>&#160;&#160;&#160;$goback", 'bottom20');
-            die();
+            app_halt('Exit called');
         } else {
             if (empty($newup)) {
                 $newup = $user['uploaded'] - $tbet['amount'];
@@ -347,7 +345,7 @@ if (isset($color_options[$post_color], $number_options[$post_number]) || isset($
             }
             stderr(_('Damn it'), '<h2>' . _('You lost the bet') . ' ' . format_username($tbet['userid']) . ' ' . _('has won') . ' ' . htmlsafechars($nogb) . ' ' . _('of your hard earnt upload credit') . "!</h2> &#160;&#160;&#160;$goback", 'bottom20');
         }
-        die();
+        app_halt('Exit called');
     }
     $empty_bets = $casino_bets->get_empty_bets();
     $totbets = !empty($empty_bets) ? count($empty_bets) : 0;

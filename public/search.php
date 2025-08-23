@@ -1,8 +1,6 @@
 <?php
 require_once __DIR__ . '/../include/runtime_safe.php';
 
-require_once __DIR__ . '/../include/bootstrap_pdo.php';
-
 
 declare(strict_types = 1);
 
@@ -25,24 +23,24 @@ if (!empty($bot) && !empty($auth) && !empty($torrent_pass)) {
     $session = $container->get(Session::class);
     $session->set('is-warning', _('The search page is a restricted page, bots only'));
     header("Location: {$site_config['paths']['baseurl']}/browse.php");
-    die();
+    app_halt('Exit called');
 }
 
 header('content-type: application/json');
 if (empty($userid)) {
     echo json_encode(['msg' => _('invalid user credentials')]);
-    die();
+    app_halt('Exit called');
 }
 $status = $users_class->get_item('status', $userid);
 if ($status === 5) {
     echo json_encode(['msg' => _("Permission denied, you're account is suspended")]);
-    die();
+    app_halt('Exit called');
 } elseif ($status === 2) {
     echo json_encode(['msg' => _("Permission denied, you're account is disabled")]);
-    die();
+    app_halt('Exit called');
 } elseif ($status === 1) {
     echo json_encode(['msg' => _("Permission denied, you're account is parked")]);
-    die();
+    app_halt('Exit called');
 }
 if (!empty($search)) {
     $fluent = $container->get(Database::class);
@@ -56,9 +54,9 @@ if (!empty($search)) {
 
     if ($results) {
         echo json_encode($results);
-        die();
+        app_halt('Exit called');
     } else {
         echo json_encode(['msg' => 'no results for: ' . $search]);
-        die();
+        app_halt('Exit called');
     }
 }

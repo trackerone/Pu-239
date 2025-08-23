@@ -1,8 +1,6 @@
 <?php
 require_once __DIR__ . '/../include/runtime_safe.php';
 
-require_once __DIR__ . '/../include/bootstrap_pdo.php';
-
 
 declare(strict_types = 1);
 
@@ -13,7 +11,7 @@ global $container, $site_config, $CURUSER;
 
 if (empty($_POST['pm'])) {
     header("Location: {$_SERVER['HTTP_REFERER']}");
-    die();
+    app_halt('Exit called');
 }
 $pm_messages = is_array($_POST['pm']) ? $_POST['pm'] : [$_POST['pm']];
 $messages_class = $container->get(Message::class);
@@ -27,7 +25,7 @@ if (isset($_POST['move'])) {
     }
     $cache->delete('inbox_' . $CURUSER['id']);
     header('Location: ' . $_SERVER['PHP_SELF'] . '?action=view_mailbox&multi_move=1&box=' . $mailbox);
-    die();
+    app_halt('Exit called');
 }
 if (isset($_POST['delete'])) {
     foreach ($pm_messages as $id) {
@@ -63,5 +61,5 @@ if (isset($_POST['delete'])) {
     } else {
         header('Location: ' . $_SERVER['PHP_SELF'] . '?action=view_mailbox&multi_delete=1&box=' . $mailbox);
     }
-    die();
+    app_halt('Exit called');
 }

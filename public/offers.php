@@ -1,8 +1,6 @@
 <?php
 require_once __DIR__ . '/../include/runtime_safe.php';
 
-require_once __DIR__ . '/../include/bootstrap_pdo.php';
-
 
 declare(strict_types = 1);
 
@@ -73,7 +71,7 @@ if (isset($data['action'])) {
                 $session->set('is-danger', _('You do not have access to delete this comment'));
             }
             header('Location: ' . $_SERVER['PHP_SELF'] . '?action=view_offer&id=' . $tid);
-            die();
+            app_halt('Exit called');
         case 'edit':
             $edit_comment = true;
             $cid = isset($data['cid']) ? (int) $data['cid'] : 0;
@@ -164,7 +162,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if ($validation->fails()) {
             $errors = $validation->errors();
             stderr(_('Error'), $errors->firstOfAll()['name']);
-            die();
+            app_halt('Exit called');
         }
         $id = isset($_POST['id']) ? (int) $_POST['id'] : 0;
         $values = [
@@ -183,7 +181,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $session->set('is-warning', _('Comment Not Added'));
         }
         header('Location: ' . $_SERVER['PHP_SELF'] . '?action=view_offer&id=' . $id);
-        die();
+        app_halt('Exit called');
     } elseif ($edit_comment) {
         $validation = $validator->validate($_POST, [
             'id' => 'required|numeric',
@@ -193,7 +191,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if ($validation->fails()) {
             $errors = $validation->errors();
             stderr(_('Error'), $errors->firstOfAll()['name']);
-            die();
+            app_halt('Exit called');
         }
         $cid = isset($_POST['cid']) ? (int) $_POST['cid'] : 0;
         $comment = $comment_class->get_comment_by_id($cid);
@@ -211,7 +209,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
         $id = isset($_POST['id']) ? (int) $_POST['id'] : 0;
         header('Location: ' . $_SERVER['PHP_SELF'] . '?action=view_offer&id=' . $id);
-        die();
+        app_halt('Exit called');
     } else {
         $validation = $validator->validate($_POST, [
             'type' => 'required|numeric',
@@ -224,7 +222,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if ($validation->fails()) {
             $errors = $validation->errors();
             stderr(_('Error'), $errors->firstOfAll()['name']);
-            die();
+            app_halt('Exit called');
         }
         $values = [
             'category' => (int) $_POST['type'],
@@ -240,7 +238,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $session->unset('post_offer_data');
                 $session->set('is-success', _fe('Offer: {0} Added', format_comment($_POST['name'])));
                 header('Location: ' . $_SERVER['PHP_SELF']);
-                die();
+                app_halt('Exit called');
             }
         } elseif ($edit) {
             $values['updated'] = $dt;
@@ -248,7 +246,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             if ($offer_class->update($values, (int) $_POST['id'])) {
                 $session->set('is-success', _fe('Offer: {0} Updated', format_comment($_POST['name'])));
                 header('Location: ' . $_SERVER['PHP_SELF']);
-                die();
+                app_halt('Exit called');
             }
         }
     }

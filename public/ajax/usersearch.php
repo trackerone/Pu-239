@@ -1,8 +1,6 @@
 <?php
 require_once __DIR__ . '/../../include/runtime_safe.php';
 
-require_once __DIR__ . '/../../include/bootstrap_pdo.php';
-
 
 declare(strict_types = 1);
 
@@ -20,9 +18,9 @@ if (!empty($term)) {
     $users = $users_class->search_by_username($term);
     if (!empty($users)) {
         echo json_encode($users);
-        die();
+        app_halt('Exit called');
     }
 }
 $status = ['data' => _('Invalid Request')];
 echo json_encode($status);
-die();
+app_halt('Exit called');

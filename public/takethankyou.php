@@ -1,8 +1,6 @@
 <?php
 require_once __DIR__ . '/../include/runtime_safe.php';
 
-require_once __DIR__ . '/../include/bootstrap_pdo.php';
-
 
 declare(strict_types = 1);
 
@@ -16,7 +14,7 @@ $user = check_user_status();
 global $container, $site_config;
 
 if (empty($_POST['id']) && empty($_GET['id'])) {
-    die();
+    app_halt('Exit called');
 }
 $id = !empty($_GET['id']) ? (int) $_GET['id'] : (int) $_POST['id'];
 if (!is_valid_id($id)) {

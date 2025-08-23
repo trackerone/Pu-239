@@ -1,8 +1,6 @@
 <?php
 require_once __DIR__ . '/../include/runtime_safe.php';
 
-require_once __DIR__ . '/../include/bootstrap_pdo.php';
-
 
 declare(strict_types = 1);
 
@@ -20,7 +18,7 @@ $session = $container->get(Session::class);
 if (!$site_config['bucket']['allowed']) {
     $session->set('is-warning', _('BitBucket has been disabled'));
     header("Location: {$site_config['paths']['baseurl']}/index.php");
-    die();
+    app_halt('Exit called');
 }
 
 $SaLt = $site_config['salt']['one'];

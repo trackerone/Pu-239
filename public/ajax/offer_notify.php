@@ -1,8 +1,6 @@
 <?php
 require_once __DIR__ . '/../../include/runtime_safe.php';
 
-require_once __DIR__ . '/../../include/bootstrap_pdo.php';
-
 
 declare(strict_types = 1);
 
@@ -15,13 +13,13 @@ global $container;
 
 if (empty($user)) {
     echo json_encode(['notify' => 'invalid']);
-    die();
+    app_halt('Exit called');
 }
 $id = (int) $_POST['id'];
 $notified = (bool) $_POST['notified'];
 if (empty($id) || !isset($notified)) {
     echo json_encode(['notify' => 'invalid']);
-    die();
+    app_halt('Exit called');
 }
 $fluent = $container->get(Database::class);
 if ($notified) {
@@ -31,7 +29,7 @@ if ($notified) {
                ->where('offerid = ?', $id)
                ->execute();
         echo json_encode(['notify' => 0]);
-        die();
+        app_halt('Exit called');
     } catch (Exception $e) {
         // TODO
     }
@@ -46,10 +44,10 @@ if ($notified) {
                             ->execute();
 
         echo json_encode(['notify' => $notify_id]);
-        die();
+        app_halt('Exit called');
     } catch (Exception $e) {
         // TODO
     }
 }
 echo json_encode(['notify' => 'invalid']);
-die();
+app_halt('Exit called');

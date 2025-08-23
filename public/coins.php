@@ -1,8 +1,6 @@
 <?php
 require_once __DIR__ . '/../include/runtime_safe.php';
 
-require_once __DIR__ . '/../include/bootstrap_pdo.php';
-
 
 declare(strict_types = 1);
 
@@ -19,7 +17,7 @@ $id = (int) $_GET['id'];
 $points = (int) $_GET['points'];
 $dt = TIME_NOW;
 if (!is_valid_id($id) || !is_valid_id($points)) {
-    die();
+    app_halt('Exit called');
 }
 $pointscangive = [
     10,
@@ -35,14 +33,14 @@ $session = $container->get(Session::class);
 if (!in_array($points, $pointscangive)) {
     $session->set('is-warning', _("You can't give that amount of points!"));
     header("Location: $returnto");
-    die();
+    app_halt('Exit called');
 }
 $sdsa = sql_query('SELECT 1 FROM coins WHERE torrentid = ' . sqlesc($id) . ' AND userid =' . sqlesc($user['id'])) or sqlerr(__FILE__, __LINE__);
 $asdd = mysqli_fetch_assoc($sdsa);
 if ($asdd) {
     $session->set('is-warning', _('You already gave points to this torrent.'));
     header("Location: $returnto");
-    die();
+    app_halt('Exit called');
 }
 $res = sql_query('SELECT owner,name,points FROM torrents WHERE id=' . sqlesc($id)) or sqlerr(__FILE__, __LINE__);
 $row = mysqli_fetch_assoc($res) or stderr(_('Error'), _('Torrent was not found'));
@@ -50,12 +48,12 @@ $userid = (int) $row['owner'];
 if ($userid == $user['id']) {
     $session->set('is-warning', _("You can't give your self points!"));
     header("Location: $returnto");
-    die();
+    app_halt('Exit called');
 }
 if ($user['seedbonus'] < $points) {
     $session->set('is-warning', _("You don't have enough points for that!"));
     header("Location: $returnto");
-    die();
+    app_halt('Exit called');
 }
 $sql = sql_query('SELECT seedbonus FROM users WHERE id=' . sqlesc($userid)) or sqlerr(__FILE__, __LINE__);
 $User = mysqli_fetch_assoc($sql);
@@ -94,4 +92,4 @@ $cache->delete('coin_points_' . $id);
 
 $session->set('is-success', _('Successfully gave points to this torrent.'));
 header("Location: $returnto");
-die();
+app_halt('Exit called');

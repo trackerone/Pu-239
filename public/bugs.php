@@ -1,8 +1,6 @@
 <?php
 require_once __DIR__ . '/../include/runtime_safe.php';
 
-require_once __DIR__ . '/../include/bootstrap_pdo.php';
-
 
 declare(strict_types = 1);
 
@@ -293,7 +291,7 @@ if ($action === 'viewbug') {
     } else {
         $session->set('is-warning', _('There are no reported bugs :).'));
         header('Location: ' . $site_config['paths']['baseurl']);
-        die();
+        app_halt('Exit called');
     }
 } elseif ($action === 'add') {
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {

@@ -1,8 +1,6 @@
 <?php
 require_once __DIR__ . '/../include/runtime_safe.php';
 
-require_once __DIR__ . '/../include/bootstrap_pdo.php';
-
 
 declare(strict_types = 1);
 
@@ -95,21 +93,21 @@ if ($action === 'reset_torrent_pass') {
     $user_class = $container->get(User::class);
     $user_class->update($update, $user['id']);
     header('Location: ' . $site_config['paths']['baseurl'] . '/usercp.php?action=api');
-    die();
+    app_halt('Exit called');
 }
 if ($action === 'reset_auth_key') {
     $update['auth'] = make_password(32);
     $user_class = $container->get(User::class);
     $user_class->update($update, $user['id']);
     header('Location: ' . $site_config['paths']['baseurl'] . '/usercp.php?action=api');
-    die();
+    app_halt('Exit called');
 }
 if ($action === 'reset_api_key') {
     $update['apikey'] = make_password(32);
     $user_class = $container->get(User::class);
     $user_class->update($update, $user['id']);
     header('Location: ' . $site_config['paths']['baseurl'] . '/usercp.php?action=api');
-    die();
+    app_halt('Exit called');
 }
 
 $avatar = get_avatar($user);
@@ -261,7 +259,7 @@ if ($action === 'avatar') {
         $user_class = $container->get(User::class);
         $user_class->update($update, $user['id']);
         header('Location: ' . $_SERVER['REQUEST_URI']);
-        die();
+        app_halt('Exit called');
     }
     $HTMLOUT .= tr("<div class='has-text-centered top10'><div class='bottom10'>" . _('Torrent Pass') . "</div><a href='{$_SERVER['PHP_SELF']}?action=reset_torrent_pass' class='button is-small'>" . _('Reset') . '</a></div>', '<input type="text" class="w-100" name="torrent_pass"  value="' . htmlsafechars($user['torrent_pass']) . '" readonly onClick="this.select();"><div class="left10 top10">' . _('This is used for downloading and seeding torrents, in your torrent client and your rss reader.') . '</div>', 1);
     $HTMLOUT .= tr("<div class='has-text-centered top10'><div class='bottom10'>" . _('Auth') . "</div><a href='{$_SERVER['PHP_SELF']}?action=reset_auth_key' class='button is-small'>" . _('Reset') . '</a></div>', '<input type="text" class="w-100" name="auth"  value="' . htmlsafechars($user['auth']) . '" readonly onClick="this.select();"><div class="left10 top10">' . _('This is only used by an upload script, msg any staff member for the details.') . '</div>', 1);

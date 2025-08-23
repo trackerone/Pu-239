@@ -1,8 +1,6 @@
 <?php
 require_once __DIR__ . '/../include/runtime_safe.php';
 
-require_once __DIR__ . '/../include/bootstrap_pdo.php';
-
 
 declare(strict_types = 1);
 
@@ -102,4 +100,4 @@ if (strpos($to_user['notifs'], '[pm]') !== false) {
     send_mail($to_user['email'], _fe('You have received a PM from {0}!', $username), $body, strip_tags($body));
 }
 header('Location: ' . $_SERVER['PHP_SELF'] . '?action=view_mailbox&forwarded=1');
-die();
+app_halt('Exit called');

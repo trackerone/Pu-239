@@ -1,8 +1,6 @@
 <?php
 require_once __DIR__ . '/../include/runtime_safe.php';
 
-require_once __DIR__ . '/../include/bootstrap_pdo.php';
-
 
 declare(strict_types = 1);
 
@@ -58,13 +56,13 @@ $session = $container->get(Session::class);
 if (!isset($_GET['id'])) {
     $session->set('is-warning', '[h3]' . _('Error') . '[/h3] ' . _('Missing ID') . '');
     header("Location: {$site_config['paths']['baseurl']}/index.php");
-    die();
+    app_halt('Exit called');
 }
 
 if (!is_valid_id((int) $_GET['id'])) {
     $session->set('is-warning', '[h3]' . _('Error') . '[/h3] ' . _('Invalid ID') . " {$_GET['id']}");
     header("Location: {$site_config['paths']['baseurl']}/index.php");
-    die();
+    app_halt('Exit called');
 }
 $scheme = $session->get('scheme') === 'http' ? '' : '&amp;ssl=1';
 $id = (int) $_GET['id'];
@@ -81,7 +79,7 @@ if (!empty($torrent['next']['id'])) {
 if (empty($torrent)) {
     $session->set('is-warning', '[h3]' . _('Error') . '[/h3] ' . _('Invalid ID') . "{$_GET['id']}");
     header("Location: {$site_config['paths']['baseurl']}/index.php");
-    die();
+    app_halt('Exit called');
 }
 if (isset($_GET['hit'])) {
     $torrent['views'] = $torrent['views'] + 1;
@@ -111,7 +109,7 @@ if ($moderator) {
         if (!empty($_GET['returnto'])) {
             $returnto = str_replace('&amp;', '&', $_GET['returnto']);
             header("Location: {$site_config['paths']['baseurl']}" . urldecode($returnto));
-            die();
+            app_halt('Exit called');
         }
         $session->set('is-success', "Torrents has been 'Checked'");
     } elseif (isset($_POST['rechecked']) && $_POST['rechecked'] == $id) {
@@ -177,7 +175,7 @@ if ($moderator) {
 
         $session->set('is-success', 'Torrent Cache Cleared');
         header("Location: {$site_config['paths']['baseurl']}/details.php?id=$id");
-        die();
+        app_halt('Exit called');
     }
 }
 if ($user['downloadpos'] !== 1) {

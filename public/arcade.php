@@ -1,8 +1,6 @@
 <?php
 require_once __DIR__ . '/../include/runtime_safe.php';
 
-require_once __DIR__ . '/../include/bootstrap_pdo.php';
-
 
 declare(strict_types = 1);
 
@@ -16,7 +14,7 @@ if ($user['class'] < $site_config['allowed']['play']) {
     stderr(_('Error'), _fe('Sorry, you must be a {0} to play in the arcade!', $site_config['class_names'][$site_config['allowed']['play']]), 'bottom20');
 } elseif ($user['game_access'] !== 1 || $user['status'] !== 0) {
     stderr(_('Error'), _('Your gaming rights have been disabled.'), 'bottom20', 'bottom20');
-    die();
+    app_halt('Exit called');
 }
 
 $HTMLOUT = "

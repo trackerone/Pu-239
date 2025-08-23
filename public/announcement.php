@@ -1,8 +1,6 @@
 <?php
 require_once __DIR__ . '/../include/runtime_safe.php';
 
-require_once __DIR__ . '/../include/bootstrap_pdo.php';
-
 
 declare(strict_types = 1);
 
@@ -44,7 +42,7 @@ if (!empty($row) && $row['curr_ann_id'] == 0 && $row['curr_ann_last_check'] == 0
         $query = $ann_row['sql_query'];
         // Ensure it only selects...
         if (!preg_match('/\\ASELECT.+?FROM.+?WHERE.+?\\z/', $query)) {
-            die();
+            app_halt('Exit called');
         }
         // The following line modifies the query to only return the current user
         // row if the existing query matches any attributes.

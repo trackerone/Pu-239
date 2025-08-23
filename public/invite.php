@@ -1,8 +1,6 @@
 <?php
 require_once __DIR__ . '/../include/runtime_safe.php';
 
-require_once __DIR__ . '/../include/bootstrap_pdo.php';
-
 
 declare(strict_types = 1);
 
@@ -207,7 +205,7 @@ if ($do === 'view_page') {
             $session = $container->get(Session::class);
             $session->set('is-success', _('A confirmation email has been sent to the address you specified.'));
             header("Location: {$site_config['paths']['baseurl']}/invite.php?do=view_page");
-            die();
+            app_halt('Exit called');
         }
     }
 } elseif ($do === 'send_email') {
@@ -241,7 +239,7 @@ if ($do === 'view_page') {
             $session = $container->get(Session::class);
             $session->set('is-success', _('A confirmation email has been sent to the address you specified.'));
             header("Location: {$site_config['paths']['baseurl']}/invite.php?do=view_page");
-            die();
+            app_halt('Exit called');
         }
     }
     $id = isset($_GET['id']) ? (int) $_GET['id'] : (isset($_POST['id']) ? (int) $_POST['id'] : 0);

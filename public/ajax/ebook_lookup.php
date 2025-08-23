@@ -1,8 +1,6 @@
 <?php
 require_once __DIR__ . '/../../include/runtime_safe.php';
 
-require_once __DIR__ . '/../../include/bootstrap_pdo.php';
-
 
 declare(strict_types = 1);
 
@@ -23,7 +21,7 @@ $validation = $validator->validate($_POST, [
 ]);
 if ($validation->fails()) {
     echo json_encode(['content' => 'invalid']);
-    die();
+    app_halt('Exit called');
 }
 $tid = (int) $_POST['tid'];
 $torrents_class = $container->get(Torrent::class);
@@ -34,8 +32,8 @@ $title = htmlsafechars($_POST['name']);
 $book_info = get_book_info($isbn, $title, $tid, $poster);
 if (!empty($book_info)) {
     echo json_encode(['content' => $book_info['ebook']]);
-    die();
+    app_halt('Exit called');
 }
 
 echo json_encode(['content' => 'Lookup Failed']);
-die();
+app_halt('Exit called');

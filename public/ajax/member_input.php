@@ -1,8 +1,6 @@
 <?php
 require_once __DIR__ . '/../../include/runtime_safe.php';
 
-require_once __DIR__ . '/../../include/bootstrap_pdo.php';
-
 
 declare(strict_types = 1);
 
@@ -30,13 +28,13 @@ $session = $container->get(Session::class);
 if (!isset($action)) {
     $session->set('is-danger', _('Access Not Allowed'));
     header('Location: ' . $referer);
-    die();
+    app_halt('Exit called');
 }
 $id = $curuser['class'] < UC_STAFF ? $curuser['id'] : (int) $_POST['id'];
 if ($id === 0) {
     $session->set('is-danger', _('Invalid ID'));
     header('Location: ' . $referer);
-    die();
+    app_halt('Exit called');
 }
 $users_class = $container->get(User::class);
 $user = $users_class->getUserFromId($id);
