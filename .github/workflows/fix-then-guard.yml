@@ -1,0 +1,41 @@
+name: Fix then Guard
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  fix-and-guard:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.2'
+      - name: Run short tag fixer
+        run: php tools/fix_short_open_tags.php
+      - name: Run termination fixer
+        run: php tools/fix_term_calls.php
+      - name: Commit & push changes (if any)
+        run: |
+          set -e
+          if [[ -n "$(git status --porcelain)" ]]; then
+            git config user.name "github-actions[bot]"
+            git config user.email "github-actions[bot]@users.noreply.github.com"
+            git add -A
+            git commit -m "chore: fix short tags & termination calls (AJAXChat.php, rss.php)"
+            git push
+          else
+            echo "No changes to commit."
+          fi
+      - name: Run static guard
+        env:
+          GUARD_MODE: fail
+          GUARD_EXCLUDE: admin/adminer.php,tools/static_guard.php
+          GUARD_FAIL_ON: merge_conflict_marker,short_open_tag,eval_usage,terminate_calls,debug_calls,deprecated_mysql
+        run: php tools/static_guard.php
