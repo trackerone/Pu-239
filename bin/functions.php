@@ -1,8 +1,6 @@
 <?php
 require_once __DIR__ . '/../include/runtime_safe.php';
 
-require_once __DIR__ . '/../include/bootstrap_pdo.php';
-
 
 declare(strict_types = 1);
 
@@ -68,7 +66,7 @@ function get_classes(array $styles, bool $create)
 
         if (empty($classes)) {
             if (!$create) {
-                die("You do have not classes for template {$style}\n\nto create them rerun this script\nphp bin/uglify.php classes\n");
+                app_halt("You do have not classes for template {$style}\n\nto create them rerun this script\nphp bin/uglify.php classes\n");
             } else {
                 foreach ($all_classes[0] as $values) {
                     $values['template'] = $style;
@@ -76,7 +74,7 @@ function get_classes(array $styles, bool $create)
                            ->values($values)
                            ->execute();
                 }
-                die("Classes added for template {$style}\n");
+                app_halt("Classes added for template {$style}\n");
             }
         }
         $all_classes[] = $classes;

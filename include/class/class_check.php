@@ -1,8 +1,6 @@
 <?php
 require_once __DIR__ . '/../runtime_safe.php';
 
-require_once __DIR__ . '/../bootstrap_pdo.php';
-
 
 declare(strict_types = 1);
 
@@ -34,14 +32,14 @@ function class_check(int $class = UC_STAFF)
     $user = check_user_status();
     if (empty($user)) {
         header("Location: {$site_config['paths']['baseurl']}/404.html");
-        die();
+        app_halt('Exit called');
     }
     $auth = $container->get(Auth::class);
     if ($auth->isRemembered()) {
         $session = $container->get(Session::class);
         $session->set('is-danger', _('Please confirm your password.'));
         header("Location: {$site_config['paths']['baseurl']}/verify.php?page=" . urlencode($_SERVER['REQUEST_URI']));
-        die();
+        app_halt('Exit called');
     }
     $userid = $user['id'];
     if (!has_access($user['class'], $class, 'coder')) {

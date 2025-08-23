@@ -1,8 +1,6 @@
 <?php
 require_once __DIR__ . '/../include/runtime_safe.php';
 
-require_once __DIR__ . '/../include/bootstrap_pdo.php';
-
 
 declare(strict_types = 1);
 
@@ -50,7 +48,7 @@ switch ($action) {
                ->where('id = ?', $id)
                ->execute();
         header('Location: ' . $_SERVER['PHP_SELF'] . '?tool=over_forums');
-        die();
+        app_halt('Exit called');
         break;
 
     case 'edit_forum':
@@ -77,7 +75,7 @@ switch ($action) {
                ->where('id = ?', $id)
                ->execute();
         header('Location: ' . $_SERVER['PHP_SELF'] . '?tool=over_forums');
-        die();
+        app_halt('Exit called');
         break;
 
     case 'add_forum':
@@ -103,7 +101,7 @@ switch ($action) {
                ->execute();
 
         header('Location: ' . $_SERVER['PHP_SELF'] . '?tool=over_forums');
-        die();
+        app_halt('Exit called');
         break;
 
     case 'edit_forum_page':

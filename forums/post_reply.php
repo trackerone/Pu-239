@@ -1,8 +1,6 @@
 <?php
 require_once __DIR__ . '/../include/runtime_safe.php';
 
-require_once __DIR__ . '/../include/bootstrap_pdo.php';
-
 
 declare(strict_types = 1);
 
@@ -108,7 +106,7 @@ if (isset($_POST['button']) && $_POST['button'] === 'Post') {
         $size_error = $uploaded[1];
     }
     header('Location: ' . $_SERVER['PHP_SELF'] . '?action=view_topic&topic_id=' . $topic_id . ($extension_error === '' ? '' : '&ee=' . $extension_error) . ($size_error === '' ? '' : '&se=' . $size_error) . '&page=last#' . $post_id);
-    die();
+    app_halt('Exit called');
 }
 
 $HTMLOUT .= '

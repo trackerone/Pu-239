@@ -1,8 +1,6 @@
 <?php
 require_once __DIR__ . '/../include/runtime_safe.php';
 
-require_once __DIR__ . '/../include/bootstrap_pdo.php';
-
 
 declare(strict_types = 1);
 
@@ -17,7 +15,7 @@ foreach ($vars as $k => $v) {
     $vars[$k] = isset($_GET[$k]) ? $_GET[$k] : '';
 }
 if ($key !== $vars['key'] || empty($vars['username'])) {
-    die('hmm something looks odd');
+    app_halt('hmm something looks odd');
 }
 require_once __DIR__ . '/include/bittorrent.php';
 switch ($vars['do']) {
@@ -32,6 +30,6 @@ switch ($vars['do']) {
         break;
 
     default:
-        die('hmm something looks odd again');
+        app_halt('hmm something looks odd again');
 }
-die();
+app_halt('Exit called');

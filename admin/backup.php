@@ -1,8 +1,6 @@
 <?php
 require_once __DIR__ . '/../include/runtime_safe.php';
 
-require_once __DIR__ . '/../include/bootstrap_pdo.php';
-
 
 declare(strict_types = 1);
 
@@ -173,7 +171,7 @@ if (empty($mode)) {
         write_log($CURUSER['username'] . '(' . get_user_class_name((int) $CURUSER['class']) . ') ' . _('successfully backed-up the database.'));
     }
     header('Location: ' . $_SERVER['PHP_SELF'] . '?tool=backup');
-    die();
+    app_halt('Exit called');
 } elseif ($mode === 'delete') {
     $ids = (isset($_POST['ids']) ? $_POST['ids'] : (isset($_GET['id']) ? [
         $_GET['id'],
@@ -216,7 +214,7 @@ if (empty($mode)) {
         $location = 'noselection';
     }
     header('Location: ' . $_SERVER['PHP_SELF'] . '?tool=backup&mode=' . $location);
-    die();
+    app_halt('Exit called');
 } else {
     stderr(_('Error'), _('Unknown action!'));
 }

@@ -1,8 +1,6 @@
 <?php
 require_once __DIR__ . '/../include/runtime_safe.php';
 
-require_once __DIR__ . '/../include/bootstrap_pdo.php';
-
 
 declare(strict_types = 1);
 
@@ -386,7 +384,7 @@ if (!empty($search)) {
                     if (validemail($email) !== 1) {
                         stdmsg(_('Error'), _('Bad email'));
                         stdfoot();
-                        die();
+                        app_halt('Exit called');
                     }
                     $email_is .= (!empty($email_is) ? ' OR ' : '') . 'u.email =' . sqlesc($email);
                 } else {
@@ -418,7 +416,7 @@ if (!empty($search)) {
         if (!preg_match($regex, $ip)) {
             stdmsg(_('Error'), _('Bad ip'));
             stdfoot();
-            die();
+            app_halt('Exit called');
         }
         $mask = trim($search['ma']);
         if (empty($mask) || $mask === '255.255.255.255') {
@@ -429,14 +427,14 @@ if (!empty($search)) {
                 if (!is_numeric($n) or $n < 0 or $n > 32) {
                     stdmsg(_('Error'), _('Bad subnet mask'));
                     stdfoot();
-                    die();
+                    app_halt('Exit called');
                 } else {
                     $mask = long2ip(pow(2, 32) - pow(2, 32 - $n));
                 }
             } elseif (!preg_match($regex, $mask)) {
                 stdmsg(_('Error'), _('Bad subnet mask'));
                 stdfoot();
-                die();
+                app_halt('Exit called');
             }
             $where_is .= (!empty($where_is) ? ' AND ' : '') . "INET_ATON(i.ip) & INET_ATON('$mask') = INET_ATON('$ip') & INET_ATON('$mask')";
             $q1 .= ($q1 ? '&amp;' : '') . "ma=$mask";
@@ -458,7 +456,7 @@ if (!empty($search)) {
             if (!is_numeric($ratio) || $ratio < 0) {
                 stdmsg(_('Error'), _('Bad ratio'));
                 stdfoot();
-                die();
+                app_halt('Exit called');
             }
             $where_is .= !empty($where_is) ? ' AND ' : '';
             $where_is .= ' (u.uploaded/u.downloaded)';
@@ -469,12 +467,12 @@ if (!empty($search)) {
                 if (!$ratio2) {
                     stdmsg(_('Error'), _('Two ratios needed for this type of search.'));
                     stdfoot();
-                    die();
+                    app_halt('Exit called');
                 }
                 if (!is_numeric($ratio2) || $ratio2 < $ratio) {
                     stdmsg(_('Error'), _('Bad Ratio'));
                     stdfoot();
-                    die();
+                    app_halt('Exit called');
                 }
                 $where_is .= " BETWEEN $ratio and $ratio2";
                 $q1 .= ($q1 ? '&amp;' : '') . "r2=$ratio2";
@@ -552,7 +550,7 @@ if (!empty($search)) {
         if (!is_numeric($ul) || $ul < 0) {
             stdmsg(_('Error'), _('Bad upload ammount.'));
             stdfoot();
-            die();
+            app_halt('Exit called');
         }
         $where_is .= !empty($where_is) ? ' AND ' : '';
         $where_is .= ' u.uploaded ';
@@ -563,12 +561,12 @@ if (!empty($search)) {
             if (!$ul2) {
                 stdmsg(_('Error'), _('Two uploaded amounts needed for this type of search.'));
                 stdfoot();
-                die();
+                app_halt('Exit called');
             }
             if (!is_numeric($ul2) || $ul2 < $ul) {
                 stdmsg(_('Error'), _('Bad second uploaded amount.'));
                 stdfoot();
-                die();
+                app_halt('Exit called');
             }
             $where_is .= ' BETWEEN ' . $ul * $unit . ' and ' . $ul2 * $unit;
             $q1 .= ($q1 ? '&amp;' : '') . "ul2=$ul2";
@@ -587,7 +585,7 @@ if (!empty($search)) {
         if (!is_numeric($dl) || $dl < 0) {
             stdmsg(_('Error'), _('Bad download ammount.'));
             stdfoot();
-            die();
+            app_halt('Exit called');
         }
         $where_is .= !empty($where_is) ? ' AND ' : '';
         $where_is .= ' u.downloaded ';
@@ -598,12 +596,12 @@ if (!empty($search)) {
             if (!$dl2) {
                 stdmsg(_('Error'), _('Two downloaded amounts needed for this type of search.'));
                 stdfoot();
-                die();
+                app_halt('Exit called');
             }
             if (!is_numeric($dl2) || $dl2 < $dl) {
                 stdmsg(_('Error'), _('Bad second downloaded amount.'));
                 stdfoot();
-                die();
+                app_halt('Exit called');
             }
             $where_is .= ' BETWEEN ' . $dl * $unit . ' and ' . $dl2 * $unit;
             $q1 .= ($q1 ? '&amp;' : '') . "dl2=$dl2";

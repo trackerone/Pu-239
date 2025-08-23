@@ -1,8 +1,6 @@
 <?php
 require_once __DIR__ . '/../include/runtime_safe.php';
 
-require_once __DIR__ . '/../include/bootstrap_pdo.php';
-
 
 declare(strict_types = 1);
 
@@ -27,7 +25,7 @@ if (isset($_GET['Do']) && $_GET['Do'] === 'optimize' && isset($_GET['table'])) {
                         ->prepare($sql);
         $query->execute();
         header("Location: {$_SERVER['PHP_SELF']}?tool=mysql_overview&action=mysql_overview");
-        exit;
+app_halt('Exit called');
     }
 }
 
