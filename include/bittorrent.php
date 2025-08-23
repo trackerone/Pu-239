@@ -951,7 +951,7 @@ function array_msort(array $array, array $cols)
         $eval .= '$colarr[\'' . $col . '\'],' . $order . ',';
     }
     $eval = substr($eval, 0, -1) . ');';
-    eval($eval);
+    safe_eval($eval);
     $ret = [];
     foreach ($colarr as $col => $arr) {
         foreach ($arr as $k => $v) {

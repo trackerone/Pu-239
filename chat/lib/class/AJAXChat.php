@@ -1,6 +1,4 @@
 <?php
-require_once __DIR__ . '/../../../include/runtime_safe.php';
-
 
 declare(strict_types = 1);
 
@@ -104,7 +102,7 @@ class AJAXChat
         $config = null;
         if (!include(AJAX_CHAT_PATH . 'lib' . DIRECTORY_SEPARATOR . '/config.php')) {
             echo '<strong>Error:</strong> Could not find a config.php file in "' . AJAX_CHAT_PATH . 'lib' . DIRECTORY_SEPARATOR . '". Check to make sure the file exists.';
-            app_halt('Exit called');
+            die();
         }
         $this->_config = &$config;
 
@@ -2761,7 +2759,7 @@ class AJAXChat
      */
     public function getChatViewXMLMessages()
     {
-        $xml = '<?xml version="1.0" encoding="UTF-8"?>';
+        $xml = '<?php xml version="1.0" encoding="UTF-8"?>';
         $xml .= '<root>';
         $xml .= $this->getInfoMessagesXML();
         $xml .= $this->getChatViewOnlineUsersXML([$this->getChannel()]);
@@ -2963,7 +2961,7 @@ class AJAXChat
      */
     public function getTeaserViewXMLMessages()
     {
-        $xml = '<?xml version="1.0" encoding="UTF-8"?>';
+        $xml = '<?php xml version="1.0" encoding="UTF-8"?>';
         $xml .= '<root>';
         $xml .= $this->getInfoMessagesXML();
         $xml .= $this->getTeaserViewMessagesXML();
@@ -3065,7 +3063,7 @@ class AJAXChat
      */
     public function getLogsViewXMLMessages()
     {
-        $xml = '<?xml version="1.0" encoding="UTF-8"?>';
+        $xml = '<?php xml version="1.0" encoding="UTF-8"?>';
         $xml .= '<root>';
         $xml .= $this->getInfoMessagesXML();
         $xml .= $this->getLogsViewMessagesXML();
@@ -3250,7 +3248,7 @@ class AJAXChat
      */
     public function getLogoutXMLMessage()
     {
-        $xml = '<?xml version="1.0" encoding="UTF-8"?>';
+        $xml = '<?php xml version="1.0" encoding="UTF-8"?>';
         $xml .= '<root>';
         $xml .= '<infos>';
         $xml .= '<info type="logout">';
