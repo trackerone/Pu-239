@@ -1,6 +1,8 @@
 <?php
 require_once __DIR__ . '/../include/runtime_safe.php';
 
+require_once __DIR__ . '/../include/bootstrap_pdo.php';
+
 
 declare(strict_types = 1);
 
@@ -63,7 +65,7 @@ if ($mode === 'delete') {
     $cache->delete('latest_news_');
     $session->set('is-success', _('News entry deleted'));
     header("Location: {$site_config['paths']['baseurl']}/staffpanel.php?tool=news&mode=news");
-    app_halt('Exit called');
+    die();
 } elseif ($mode === 'add') {
     $body = isset($_POST['body']) ? htmlsafechars($_POST['body']) : '';
     $sticky = isset($_POST['sticky']) ? htmlsafechars($_POST['sticky']) : 'yes';
@@ -97,7 +99,7 @@ if ($mode === 'delete') {
         $session->set('is-warning', _("Something's wrong!"));
     }
     header("Location: {$site_config['paths']['baseurl']}/staffpanel.php?tool=news&mode=news");
-    app_halt('Exit called');
+    die();
 } elseif ($mode === 'edit') {
     $newsid = (int) $_GET['newsid'];
     if (!is_valid_id($newsid)) {
@@ -133,7 +135,7 @@ if ($mode === 'delete') {
         $cache->delete('latest_news_');
         $session->set('is-success', _('News item was edited successfully'));
         header("Location: {$site_config['paths']['baseurl']}/staffpanel.php?tool=news&mode=news");
-        app_halt('Exit called');
+        die();
     } else {
         $HTMLOUT .= "
             <h1 class='has-text-centered'>" . _('Edit News Item') . "</h1>

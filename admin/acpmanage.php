@@ -1,6 +1,8 @@
 <?php
 require_once __DIR__ . '/../include/runtime_safe.php';
 
+require_once __DIR__ . '/../include/bootstrap_pdo.php';
+
 
 declare(strict_types = 1);
 
@@ -55,7 +57,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['ids'])) {
         $session->set('is-success', _('The account was deleted.'));
     }
     header('Location: ' . $_SERVER['PHP_SELF'] . '?tool=acpmanage&amp;action=acpmanage');
-app_halt('Exit called');
+    exit;
 }
 $disabled = $fluent->from('users')
                    ->select(null)

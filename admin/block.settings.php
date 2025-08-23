@@ -1,6 +1,8 @@
 <?php
 require_once __DIR__ . '/../include/runtime_safe.php';
 
+require_once __DIR__ . '/../include/bootstrap_pdo.php';
+
 
 declare(strict_types = 1);
 
@@ -116,7 +118,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $cache->delete('site_blocks_');
     sleep(3);
     header('Location: ' . $_SERVER['PHP_SELF'] . '?tool=block.settings');
-    app_halt('Exit called');
+    die();
 }
 
 $HTMLOUT = "

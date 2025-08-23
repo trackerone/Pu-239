@@ -1,6 +1,8 @@
 <?php
 require_once __DIR__ . '/../include/runtime_safe.php';
 
+require_once __DIR__ . '/../include/bootstrap_pdo.php';
+
 
 declare(strict_types = 1);
 
@@ -97,7 +99,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
         }
     }
-    app_halt('Exit called');
+    die();
 }
 switch ($do) {
     case 'disabled':

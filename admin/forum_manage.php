@@ -1,6 +1,8 @@
 <?php
 require_once __DIR__ . '/../include/runtime_safe.php';
 
+require_once __DIR__ . '/../include/bootstrap_pdo.php';
+
 
 declare(strict_types = 1);
 
@@ -52,17 +54,17 @@ switch ($action) {
     case 'delete':
         if (!$id) {
             header('Location: ' . $_SERVER['PHP_SELF'] . '?tool=forum_manage&action=forum_manage');
-            app_halt('Exit called');
+            die();
         }
         $forum_class->delete($id);
         header('Location: ' . $_SERVER['PHP_SELF'] . '?tool=forum_manage&action=forum_manage');
-        app_halt('Exit called');
+        die();
         break;
 
     case 'edit_forum':
         if (!$name && !$desc && !$id) {
             header('Location: ' . $_SERVER['PHP_SELF'] . '?tool=forum_manage&action=forum_manage');
-            app_halt('Exit called');
+            die();
         }
         $set = [
             'sort' => $sort,
@@ -76,13 +78,13 @@ switch ($action) {
         ];
         $forum_class->update($set, $id);
         header('Location: ' . $_SERVER['PHP_SELF'] . '?tool=forum_manage&action=forum_manage');
-        app_halt('Exit called');
+        die();
         break;
 
     case 'add_forum':
         if (!$name && !$desc) {
             header('Location: ' . $_SERVER['PHP_SELF'] . '?tool=forum_manage&action=forum_manage');
-            app_halt('Exit called');
+            die();
         }
         $values = [
             'sort' => $sort,
@@ -96,7 +98,7 @@ switch ($action) {
         ];
         $forum_class->add($values);
         header('Location: ' . $_SERVER['PHP_SELF'] . '?tool=forum_manage&action=forum_manage');
-        app_halt('Exit called');
+        die();
         break;
 
     case 'edit_forum_page':

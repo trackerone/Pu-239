@@ -1,6 +1,8 @@
 <?php
 require_once __DIR__ . '/../include/runtime_safe.php';
 
+require_once __DIR__ . '/../include/bootstrap_pdo.php';
+
 
 declare(strict_types = 1);
 
@@ -37,7 +39,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if ($validation->fails() || !valid_username($post['username'], false, true)) {
         write_log(getip(0,) . ' has used invalid data to signup. ' . json_encode($post, JSON_PRETTY_PRINT));
         header("Location: {$_SERVER['PHP_SELF']}");
-        app_halt('Exit called');
+        die();
     } else {
         $password = bin2hex(random_bytes(12));
         $data = [

@@ -1,6 +1,8 @@
 <?php
 require_once __DIR__ . '/../include/runtime_safe.php';
 
+require_once __DIR__ . '/../include/bootstrap_pdo.php';
+
 
 declare(strict_types = 1);
 
@@ -612,7 +614,7 @@ function redirect($url, $text, $time = 2)
 </body>
 </html>';
     echo $html;
-app_halt('Exit called');
+    exit;
 }
 
 /**

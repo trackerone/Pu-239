@@ -1,6 +1,8 @@
 <?php
 require_once __DIR__ . '/../include/runtime_safe.php';
 
+require_once __DIR__ . '/../include/bootstrap_pdo.php';
+
 
 declare(strict_types = 1);
 
@@ -306,7 +308,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     run_uglify();
     $cache->flushDB();
     header('Location: ' . $_SERVER['PHP_SELF'] . '?tool=class_config');
-    app_halt('Exit called');
+    die();
 }
 $HTMLOUT .= "
         <h1 class='has-text-centered top20'>" . _fe('User Class Settings for Template {0}', $style) . "</h1>

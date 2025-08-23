@@ -1,6 +1,8 @@
 <?php
 require_once __DIR__ . '/../include/runtime_safe.php';
 
+require_once __DIR__ . '/../include/bootstrap_pdo.php';
+
 
 declare(strict_types = 1);
 
@@ -196,7 +198,7 @@ if ($id !== 0) {
     } else {
         $letter = isset($_GET['letter']) ? trim((string) $_GET['letter']) : '';
         if (strlen($letter) > 1) {
-            app_halt('Exit called');
+            die();
         }
         if ($letter == '' || strpos('abcdefghijklmnopqrstuvwxyz0123456789', $letter) === false) {
             $letter = '';
