@@ -1,4 +1,4 @@
-name: Static Guard
+name: Static Guard (strict)
 
 on:
   push:
@@ -17,14 +17,11 @@ jobs:
         uses: shivammathur/setup-php@v2
         with:
           php-version: '8.2'
-      - name: Run static guard (strict but with excludes)
+      - name: Run static guard (strict rules)
         env:
           GUARD_MODE: fail
-          GUARD_EXCLUDE: admin/adminer.php,include/mysql_compat.php,tools/static_guard.php
-          GUARD_FAIL_ON: short_open_tag,eval_usage
+          # Keep excluding third-party/adminer and the guard itself only
+          GUARD_EXCLUDE: admin/adminer.php,tools/static_guard.php
+          # Fail on everything we care about now
+          GUARD_FAIL_ON: merge_conflict_marker,short_open_tag,eval_usage,terminate_calls,debug_calls,deprecated_mysql
         run: php tools/static_guard.php
-      - name: Upload guard report
-        uses: actions/upload-artifact@v4
-        with:
-          name: guard-report
-          path: tools/guard_report.txt
