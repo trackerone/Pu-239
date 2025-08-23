@@ -1,6 +1,8 @@
 <?php
 require_once __DIR__ . '/../../include/runtime_safe.php';
 
+require_once __DIR__ . '/../../include/bootstrap_pdo.php';
+
 
 declare(strict_types = 1);
 
@@ -17,11 +19,11 @@ $tid = $_POST['tid'];
 header('content-type: application/json');
 if (empty($tid)) {
     echo json_encode(['fail' => 'invalid']);
-    app_halt('Exit called');
+    die();
 }
 if (empty($user)) {
     echo json_encode(['fail' => 'csrf']);
-    app_halt('Exit called');
+    die();
 }
 $fluent = $container->get(Database::class);
 $cache = $container->get(Cache::class);
@@ -58,7 +60,7 @@ if ($private === 'true') {
         'tid' => $tid,
         'remove' => 'false',
     ]);
-    app_halt('Exit called');
+    die();
 }
 
 $bookmark = $fluent->from('bookmarks')
@@ -79,7 +81,7 @@ if (!empty($bookmark)) {
         'tid' => $tid,
         'remove' => $remove,
     ]);
-    app_halt('Exit called');
+    die();
 } else {
     $values = [
         'userid' => $user['id'],
@@ -95,5 +97,5 @@ if (!empty($bookmark)) {
         'tid' => $tid,
         'remove' => $remove,
     ]);
-    app_halt('Exit called');
+    die();
 }

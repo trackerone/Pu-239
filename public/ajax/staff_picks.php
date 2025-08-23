@@ -1,6 +1,8 @@
 <?php
 require_once __DIR__ . '/../../include/runtime_safe.php';
 
+require_once __DIR__ . '/../../include/bootstrap_pdo.php';
+
 
 declare(strict_types = 1);
 
@@ -14,13 +16,13 @@ global $container;
 
 if (empty($user) || $user['class'] < UC_STAFF) {
     echo json_encode(['pick' => 'csrf']);
-    app_halt('Exit called');
+    die();
 }
 $pick = (int) $_POST['pick'];
 $id = (int) $_POST['id'];
 if (!isset($pick) || empty($id)) {
     echo json_encode(['pick' => 'invalid']);
-    app_halt('Exit called');
+    die();
 }
 
 $staff_picks = $pick === 0 ? TIME_NOW : 0;
@@ -38,9 +40,9 @@ if ($result) {
     $cache->delete('staff_picks_');
     $data['staff_pick'] = $staff_picks;
     echo json_encode($data);
-    app_halt('Exit called');
+    die();
 } else {
     $data['staff_pick'] = 'fail';
     echo json_encode($data);
-    app_halt('Exit called');
+    die();
 }

@@ -1,20 +1,22 @@
 <?php
 require_once __DIR__ . '/../../include/runtime_safe.php';
 
+require_once __DIR__ . '/../../include/bootstrap_pdo.php';
+
 
 declare(strict_types = 1);
 
 use Pu239\User;
 
 if (empty($_GET['wantemail'])) {
-    app_halt('<div class="margin10 has-text-info">You can\'t post nothing please enter a email!</div>');
+    die('<div class="margin10 has-text-info">You can\'t post nothing please enter a email!</div>');
 }
 require_once __DIR__ . '/../../include/bittorrent.php';
 global $container;
 
 if (is_array($_GET['wantemail']) || !validemail($_GET['wantemail'])) {
     echo "<span class='has-text-danger'>" . _('Invalid Email Address') . '</span>';
-    app_halt('Exit called');
+    die();
 }
 
 $user = $container->get(User::class);
@@ -23,4 +25,4 @@ if ($user->get_count_by_email(htmlsafechars($_GET['wantemail']))) {
 } else {
     echo "<div class='has-text-success tooltipper margin10' title='" . _('Email Available') . "'><i class='icon-thumbs-up icon' aria-hidden='true'></i><b>" . _('Email Available') . '</b></div>';
 }
-app_halt('Exit called');
+die();

@@ -1,6 +1,8 @@
 <?php
 require_once __DIR__ . '/../../include/runtime_safe.php';
 
+require_once __DIR__ . '/../../include/bootstrap_pdo.php';
+
 
 declare(strict_types = 1);
 
@@ -40,10 +42,10 @@ if (!empty($imdb)) {
             'content' => $movie_info[0],
         ]);
         echo $output;
-        app_halt('Exit called');
+        die();
     }
 }
 echo json_encode([
     'fail' => 'invalid',
 ]);
-app_halt('Exit called');
+die();

@@ -1,6 +1,8 @@
 <?php
 require_once __DIR__ . '/../../include/runtime_safe.php';
 
+require_once __DIR__ . '/../../include/bootstrap_pdo.php';
+
 
 declare(strict_types = 1);
 
@@ -17,7 +19,7 @@ global $container, $site_config;
 header('content-type: application/json');
 if (empty($user['id'])) {
     echo json_encode(['msg' => _('Invalid ID')]);
-    app_halt('Exit called');
+    die();
 }
 $username = $user['username'];
 $SaLt = $site_config['salt']['one'];
@@ -40,7 +42,7 @@ for ($i = 0; $i < $_POST['nbr_files']; ++$i) {
     $it1 = exif_imagetype($_FILES['file_' . $i]['tmp_name']);
     if (!in_array($it1, $site_config['images']['exif'])) {
         echo json_encode(['msg' => _('Invalid file extension. jpg, gif, png and webp only.')]);
-        app_halt('Exit called');
+        die();
     }
 
     $file = strtolower($file);
@@ -49,12 +51,12 @@ for ($i = 0; $i < $_POST['nbr_files']; ++$i) {
     $pathlink = $bucketlink . $USERSALT . '_' . $randb . $file;
     if (!move_uploaded_file($_FILES['file_' . $i]['tmp_name'], $path)) {
         echo json_encode(['msg' => _('Upload failed to save image.')]);
-        app_halt('Exit called');
+        die();
     }
 
     if (!file_exists($path)) {
         echo json_encode(['msg' => _('Upload failed to save image.')]);
-        app_halt('Exit called');
+        die();
     }
     $image_proxy->optimize_image($path, '', false);
     $images[] = "{$site_config['paths']['baseurl']}/img.php?{$pathlink}";
@@ -66,8 +68,8 @@ if (!empty($images)) {
         'urls' => $images,
     ];
     echo json_encode($output);
-    app_halt('Exit called');
+    die();
 } else {
     echo json_encode(['msg' => _('Unknown failure occurred')]);
-    app_halt('Exit called');
+    die();
 }
