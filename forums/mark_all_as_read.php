@@ -1,6 +1,8 @@
 <?php
 require_once __DIR__ . '/../include/runtime_safe.php';
 
+require_once __DIR__ . '/../include/bootstrap_pdo.php';
+
 
 declare(strict_types = 1);
 
@@ -27,7 +29,7 @@ function redirect()
     } else {
         header('Location: ' . $_SERVER['PHP_SELF'] . '?m=1');
     }
-    app_halt('Exit called');
+    die();
 }
 
 /**
