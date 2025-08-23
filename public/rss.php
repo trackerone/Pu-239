@@ -1,4 +1,6 @@
 <?php
+require_once __DIR__ . '/../include/runtime_safe.php';
+
 
 declare(strict_types = 1);
 
@@ -130,8 +132,8 @@ function format_rss($data, ?string $torrent_pass)
     $feed = isset($_GET['type']) && $_GET['type'] === 'dl' ? 'dl' : 'web';
     $url = urlencode($site_config['paths']['baseurl'] . $_SERVER['REQUEST_URI']);
     $date = date(DATE_RSS, TIME_NOW);
-    $rss = '<?php xml version="1.0" encoding="UTF-8"?>
-<?php xml-stylesheet type="text/css" href="' . $site_config['paths']['baseurl'] . '/css/rss.css"?>
+    $rss = '<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/css" href="' . $site_config['paths']['baseurl'] . '/css/rss.css"?>
 <rss version="2.0"
     xmlns:content="http://purl.org/rss/1.0/modules/content/"
     xmlns:wfw="http://wellformedweb.org/CommentAPI/"
@@ -204,5 +206,5 @@ function format_rss($data, ?string $torrent_pass)
 
     header('Content-Type: application/xml');
     echo $rss;
-    die();
+    app_halt('Exit called');
 }
