@@ -1,6 +1,8 @@
 <?php
 require_once __DIR__ . '/runtime_safe.php';
 
+require_once __DIR__ . '/bootstrap_pdo.php';
+
 
 declare(strict_types = 1);
 
@@ -44,7 +46,7 @@ if ($score === 0) {
     $session = $container->get(Session::class);
     $session->set('is-info', "Wow!! That was pretty bad. Don't worry, we will tell anyone about it.");
     header('Location: ' . $site_config['paths']['baseurl'] . "/arcade_top_scores.php#{$gname}");
-    app_halt('Exit called');
+    die();
 }
 $fluent->insertInto('flashscores')
        ->values($values)

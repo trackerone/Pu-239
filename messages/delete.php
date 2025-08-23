@@ -1,6 +1,8 @@
 <?php
 require_once __DIR__ . '/../include/runtime_safe.php';
 
+require_once __DIR__ . '/../include/bootstrap_pdo.php';
+
 
 declare(strict_types = 1);
 
@@ -32,4 +34,4 @@ if (($message['receiver'] == $CURUSER['id'] || $message['sender'] == $CURUSER['i
 }
 
 header("Location: {$_SERVER['PHP_SELF']}?action=view_mailbox&deleted=1");
-app_halt('Exit called');
+die();

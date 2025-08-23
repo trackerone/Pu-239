@@ -1,6 +1,8 @@
 <?php
 require_once __DIR__ . '/../include/runtime_safe.php';
 
+require_once __DIR__ . '/../include/bootstrap_pdo.php';
+
 
 declare(strict_types = 1);
 
@@ -37,7 +39,7 @@ if (!empty($_POST['buttonval']) && $_POST['buttonval'] === 'Save draft') {
         stderr(_('Error'), _("Message wasn't saved!"));
     }
     header('Location: ' . $_SERVER['PHP_SELF'] . '?action=view_message&new_draft=1&id=' . $new_draft_id);
-    app_halt('Exit called');
+    die();
 }
 
 $HTMLOUT .= $top_links . '
