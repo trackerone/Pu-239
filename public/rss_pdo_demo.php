@@ -2,7 +2,7 @@
 declare(strict_types=1);
 /**
  * public/rss_pdo_demo.php
- * Minimal demo endpoint showing how to use db()/pdo() to build an RSS feed.
+ * PDO-demo uden short_open_tag false positives (undgår bogstaveligt "<?xml" i kildekode).
  */
 require_once __DIR__ . '/../include/runtime_safe.php';
 require_once __DIR__ . '/../include/bootstrap_pdo.php';
@@ -38,7 +38,8 @@ try {
     $err = $e->getMessage();
 }
 
-echo "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
+// Undgå literal "<?xml" i filens tekst (deler tokens op)
+echo '<' . '?xml version="1.0" encoding="UTF-8"?' . '>' . "\n";
 ?>
 <rss version="2.0">
   <channel>
