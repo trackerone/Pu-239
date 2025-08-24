@@ -1,4 +1,4 @@
-name: Static Guard (unblock)
+name: Static Guard (strict)
 
 on:
   push:
@@ -17,9 +17,9 @@ jobs:
         uses: shivammathur/setup-php@v2
         with:
           php-version: '8.2'
-      - name: Run static guard (tempered rules)
+      - name: Run static guard (strict rules)
         env:
           GUARD_MODE: fail
-          GUARD_EXCLUDE: admin/adminer.php,tools/repo_sanity.php
-          GUARD_FAIL_ON: merge_conflict_marker,short_open_tag,eval_usage,deprecated_mysql
+          GUARD_EXCLUDE: admin/adminer.php,tools/static_guard.php
+          GUARD_FAIL_ON: merge_conflict_marker,short_open_tag,eval_usage,terminate_calls,debug_calls,deprecated_mysql
         run: php tools/static_guard.php
