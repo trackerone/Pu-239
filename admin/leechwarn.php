@@ -4,6 +4,8 @@ require_once __DIR__ . '/../include/runtime_safe.php';
 
 declare(strict_types = 1);
 
+use Pu239\Database;
+
 use Pu239\Cache;
 
 require_once INCL_DIR . 'function_users.php';
@@ -33,34 +35,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
     $cache = $container->get(Cache::class);
     if ($act === 'delete' && has_access($CURUSER['class'], UC_SYSOP, 'coder')) {
-        $res_del = sql_query('SELECT id, username, registered, downloaded, uploaded, last_access, class, donor, warned, status FROM users WHERE id IN (' . implode(', ', $_uids) . ') ORDER BY username DESC');
-        if (mysqli_num_rows($res_del) != 0) {
-            $count = mysqli_num_rows($res_del);
-            while ($arr_del = mysqli_fetch_assoc($res_del)) {
-                $userid = $arr_del['id'];
-                $res = sql_query('DELETE FROM users WHERE id=' . sqlesc($userid)) or sqlerr(__FILE__, __LINE__);
-                $cache->delete('user_' . $userid);
-                write_log("User: {$arr_del['username']} Was deleted by " . $CURUSER['username'] . ' Via Leech Warn Page');
+        $res_del = $db->run(');
             }
         } else {
             stderr(_('Error'), _('Something went wrong2!'));
         }
     }
     if ($act === 'disable') {
-        if (sql_query('UPDATE users SET status = 2, modcomment = CONCAT(' . sqlesc(get_date((int) TIME_NOW, 'DATE', 1) . ' - Disabled by ' . $CURUSER['username'] . "\n") . ',modcomment) WHERE id IN (' . implode(', ', $_uids) . ')')) {
-            foreach ($_uids as $uid) {
-                $cache->update_row('user_' . $uid, [
-                    'status' => 2,
-                ], $site_config['expires']['user_cache']);
-            }
-            $c = mysqli_affected_rows($mysqli);
-            header('Refresh: 2; url=' . $r);
-            stderr(_('Success'), $c . _(' user') . ($c > 1 ? _('s') : '') . _(' disabled!'));
-        } else {
-            stderr(_('Error'), _('Something went wrong3!'));
-        }
-    } elseif ($act === 'unwarn') {
-        $sub = _('Leech Warn removed');
+        if ($db->run(');
         $body = _('Hey, your Leech warning was removed by ') . $CURUSER['username'] . _('Please keep in your best behaviour from now on.');
         $pms = [];
         foreach ($_uids as $uid) {
@@ -70,17 +52,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $pms[] = '(2,' . $uid . ', ' . sqlesc($sub) . ', ' . sqlesc($body) . ', ' . sqlesc(TIME_NOW) . ')';
         }
         if (!empty($pms) && count($pms)) {
-            $g = sql_query('INSERT INTO messages(sender,receiver,subject,msg,added) VALUE ' . implode(', ', $pms)) or ($q_err = ((is_object($mysqli)) ? mysqli_error($mysqli) : (($___mysqli_res = mysqli_connect_error()) ? $___mysqli_res : false)));
-            $q1 = sql_query("UPDATE users SET leechwarn='0', modcomment=CONCAT(" . sqlesc(get_date((int) TIME_NOW, 'DATE', 1) . ' - Leech Warning removed by ' . $CURUSER['username'] . "\n") . ',modcomment) WHERE id IN (' . implode(', ', $_uids) . ')') or ($q2_err = ((is_object($mysqli)) ? mysqli_error($mysqli) : (($___mysqli_res = mysqli_connect_error()) ? $___mysqli_res : false)));
-            if ($g && $q1) {
-                header('Refresh: 2; url=' . $r);
-                stderr(_('Success'), count($pms) . _(' user') . (count($pms) > 1 ? _('s') : '') . _(' Leech warning removed'));
-            } else {
-                stderr(_('Error'), _('Something went wrong! Q1 - ') . $q_err . '<br>' . _('Q2 - ') . '' . $q2_err);
-            }
-        }
-    }
-app_halt('Exit called');
+            $g = $db->run(');
 }
 switch ($do) {
     case 'disabled':

@@ -4,6 +4,8 @@ require_once __DIR__ . '/../include/runtime_safe.php';
 
 declare(strict_types = 1);
 
+use Pu239\Database;
+
 use Pu239\Message;
 use Pu239\User;
 
@@ -52,36 +54,7 @@ switch ($action) {
             stderr(_('Error'), _('You forgot to select an amount!'));
         }
         $bonus_added = $GB / 1073741824;
-        $res_GB = sql_query('SELECT id, uploaded, modcomment FROM users WHERE status = 0 AND class IN ' . $free_for) or sqlerr(__FILE__, __LINE__);
-        $pm_values = $user_values = [];
-        if (mysqli_num_rows($res_GB) > 0) {
-            while ($arr_GB = mysqli_fetch_assoc($res_GB)) {
-                $GB_new = $arr_GB['uploaded'] + $GB;
-                $modcomment = $arr_GB['modcomment'];
-                $modcomment = get_date((int) $dt, 'DATE', 1) . ' - ' . $bonus_added . _('GB Mass Bonus added - AutoSystem.') . $modcomment;
-                $msg = _fe('Hey,
- we have decided to add {0} GB upload credit to all classes.
- Cheers {1} Staff', $bonus_added, $site_config['site']['name']);
-                $pm_values[] = [
-                    'receiver' => (int) $arr_GB['id'],
-                    'added' => $dt,
-                    'msg' => $msg,
-                    'subject' => _('Upload added'),
-                ];
-                $set = [
-                    'uploaded' => $GB_new,
-                    'modcomment' => $modcomment,
-                ];
-                $users_class->update($set, (int) $arr_GB['id']);
-            }
-            $count = count($pm_values);
-            if ($count > 0) {
-                $messages_class->insert($pm_values);
-                write_log(_fe('Staff mass bonus - added upload credit to {0} members in all classes by {1}', $count, $CURUSER['username']));
-            }
-            unset($pm_values, $user_values, $user_updates, $count);
-        }
-        header('Location: ' . $_SERVER['PHP_SELF'] . '?tool=mass_bonus_for_members&action=mass_bonus_for_members&GB=1');
+        $res_GB = $db->run(');
         app_halt('Exit called');
         break;
 
@@ -90,37 +63,7 @@ switch ($action) {
         if ($karma < 100 || $karma > 5000) {
             stderr(_('Error'), _('You forgot to select an amount!'));
         }
-        $res_karma = sql_query('SELECT id, seedbonus, modcomment FROM users WHERE status = 0 AND class IN ' . $free_for) or sqlerr(__FILE__, __LINE__);
-        $pm_values = $user_values = [];
-        if (mysqli_num_rows($res_karma) > 0) {
-            $msg = _('Hey,
- we have decided to add') . " $karma  " . _('Karma bonus points to all classes.
- Cheers') . " {$site_config['site']['name']} " . _('staff') . '';
-            while ($arr_karma = mysqli_fetch_assoc($res_karma)) {
-                $karma_new = $arr_karma['seedbonus'] + $karma;
-                $modcomment = $arr_karma['modcomment'];
-                $modcomment = get_date((int) $dt, 'DATE', 1) . ' - ' . $karma . _('Mass Bonus Karma Points added - AutoSystem.
-') . $modcomment;
-                $pm_values[] = [
-                    'receiver' => (int) $arr_karma['id'],
-                    'added' => $dt,
-                    'msg' => $msg,
-                    'subject' => _('Karma added'),
-                ];
-                $set = [
-                    'seedbonus' => $karma_new,
-                    'modcomment' => $modcomment,
-                ];
-                $users_class->update($set, (int) $arr_karma['id']);
-            }
-            $count = count($pm_values);
-            if ($count > 0) {
-                $messages_class->insert($pm_values);
-                write_log(_('Staff mass bonus - added karma points to') . " $count " . _('members in all classes by') . " {$CURUSER['username']}");
-            }
-            unset($pm_values, $user_values, $user_updates, $count);
-        }
-        header('Location: ' . $_SERVER['PHP_SELF'] . '?tool=mass_bonus_for_members&action=mass_bonus_for_members&karma=1');
+        $res_karma = $db->run(');
         app_halt('Exit called');
         break;
 
@@ -129,37 +72,7 @@ switch ($action) {
         if ($freeslots < 1 || $freeslots > 50) {
             stderr(_('Error'), _('You forgot to select an amount!'));
         }
-        $res_freeslots = sql_query('SELECT id, freeslots, modcomment FROM users WHERE status = 0 AND class IN ' . $free_for) or sqlerr(__FILE__, __LINE__);
-        $pm_values = $user_values = [];
-        if (mysqli_num_rows($res_freeslots) > 0) {
-            $msg = _('Hey,
- we have decided to add') . " $freeslots " . _('free slots to all classes.
- Cheers') . " {$site_config['site']['name']} " . _('staff') . '';
-            while ($arr_freeslots = mysqli_fetch_assoc($res_freeslots)) {
-                $freeslots_new = $arr_freeslots['freeslots'] + $freeslots;
-                $modcomment = $arr_freeslots['modcomment'];
-                $modcomment = get_date((int) $dt, 'DATE', 1) . ' - ' . $freeslots . _('Free Leech Slots Mass Bonus added - AutoSystem.
-') . $modcomment;
-                $pm_values[] = [
-                    'receiver' => (int) $arr_freeslots['id'],
-                    'added' => $dt,
-                    'msg' => $msg,
-                    'subject' => _('Free Slots added'),
-                ];
-                $set = [
-                    'freeslots' => $freeslots_new,
-                    'modcomment' => $modcomment,
-                ];
-                $users_class->update($set, (int) $arr_freeslots['id']);
-            }
-            $count = count($pm_values);
-            if ($count > 0) {
-                $messages_class->insert($pm_values);
-                write_log(_('Staff mass bonus - added freeslots to') . " $count " . _('members in all classes by') . " {$CURUSER['username']}");
-            }
-            unset($pm_values, $user_values, $user_updates, $count);
-        }
-        header('Location: ' . $_SERVER['PHP_SELF'] . '?tool=mass_bonus_for_members&action=mass_bonus_for_members&freeslots=1');
+        $res_freeslots = $db->run(');
         app_halt('Exit called');
         break;
 
@@ -168,33 +81,7 @@ switch ($action) {
         if ($invites < 1 || $invites > 50) {
             stderr(_('Error'), _('You forgot to select an amount!'));
         }
-        $res_invites = sql_query("SELECT id, invites, modcomment FROM users WHERE status = 0 AND invite_on = 'yes' AND class IN " . $free_for);
-        $pm_buffer = $users_buffer = [];
-        if (mysqli_num_rows($res_invites) > 0) {
-            $msg = _('Hey,
- we have decided to add') . " $invites " . _('invites to all classes.
- Cheers') . " {$site_config['site']['name']} " . _('staff') . '';
-            while ($arr_invites = mysqli_fetch_assoc($res_invites)) {
-                $invites_new = $arr_invites['invites'] + $invites;
-                $modcomment = $arr_invites['modcomment'];
-                $modcomment = get_date((int) $dt, 'DATE', 1) . ' - ' . $invites . _('Invites Mass Bonus added - AutoSystem.
-') . $modcomment;
-                $pm_values[] = [
-                    'receiver' => (int) $arr_invites['id'],
-                    'added' => $dt,
-                    'msg' => $msg,
-                    'subject' => _('Invites added'),
-                ];
-                $set = [
-                    'invites' => $invites_new,
-                    'modcomment' => $modcomment,
-                ];
-                $users_class->update($set, (int) $arr_invites['id']);
-            }
-            $count = count($pm_values);
-            if ($count > 0) {
-                $messages_class->insert($pm_values);
-                write_log(_('Staff mass bonus - added invites to') . " $count " . _('members in all classes by') . " {$CURUSER['username']}");
+        $res_invites = $db->run(");
             }
             unset($pm_values, $user_values, $user_updates, $count);
         }
@@ -209,25 +96,7 @@ switch ($action) {
         if (!isset($_POST['body'])) {
             stderr(_('Error'), _('No body text... Please enter something to send!'));
         }
-        $res_pms = sql_query('SELECT id FROM users WHERE status = 0 AND class IN ' . $free_for);
-        $pm_values = [];
-        if (mysqli_num_rows($res_pms) > 0) {
-            while ($arr_pms = mysqli_fetch_assoc($res_pms)) {
-                $pm_values[] = [
-                    'receiver' => (int) $arr_pms['id'],
-                    'added' => $dt,
-                    'msg' => htmlsafechars($_POST['body']),
-                    'subject' => htmlsafechars($_POST['subject']),
-                ];
-            }
-            $count = count($pm_values);
-            if ($count > 0) {
-                $messages_class->insert($pm_values);
-                write_log(_('Mass pm sent to') . " $count " . _('members in all classes by') . " {$CURUSER['username']}");
-            }
-            unset($pm_values, $count);
-        }
-        header('Location: ' . $_SERVER['PHP_SELF'] . '?tool=mass_bonus_for_members&action=mass_bonus_for_members&pm=1');
+        $res_pms = $db->run(');
         app_halt('Exit called');
         break;
 }

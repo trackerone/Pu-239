@@ -6,6 +6,8 @@ require_once __DIR__ . '/../include/bootstrap_pdo.php';
 
 declare(strict_types = 1);
 
+use Pu239\Database;
+
 require_once INCL_DIR . 'function_users.php';
 require_once INCL_DIR . 'function_html.php';
 require_once INCL_DIR . 'function_pager.php';
@@ -25,14 +27,14 @@ if (isset($_POST['nowarned']) && $_POST['nowarned'] === 'nowarned') {
         stderr(_('Error'), _('You must select a user.'));
     }
     if (!empty($_POST['remove'])) {
-        sql_query('DELETE FROM cheaters WHERE id IN (' . implode(', ', array_map('sqlesc', $_POST['remove'])) . ')') or sqlerr(__FILE__, __LINE__);
+        $db->run(');
     }
     if (!empty($_POST['desact'])) {
-        sql_query('UPDATE users SET status = 2 WHERE id IN (' . implode(', ', array_map('sqlesc', $_POST['desact'])) . ')') or sqlerr(__FILE__, __LINE__);
+        $db->run(');
         $this->cache->deleteMulti($_POST['desact']);
     }
 }
-$res = sql_query('SELECT COUNT(id) FROM cheaters') or sqlerr(__FILE__, __LINE__);
+$rows = $db->fetchAll('SELECT COUNT(id) FROM cheaters');
 $row = mysqli_fetch_array($res);
 $count = $row[0];
 $perpage = 15;
@@ -51,9 +53,9 @@ if ($count > 0) {
             <th class='w-1 has-text-centered'>" . _('Disable') . "</th>
             <th class='w-1 has-text-centered'>" . _('Remove') . '</th>
         </tr>';
-    $res = sql_query('SELECT c.id AS cid, c.added, c.userid, c.torrentid, c.client, c.rate, c.beforeup, c.upthis, c.timediff, c.userip, t.id AS tid, t.name AS tname FROM cheaters AS c LEFT JOIN torrents AS t ON t.id=c.torrentid ORDER BY added DESC ' . $pager['limit']) or sqlerr(__FILE__, __LINE__);
+    $rows = $db->fetchAll('SELECT c.id AS cid, c.added, c.userid, c.torrentid, c.client, c.rate, c.beforeup, c.upthis, c.timediff, c.userip, t.id AS tid, t.name AS tname FROM cheaters AS c LEFT JOIN torrents AS t ON t.id=c.torrentid ORDER BY added DESC ' . $pager['limit']);
     $body = '';
-    while ($arr = mysqli_fetch_assoc($res)) {
+    foreach ($rows as $arr) {
         $id = $arr['cid'];
         $userid = $arr['userid'];
         $torrname = htmlsafechars(CutName($arr['tname'], 80));

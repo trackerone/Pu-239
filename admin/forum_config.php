@@ -16,7 +16,8 @@ global $container, $site_config;
 $HTMLOUT = $time_drop_down = $accepted_file_extension = $accepted_file_types = $member_class_drop_down = '';
 $settings_saved = false;
 $config_id = 1;
-$fluent = $container->get(Database::class);
+$db = $container->get(Database::class);
+$fluent = $db;
 $cache = $container->get(Cache::class);
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['do_it'])) {
     $update = [
@@ -49,7 +50,7 @@ $main_links = "
             </div>
             <h1 class='has-text-centered'>" . _('Config Forums') . '</h1>';
 
-$res = sql_query('SELECT delete_for_real, min_delete_view_class, readpost_expiry, min_upload_class, accepted_file_extension,
+$rows = $db->fetchAll('SELECT delete_for_real, min_delete_view_class, readpost_expiry, min_upload_class, accepted_file_extension,
                                 accepted_file_types, max_file_size FROM forum_config WHERE id = ' . sqlesc($config_id));
 $arr = mysqli_fetch_array($res);
 $weeks = 1;

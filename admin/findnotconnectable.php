@@ -75,7 +75,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (!$msg) {
         stderr(_('Error'), 'Please Type In Some Text');
     }
-    $fluent = $container->get(Database::class);
+    $db = $container->get(Database::class);
+$fluent = $db;
     $users = $fluent->from('peers')
                     ->select(null)
                     ->select('DISTINCT userid AS userid')

@@ -6,6 +6,8 @@ require_once __DIR__ . '/../include/bootstrap_pdo.php';
 
 declare(strict_types = 1);
 
+use Pu239\Database;
+
 require_once INCL_DIR . 'function_users.php';
 require_once INCL_DIR . 'function_bbcode.php';
 require_once INCL_DIR . 'function_pager.php';

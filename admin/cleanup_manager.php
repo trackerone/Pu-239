@@ -65,7 +65,7 @@ function resettimer()
 
     $session = $container->get(Session::class);
     $timestamp = strtotime('today midnight');
-    sql_query("UPDATE cleanup SET clean_time = $timestamp WHERE clean_time > 0");
+    $db->run(");
     $session->set('is-success', 'Cleanup Time Set to ' . get_date((int) $timestamp, 'LONG'));
     cleanup_show_main();
     app_halt('Exit called');
@@ -94,21 +94,7 @@ function manualclean($params)
         stderr(_('Error'), _('Bad you!'));
     }
     $params['cid'] = sqlesc($params['cid']);
-    $sql = sql_query('SELECT * FROM cleanup WHERE clean_id=' . sqlesc($params['cid'])) or sqlerr(__FILE__, __LINE__);
-    $row = mysqli_fetch_assoc($sql);
-    if ($row['clean_id']) {
-        $next_clean = ceil($row['clean_time'] / $row['clean_increment']) * $row['clean_increment'] + $row['clean_increment'];
-        sql_query('UPDATE cleanup SET clean_time = ' . sqlesc($next_clean) . ' WHERE clean_id=' . sqlesc($row['clean_id'])) or sqlerr(__FILE__, __LINE__);
-        if (file_exists(CLEAN_DIR . $row['clean_file'])) {
-            require_once CLEAN_DIR . $row['clean_file'];
-            if (function_exists($row['function_name'])) {
-                register_shutdown_function($row['function_name'], $row);
-            }
-        }
-    }
-
-    cleanup_show_main();
-    app_halt('Exit called');
+    $sql = $db->run(');
 }
 
 /**
@@ -119,7 +105,8 @@ function cleanup_show_main()
 {
     global $container, $site_config;
 
-    $fluent = $container->get(Database::class);
+    $db = $container->get(Database::class);
+$fluent = $db;
     $count1 = $fluent->from('cleanup')
                      ->select(null)
                      ->select('COUNT(clean_id) AS count')
@@ -146,64 +133,7 @@ function cleanup_show_main()
                 </tr>
             </thead>
             <tbody>';
-    $sql = sql_query("SELECT * FROM cleanup ORDER BY clean_on DESC, clean_time, clean_increment {$pager['limit']}") or sqlerr(__FILE__, __LINE__);
-    if (!mysqli_num_rows($sql)) {
-        stderr(_('Error'), _('Fucking panic now!'));
-    }
-    while ($row = mysqli_fetch_assoc($sql)) {
-        $row['_clean_time'] = get_date((int) $row['clean_time'], 'LONG', 1, 0);
-        $row['clean_increment'] = (int) $row['clean_increment'];
-        $row['_class'] = $row['clean_on'] != 1 ? " style='color:red'" : '';
-        $row['_title'] = $row['clean_on'] != 1 ? ' (' . _('Locked') . ')' : '';
-        $row['_clean_time'] = $row['clean_on'] != 1 ? "<span class='has-text-danger'>{$row['_clean_time']}</span>" : $row['_clean_time'];
-        $on_off = $row['clean_on'] != 1 ? "<i class='icon-toggle-off icon has-text-danger'></i>" : "<i class='icon-toggle-on icon has-text-success'></i>";
-        $htmlout .= "
-        <tr>
-            <td{$row['_class']}><div>{$row['clean_title']}{$row['_title']}</div><div class='size_3'>{$row['clean_desc']}</div></td>
-            <td class='has-text-centered'>" . mkprettytime($row['clean_increment']) . "</td>
-            <td class='has-text-centered'>{$row['_clean_time']}</td>
-            <td class='has-text-centered'>
-                <a href='{$site_config['paths']['baseurl']}/staffpanel.php?tool=cleanup_manager&amp;action=cleanup_manager&amp;mode=edit&amp;cid={$row['clean_id']}' class='tooltipper' title='" . _('Edit') . "'>
-                    <i class='icon-edit icon has-text-info' aria-hidden='true'></i>
-                </a>
-            </td>
-            <td class='has-text-centered'>
-                <a href='{$site_config['paths']['baseurl']}/staffpanel.php?tool=cleanup_manager&amp;action=cleanup_manager&amp;mode=delete&amp;cid={$row['clean_id']}' class='tooltipper' title='" . _('Delete') . "'>
-                    <i class='icon-trash-empty icon has-text-danger' aria-hidden='true'></i>
-                </a>
-            </td>
-            <td class='has-text-centered'>
-                <a href='{$site_config['paths']['baseurl']}/staffpanel.php?tool=cleanup_manager&amp;action=cleanup_manager&amp;mode=unlock&amp;cid={$row['clean_id']}&amp;clean_on={$row['clean_on']}' class='tooltipper' title='" . _('on/off') . "'>
-                $on_off
-            </td>
-            <td class='has-text-centered'>
-                <a class='button is-small' href='{$site_config['paths']['baseurl']}/staffpanel.php?tool=cleanup_manager&amp;action=cleanup_manager&amp;mode=run&amp;cid={$row['clean_id']}'>" . _('Run it now') . '</a>
-            </td>
-         </tr>';
-    }
-    $htmlout .= '</tbody></table>' . ($count1 > $perpage ? $pager['pagerbottom'] : '');
-    $title = _('Cleanup Manager');
-    $breadcrumbs = [
-        "<a href='{$site_config['paths']['baseurl']}/staffpanel.php'>" . _('Staff Panel') . '</a>',
-        "<a href='{$_SERVER['PHP_SELF']}'>$title</a>",
-    ];
-    echo stdhead($title, [], 'page-wrapper', $breadcrumbs) . wrapper($htmlout) . stdfoot();
-}
-
-/**
- * @throws \Envms\FluentPDO\Exception
- * @throws Exception
- */
-function cleanup_show_edit()
-{
-    global $params, $site_config;
-
-    if (!isset($params['cid']) || empty($params['cid']) || !is_valid_id((int) $params['cid'])) {
-        cleanup_show_main();
-app_halt('Exit called');
-    }
-    $cid = intval($params['cid']);
-    $sql = sql_query("SELECT * FROM cleanup WHERE clean_id=$cid");
+    $sql = $db->run(");
     if (!mysqli_num_rows($sql)) {
         stderr(_('Error'), _('Why me?'));
     }
@@ -331,7 +261,7 @@ function cleanup_take_edit($params)
     foreach ($params as $k => $v) {
         $params[$k] = sqlesc($v);
     }
-    sql_query("UPDATE cleanup SET function_name = {$params['function_name']}, clean_title = {$params['clean_title']}, clean_desc = {$params['clean_desc']}, clean_file = {$params['clean_file']}, clean_time = {$params['clean_time']}, clean_increment = {$params['clean_increment']}, clean_log = {$params['clean_log']}, clean_on = {$params['clean_on']} WHERE clean_id={$params['cid']}");
+    $db->run(");
     cleanup_show_main();
     app_halt('Exit called');
 }
@@ -460,7 +390,7 @@ function cleanup_take_new($params)
     foreach ($params as $k => $v) {
         $params[$k] = sqlesc($v);
     }
-    sql_query("INSERT INTO cleanup (function_name, clean_title, clean_desc, clean_file, clean_time, clean_increment, clean_log, clean_on) VALUES ({$params['function_name']}, {$params['clean_title']}, {$params['clean_desc']}, {$params['clean_file']}, {$params['clean_time']}, {$params['clean_increment']}, {$params['clean_log']}, {$params['clean_on']})");
+    $db->run(");
     if (((is_null($___mysqli_res = mysqli_insert_id($mysqli))) ? false : $___mysqli_res)) {
         stderr(_('Info'), _('Success, new cleanup task added!'));
     } else {
@@ -491,7 +421,7 @@ function cleanup_take_delete($params)
         stderr(_('Error'), _('Bad you!'));
     }
     $params['cid'] = sqlesc($params['cid']);
-    sql_query("DELETE FROM cleanup WHERE clean_id={$params['cid']}");
+    $db->run(");
     if (mysqli_affected_rows($mysqli) === 1) {
         stderr(_('Info'), _('Success, cleanup task deleted!'));
     } else {
@@ -540,7 +470,7 @@ function cleanup_take_unlock($params)
     unset($opts);
     $params['cid'] = sqlesc($params['cid']);
     $params['clean_on'] = ($params['clean_on'] === 1 ? sqlesc($params['clean_on'] - 1) : sqlesc($params['clean_on'] + 1));
-    sql_query("UPDATE cleanup SET clean_on = {$params['clean_on']} WHERE clean_id={$params['cid']}");
+    $db->run(");
     if (mysqli_affected_rows($mysqli) === 1) {
         cleanup_show_main();
     } else {

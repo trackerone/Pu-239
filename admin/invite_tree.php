@@ -18,7 +18,8 @@ global $container, $site_config;
 $HTMLOUT = '';
 $id = isset($_GET['id']) ? (int) $_GET['id'] : (isset($_POST['id']) ? (int) $_POST['id'] : 0);
 $users_class = $container->get(User::class);
-$fluent = $container->get(Database::class);
+$db = $container->get(Database::class);
+$fluent = $db;
 if ($id !== 0) {
     $arr_user = $users_class->getUserFromId($id);
     $HTMLOUT .= '
@@ -267,7 +268,7 @@ if ($id !== 0) {
 
     $HTMLOUT .= $count > $perpage ? $menu_top : '';
     if ($count > 0) {
-        $res = sql_query('SELECT users.*, countries.name, countries.flagpic FROM users FORCE INDEX ( username ) LEFT JOIN countries ON country = countries.id WHERE ' . $query . ' ORDER BY username ' . $LIMIT);
+        $rows = $db->fetchAll('SELECT users.*, countries.name, countries.flagpic FROM users FORCE INDEX ( username ) LEFT JOIN countries ON country = countries.id WHERE ' . $query . ' ORDER BY username ' . $LIMIT);
         $heading = '
             <tr>
                 <th>' . _('User name') . '</th>

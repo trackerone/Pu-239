@@ -20,7 +20,8 @@ global $container, $CURUSER, $site_config;
 
 $style = get_stylesheet();
 $session = $container->get(Session::class);
-$fluent = $container->get(Database::class);
+$db = $container->get(Database::class);
+$fluent = $db;
 $all_classes = $fluent->from('class_config')
                       ->where('template = ?', $style)
                       ->orderBy('value');
@@ -53,7 +54,8 @@ function update_forum_classes(int $value, string $direction)
 {
     global $container;
 
-    $fluent = $container->get(Database::class);
+    $db = $container->get(Database::class);
+$fluent = $db;
     if ($direction === 'increment') {
         $fluent->update('forums')
                ->set(['min_class_read' => new Literal('min_class_read + 1')])
@@ -101,7 +103,8 @@ function update_forum_classes(int $value, string $direction)
     }
 }
 
-$fluent = $container->get(Database::class);
+$db = $container->get(Database::class);
+$fluent = $db;
 $cache = $container->get(Cache::class);
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $data = [];
@@ -198,17 +201,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
             $i = $old_max;
             while ($i >= $value) {
-                sql_query("UPDATE class_config SET value = value +1 where value = $i AND name NOT IN ('UC_MIN', 'UC_STAFF', 'UC_MAX')") or sqlerr(__FILE__, __LINE__);
+                $db->run(");
                 --$i;
             }
 
             if ($value > UC_MAX) {
-                sql_query("UPDATE users SET class = class +1 where class = $old_max") or sqlerr(__FILE__, __LINE__);
+                $db->run(");
             } else {
                 $i = $old_max;
                 while ($i >= $value) {
-                    sql_query("UPDATE users SET class = class + 1 where class = $i") or sqlerr(__FILE__, __LINE__);
-                    sql_query("UPDATE staffpanel SET av_class = av_class + 1 where av_class = $i") or sqlerr(__FILE__, __LINE__);
+                    $db->run(");
+                    $db->run(");
                     --$i;
                 }
             }

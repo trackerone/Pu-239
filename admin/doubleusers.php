@@ -6,6 +6,8 @@ require_once __DIR__ . '/../include/bootstrap_pdo.php';
 
 declare(strict_types = 1);
 
+use Pu239\Database;
+
 use Pu239\Cache;
 use Pu239\Message;
 
@@ -23,13 +25,13 @@ if ($remove) {
     if (empty($remove)) {
         stderr(_('Error'), _('Invalid data'));
     }
-    $res = sql_query('SELECT id, username, class FROM users WHERE personal_doubleseed > NOW() AND id = ' . sqlesc($remove)) or sqlerr(__FILE__, __LINE__);
+    $rows = $db->fetchAll('SELECT id, username, class FROM users WHERE personal_doubleseed > NOW() AND id = ' . sqlesc($remove)) or sqlerr(__FILE__, __LINE__);
     $msgs_buffer = [];
     if (mysqli_num_rows($res) > 0) {
         $msg = _fe('DoubleSeed On All Torrents have been removed by {0}', $CURUSER['username']);
         $messages_class = $container->get(Message::class);
         $cache = $container->get(Cache::class);
-        while ($arr = mysqli_fetch_assoc($res)) {
+        foreach ($rows as $arr) {
             $modcomment = sqlesc(get_date((int) $dt, 'DATE', 1) . ' - ' . _fe('DoubleSeed On All Torrents removed by {0}', $CURUSER['username']) . " \n");
             $msgs_buffer[] = [
                 'receiver' => $arr['id'],
@@ -38,15 +40,7 @@ if ($remove) {
                 'subject' => _('DoubleSeed Notice!'),
             ];
             $messages_class->insert($msgs_buffer);
-            sql_query('UPDATE users SET personal_doubleseed = NOW(), modcomment = ' . $modcomment . ' WHERE id = ' . sqlesc($arr['id'])) or sqlerr(__FILE__, __LINE__);
-            write_log(_fe('User account {0} ){1}) DoubleSeed On All Torrents have been removed by {2}', $remove, $arr['username'], $CURUSER['username']));
-            $cache->delete('user_' . $arr['id']);
-        }
-    } else {
-        stderr(_('Error'), _('That User has No DoubleSeed Status!'));
-    }
-}
-$res2 = sql_query('SELECT id, username, class, personal_doubleseed FROM users WHERE personal_doubleseed > NOW() ORDER BY username') or sqlerr(__FILE__, __LINE__);
+            $db->run(');
 $count = mysqli_num_rows($res2);
 $perpage = 25;
 $pager = pager($perpage, $count, "{$site_config['paths']['baseurl']}/staffpanel.php?tool=doubleusers&amp;");

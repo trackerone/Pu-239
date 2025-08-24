@@ -6,6 +6,8 @@ require_once __DIR__ . '/../include/bootstrap_pdo.php';
 
 declare(strict_types = 1);
 
+use Pu239\Database;
+
 use Pu239\Message;
 use Pu239\Session;
 
@@ -84,47 +86,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         break;
 
                     case 'all_friends':
-                        $fq = sql_query('SELECT friendid FROM friends WHERE userid=' . sqlesc($CURUSER['id'])) or sqlerr(__FILE__, __LINE__);
-                        if (mysqli_num_rows($fq)) {
-                            while ($fa = mysqli_fetch_row($fq)) {
-                                $ids[] = $fa[0];
-                            }
-                        }
-                        break;
-                }
-            }
-            if (ctype_digit($group) && (int) $group >= 0) {
-                $classes[] = $group;
-                $sent2classes[] = get_user_class_name((int) $group);
-            }
-        }
-        if (count($classes) > 0) {
-            $where[] = 'u.class IN (' . implode(', ', $classes) . ')';
-        }
-        if (count($where) > 0) {
-            $q1 = sql_query('SELECT u.id FROM users AS u WHERE ' . implode(' OR ', $where)) or sqlerr(__FILE__, __LINE__);
-            if (mysqli_num_rows($q1) > 0) {
-                while ($a = mysqli_fetch_row($q1)) {
-                    $ids[] = $a[0];
-                }
-            }
-        }
-        $ids = array_unique($ids);
-        if (count($ids) > 0) {
-            $msg .= '[class=top20][p]' . _pfe('This message was set to the following class: {1}', 'This message was set to the following classes: {1}', count($sent2classes), implode(', ', $sent2classes)) . '[/p][/class]';
-            foreach ($ids as $rid) {
-                $msgs_buffer[] = [
-                    'sender' => $sender,
-                    'poster' => $CURUSER['id'],
-                    'receiver' => $rid,
-                    'added' => $dt,
-                    'msg' => $msg,
-                    'subject' => $subject,
-                ];
-            }
-            $messages_class = $container->get(Message::class);
-            $r = $messages_class->insert($msgs_buffer);
-            $err[] = $r ? _pfe('Message sent to {0} user', 'Message sent to {0} users', count($msgs_buffer)) : _('Unable to send the message try again!');
+                        $fq = $db->run(');
         } else {
             $err[] = _('There are not any users in the groups you selected!');
         }

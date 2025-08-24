@@ -6,6 +6,8 @@ require_once __DIR__ . '/../include/bootstrap_pdo.php';
 
 declare(strict_types = 1);
 
+use Pu239\Database;
+
 require_once INCL_DIR . 'function_users.php';
 require_once CLASS_DIR . 'class_check.php';
 class_check(UC_MAX);
@@ -122,7 +124,7 @@ function localisedDate($timestamp = -1, $format = '')
 ////////////////////// END FUNCTION LIST /////////////////////////////////////
 $HTMLOUT = '';
 $HTMLOUT .= "<h1 class='has-text-centered'>" . _('Mysql Server Status') . '</h1>';
-$res = sql_query('SHOW GLOBAL STATUS') or sqlerr(__FILE__, __LINE__);
+$rows = $db->fetchAll('SHOW GLOBAL STATUS');
 $serverStatus = [];
 while ($row = mysqli_fetch_row($res)) {
     $serverStatus[$row[0]] = $row[1];
@@ -130,7 +132,7 @@ while ($row = mysqli_fetch_row($res)) {
 @((mysqli_free_result($res) || (is_object($res) && (get_class($res) === 'mysqli_result'))) ? true : false);
 unset($res, $row);
 
-$res = sql_query('SELECT UNIX_TIMESTAMP() - ' . $serverStatus['Uptime']) or sqlerr(__FILE__, __LINE__);
+$rows = $db->fetchAll('SELECT UNIX_TIMESTAMP() - ' . $serverStatus['Uptime']) or sqlerr(__FILE__, __LINE__);
 $row = mysqli_fetch_row($res);
 $HTMLOUT .= "<p class='has-text-centered'>" . _fe('This MySQL server has been running for {0}. It started up on {1}', timespanFormat($serverStatus['Uptime']), localisedDate((int) $row[0])) . '</p>';
 ((mysqli_free_result($res) || (is_object($res) && (get_class($res) === 'mysqli_result'))) ? true : false);

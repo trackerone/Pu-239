@@ -6,6 +6,8 @@ require_once __DIR__ . '/../include/bootstrap_pdo.php';
 
 declare(strict_types = 1);
 
+use Pu239\Database;
+
 require_once INCL_DIR . 'function_users.php';
 require_once INCL_DIR . 'function_html.php';
 require_once INCL_DIR . 'function_pager.php';
@@ -147,38 +149,7 @@ if ($ip) {
         } else {
             $ipstr = '---';
         }
-        $resip = sql_query('SELECT INET6_NTOA(ip) FROM ips WHERE userid=' . sqlesc($user['id']) . ' GROUP BY ips.ip') or sqlerr(__FILE__, __LINE__);
-        $iphistory = mysqli_num_rows($resip);
-        if ($user['invitedby'] > 0) {
-            $res2 = sql_query('SELECT username FROM users WHERE id=' . sqlesc($user['invitedby']));
-            $array = mysqli_fetch_assoc($res2);
-            $invitedby = $array['id'];
-            if ($invitedby == '') {
-                $invitedby = '<i>[' . _('Deleted') . ']</i>';
-            } else {
-                $invitedby = format_username((int) $invitedby);
-            }
-        } else {
-            $invitedby = '--';
-        }
-        $HTMLOUT .= '<tr>
-           <td>' . format_username((int) $user['id']) . '</td>' . '<td>' . member_ratio((float) $user['uploaded'], (float) $user['downloaded']) . '</td>
-          <td>' . $user['email'] . '</td><td>' . $ipstr . '</td>
-          <td><div>' . get_date((int) $user['last_access'], 'DATE', 1, 0) . "</div></td>
-          <td><div><b><a href='{$site_config['paths']['baseurl']}/staffpanel.php?tool=iphistory&amp;action=iphistory&amp;id=" . (int) $user['id'] . "'>$iphistory</a></b></div></td>
-          <td><div>" . get_date((int) $user['access'], 'DATE', 1, 0) . '</div></td>
-          <td><div>' . get_date((int) $user['registered'], 'DATE', 1, 0) . '</div></td>
-          <td><div>' . $invitedby . "</div></td>
-          </tr>\n";
-    }
-    $HTMLOUT .= '</table>';
-    if ($count > $perpage) {
-        $pager['pagerbottom'];
-    }
-    $HTMLOUT .= end_frame();
-}
-$HTMLOUT .= end_main_frame();
-$title = _('IP Search');
+        $resip = $db->run(');
 $breadcrumbs = [
     "<a href='{$site_config['paths']['baseurl']}/staffpanel.php'>" . _('Staff Panel') . '</a>',
     "<a href='{$_SERVER['PHP_SELF']}'>$title</a>",

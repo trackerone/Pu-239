@@ -6,6 +6,8 @@ require_once __DIR__ . '/../include/bootstrap_pdo.php';
 
 declare(strict_types = 1);
 
+use Pu239\Database;
+
 require_once INCL_DIR . 'function_users.php';
 require_once INCL_DIR . 'function_bbcode.php';
 require_once CLASS_DIR . 'class_check.php';
@@ -19,13 +21,10 @@ if (!is_valid_id($id)) {
 }
 if ($CURUSER['class'] >= UC_STAFF) {
     $dt = TIME_NOW;
-    $res = sql_query('SELECT username FROM users WHERE id = ' . sqlesc($id)) or sqlerr(__FILE__, __LINE__);
+    $rows = $db->fetchAll('SELECT username FROM users WHERE id = ' . sqlesc($id)) or sqlerr(__FILE__, __LINE__);
     $arr = mysqli_fetch_assoc($res);
     $username = htmlsafechars($arr['username']);
-    sql_query('DELETE FROM peers WHERE userid = ' . sqlesc($id));
-    $effected = mysqli_affected_rows($mysqli);
-    write_log(_fe("Staff flushed {0}'s ghost torrents at {1}. {2} torrents where successfully cleaned.", $username, get_date((int) $dt, 'LONG', 0, 1), $effected));
-    header('Refresh: 3; url=index.php');
+    $db->run(');
     stderr(_('Success'), _pfe('{0} ghost torrent was successfully cleaned. You may now restart your torrents, the tracker has been updated.', '{0} ghost torrents were successfully cleaned. You may now restart your torrents, the tracker has been updated.', $effected));
 } else {
     stderr(_('Error'), _('You are not a member of the staff.'));

@@ -15,7 +15,8 @@ $class = get_access(basename($_SERVER['REQUEST_URI']));
 class_check($class);
 global $container, $site_config, $CURUSER;
 
-$fluent = $container->get(Database::class);
+$db = $container->get(Database::class);
+$fluent = $db;
 $promos = $fluent->from('class_promo')
     ->orderBy('id');
 foreach ($promos as $ac) {
@@ -59,7 +60,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 }
             }
         }
-        if (sql_query('INSERT INTO class_promo(name,min_ratio,uploaded,time,low_ratio) VALUES ' . implode(', ', $update) . ' ON DUPLICATE KEY UPDATE name = VALUES(name),min_ratio = VALUES(min_ratio),uploaded = VALUES(uploaded),time = VALUES(time),low_ratio = VALUES(low_ratio)')) { // need to change strut
+        if ($db->run('INSERT INTO class_promo (name,min_ratio,uploaded,time,low_ratio) VALUES ' . implode(', ', $update) . ' ON DUPLICATE KEY UPDATE name = VALUES(name),min_ratio = VALUES(min_ratio),uploaded = VALUES(uploaded),time = VALUES(time),low_ratio = VALUES(low_ratio)')) { // need to change strut
             $session->set('is-success', _('user configuration was saved!'));
         } else {
             $session->set('is-error', _('There was an error while executing the update query or nothing was updated 1.'));
@@ -98,26 +99,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         } else {
             $session->set('is-error', _('We cannot have empty low ratio!'));
         }
-        if (sql_query('INSERT INTO class_promo (name, min_ratio,uploaded,time,low_ratio) VALUES(' . sqlesc($name) . ', ' . sqlesc($min_ratio) . ', ' . sqlesc($uploaded) . ', ' . sqlesc($time) . ', ' . sqlesc($low_ratio) . ')')) {
-            $session->set('is-success', _('user configuration was saved!'));
-        } else {
-            $session->set('is-error', _('There was an error while executing the update query or nothing was updated 2.'));
-        }
-    } elseif ($mode === 'remove') {
-        if (isset($_POST['remove'])) {
-            $name = htmlsafechars($_POST['remove']);
-        } else {
-            $session->set('is-error', _('Required Data Not Given!'));
-        }
-        if (sql_query('DELETE FROM class_promo WHERE name = ' . sqlesc($name))) {
-            $session->set('is-success', _('Class Promo was deleted!'));
-        } else {
-            $session->set('is-error', 'There was an error while deleting the Class Promo.');
+        if ($db->run(');
         }
     }
 }
 
-$res = sql_query('SELECT * FROM class_promo ORDER BY id');
+$rows = $db->fetchAll('SELECT * FROM class_promo ORDER BY id');
 if (mysqli_num_rows($res) >= 1) {
     $head_top = "
     <h3 class='has-text-centered top20'>" . _('User Promotion Settings') . "</h3>
@@ -133,7 +120,7 @@ if (mysqli_num_rows($res) >= 1) {
             <th class='has-text-centered'>" . _('Remove') . '</th>
         </tr>';
     $body = '';
-    while ($arr = mysqli_fetch_assoc($res)) {
+    foreach ($rows as $arr) {
         $body .= '
         <tr>
             <td>

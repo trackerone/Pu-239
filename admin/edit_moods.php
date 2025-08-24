@@ -6,6 +6,8 @@ require_once __DIR__ . '/../include/bootstrap_pdo.php';
 
 declare(strict_types = 1);
 
+use Pu239\Database;
+
 use Pu239\Cache;
 
 require_once CLASS_DIR . 'class_check.php';
@@ -25,13 +27,12 @@ $edit_mood['bonus'] = isset($edit_params['bonus']) ? 1 : 0;
 $cache = $container->get(Cache::class);
 if ($edit_mood['action'] === 'added') {
     if ($edit_mood['name'] != 'is example mood' && $edit_mood['image'] != 'smile1.gif') {
-        sql_query('INSERT INTO moods (name, image, bonus) VALUES (' . sqlesc($edit_mood['name']) . ', ' . sqlesc($edit_mood['image']) . ', ' . sqlesc($edit_mood['bonus']) . ')') or sqlerr(__FILE__, __LINE__);
+        $db->run('INSERT INTO moods (name, image, bonus) VALUES (' . sqlesc($edit_mood['name']) . ', ' . sqlesc($edit_mood['image']) . ', ' . sqlesc($edit_mood['bonus']) . ')') or sqlerr(__FILE__, __LINE__);
         $cache->delete('topmoods');
         write_log('<b>' . _('Mood Added') . '</b> ' . htmlsafechars($CURUSER['username']) . ' - ' . htmlsafechars($edit_mood['name']) . '<img src="' . $site_config['paths']['images_baseurl'] . 'smilies/' . htmlsafechars($edit_mood['image']) . '" alt="">');
     }
 } elseif ($edit_mood['action'] === 'edited') {
-    sql_query('UPDATE moods SET name = ' . sqlesc($edit_mood['name']) . ', image = ' . sqlesc($edit_mood['image']) . ', bonus = ' . sqlesc($edit_mood['bonus']) . ' WHERE id=' . sqlesc($edit_mood['id'])) or sqlerr(__FILE__, __LINE__);
-    $cache->delete('topmoods');
+    $db->run(');
     write_log('<b>' . _('Mood Edited') . '</b> ' . htmlsafechars($CURUSER['username']) . ' - ' . htmlsafechars($edit_mood['name']) . '<img src="' . $site_config['paths']['images_baseurl'] . 'smilies/' . htmlsafechars($edit_mood['image']) . '" alt="">');
 }
 if ($edit_mood['action'] === 'edit' && $edit_mood['id']) {
@@ -76,10 +77,10 @@ $HTMLOUT .= "<table class='table table-bordered table-striped'>
       <td class='colhead'>" . _('Bonus') . "</td>
       <td class='colhead'>" . _('Edit') . '</td>' . //<td class='colhead'>" . _('Remove') . "</td>
     '</tr>';
-$res = sql_query('SELECT * FROM moods ORDER BY id') or sqlerr(__FILE__, __LINE__);
+$rows = $db->fetchAll('SELECT * FROM moods ORDER BY id');
 if (mysqli_num_rows($res)) {
     $color = true;
-    while ($arr = mysqli_fetch_assoc($res)) {
+    foreach ($rows as $arr) {
         $HTMLOUT .= '<tr ' . (($color = !$color) ? ' style="background-color:#000000;"' : 'style="background-color:#0f0f0f;"') . '>
       <td><img src="' . $site_config['paths']['images_baseurl'] . 'smilies/' . htmlsafechars($arr['image']) . '" alt=""></td>
       <td>' . htmlsafechars($arr['name']) . '</td>

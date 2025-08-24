@@ -6,6 +6,8 @@ require_once __DIR__ . '/../include/bootstrap_pdo.php';
 
 declare(strict_types = 1);
 
+use Pu239\Database;
+
 use Pu239\Session;
 
 require_once INCL_DIR . 'function_pager.php';
@@ -28,7 +30,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
     if ($action === 'deluser' && (!empty($_POST['userid']))) {
-        $res = sql_query('SELECT id, email, modcomment, username, registered, last_access FROM users WHERE id IN (' . implode(', ', array_map('sqlesc', $_POST['userid'])) . ') ORDER BY last_access DESC ');
+        $rows = $db->fetchAll('SELECT id, email, modcomment, username, registered, last_access FROM users WHERE id IN (' . implode(', ', array_map('sqlesc', $_POST['userid'])) . ') ORDER BY last_access DESC ');
         $count = mysqli_num_rows($res);
         while ($arr = mysqli_fetch_array($res)) {
             $userid = (int) $arr['id'];
@@ -41,12 +43,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
     if ($action === 'disable' && (!empty($_POST['userid']))) {
-        sql_query('UPDATE users SET status = 2 WHERE id IN (' . implode(', ', array_map('sqlesc', $_POST['userid'])) . ') ');
+        $db->run(');
         $session->set('is-success', _('You have successfully disabled the selected accounts!'));
     }
 
     if ($action === 'mail' && (!empty($_POST['userid']))) {
-        $res = sql_query('SELECT id, email, modcomment, username, registered, last_access FROM users WHERE id IN (' . implode(', ', array_map('sqlesc', $_POST['userid'])) . ') ORDER BY last_access DESC ');
+        $rows = $db->fetchAll('SELECT id, email, modcomment, username, registered, last_access FROM users WHERE id IN (' . implode(', ', array_map('sqlesc', $_POST['userid'])) . ') ORDER BY last_access DESC ');
         $count = mysqli_num_rows($res);
         while ($arr = mysqli_fetch_array($res)) {
             $id = (int) $arr['id'];
@@ -73,24 +75,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $date = TIME_NOW;
             $userid = (int) $CURUSER['id'];
             if ($count > 0 && $mail) {
-                sql_query('UPDATE avps SET value_i=' . sqlesc($date) . ', value_u=' . sqlesc($count) . ', value_s=' . sqlesc($userid) . " WHERE arg='inactivemail'") or sqlerr(__FILE__, __LINE__);
-            }
-        }
-
-        if ($mail) {
-            $session->set('is-success', _('Messages sent.'));
-        } else {
-            $session->set('is-error', _('Try again'));
-        }
-    }
-}
-$dt = TIME_NOW - ($days * 86400);
-$res = sql_query('SELECT COUNT(id) FROM users WHERE last_access<' . sqlesc($dt) . ' AND verified = 1 AND status = 0 ORDER BY last_access DESC');
+                $db->run(');
 $row = mysqli_fetch_array($res);
 $count = (int) $row[0];
 $perpage = 15;
 $pager = pager($perpage, $count, 'staffpanel.php?tool=inactive&amp;');
-$res = sql_query('SELECT id,username,class,email,uploaded,downloaded,last_access FROM users WHERE last_access < ' . sqlesc($dt) . " AND verified = 1 AND status = 0 ORDER BY last_access DESC {$pager['limit']}") or sqlerr(__FILE__, __LINE__);
+$rows = $db->fetchAll('SELECT id,username,class,email,uploaded,downloaded,last_access FROM users WHERE last_access < ' . sqlesc($dt) . " AND verified = 1 AND status = 0 ORDER BY last_access DESC {$pager['limit']}") or sqlerr(__FILE__, __LINE__);
 $count_inactive = mysqli_num_rows($res);
 if ($count_inactive > 0) {
     if ($count > $perpage) {
@@ -125,7 +115,7 @@ if ($count_inactive > 0) {
     <td class='colhead'>" . _('Ratio') . "</td>
     <td class='colhead'>" . _('Last seen') . "</td>
     <td class='colhead'>" . _('X') . '</td></tr>';
-    while ($arr = mysqli_fetch_assoc($res)) {
+    foreach ($rows as $arr) {
         $ratio = member_ratio((float) $arr['uploaded'], (float) $arr['downloaded']);
         $last_seen = (($arr['last_access'] == '0') ? 'never' : get_date((int) $arr['last_access'], 'DATE'));
         $class = get_user_class_name((int) $arr['class']);

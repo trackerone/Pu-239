@@ -4,6 +4,8 @@ require_once __DIR__ . '/../include/runtime_safe.php';
 
 declare(strict_types = 1);
 
+use Pu239\Database;
+
 use Pu239\Cache;
 
 require_once INCL_DIR . 'function_users.php';
@@ -35,34 +37,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         stderr(_('Error'), _('Something went wrong!'));
     }
     if ($act === 'delete' && has_access($CURUSER['class'], UC_SYSOP, 'coder')) {
-        $res_del = sql_query('SELECT id, username, registered, downloaded, uploaded, last_access, class, donor, warned, status FROM users WHERE id IN (' . implode(', ', $_uids) . ') ORDER BY username DESC');
-        if (mysqli_num_rows($res_del) != 0) {
-            $count = mysqli_num_rows($res_del);
-            while ($arr_del = mysqli_fetch_assoc($res_del)) {
-                $userid = $arr_del['id'];
-                $res = sql_query('DELETE FROM users WHERE id=' . sqlesc($userid)) or sqlerr(__FILE__, __LINE__);
-                $cache->delete('user_' . $userid);
-                write_log("User: {$arr_del['username']} Was deleted by " . $CURUSER['username'] . ' Via Hit And Run Page');
+        $res_del = $db->run(');
             }
         } else {
             stderr(_('Error'), _('Something went wrong!'));
         }
     }
     if ($act === 'disable') {
-        if (sql_query('UPDATE users SET status = 2, modcomment=CONCAT(' . sqlesc(get_date((int) TIME_NOW, 'DATE', 1) . ' - Disabled by ' . $CURUSER['username'] . "\n") . ',modcomment) WHERE id IN (' . implode(', ', $_uids) . ')')) {
-            foreach ($_uids as $uid) {
-                $cache->update_row('user_' . $uid, [
-                    'status' => 2,
-                ], $site_config['expires']['user_cache']);
-            }
-            $d = mysqli_affected_rows($mysqli);
-            header('Refresh: 2; url=' . $r);
-            stderr(_('Success'), _pf('{0} user disabled', '{0} users disabled', $d));
-        } else {
-            stderr(_('Error'), _('Something went wrong!'));
-        }
-    } elseif ($act === 'unwarn') {
-        $sub = _('Hit and Run Warn removed');
+        if ($db->run(');
         $body = _fe('Hey, your Hit and Run warning was removed by {0}. Please keep in your best behaviour from now on.', $CURUSER['username']);
         $pms = [];
         foreach ($_uids as $id) {
@@ -72,8 +54,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             'hnrwarn' => 'no',
         ], $site_config['expires']['user_cache']);
         if (!empty($pms) && count($pms)) {
-            $g = sql_query('INSERT INTO messages(sender,receiver,subject,msg,added) VALUE ' . implode(', ', $pms)) or sqlerr(__FILE__, __LINE__);
-            $q1 = sql_query("UPDATE users SET hnrwarn='no', modcomment=CONCAT(" . sqlesc(get_date((int) TIME_NOW, 'DATE', 1) . ' - Hit and Run Warning removed by ' . $CURUSER['username'] . "\n") . ',modcomment) WHERE id IN (' . implode(', ', $_uids) . ')') or sqlerr(__FILE__, __LINE__);
+            $g = $db->run(');
             if ($g && $q1) {
                 header('Refresh: 2; url=' . $r);
                 stderr(_('Success'), _pfe("{0} user HnR's warning removed", "{0} users HnR's warning removed", count($pms)));
