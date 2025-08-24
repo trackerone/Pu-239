@@ -2,13 +2,15 @@
 declare(strict_types=1);
 /**
  * public/rss_pdo_demo.php
- * PDO-demo uden short_open_tag false positives (undgår bogstaveligt "<?xml" i kildekode).
+ * PDO-demo uden short_open_tag false positives.
  */
 require_once __DIR__ . '/../include/runtime_safe.php';
 require_once __DIR__ . '/../include/bootstrap_pdo.php';
 
 header('Content-Type: application/rss+xml; charset=UTF-8');
-function xml($s) { return htmlspecialchars((string)$s, ENT_XML1 | ENT_COMPAT, 'UTF-8'); }
+
+$xml = [];
+$xml[] = '<' . '?xml version="1.0" encoding="UTF-8"?' . '>'; // undgår literal "<?xml"
 
 $title = 'Pu-239 Demo RSS';
 $link  = '/';
@@ -16,6 +18,11 @@ $desc  = 'Demo RSS feed powered by PDO';
 
 $items = [];
 $err = null;
+
+/** HTML/XML escape helper */
+$xmlEsc = static function ($s) {
+    return htmlspecialchars((string)$s, ENT_XML1 | ENT_COMPAT, 'UTF-8');
+};
 
 try {
     $has = db()->fetchValue(
@@ -38,34 +45,35 @@ try {
     $err = $e->getMessage();
 }
 
-// Undgå literal "<?xml" i filens tekst (deler tokens op)
-echo '<' . '?xml version="1.0" encoding="UTF-8"?' . '>' . "\n";
-?>
-<rss version="2.0">
-  <channel>
-    <title><?= xml($title) ?></title>
-    <link><?= xml($link) ?></link>
-    <description><?= xml($desc) ?></description>
-    <language>en-us</language>
-    <ttl>15</ttl>
-<?php if (!empty($items)): ?>
-<?php foreach ($items as $it): ?>
-    <item>
-      <title><?= xml($it['title']) ?></title>
-      <link><?= xml($it['link']) ?></link>
-      <guid><?= xml($it['guid']) ?></guid>
-      <pubDate><?= xml($it['pubDate']) ?></pubDate>
-      <description><?= xml($it['description']) ?></description>
-    </item>
-<?php endforeach; ?>
-<?php else: ?>
-    <item>
-      <title><?= xml($title) ?> (empty demo)</title>
-      <link><?= xml($link) ?></link>
-      <guid>demo:empty</guid>
-      <pubDate><?= gmdate('r') ?></pubDate>
-      <description><?php if ($err) { echo xml('DB error: ' . $err); } else { echo xml('No data or torrents table missing.'); } ?></description>
-    </item>
-<?php endif; ?>
-  </channel>
-</rss>
+$xml[] = '<rss version="2.0">';
+$xml[] = '  <channel>';
+$xml[] = '    <title>' . $xmlEsc($title) . '</title>';
+$xml[] = '    <link>' . $xmlEsc($link) . '</link>';
+$xml[] = '    <description>' . $xmlEsc($desc) . '</description>';
+$xml[] = '    <language>en-us</language>';
+$xml[] = '    <ttl>15</ttl>';
+
+if (!empty($items)) {
+    foreach ($items as $it) {
+        $xml[] = '    <item>';
+        $xml[] = '      <title>' . $xmlEsc($it['title']) . '</title>';
+        $xml[] = '      <link>' . $xmlEsc($it['link']) . '</link>';
+        $xml[] = '      <guid>' . $xmlEsc($it['guid']) . '</guid>';
+        $xml[] = '      <pubDate>' . $xmlEsc($it['pubDate']) . '</pubDate>';
+        $xml[] = '      <description>' . $xmlEsc($it['description']) . '</description>';
+        $xml[] = '    </item>';
+    }
+} else {
+    $xml[] = '    <item>';
+    $xml[] = '      <title>' . $xmlEsc($title) . ' (empty demo)</title>';
+    $xml[] = '      <link>' . $xmlEsc($link) . '</link>';
+    $xml[] = '      <guid>demo:empty</guid>';
+    $xml[] = '      <pubDate>' . gmdate('r') . '</pubDate>';
+    $xml[] = '      <description>' . $xmlEsc($err ? ('DB error: ' . $err) : 'No data or torrents table missing.') . '</description>';
+    $xml[] = '    </item>';
+}
+
+$xml[] = '  </channel>';
+$xml[] = '</rss>';
+
+echo implode("\n", $xml);
