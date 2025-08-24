@@ -8,8 +8,10 @@ use Pu239\Database;
 
 $colour = $post_status_image = '';
 $ASC_DESC = ((isset($_GET['ASC_DESC']) && $_GET['ASC_DESC'] === 'ASC') ? 'ASC ' : 'DESC ');
-global $container, $site_config, $CURUSER;
+global $container;
+$db = $container->get(Database::class);, $site_config, $CURUSER;
 
+$fluent = $db; // alias
 $fluent = $container->get(Database::class);
 $count = $fluent->from('posts AS p')
                 ->select(null)
@@ -35,7 +37,7 @@ $pager = pager($perpage, $count, $link);
 $menu_top = $pager['pagertop'];
 $menu_bottom = $pager['pagerbottom'];
 $LIMIT = $pager['limit'];
-$res = sql_query('SELECT p.id AS post_id, p.topic_id, p.user_id, p.added, p.body, p.edited_by, p.edit_date, p.icon, p.post_title, p.bbcode, p.post_history, p.edit_reason, p.status AS post_status, p.anonymous, t.id AS topic_id, t.topic_name, t.forum_id, t.sticky, t.locked, t.poll_id, t.status AS topic_status, f.name AS forum_name, f.description FROM posts AS p LEFT JOIN topics AS t ON p.topic_id=t.id LEFT JOIN forums AS f ON f.id=t.forum_id WHERE  ' . ($CURUSER['class'] < UC_STAFF ? 'p.status = \'ok\' AND t.status = \'ok\' AND' : ($CURUSER['class'] < $site_config['forum_config']['min_delete_view_class'] ? 'p.status != \'deleted\' AND t.status != \'deleted\'  AND' : '')) . ' p.user_id=' . $CURUSER['id'] . ' AND f.min_class_read <= ' . $CURUSER['class'] . ' ORDER BY p.id ' . $ASC_DESC . $LIMIT) or sqlerr(__FILE__, __LINE__);
+$rows = $db->fetchAll('SELECT p.id AS post_id, p.topic_id, p.user_id, p.added, p.body, p.edited_by, p.edit_date, p.icon, p.post_title, p.bbcode, p.post_history, p.edit_reason, p.status AS post_status, p.anonymous, t.id AS topic_id, t.topic_name, t.forum_id, t.sticky, t.locked, t.poll_id, t.status AS topic_status, f.name AS forum_name, f.description FROM posts AS p LEFT JOIN topics AS t ON p.topic_id=t.id LEFT JOIN forums AS f ON f.id=t.forum_id WHERE  ' . ($CURUSER['class'] < UC_STAFF ? 'p.status = \'ok\' AND t.status = \'ok\' AND' : ($CURUSER['class'] < $site_config['forum_config']['min_delete_view_class'] ? 'p.status != \'deleted\' AND t.status != \'deleted\'  AND' : '')) . ' p.user_id=' . $CURUSER['id'] . ' AND f.min_class_read <= ' . $CURUSER['class'] . ' ORDER BY p.id ' . $ASC_DESC . $LIMIT) or sqlerr(__FILE__, __LINE__);
 $HTMLOUT .= $mini_menu . '<h1 class="has-text-centered">' . $count . ' ' . _('Posts by') . ' ' . format_username((int) $CURUSER['id']) . '</h1>
 			<ul class="level-center bottom20">
                 <li>
@@ -46,7 +48,7 @@ $HTMLOUT .= $mini_menu . '<h1 class="has-text-centered">' . $count . ' ' . _('Po
                 </li>
             </ul>';
 $HTMLOUT .= ($count > $perpage ? $menu_top : '') . '<a id="top"></a>';
-while ($arr = mysqli_fetch_assoc($res)) {
+foreach ($rows as $arr) {
     $topic_status = htmlsafechars($arr['topic_status']);
     switch ($topic_status) {
         case 'ok':

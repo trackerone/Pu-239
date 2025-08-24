@@ -6,6 +6,8 @@ require_once __DIR__ . '/../../include/bootstrap_pdo.php';
 
 declare(strict_types = 1);
 
+use Pu239\Database;
+
 $forum_posts .= "
     <a id='latestforum-hash'></a>
     <div id='latestforum' class='box'>
@@ -16,7 +18,8 @@ $num = 0;
 
 use Pu239\Cache;
 
-global $container, $site_config, $CURUSER;
+global $container;
+$db = $container->get(Database::class);, $site_config, $CURUSER;
 
 $cache = $container->get(Cache::class);
 $topics = $cache->get('last_posts_' . $CURUSER['class']);

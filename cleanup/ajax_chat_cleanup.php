@@ -6,6 +6,8 @@ require_once __DIR__ . '/../include/bootstrap_pdo.php';
 
 declare(strict_types = 1);
 
+use Pu239\Database;
+
 use DI\DependencyException;
 use DI\NotFoundException;
 
@@ -22,8 +24,8 @@ function ajax_chat_cleanup($data)
 
     $time_start = microtime(true);
     require_once INCL_DIR . 'function_users.php';
-    $res = sql_query('SELECT id, channel, ttl, text FROM ajax_chat_messages
-                        WHERE ttl > 0 AND UNIX_TIMESTAMP(dateTime) + ttl <= UNIX_TIMESTAMP(NOW())') or sqlerr(__FILE__, __LINE__);
+    $rows = $db->fetchAll('SELECT id, channel, ttl, text FROM ajax_chat_messages
+                        WHERE ttl > 0 AND UNIX_TIMESTAMP(dateTime) + ttl <= UNIX_TIMESTAMP(NOW())');
 
     while ($row = mysqli_fetch_assoc($res)) {
         if (strpos($row['text'], '/delete') === false) {
@@ -32,7 +34,7 @@ function ajax_chat_cleanup($data)
         sql_query('DELETE FROM ajax_chat_messages WHERE id=' . $row['id']) or sqlerr(__FILE__, __LINE__);
     }
 
-    sql_query("UPDATE ajax_chat_messages SET text = REPLACE(REPLACE(text, '[/img]', '[/url]'), '[img]', '[url]') WHERE text LIKE '%[img]%[/img]%' AND dateTime <= NOW() - INTERVAL 1 DAY;") or sqlerr(__FILE__, __LINE__);
+    $db->run(");
 
     $time_end = microtime(true);
     $run_time = $time_end - $time_start;

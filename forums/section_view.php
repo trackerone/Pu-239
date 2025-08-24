@@ -6,6 +6,8 @@ require_once __DIR__ . '/../include/bootstrap_pdo.php';
 
 declare(strict_types = 1);
 
+use Pu239\Database;
+
 use Pu239\Cache;
 
 $child_boards = $now_viewing = $colour = '';
@@ -16,7 +18,8 @@ if (!is_valid_id($forum_id)) {
 
 $over_forums_res = sql_query('SELECT name, min_class_view FROM over_forums WHERE id = ' . sqlesc($forum_id)) or sqlerr(__FILE__, __LINE__);
 $over_forums_arr = mysqli_fetch_assoc($over_forums_res);
-global $container, $CURUSER, $site_config;
+global $container;
+$db = $container->get(Database::class);, $CURUSER, $site_config;
 
 if ($CURUSER['class'] < $over_forums_arr['min_class_view']) {
     stderr(_('Error'), _('Bad ID.'));
@@ -32,7 +35,7 @@ $cache = $container->get(Cache::class);
 while ($forums_arr = mysqli_fetch_assoc($forums_res)) {
     //=== Get last post info
     if (($last_post_arr = $cache->get('sv_last_post_' . $forums_arr['forum_id'] . '_' . $CURUSER['class'])) === false) {
-        $query = sql_query('SELECT t.last_post, t.topic_name, t.id AS topic_id, t.anonymous AS tan, p.user_id, p.added, p.anonymous AS pan, u.id, u.username, u.class, u.donor, u.warned, u.status, u.chatpost, u.leechwarn, u.pirate, u.king, u.perms, u.offensive_avatar FROM topics AS t LEFT JOIN posts AS p ON t.last_post = p.id LEFT JOIN users AS u ON p.user_id=u.id WHERE ' . ($CURUSER['class'] < UC_STAFF ? 'p.status = \'ok\' AND t.status = \'ok\' AND' : ($CURUSER['class'] < $site_config['forum_config']['min_delete_view_class'] ? 'p.status != \'deleted\' AND t.status != \'deleted\' AND' : '')) . ' forum_id=' . sqlesc($forums_arr['forum_id']) . ' ORDER BY last_post DESC LIMIT 1') or sqlerr(__FILE__, __LINE__);
+        $rows = $db->fetchAll('SELECT t.last_post, t.topic_name, t.id AS topic_id, t.anonymous AS tan, p.user_id, p.added, p.anonymous AS pan, u.id, u.username, u.class, u.donor, u.warned, u.status, u.chatpost, u.leechwarn, u.pirate, u.king, u.perms, u.offensive_avatar FROM topics AS t LEFT JOIN posts AS p ON t.last_post = p.id LEFT JOIN users AS u ON p.user_id=u.id WHERE ' . ($CURUSER['class'] < UC_STAFF ? 'p.status = \'ok\' AND t.status = \'ok\' AND' : ($CURUSER['class'] < $site_config['forum_config']['min_delete_view_class'] ? 'p.status != \'deleted\' AND t.status != \'deleted\' AND' : '')) . ' forum_id=' . sqlesc($forums_arr['forum_id']) . ' ORDER BY last_post DESC LIMIT 1');
         $last_post_arr = mysqli_fetch_assoc($query);
         $cache->set('sv_last_post_' . $forums_arr['forum_id'] . '_' . $CURUSER['class'], $last_post_arr, $site_config['expires']['sv_last_post']);
     }
@@ -40,7 +43,7 @@ while ($forums_arr = mysqli_fetch_assoc($forums_res)) {
     if ($last_post_arr['last_post'] > 0) {
         //=== get the last post read by CURUSER
         if (($last_read_post_arr = $cache->get('sv_last_read_post_' . $last_post_arr['topic_id'] . '_' . $CURUSER['id'])) === false) {
-            $query = sql_query('SELECT last_post_read FROM read_posts WHERE user_id=' . sqlesc($CURUSER['id']) . ' AND topic_id=' . sqlesc($last_post_arr['topic_id'])) or sqlerr(__FILE__, __LINE__);
+            $rows = $db->fetchAll('SELECT last_post_read FROM read_posts WHERE user_id=' . sqlesc($CURUSER['id']) . ' AND topic_id=' . sqlesc($last_post_arr['topic_id'])) or sqlerr(__FILE__, __LINE__);
             $last_read_post_arr = mysqli_fetch_row($query);
             $cache->set('sv_last_read_post_' . $last_post_arr['topic_id'] . '_' . $CURUSER['id'], $last_read_post_arr, $site_config['expires']['sv_last_read_post']);
         }
@@ -51,8 +54,8 @@ while ($forums_arr = mysqli_fetch_assoc($forums_res)) {
         if (($child_boards_cache = $cache->get($keys['child_boards'])) === false) {
             $child_boards = '';
             $child_boards_cache = [];
-            $res = sql_query('SELECT name, id FROM forums WHERE parent_forum = ' . sqlesc($forums_arr['forum_id']) . ' ORDER BY sort') or sqlerr(__FILE__, __LINE__);
-            while ($arr = mysqli_fetch_assoc($res)) {
+            $rows = $db->fetchAll('SELECT name, id FROM forums WHERE parent_forum = ' . sqlesc($forums_arr['forum_id']) . ' ORDER BY sort');
+            foreach ($rows as $arr) {
                 if ($child_boards) {
                     $child_boards .= ', ';
                 }
@@ -69,8 +72,8 @@ while ($forums_arr = mysqli_fetch_assoc($forums_res)) {
         if (($now_viewing_cache = $cache->get('now_viewing_section_view')) === false) {
             $nowviewing = '';
             $now_viewing_cache = [];
-            $res = sql_query('SELECT n_v.user_id, u.id, u.username, u.class, u.donor, u.warned, u.status, u.chatpost, u.leechwarn, u.pirate, u.king, u.perms FROM now_viewing AS n_v LEFT JOIN users AS u ON n_v.user_id=u.id WHERE forum_id=' . sqlesc($forums_arr['forum_id'])) or sqlerr(__FILE__, __LINE__);
-            while ($arr = mysqli_fetch_assoc($res)) {
+            $rows = $db->fetchAll('SELECT n_v.user_id, u.id, u.username, u.class, u.donor, u.warned, u.status, u.chatpost, u.leechwarn, u.pirate, u.king, u.perms FROM now_viewing AS n_v LEFT JOIN users AS u ON n_v.user_id=u.id WHERE forum_id=' . sqlesc($forums_arr['forum_id'])) or sqlerr(__FILE__, __LINE__);
+            foreach ($rows as $arr) {
                 if ($nowviewing) {
                     $nowviewing .= ",\n";
                 }

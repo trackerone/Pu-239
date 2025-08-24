@@ -6,6 +6,8 @@ require_once __DIR__ . '/../include/bootstrap_pdo.php';
 
 declare(strict_types = 1);
 
+use Pu239\Database;
+
 global $site_config, $CURUSER;
 
 $limit = preg_match('/edit_post/', $_SERVER['QUERY_STRING']) ? '1, 10' : '10';

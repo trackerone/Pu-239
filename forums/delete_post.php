@@ -7,7 +7,8 @@ declare(strict_types = 1);
 use Pu239\Cache;
 use Pu239\Database;
 
-global $container, $site_config, $CURUSER;
+global $container;
+$db = $container->get(Database::class);, $site_config, $CURUSER;
 
 $post_id = isset($_GET['post_id']) ? (int) $_GET['post_id'] : (isset($_POST['post_id']) ? (int) $_POST['post_id'] : 0);
 $topic_id = isset($_GET['topic_id']) ? (int) $_GET['topic_id'] : (isset($_POST['topic_id']) ? (int) $_POST['topic_id'] : 0);
@@ -15,6 +16,7 @@ $sanity_check = isset($_GET['sanity_check']) ? (int) $_GET['sanity_check'] : 0;
 if (!is_valid_id($post_id) || !is_valid_id($topic_id)) {
     stderr(_('Error'), _('Bad ID.'));
 }
+$fluent = $db; // alias
 $fluent = $container->get(Database::class);
 $arr_post = $fluent->from('posts AS p')
                    ->select(null)
@@ -78,29 +80,7 @@ if ($sanity_check > 0) {
                    ->where('id = ?', $topic_id)
                    ->execute();
         } else {
-            sql_query('UPDATE topics SET last_post = ' . sqlesc($arr['id']) . ", post_count = (SELECT COUNT(id) FROM posts WHERE topic_id = topics.id) WHERE status = 'ok'") or sqlerr(__FILE__, __LINE__);
-        }
-        sql_query('UPDATE forums SET post_count = post_count - 1 WHERE id = ' . sqlesc($arr['forum_id'])) or sqlerr(__FILE__, __LINE__);
-        sql_query('DELETE FROM posts WHERE id = ' . sqlesc($post_id)) or sqlerr(__FILE__, __LINE__);
-        sql_query('UPDATE usersachiev SET forumposts = forumposts - 1 WHERE userid = ' . sqlesc($arr_post['user_id'])) or sqlerr(__FILE__, __LINE__);
-        clr_forums_cache((int) $arr['forum_id']);
-        clr_forums_cache((int) $post_id);
-        $cache = $container->get(Cache::class);
-        for ($i = UC_MIN; $i <= UC_MAX; ++$i) {
-            $cache->delete('forum_last_post_' . $arr['forum_id'] . '_' . $i);
-        }
-    } else {
-        sql_query("UPDATE posts SET status = 'deleted'  WHERE id = " . sqlesc($post_id) . ' AND topic_id = ' . sqlesc($topic_id)) or sqlerr(__FILE__, __LINE__);
-        sql_query('UPDATE forums SET post_count = post_count - 1 WHERE id = ' . sqlesc($arr_post['forum_id'])) or sqlerr(__FILE__, __LINE__);
-        sql_query('UPDATE usersachiev SET forumposts = forumposts - 1 WHERE userid = ' . sqlesc($arr_post['user_id'])) or sqlerr(__FILE__, __LINE__);
-        clr_forums_cache((int) $post_id);
-        $cache = $container->get(Cache::class);
-        for ($i = UC_MIN; $i <= UC_MAX; ++$i) {
-            $cache->delete('forum_last_post_' . $arr_post['forum_id'] . '_' . $i);
-        }
-    }
-    header('Location: ' . $_SERVER['PHP_SELF'] . '?action=view_topic&topic_id=' . $topic_id);
-    app_halt('Exit called');
+            $db->run(');
 } else {
     global $page;
 

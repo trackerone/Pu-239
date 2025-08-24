@@ -6,6 +6,8 @@ require_once __DIR__ . '/bootstrap_pdo.php';
 
 declare(strict_types = 1);
 
+use Pu239\Database;
+
 use DI\DependencyException;
 use DI\NotFoundException;
 use Pu239\Cache;
@@ -24,6 +26,7 @@ use Pu239\User;
 function account_delete(int $userid)
 {
     global $container;
+$db = $container->get(Database::class);;
 
     if (empty($userid)) {
         return false;
@@ -35,11 +38,11 @@ function account_delete(int $userid)
     $cache->delete('all_users_');
     $cache->delete('user_' . $userid);
 
-    sql_query("DELETE FROM users WHERE id = $userid") or sqlerr(__FILE__, __LINE__);
-    sql_query("DELETE FROM staffmessages WHERE sender = $userid") or sqlerr(__FILE__, __LINE__);
-    sql_query("DELETE FROM staffmessages_answers WHERE sender = $userid") or sqlerr(__FILE__, __LINE__);
-    sql_query("DELETE FROM messages WHERE sender = $userid") or sqlerr(__FILE__, __LINE__);
-    sql_query("DELETE FROM messages WHERE receiver = $userid") or sqlerr(__FILE__, __LINE__);
+    $db->run(");
+    $db->run(");
+    $db->run(");
+    $db->run(");
+    $db->run(");
 
     return $username;
 }

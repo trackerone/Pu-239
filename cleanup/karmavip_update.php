@@ -6,6 +6,8 @@ require_once __DIR__ . '/../include/bootstrap_pdo.php';
 
 declare(strict_types = 1);
 
+use Pu239\Database;
+
 use DI\DependencyException;
 use DI\NotFoundException;
 use MatthiasMullie\Scrapbook\Exception\UnbegunTransaction;
@@ -31,12 +33,13 @@ function karmavip_update($data)
     $res = sql_query("SELECT id, modcomment FROM users WHERE vip_added = 'yes' AND donoruntil < " . $dt . ' AND vip_until < ' . $dt) or sqlerr(__FILE__, __LINE__);
     $msgs_buffer = $users_buffer = [];
     if (mysqli_num_rows($res) > 0) {
-        global $container, $site_config;
+        global $container;
+$db = $container->get(Database::class);, $site_config;
 
         $cache = $container->get(Cache::class);
         $subject = 'VIP status expired.';
         $msg = "Your VIP status has timed out and has been auto-removed by the system. Become a VIP again by donating to {$site_config['site']['name']} , or exchanging some Karma Bonus Points. Cheers !\n";
-        while ($arr = mysqli_fetch_assoc($res)) {
+        foreach ($rows as $arr) {
             $modcomment = $arr['modcomment'];
             $modcomment = get_date((int) $dt, 'DATE', 1) . " - Vip status Automatically Removed By System.\n" . $modcomment;
             $modcom = sqlesc($modcomment);
@@ -59,7 +62,7 @@ function karmavip_update($data)
         if ($count > 0) {
             $messages_class = $container->get(Message::class);
             $messages_class->insert($msgs_buffer);
-            sql_query('INSERT INTO users (id, class, vip_added, vip_until, modcomment) VALUES ' . implode(', ', $users_buffer) . ' ON DUPLICATE KEY UPDATE class = VALUES(class),vip_added = VALUES(vip_added),vip_until = VALUES(vip_until),modcomment = VALUES(modcomment)') or sqlerr(__FILE__, __LINE__);
+            $db->run(');
         }
         if ($data['clean_log']) {
             write_log('Cleanup - Karma Vip status expired on - ' . $count . ' Member(s)');

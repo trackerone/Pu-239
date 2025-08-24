@@ -8,10 +8,12 @@ declare(strict_types = 1);
 
 use Pu239\Database;
 
-global $container, $site_config, $CURUSER;
+global $container;
+$db = $container->get(Database::class);, $site_config, $CURUSER;
 
 $posts = $lppostid = $topicpoll = $rpic = $body = '';
 $HTMLOUT .= $mini_menu . '<h1 class="has-text-centered">Subscribed Forums for ' . format_username((int) $CURUSER['id']) . '</h1>';
+$fluent = $db; // alias
 $fluent = $container->get(Database::class);
 $count = $fluent->from('subscriptions')
                 ->select(null)
@@ -38,7 +40,7 @@ $menu_top = $pager['pagertop'];
 $menu_bottom = $pager['pagerbottom'];
 $LIMIT = $pager['limit'];
 
-$res = sql_query('SELECT s.id AS subscribed_id, t.id AS topic_id, t.topic_name, t.topic_desc, t.last_post, t.views, t.post_count, t.locked, t.sticky, t.poll_id, t.user_id, t.anonymous AS tan, p.id AS post_id, p.added, p.user_id, p.anonymous AS pan, u.username, u.id, u.class, u.donor, u.warned, u.status, u.chatpost, u.leechwarn, u.pirate, u.king, u.perms, u.offensive_avatar FROM subscriptions AS s LEFT JOIN topics AS t ON s.topic_id=t.id LEFT JOIN posts AS p ON t.last_post = p.id LEFT JOIN forums AS f ON f.id=t.forum_id LEFT JOIN users AS u ON u.id=p.user_id WHERE ' . ($CURUSER['class'] < UC_STAFF ? 'p.status = \'ok\' AND t.status = \'ok\' AND' : ($CURUSER['class'] < $site_config['forum_config']['min_delete_view_class'] ? 'p.status != \'deleted\' AND t.status != \'deleted\'  AND' : '')) . ' s.user_id=' . $CURUSER['id'] . ' AND f.min_class_read < ' . sqlesc($CURUSER['class']) . ' AND s.user_id=' . sqlesc($CURUSER['id']) . '  ORDER BY t.id DESC ' . $LIMIT) or sqlerr(__FILE__, __LINE__);
+$rows = $db->fetchAll('SELECT s.id AS subscribed_id, t.id AS topic_id, t.topic_name, t.topic_desc, t.last_post, t.views, t.post_count, t.locked, t.sticky, t.poll_id, t.user_id, t.anonymous AS tan, p.id AS post_id, p.added, p.user_id, p.anonymous AS pan, u.username, u.id, u.class, u.donor, u.warned, u.status, u.chatpost, u.leechwarn, u.pirate, u.king, u.perms, u.offensive_avatar FROM subscriptions AS s LEFT JOIN topics AS t ON s.topic_id=t.id LEFT JOIN posts AS p ON t.last_post = p.id LEFT JOIN forums AS f ON f.id=t.forum_id LEFT JOIN users AS u ON u.id=p.user_id WHERE ' . ($CURUSER['class'] < UC_STAFF ? 'p.status = \'ok\' AND t.status = \'ok\' AND' : ($CURUSER['class'] < $site_config['forum_config']['min_delete_view_class'] ? 'p.status != \'deleted\' AND t.status != \'deleted\'  AND' : '')) . ' s.user_id=' . $CURUSER['id'] . ' AND f.min_class_read < ' . sqlesc($CURUSER['class']) . ' AND s.user_id=' . sqlesc($CURUSER['id']) . '  ORDER BY t.id DESC ' . $LIMIT) or sqlerr(__FILE__, __LINE__);
 while ($topic_arr = mysqli_fetch_assoc($res)) {
     $topic_id = (int) $topic_arr['topic_id'];
     $locked = $topic_arr['locked'] === 'yes';

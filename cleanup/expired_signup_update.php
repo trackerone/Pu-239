@@ -6,6 +6,8 @@ require_once __DIR__ . '/../include/bootstrap_pdo.php';
 
 declare(strict_types = 1);
 
+use Pu239\Database;
+
 use DI\DependencyException;
 use DI\NotFoundException;
 use Pu239\Cache;
@@ -19,17 +21,18 @@ use Pu239\Cache;
  */
 function expired_signup_update($data)
 {
-    global $container, $site_config;
+    global $container;
+$db = $container->get(Database::class);, $site_config;
 
     $time_start = microtime(true);
     $dt = TIME_NOW;
     $deadtime = $dt - $site_config['signup']['timeout'];
-    $res = sql_query("SELECT id, username FROM users WHERE status != 0 AND registered < $deadtime ORDER BY username DESC") or sqlerr(__FILE__, __LINE__);
+    $rows = $db->fetchAll("SELECT id, username FROM users WHERE status != 0 AND registered < $deadtime ORDER BY username DESC");
     $cache = $container->get(Cache::class);
-    if (mysqli_num_rows($res) != 0) {
-        while ($arr = mysqli_fetch_assoc($res)) {
+    if (!empty($rows)) {
+        foreach ($rows as $arr) {
             $userid = $arr['id'];
-            $res_del = sql_query('DELETE FROM users WHERE id = ' . sqlesc($userid)) or sqlerr(__FILE__, __LINE__);
+            $res_del = $db->run('DELETE FROM users WHERE id = :id', [':id' => $userid]) or sqlerr(__FILE__, __LINE__);
             $cache->delete('user_' . $userid);
             if ($data['clean_log']) {
                 write_log("Expired Signup Cleanup: User: {$arr['username']} was deleted");

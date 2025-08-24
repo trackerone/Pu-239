@@ -6,6 +6,8 @@ require_once __DIR__ . '/../include/bootstrap_pdo.php';
 
 declare(strict_types = 1);
 
+use Pu239\Database;
+
 use DI\DependencyException;
 use DI\NotFoundException;
 
@@ -19,7 +21,7 @@ use DI\NotFoundException;
 function achievement_sreset_update($data)
 {
     $time_start = microtime(true);
-    sql_query('UPDATE usersachiev SET dailyshouts = 0 WHERE dailyshouts != 0') or sqlerr(__FILE__, __LINE__);
+    $db->run(');
     $time_end = microtime(true);
     $run_time = $time_end - $time_start;
     $text = " Run time: $run_time seconds";

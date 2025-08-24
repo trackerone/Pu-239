@@ -17,7 +17,8 @@ use Pu239\Message;
  */
 function achievement_seedtime_update($data)
 {
-    global $container, $site_config;
+    global $container;
+$db = $container->get(Database::class);, $site_config;
 
     $time_start = microtime(true);
     $seedtime = 604800; // 7days
@@ -30,7 +31,8 @@ function achievement_seedtime_update($data)
     $seedtime8 = 10368000; // 120days
     $seedtime9 = 12960000; // 200days
     $seedtime10 = 31536000; //1year
-    $fluent = $container->get(Database::class);
+    $fluent = $db; // alias
+$fluent = $container->get(Database::class);
     $query = $fluent->from('snatched AS s')
                     ->select(null)
                     ->select('DISTINCT s.userid')
@@ -120,8 +122,8 @@ function achievement_seedtime_update($data)
         if ($count > 0) {
             $messages_class = $container->get(Message::class);
             $messages_class->insert($msgs_buffer);
-            sql_query('INSERT INTO achievements (userid, date, achievement, icon, description) VALUES ' . implode(', ', $achievements_buffer) . ' ON DUPLICATE KEY UPDATE date = VALUES(date),achievement = VALUES(achievement),icon = VALUES(icon),description = VALUES(description)') or sqlerr(__FILE__, __LINE__);
-            sql_query("INSERT INTO usersachiev (userid, $var1, achpoints) VALUES " . implode(', ', $usersachiev_buffer) . " ON DUPLICATE KEY UPDATE $var1 = VALUES($var1), achpoints=achpoints + VALUES(achpoints)") or sqlerr(__FILE__, __LINE__);
+            $db->run(');
+            $db->run(");
         }
         $time_end = microtime(true);
         $run_time = $time_end - $time_start;

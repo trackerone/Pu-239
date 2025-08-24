@@ -6,6 +6,8 @@ require_once __DIR__ . '/../include/bootstrap_pdo.php';
 
 declare(strict_types = 1);
 
+use Pu239\Database;
+
 use Pu239\Cache;
 use Pu239\Message;
 
@@ -16,10 +18,11 @@ use Pu239\Message;
  */
 function achievement_request_update($data)
 {
-    global $container, $site_config;
+    global $container;
+$db = $container->get(Database::class);, $site_config;
 
     $time_start = microtime(true);
-    $res = sql_query('SELECT userid, reqfilled, reqlvl FROM usersachiev WHERE reqfilled >= 1') or sqlerr(__FILE__, __LINE__);
+    $rows = $db->fetchAll('SELECT userid, reqfilled, reqlvl FROM usersachiev WHERE reqfilled >= 1');
     $msgs_buffer = $usersachiev_buffer = $achievements_buffer = [];
     $cache = $container->get(Cache::class);
     if (mysqli_num_rows($res) > 0) {
@@ -27,7 +30,7 @@ function achievement_request_update($data)
         $subject = 'New Achievement Earned!';
         $points = random_int(1, 3);
         $var1 = 'reqlvl';
-        while ($arr = mysqli_fetch_assoc($res)) {
+        foreach ($rows as $arr) {
             $reqfilled = (int) $arr['reqfilled'];
             $lvl = (int) $arr['reqlvl'];
             $msg = '';
@@ -66,8 +69,8 @@ function achievement_request_update($data)
         if ($count > 0) {
             $messages_class = $container->get(Message::class);
             $messages_class->insert($msgs_buffer);
-            sql_query('INSERT INTO achievements (userid, date, achievement, icon, description) VALUES ' . implode(', ', $achievements_buffer) . ' ON DUPLICATE KEY UPDATE date = VALUES(date),achievement = VALUES(achievement),icon = VALUES(icon),description = VALUES(description)') or sqlerr(__FILE__, __LINE__);
-            sql_query("INSERT INTO usersachiev (userid, $var1, achpoints) VALUES " . implode(', ', $usersachiev_buffer) . " ON DUPLICATE KEY UPDATE $var1 = VALUES($var1), achpoints=achpoints + VALUES(achpoints)") or sqlerr(__FILE__, __LINE__);
+            $db->run(');
+            $db->run(");
         }
         $time_end = microtime(true);
         $run_time = $time_end - $time_start;

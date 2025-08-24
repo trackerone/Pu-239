@@ -6,6 +6,8 @@ require_once __DIR__ . '/../include/bootstrap_pdo.php';
 
 declare(strict_types = 1);
 
+use Pu239\Database;
+
 use Pu239\Cache;
 use Pu239\Message;
 
@@ -26,13 +28,13 @@ function achievement_bday_update($data)
     $maxdt4 = ($dt - 86400 * 1460); // 4 years
     $maxdt5 = ($dt - 86400 * 1825); // 5 years
     $maxdt6 = ($dt - 86400 * 2190); // 6 years
-    $res = sql_query("SELECT u.id, u.registered, a.bday FROM users AS u LEFT JOIN usersachiev AS a ON u.id = a.userid WHERE u.status = 0 AND u.registered < $maxdt") or sqlerr(__FILE__, __LINE__);
+    $rows = $db->fetchAll("SELECT u.id, u.registered, a.bday FROM users AS u LEFT JOIN usersachiev AS a ON u.id = a.userid WHERE u.status = 0 AND u.registered < $maxdt");
     $msgs_buffer = $usersachiev_buffer = $achievements_buffer = [];
     if (mysqli_num_rows($res) > 0) {
         $subject = 'New Achievement Earned!';
         $points = random_int(1, 3);
         $var1 = 'bday';
-        while ($arr = mysqli_fetch_assoc($res)) {
+        foreach ($rows as $arr) {
             $bday = (int) $arr['bday'];
             $registered = (int) $arr['registered'];
             $msg = '';
@@ -76,8 +78,8 @@ function achievement_bday_update($data)
         if ($count > 0) {
             $messages_class = $container->get(Message::class);
             $messages_class->insert($msgs_buffer);
-            sql_query('INSERT INTO achievements (userid, date, achievement, icon, description) VALUES ' . implode(', ', $achievements_buffer) . ' ON DUPLICATE KEY UPDATE date = VALUES(date),achievement = VALUES(achievement),icon = VALUES(icon),description = VALUES(description)') or sqlerr(__FILE__, __LINE__);
-            sql_query("INSERT INTO usersachiev (userid, $var1, achpoints) VALUES " . implode(', ', $usersachiev_buffer) . " ON DUPLICATE KEY UPDATE $var1 = VALUES($var1), achpoints=achpoints + VALUES(achpoints)") or sqlerr(__FILE__, __LINE__);
+            $db->run(');
+            $db->run(");
         }
         $time_end = microtime(true);
         $run_time = $time_end - $time_start;

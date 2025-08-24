@@ -6,6 +6,8 @@ require_once __DIR__ . '/../include/bootstrap_pdo.php';
 
 declare(strict_types = 1);
 
+use Pu239\Database;
+
 use Envms\FluentPDO\Literal;
 use Pu239\Achievement;
 use Pu239\Cache;
@@ -19,17 +21,18 @@ use Pu239\Usersachiev;
  */
 function achievement_karma_update($data)
 {
-    global $container, $site_config;
+    global $container;
+$db = $container->get(Database::class);, $site_config;
 
     $time_start = microtime(true);
-    $res = sql_query('SELECT u.id, u.seedbonus, a.bonus FROM users AS u LEFT JOIN usersachiev AS a ON u.id = a.userid WHERE status = 0 AND u.seedbonus >= 250 AND a.bonus >= 0') or sqlerr(__FILE__, __LINE__);
+    $rows = $db->fetchAll('SELECT u.id, u.seedbonus, a.bonus FROM users AS u LEFT JOIN usersachiev AS a ON u.id = a.userid WHERE status = 0 AND u.seedbonus >= 250 AND a.bonus >= 0');
     $msgs_buffer = $usersachiev_buffer = $achievements_buffer = [];
     if (mysqli_num_rows($res) > 0) {
         $dt = TIME_NOW;
         $points = random_int(1, 3);
         $subject = 'New Achievement Earned!';
         $cache = $container->get(Cache::class);
-        while ($arr = mysqli_fetch_assoc($res)) {
+        foreach ($rows as $arr) {
             $seedbonus = (float) $arr['seedbonus'];
             $lvl = (int) $arr['bonus'];
             $msg = '';
