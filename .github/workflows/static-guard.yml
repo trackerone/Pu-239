@@ -20,6 +20,6 @@ jobs:
       - name: Run static guard (tempered rules)
         env:
           GUARD_MODE: fail
-          GUARD_EXCLUDE: admin/adminer.php,tools/static_guard.php,tools/repo_sanity.php
+          GUARD_EXCLUDE: admin/adminer.php,tools/repo_sanity.php
           GUARD_FAIL_ON: merge_conflict_marker,short_open_tag,eval_usage,deprecated_mysql
         run: php tools/static_guard.php
