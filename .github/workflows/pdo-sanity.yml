@@ -1,0 +1,16 @@
+name: PDO Sanity
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+jobs:
+  pdo-sanity:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.2'
+      - name: Run PDO sanity
+        run: php tools/pdo_sanity.php
