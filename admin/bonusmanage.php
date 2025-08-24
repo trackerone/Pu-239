@@ -4,6 +4,8 @@ require_once __DIR__ . '/../include/runtime_safe.php';
 
 declare(strict_types = 1);
 
+use Pu239\Database;
+
 require_once INCL_DIR . 'function_users.php';
 require_once INCL_DIR . 'function_html.php';
 require_once CLASS_DIR . 'class_check.php';
@@ -12,7 +14,7 @@ class_check($class);
 global $site_config;
 
 $HTMLOUT = $count = '';
-$res = sql_query('SELECT * FROM bonus ORDER BY orderid, bonusname') or sqlerr(__FILE__, __LINE__);
+$rows = $db->fetchAll('SELECT * FROM bonus ORDER BY orderid, bonusname');
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (isset($_POST['id']) || isset($_POST['orderid']) || isset($_POST['points']) || isset($_POST['pointspool']) || isset($_POST['minpoints']) || isset($_POST['description']) || isset($_POST['enabled']) || isset($_POST['minclass'])) {
         $id = (int) $_POST['id'];
@@ -33,9 +35,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $sql = sql_query('UPDATE bonus SET orderid=' . sqlesc($orderid) . ', points = ' . sqlesc($points) . ', pointspool = ' . sqlesc($pointspool) . ', minpoints = ' . sqlesc($minpoints) . ', minclass = ' . sqlesc($minclass) . ', enabled = ' . sqlesc($enabled) . ', description = ' . sqlesc($descr) . ' WHERE id=' . sqlesc($id)) or sqlerr(__FILE__, __LINE__);
         sql_query("UPDATE bonus SET orderid=orderid + 1 WHERE orderid>= $orderid AND id != $id") or sqlerr(__FILE__, __LINE__);
 
-        $query = sql_query('SELECT id FROM bonus ORDER BY orderid, id');
+        $ids = $db->fetchAll('SELECT id FROM bonus ORDER BY orderid, id');
         $iter = 0;
-        while ($arr = mysqli_fetch_assoc($query)) {
+        foreach ($ids as $arr) {
             sql_query('UPDATE bonus SET orderid=' . ++$iter . ' WHERE id=' . $arr['id']) or sqlerr(__FILE__, __LINE__);
         }
 
@@ -68,7 +70,7 @@ $HTMLOUT = "
     <h1 class='has-text-centered'>" . _('Bonus Management') . '</h1>';
 
 $body = '';
-while ($arr = mysqli_fetch_assoc($res)) {
+foreach ($rows as $arr) {
     $body .= "
         <tr>
             <form name='bonusmanage' method='post' action='{$_SERVER['PHP_SELF']}?tool=bonusmanage&amp;action=bonusmanage' enctype='multipart/form-data' accept-charset='utf-8'>

@@ -17,7 +17,7 @@ global $ontainer, $CURUSER, $site_config;
 $HTMLOUT = '';
 $remove = isset($_GET['remove']) ? (int) $_GET['remove'] : 0;
 if (is_valid_id($remove)) {
-    sql_query('DELETE FROM bannedemails WHERE id=' . sqlesc($remove)) or sqlerr(__FILE__, __LINE__);
+    $db->run('DELETE FROM bannedemails WHERE id = :id', [':id' => $remove]);
     write_log(_fe('Email ban {0} was removed by {1}', $remove, $CURUSER['username']));
 }
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -50,7 +50,8 @@ $body = "
         </tr>";
 $HTMLOUT .= main_table($body) . '
     </form>';
-$fluent = $container->get(Database::class);
+$db = $container->get(Database::class);
+$fluent = $db;
 $count1 = $fluent->from('bannedemails')
                  ->select(null)
                  ->select('COUNT(id) AS count')
@@ -62,7 +63,7 @@ $HTMLOUT .= "<h1 class='has-text-centered'>" . _('Current Banned Emails') . '</h
 if ($count1 > $perpage) {
     $HTMLOUT .= $pager['pagertop'];
 }
-if (mysqli_num_rows($res) == 0) {
+if (empty($rows)) {
     $HTMLOUT .= stdmsg('Sorry', '<p><b>' . _('Nothing Found!') . '</b></p>');
 } else {
     $heading = '
@@ -74,7 +75,7 @@ if (mysqli_num_rows($res) == 0) {
             <th>' . _('Remove?') . '</th>
         </tr>';
     $body = '';
-    while ($arr = mysqli_fetch_assoc($res)) {
+    foreach ($rows as $arr) {
         $body .= '
         <tr>
             <td>' . get_date((int) $arr['added'], '') . '</td>

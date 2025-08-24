@@ -21,7 +21,8 @@ $stdfoot = [
 $HTMLOUT = '';
 global $container, $CURUSER, $site_config;
 
-$fluent = $container->get(Database::class);
+$db = $container->get(Database::class);
+$fluent = $db;
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['ids'])) {
     $ids = $_POST['ids'];
@@ -76,8 +77,8 @@ $disabled = number_format($disabled);
 $pending = number_format($pending);
 $perpage = 25;
 $pager = pager($perpage, $count, 'staffpanel.php?tool=acpmanage&amp;action=acpmanage&amp;');
-$res = sql_query("SELECT id, username, registered, downloaded, uploaded, last_access, class, donor, warned, status, verified FROM users WHERE status = 2 OR verified = 0 ORDER BY username DESC {$pager['limit']}");
-if (mysqli_num_rows($res) != 0) {
+$rows = $db->fetchAll('SELECT id, username, registered, downloaded, uploaded, last_access, status, verified FROM users WHERE status = 2 OR verified = 0 ORDER BY username DESC ' . $pager['limit']);
+if (!empty($rows)) {
     if ($count > $perpage) {
         $HTMLOUT .= $pager['pagertop'];
     }
@@ -95,7 +96,7 @@ if (mysqli_num_rows($res) != 0) {
       <td class='colhead'>" . _('Status') . "</td>
       <td class='colhead has-no-wrap'>" . _('Enabled') . '</td>
       </tr>';
-    while ($arr = mysqli_fetch_assoc($res)) {
+    foreach ($rows as $arr) {
         $uploaded = mksize($arr['uploaded']);
         $downloaded = mksize($arr['downloaded']);
         $ratio = $arr['downloaded'] > 0 ? $arr['uploaded'] / $arr['downloaded'] : 0;
