@@ -18,7 +18,8 @@ class_check($class);
 global $container, $CURUSER, $site_config;
 
 $session = $container->get(Session::class);
-$fluent = $container->get(Database::class);
+$db = $container->get(Database::class);
+$fluent = $db;
 $remove = isset($_GET['remove']) ? (int) $_GET['remove'] : 0;
 if ($remove > 0) {
     $res = $fluent->from('bans')

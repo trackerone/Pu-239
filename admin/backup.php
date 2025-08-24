@@ -11,7 +11,8 @@ require_once INCL_DIR . 'function_html.php';
 require_once CLASS_DIR . 'class_check.php';
 $class = get_access(basename($_SERVER['REQUEST_URI']));
 class_check($class);
-global $container, $CURUSER, $site_config;
+global $container
+$db = $container->get(Database::class);, $CURUSER, $site_config;
 
 $dt = TIME_NOW;
 $HTMLOUT = '';

@@ -14,7 +14,8 @@ $class = get_access(basename($_SERVER['REQUEST_URI']));
 class_check($class);
 global $container;
 
-$fluent = $container->get(Database::class);
+$db = $container->get(Database::class);
+$fluent = $db;
 $agents = $fluent->from('peers')
                  ->select(null)
                  ->select('agent')
