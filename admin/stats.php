@@ -6,6 +6,8 @@ require_once __DIR__ . '/../include/bootstrap_pdo.php';
 
 declare(strict_types = 1);
 
+use Pu239\Database;
+
 use Pu239\Roles;
 
 require_once INCL_DIR . 'function_users.php';
@@ -18,10 +20,10 @@ global $site_config;
 
 $HTMLOUT = '';
 //$HTMLOUT .= begin_main_frame();
-$res = sql_query('SELECT COUNT(id) FROM torrents') or sqlerr(__FILE__, __LINE__);
+$rows = $db->fetchAll('SELECT COUNT(id) FROM torrents');
 $n = mysqli_fetch_row($res);
 $n_tor = $n[0];
-$res = sql_query('SELECT COUNT(id) FROM peers') or sqlerr(__FILE__, __LINE__);
+$rows = $db->fetchAll('SELECT COUNT(id) FROM peers');
 $n = mysqli_fetch_row($res);
 $n_peers = $n[0];
 $uporder = isset($_GET['uporder']) ? $_GET['uporder'] : '';
@@ -109,9 +111,9 @@ if ($n_tor == 0) {
     } else {
         $orderby = 'c.name';
     }
-    $res = sql_query("SELECT c.name, MAX(t.added) AS last, COUNT(DISTINCT t.id) AS n_t, COUNT(p.id) AS n_p
+    $rows = $db->fetchAll("SELECT c.name, MAX(t.added) AS last, COUNT(DISTINCT t.id) AS n_t, COUNT(p.id) AS n_p
       FROM categories as c LEFT JOIN torrents as t ON t.category = c.id LEFT JOIN peers as p
-      ON t.id=p.torrent GROUP BY c.id ORDER BY $orderby") or sqlerr(__FILE__, __LINE__);
+      ON t.id=p.torrent GROUP BY c.id ORDER BY $orderby");
     $heading = "
     <tr>
         <th><a href='{$site_config['paths']['baseurl']}/staffpanel.php?tool=stats&amp;action=stats&amp;uporder=$uporder&amp;catorder=category' class='colheadlink'>" . _('Category') . "</a></th>

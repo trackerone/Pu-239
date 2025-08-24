@@ -6,6 +6,8 @@ require_once __DIR__ . '/../include/bootstrap_pdo.php';
 
 declare(strict_types = 1);
 
+use Pu239\Database;
+
 use DI\DependencyException;
 use DI\NotFoundException;
 
@@ -65,10 +67,10 @@ $html = [];
  */
 function sql_get_version()
 {
-    $query = sql_query('SELECT VERSION() AS version');
+    $rows = $db->fetchAll('SELECT VERSION() AS version');
     if (!$row = mysqli_fetch_assoc($query)) {
         unset($row);
-        $query = sql_query("SHOW VARIABLES LIKE 'version'");
+        $rows = $db->fetchAll("SHOW VARIABLES LIKE 'version'");
         $row = mysqli_fetch_row($query);
         $row['version'] = $row[1];
     }
@@ -84,39 +86,7 @@ $server_software = php_uname();
 $load_limit = '--';
 $server_load_found = 0;
 $using_cache = 0;
-$avp = sql_query("SELECT value_s FROM avps WHERE arg = 'loadlimit'") or sqlerr(__FILE__, __LINE__);
-if (false !== $row = mysqli_fetch_assoc($avp)) {
-    $loadinfo = explode('-', $row['value_s']);
-    if (isset($loadinfo[1]) && intval($loadinfo[1]) > (time() - 20)) {
-        $server_load_found = 1;
-        $using_cache = 1;
-        $load_limit = $loadinfo[0];
-    }
-}
-if (!$server_load_found) {
-    if (@file_exists('/proc/loadavg')) {
-        if ($fh = @fopen('/proc/loadavg', 'r')) {
-            $data = @fread($fh, 6);
-            @fclose($fh);
-            $load_avg = explode(' ', $data);
-            $load_limit = trim($load_avg[0]);
-        }
-    } elseif (strstr(strtolower(PHP_OS), 'win')) {
-        $serverstats = @shell_exec("typeperf \"Processor(_Total)\% Processor Time\" -sc 1");
-        if ($serverstats) {
-            $server_reply = explode("\n", str_replace("\r", '', $serverstats));
-            $serverstats = array_slice($server_reply, 2, 1);
-            $statline = explode(',', str_replace('"', '', $serverstats[0]));
-            $load_limit = round($statline[1], 4);
-        }
-    } else {
-        if ($serverstats = @exec('uptime')) {
-            preg_match("/(?:averages)?\: ([0-9\.]+),[\s]+([0-9\.]+),[\s]+([0-9\.]+)/", $serverstats, $load);
-            $load_limit = $load[1];
-        }
-    }
-    if ($load_limit) {
-        sql_query("UPDATE avps SET value_s = '" . $load_limit . '-' . time() . "' WHERE arg = 'loadlimit'") or sqlerr(__FILE__, __LINE__);
+$avp = $db->run(");
     }
 }
 $total_memory = $avail_memory = '--';

@@ -4,6 +4,8 @@ require_once __DIR__ . '/../include/runtime_safe.php';
 
 declare(strict_types = 1);
 
+use Pu239\Database;
+
 use DI\DependencyException;
 use DI\NotFoundException;
 use MatthiasMullie\Scrapbook\Exception\UnbegunTransaction;
@@ -91,7 +93,7 @@ function show_level(array $input)
 
     $title = _('User Reputation Manager - Overview');
     $html = '';
-    $query = sql_query('SELECT * FROM reputationlevel ORDER BY minimumreputation') or sqlerr(__FILE__, __LINE__);
+    $rows = $db->fetchAll('SELECT * FROM reputationlevel ORDER BY minimumreputation');
     if (!mysqli_num_rows($query)) {
         do_update($input, 'new');
 
@@ -164,7 +166,7 @@ function show_form(array $input, string $type)
     $html = _('This allows you to add a new reputation level or edit an existing reputation level.');
     $res = [];
     if ($type === 'edit') {
-        $query = sql_query('SELECT * FROM reputationlevel WHERE reputationlevelid = ' . (int) $input['reputationlevelid']) or sqlerr(__LINE__, __FILE__);
+        $rows = $db->fetchAll('SELECT * FROM reputationlevel WHERE reputationlevelid = ' . (int) $input['reputationlevelid']) or sqlerr(__LINE__, __FILE__);
         if (!$res = mysqli_fetch_assoc($query)) {
             stderr(_('Error'), _('Invalid ID.'));
         }
@@ -224,28 +226,23 @@ function do_update(array $input, string $type)
     }
     // what we gonna do?
     if ($type === 'new') {
-        sql_query("INSERT INTO reputationlevel (minimumreputation, level) VALUES ($minrep, $level)") or sqlerr(__FILE__, __LINE__);
+        $db->run(");
     } elseif ($type === 'edit') {
         $levelid = intval($input['reputationlevelid']);
         if (!is_valid_id($levelid)) {
             stderr(_('Error'), _('Invalid ID'));
         }
         // check it's a valid rep id
-        $query = sql_query("SELECT reputationlevelid FROM reputationlevel WHERE reputationlevelid=$levelid") or sqlerr(__FILE__, __LINE__);
+        $rows = $db->fetchAll("SELECT reputationlevelid FROM reputationlevel WHERE reputationlevelid=$levelid");
         if (!mysqli_num_rows($query)) {
             stderr(_('Error'), _('Invalid ID.'));
         }
-        sql_query("UPDATE reputationlevel SET minimumreputation = $minrep, level = $level WHERE reputationlevelid=$levelid") or sqlerr(__FILE__, __LINE__);
+        $db->run(");
     } else {
         $ids = $input['reputation'];
         if (is_array($ids) && count($ids)) {
             foreach ($ids as $k => $v) {
-                sql_query('UPDATE reputationlevel SET minimumreputation = ' . (int) $v . ' WHERE reputationlevelid=' . sqlesc($k)) or sqlerr(__FILE__, __LINE__);
-            }
-        } else {
-            stderr(_('Error'), _('Invalid ID.'));
-        }
-        $redirect = _('Saved Reputation Level Successfully.');
+                $db->run(');
     }
     rep_cache();
     redirect('staffpanel.php?tool=reputation_ad&amp;mode=done', $redirect);
@@ -265,12 +262,12 @@ function do_delete(array $input)
     }
     $levelid = intval($input['reputationlevelid']);
     // check the id is valid within db
-    $query = sql_query("SELECT reputationlevelid FROM reputationlevel WHERE reputationlevelid = $levelid") or sqlerr(__FILE__, __LINE__);
+    $rows = $db->fetchAll("SELECT reputationlevelid FROM reputationlevel WHERE reputationlevelid = $levelid");
     if (!mysqli_num_rows($query)) {
         stderr(_('Error'), _("Rep ID doesn't exist"));
     }
     // if we here, we delete it!
-    sql_query("DELETE FROM reputationlevel WHERE reputationlevelid = $levelid") or sqlerr(__FILE__, __LINE__);
+    $db->run(");
     rep_cache();
     redirect('staffpanel.php?tool=reputation_ad&amp;mode=done', _('Reputation deleted successfully'), 5);
 }
@@ -290,7 +287,7 @@ function show_form_rep(array $input)
         stderr(_('Error'), _('Invalid ID.'));
     }
     $title = _('User Reputation Manager');
-    $query = sql_query('SELECT r.*, p.topic_id, t.topic_name, leftfor.username AS leftfor_name, 
+    $rows = $db->fetchAll('SELECT r.*, p.topic_id, t.topic_name, leftfor.username AS leftfor_name, 
                     leftby.username AS leftby_name
                     FROM reputation r
                     LEFT JOIN posts p ON p.id=r.postid
@@ -377,242 +374,7 @@ function view_list(array $now_date, array $input, int $time_offset)
             stderr(_('Error'), _('Start date is after the end date.'));
         }
         if (!empty($input['leftby'])) {
-            $left_b = sql_query('SELECT id FROM users WHERE username = ' . sqlesc($input['leftby'])) or sqlerr(__FILE__, __LINE__);
-            if (!mysqli_num_rows($left_b)) {
-                stderr(_('Error'), _fe('Could not find user {0}', format_comment($input['leftby'])));
-            }
-            $leftby = mysqli_fetch_assoc($left_b);
-            $who = $leftby['id'];
-            $cond = 'r.whoadded=' . $who;
-        }
-        if (!empty($input['leftfor'])) {
-            $left_f = sql_query('SELECT id FROM users WHERE username = ' . sqlesc($input['leftfor'])) or sqlerr(__FILE__, __LINE__);
-            if (!mysqli_num_rows($left_f)) {
-                stderr(_('Error'), _fe('Could not find user {0}', format_comment($input['leftfor'])));
-            }
-            $leftfor = mysqli_fetch_assoc($left_f);
-            $user = $leftfor['id'];
-            $cond .= ($cond ? ' AND' : '') . ' r.userid=' . $user;
-        }
-        if ($start) {
-            $cond .= ($cond ? ' AND' : '') . " r.dateadd>= $start";
-        }
-        if ($end) {
-            $cond .= ($cond ? ' AND' : '') . " r.dateadd <= $end";
-        }
-        switch ($input['orderby']) {
-            case 'leftbyuser':
-                $order = 'leftby.username';
-                $orderby = 'leftbyuser';
-                break;
-
-            case 'leftforuser':
-                $order = 'leftfor.username';
-                $orderby = 'leftforuser';
-                break;
-
-            default:
-                $order = 'r.dateadd';
-                $orderby = 'dateadd';
-        }
-        $html = '<h2>' . _('Reputation Comments') . '</h2>';
-        $table_header = '<table><tr>';
-        $table_header .= '<td>' . _('ID') . '</td>';
-        $table_header .= "<td><a href='{$site_config['paths']['baseurl']}/staffpanel.php?tool=reputation_ad&amp;mode=list&amp;dolist=1&amp;who=" . $who . '&amp;user=' . $user . "&amp;orderby=leftbyuser&amp;startstamp=$start&amp;endstamp=$end&amp;page=$first'>" . _('Left By') . '</a></td>';
-        $table_header .= "<td><a href='{$site_config['paths']['baseurl']}/staffpanel.php?tool=reputation_ad&amp;mode=list&amp;dolist=1&amp;who=" . $who . '&amp;user=' . $user . "&amp;orderby=leftforuser&amp;startstamp=$start&amp;endstamp=$end&amp;page=$first'>" . _('Left For') . '</a></td>';
-        $table_header .= "<td><a href='{$site_config['paths']['baseurl']}/staffpanel.php?tool=reputation_ad&amp;mode=list&amp;dolist=1&amp;who=" . $who . '&amp;user=' . $user . "&amp;orderby=date&amp;startstamp=$start&amp;endstamp=$end&amp;page=$first'>" . _('Date') . '</a></td>';
-        $table_header .= '<td>' . _('Point') . '</td>';
-        $table_header .= '<td>' . _('Reason') . '</td>';
-        $table_header .= '<td>' . _('Controls') . '</td></tr>';
-        $html .= $table_header;
-        // do the count for pager etc
-        $query = sql_query("SELECT COUNT(reputationid) AS cnt FROM reputation r WHERE $cond") or sqlerr(__FILE__, __LINE__);
-        //echo_r($input); exit;
-        $total = mysqli_fetch_assoc($query);
-        if (!$total['cnt']) {
-            $html .= "<tr><td colspan='7'>" . _('No Matches Found!') . '</td></tr>';
-        }
-        // do the pager thang!
-        $deflimit = 10;
-        $links = '<span style="background: #F0F5FA; border: 1px solid #072A66;padding: 1px 3px 1px 3px;">' . _fe('{0} Records', $total['cnt']) . '</span>';
-        if ($total['cnt'] > $deflimit) {
-            require_once INCL_DIR . 'function_pager.php';
-            $links = pager_rep([
-                'count' => $total['cnt'],
-                'perpage' => $deflimit,
-                'start_value' => $first,
-                'url' => 'staffpanel.php?tool=reputation_ad&amp;mode=list&amp;dolist=1&amp;who=' . $who . '&amp;user=' . $user . "&amp;orderby=$orderby&amp;startstamp=$start&amp;endstamp=$end",
-            ]);
-        }
-        // mofo query!
-        $query = sql_query("SELECT r.*, p.topic_id, leftfor.id AS leftfor_id, 
-                                    leftfor.username AS leftfor_name, leftby.id AS leftby_id, 
-                                    leftby.username AS leftby_name 
-                                    FROM reputation r 
-                                    left join posts p ON p.id=r.postid 
-                                    left join users leftfor ON leftfor.id=r.userid 
-                                    left join users leftby ON leftby.id=r.whoadded 
-                                    WHERE $cond ORDER BY $order LIMIT $first, $deflimit") or sqlerr(__FILE__, __LINE__);
-        if (!mysqli_num_rows($query)) {
-            stderr(_('Error'), _('Nothing here'));
-        }
-        while ($r = mysqli_fetch_assoc($query)) {
-            $r['dateadd'] = date('M j, Y, g:i a', $r['dateadd']);
-            $html .= "
-            <tr>
-                <td>#{$r['reputationid']}</td>
-                <td>" . format_username((int) $r['leftby_id']) . '</td>
-                <td>' . format_username((int) $r['leftfor_id']) . "</td>
-                <td>{$r['dateadd']}</td>
-                <td>{$r['reputation']}</td>
-                <td>
-                    <a href='{$site_config['paths']['baseurl']}/forums.php?action=viewtopic&amp;topicid={$r['topic_id']}&amp;page=p{$r['postid']}#{$r['postid']}' target='_blank'>" . htmlsafechars($r['reason']) . "</a>
-                </td>
-                <td>
-                    <a href='{$site_config['paths']['baseurl']}/staffpanel.php?tool=reputation_ad&amp;mode=editrep&amp;reputationid={$r['reputationid']}'>
-                        <i class='icon-edit icon has-text-info' aria-hidden='true'></i>
-                    </a>
-                    <a href='{$site_config['paths']['baseurl']}/reputation_ad.php?mode=dodelrep&amp;reputationid={$r['reputationid']}'>
-                        <i class='icon-trash-empty icon has-text-danger' aria-hidden='true'></i>
-                    </a>
-                </td>
-            </tr>";
-        }
-        $html .= '</table>';
-        $html .= "<br><div>$links</div>";
-    }
-    html_out($html, $title);
-}
-
-/**
- * @param array $input
- *
- * @throws DependencyException
- * @throws NotFoundException
- * @throws UnbegunTransaction
- * @throws Exception
- */
-function do_delete_rep(array $input)
-{
-    global $container, $site_config;
-
-    if (!is_valid_id((int) $input['reputationid'])) {
-        stderr(_('Error'), _('Invalid ID'));
-    }
-    // check it's a valid ID.
-    $query = sql_query('SELECT reputationid, reputation, userid FROM reputation WHERE reputationid=' . sqlesc($input['reputationid'])) or sqlerr(__FILE__, __LINE__);
-    if (($r = mysqli_fetch_assoc($query)) === false) {
-        stderr(_('Error'), _('Invalid ID.'));
-    }
-    $sql = sql_query('SELECT reputation ' . 'FROM users ' . 'WHERE id=' . sqlesc($input['reputationid'])) or sqlerr(__FILE__, __LINE__);
-    $User = mysqli_fetch_assoc($sql);
-    // do the delete
-    sql_query('DELETE FROM reputation WHERE reputationid=' . sqlesc($r['reputationid'])) or sqlerr(__FILE__, __LINE__);
-    sql_query("UPDATE users SET reputation = (reputation-{$r['reputation']} ) WHERE id=" . sqlesc($r['userid'])) or sqlerr(__FILE__, __LINE__);
-    $update['rep'] = ($User['reputation'] - $r['reputation']);
-    $cache = $container->get(Cache::class);
-    $cache->update_row('user_' . $r['userid'], [
-        'reputation' => $update['rep'],
-    ], $site_config['expires']['user_cache']);
-    redirect('staffpanel.php?tool=reputation_ad&amp;mode=list', _('Deleted Reputation Successfully'), 5);
-}
-
-/**
- * @param array $input
- *
- * @throws UnbegunTransaction
- * @throws DependencyException
- * @throws NotFoundException
- * @throws Exception
- */
-function do_edit_rep(array $input)
-{
-    global $container, $site_config;
-
-    $reason = '';
-    if (isset($input['reason']) && !empty($input['reason'])) {
-        $reason = str_replace('<br>', '', $input['reason']);
-        $reason = trim($reason);
-        if ((strlen(trim($reason)) < 2) || ($reason == '')) {
-            stderr(_('Error'), _('The text you entered was too short.'));
-        }
-        if (strlen($input['reason']) > 250) {
-            stderr(_('Error'), _('The text entry is too long.'));
-        }
-    }
-    $oldrep = $input['oldreputation'];
-    $newrep = $input['reputation'];
-    $query = sql_query('SELECT reputationid, reason, userid FROM reputation WHERE reputationid = ' . sqlesc($input['reputationid'])) or sqlerr(__FILE__, __LINE__);
-    if ($r = mysqli_fetch_assoc($query) === false) {
-        stderr(_('Error'), _('Invalid ID'));
-    }
-    if ($oldrep != $newrep) {
-        if ($r['reason'] != $reason) {
-            sql_query('UPDATE reputation SET reputation = ' . sqlesc($newrep) . ', reason = ' . sqlesc($reason) . ' WHERE reputationid=' . sqlesc($r['reputationid'])) or sqlerr(__FILE__, __LINE__);
-        }
-        $sql = sql_query('SELECT reputation ' . 'FROM users ' . 'WHERE id=' . sqlesc($input['reputationid'])) or sqlerr(__FILE__, __LINE__);
-        $User = mysqli_fetch_assoc($sql);
-        $diff = $oldrep - $newrep;
-        sql_query("UPDATE users SET reputation = (reputation-{$diff}) WHERE id=" . sqlesc($r['userid'])) or sqlerr(__FILE__, __LINE__);
-        $update['rep'] = ($User['reputation'] - $diff);
-        $cache = $container->get(Cache::class);
-        $cache->update_row('user_' . $r['userid'], [
-            'reputation' => $update['rep'],
-        ], $site_config['expires']['user_cache']);
-        $cache->delete('user_' . $r['userid']);
-    }
-    redirect('staffpanel.php?tool=reputation_ad&amp;mode=list', _fe('Saved Reputation ID: #{0} Successfully', $r['reputationid']), 5);
-}
-
-/**
- * @param string $html
- * @param string $title
- *
- * @throws Exception
- */
-function html_out($html = '', $title = '')
-{
-    global $site_config;
-
-    if (empty($html)) {
-        stderr(_('Error'), _('Nothing to output'));
-    }
-    $title = empty($title) ? _('Reputation') : $title;
-    $breadcrumbs = [
-        "<a href='{$site_config['paths']['baseurl']}/staffpanel.php'>" . _('Staff Panel') . '</a>',
-        "<a href='{$_SERVER['PHP_SELF']}'>$title</a>",
-    ];
-    echo stdhead($title, [], 'page-wrapper', $breadcrumbs) . wrapper($html) . stdfoot();
-}
-
-/**
- * @param     $url
- * @param     $text
- * @param int $time
- */
-function redirect($url, $text, $time = 2)
-{
-    global $site_config;
-
-    $html = doc_head(_('Admin Rep Redirection')) . "
-<meta http-equiv='refresh' content='{$time}; url={$site_config['paths']['baseurl']}/{$url}'>
-<link rel='stylesheet' href='" . get_file_name('css') . "'>
-</head>
-<body>
-    <div>
-        <div>" . _('Redirecting...') . "</div>
-            <div style='padding: 8px;'>
-                <div>$text
-                <br>
-                <br>
-                <a href='{$site_config['paths']['baseurl']}/{$url}'>" . _('Click here if not redirected...') . '</a>
-            </div>
-        </div>
-    </div>
-</body>
-</html>';
-    echo $html;
-app_halt('Exit called');
+            $left_b = $db->run(');
 }
 
 /**
@@ -653,7 +415,7 @@ function get_month_dropdown(array $now_date, $i = 0)
  */
 function rep_cache()
 {
-    $query = sql_query('SELECT * FROM reputationlevel') or sqlerr(__FILE__, __LINE__);
+    $rows = $db->fetchAll('SELECT * FROM reputationlevel');
     if (!mysqli_num_rows($query)) {
         stderr(_('Error'), _('No items to cache'));
     }

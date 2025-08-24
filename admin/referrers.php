@@ -6,6 +6,8 @@ require_once __DIR__ . '/../include/bootstrap_pdo.php';
 
 declare(strict_types = 1);
 
+use Pu239\Database;
+
 require_once INCL_DIR . 'function_users.php';
 require_once INCL_DIR . 'function_pager.php';
 require_once CLASS_DIR . 'class_check.php';
@@ -15,7 +17,7 @@ global $site_config;
 
 $HTMLOUT = '';
 $_GET['page'] = !isset($_GET['page']) ? 0 : (int) $_GET['page'];
-$res = sql_query('SELECT * FROM referrers') or sqlerr(__FILE__, __LINE__);
+$rows = $db->fetchAll('SELECT * FROM referrers');
 $count = mysqli_num_rows($res);
 if ($count > 0) {
     $HTMLOUT .= "
@@ -33,7 +35,7 @@ if ($count > 0) {
     $perpage = 10;
     $i = (int) $_GET['page'] * $perpage;
     $pager = pager($perpage, $count, 'staffpanel.php?tool=referrers&amp;');
-    $res = sql_query("SELECT r.*, u.id as uid, u.username FROM referrers AS r LEFT JOIN users AS u ON u.ip = r.ip ORDER BY date DESC {$pager['limit']}") or sqlerr(__FILE__, __LINE__);
+    $rows = $db->fetchAll("SELECT r.*, u.id as uid, u.username FROM referrers AS r LEFT JOIN users AS u ON u.ip = r.ip ORDER BY date DESC {$pager['limit']}");
     if (mysqli_num_rows($res) > 0) {
         $body = '';
         while ($data = mysqli_fetch_assoc($res)) {

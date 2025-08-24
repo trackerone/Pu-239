@@ -19,7 +19,8 @@ global $container, $CURUSER, $site_config;
 
 $HTMLOUT = $H1_thingie = $count2 = '';
 $count = 0;
-$fluent = $container->get(Database::class);
+$db = $container->get(Database::class);
+$fluent = $db;
 if (isset($_GET['remove'])) {
     if ($CURUSER['class'] < UC_STAFF) {
         stderr(_('Error'), _('Only the Staff can remove members from the list!'));
@@ -30,10 +31,10 @@ if (isset($_GET['remove'])) {
     if (!empty($remove_me_Ive_been_good)) {
         if (!is_array($remove_me_Ive_been_good)) {
             if (is_valid_id($remove_me_Ive_been_good)) {
-                $res = sql_query('SELECT username, modcomment FROM users WHERE id = ' . sqlesc($remove_me_Ive_been_good)) or sqlerr(__FILE__, __LINE__);
+                $rows = $db->fetchAll('SELECT username, modcomment FROM users WHERE id = ' . sqlesc($remove_me_Ive_been_good)) or sqlerr(__FILE__, __LINE__);
                 $user = mysqli_fetch_assoc($res);
                 $modcomment = get_date((int) TIME_NOW, 'DATE', 1) . ' - ' . _('Removed from watched users by') . " $CURUSER[username].\n" . $user['modcomment'];
-                sql_query('UPDATE users SET watched_user = \'0\', modcomment = ' . sqlesc($modcomment) . ' WHERE id=' . sqlesc($remove_me_Ive_been_good)) or sqlerr(__FILE__, __LINE__);
+                $db->run('UPDATE users SET watched_user = \'0\', modcomment = ' . sqlesc($modcomment) . ' WHERE id = :id', [':id' => $remove_me_Ive_been_good]) or sqlerr(__FILE__, __LINE__);
                 $cache = $container->get(Cache::class);
                 $cache->update_row('user_' . $remove_me_Ive_been_good, [
                     'watched_user' => 0,
@@ -47,24 +48,7 @@ if (isset($_GET['remove'])) {
                 $id = (int) $id;
                 if (is_valid_id($id)) {
                     //=== get mod comments for member
-                    $res = sql_query('SELECT username, modcomment FROM users WHERE id = ' . sqlesc($id)) or sqlerr(__FILE__, __LINE__);
-                    $user = mysqli_fetch_assoc($res);
-                    $modcomment = get_date((int) TIME_NOW, 'DATE', 1) . ' - ' . _('Removed from watched users by') . " $CURUSER[username].\n" . $user['modcomment'];
-                    sql_query('UPDATE users SET watched_user = \'0\', modcomment = ' . sqlesc($modcomment) . ' WHERE id=' . sqlesc($id)) or sqlerr(__FILE__, __LINE__);
-                    $cache->update_row('user_' . $id, [
-                        'watched_user' => 0,
-                        'modcomment' => $modcomment,
-                    ], $site_config['expires']['user_cache']);
-                    $count = (++$count);
-                    $removed_log .= format_username((int) $id);
-                }
-            }
-        }
-    }
-    //=== Check if members were removed
-    $mysqli = $container->get(mysqli::class);
-    if (mysqli_affected_rows($mysqli) == 0) {
-        stderr(_('Error'), _('No one was deleted') . '!');
+                    $res = $db->run(');
     } else {
         write_log('[b]' . $CURUSER['username'] . '[/b] ' . _('Removed:') . '<br>' . $removed_log . ' <br>' . _('from watched users') . '');
     }
@@ -75,7 +59,7 @@ if (isset($_GET['add'])) {
     $member_whos_been_bad = (int) $_GET['id'];
     if (is_valid_id($member_whos_been_bad)) {
         //=== make sure they are not being watched...
-        $res = sql_query('SELECT modcomment, watched_user, watched_user_reason, username FROM users WHERE id=' . sqlesc($member_whos_been_bad)) or sqlerr(__FILE__, __LINE__);
+        $rows = $db->fetchAll('SELECT modcomment, watched_user, watched_user_reason, username FROM users WHERE id=' . sqlesc($member_whos_been_bad)) or sqlerr(__FILE__, __LINE__);
         $user = mysqli_fetch_assoc($res);
         if ($user['watched_user'] > 0) {
             stderr(_('Error'), _fe("{0} is on the watched user list already! back to {1}'s profile", htmlsafechars($user['username']), format_username((int) $user['id'])));
@@ -98,7 +82,7 @@ if (isset($_GET['add'])) {
         //=== all is good, let's enter them \o/
         $watched_user_reason = htmlsafechars($_POST['reason']);
         $modcomment = get_date((int) TIME_NOW, 'DATE', 1) . ' - ' . _fe('Added to watched users by {0}', $CURUSER['username']) . "\n" . $user['modcomment'];
-        sql_query('UPDATE users SET watched_user = ' . TIME_NOW . ', modcomment = ' . sqlesc($modcomment) . ', watched_user_reason = ' . sqlesc($watched_user_reason) . ' WHERE id=' . sqlesc($member_whos_been_bad)) or sqlerr(__FILE__, __LINE__);
+        $db->run('UPDATE users SET watched_user = ' . TIME_NOW . ', modcomment = ' . sqlesc($modcomment) . ', watched_user_reason = ' . sqlesc($watched_user_reason) . ' WHERE id = :id', [':id' => $member_whos_been_bad]) or sqlerr(__FILE__, __LINE__);
         $cache->update_row('user_' . $member_whos_been_bad, [
             'watched_user' => TIME_NOW,
             'watched_user_reason' => $watched_user_reason,
@@ -129,7 +113,7 @@ $ASC = (isset($_GET['ASC']) ? ($_GET['ASC'] === 'ASC' ? 'DESC' : 'ASC') : 'DESC'
 $i = 1;
 $HTMLOUT .= $H1_thingie;
 
-$res = sql_query('SELECT id, username, registered, watched_user_reason, watched_user, uploaded, downloaded, warned, status, donor, class, leechwarn, chatpost, pirate, king, invitedby FROM users WHERE watched_user != \'0\' ORDER BY ' . $ORDER_BY . $ASC) or sqlerr(__FILE__, __LINE__);
+$rows = $db->fetchAll('SELECT id, username, registered, watched_user_reason, watched_user, uploaded, downloaded, warned, status, donor, class, leechwarn, chatpost, pirate, king, invitedby FROM users WHERE watched_user != \'0\' ORDER BY ' . $ORDER_BY . $ASC) or sqlerr(__FILE__, __LINE__);
 $how_many = mysqli_num_rows($res);
 if ($how_many > 0) {
     $HTMLOUT .= '

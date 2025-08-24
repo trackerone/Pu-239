@@ -4,6 +4,8 @@ require_once __DIR__ . '/../include/runtime_safe.php';
 
 declare(strict_types = 1);
 
+use Pu239\Database;
+
 use Pu239\Cache;
 use Pu239\Message;
 
@@ -16,7 +18,8 @@ $HTMLOUT = '';
 $dt = TIME_NOW;
 $this_url = $_SERVER['SCRIPT_NAME'];
 $do = isset($_GET['do']) && $_GET['do'] === 'disabled' ? 'disabled' : 'warned';
-global $container, $site_config;
+global $container;
+$db = $container->get(Database::class);, $site_config;
 
 $mysqli = $container->get(mysqli::class);
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -37,14 +40,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     global $CURUSER;
 
     if ($act === 'delete' && has_access($CURUSER['class'], UC_SYSOP, 'coder')) {
-        $res_del = sql_query('SELECT id, username, registered, downloaded, uploaded, last_access, class, donor, warned, status FROM users WHERE id IN (' . implode(', ', $_uids) . ') ORDER BY username DESC');
-        if (mysqli_num_rows($res_del) != 0) {
-            $count = mysqli_num_rows($res_del);
-            while ($arr_del = mysqli_fetch_assoc($res_del)) {
-                $userid = $arr_del['id'];
-                $res = sql_query('DELETE FROM users WHERE id=' . sqlesc($userid)) or sqlerr(__FILE__, __LINE__);
-                $cache->delete('user_' . $userid);
-                write_log("User: {$arr_del['username']} Was deleted by " . $CURUSER['username'] . ' Via Warn Page');
+        $res_del = $db->run(');
             }
         } else {
             stderr(_('Error'), _('Something went wrong!'));
@@ -52,24 +48,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
     if ($act === 'disable') {
         global $container;
+$db = $container->get(Database::class);;
 
         $cache = $container->get(Cache::class);
-        if (sql_query('UPDATE users SET status = 2, modcomment=CONCAT(' . sqlesc(get_date((int) $dt, 'DATE', 1) . _('- Disabled by  ') . $CURUSER['username'] . "\n") . ',modcomment) WHERE id IN (' . implode(', ', $_uids) . ')')) {
-            foreach ($_uids as $uid) {
-                $cache->update_row('user_' . $uid, [
-                    'status' => 2,
-                ], $site_config['expires']['user_cache']);
-            }
-            $d = mysqli_affected_rows($mysqli);
-            header('Refresh: 2; url=' . $r);
-            stderr(_('Success'), _pfe('{0} user disabled!', '{0} users disabled!', $d));
-        } else {
-            stderr(_('Error'), _('Something went wrong!'));
-        }
-    } elseif ($act === 'unwarn') {
-        $subject = _('Warn removed');
+        if ($db->run(');
         $msg = _fe('Hey, your warning was removed by {0}. Please keep in your best behaviour from now on.', $CURUSER['username']);
         global $container;
+$db = $container->get(Database::class);;
 
         $cache = $container->get(Cache::class);
         foreach ($_uids as $id) {
@@ -85,6 +70,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
         if (!empty($msgs_buffer)) {
             global $container;
+$db = $container->get(Database::class);;
 
             $messages_class = $container->get(Message::class);
             $messages_class->insert($msgs_buffer);

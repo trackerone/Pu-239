@@ -6,6 +6,8 @@ require_once __DIR__ . '/../include/bootstrap_pdo.php';
 
 declare(strict_types = 1);
 
+use Pu239\Database;
+
 require_once INCL_DIR . 'function_users.php';
 require_once INCL_DIR . 'function_pager.php';
 require_once INCL_DIR . 'function_bbcode.php';
@@ -22,14 +24,14 @@ if (!empty($search)) {
 }
 // delete items older than 1 month
 $secs = TIME_NOW - (30 * 86400);
-sql_query("DELETE FROM sitelog WHERE added < $secs") or sqlerr(__FILE__, __LINE__);
+$db->run(");
 $resx = sql_query("SELECT COUNT(id) FROM sitelog $where");
 $rowx = mysqli_fetch_array($resx, MYSQLI_NUM);
 $count = (int) $rowx[0];
 $perpage = 30;
 $pager = pager($perpage, $count, 'staffpanel.php?tool=sitelog&amp;action=sitelog&amp;' . (!empty($search) ? "search=$search&amp;" : '') . '');
 $HTMLOUT = '';
-$res = sql_query("SELECT added, txt FROM sitelog $where ORDER BY added DESC {$pager['limit']} ") or sqlerr(__FILE__, __LINE__);
+$rows = $db->fetchAll("SELECT added, txt FROM sitelog $where ORDER BY added DESC {$pager['limit']} ");
 $HTMLOUT .= "
         <h1 class='has-text-centered'>" . _('Site log') . "</h1>
         <div class='has-text-centered margin20'>
@@ -42,7 +44,7 @@ $HTMLOUT .= "
 if ($count > $perpage) {
     $HTMLOUT .= $pager['pagertop'];
 }
-if (mysqli_num_rows($res) == 0) {
+if (empty($rows)) {
     $HTMLOUT .= main_div(_('Log is empty'), '', 'has-text-centered padding20');
 } else {
     $heading = '
@@ -53,7 +55,7 @@ if (mysqli_num_rows($res) == 0) {
     $log_events = [];
     $colors = [];
     $body = '';
-    while ($arr = mysqli_fetch_assoc($res)) {
+    foreach ($rows as $arr) {
         $txt = substr($arr['txt'], 0, 50);
         if (!in_array($txt, $log_events)) {
             $color = random_color(100, 200);

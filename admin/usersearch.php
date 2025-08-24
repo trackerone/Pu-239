@@ -19,7 +19,8 @@ global $container, $site_config, $CURUSER;
 $search = array_merge($_POST, $_GET);
 $cache = $container->get(Cache::class);
 $oldest = $cache->get('oldest_');
-$fluent = $container->get(Database::class);
+$db = $container->get(Database::class);
+$fluent = $db;
 if ($oldest === false || is_null($oldest)) {
     $oldest = $fluent->from('users')
                      ->select(null)
@@ -735,7 +736,7 @@ if (!empty($search)) {
     $pager = pager($perpage, $count, "{$site_config['paths']['baseurl']}/staffpanel.php?tool=usersearch&amp;" . $q1);
     $query1 .= $pager['limit'];
     $res = sql_query($query1) or sqlerr(__FILE__, __LINE__);
-    if (mysqli_num_rows($res) == 0) {
+    if (empty($rows)) {
         stdmsg(_('Warning'), _('No user was found.'));
     } else {
         if ($count > $perpage) {

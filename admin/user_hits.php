@@ -6,6 +6,8 @@ require_once __DIR__ . '/../include/bootstrap_pdo.php';
 
 declare(strict_types = 1);
 
+use Pu239\Database;
+
 use Pu239\User;
 
 require_once INCL_DIR . 'function_users.php';
@@ -13,14 +15,15 @@ require_once INCL_DIR . 'function_pager.php';
 require_once CLASS_DIR . 'class_check.php';
 $class = get_access(basename($_SERVER['REQUEST_URI']));
 class_check($class);
-global $container, $site_config, $CURUSER;
+global $container;
+$db = $container->get(Database::class);, $site_config, $CURUSER;
 stderr(_('Error'), 'This page is not in use atm');
 $HTMLOUT = '';
 $id = (int) $_GET['id'];
 if (!is_valid_id($id) || $CURUSER['id'] != $id && $CURUSER['class'] < UC_STAFF) {
     $id = $CURUSER['id'];
 }
-$res = sql_query('SELECT COUNT(id) FROM userhits WHERE hitid = ' . sqlesc($id)) or sqlerr(__FILE__, __LINE__);
+$rows = $db->fetchAll('SELECT COUNT(id) FROM userhits WHERE hitid = ' . sqlesc($id)) or sqlerr(__FILE__, __LINE__);
 $row = mysqli_fetch_row($res);
 $count = $row[0];
 $perpage = 15;
@@ -44,8 +47,8 @@ $HTMLOUT .= "
 <td class='colhead'>" . _('Username') . "</td>
 <td class='colhead'>" . _('Viewed at') . "</td>
 </tr>\n";
-$res = sql_query('SELECT uh.*, username, users.id AS uid FROM userhits uh LEFT JOIN users ON uh.userid=users.id WHERE hitid =' . sqlesc($id) . ' ORDER BY uh.id DESC ' . $pager['limit']) or sqlerr(__FILE__, __LINE__);
-while ($arr = mysqli_fetch_assoc($res)) {
+$res = sql_query('SELECT uh.*, username, users.id AS uid FROM userhits uh LEFT JOIN users ON uh.userid=users.id WHERE hitid =' . sqlesc($id) . ' ORDER BY uh.id DESC ' . $pager['limit']);
+foreach ($rows as $arr) {
     $HTMLOUT .= '
 <tr><td>' . number_format($arr['number']) . '</td>
 <td>' . format_username((int) $arr['uid']) . '</td>
