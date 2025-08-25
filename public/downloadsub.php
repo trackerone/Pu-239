@@ -11,6 +11,7 @@ use Pu239\Database;
 require_once __DIR__ . '/../include/bittorrent.php';
 check_user_status();
 global $container;
+$db = $container->get(Database::class);;
 
 $action = isset($_POST['action']) ? htmlsafechars($_POST['action']) : '';
 if ($action === 'download') {
@@ -18,7 +19,8 @@ if ($action === 'download') {
     if ($id == 0) {
         stderr(_('Error'), _('Invalid ID'));
     } else {
-        $fluent = $container->get(Database::class);
+        $fluent = $db; // alias
+$fluent = $container->get(Database::class);
         $subtitle = $fluent->from('subtitles')
                            ->select(null)
                            ->select('id')
@@ -44,7 +46,7 @@ if ($action === 'download') {
             unlink($zipfile);
             unlink($file_name);
         }
-        sql_query('UPDATE subtitles SET hits = hits + 1 WHERE id = ' . sqlesc($id));
+        $db->run('UPDATE subtitles SET hits = hits + 1 WHERE id = :id', [':id' => $id]);
     }
 } else {
     stderr(_('Error'), _('You do not have the permission to do that.'));

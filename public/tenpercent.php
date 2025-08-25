@@ -4,6 +4,8 @@ require_once __DIR__ . '/../include/runtime_safe.php';
 
 declare(strict_types = 1);
 
+use Pu239\Database;
+
 use Pu239\Cache;
 use Pu239\Message;
 
@@ -12,7 +14,8 @@ require_once INCL_DIR . 'function_users.php';
 require_once INCL_DIR . 'function_html.php';
 
 $user = check_user_status();
-global $container, $site_config;
+global $container;
+$db = $container->get(Database::class);, $site_config;
 
 $uploaded = $user['uploaded'];
 $downloaded = $user['downloaded'];
@@ -37,7 +40,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $dt = TIME_NOW;
     $subject = '10% Addition';
     $msg = 'Today, ' . get_date((int) $dt, 'LONG', 0, 1) . ', you have increased your total upload amount by 10% from [b]' . mksize($uploaded) . '[/b] to [b]' . mksize($newuploaded) . '[/b], which brings your ratio to [b]' . $newratio . '[/b].';
-    $res = sql_query("UPDATE users SET uploaded = uploaded * 1.1, tenpercent = 'yes' WHERE id=" . sqlesc($user['id'])) or sqlerr(__FILE__, __LINE__);
+    $rows = $db->fetchAll("UPDATE users SET uploaded = uploaded * 1.1, tenpercent = 'yes' WHERE id=" . sqlesc($user['id'])) or sqlerr(__FILE__, __LINE__);
     $update['uploaded'] = $user['uploaded'] * 1.1;
     $cache = $container->get(Cache::class);
     $cache->update_row('user_' . $user['id'], [

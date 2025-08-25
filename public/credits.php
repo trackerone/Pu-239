@@ -11,7 +11,8 @@ require_once INCL_DIR . 'function_users.php';
 require_once INCL_DIR . 'function_bbcode.php';
 require_once INCL_DIR . 'function_comments.php';
 $user = check_user_status();
-global $container, $site_config;
+global $container;
+$db = $container->get(Database::class);, $site_config;
 
 $HTMLOUT = '';
 $action = isset($_GET['action']) ? htmlsafechars($_GET['action']) : '';
@@ -36,7 +37,7 @@ if (isset($_POST['action']) === 'add' && has_access($user['class'], UC_SYSOP, 'c
     $link = ($_POST['link']);
     $status = ($_POST['status']);
     $credit = ($_POST['credit']);
-    sql_query('INSERT INTO modscredits (name, description,  category,  pu239lnk,  status, credit) VALUES(' . sqlesc($name) . ', ' . sqlesc($description) . ', ' . sqlesc($category) . ', ' . sqlesc($link) . ', ' . sqlesc($status) . ', ' . sqlesc($credit) . ')') or sqlerr(__FILE__, __LINE__);
+    $db->run('INSERT INTO modscredits (name, description,  category,  pu239lnk,  status, credit) VALUES (' . sqlesc($name) . ', ' . sqlesc($description) . ', ' . sqlesc($category) . ', ' . sqlesc($link) . ', ' . sqlesc($status) . ', ' . sqlesc($credit) . ')') or sqlerr(__FILE__, __LINE__);
     header("Location: {$_SERVER['PHP_SELF']}");
     app_halt('Exit called');
 }
@@ -45,15 +46,15 @@ if ($action === 'delete' && has_access($user['class'], UC_SYSOP, 'coder')) {
     if (!$id) {
         stderr(_('Error'), _('Fuck something went Pete Tong!'));
     }
-    sql_query("DELETE FROM modscredits where id='$id'") or sqlerr(__FILE__, __LINE__);
+    $db->run(");
     header("Location: {$_SERVER['PHP_SELF']}");
     app_halt('Exit called');
 }
 
 if ($action === 'edit' && has_access($user['class'], UC_SYSOP, 'coder')) {
     $id = (int) $_GET['id'];
-    $res = sql_query('SELECT name, description, category, pu239lnk, status, credit FROM modscredits WHERE id =' . $id . '') or sqlerr(__FILE__, __LINE__);
-    if (mysqli_num_rows($res) == 0) {
+    $rows = $db->fetchAll('SELECT name, description, category, pu239lnk, status, credit FROM modscredits WHERE id =' . $id . '');
+    if (empty($rows)) {
         stderr(_('Error'), _('No credit mod found with that ID!'));
     }
     while ($mod = mysqli_fetch_assoc($res)) {
@@ -74,91 +75,11 @@ if ($action === 'edit' && has_access($user['class'], UC_SYSOP, 'coder')) {
                     <td class='rowhead'>" . _('Category') . "</td>
                     <td style='padding: 0'>
                         <select name='category'>";
-        $result = sql_query('SHOW COLUMNS FROM modscredits WHERE field = "category"');
-        while ($row = mysqli_fetch_row($result)) {
-            foreach (explode("','", substr($row[1], 6, -2)) as $v) {
-                $HTMLOUT .= "
-                            <option value='$v' " . ($mod['category'] == $v ? 'selected' : '') . ">$v</option>";
-            }
-        }
-        $HTMLOUT .= "
-                        </select>
-                    </td>
-                </tr>
-                <tr><td class='rowhead'>" . _('Link') . "</td>
-                    <td style='padding: 0'><input type='text' size='60' maxlength='120' name='link' " . "value='" . htmlsafechars($mod['pu239lnk']) . "'></td>
-                </tr>
-                <tr>
-                    <td class='rowhead'>" . _('Status') . "</td>
-                    <td class='is-paddingless'>
-                        <select name='modstatus'>";
-        $result = sql_query('SHOW COLUMNS FROM modscredits WHERE field="status"');
-        while ($row = mysqli_fetch_row($result)) {
-            foreach (explode("','", substr($row[1], 6, -2)) as $y) {
-                $HTMLOUT .= "
-                            <option value='$y' " . ($mod['status'] == $y ? 'selected' : '') . ">$y</option>";
-            }
-        }
-        $HTMLOUT .= "
-                        </select>
-                    </td>
-                </tr>
-                <tr>
-                    <td class='rowhead'>" . _('Credits') . "</td>
-                    <td style='padding: 0'>
-                        <input type='text' size='60' maxlength='120' name='credits' value='" . htmlsafechars($mod['credit']) . "'>
-                    </td>
-                </tr>
-                <tr>
-                    <td colspan='2'><input type='submit' value='" . _('Submit') . "'></td>
-                </tr>
-            </table>
-        </form>";
-    }
-    $title = _('Mod Credits');
-    $breadcrumbs = [
-        "<a href='{$_SERVER['PHP_SELF']}'>$title</a>",
-    ];
-    echo stdhead($title, [], 'page-wrapper', $breadcrumbs) . wrapper($HTMLOUT) . stdfoot();
-} elseif ($action === 'update' && has_access($user['class'], UC_SYSOP, 'coder')) {
-    $id = (int) $_GET['id'];
-    if (!is_valid_id($id)) {
-        stderr(_('Error'), _('Invalid ID'));
-    }
-    $res = sql_query('SELECT id FROM modscredits WHERE id=' . sqlesc($id));
-    if (mysqli_num_rows($res) == 0) {
-        stderr(_('Error'), _('Invalid ID'));
-    }
-
-    $name = $_POST['name'];
-    $description = $_POST['description'];
-    $category = $_POST['category'];
-    $link = $_POST['link'];
-    $modstatus = $_POST['modstatus'];
-    $credit = $_POST['credits'];
-
-    if (empty($name)) {
-        stderr(_('Error'), _('You must specify a name for this credit.'));
-    }
-
-    if (empty($description)) {
-        stderr(_('Error'), _('You must provide a description for this credit.'));
-    }
-
-    if (empty($link)) {
-        stderr(_('Error'), _('You must provide a link for this credit.'));
-    }
-
-    if (empty($credit)) {
-        stderr(_('Error'), _('You must provide a credit for the author(s) of this credit.'));
-    }
-
-    sql_query('UPDATE modscredits SET name = ' . sqlesc($name) . ', category = ' . sqlesc($category) . ', status = ' . sqlesc($modstatus) . ',  pu239lnk = ' . sqlesc($link) . ', credit = ' . sqlesc($credit) . ', description = ' . sqlesc($description) . ' WHERE id=' . sqlesc($id)) or sqlerr(__FILE__, __LINE__);
-    header("Location: {$_SERVER['PHP_SELF']}");
-    app_halt('Exit called');
+        $result = $db->run(');
 }
 
-$res = sql_query('SELECT * FROM modscredits') or sqlerr(__FILE__, __LINE__);
+$rows = $db->fetchAll('SELECT * FROM modscredits');
+$fluent = $db; // alias
 $fluent = $container->get(Database::class);
 $credits = $fluent->from('modscredits')
                   ->orderBy('id')

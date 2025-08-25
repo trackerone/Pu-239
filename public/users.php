@@ -4,6 +4,8 @@ require_once __DIR__ . '/../include/runtime_safe.php';
 
 declare(strict_types = 1);
 
+use Pu239\Database;
+
 require_once __DIR__ . '/../include/bittorrent.php';
 require_once INCL_DIR . 'function_users.php';
 require_once INCL_DIR . 'function_html.php';
@@ -93,7 +95,7 @@ $page = isset($_GET['page']) ? (int) $_GET['page'] : 1;
 $perpage = 25;
 $browsemenu = '';
 $pagemenu = '';
-$res = sql_query('SELECT COUNT(id) FROM users WHERE ' . $query1) or sqlerr(__FILE__, __LINE__);
+$rows = $db->fetchAll('SELECT COUNT(id) FROM users WHERE ' . $query1) or sqlerr(__FILE__, __LINE__);
 $arr = mysqli_fetch_row($res);
 $pager = pager($perpage, (int) $arr[0], "{$site_config['paths']['baseurl']}/users.php?$q1&amp;");
 if ($arr[0] > 0) {

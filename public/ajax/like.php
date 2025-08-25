@@ -38,6 +38,7 @@ if (!empty($user) && is_array($user)) {
 function comment_like_unlike(array $fields, array $user)
 {
     global $container;
+$db = $container->get(Database::class);;
 
     $id = (int) $_POST['id'];
     $type = $_POST['type'];
@@ -64,7 +65,8 @@ function comment_like_unlike(array $fields, array $user)
         $table = $fields[$type];
     }
     $cache = $container->get(Cache::class);
-    $fluent = $container->get(Database::class);
+    $fluent = $db; // alias
+$fluent = $container->get(Database::class);
     if ($data['count'] == 0 && $current === 'Like') {
         $sql = "INSERT INTO likes ({$type}_id, user_id) VALUES (" . sqlesc($id) . ', ' . sqlesc($user['id']) . ')';
         $res = sql_query($sql) or sqlerr(__FILE__, __LINE__);

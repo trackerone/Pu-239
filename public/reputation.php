@@ -4,6 +4,8 @@ require_once __DIR__ . '/../include/runtime_safe.php';
 
 declare(strict_types = 1);
 
+use Pu239\Database;
+
 use Pu239\Cache;
 
 require_once __DIR__ . '/../include/bittorrent.php';
@@ -12,7 +14,8 @@ require_once CLASS_DIR . 'class_user_options.php';
 require_once CLASS_DIR . 'class_user_options_2.php';
 require_once INCL_DIR . 'function_html.php';
 $user = check_user_status();
-global $container, $site_config;
+global $container;
+$db = $container->get(Database::class);, $site_config;
 
 $is_mod = $user['class'] >= UC_STAFF ? true : false;
 
@@ -137,89 +140,7 @@ if (!$is_mod) {
         }
     }
 }
-$r = sql_query('SELECT COUNT(id) FROM posts WHERE user_id = ' . sqlesc($user['id'])) or sqlerr(__FILE__, __LINE__);
-$a = mysqli_fetch_row($r);
-$user['posts'] = $a[0];
-
-$reason = '';
-if (isset($input['reason']) && !empty($input['reason'])) {
-    $reason = trim($input['reason']);
-    $temp = stripslashes($input['reason']);
-    if ((strlen(trim($temp)) < 2) || (empty($reason))) {
-        rep_output(_('Reputation reasion is too short!'));
-    }
-    if (strlen(preg_replace('/&#([0-9]+);/', '-', stripslashes($input['reason']))) > 250) {
-        rep_output(_('Reputation reasion is too long!'));
-    }
-}
-
-if (isset($input['do']) && $input['do'] === 'addrep') {
-    if ($res['userid'] == $user['id']) {
-        rep_output(_('You cannot rep your own stuffs!'));
-    }
-    $score = fetch_reppower($user, $input['reputation']);
-    $res['reputation'] += $score;
-    sql_query(
-        'UPDATE users SET reputation = ' . (int) $res['reputation'] . ' WHERE id=' . sqlesc($res['userid'])
-    ) or sqlerr(__FILE__, __LINE__);
-    $cache = $container->get(Cache::class);
-    $cache->update_row(
-        'user_' . $res['userid'],
-        [
-            'reputation' => $res['reputation'],
-        ],
-        $site_config['expires']['user_cache']
-    );
-    $cache->delete('user_rep_' . $res['userid']);
-    $save = [
-        'reputation' => sqlesc($score),
-        'whoadded' => sqlesc((int) $user['id']),
-        'reason' => sqlesc($reason),
-        'dateadd' => sqlesc(TIME_NOW),
-        'locale' => sqlesc($rep_locale),
-        'postid' => sqlesc((int) $input['pid']),
-        'userid' => sqlesc((int) $res['userid']),
-    ];
-
-    sql_query(
-        'INSERT INTO reputation (' . implode(', ', array_keys($save)) . ') VALUES (' . implode(', ', $save) . ')'
-    ) or sqlerr(__FILE__, __LINE__);
-    header("Location: {$site_config['paths']['baseurl']}/reputation.php?pid={$input['pid']}&done=1");
-} else {
-    if ($res['userid'] == $user['id']) { // same as him!
-        // check for fish!
-        $query1 = sql_query(
-            'SELECT r.*, leftby.id AS leftby_id, leftby.username AS leftby_name
-            FROM reputation AS r
-            LEFT JOIN users leftby ON leftby.id=r.whoadded
-            WHERE postid = ' . sqlesc($input['pid']) . ' AND r.locale = ' . sqlesc($input['locale']) . '
-            ORDER BY dateadd DESC'
-        ) or sqlerr(__FILE__, __LINE__);
-        $reasonbits = $rep = '';
-        if (mysqli_num_rows($query1) !== false) {
-            $total = 0;
-            while ($postrep = mysqli_fetch_assoc($query1)) {
-                $total += $postrep['reputation'];
-                if ($postrep['reputation'] > 0) {
-                    $posneg = 'pos';
-                } elseif ($postrep['reputation'] < 0) {
-                    $posneg = 'neg';
-                } else {
-                    $posneg = 'balance';
-                }
-                if ($GVARS['g_rep_seeown']) {
-                    $postrep['reason'] = $postrep['reason'] . " <span class='desc'>" . _(
-                        'Left by'
-                    ) . ' ' . format_username((int) $postrep['leftby_id']) . '</span>';
-                }
-                $reasonbits .= "<tr>
-    <td class='row2'><img src='{$site_config['paths']['images_baseurl']}rep/reputation_$posneg.gif' alt=''></td>
-    <td class='row2'>{$postrep['reason']}</td>
-</tr>";
-            }
-
-            if ($total == 0) {
-                $rep = _('Even');
+$r = $db->run(');
             } elseif ($total > 0 && $total <= 5) {
                 $rep = _('Somewhat Positive');
             } elseif ($total > 5 && $total <= 15) {

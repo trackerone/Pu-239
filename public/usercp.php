@@ -4,6 +4,8 @@ require_once __DIR__ . '/../include/runtime_safe.php';
 
 declare(strict_types = 1);
 
+use Pu239\Database;
+
 use Pu239\Session;
 use Pu239\User;
 
@@ -29,70 +31,11 @@ $stdfoot = [
         get_file_name('sceditor_js'),
     ],
 ];
-global $container, $TZ, $site_config, $i18n;
+global $container;
+$db = $container->get(Database::class);, $TZ, $site_config, $i18n;
 
 $HTMLOUT = $stylesheets = $wherecatina = '';
-$templates = sql_query('SELECT id, name FROM stylesheets ORDER BY id');
-while ($templ = mysqli_fetch_assoc($templates)) {
-    if (file_exists(ROOT_DIR . "templates/$templ[id]/template.php")) {
-        $stylesheets .= "<option value='" . (int) $templ['id'] . "' " . ($templ['id'] == get_stylesheet() ? 'selected' : '') . '>' . format_comment($templ['name']) . '</option>';
-    }
-}
-$countries = "<option value='0'>---- " . _('None selected') . " ----</option>\n";
-$ct_r = sql_query('SELECT id,name FROM countries ORDER BY name') or sqlerr(__FILE__, __LINE__);
-while ($ct_a = mysqli_fetch_assoc($ct_r)) {
-    $countries .= "<option value='" . (int) $ct_a['id'] . "' " . ($user['country'] == $ct_a['id'] ? 'selected' : '') . '>' . format_comment($ct_a['name']) . "</option>\n";
-}
-$offset = !empty($user['time_offset']) ? $user['time_offset'] : $site_config['time']['offset'];
-$time_select = "
-            <select name='user_timezone' style='min-width: 400px'>";
-foreach ($TZ as $off => $words) {
-    if (preg_match("/^time_(-?[\d\.]+)$/", $off, $match)) {
-        $time_select .= $match[1] == $offset ? "
-                <option value='{$match[1]}' selected>$words</option>" : "
-                <option value='{$match[1]}'>$words</option>";
-    }
-}
-$time_select .= '
-            </select>';
-if ($user['dst_in_use']) {
-    $dst_check = 'checked';
-} else {
-    $dst_check = '';
-}
-if ($user['auto_correct_dst']) {
-    $dst_correction = 'checked';
-} else {
-    $dst_correction = '';
-}
-$possible_actions = [
-    'avatar',
-    'signature',
-    'social',
-    'location',
-    'security',
-    'links',
-    'torrents',
-    'api',
-    'personal',
-    'default',
-    'reset_torrent_pass',
-    'reset_auth_key',
-    'reset_api_key',
-];
-$session = $container->get(Session::class);
-$action = isset($_GET['action']) ? htmlsafechars($_GET['action']) : 'default';
-if (!in_array($action, $possible_actions)) {
-    $session->set('is-warning', _('Error! Change a few things up and try submitting again.'));
-}
-if (isset($_GET['edited'])) {
-    $session->set('is-success', _('Profile updated!'));
-}
-if ($action === 'reset_torrent_pass') {
-    $update['torrent_pass'] = make_password(32);
-    $user_class = $container->get(User::class);
-    $user_class->update($update, $user['id']);
-    header('Location: ' . $site_config['paths']['baseurl'] . '/usercp.php?action=api');
+$templates = $db->run(');
     app_halt('Exit called');
 }
 if ($action === 'reset_auth_key') {

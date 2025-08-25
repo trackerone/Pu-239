@@ -20,7 +20,8 @@ require_once INCL_DIR . 'function_bbcode.php';
 require_once INCL_DIR . 'function_pager.php';
 require_once CLASS_DIR . 'class_user_options.php';
 $user = check_user_status();
-global $container, $site_config;
+global $container;
+$db = $container->get(Database::class);, $site_config;
 
 $image = placeholder_image();
 $stdhead = [
@@ -39,6 +40,7 @@ if (!$site_config['forum_config']['online'] && !has_access($user['class'], UC_ST
     stderr(_('Information'), _('The forums are currently offline for maintainance work'));
 }
 $HTMLOUT = '';
+$fluent = $db; // alias
 $fluent = $container->get(Database::class);
 $fluent->update('users')
        ->set(['forum_access' => TIME_NOW])
@@ -489,7 +491,7 @@ switch ($action) {
                 if (!empty($last_post_arr) && $last_post_arr['last_post'] > 0) {
                     $last_post_id = $last_post_arr['last_post'];
                     if (($last_read_post_arr = $cache->get('last_read_post_' . $last_post_arr['topic_id'] . '_' . $user['id'])) === false) {
-                        $query = sql_query('SELECT last_post_read FROM read_posts WHERE user_id = ' . sqlesc($user['id']) . ' AND topic_id = ' . sqlesc($last_post_arr['topic_id'])) or sqlerr(__FILE__, __LINE__);
+                        $rows = $db->fetchAll('SELECT last_post_read FROM read_posts WHERE user_id = ' . sqlesc($user['id']) . ' AND topic_id = ' . sqlesc($last_post_arr['topic_id'])) or sqlerr(__FILE__, __LINE__);
                         $last_read_post_arr = mysqli_fetch_row($query);
                         $cache->set('last_read_post_' . $last_post_arr['topic_id'] . '_' . $user['id'], $last_read_post_arr, $site_config['expires']['last_read_post']);
                     }
@@ -654,7 +656,8 @@ function ratingpic_forums($num)
  */
 function insert_quick_jump_menu($current_forum = 0, $staff = false)
 {
-    global $container, $site_config, $user;
+    global $container;
+$db = $container->get(Database::class);, $site_config, $user;
 
     $cache = $container->get(Cache::class);
     $cachename = 'f_insertJumpTo_' . $user['id'] . ($staff ? '' : '_staff' === false);

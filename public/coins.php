@@ -4,6 +4,8 @@ require_once __DIR__ . '/../include/runtime_safe.php';
 
 declare(strict_types = 1);
 
+use Pu239\Database;
+
 use Pu239\Cache;
 use Pu239\Message;
 use Pu239\Session;
@@ -11,7 +13,8 @@ use Pu239\Session;
 require_once __DIR__ . '/../include/bittorrent.php';
 require_once INCL_DIR . 'function_users.php';
 $user = check_user_status();
-global $container, $site_config;
+global $container;
+$db = $container->get(Database::class);, $site_config;
 
 $id = (int) $_GET['id'];
 $points = (int) $_GET['points'];
@@ -35,34 +38,10 @@ if (!in_array($points, $pointscangive)) {
     header("Location: $returnto");
     app_halt('Exit called');
 }
-$sdsa = sql_query('SELECT 1 FROM coins WHERE torrentid = ' . sqlesc($id) . ' AND userid =' . sqlesc($user['id'])) or sqlerr(__FILE__, __LINE__);
-$asdd = mysqli_fetch_assoc($sdsa);
-if ($asdd) {
-    $session->set('is-warning', _('You already gave points to this torrent.'));
-    header("Location: $returnto");
-    app_halt('Exit called');
-}
-$res = sql_query('SELECT owner,name,points FROM torrents WHERE id=' . sqlesc($id)) or sqlerr(__FILE__, __LINE__);
-$row = mysqli_fetch_assoc($res) or stderr(_('Error'), _('Torrent was not found'));
-$userid = (int) $row['owner'];
-if ($userid == $user['id']) {
-    $session->set('is-warning', _("You can't give your self points!"));
-    header("Location: $returnto");
-    app_halt('Exit called');
-}
-if ($user['seedbonus'] < $points) {
-    $session->set('is-warning', _("You don't have enough points for that!"));
-    header("Location: $returnto");
-    app_halt('Exit called');
-}
-$sql = sql_query('SELECT seedbonus FROM users WHERE id=' . sqlesc($userid)) or sqlerr(__FILE__, __LINE__);
-$User = mysqli_fetch_assoc($sql);
-sql_query('INSERT INTO coins (userid, torrentid, points) VALUES (' . sqlesc($user['id']) . ', ' . sqlesc($id) . ', ' . sqlesc($points) . ')') or sqlerr(__FILE__, __LINE__);
-sql_query('UPDATE users SET seedbonus=seedbonus+' . sqlesc($points) . ' WHERE id=' . sqlesc($userid)) or sqlerr(__FILE__, __LINE__);
-sql_query('UPDATE users SET seedbonus=seedbonus-' . sqlesc($points) . ' WHERE id=' . sqlesc($user['id'])) or sqlerr(__FILE__, __LINE__);
-sql_query('UPDATE torrents SET points=points+' . sqlesc($points) . ' WHERE id=' . sqlesc($id)) or sqlerr(__FILE__, __LINE__);
-$msg = _('You have been given') . " $points " . _('points by') . ' ' . $user['username'] . ' ' . _('for torrent') . ' [url=' . $site_config['paths']['baseurl'] . '/details.php?id=' . $id . ']' . htmlsafechars($row['name']) . '[/url].';
-$subject = _('You have been given.gift');
+$sdsa = $db->run(');
+$db->run('UPDATE users SET seedbonus=seedbonus+' . sqlesc($points) . ' WHERE id = :id', [':id' => $userid]) or sqlerr(__FILE__, __LINE__);
+$db->run('UPDATE users SET seedbonus=seedbonus-' . sqlesc($points) . ' WHERE id=' . sqlesc($user['id'])) or sqlerr(__FILE__, __LINE__);
+$db->run(');
 $msgs_buffer[] = [
     'receiver' => $userid,
     'added' => $dt,

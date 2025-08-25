@@ -4,6 +4,8 @@ require_once __DIR__ . '/../include/runtime_safe.php';
 
 declare(strict_types = 1);
 
+use Pu239\Database;
+
 require_once __DIR__ . '/../include/bittorrent.php';
 require_once INCL_DIR . 'function_users.php';
 require_once INCL_DIR . 'function_html.php';
@@ -14,11 +16,11 @@ global $site_config;
 $HTMLOUT = '';
 stderr(_('Error'), _('This page is not complete.'));
 $dt = TIME_NOW;
-$res = sql_query('
+$rows = $db->fetchAll('
         SELECT u.id, u.curr_ann_id, u.curr_ann_last_check, u.last_access, ann_main.subject AS curr_ann_subject, ann_main.body AS curr_ann_body
         FROM users AS u
         LEFT JOIN announcement_main AS ann_main ON ann_main.main_id = u.curr_ann_id
-        WHERE u.id = ' . sqlesc($user['id']) . ' AND u.status = 0') or sqlerr(__FILE__, __LINE__);
+        WHERE u.id = ' . sqlesc($user['id']) . ' AND u.status = 0');
 $row = mysqli_fetch_assoc($res);
 if (($row['curr_ann_id'] > 0) && ($row['curr_ann_body'] == null)) {
     $row['curr_ann_id'] = 0;

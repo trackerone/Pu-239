@@ -4,6 +4,8 @@ require_once __DIR__ . '/../../include/runtime_safe.php';
 
 declare(strict_types = 1);
 
+use Pu239\Database;
+
 use DI\DependencyException;
 use DI\NotFoundException;
 use Pu239\Cache;
@@ -12,6 +14,7 @@ require_once __DIR__ . '/../../include/bittorrent.php';
 require_once INCL_DIR . 'function_users.php';
 $user = check_user_status();
 global $container;
+$db = $container->get(Database::class);;
 
 if (empty($_POST)) {
     stderr(_('Error'), _('Access Not Allowed'));
@@ -119,7 +122,7 @@ switch ($do) {
             $result = sql_query($c);
             $arr = $result->fetch_row();
             if ($arr[0] == 0) {
-                if (sql_query('INSERT INTO thanks(userid,torrentid) VALUES(' . sqlesc($uid) . ',' . sqlesc($tid) . ')')) {
+                if ($db->run('INSERT INTO thanks (userid,torrentid) VALUES (' . sqlesc($uid) . ',' . sqlesc($tid) . ')')) {
                     echo print_list($uid, $tid, $ajax);
                 } else {
                     $msg = 'There was an error with the query,contact the staff. Mysql error ' . ((is_object($mysqli)) ? mysqli_error($mysqli) : (($___mysqli_res = mysqli_connect_error()) ? $___mysqli_res : false));
@@ -131,7 +134,7 @@ switch ($do) {
             }
         }
         if ($site_config['bonus']['on']) {
-            sql_query('UPDATE users SET seedbonus = seedbonus + ' . sqlesc($site_config['bonus']['per_thanks']) . ' WHERE id =' . sqlesc($uid)) or sqlerr(__FILE__, __LINE__);
+            $db->run('UPDATE users SET seedbonus = seedbonus + ' . sqlesc($site_config['bonus']['per_thanks']) . ' WHERE id = :id', [':id' => $uid]) or sqlerr(__FILE__, __LINE__);
             $sql = sql_query('SELECT seedbonus FROM users WHERE id=' . sqlesc($uid)) or sqlerr(__FILE__, __LINE__);
             $User = mysqli_fetch_assoc($sql);
             $update['seedbonus'] = ($User['seedbonus'] + $site_config['bonus']['per_thanks']);

@@ -10,8 +10,10 @@ require_once __DIR__ . '/../include/bittorrent.php';
 require_once INCL_DIR . 'function_users.php';
 require_once INCL_DIR . 'function_html.php';
 check_user_status();
-global $container, $site_config;
+global $container;
+$db = $container->get(Database::class);, $site_config;
 
+$fluent = $db; // alias
 $fluent = $container->get(Database::class);
 
 $HTMLOUT = '';

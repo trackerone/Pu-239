@@ -6,12 +6,15 @@ require_once __DIR__ . '/../../include/bootstrap_pdo.php';
 
 declare(strict_types = 1);
 
+use Pu239\Database;
+
 use Pu239\Cache;
 
 require_once __DIR__ . '/../../include/bittorrent.php';
 require_once INCL_DIR . 'function_users.php';
 $user = check_user_status();
 global $container;
+$db = $container->get(Database::class);;
 
 if (empty($_POST)) {
     return null;
@@ -23,16 +26,7 @@ $uid = $user['id'];
 $ajax = isset($_POST['ajax']) && $_POST['ajax'] == 1 ? true : false;
 $what = isset($_POST['what']) && $_POST['what'] === 'torrent' ? 'torrent' : 'topic';
 $ref = isset($_POST['ref']) ? $_POST['ref'] : ($what === 'torrent' ? 'details.php' : 'forums/view_topic.php');
-$completeres = sql_query('SELECT * FROM snatched WHERE complete_date != 0 AND userid = ' . $user['id'] . ' AND torrentid = ' . $id) or sqlerr(__FILE__, __LINE__);
-$completecount = mysqli_num_rows($completeres);
-if ($what === 'torrent' && $completecount == 0) {
-    return false;
-}
-
-if ($id > 0 && $rate >= 1 && $rate <= 5) {
-    $cache = $container->get(Cache::class);
-    if (sql_query('INSERT INTO rating(' . $what . ',rating, user) VALUES (' . sqlesc($id) . ',' . sqlesc($rate) . ',' . sqlesc($uid) . ')')) {
-        $table = ($what === 'torrent' ? 'torrents' : 'topics');
+$completeres = $db->run(');
         sql_query('UPDATE ' . $table . ' SET num_ratings = num_ratings + 1, rating_sum = rating_sum+' . sqlesc($rate) . ' WHERE id=' . sqlesc($id));
         $cache->delete('rating_' . $what . '_' . $id . '_' . $user['id']);
         if ($what === 'torrent') {

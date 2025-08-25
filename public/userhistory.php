@@ -6,6 +6,8 @@ require_once __DIR__ . '/../include/bootstrap_pdo.php';
 
 declare(strict_types = 1);
 
+use Pu239\Database;
+
 use Pu239\User;
 
 require_once __DIR__ . '/../include/bittorrent.php';
@@ -14,7 +16,8 @@ require_once INCL_DIR . 'function_bbcode.php';
 require_once INCL_DIR . 'function_pager.php';
 require_once INCL_DIR . 'function_html.php';
 $curuser = check_user_status();
-global $container, $site_config, $curuser;
+global $container;
+$db = $container->get(Database::class);, $site_config, $curuser;
 
 $userid = !empty($_GET['id']) ? (int) $_GET['id'] : $curuser['id'];
 if ($userid != $curuser['id']) {
@@ -50,14 +53,14 @@ if ($action === 'viewposts') {
     $select_is = 'f.id AS f_id, f.name, t.id AS t_id, t.topic_name, t.last_post, r.last_post_read, p.*';
     $query = "SELECT $select_is FROM $from_is WHERE $where_is ORDER BY $order_is {$pager['limit']}";
     $res = sql_query($query) or sqlerr(__FILE__, __LINE__);
-    if (mysqli_num_rows($res) == 0) {
+    if (empty($rows)) {
         stderr(_('Error'), _('No posts found'));
     }
     $HTMLOUT .= "<h1 class='has-text-centered'>" . _('Post history for') . " $subject</h1>\n";
     if ($postcount > $perpage) {
         $HTMLOUT .= $pager['pagertop'];
     }
-    while ($arr = mysqli_fetch_assoc($res)) {
+    foreach ($rows as $arr) {
         $postid = (int) $arr['id'];
         $posterid = (int) $arr['user_id'];
         $topicid = (int) $arr['t_id'];
@@ -125,7 +128,7 @@ if ($action === 'viewposts') {
     $select_is = 't.name, c.torrent AS t_id, c.id, c.added, c.text';
     $query = "SELECT $select_is FROM $from_is WHERE $where_is ORDER BY $order_is {$pager['limit']}";
     $res = sql_query($query) or sqlerr(__FILE__, __LINE__);
-    if (mysqli_num_rows($res) == 0) {
+    if (empty($rows)) {
         stderr(_('Error'), _('No comments found'));
     }
     $HTMLOUT .= "<h1 class='has-text-centered'>" . _('Comments history for') . " $subject</h1>\n";
@@ -133,7 +136,7 @@ if ($action === 'viewposts') {
         $HTMLOUT .= $pager['pagertop'];
     }
 
-    while ($arr = mysqli_fetch_assoc($res)) {
+    foreach ($rows as $arr) {
         $commentid = (int) $arr['id'];
         $torrent = !empty($arr['name']) ? format_comment($arr['name']) : '';
         if (strlen($torrent) > 55) {

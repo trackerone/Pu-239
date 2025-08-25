@@ -91,17 +91,14 @@ $top_links = '
     </div>';
 
 global $container;
+$db = $container->get(Database::class);;
 
 $cache = $container->get(Cache::class);
+$fluent = $db; // alias
 $fluent = $container->get(Database::class);
 if (isset($_GET['change_pm_number'])) {
     $change_pm_number = (isset($_GET['change_pm_number']) ? (int) $_GET['change_pm_number'] : 20);
-    sql_query('UPDATE users SET pms_per_page = ' . sqlesc($change_pm_number) . ' WHERE id=' . sqlesc($user['id'])) or sqlerr(__FILE__, __LINE__);
-    $cache->update_row('user_' . $user['id'], [
-        'pms_per_page' => $change_pm_number,
-    ], $site_config['expires']['user_cache']);
-    if (isset($_GET['edit_mail_boxes'])) {
-        header('Location: ' . $_SERVER['PHP_SELF'] . '?action=edit_mailboxes&pm=1');
+    $db->run(');
     } else {
         header('Location: ' . $_SERVER['PHP_SELF'] . '?action=view_mailbox&pm=1&box=' . $mailbox);
     }
@@ -208,7 +205,8 @@ switch ($action) {
  */
 function get_all_boxes(int $box, int $userid)
 {
-    global $container, $site_config;
+    global $container;
+$db = $container->get(Database::class);, $site_config;
 
     $cache = $container->get(Cache::class);
     $get_all_boxes = $cache->get('get_all_boxes_' . $userid);
@@ -257,13 +255,14 @@ function get_all_boxes(int $box, int $userid)
  */
 function insertJumpTo(int $mailbox, int $userid)
 {
-    global $container, $site_config;
+    global $container;
+$db = $container->get(Database::class);, $site_config;
 
     $cache = $container->get(Cache::class);
     $cache->delete('insertJumpTo_' . $userid);
     $insertJumpTo = $cache->get('insertJumpTo_' . $userid);
     if ($insertJumpTo === false || is_null($insertJumpTo)) {
-        $res = sql_query('SELECT boxnumber,name FROM pmboxes WHERE userid=' . sqlesc($userid) . ' ORDER BY boxnumber') or sqlerr(__FILE__, __LINE__);
+        $rows = $db->fetchAll('SELECT boxnumber,name FROM pmboxes WHERE userid=' . sqlesc($userid) . ' ORDER BY boxnumber');
         $insertJumpTo = '
             <div class="has-text-centered">
                 <form action="messages.php" method="get" accept-charset="utf-8">

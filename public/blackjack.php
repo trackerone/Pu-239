@@ -4,6 +4,8 @@ require_once __DIR__ . '/../include/runtime_safe.php';
 
 declare(strict_types = 1);
 
+use Pu239\Database;
+
 use DI\DependencyException;
 use DI\NotFoundException;
 use Pu239\Cache;
@@ -14,7 +16,8 @@ require_once __DIR__ . '/../include/bittorrent.php';
 require_once INCL_DIR . 'function_users.php';
 require_once INCL_DIR . 'function_html.php';
 $user = check_user_status();
-global $container, $site_config;
+global $container;
+$db = $container->get(Database::class);, $site_config;
 
 $HTMLOUT = $debugout = '';
 if ($user['class'] < $site_config['allowed']['play']) {
@@ -1088,6 +1091,7 @@ if ($game) {
 function getCardData($cardid)
 {
     global $container;
+$db = $container->get(Database::class);;
 
     $cache = $container->get(Cache::class);
     $card = $cache->get('card_data_' . $cardid);

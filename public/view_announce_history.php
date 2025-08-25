@@ -13,11 +13,13 @@ require_once INCL_DIR . 'function_users.php';
 require_once INCL_DIR . 'function_html.php';
 require_once INCL_DIR . 'function_bbcode.php';
 $user = check_user_status();
-global $container, $site_config;
+global $container;
+$db = $container->get(Database::class);, $site_config;
 
 stderr(_('Error'), 'This page is not completed.');
 $action = isset($_GET['action']) ? htmlsafechars($_GET['action']) : '';
 $HTMLOUT = "<h2><span class='size_6'>" . _('Announcement History') . '</span></h2>';
+$fluent = $db; // alias
 $fluent = $container->get(Database::class);
 $query1 = sprintf('SELECT m.main_id, m.subject, m.body
             FROM announcement_main AS m 

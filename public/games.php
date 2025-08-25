@@ -12,7 +12,8 @@ require_once __DIR__ . '/../include/bittorrent.php';
 require_once INCL_DIR . 'function_users.php';
 require_once INCL_DIR . 'function_html.php';
 $user = check_user_status();
-global $container, $site_config;
+global $container;
+$db = $container->get(Database::class);, $site_config;
 
 $HTMLOUT = '';
 if ($user['class'] < $site_config['allowed']['play']) {
@@ -32,6 +33,7 @@ while ($count = mysqli_fetch_array($res)) {
 }
 
 // Casino
+$fluent = $db; // alias
 $fluent = $container->get(Database::class);
 $casino_count = $fluent->from('casino')
                        ->select(null)

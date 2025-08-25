@@ -15,7 +15,8 @@ require_once __DIR__ . '/../include/bittorrent.php';
 require_once INCL_DIR . 'function_users.php';
 require_once INCL_DIR . 'function_html.php';
 $user = check_user_status();
-global $container, $site_config;
+global $container;
+$db = $container->get(Database::class);, $site_config;
 
 if ($user['class'] < UC_STAFF) {
     stderr(_('Error'), _('You do not have permission to do this.'));
@@ -26,6 +27,7 @@ if (!isset($_GET['id']) || !is_valid_id((int) $_GET['id'])) {
 }
 
 $id = (int) $_GET['id'];
+$fluent = $db; // alias
 $fluent = $container->get(Database::class);
 $tid = $fluent->from('torrents AS t')
               ->select(null)

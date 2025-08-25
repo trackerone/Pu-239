@@ -4,12 +4,15 @@ require_once __DIR__ . '/../include/runtime_safe.php';
 
 declare(strict_types = 1);
 
+use Pu239\Database;
+
 use Pu239\Cache;
 
 require_once __DIR__ . '/../include/bittorrent.php';
 require_once INCL_DIR . 'function_html.php';
 $user = check_user_status();
-global $container, $site_config;
+global $container;
+$db = $container->get(Database::class);, $site_config;
 $HTMLOUT = '';
 
 if (!isset($user['id'])) {
@@ -18,15 +21,7 @@ if (!isset($user['id'])) {
 $more = $user['perms'] & UNLOCK_MORE_MOODS ? 2 : 1;
 if (isset($_GET['id'])) {
     $moodid = (isset($_GET['id']) ? (int) $_GET['id'] : 1);
-    $res_moods = sql_query('SELECT * FROM moods WHERE bonus < ' . sqlesc($more) . ' AND id=' . sqlesc($moodid)) or sqlerr(__FILE__, __LINE__);
-    if (mysqli_num_rows($res_moods)) {
-        $rmood = mysqli_fetch_assoc($res_moods);
-        sql_query('UPDATE users SET mood = ' . sqlesc($moodid) . ' WHERE id=' . sqlesc($user['id'])) or sqlerr(__FILE__, __LINE__);
-        $cache = $container->get(Cache::class);
-        $cache->update_row('user_' . $user['id'], [
-            'mood' => $moodid,
-        ], $site_config['expires']['user_cache']);
-        $cache->delete('topmoods');
+    $res_moods = $db->run(');
         write_log('<b>' . _('Mood Change') . '</b> ' . $user['username'] . ' ' . htmlsafechars($rmood['name']) . '<img src="' . $site_config['paths']['images_baseurl'] . 'smilies/' . htmlsafechars($rmood['image']) . '" alt="">');
         $HTMLOUT = doc_head(_('moods')) . "
         <link rel='stylesheet' href='" . get_file_name('vendor_css') . "'>
@@ -61,9 +56,9 @@ $body = '
 $div = '
     <h3 class="has-text-centered has-text-primary top20">' . _fe("{0}'s Mood", $user['username']) . '</h3>
     <div class="level-center bottom20">';
-$res = sql_query('SELECT * FROM moods WHERE bonus < ' . sqlesc($more) . ' ORDER BY id') or sqlerr(__FILE__, __LINE__);
+$rows = $db->fetchAll('SELECT * FROM moods WHERE bonus < ' . sqlesc($more) . ' ORDER BY id');
 $count = 0;
-while ($arr = mysqli_fetch_assoc($res)) {
+foreach ($rows as $arr) {
     $div .= '
         <span class="margin10 bordered has-text-centered bg-04">
             <a href="?id=' . (int) $arr['id'] . '">

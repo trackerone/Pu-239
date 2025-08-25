@@ -4,6 +4,8 @@ require_once __DIR__ . '/../include/runtime_safe.php';
 
 declare(strict_types = 1);
 
+use Pu239\Database;
+
 use Pu239\Cache;
 
 require_once __DIR__ . '/../include/bittorrent.php';
@@ -11,7 +13,8 @@ require_once INCL_DIR . 'function_html.php';
 require_once INCL_DIR . 'function_users.php';
 require_once CLASS_DIR . 'class_user_options_2.php';
 $user = check_user_status();
-global $container, $site_config;
+global $container;
+$db = $container->get(Database::class);, $site_config;
 
 $id = (isset($_GET['id']) ? $_GET['id'] : $user['id']);
 if (!is_valid_id($id) || $user['class'] < UC_STAFF) {
@@ -38,11 +41,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
     if ($setbits || $clrbits) {
-        sql_query('UPDATE users SET perms = ((perms | ' . $setbits . ') & ~' . $clrbits . ') 
-                 WHERE id=' . sqlesc($id)) or sqlerr(__FILE__, __LINE__);
+        $db->run('UPDATE users SET perms = ((perms | ' . $setbits . ') & ~' . $clrbits . ') WHERE id = :id', [':id' => $id]) or sqlerr(__FILE__, __LINE__);
     }
     // grab current data
-    $res = sql_query('SELECT perms FROM users
+    $rows = $db->fetchAll('SELECT perms FROM users
                      WHERE id=' . sqlesc($id)) or sqlerr(__FILE__, __LINE__);
     $row = mysqli_fetch_assoc($res);
     $row['perms'] = (int) $row['perms'];

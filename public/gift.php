@@ -6,12 +6,15 @@ require_once __DIR__ . '/../include/bootstrap_pdo.php';
 
 declare(strict_types = 1);
 
+use Pu239\Database;
+
 use Pu239\Cache;
 
 require_once __DIR__ . '/../include/bittorrent.php';
 require_once INCL_DIR . 'function_users.php';
 $user = check_user_status();
-global $container, $site_config;
+global $container;
+$db = $container->get(Database::class);, $site_config;
 
 $Christmasday = mktime(0, 0, 0, 12, 25, (int) date('Y'));
 $dayafter = mktime(0, 0, 0, 12, 26, (int) date('Y'));
@@ -32,24 +35,7 @@ $open = isset($_GET['open']) ? (int) $_GET['open'] : 0;
 if ($open != 1) {
     stderr(_('Error'), 'Invalid url', 'bottom20');
 }
-$sql = sql_query('SELECT seedbonus, invites, freeslots, uploaded FROM users WHERE id=' . sqlesc($userid)) or sqlerr(__FILE__, __LINE__);
-$User = mysqli_fetch_assoc($sql);
-if (isset($open) && $open == 1) {
-    if ($today >= $Christmasday && $today <= $dayafter) {
-        $cache = $container->get(Cache::class);
-        if ($user['gotgift'] === 'no') {
-            if ($gift === 'upload') {
-                sql_query("UPDATE users SET invites=invites+1, uploaded=uploaded+1024*1024*1024*10, freeslots=freeslots+1, gotgift='yes' WHERE id=" . sqlesc($userid)) or sqlerr(__FILE__, __LINE__);
-                $update['invites'] = ($User['invites'] + 1);
-                $update['uploaded'] = ($User['uploaded'] + 1024 * 1024 * 1024 * 10);
-                $update['freeslots'] = ($User['freeslots'] + 1);
-                $cache->update_row('user_' . $userid, [
-                    'invites' => $update['invites'],
-                    'freeslots' => $update['freeslots'],
-                    'gotgift' => 'yes',
-                    'uploaded' => $update['uploaded'],
-                ], $site_config['expires']['user_cache']);
-                header('Refresh: 5; url=' . $site_config['paths']['baseurl'] . '/index.php');
+$sql = $db->run(');
                 stderr(_('Congratulations!'), "<img src='{$site_config['paths']['images_baseurl']}gift.png' alt='" . _('Christmas Gift') . "' title='" . _('Christmas Gift') . "'><h2>" . _('You just got 1 invite , 10 GB upload and 1 bonus freeslot!') . '</h2>' . _fe('Thanks for your support and sharing through year {0}!<br>Merry Christmas and a Happy New Year from the {1} staff.<br>Redirecting in 5..4..3..2..1', date('Y'), $site_config['site']['name']), 'bottom20');
             }
             if ($gift === 'bonus') {

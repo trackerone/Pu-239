@@ -18,7 +18,8 @@ require_once INCL_DIR . 'function_html.php';
 require_once INCL_DIR . 'function_bbcode.php';
 require_once INCL_DIR . 'function_comments.php';
 $user = check_user_status();
-global $container, $site_config;
+global $container;
+$db = $container->get(Database::class);, $site_config;
 
 $comments = $container->get(Comment::class);
 $user_class = $container->get(User::class);
@@ -77,7 +78,7 @@ if ($action === 'add') {
         if (!is_valid_id($id)) {
             stderr(_('Error'), _('Invalid ID'));
         }
-        $res = sql_query("SELECT $sql_1 WHERE id = " . sqlesc($id)) or sqlerr(__FILE__, __LINE__);
+        $rows = $db->fetchAll("SELECT $sql_1 WHERE id = " . sqlesc($id)) or sqlerr(__FILE__, __LINE__);
         $arr = mysqli_fetch_array($res);
         if (!$arr) {
             stderr(_('Error'), _fe('No {0} with that ID.', $locale));
@@ -102,46 +103,20 @@ if ($action === 'add') {
             'ori_text' => $body,
             'anonymous' => $anon,
         ];
-        $fluent = $container->get(Database::class);
+        $fluent = $db; // alias
+$fluent = $container->get(Database::class);
         $newid = $fluent->insertInto('comments')
                         ->values($values)
                         ->execute();
 
-        sql_query("UPDATE $table_type SET comments = comments + 1 WHERE id = " . sqlesc($id)) or sqlerr(__FILE__, __LINE__);
-        $cache->delete('latest_comments_');
-        if ($site_config['bonus']['on']) {
-            $update = [
-                'seedbonus' => $user['seedbonus'] + $site_config['bonus']['per_comment'],
-            ];
-            $user_class->update($update, $user['id']);
-            $torrent_comments = $torrents->get_items(['comments'], $id);
-            $update = [
-                'comments' => $torrent_comments + 1,
-            ];
-            $torrents->update($update, $id);
-        }
-        $cpm_r = $user_class->get_item('commentpm', $owner);
-        if ($cpm_r === 'yes') {
-            $dt = TIME_NOW;
-            $subby = 'Someone has left a comment';
-            $msg = _fe('You have received a comment on your torrent {0}{1}{2}.', "[url={$site_config['paths']['baseurl']}/details.php?id={$id}]", htmlsafechars($arr['name']), '[/url]');
-            $msgs_buffer[] = [
-                'receiver' => $arr['owner'],
-                'added' => $dt,
-                'msg' => $msg,
-                'subject' => $subject,
-            ];
-            $messages_class->insert($msgs_buffer);
-        }
-        $session->set('is-success', _('Your comment has been posted'));
-        header("Refresh: 0; url=$locale_link.php?id=$id$extra_link&viewcomm=$newid#comm$newid");
+        $db->run(");
         app_halt('Exit called');
     }
     $id = isset($_GET['tid']) ? (int) $_GET['tid'] : 0;
     if (!is_valid_id($id)) {
         stderr(_('Error'), _('Invalid ID'));
     }
-    $res = sql_query("SELECT $sql_1 WHERE id = " . sqlesc($id)) or sqlerr(__FILE__, __LINE__);
+    $rows = $db->fetchAll("SELECT $sql_1 WHERE id = " . sqlesc($id)) or sqlerr(__FILE__, __LINE__);
     $arr = mysqli_fetch_assoc($res);
     if (!$arr) {
         stderr(_('Error'), _fe('No {0} with that ID.', $locale));
@@ -189,37 +164,7 @@ if ($action === 'add') {
     if (!is_valid_id($commentid)) {
         stderr(_('Error'), _('Invalid ID'));
     }
-    $res = sql_query("SELECT c.*, t.$name, t.id as tid FROM comments AS c LEFT JOIN $table_type AS t ON c.$locale = t.id WHERE c.id=" . sqlesc($commentid)) or sqlerr(__FILE__, __LINE__);
-    $arr = mysqli_fetch_assoc($res);
-    if (!$arr) {
-        stderr(_('Error'), _('Invalid ID'));
-    }
-    if ($arr['user'] != $user['id'] && $user['class'] < UC_STAFF) {
-        stderr(_('Error'), _('Permission denied.'));
-    }
-    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-        $body = isset($_POST['body']) ? $_POST['body'] : '';
-        if ($body == '') {
-            stderr(_('Error'), _('Comment body cannot be empty!'));
-        }
-        $text = htmlsafechars($body);
-        if (isset($_POST['lasteditedby']) || $user['class'] < UC_STAFF) {
-            $update = [
-                'text' => $text,
-                'editedat' => TIME_NOW,
-                'editedby' => $user['id'],
-            ];
-            $comments->update($update, $commentid);
-        } else {
-            $update = [
-                'text' => $text,
-                'editedat' => TIME_NOW,
-                'editedby' => 2,
-            ];
-            $comments->update($update, $commentid);
-        }
-        $session->set('is-success', _('The comment has been updated'));
-        header("Refresh: 0; url=$locale_link.php?id=" . (int) $arr['tid'] . "$extra_link&viewcomm=$commentid#comm$commentid");
+    $res = $db->run(");
         app_halt('Exit called');
     }
     $HTMLOUT = '';
@@ -254,7 +199,7 @@ if ($action === 'add') {
         stderr(_('Delete comment'), _('You are about to delete a comment. Click') . " <a href='{$_SERVER['PHP_SELF']}?action=delete&amp;cid=$commentid&amp;tid=$tid&amp;sure=1" . ($locale === 'request' ? '&amp;type=request' : '') . "'>
           <span class='has-text-success'>" . _('here') . '</span></a> ' . _('if you are sure.'));
     }
-    $res = sql_query("SELECT $locale FROM comments WHERE id = " . sqlesc($commentid)) or sqlerr(__FILE__, __LINE__);
+    $rows = $db->fetchAll("SELECT $locale FROM comments WHERE id = " . sqlesc($commentid)) or sqlerr(__FILE__, __LINE__);
     $arr = mysqli_fetch_assoc($res);
     $id = 0;
     if ($arr) {
@@ -262,21 +207,7 @@ if ($action === 'add') {
     }
     $deleted = $comments->delete($commentid);
     if ($id && $deleted) {
-        sql_query("UPDATE $table_type SET comments = comments - 1 WHERE id=" . sqlesc($id));
-    }
-    if ($site_config['bonus']['on']) {
-        $torrent_comments = $torrents->get_items(['comments'], $tid);
-        $update = [
-            'seedbonus' => $user['seedbonus'] - $site_config['bonus']['per_comment'],
-        ];
-        $user_class->update($update, $user['id']);
-        $update = [
-            'comments' => $torrent_comments > 0 ? $torrent_comments - 1 : 0,
-        ];
-        $torrents->update($update, $id);
-    }
-    $session->set('is-success', _('The comment has been deleted'));
-    header("Refresh: 0; url=$locale_link.php?id=$tid$extra_link");
+        $db->run(");
     app_halt('Exit called');
 } elseif ($action === 'vieworiginal') {
     if ($user['class'] < UC_STAFF) {
@@ -286,7 +217,7 @@ if ($action === 'add') {
     if (!is_valid_id($commentid)) {
         stderr(_('Error'), _('Invalid ID'));
     }
-    $res = sql_query("SELECT c.*, t.$name FROM comments AS c LEFT JOIN $table_type AS t ON c.$locale = t.id WHERE c.id=" . sqlesc($commentid)) or sqlerr(__FILE__, __LINE__);
+    $rows = $db->fetchAll("SELECT c.*, t.$name FROM comments AS c LEFT JOIN $table_type AS t ON c.$locale = t.id WHERE c.id=" . sqlesc($commentid)) or sqlerr(__FILE__, __LINE__);
     $arr = mysqli_fetch_assoc($res);
     if (!$arr) {
         stderr(_('Error'), _('Invalid ID') . " $commentid.");

@@ -4,6 +4,8 @@ require_once __DIR__ . '/../include/runtime_safe.php';
 
 declare(strict_types = 1);
 
+use Pu239\Database;
+
 use Pu239\Cache;
 use Pu239\Session;
 use Pu239\Torrent;
@@ -12,7 +14,8 @@ require_once __DIR__ . '/../include/bittorrent.php';
 require_once INCL_DIR . 'function_users.php';
 require_once INCL_DIR . 'function_html.php';
 $user = check_user_status();
-global $container, $site_config;
+global $container;
+$db = $container->get(Database::class);, $site_config;
 
 $torrent_cache = $torrent_txt_cache = '';
 $possible_extensions = [
@@ -45,22 +48,7 @@ function valid_torrent_name($torrent_name)
 }
 
 $nfoaction = '';
-$select_torrent = sql_query('SELECT name, title, descr, isbn, category, visible, vip, release_group, poster, url, newgenre, description, anonymous, sticky, owner, allow_comments, nuked, nukereason, filename, save_as, youtube, tags, info_hash, freetorrent FROM torrents WHERE id = ' . sqlesc($id)) or sqlerr(__FILE__, __LINE__);
-$fetch_assoc = mysqli_fetch_assoc($select_torrent) or stderr(_('Error'), 'No torrent with this ID!');
-$infohash = $fetch_assoc['info_hash'];
-if ($user['id'] != $fetch_assoc['owner'] && !has_access($user['class'], UC_STAFF, 'torrent_mod')) {
-    $session->set('is-danger', "You're not the owner of this torrent.");
-    header("Location: {$_SERVER['HTTP_REFERER']}");
-    app_halt('Exit called');
-}
-$updateset = $torrent_cache = $torrent_txt_cache = [];
-$fname = $fetch_assoc['filename'];
-preg_match('/^(.+)\.torrent$/si', $fname, $matches);
-$shortfname = $matches[1];
-$dname = $fetch_assoc['save_as'];
-if ((isset($_POST['nfoaction'])) && ($_POST['nfoaction'] === 'update')) {
-    if (empty($_FILES['nfo']['name'])) {
-        $session->set('is-warning', 'No NFO!');
+$select_torrent = $db->run(');
         header("Location: {$_SERVER['HTTP_REFERER']}");
         app_halt('Exit called');
     }
@@ -170,23 +158,7 @@ if (in_array($category, $site_config['categories']['movie']) || in_array($catego
 if (($sticky = (!empty($_POST['sticky']) ? 'yes' : 'no')) != $fetch_assoc['sticky']) {
     $updateset[] = 'sticky = ' . sqlesc($sticky);
     if ($sticky === 'yes') {
-        sql_query('UPDATE usersachiev SET stickyup = stickyup + 1 WHERE userid = ' . sqlesc($fetch_assoc['owner'])) or sqlerr(__FILE__, __LINE__);
-    }
-}
-
-if (isset($_POST['nuked']) && ($nuked = $_POST['nuked']) != $fetch_assoc['nuked']) {
-    $updateset[] = 'nuked = ' . sqlesc($nuked);
-    $torrent_cache['nuked'] = $nuked;
-}
-
-if (isset($_POST['nukereason']) && ($nukereason = $_POST['nukereason']) != $fetch_assoc['nukereason']) {
-    $updateset[] = 'nukereason = ' . sqlesc($nukereason);
-    $torrent_cache['nukereason'] = $nukereason;
-}
-
-if (!empty($_POST['poster']) && (($poster = $_POST['poster']) != $fetch_assoc['poster'])) {
-    if (!preg_match("/^(http|https):\/\/[^\s'\"<>]+$/i", $poster)) {
-        $session->set('is-warning', 'Make sure you include http(s):// in the URL.');
+        $db->run(');
         header("Location: {$_SERVER['HTTP_REFERER']}");
         app_halt('Exit called');
     }

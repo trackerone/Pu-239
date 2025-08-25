@@ -13,7 +13,8 @@ require_once INCL_DIR . 'function_users.php';
 require_once INCL_DIR . 'function_html.php';
 require_once INCL_DIR . 'function_password.php';
 $user = check_user_status();
-global $container, $site_config;
+global $container;
+$db = $container->get(Database::class);, $site_config;
 
 $stdfoot = [
     'js' => [
@@ -35,6 +36,7 @@ if ($user['status'] === 5) {
     stderr(_('Error'), _('Your account is suspended'));
 }
 
+$fluent = $db; // alias
 $fluent = $container->get(Database::class);
 $cache = $container->get(Cache::class);
 if ($do === 'view_page') {
@@ -87,67 +89,7 @@ if ($do === 'view_page') {
 
     $HTMLOUT .= main_table($body, $heading);
     $body = $heading = '';
-    $select = sql_query('SELECT * FROM invite_codes WHERE sender = ' . sqlesc($user['id']) . " AND status = 'Pending'") or sqlerr(__FILE__, __LINE__);
-    $num_row = mysqli_num_rows($select);
-    $HTMLOUT .= "<h1 class='has-text-centered top20'>" . _('Created Invite Codes') . '</h1>';
-    if (!$num_row) {
-        $body .= "
-                    <tr>
-                        <td><div class='padding20'>" . _('You have not created any invite codes!') . '</div></td>
-                    </tr>';
-    } else {
-        $body .= "
-                    <tr>
-                        <td class='level-item'>" . _('Send Invite Code') . "</td>
-                        <td class='has-text-centered'>" . _('Sent To') . "</td>
-                        <td class='has-text-centered'>" . _('Created Date') . "</td>
-                        <td class='has-text-centered'>" . _('Tools') . "</td>
-                        <td class='has-text-centered'>" . _('Status') . '</td>
-                    </tr>';
-        for ($i = 0; $i < $num_row; ++$i) {
-            $fetch_assoc = mysqli_fetch_assoc($select);
-            $secret = (int) $fetch_assoc['id'];
-            $invite = $fetch_assoc['code'];
-            $can_send_it = empty($fetch_assoc['email']) ? "
-                            <a href='{$site_config['paths']['baseurl']}/invite.php?do=send_email&amp;id={$secret}' class='tooltipper' title='" . _('Send Email') . "'>
-                                <i class='icon-mail-alt' aria-hidden='true'></i>" . htmlsafechars($fetch_assoc['code']) . '
-                            </a>' : "
-                            <span class='tooltipper' title='" . _('Email Sent') . "'>
-                                " . htmlsafechars($fetch_assoc['code']) . '
-                            </span>';
-            $url = !empty($fetch_assoc['email']) ? "{$site_config['paths']['baseurl']}/signup.php?id={$secret}&amp;code={$invite}" : '';
-            $body .= "
-                    <tr>
-                        <td>$can_send_it</td>
-                        <td class='has-text-centered'>
-                            <span>" . (!empty($fetch_assoc['email']) ? htmlsafechars($fetch_assoc['email']) : '---') . "</span>
-                        </td>
-                        <td class='has-text-centered'>" . get_date((int) $fetch_assoc['added'], '', 0, 1) . "</td>
-                        <td class='has-text-centered'>
-                            <a href='{$site_config['paths']['baseurl']}/invite.php?do=delete_invite&amp;id={$secret}&amp;sender={$user['id']}' class='tooltipper' title='" . _('Delete Invite') . "'>
-                                <i class='icon-trash-empty icon has-text-danger'></i>
-                            </a>" . (!empty($fetch_assoc['email']) ? "
-                            <a href='{$site_config['paths']['baseurl']}/invite.php?do=resend&amp;id={$secret}&amp;sender={$user['id']}' class='tooltipper' title='" . _('Resend Invite') . "'>
-                                <i class='icon-mail icon has-text-success'></i>
-                            </a>" : '') . "
-                        </td>
-                        <td class='has-text-centered'>" . htmlsafechars($fetch_assoc['status']) . "</td>
-                    </tr>
-                    <tr>
-                        <td colspan='5'>
-                            <input type='type' id='invite_url' class='w-100 bg-none has-no-border has-text-link tooltipper' readonly title='" . _('If sending email failed, you can share this link') . "' value='$url'>
-                        </td>
-                    </tr>";
-        }
-    }
-    $HTMLOUT .= main_table($body, $heading) . "
-            <form action='?do=create_invite' method='post' enctype='multipart/form-data' accept-charset='utf-8'>
-                <div class='has-text-centered margin20'>
-                    <input type='submit' class='button is-small' value='" . _('Create Invite Code') . "'>
-                </div>
-            </form>";
-
-    $title = _('Invites');
+    $select = $db->run(');
     $breadcrumbs = [
         "<a href='{$_SERVER['PHP_SELF']}'>$title</a>",
     ];
@@ -284,7 +226,7 @@ if ($do === 'view_page') {
     echo stdhead($title, [], 'page-wrapper', $breadcrumbs) . wrapper($HTMLOUT) . stdfoot();
 } elseif ($do === 'delete_invite') {
     $id = isset($_GET['id']) ? (int) $_GET['id'] : (isset($_POST['id']) ? (int) $_POST['id'] : 0);
-    $query = sql_query('SELECT * FROM invite_codes WHERE id=' . sqlesc($id) . ' AND sender = ' . sqlesc($user['id']) . ' AND status = "Pending"') or sqlerr(__FILE__, __LINE__);
+    $rows = $db->fetchAll('SELECT * FROM invite_codes WHERE id=' . sqlesc($id) . ' AND sender = ' . sqlesc($user['id']) . ' AND status = "Pending"');
     $assoc = mysqli_fetch_assoc($query);
     if (!$assoc) {
         stderr(_('Error'), _('This invite code does not exist.'));
@@ -319,16 +261,7 @@ if ($do === 'view_page') {
         stderr(_('Error'), _('Invalid ID!'));
     }
 
-    $select = sql_query('SELECT id, username FROM users WHERE id =' . sqlesc($userid) . ' AND invitedby = ' . sqlesc($user['id'])) or sqlerr(__FILE__, __LINE__);
-    $assoc = mysqli_fetch_assoc($select);
-    if (!$assoc) {
-        stderr(_('Error'), _('No user with this ID.'));
-    }
-    isset($_GET['sure']) && $sure = htmlsafechars($_GET['sure']);
-    if (!$sure) {
-        stderr(_('Confirmed'), _fe("Are you sure you want to confirm {0}'s account? Click {1}here{2} to confirm it or {3}here{4} to go back", format_comment($assoc['username']), "<a href='{$_SERVER['PHP_SELF']}?do=confirm_account&amp;userid={$userid}&amp;sender={$user['id']}&amp;sure=yes'>", '</a>', "<a href='{$_SERVER['PHP_SELF']}?do=view_page'>", '</a>'));
-    }
-    sql_query('UPDATE users SET status = "confirmed" WHERE id =' . sqlesc($userid) . ' AND invitedby = ' . sqlesc($user['id']) . ' AND status = "Pending"') or sqlerr(__FILE__, __LINE__);
+    $select = $db->run(');
 
     $cache->update_row('user_' . $userid, [
         'status' => 'confirmed',
@@ -348,7 +281,7 @@ cheers,
     $id = (int) $assoc['id'];
     $subject = sqlesc(_fe('Welcome to {0}!', $site_config['site']['name']));
     $added = TIME_NOW;
-    sql_query("INSERT INTO messages (sender, subject, receiver, msg, added) VALUES (2, $subject, " . sqlesc($id) . ", $msg, $added)") or sqlerr(__FILE__, __LINE__);
+    $db->run(");
     ///////////////////end////////////
     header('Location: ?do=view_page');
 }
