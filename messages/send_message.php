@@ -4,6 +4,8 @@ require_once __DIR__ . '/../include/runtime_safe.php';
 
 declare(strict_types = 1);
 
+use Pu239\Database;
+
 require_once INCL_DIR . 'function_users.php';
 require_once INCL_DIR . 'function_html.php';
 
@@ -11,7 +13,8 @@ use Pu239\Message;
 use Pu239\User;
 
 $subject = $msg = '';
-global $container, $CURUSER, $site_config;
+global $container;
+$db = $container->get(Database::class);, $CURUSER, $site_config;
 
 $messages_class = $container->get(Message::class);
 $users_class = $container->get(User::class);
@@ -48,86 +51,7 @@ if (isset($_POST['buttonval']) && $_POST['buttonval'] === _('Send')) {
         $should_i_send_this = $arr_receiver['acceptpms'] === 'yes' ? 'yes' : ($arr_receiver['acceptpms'] === 'no' ? 'no' : ($arr_receiver['acceptpms'] === 'friends' ? 'friends' : ''));
         switch ($should_i_send_this) {
             case 'yes':
-                $r = sql_query('SELECT id FROM blocks WHERE userid = ' . sqlesc($receiver) . ' AND blockid = ' . sqlesc($CURUSER['id'])) or sqlerr(__FILE__, __LINE__);
-                $block = mysqli_fetch_row($r);
-                if (!empty($block[0]) && $block[0] > 0) {
-                    stderr(_('Refused'), htmlsafechars($arr_receiver['username']) . _(' has blocked PMs from you.'));
-                }
-                break;
-
-            case 'friends':
-                $r = sql_query('SELECT id FROM friends WHERE userid = ' . sqlesc($receiver) . ' AND friendid = ' . sqlesc($CURUSER['id'])) or sqlerr(__FILE__, __LINE__);
-                $friend = mysqli_fetch_row($r);
-                if (!empty($friend[0]) && (int) $friend[0] === 0) {
-                    stderr('Refused', htmlsafechars($arr_receiver['username']) . ' only accepts PMs from members in their friends list.');
-                }
-                break;
-
-            case 'no':
-                stderr(_('Refused'), htmlsafechars($arr_receiver['username']) . _(' does not accept PMs.'));
-                break;
-        }
-    }
-    $dt = TIME_NOW;
-    $msgs_buffer[] = [
-        'sender' => $CURUSER['id'],
-        'poster' => $CURUSER['id'],
-        'receiver' => $receiver,
-        'added' => $dt,
-        'msg' => $msg,
-        'subject' => $subject,
-        'saved' => $save,
-        'location' => 1,
-        'urgent' => $urgent,
-    ];
-    $messageg_id = $messages_class->insert($msgs_buffer, false);
-    if (!empty($_FILES)) {
-        require_once FORUM_DIR . 'attachment.php';
-        // TODO replace simple timestamp with microtime(true) to ensure unique timestamp
-        // or generate a uniquid and create a new field in messages
-        $uploaded = upload_attachments($dt);
-        $extension_error = $uploaded[0];
-        $size_error = $uploaded[1];
-    }
-    if (!empty($messageg_id) && !empty($arr_receiver['notifs']) && strpos($arr_receiver['notifs'], '[pm]') !== false) {
-        $username = htmlsafechars($CURUSER['username']);
-        $title = $site_config['site']['name'];
-        $msg = doc_head("{$title} PM Received") . '
-</head>
-<body>
-<p>' . _('You have received a PM from ') . " $username!</p>
-<p>" . _('You can use the URL below to view the message (you may have to login).') . "</p>
-<p>{$site_config['paths']['baseurl']}/messages.php?action=view_message&id={$messageg_id}</p>
-<p>--{$site_config['site']['name']}</p>
-</body>
-</html>";
-
-        send_mail($arr_receiver['email'], _('You have received a PM from ') . " $username!", $msg, strip_tags($msg));
-    }
-    if ($delete != 0) {
-        $set = [
-            'location' => 0,
-        ];
-        $message = $messages_class->get_by_id($delete);
-        if (!empty($message)) {
-            if ($message['receiver'] != $CURUSER['id']) {
-                stderr(_('Quote!'), _('Thou spongy prick-eared bag of guts!'));
-            }
-            if ($save != 'yes') {
-                $messages_class->delete($delete, $message['receiver']);
-                $messages_class->update($set, $delete);
-            } else {
-                $values = [
-                    'location' => 0,
-                ];
-                $messages_class->update($values, $delete);
-            }
-        }
-    }
-    if ($returnto) {
-        header('Location: ' . $returnto);
-    } else {
-        header('Location: ' . $_SERVER['PHP_SELF'] . '?action=view_mailbox&sent=1');
+                $r = $db->run(');
     }
     app_halt('Exit called');
 }

@@ -4,6 +4,8 @@ require_once __DIR__ . '/../include/runtime_safe.php';
 
 declare(strict_types = 1);
 
+use Pu239\Database;
+
 $key = 'VGhlIE1vemlsbGEgZmFtaWx5IGFwcG';
 $vars = [
     'ircidle' => '',
@@ -20,16 +22,6 @@ if ($key !== $vars['key'] || empty($vars['username'])) {
 require_once __DIR__ . '/include/bittorrent.php';
 switch ($vars['do']) {
     case 'check':
-        $q = sql_query('SELECT id FROM users WHERE username = ' . sqlesc($vars['username']));
-        echo mysqli_num_rows($q);
-        break;
-
-    case 'idle':
-        sql_query('UPDATE users SET onirc = ' . sqlesc(!$vars['ircidle'] ? 'no' : 'yes') . ' WHERE username = ' . sqlesc($vars['username']));
-        echo mysqli_affected_rows($mysqli);
-        break;
-
-    default:
-        app_halt('hmm something looks odd again');
+        $q = $db->run(');
 }
 app_halt('Exit called');

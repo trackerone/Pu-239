@@ -10,53 +10,7 @@ use Pu239\Session;
 
 require_once __DIR__ . '/../include/bittorrent.php';
 require_once INCL_DIR . 'function_html.php';
-$lconf = sql_query('SELECT * FROM lottery_config') or sqlerr(__FILE__, __LINE__);
-while ($ac = mysqli_fetch_assoc($lconf)) {
-    $lottery_config[$ac['name']] = $ac['value'];
-}
-global $container, $site_config, $CURUSER;
-
-$session = $container->get(Session::class);
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $fail = false;
-    $tickets = isset($_POST['tickets']) ? (int) $_POST['tickets'] : '';
-    if (!$tickets) {
-        $session->set('is-warning', _fe('How many tickets you wanna buy? [{0}]', $_POST['tickets']));
-        $fail = true;
-    } elseif ($tickets <= 0) {
-        $session->set('is-warning', _fe("You can't buy a negative quantity? [{0}]", $_POST['tickets']));
-        $fail = true;
-    }
-    $fluent = $container->get(Database::class);
-    $user_tickets = $fluent->from('tickets')
-                           ->select(null)
-                           ->select('COUNT(id) AS count')
-                           ->where('user = ?', $CURUSER['id'])
-                           ->fetch('count');
-
-    if ($user_tickets + $tickets > $lottery_config['user_tickets']) {
-        $session->set('is-warning', _pfe('You reached your limit. The max is {0} ticket.', 'You reached your limit. The max is {0} tickets.', $lottery_config['user_tickets']));
-        $fail = true;
-    } elseif ($CURUSER['seedbonus'] < $tickets * $lottery_config['ticket_amount']) {
-        $session->set('is-warning', _('You need more points to buy the amount of tickets you want'));
-        $fail = true;
-    }
-    $t = [];
-    for ($i = 1; $i <= $tickets; ++$i) {
-        $t[] = '(' . $CURUSER['id'] . ')';
-    }
-    if (!$fail) {
-        if (sql_query('INSERT INTO tickets(user) VALUES ' . implode(', ', $t))) {
-            sql_query('UPDATE users SET seedbonus = seedbonus - ' . ($tickets * $lottery_config['ticket_amount']) . ' WHERE id=' . $CURUSER['id']);
-            $seedbonus_new = $CURUSER['seedbonus'] - ($tickets * $lottery_config['ticket_amount']);
-            $cache = $container->get(Cache::class);
-            $cache->update_row('user_' . $CURUSER['id'], [
-                'seedbonus' => $seedbonus_new,
-            ], $site_config['expires']['user_cache']);
-            $session->set('is-success', _pfe('You bought {0} ticket.', 'You bought {0} tickets.', number_format($tickets)) . ' ' . _pfe('You now have {0} ticket!', 'You now have {0} tickets!', number_format($tickets + $user_tickets)));
-            if ($site_config['site']['autoshout_chat'] || $site_config['site']['autoshout_irc']) {
-                $classColor = get_user_class_color($CURUSER['class']);
-                $msg = _pfe('{1} has just bought {2}{0} Lottery Ticket!{3} GOOD LUCK!', '{1} has just bought {2}{0} Lottery Tickets!{3} GOOD LUCK!', $tickets, "[color=#$classColor]" . format_comment($CURUSER['username']) . '[/color]', "[url={$site_config['paths']['baseurl']}/lottery.php]", '[/url]');
+$lconf = $db->run(');
                 autoshout($msg);
             }
         } else {

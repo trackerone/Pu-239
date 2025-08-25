@@ -4,6 +4,8 @@ require_once __DIR__ . '/../include/runtime_safe.php';
 
 declare(strict_types = 1);
 
+use Pu239\Database;
+
 use Pu239\Session;
 
 require_once __DIR__ . '/../include/bittorrent.php';
@@ -11,43 +13,7 @@ require_once CLASS_DIR . 'class_check.php';
 require_once INCL_DIR . 'function_html.php';
 require_once INCL_DIR . 'function_users.php';
 class_check(UC_STAFF);
-$lconf = sql_query('SELECT * FROM lottery_config') or sqlerr(__FILE__, __LINE__);
-global $container, $site_config;
-
-while ($ac = mysqli_fetch_assoc($lconf)) {
-    $lottery_config[$ac['name']] = $ac['value'];
-}
-$session = $container->get(Session::class);
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    foreach ([
-        'ticket_amount' => 0,
-        'class_allowed' => 1,
-        'user_tickets' => 0,
-        'end_date' => 0,
-    ] as $key => $type) {
-        if (isset($_POST[$key]) && ($type == 0 && $_POST[$key] == 0 || $type == 1 && count($_POST[$key]) == 0)) {
-            $session->set('is-warning', _('You forgot to fill some data'));
-        }
-    }
-    if (!empty($lottery_config)) {
-        foreach ($lottery_config as $c_name => $c_value) {
-            if (isset($_POST[$c_name])) {
-                if ($_POST[$c_name] != $c_value) {
-                    $update[] = '(' . sqlesc($c_name) . ',' . sqlesc(is_array($_POST[$c_name]) ? implode('|', $_POST[$c_name]) : $_POST[$c_name]) . ')';
-                }
-                if ($c_name === 'prize_fund') {
-                    $fund = number_format((int) $_POST[$c_name]);
-                } elseif ($c_name === 'ticket_amount') {
-                    $cost = number_format((int) $_POST[$c_name]);
-                } elseif ($c_name === 'ticket_amount_type') {
-                    $type = ucfirst($_POST[$c_name]);
-                }
-            }
-        }
-    }
-
-    if (!empty($update) && sql_query('INSERT INTO lottery_config(name,value) VALUES ' . implode(', ', $update) . ' ON DUPLICATE KEY UPDATE value = VALUES(value)')) {
-        $cache->delete('lottery_info_');
+$lconf = $db->run(');
         if ($site_config['site']['autoshout_chat'] || $site_config['site']['autoshout_irc']) {
             $link = "[url={$site_config['paths']['baseurl']}/lottery.php]" . _('Lottery') . '[/url]';
             $msg = _fe('The {0} has begun! Get your tickets now. The pot is {1} and each ticket is only {2} {3}.', $link, $fund, $cost, $type);

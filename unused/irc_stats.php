@@ -4,6 +4,8 @@ require_once __DIR__ . '/../include/runtime_safe.php';
 
 declare(strict_types = 1);
 
+use Pu239\Database;
+
 $hash = 'YXBwemZhbg';
 $_hash = isset($_GET['hash']) ? $_GET['hash'] : '';
 $_user = isset($_GET['u']) ? htmlsafechars($_GET['u']) : '';
