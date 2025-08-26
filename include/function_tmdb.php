@@ -25,8 +25,7 @@ use Pu239\Image;
  */
 function get_tv_by_day($dates, bool $images = false)
 {
-    global $container;
-$db = $container->get(Database::class);, $site_config, $BLOCKS;
+    global $container, $site_config, $BLOCKS;
 
     if (!$BLOCKS['tmdb_api_on']) {
         return false;
@@ -144,8 +143,7 @@ function get_movies_by_week($dates)
  */
 function get_movies_in_theaters(bool $images = false)
 {
-    global $container;
-$db = $container->get(Database::class);, $site_config, $BLOCKS;
+    global $container, $site_config, $BLOCKS;
 
     if (!$BLOCKS['tmdb_api_on']) {
         return false;
@@ -213,8 +211,7 @@ $db = $container->get(Database::class);, $site_config, $BLOCKS;
  */
 function get_movies_by_vote_average($count, bool $images = false)
 {
-    global $container;
-$db = $container->get(Database::class);, $site_config, $BLOCKS;
+    global $container, $site_config, $BLOCKS;
 
     if (!$BLOCKS['tmdb_api_on']) {
         return false;
@@ -284,14 +281,12 @@ $db = $container->get(Database::class);, $site_config, $BLOCKS;
  */
 function get_movie_id($imdbid, $type)
 {
-    global $container;
-$db = $container->get(Database::class);, $site_config, $BLOCKS;
+    global $container, $site_config, $BLOCKS;
 
     if (!$BLOCKS['tmdb_api_on']) {
         return false;
     }
-    $fluent = $db; // alias
-$fluent = $container->get(Database::class);
+    $fluent = $container->get(Database::class);
     $id = $fluent->from('images')
         ->select(null)
         ->select($type)
@@ -456,7 +451,6 @@ function get_imdbid($tmdbid)
 function update_tmdb_id($tmdb_id, $imdb_id)
 {
     global $container;
-$db = $container->get(Database::class);;
 
     $set = [
         'tmdb_id' => $tmdb_id,
@@ -480,7 +474,6 @@ $db = $container->get(Database::class);;
 function insert_image(int $tmdb_id, string $imdb_id, string $url, string $type)
 {
     global $container;
-$db = $container->get(Database::class);;
 
     $images_class = $container->get(Image::class);
     $cache = $container->get(Cache::class);

@@ -33,13 +33,10 @@ if ($site_config['db']['debug'] && !in_array($_SERVER['PHP_SELF'], $ignore)) {
 function debug_pdo()
 {
     global $container;
-$db = $container->get(Database::class);;
 
-    $fluent = $db; // alias
-$fluent = $container->get(Database::class);
+    $fluent = $container->get(Database::class);
     $fluent->debug = function ($BaseQuery) {
         global $container;
-$db = $container->get(Database::class);;
 
         $params = [];
         $query = str_replace([
@@ -79,8 +76,7 @@ $db = $container->get(Database::class);;
  */
 function sql_query($query)
 {
-    global $container;
-$db = $container->get(Database::class);, $site_config, $ignore;
+    global $container, $site_config, $ignore;
 
     $mysqli = $container->get(mysqli::class);
     if ($site_config['db']['debug'] && !in_array($_SERVER['PHP_SELF'], $ignore)) {
@@ -113,7 +109,6 @@ function sqlesc($x)
         return (float) $x;
     }
     global $container;
-$db = $container->get(Database::class);;
 
     $mysqli = $container->get(mysqli::class);
 
@@ -135,7 +130,6 @@ function sqlesc_noquote($x)
     }
 
     global $container;
-$db = $container->get(Database::class);;
 
     $mysqli = $container->get(mysqli::class);
 
@@ -152,8 +146,7 @@ $db = $container->get(Database::class);;
  */
 function sqlerr($file = '', $line = '')
 {
-    global $container;
-$db = $container->get(Database::class);, $site_config, $CURUSER;
+    global $container, $site_config, $CURUSER;
 
     $mysqli = $container->get(mysqli::class);
     $the_error = ((is_object($mysqli)) ? mysqli_error($mysqli) : (($___mysqli_res = mysqli_connect_error()) ? $___mysqli_res : false));
@@ -204,7 +197,6 @@ function store_query(string $query, float $time, array $params)
 {
     if (PHP_SAPI !== 'cli') {
         global $container;
-$db = $container->get(Database::class);;
 
         $cache = $container->get(Cache::class);
         $id = session_id();

@@ -23,8 +23,7 @@ use Pu239\Database;
  */
 function getRate($id, $what)
 {
-    global $container;
-$db = $container->get(Database::class);, $CURUSER;
+    global $container, $CURUSER;
 
     $return = false;
     if ($id == 0 || !in_array($what, [
@@ -37,8 +36,7 @@ $db = $container->get(Database::class);, $CURUSER;
     $cache = $container->get(Cache::class);
     $rating_cache = $cache->get($keys['rating']);
     if ($rating_cache === false || is_null($rating_cache)) {
-        $fluent = $db; // alias
-$fluent = $container->get(Database::class);
+        $fluent = $container->get(Database::class);
         $qy1 = $fluent->from('rating')
                       ->select(null)
                       ->select('IFNULL(SUM(rating), 0) AS sum')
