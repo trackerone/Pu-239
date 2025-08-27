@@ -21,7 +21,8 @@ use Pu239\Database;
  */
 function happyHour($action)
 {
-    global $container, $site_config;
+    global $container;
+$db = $container->get(Database::class);, $site_config;
 
     if ($action === 'generate') {
         $nextDay = date('Y-m-d', TIME_NOW + 86400);
@@ -62,7 +63,8 @@ function happyHour($action)
         if ($act === 1) {
             $todo = 255;
         } else {
-            $fluent = $container->get(Database::class);
+            $fluent = $db; // alias
+$fluent = $container->get(Database::class);
             $categories = $fluent->from('categories')
                                  ->select(null)
                                  ->select('id')

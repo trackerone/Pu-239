@@ -4,6 +4,8 @@ require_once __DIR__ . '/runtime_safe.php';
 
 declare(strict_types = 1);
 
+use Pu239\Database;
+
 use DI\DependencyException;
 use DI\NotFoundException;
 use MatthiasMullie\Scrapbook\Exception\UnbegunTransaction;
@@ -22,7 +24,8 @@ use Pu239\User;
  */
 function stealth(int $userid, bool $stealth = true)
 {
-    global $container, $site_config, $CURUSER;
+    global $container;
+$db = $container->get(Database::class);, $site_config, $CURUSER;
 
     $users_class = $container->get(User::class);
     $username = $users_class->get_item('username', $userid);
@@ -36,13 +39,13 @@ function stealth(int $userid, bool $stealth = true)
     }
 
     if ($setbits || $clrbits) {
-        sql_query('UPDATE users SET perms = ((perms | ' . $setbits . ') & ~' . $clrbits . ') WHERE id = ' . sqlesc($userid)) or sqlerr(__FILE__, __LINE__);
+        $db->run('UPDATE users SET perms = ((perms | ' . $setbits . ') & ~' . $clrbits . ') WHERE id = :id', [':id' => $userid]) or sqlerr(__FILE__, __LINE__);
     }
-    $res = sql_query('SELECT username, perms, modcomment FROM users WHERE id = ' . sqlesc($userid) . ' LIMIT 1') or sqlerr(__FILE__, __LINE__);
+    $rows = $db->fetchAll('SELECT username, perms, modcomment FROM users WHERE id = ' . sqlesc($userid) . ' LIMIT 1');
     $row = mysqli_fetch_assoc($res);
     $row['perms'] = (int) $row['perms'];
     $modcomment = get_date((int) TIME_NOW, '', 1) . ' - ' . $display . ' in Stealth Mode thanks to ' . $CURUSER['username'] . "\n" . $row['modcomment'];
-    sql_query('UPDATE users SET modcomment = ' . sqlesc($modcomment) . ' WHERE id = ' . sqlesc($userid)) or sqlerr(__FILE__, __LINE__);
+    $db->run('UPDATE users SET modcomment = ' . sqlesc($modcomment) . ' WHERE id = :id', [':id' => $userid]) or sqlerr(__FILE__, __LINE__);
     $cache = $container->get(Cache::class);
     $cache->update_row('user_' . $userid, [
         'perms' => $row['perms'],
