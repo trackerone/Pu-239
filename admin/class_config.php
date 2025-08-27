@@ -16,12 +16,13 @@ require_once INCL_DIR . 'function_html.php';
 require_once BIN_DIR . 'uglify.php';
 $class = get_access(basename($_SERVER['REQUEST_URI']));
 class_check($class);
-global $container, $CURUSER, $site_config;
+global $container;
+$db = $container->get(Database::class);, $CURUSER, $site_config;
 
 $style = get_stylesheet();
 $session = $container->get(Session::class);
-$db = $container->get(Database::class);
-$fluent = $db;
+$fluent = $db; // alias
+$fluent = $container->get(Database::class);
 $all_classes = $fluent->from('class_config')
                       ->where('template = ?', $style)
                       ->orderBy('value');
@@ -53,9 +54,9 @@ if (!in_array($mode, $possible_modes)) {
 function update_forum_classes(int $value, string $direction)
 {
     global $container;
+$db = $container->get(Database::class);;
 
-    $db = $container->get(Database::class);
-$fluent = $db;
+    $fluent = $container->get(Database::class);
     if ($direction === 'increment') {
         $fluent->update('forums')
                ->set(['min_class_read' => new Literal('min_class_read + 1')])
@@ -103,8 +104,7 @@ $fluent = $db;
     }
 }
 
-$db = $container->get(Database::class);
-$fluent = $db;
+$fluent = $container->get(Database::class);
 $cache = $container->get(Cache::class);
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $data = [];

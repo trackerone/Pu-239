@@ -17,7 +17,8 @@ require_once INCL_DIR . 'function_torrenttable.php';
 require_once CLASS_DIR . 'class_check.php';
 $class = get_access(basename($_SERVER['REQUEST_URI']));
 class_check($class);
-global $container, $site_config, $CURUSER;
+global $container;
+$db = $container->get(Database::class);, $site_config, $CURUSER;
 
 $HTMLOUT = '';
 
@@ -75,8 +76,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (!$msg) {
         stderr(_('Error'), 'Please Type In Some Text');
     }
-    $db = $container->get(Database::class);
-$fluent = $db;
+    $fluent = $db; // alias
+$fluent = $container->get(Database::class);
     $users = $fluent->from('peers')
                     ->select(null)
                     ->select('DISTINCT userid AS userid')

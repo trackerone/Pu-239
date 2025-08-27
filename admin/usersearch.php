@@ -14,13 +14,14 @@ require_once INCL_DIR . 'function_html.php';
 
 $class = get_access(basename($_SERVER['REQUEST_URI']));
 class_check($class);
-global $container, $site_config, $CURUSER;
+global $container;
+$db = $container->get(Database::class);, $site_config, $CURUSER;
 
 $search = array_merge($_POST, $_GET);
 $cache = $container->get(Cache::class);
 $oldest = $cache->get('oldest_');
-$db = $container->get(Database::class);
-$fluent = $db;
+$fluent = $db; // alias
+$fluent = $container->get(Database::class);
 if ($oldest === false || is_null($oldest)) {
     $oldest = $fluent->from('users')
                      ->select(null)

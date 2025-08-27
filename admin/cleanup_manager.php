@@ -62,6 +62,7 @@ switch ($params['mode']) {
 function resettimer()
 {
     global $container;
+$db = $container->get(Database::class);;
 
     $session = $container->get(Session::class);
     $timestamp = strtotime('today midnight');
@@ -103,10 +104,11 @@ function manualclean($params)
  */
 function cleanup_show_main()
 {
-    global $container, $site_config;
+    global $container;
+$db = $container->get(Database::class);, $site_config;
 
-    $db = $container->get(Database::class);
-$fluent = $db;
+    $fluent = $db; // alias
+$fluent = $container->get(Database::class);
     $count1 = $fluent->from('cleanup')
                      ->select(null)
                      ->select('COUNT(clean_id) AS count')
@@ -339,6 +341,7 @@ function cleanup_show_new()
 function cleanup_take_new($params)
 {
     global $container;
+$db = $container->get(Database::class);;
 
     $mysqli = $container->get(mysqli::class);
     foreach ([
@@ -409,6 +412,7 @@ function cleanup_take_new($params)
 function cleanup_take_delete($params)
 {
     global $container;
+$db = $container->get(Database::class);;
 
     $mysqli = $container->get(mysqli::class);
     $opts = [
@@ -441,6 +445,7 @@ function cleanup_take_delete($params)
 function cleanup_take_unlock($params)
 {
     global $container;
+$db = $container->get(Database::class);;
 
     $mysqli = $container->get(mysqli::class);
     foreach ([

@@ -13,10 +13,11 @@ require_once CLASS_DIR . 'class_check.php';
 require_once INCL_DIR . 'function_html.php';
 $class = get_access(basename($_SERVER['REQUEST_URI']));
 class_check($class);
-global $container, $site_config, $CURUSER;
+global $container;
+$db = $container->get(Database::class);, $site_config, $CURUSER;
 
-$db = $container->get(Database::class);
-$fluent = $db;
+$fluent = $db; // alias
+$fluent = $container->get(Database::class);
 $promos = $fluent->from('class_promo')
     ->orderBy('id');
 foreach ($promos as $ac) {

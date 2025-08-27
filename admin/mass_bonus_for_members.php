@@ -25,7 +25,8 @@ $stdfoot = [
         get_file_name('sceditor_js'),
     ],
 ];
-global $container, $site_config;
+global $container;
+$db = $container->get(Database::class);, $site_config;
 
 $users_class = $container->get(User::class);
 $messages_class = $container->get(Message::class);

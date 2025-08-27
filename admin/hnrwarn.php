@@ -18,7 +18,8 @@ global $site_config;
 $HTMLOUT = '';
 $this_url = $_SERVER['SCRIPT_NAME'];
 $do = isset($_GET['do']) && $_GET['do'] === 'disabled' ? 'disabled' : 'hnrwarn';
-global $container, $CURUSER;
+global $container;
+$db = $container->get(Database::class);, $CURUSER;
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $cache = $container->get(Cache::class);

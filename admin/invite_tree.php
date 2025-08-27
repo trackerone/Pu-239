@@ -13,13 +13,14 @@ require_once INCL_DIR . 'function_pager.php';
 require_once CLASS_DIR . 'class_check.php';
 $class = get_access(basename($_SERVER['REQUEST_URI']));
 class_check($class);
-global $container, $site_config;
+global $container;
+$db = $container->get(Database::class);, $site_config;
 
 $HTMLOUT = '';
 $id = isset($_GET['id']) ? (int) $_GET['id'] : (isset($_POST['id']) ? (int) $_POST['id'] : 0);
 $users_class = $container->get(User::class);
-$db = $container->get(Database::class);
-$fluent = $db;
+$fluent = $db; // alias
+$fluent = $container->get(Database::class);
 if ($id !== 0) {
     $arr_user = $users_class->getUserFromId($id);
     $HTMLOUT .= '

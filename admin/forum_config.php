@@ -11,13 +11,14 @@ require_once INCL_DIR . 'function_html.php';
 require_once CLASS_DIR . 'class_check.php';
 $class = get_access(basename($_SERVER['REQUEST_URI']));
 class_check($class);
-global $container, $site_config;
+global $container;
+$db = $container->get(Database::class);, $site_config;
 
 $HTMLOUT = $time_drop_down = $accepted_file_extension = $accepted_file_types = $member_class_drop_down = '';
 $settings_saved = false;
 $config_id = 1;
-$db = $container->get(Database::class);
-$fluent = $db;
+$fluent = $db; // alias
+$fluent = $container->get(Database::class);
 $cache = $container->get(Cache::class);
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['do_it'])) {
     $update = [

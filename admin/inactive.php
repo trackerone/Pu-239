@@ -17,7 +17,8 @@ require_once CLASS_DIR . 'class_check.php';
 require_once INCL_DIR . 'function_account_delete.php';
 $class = get_access(basename($_SERVER['REQUEST_URI']));
 class_check($class);
-global $container, $CURUSER, $site_config;
+global $container;
+$db = $container->get(Database::class);, $CURUSER, $site_config;
 
 $HTMLOUT = '';
 $record_mail = true;

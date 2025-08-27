@@ -15,12 +15,13 @@ require_once INCL_DIR . 'function_bbcode.php';
 require_once CLASS_DIR . 'class_check.php';
 $class = get_access(basename($_SERVER['REQUEST_URI']));
 class_check($class);
-global $container, $CURUSER, $site_config;
+global $container;
+$db = $container->get(Database::class);, $CURUSER, $site_config;
 
 $HTMLOUT = $H1_thingie = $count2 = '';
 $count = 0;
-$db = $container->get(Database::class);
-$fluent = $db;
+$fluent = $db; // alias
+$fluent = $container->get(Database::class);
 if (isset($_GET['remove'])) {
     if ($CURUSER['class'] < UC_STAFF) {
         stderr(_('Error'), _('Only the Staff can remove members from the list!'));
