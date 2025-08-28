@@ -1,0 +1,23 @@
+{
+  "$schema": "https://raw.githubusercontent.com/laravel/pint/main/pint.schema.json",
+  "preset": "laravel",
+  "rules": {
+    "array_syntax": {
+      "syntax": "short"
+    },
+    "single_quote": true,
+    "no_unused_imports": true,
+    "ordered_imports": true,
+    "native_function_invocation": {
+      "include": [
+        "@all"
+      ]
+    }
+  },
+  "exclude": [
+    "bootstrap/cache",
+    "storage",
+    "node_modules",
+    "vendor"
+  ]
+}

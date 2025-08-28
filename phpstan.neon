@@ -1,0 +1,20 @@
+includes:
+  - phpstan-baseline.neon
+
+parameters:
+  paths:
+    - app
+    - config
+    - routes
+    - database
+  level: max
+  tmpDir: storage/cache/phpstan
+  checkGenericClassInNonGenericObjectType: false
+  ignoreErrors:
+    # Example ignore (keep minimal; adjust as code is fixed)
+    - message: "~Call to an undefined method Illuminate\\.*~"
+      paths:
+        - app/*
+  scanFiles:
+    - bootstrap/app.php
+  reportUnmatchedIgnoredErrors: true

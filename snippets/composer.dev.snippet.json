@@ -1,0 +1,14 @@
+{
+  "require-dev": {
+    "laravel/pint": "^1.17",
+    "phpstan/phpstan": "^1.11",
+    "nunomaduro/larastan": "^2.9",
+    "rector/rector": "^1.2"
+  },
+  "scripts": {
+    "qa": "vendor/bin/pint --test && vendor/bin/phpstan analyse --configuration=phpstan.neon --memory-limit=1G",
+    "pint": "vendor/bin/pint",
+    "stan": "vendor/bin/phpstan analyse --configuration=phpstan.neon --memory-limit=1G",
+    "rector": "vendor/bin/rector process --dry-run"
+  }
+}
