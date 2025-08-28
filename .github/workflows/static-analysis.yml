@@ -1,10 +1,11 @@
-name: Static Analysis
+name: Static Analysis (CI-only)
 
 on:
   push:
     branches: [ main, develop ]
   pull_request:
     branches: [ main, develop ]
+  workflow_dispatch:
 
 jobs:
   analyze:
@@ -20,7 +21,7 @@ jobs:
           MYSQL_ROOT_PASSWORD: root
         ports: ["3306:3306"]
         options: >-
-          --health-cmd="mysqladmin ping -h 127.0.0.1 -u root -proot"
+          --health-cmd="mysqladmin ping -h 127.0.0.1 -u 127.0.0.1 -proot"
           --health-interval=10s
           --health-timeout=5s
           --health-retries=5
@@ -35,19 +36,17 @@ jobs:
           php-version: '8.3'
           extensions: mbstring, intl, pcntl, pdo_mysql, bcmath
           coverage: none
-          tools: composer:v2
+          tools: composer:v2, phpstan
 
-      - name: Cache composer dependencies
-        uses: actions/cache@v4
-        with:
-          path: ~/.composer/cache/files
-          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
-          restore-keys: ${{ runner.os }}-composer-
-
-      - name: Install dependencies
+      - name: Install Composer dependencies (prod only)
         run: |
-          composer install --prefer-dist --no-progress --no-interaction
-          composer config allow-plugins.dealerdirect/phpcodesniffer-composer-installer true || true
+          composer install --no-interaction --no-progress --prefer-dist --no-dev
+
+      - name: Install QA tools globally (no local needed)
+        run: |
+          composer global config allow-plugins.dealerdirect/phpcodesniffer-composer-installer true || true
+          composer global require laravel/pint:^1.17 nunomaduro/larastan:^2.9 --no-interaction --no-progress
+          echo "$HOME/.composer/vendor/bin" >> $GITHUB_PATH
 
       - name: Prepare app key and env
         run: |
@@ -55,15 +54,16 @@ jobs:
           php artisan key:generate || true
 
       - name: Run Laravel Pint (code style)
-        run: vendor/bin/pint --test
+        run: pint --test
 
-      - name: Run PHPStan (level max with baseline)
-        run: |
-          vendor/bin/phpstan analyse --memory-limit=1G             --configuration=phpstan.neon
+      - name: Run PHPStan (level max)
+        run: phpstan analyse --configuration=phpstan.neon --memory-limit=1G
 
-      - name: Upload PHPStan result (optional)
+      - name: Upload logs on failure
         if: failure()
         uses: actions/upload-artifact@v4
         with:
-          name: phpstan-report
-          path: storage/logs
+          name: static-analysis-artifacts
+          path: |
+            storage/logs
+            phpstan-baseline.neon
