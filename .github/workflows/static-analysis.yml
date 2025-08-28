@@ -1,0 +1,69 @@
+name: Static Analysis
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main, develop ]
+
+jobs:
+  analyze:
+    runs-on: ubuntu-latest
+
+    services:
+      mysql:
+        image: mysql:8
+        env:
+          MYSQL_DATABASE: laravel
+          MYSQL_USER: laravel
+          MYSQL_PASSWORD: laravel
+          MYSQL_ROOT_PASSWORD: root
+        ports: ["3306:3306"]
+        options: >-
+          --health-cmd="mysqladmin ping -h 127.0.0.1 -u root -proot"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=5
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.3'
+          extensions: mbstring, intl, pcntl, pdo_mysql, bcmath
+          coverage: none
+          tools: composer:v2
+
+      - name: Cache composer dependencies
+        uses: actions/cache@v4
+        with:
+          path: ~/.composer/cache/files
+          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
+          restore-keys: ${{ runner.os }}-composer-
+
+      - name: Install dependencies
+        run: |
+          composer install --prefer-dist --no-progress --no-interaction
+          composer config allow-plugins.dealerdirect/phpcodesniffer-composer-installer true || true
+
+      - name: Prepare app key and env
+        run: |
+          cp -n .env.example .env || true
+          php artisan key:generate || true
+
+      - name: Run Laravel Pint (code style)
+        run: vendor/bin/pint --test
+
+      - name: Run PHPStan (level max with baseline)
+        run: |
+          vendor/bin/phpstan analyse --memory-limit=1G             --configuration=phpstan.neon
+
+      - name: Upload PHPStan result (optional)
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: phpstan-report
+          path: storage/logs
