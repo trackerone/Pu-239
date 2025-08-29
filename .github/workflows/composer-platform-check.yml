@@ -1,0 +1,43 @@
+name: Composer Platform Alignment (Soft)
+
+on:
+  pull_request:
+    branches: [ main, develop ]
+  workflow_dispatch:
+
+jobs:
+  platform_check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.3'
+          tools: composer:v2
+          coverage: none
+
+      - name: Validate composer.json
+        continue-on-error: true
+        run: composer validate --no-check-publish --strict
+
+      - name: PHP 8.3 allow check (composer require constraints)
+        id: allowcheck
+        continue-on-error: true
+        run: php tools/check_platform.php > platform-check-report.txt
+
+      - name: Why-not PHP ^8.3 (dependency graph)
+        continue-on-error: true
+        run: composer why-not php ^8.3 -t > composer-why-not-php83.txt || true
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: platform-alignment-report
+          path: |
+            platform-check-report.txt
+            composer-why-not-php83.txt
+            composer.json
+            composer.lock
