@@ -1,14 +1,15 @@
-# Batch 29 – Repo foundation hardening
+# Batch 29 – Repository Foundation Hardening
 
-Purpose: Raise baseline without features. 
-Contents:
-- `.github/dependabot.yml` – automatic update PRs (actions daily, composer weekly)
+Purpose: raise the baseline around the repository without touching features.
+
+## Contents
+- `.github/dependabot.yml` – automatic update PRs (GitHub Actions daily, Composer weekly)
 - `.github/workflows/codeql.yml` – security scanning (CodeQL) weekly and on PRs
 - `.github/PULL_REQUEST_TEMPLATE.md` – consistent PR checklist
-- `.github/ISSUE_TEMPLATE/*` – templates for bugs/feature requests
-- `SECURITY.md` – simple security policy
+- `.github/ISSUE_TEMPLATE/*` – issue templates for bug reports and feature requests
+- `SECURITY.md` – basic security policy
 - `CONTRIBUTING.md` – minimal contributor guide
 
-Drop-in to the root of the repo. No local execution required.
+Drop the files into the repository root. No local runs required.
 
-Generated: 2025-08-29T03:43:09
+*Generated: 2025-08-29T04:14:22*
