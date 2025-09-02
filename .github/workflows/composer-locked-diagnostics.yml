@@ -1,0 +1,89 @@
+name: Composer Locked Install Diagnostics (PHP 8.3)
+
+on:
+  workflow_dispatch:
+    inputs:
+      platform_php:
+        description: "Temporary platform.php to test against"
+        required: false
+        default: "8.3.0"
+
+jobs:
+  diagnose-locked:
+    name: Diagnose blockers using lockfile (non-destructive)
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.3'
+          tools: composer:v2, jq
+          coverage: none
+
+      - name: Prepare temp workdir
+        run: |
+          mkdir -p ci-tmp
+          cp composer.json ci-tmp/composer.json
+          cp composer.lock ci-tmp/composer.lock
+
+      - name: Inject platform.php into temp composer.json (no repo change)
+        working-directory: ci-tmp
+        run: |
+          php -r '
+            $f = "composer.json";
+            $j = json_decode(file_get_contents($f), true);
+            if (!isset($j["config"])) $j["config"] = [];
+            if (!isset($j["config"]["platform"])) $j["config"]["platform"] = [];
+            $j["config"]["platform"]["php"] = getenv("INPUT_PLATFORM_PHP") ?: "8.3.0";
+            file_put_contents($f, json_encode($j, JSON_PRETTY_PRINT|JSON_UNESCAPED_SLASHES) . PHP_EOL);
+          '
+          cat composer.json
+
+      - name: Validate composer.json
+        working-directory: ci-tmp
+        continue-on-error: true
+        run: composer validate --no-check-publish --strict
+
+      - name: Why-not PHP ^8.3 (locked)
+        working-directory: ci-tmp
+        continue-on-error: true
+        run: composer why-not php ^8.3 --locked -t > composer-why-not-php83-locked.txt || true
+
+      - name: Outdated (direct, locked)
+        working-directory: ci-tmp
+        continue-on-error: true
+        run: composer outdated --direct --locked --format=json > composer-outdated-locked.json || true
+
+      - name: Attempt locked install (expect failure if blockers exist)
+        working-directory: ci-tmp
+        id: install
+        continue-on-error: true
+        run: |
+          composer install --no-interaction --no-progress --prefer-dist \
+            --no-dev --no-scripts --no-plugins \
+            2>&1 | tee install-log.txt
+          echo "status=$?" >> $GITHUB_OUTPUT
+
+      - name: Summarize result
+        working-directory: ci-tmp
+        run: |
+          echo "Composer install exit code: ${{ steps.install.outputs.status }}" > summary.txt
+          echo "" >> summary.txt
+          echo "Top 100 lines from install-log:" >> summary.txt
+          tail -n 100 install-log.txt >> summary.txt || true
+
+      - name: Upload diagnostics artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: composer-locked-diagnostics
+          path: |
+            ci-tmp/composer.json
+            ci-tmp/composer.lock
+            ci-tmp/composer-why-not-php83-locked.txt
+            ci-tmp/composer-outdated-locked.json
+            ci-tmp/install-log.txt
+            ci-tmp/summary.txt
