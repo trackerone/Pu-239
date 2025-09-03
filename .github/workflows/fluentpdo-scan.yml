@@ -1,0 +1,27 @@
+name: FluentPDO Scan (Soft)
+
+on:
+  pull_request:
+    branches: [ main, develop ]
+  workflow_dispatch:
+
+jobs:
+  scan:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Run FluentPDO scanner
+        run: php tools/scan_fluentpdo.php > fluentpdo-report.txt
+
+      - name: Upload report
+        uses: actions/upload-artifact@v4
+        with:
+          name: fluentpdo-report
+          path: fluentpdo-report.txt
+
+      - name: Print summary (non-blocking)
+        shell: bash
+        run: |
+          echo "---- FluentPDO references ----"
+          cat fluentpdo-report.txt || true
