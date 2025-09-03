@@ -1,0 +1,27 @@
+name: Fix lockfile (isbn + permissions-handler)
+
+on:
+  workflow_dispatch:
+
+jobs:
+  fix-lock:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.3'
+          tools: composer:v2
+
+      - name: Update and remove blockers
+        run: |
+          composer update biblys/isbn --with-all-dependencies
+          composer remove umpirsky/composer-permissions-handler
+
+      - name: Commit lockfile changes
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "chore: bump isbn to 3.x and remove permissions-handler"
+          branch: php83-fixes
+          create_branch: true
