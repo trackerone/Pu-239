@@ -1,0 +1,82 @@
+name: Composer Modernize PR (PHP 8.3)
+
+on:
+  workflow_dispatch:
+
+jobs:
+  modernize:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Update composer.json in-place
+        run: |
+          php -r '
+          $f = "composer.json";
+          $j = json_decode(file_get_contents($f), true);
+          if (!isset($j["require"])) $j["require"] = [];
+          // Force PHP 8.3
+          $j["require"]["php"] = "^8.3";
+          // Bump biblys/isbn
+          if (isset($j["require"]["biblys/isbn"])) {
+              $j["require"]["biblys/isbn"] = "^3.0";
+          }
+          // Remove permissions-handler
+          foreach (["require","require-dev"] as $sec) {
+              if (isset($j[$sec]["umpirsky/composer-permissions-handler"])) {
+                  unset($j[$sec]["umpirsky/composer-permissions-handler"]);
+              }
+          }
+          if (!isset($j["config"])) $j["config"] = [];
+          if (!isset($j["config"]["platform"])) $j["config"]["platform"] = [];
+          $j["config"]["platform"]["php"] = "8.3.0";
+          file_put_contents($f, json_encode($j, JSON_PRETTY_PRINT|JSON_UNESCAPED_SLASHES) . PHP_EOL);
+          echo "composer.json updated\n";
+          '
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.3'
+          tools: composer:v2
+          coverage: none
+
+      - name: Composer update (no scripts/plugins)
+        run: composer update --with-all-dependencies --no-interaction --no-progress --no-scripts --no-plugins || true
+
+      - name: Save reports
+        run: |
+          composer outdated --direct --format=json > composer-outdated-after.json || true
+          composer why-not php ^8.3 -t > composer-why-not-after.txt || true
+
+      - name: Create PR
+        uses: peter-evans/create-pull-request@v6
+        with:
+          commit-message: "chore: PHP 8.3 readiness"
+          title: "PHP 8.3 readiness"
+          body: |
+            Automated PR:
+            - Set PHP ^8.3
+            - Bump biblys/isbn → ^3
+            - Remove umpirsky/composer-permissions-handler
+            Reports are attached as artifacts.
+          branch: ci/php83-modernize
+          delete-branch: true
+          add-paths: |
+            composer.json
+            composer.lock
+            composer-outdated-after.json
+            composer-why-not-after.txt
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: php83-modernize-reports
+          path: |
+            composer.json
+            composer.lock
+            composer-outdated-after.json
+            composer-why-not-after.txt
