@@ -1,0 +1,54 @@
+name: Batch Publisher
+
+on:
+  workflow_dispatch:
+    inputs:
+      batch_name:
+        description: "Name of the batch (e.g., batch34_fluentpdo-phaseout)"
+        required: true
+      commit_message:
+        description: "Commit message"
+        required: true
+        default: "chore: add batch files"
+      file_path:
+        description: "Relative path in repo (e.g., docs/NEW_FILE.md)"
+        required: true
+      file_content:
+        description: "Raw file content (multiline string)"
+        required: true
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Write file
+        run: |
+          mkdir -p $(dirname "${{ github.event.inputs.file_path }}")
+          cat <<'EOF' > ${{ github.event.inputs.file_path }}
+          ${{ github.event.inputs.file_content }}
+          EOF
+
+      - name: Commit changes
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: ${{ github.event.inputs.commit_message }}
+          branch: batches/${{ github.event.inputs.batch_name }}
+          create_branch: true
+
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v6
+        with:
+          branch: batches/${{ github.event.inputs.batch_name }}
+          title: "Batch: ${{ github.event.inputs.batch_name }}"
+          body: |
+            This PR was created by the Batch Publisher workflow.
+            Batch name: **${{ github.event.inputs.batch_name}}**
+            Commit message: **${{ github.event.inputs.commit_message}}**
+          base: main
