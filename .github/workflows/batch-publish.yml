@@ -1,0 +1,58 @@
+name: Batch Publisher (Multi-file)
+
+on:
+  workflow_dispatch:
+    inputs:
+      batch_name:
+        description: "Name of the batch (e.g., batch34_fluentpdo-phaseout)"
+        required: true
+      commit_message:
+        description: "Commit message"
+        required: true
+        default: "chore: add batch files"
+      files_json:
+        description: |
+          JSON array of { "path": "relative/path/to/file", "content": "file content" }
+          Example:
+          [
+            {"path":"docs/README.md","content":"# Hello"},
+            {"path":".github/workflows/test.yml","content":"name: test"}
+          ]
+        required: true
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Parse and write files
+        id: write
+        run: |
+          echo '${{ github.event.inputs.files_json }}' | jq -c '.[]' | while read file; do
+            path=$(echo "$file" | jq -r '.path')
+            content=$(echo "$file" | jq -r '.content')
+            mkdir -p "$(dirname "$path")"
+            printf "%s\n" "$content" > "$path"
+            echo "Wrote $path"
+          done
+
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v6
+        with:
+          commit-message: ${{ github.event.inputs.commit_message }}
+          title: "Batch: ${{ github.event.inputs.batch_name }}"
+          body: |
+            This PR was created by the Batch Publisher workflow.
+            Batch: **${{ github.event.inputs.batch_name }}**
+            Commit: **${{ github.event.inputs.commit_message }}**
+            Files were added/updated based on provided JSON input.
+          branch: batches/${{ github.event.inputs.batch_name }}
+          delete-branch: true
+          add-paths: |
+            .
