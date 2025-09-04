@@ -1,4 +1,4 @@
-øname: Batch Publisher
+name: Batch Publisher (Multi-file)
 
 on:
   workflow_dispatch:
@@ -10,11 +10,14 @@ on:
         description: "Commit message"
         required: true
         default: "chore: add batch files"
-      file_path:
-        description: "Relative path in repo (e.g., docs/NEW_FILE.md)"
-        required: true
-      file_content:
-        description: "Raw file content (multiline string)"
+      files_json:
+        description: |
+          JSON array of { "path": "relative/path/to/file", "content": "file content" }
+          Example:
+          [
+            {"path":"docs/README.md","content":"# Hello"},
+            {"path":".github/workflows/test.yml","content":"name: test"}
+          ]
         required: true
 
 jobs:
@@ -28,27 +31,28 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@v4
 
-      - name: Write file
+      - name: Parse and write files
+        id: write
         run: |
-          mkdir -p $(dirname "${{ github.event.inputs.file_path }}")
-          cat <<'EOF' > ${{ github.event.inputs.file_path }}
-          ${{ github.event.inputs.file_content }}
-          EOF
-
-      - name: Commit changes
-        uses: stefanzweifel/git-auto-commit-action@v5
-        with:
-          commit_message: ${{ github.event.inputs.commit_message }}
-          branch: batches/${{ github.event.inputs.batch_name }}
-          create_branch: true
+          echo '${{ github.event.inputs.files_json }}' | jq -c '.[]' | while read file; do
+            path=$(echo "$file" | jq -r '.path')
+            content=$(echo "$file" | jq -r '.content')
+            mkdir -p "$(dirname "$path")"
+            printf "%s\n" "$content" > "$path"
+            echo "Wrote $path"
+          done
 
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v6
         with:
-          branch: batches/${{ github.event.inputs.batch_name }}
+          commit-message: ${{ github.event.inputs.commit_message }}
           title: "Batch: ${{ github.event.inputs.batch_name }}"
           body: |
             This PR was created by the Batch Publisher workflow.
-            Batch name: **${{ github.event.inputs.batch_name}}**
-            Commit message: **${{ github.event.inputs.commit_message}}**
-          base: main
+            Batch: **${{ github.event.inputs.batch_name }}**
+            Commit: **${{ github.event.inputs.commit_message }}**
+            Files were added/updated based on provided JSON input.
+          branch: batches/${{ github.event.inputs.batch_name }}
+          delete-branch: true
+          add-paths: |
+            .
