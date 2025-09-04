@@ -1,4 +1,4 @@
-name: Batch Publisher
+øname: Batch Publisher
 
 on:
   workflow_dispatch:
