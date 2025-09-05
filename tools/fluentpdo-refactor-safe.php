@@ -1,7 +1,8 @@
 <?php
 /**
- * Batch 37.4 – Safe FluentPDO refactor
- * Converts simple patterns (from+where, insert, update, delete).
+ * Batch 37.5 – Improved Safe FluentPDO Refactor
+ * Konverterer inserts/updates/deletes fra FluentPDO til Aura.Sql skeletter,
+ * men bevarer parametre ($values, $set, $params[...] osv.).
  */
 
 $root = dirname(__DIR__);
@@ -16,35 +17,35 @@ foreach ($rii as $file) {
     $contents = file_get_contents($path);
     $orig = $contents;
 
-    // FROM ... WHERE id
+    // INSERT: ->insertInto('table')->values($values)->execute()
     $contents = preg_replace(
-        '/(\$this->fluent|\$fluent)->from\(\'([a-zA-Z0-9_]+)\'\).*?->where\(\'([a-zA-Z0-9_]+)\',\s*(\$[a-zA-Z0-9_]+)\).*?->fetchAll\(\)/s',
-        '$sql = "SELECT * FROM $2 WHERE $3 = :$3";' . "\n" .
-        '$result = $this->db->fetchAll($sql, [\'$3\' => $4]);',
+        '/(\$[a-zA-Z0-9_]+\s*=\s*)?(?:\$this->fluent|\$fluent)->insertInto\(\'([a-zA-Z0-9_]+)\'\)\s*->values\((\$[a-zA-Z0-9_]+)\)\s*->execute\(\)/s',
+        '$1$sql = "INSERT INTO $2 (/* columns */) VALUES (/* values */)";' . "\n" .
+        '$this->db->perform($sql, $3);',
         $contents
     );
 
-    // INSERT simple
+    // DELETE: ->deleteFrom('table')->where('col = ?', $var)->execute()
     $contents = preg_replace(
-        '/(\$this->fluent|\$fluent)->insertInto\(\'([a-zA-Z0-9_]+)\'\).*?->execute\(\)/s',
-        '$sql = "INSERT INTO $2 (...) VALUES (...)";' . "\n" .
-        '$this->db->perform($sql, [/* params */]);',
+        '/(\$[a-zA-Z0-9_]+\s*=\s*)?(?:\$this->fluent|\$fluent)->deleteFrom\(\'([a-zA-Z0-9_]+)\'\)\s*->where\(\'([a-zA-Z0-9_]+)\s*=\s*\?\',\s*(\$[a-zA-Z0-9_\[\]\'"]+)\)\s*->execute\(\)/s',
+        '$1$sql = "DELETE FROM $2 WHERE $3 = :$3";' . "\n" .
+        '$this->db->perform($sql, [\'$3\' => $4]);',
         $contents
     );
 
-    // UPDATE simple
+    // UPDATE: ->update('table')->set($set)->where('col = ?', $var)->execute()
     $contents = preg_replace(
-        '/(\$this->fluent|\$fluent)->update\(\'([a-zA-Z0-9_]+)\'\).*?->execute\(\)/s',
-        '$sql = "UPDATE $2 SET ... WHERE ...";' . "\n" .
-        '$this->db->perform($sql, [/* params */]);',
+        '/(\$[a-zA-Z0-9_]+\s*=\s*)?(?:\$this->fluent|\$fluent)->update\(\'([a-zA-Z0-9_]+)\'\)\s*->set\((\$[a-zA-Z0-9_]+)\)\s*->where\(\'([a-zA-Z0-9_]+)\s*=\s*\?\',\s*(\$[a-zA-Z0-9_\[\]\'"]+)\)\s*->execute\(\)/s',
+        '$1$sql = "UPDATE $2 SET /* columns */ WHERE $4 = :$4";' . "\n" .
+        '$this->db->perform($sql, array_merge($3, [\'$4\' => $5]));',
         $contents
     );
 
-    // DELETE simple
+    // UPDATE uden where: ->update('table')->set($set)->execute()
     $contents = preg_replace(
-        '/(\$this->fluent|\$fluent)->deleteFrom\(\'([a-zA-Z0-9_]+)\'\).*?->execute\(\)/s',
-        '$sql = "DELETE FROM $2 WHERE ...";' . "\n" .
-        '$this->db->perform($sql, [/* params */]);',
+        '/(\$[a-zA-Z0-9_]+\s*=\s*)?(?:\$this->fluent|\$fluent)->update\(\'([a-zA-Z0-9_]+)\'\)\s*->set\((\$[a-zA-Z0-9_]+)\)\s*->execute\(\)/s',
+        '$1$sql = "UPDATE $2 SET /* columns */";' . "\n" .
+        '$this->db->perform($sql, $3);',
         $contents
     );
 
