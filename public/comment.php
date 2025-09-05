@@ -105,9 +105,8 @@ if ($action === 'add') {
         ];
         $fluent = $db; // alias
 $fluent = $container->get(Database::class);
-        $newid = $fluent->insertInto('comments')
-                        ->values($values)
-                        ->execute();
+        $newid = $sql = "INSERT INTO comments (/* columns */) VALUES (/* values */)";
+$this->db->perform($sql, $values);;
 
         $db->run(");
         app_halt('Exit called');

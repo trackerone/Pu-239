@@ -64,9 +64,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $_POST['button'] === 'Post') {
             'change_vote' => $change_vote,
             'multi_options' => $multi_options,
         ];
-        $poll_id = $fluent->insertInto('forum_poll')
-                          ->values($values)
-                          ->execute();
+        $poll_id = $sql = "INSERT INTO forum_poll (/* columns */) VALUES (/* values */)";
+$this->db->perform($sql, $values);;
     }
     $values = [
         'user_id' => $CURUSER['id'],
@@ -78,9 +77,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $_POST['button'] === 'Post') {
         'anonymous' => $anonymous,
         'added' => TIME_NOW,
     ];
-    $topic_id = $fluent->insertInto('topics')
-                       ->values($values)
-                       ->execute();
+    $topic_id = $sql = "INSERT INTO topics (/* columns */) VALUES (/* values */)";
+$this->db->perform($sql, $values);;
 
     $values = [
         'topic_id' => $topic_id,
@@ -93,17 +91,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $_POST['button'] === 'Post') {
         'anonymous' => $anonymous,
     ];
 
-    $post_id = $fluent->insertInto('posts')
-                      ->values($values)
-                      ->execute();
+    $post_id = $sql = "INSERT INTO posts (/* columns */) VALUES (/* values */)";
+$this->db->perform($sql, $values);;
     $post_id = (int) $post_id;
     $set = [
         'forumtopics' => new Literal('forumtopics + 1'),
     ];
-    $fluent->update('usersachiev')
-           ->set($set)
-           ->where('userid = ?', $CURUSER['id'])
-           ->execute();
+    $sql = "UPDATE usersachiev SET /* columns */ WHERE userid = :userid";
+$this->db->perform($sql, array_merge($set, ['userid' => $CURUSER['id']]));;
 
     clr_forums_cache($post_id);
     clr_forums_cache($forum_id);
@@ -115,19 +110,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $_POST['button'] === 'Post') {
         'last_post' => $post_id,
         'post_count' => 1,
     ];
-    $fluent->update('topics')
-           ->set($set)
-           ->where('id = ?', $topic_id)
-           ->execute();
+    $sql = "UPDATE topics SET /* columns */ WHERE id = :id";
+$this->db->perform($sql, array_merge($set, ['id' => $topic_id]));;
 
     $set = [
         'post_count' => new Literal('post_count + 1'),
         'topic_count' => new Literal('topic_count + 1'),
     ];
-    $fluent->update('forums')
-           ->set($set)
-           ->where('id = ?', $forum_id)
-           ->execute();
+    $sql = "UPDATE forums SET /* columns */ WHERE id = :id";
+$this->db->perform($sql, array_merge($set, ['id' => $forum_id]));;
 
     if ($site_config['site']['autoshout_chat'] || $site_config['site']['autoshout_irc']) {
         $message = htmlsafechars($CURUSER['username']) . ' ' . _('Created a new topic') . " [quote][url={$site_config['paths']['baseurl']}/forums.php?action=view_topic&topic_id=$topic_id&page=last]" . $topic_name . '[/url][/quote]';
@@ -139,10 +130,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $_POST['button'] === 'Post') {
         $set = [
             'seedbonus' => $CURUSER['seedbonus'] + $site_config['bonus']['per_topic'],
         ];
-        $fluent->update('users')
-               ->set($set)
-               ->where('id = ?', $CURUSER['id'])
-               ->execute();
+        $sql = "UPDATE users SET /* columns */ WHERE id = :id";
+$this->db->perform($sql, array_merge($set, ['id' => $CURUSER['id']]));;
         $cache->update_row('user_' . $CURUSER['id'], [
             'seedbonus' => $CURUSER['seedbonus'] + $site_config['bonus']['per_topic'],
         ]);
@@ -153,9 +142,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $_POST['button'] === 'Post') {
             'user_id' => $CURUSER['id'],
             'topic_id' => $topic_id,
         ];
-        $fluent->insertInto('subscriptions')
-               ->values($values)
-               ->execute();
+        $sql = "INSERT INTO subscriptions (/* columns */) VALUES (/* values */)";
+$this->db->perform($sql, $values);;
     }
 
     $extension_error = $size_error = 0;

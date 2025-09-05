@@ -78,10 +78,8 @@ function trivia_update($data)
                 'asked' => 1,
                 'current' => 1,
             ];
-            $fluent->update('triviaq')
-                   ->set($set)
-                   ->where('qid = ?', $qid)
-                   ->execute();
+            $sql = "UPDATE triviaq SET /* columns */ WHERE qid = :qid";
+$this->db->perform($sql, array_merge($set, ['qid' => $qid]));;
 
             $values = $fluent->from('triviaq')
                              ->select('question')

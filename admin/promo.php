@@ -58,9 +58,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $do === 'addpromo') {
         'bonus_invites' => $bonus_invites,
         'bonus_karma' => $bonus_karma,
     ];
-    $promo_id = $fluent->insertInto('promo')
-                       ->values($values)
-                       ->execute();
+    $promo_id = $sql = "INSERT INTO promo (/* columns */) VALUES (/* values */)";
+$this->db->perform($sql, $values);;
     if (empty($promo_id)) {
         stderr(_('Error'), 'Something wrong happened, please retry');
     } else {
@@ -77,9 +76,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $do === 'addpromo') {
     if ($sure === 'no') {
         stderr('Sanity check...', 'You are about to delete promo <b>' . htmlsafechars($r) . '</b>, if you are sure click <a href="' . $_SERVER['PHP_SELF'] . '?tool=promo&amp;do=delete&amp;id=' . $id . '&amp;sure=yes"><span class="has-text-danger">here</span></a>');
     } elseif ($sure === 'yes') {
-        $deleted = $fluent->deleteFrom('promo')
-                          ->where('id = ?', $id)
-                          ->execute();
+        $deleted = $sql = "DELETE FROM promo WHERE id = :id";
+$this->db->perform($sql, ['id' => $id]);;
         if (!empty($deleted)) {
             $session->set('is-success', 'Promo was deleted!');
         } else {

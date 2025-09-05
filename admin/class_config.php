@@ -229,9 +229,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     'classpic' => $pic,
                     'template' => $stylesheet['id'],
                 ];
-                $class_id = $fluent->insertInto('class_config')
-                                   ->values($values)
-                                   ->execute();
+                $class_id = $sql = "INSERT INTO class_config (/* columns */) VALUES (/* values */)";
+$this->db->perform($sql, $values);;
 
                 write_class_files($stylesheet['id']);
             }

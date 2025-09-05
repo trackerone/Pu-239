@@ -101,10 +101,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     'accounts_made' => new Literal('accounts_made + 1'),
                     'users' => empty($valid['users']) ? $userid : $valid['users'] . '|' . $userid,
                 ];
-                $fluent->update('promo')
-                       ->set($set)
-                       ->where('link = ?', $valid['link'])
-                       ->execute();
+                $sql = "UPDATE promo SET /* columns */ WHERE link = :link";
+$this->db->perform($sql, array_merge($set, ['link' => $valid['link']]));;
 
                 $set = [
                     'join_type' => 'promo',

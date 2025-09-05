@@ -64,10 +64,8 @@ class BotTriggers
      */
     public function update(array $set, int $id)
     {
-        $result = $this->fluent->update('bot_triggers')
-                               ->set($set)
-                               ->where('id = ?', $id)
-                               ->execute();
+        $result = $sql = "UPDATE bot_triggers SET /* columns */ WHERE id = :id";
+$this->db->perform($sql, array_merge($set, ['id' => $id]));;
 
         if (!$result) {
             return false;
@@ -120,9 +118,8 @@ class BotTriggers
      */
     public function delete(int $id)
     {
-        $results = $this->fluent->deleteFrom('bot_triggers')
-                                ->where('id = ?', $id)
-                                ->execute();
+        $results = $sql = "DELETE FROM bot_triggers WHERE id = :id";
+$this->db->perform($sql, ['id' => $id]);;
         $this->cache->delete('bot_replies_');
 
         return $results;

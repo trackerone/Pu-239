@@ -90,10 +90,8 @@ function notify_owner(array $tids)
         $set = [
             'notified' => $dt,
         ];
-        $fluent->update('deathrow')
-               ->set($set)
-               ->where('tid = ?', $torrent['id'])
-               ->execute();
+        $sql = "UPDATE deathrow SET /* columns */ WHERE tid = :tid";
+$this->db->perform($sql, array_merge($set, ['tid' => $torrent['id']]));;
     }
     if (!empty($values)) {
         $messages_class = $container->get(Message::class);

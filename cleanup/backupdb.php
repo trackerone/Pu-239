@@ -93,18 +93,15 @@ function backupdb($data)
     $set = [
         'last_access' => $dt,
     ];
-    $fluent->update('users')
-           ->set($set)
-           ->where('id = ?', $site_config['chatbot']['id'])
-           ->execute();
+    $sql = "UPDATE users SET /* columns */ WHERE id = :id";
+$this->db->perform($sql, array_merge($set, ['id' => $site_config['chatbot']['id']]));;
     $values = [
         'name' => $filename,
         'added' => $dt,
         'userid' => $site_config['site']['owner'],
     ];
-    $fluent->insertInto('dbbackup')
-           ->values($values)
-           ->execute();
+    $sql = "INSERT INTO dbbackup (/* columns */) VALUES (/* values */)";
+$this->db->perform($sql, $values);;
 
     $time_end = microtime(true);
     $run_time = $time_end - $time_start;

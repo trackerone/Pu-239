@@ -99,9 +99,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         'creating' => htmlsafechars($_POST['creating']),
         'seeding' => htmlsafechars($_POST['seeding']),
     ];
-    $res = $fluent->insertInto('uploadapp')
-        ->values($values)
-        ->execute();
+    $res = $sql = "INSERT INTO uploadapp (/* columns */) VALUES (/* values */)";
+$this->db->perform($sql, $values);;
     $cache->delete('new_uploadapp_');
     if (!$res) {
         stderr(_('Error'), _fe('It appears something went wrong while sending your application. Please {0}try again{1}', "<a href='{$site_config['paths']['baseurl']}/uploadapp.php'>", '</a>'));

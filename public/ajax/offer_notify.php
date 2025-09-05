@@ -39,9 +39,8 @@ if ($notified) {
         'offerid' => $id,
     ];
     try {
-        $notify_id = $fluent->insertInto('offer_notify')
-                            ->values($values)
-                            ->execute();
+        $notify_id = $sql = "INSERT INTO offer_notify (/* columns */) VALUES (/* values */)";
+$this->db->perform($sql, $values);;
 
         echo json_encode(['notify' => $notify_id]);
         app_halt('Exit called');
