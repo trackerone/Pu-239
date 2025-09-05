@@ -23,9 +23,8 @@ function forum_update($data)
 
     $time_start = microtime(true);
     $fluent = $container->get(Database::class);
-    $fluent->deleteFrom('now_viewing')
-           ->where('added < ?', TIME_NOW - 900)
-           ->execute();
+    $sql = "DELETE FROM now_viewing WHERE ...";
+$this->db->perform($sql, [/* params */]);;
 
     $forums = $fluent->from('forums')
                      ->select(null)
@@ -42,10 +41,8 @@ function forum_update($data)
             'post_count' => $forum['posts'],
             'topic_count' => $forum['topics'],
         ];
-        $fluent->update('forums')
-               ->set($set)
-               ->where('id = ?', $forum['id'])
-               ->execute();
+        $sql = "UPDATE forums SET ... WHERE ...";
+$this->db->perform($sql, [/* params */]);;
     }
     $topics = $fluent->from('topics')
                      ->select(null)
@@ -63,9 +60,8 @@ function forum_update($data)
                             ->fetch();
 
         if (empty($last_post['id'])) {
-            $fluent->deleteFrom('topics')
-                   ->where('id = ?', $topic['id'])
-                   ->execute();
+            $sql = "DELETE FROM topics WHERE ...";
+$this->db->perform($sql, [/* params */]);;
         } else {
             $count = $fluent->from('posts')
                             ->select(null)
@@ -76,10 +72,8 @@ function forum_update($data)
                 'last_post' => $last_post['id'],
                 'post_count' => $count,
             ];
-            $fluent->update('topics')
-                   ->set($set)
-                   ->where('id = ?', $topic['id'])
-                   ->execute();
+            $sql = "UPDATE topics SET ... WHERE ...";
+$this->db->perform($sql, [/* params */]);;
         }
     }
 

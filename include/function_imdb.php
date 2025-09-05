@@ -133,24 +133,18 @@ function get_imdb_info(string $imdb_id, bool $title, bool $data_only, ?int $tid,
 
         $fluent = $container->get(Database::class);
         if (!empty($persons)) {
-            $fluent->insertInto('person')
-                ->values($persons)
-                ->ignore()
-                ->execute();
+            $sql = "INSERT INTO person (...) VALUES (...)";
+$this->db->perform($sql, [/* params */]);;
         }
 
         if (!empty($cast)) {
-            $fluent->insertInto('imdb_person')
-                ->values($cast)
-                ->ignore()
-                ->execute();
+            $sql = "INSERT INTO imdb_person (...) VALUES (...)";
+$this->db->perform($sql, [/* params */]);;
         }
 
         if (!empty($roles)) {
-            $fluent->insertInto('imdb_role')
-                ->values($roles)
-                ->ignore()
-                ->execute();
+            $sql = "INSERT INTO imdb_role (...) VALUES (...)";
+$this->db->perform($sql, [/* params */]);;
         }
 
         unset($cast, $persons, $roles);
@@ -723,10 +717,8 @@ function update_torrent_data(string $imdb_id)
         'rating' => $imdb_data['rating'],
     ]);
     $fluent = $container->get(Database::class);
-    $result = $fluent->update('torrents')
-        ->set($set)
-        ->where('imdb_id = ?', 'tt' . $imdb_id)
-        ->execute();
+    $result = $sql = "UPDATE torrents SET ... WHERE ...";
+$this->db->perform($sql, [/* params */]);;
 
     if ($result) {
         $torrents = $fluent->from('torrents')
@@ -786,10 +778,8 @@ function get_imdb_person($person_id)
             $set = [
                 'updated' => TIME_NOW,
             ];
-            $fluent->update('person')
-                ->set($set)
-                ->where('imdb_id = ?', $person_id)
-                ->execute();
+            $sql = "UPDATE person SET ... WHERE ...";
+$this->db->perform($sql, [/* params */]);;
 
             return false;
         }
@@ -847,10 +837,8 @@ function get_imdb_person($person_id)
         $set = [
             'updated' => TIME_NOW,
         ];
-        $fluent->update('person')
-            ->set($set)
-            ->where('imdb_id = ?', $person_id)
-            ->execute();
+        $sql = "UPDATE person SET ... WHERE ...";
+$this->db->perform($sql, [/* params */]);;
     }
 
     return $imdb_person;

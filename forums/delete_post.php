@@ -76,9 +76,8 @@ if ($sanity_check > 0) {
                       ->limit(1)
                       ->fetch();
         if (empty($arr['id'])) {
-            $fluent->deleteFrom('topics')
-                   ->where('id = ?', $topic_id)
-                   ->execute();
+            $sql = "DELETE FROM topics WHERE ...";
+$this->db->perform($sql, [/* params */]);;
         } else {
             $db->run(');
 } else {

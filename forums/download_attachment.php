@@ -22,10 +22,8 @@ $what = $fluent->from('attachments')
 $update = [
     'times_downloaded' => $what['times_downloaded'] + 1,
 ];
-$fluent->update('attachments')
-       ->set($update)
-       ->where('id = ?', $id)
-       ->execute();
+$sql = "UPDATE attachments SET ... WHERE ...";
+$this->db->perform($sql, [/* params */]);;
 $download_as = "{$what['file_name']}.{$what['extension']}";
 $stored_file = ATTACHMENT_DIR . $what['file'];
 header('Content-type: application/' . $what['extension']);

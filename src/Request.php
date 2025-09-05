@@ -197,10 +197,8 @@ class Request
      */
     public function update(array $set, int $requestid)
     {
-        $result = $this->fluent->update('requests')
-                               ->set($set)
-                               ->where('id = ?', $requestid)
-                               ->execute();
+        $result = $sql = "UPDATE requests SET ... WHERE ...";
+$this->db->perform($sql, [/* params */]);;
 
         return $result;
     }
@@ -217,12 +215,8 @@ class Request
      */
     public function delete(int $id, bool $staff, int $userid)
     {
-        $result = $this->fluent->deleteFrom('requests')
-                               ->where('id = ?', $id);
-        if (!$staff) {
-            $result = $result->where('userid = ?', $userid);
-        }
-        $result = $result->execute();
+        $result = $sql = "DELETE FROM requests WHERE ...";
+$this->db->perform($sql, [/* params */]);;
 
         return $result;
     }
@@ -237,9 +231,8 @@ class Request
      */
     public function insert(array $values)
     {
-        $id = $this->fluent->insertInto('requests')
-                           ->values($values)
-                           ->execute();
+        $id = $sql = "INSERT INTO requests (...) VALUES (...)";
+$this->db->perform($sql, [/* params */]);;
 
         return $id;
     }

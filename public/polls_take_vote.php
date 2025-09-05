@@ -91,10 +91,8 @@ if (!$_POST['nullvote']) {
         'votes' => new Literal('votes + 1'),
         'choices' => $choices,
     ];
-    $result = $fluent->update('polls')
-                     ->set($set)
-                     ->where('pid = ?', $poll_data['pid'])
-                     ->execute();
+    $result = $sql = "UPDATE polls SET ... WHERE ...";
+$this->db->perform($sql, [/* params */]);;
 
     if (!$result) {
         stderr(_('Error'), _('Could not update records'));

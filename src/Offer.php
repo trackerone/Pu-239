@@ -174,10 +174,8 @@ class Offer
      */
     public function update(array $set, int $offerid)
     {
-        $result = $this->fluent->update('offers')
-                               ->set($set)
-                               ->where('id = ?', $offerid)
-                               ->execute();
+        $result = $sql = "UPDATE offers SET ... WHERE ...";
+$this->db->perform($sql, [/* params */]);;
 
         return $result;
     }
@@ -194,12 +192,8 @@ class Offer
      */
     public function delete(int $id, bool $staff, int $userid)
     {
-        $result = $this->fluent->deleteFrom('offers')
-                               ->where('id = ?', $id);
-        if (!$staff) {
-            $result = $result->where('userid = ?', $userid);
-        }
-        $result = $result->execute();
+        $result = $sql = "DELETE FROM offers WHERE ...";
+$this->db->perform($sql, [/* params */]);;
 
         return $result;
     }
@@ -214,9 +208,8 @@ class Offer
      */
     public function insert(array $values)
     {
-        $id = $this->fluent->insertInto('offers')
-                           ->values($values)
-                           ->execute();
+        $id = $sql = "INSERT INTO offers (...) VALUES (...)";
+$this->db->perform($sql, [/* params */]);;
 
         return $id;
     }

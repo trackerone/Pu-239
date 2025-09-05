@@ -51,10 +51,8 @@ function mow_update($data)
             write_log("'Best Film of the Week' was emptied by system");
         }
     }
-    $fluent->update('avps')
-           ->set($set)
-           ->where("avps.arg = 'bestfilmofweek'")
-           ->execute();
+    $sql = "UPDATE avps SET ... WHERE ...";
+$this->db->perform($sql, [/* params */]);;
     $cache = $container->get(Cache::class);
     $cache->delete('motw_');
     $time_end = microtime(true);

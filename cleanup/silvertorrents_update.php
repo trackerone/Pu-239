@@ -40,11 +40,8 @@ function silvertorrents_update($data)
         $set = [
             'silver' => 0,
         ];
-        $fluent->update('torrents')
-               ->set($set)
-               ->where('silver > 1')
-               ->where('silver < ?', $dt)
-               ->execute();
+        $sql = "UPDATE torrents SET ... WHERE ...";
+$this->db->perform($sql, [/* params */]);;
     }
     $cache = $container->get(Cache::class);
     foreach ($torrents as $torrent) {

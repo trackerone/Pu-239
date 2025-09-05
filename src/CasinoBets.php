@@ -91,10 +91,8 @@ class CasinoBets
      */
     public function update(array $set, int $id)
     {
-        $this->fluent->update('casino_bets')
-                     ->set($set)
-                     ->where('id = ?', $id)
-                     ->execute();
+        $sql = "UPDATE casino_bets SET ... WHERE ...";
+$this->db->perform($sql, [/* params */]);;
     }
 
     /**
@@ -104,9 +102,8 @@ class CasinoBets
      */
     public function delete_bet(int $id)
     {
-        $this->fluent->deleteFrom('casino_bets')
-                     ->where('id = ?', $id)
-                     ->execute();
+        $sql = "DELETE FROM casino_bets WHERE ...";
+$this->db->perform($sql, [/* params */]);;
     }
 
     /**
@@ -133,9 +130,8 @@ class CasinoBets
      */
     public function insert(array $values)
     {
-        $id = $this->fluent->insertInto('casino_bets')
-                           ->values($values)
-                           ->execute();
+        $id = $sql = "INSERT INTO casino_bets (...) VALUES (...)";
+$this->db->perform($sql, [/* params */]);;
 
         return $id;
     }

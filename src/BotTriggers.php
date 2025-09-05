@@ -40,10 +40,8 @@ class BotTriggers
      */
     public function insert(array $values)
     {
-        $result = $this->fluent->insertInto('bot_triggers')
-                               ->ignore()
-                               ->values($values)
-                               ->execute();
+        $result = $sql = "INSERT INTO bot_triggers (...) VALUES (...)";
+$this->db->perform($sql, [/* params */]);;
 
         if (!$result) {
             return false;
@@ -64,10 +62,8 @@ class BotTriggers
      */
     public function update(array $set, int $id)
     {
-        $result = $this->fluent->update('bot_triggers')
-                               ->set($set)
-                               ->where('id = ?', $id)
-                               ->execute();
+        $result = $sql = "UPDATE bot_triggers SET ... WHERE ...";
+$this->db->perform($sql, [/* params */]);;
 
         if (!$result) {
             return false;
@@ -120,9 +116,8 @@ class BotTriggers
      */
     public function delete(int $id)
     {
-        $results = $this->fluent->deleteFrom('bot_triggers')
-                                ->where('id = ?', $id)
-                                ->execute();
+        $results = $sql = "DELETE FROM bot_triggers WHERE ...";
+$this->db->perform($sql, [/* params */]);;
         $this->cache->delete('bot_replies_');
 
         return $results;

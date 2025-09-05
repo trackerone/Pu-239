@@ -125,18 +125,15 @@ function trivia_points_update($data)
         'gameon' => 0,
         'finished' => date('Y-m-d H:i:s', $dt),
     ];
-    $fluent->update('triviasettings')
-           ->set($set)
-           ->where('gameon = 1')
-           ->execute();
+    $sql = "UPDATE triviasettings SET ... WHERE ...";
+$this->db->perform($sql, [/* params */]);;
 
     $values = [
         'gameon' => 1,
         'started' => date('Y-m-d H:i:s', $dt),
     ];
-    $fluent->insertInto('triviasettings')
-           ->values($values)
-           ->execute();
+    $sql = "INSERT INTO triviasettings (...) VALUES (...)";
+$this->db->perform($sql, [/* params */]);;
 
     $time_end = microtime(true);
     $run_time = $time_end - $time_start;

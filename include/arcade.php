@@ -46,9 +46,8 @@ if ($score === 0) {
     header('Location: ' . $site_config['paths']['baseurl'] . "/arcade_top_scores.php#{$gname}");
     app_halt('Exit called');
 }
-$fluent->insertInto('flashscores')
-       ->values($values)
-       ->execute();
+$sql = "INSERT INTO flashscores (...) VALUES (...)";
+$this->db->perform($sql, [/* params */]);;
 
 $game_id = array_search($gname, $site_config['arcade']['games']);
 $game = $site_config['arcade']['game_names'][$game_id];
@@ -92,10 +91,8 @@ if (!empty($high) && $score > $high) {
         'level' => $level,
         'user_id' => $user['id'],
     ];
-    $fluent->update('highscores')
-           ->set($update)
-           ->where('game = ?', $gname)
-           ->execute();
+    $sql = "UPDATE highscores SET ... WHERE ...";
+$this->db->perform($sql, [/* params */]);;
 } elseif (empty($high)) {
     $set = [
         'game' => $gname,
@@ -103,8 +100,7 @@ if (!empty($high) && $score > $high) {
         'level' => $level,
         'user_id' => $user['id'],
     ];
-    $fluent->insertInto('highscores')
-           ->values($values)
-           ->execute();
+    $sql = "INSERT INTO highscores (...) VALUES (...)";
+$this->db->perform($sql, [/* params */]);;
 }
 header('Location: ' . $site_config['paths']['baseurl'] . "/arcade_top_scores.php#{$gname}");

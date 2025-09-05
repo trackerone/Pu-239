@@ -24,76 +24,41 @@ function user_update($data)
     $time_start = microtime(true);
     $dt = TIME_NOW;
     $fluent = $container->get(Database::class);
-    $fluent->update('freeslots')
-           ->set(['addedup' => 0])
-           ->where('addedup != 0')
-           ->where('addedup < ?', $dt)
-           ->execute();
+    $sql = "UPDATE freeslots SET ... WHERE ...";
+$this->db->perform($sql, [/* params */]);;
 
-    $fluent->update('freeslots')
-           ->set(['addedfree' => 0])
-           ->where('addedfree != 0')
-           ->where('addedfree < ?', $dt)
-           ->execute();
+    $sql = "UPDATE freeslots SET ... WHERE ...";
+$this->db->perform($sql, [/* params */]);;
 
-    $fluent->deleteFrom('freeslots')
-           ->where('addedup = 0')
-           ->where('addedfree = 0')
-           ->execute();
+    $sql = "DELETE FROM freeslots WHERE ...";
+$this->db->perform($sql, [/* params */]);;
 
-    $fluent->update('torrents')
-           ->set(['free' => 0])
-           ->where('free > 1')
-           ->where('free < ?', $dt)
-           ->execute();
+    $sql = "UPDATE torrents SET ... WHERE ...";
+$this->db->perform($sql, [/* params */]);;
 
-    $fluent->update('users')
-           ->set(['downloadpos' => 1])
-           ->where('downloadpos > 1')
-           ->where('downloadpos < ?', $dt)
-           ->execute();
+    $sql = "UPDATE users SET ... WHERE ...";
+$this->db->perform($sql, [/* params */]);;
 
-    $fluent->update('users')
-           ->set(['uploadpos' => 1])
-           ->where('uploadpos > 1')
-           ->where('uploadpos < ?', $dt)
-           ->execute();
+    $sql = "UPDATE users SET ... WHERE ...";
+$this->db->perform($sql, [/* params */]);;
 
-    $fluent->update('users')
-           ->set(['chatpost' => 1])
-           ->where('chatpost > 1')
-           ->where('chatpost < ?', $dt)
-           ->execute();
+    $sql = "UPDATE users SET ... WHERE ...";
+$this->db->perform($sql, [/* params */]);;
 
-    $fluent->update('users')
-           ->set(['avatarpos' => 1])
-           ->where('avatarpos > 1')
-           ->where('avatarpos < ?', $dt)
-           ->execute();
+    $sql = "UPDATE users SET ... WHERE ...";
+$this->db->perform($sql, [/* params */]);;
 
-    $fluent->update('users')
-           ->set(['immunity' => 0])
-           ->where('immunity > 1')
-           ->where('immunity < ?', $dt)
-           ->execute();
+    $sql = "UPDATE users SET ... WHERE ...";
+$this->db->perform($sql, [/* params */]);;
 
-    $fluent->update('users')
-           ->set(['warned' => 0])
-           ->where('warned > 1')
-           ->where('warned < ?', $dt)
-           ->execute();
+    $sql = "UPDATE users SET ... WHERE ...";
+$this->db->perform($sql, [/* params */]);;
 
-    $fluent->update('users')
-           ->set(['pirate' => 0])
-           ->where('pirate > 1')
-           ->where('pirate < ?', $dt)
-           ->execute();
+    $sql = "UPDATE users SET ... WHERE ...";
+$this->db->perform($sql, [/* params */]);;
 
-    $fluent->update('users')
-           ->set(['king' => 0])
-           ->where('king > 1')
-           ->where('king < ?', $dt)
-           ->execute();
+    $sql = "UPDATE users SET ... WHERE ...";
+$this->db->perform($sql, [/* params */]);;
 
     $time_end = microtime(true);
     $run_time = $time_end - $time_start;

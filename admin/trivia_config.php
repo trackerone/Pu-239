@@ -49,15 +49,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 if (empty($set['canswer'])) {
                     $session->set('is-warning', _('No answer was set as the correct answer!'));
                 } else {
-                    $fluent->update('triviaq')
-                           ->set($set)
-                           ->where('qid = ?', $id)
-                           ->execute();
+                    $sql = "UPDATE triviaq SET ... WHERE ...";
+$this->db->perform($sql, [/* params */]);;
                 }
             } elseif ($type === 'delete' && isset($_POST['id']) && is_numeric($_POST['id'])) {
-                $fluent->deleteFrom('triviaq')
-                       ->where('qid = ?', $_POST['id'])
-                       ->execute();
+                $sql = "DELETE FROM triviaq WHERE ...";
+$this->db->perform($sql, [/* params */]);;
                 $session->set('is-success', _fe('Trivia Question #{0} was deleted.', $_POST['id']));
             } elseif ($type === 'insert') {
                 $values = $_POST;
@@ -71,9 +68,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 if (empty($values['canswer'])) {
                     $session->set('is-warning', _('No answer was set as the correct answer!'));
                 } else {
-                    $newid = $fluent->insertInto('triviaq')
-                                    ->values($values)
-                                    ->execute();
+                    $newid = $sql = "INSERT INTO triviaq (...) VALUES (...)";
+$this->db->perform($sql, [/* params */]);;
                     if (!empty($newid)) {
                         $session->set('is-success', _fe('Trivia Questions #{0} inserted correctly.', $newid));
                     }

@@ -61,12 +61,10 @@ function images_update()
     $fluent = $container->get(Database::class);
     $images_class = $container->get(Image::class);
     $torrent = $container->get(Torrent::class);
-    $fluent->deleteFrom('images')
-        ->where("url = 'N/A' OR url = '' OR url IS NULL")
-        ->execute();
-    $fluent->deleteFrom('person')
-        ->where("imdb_id = '' OR imdb_id IS NULL")
-        ->execute();
+    $sql = "DELETE FROM images WHERE ...";
+$this->db->perform($sql, [/* params */]);;
+    $sql = "DELETE FROM person WHERE ...";
+$this->db->perform($sql, [/* params */]);;
     fetch_person_info(50);
     echo _('Caching IMDb Movies Coming Soon') . "\n";
     get_upcoming(true);
@@ -361,10 +359,8 @@ function images_update()
                 $set = [
                     'info_updated' => TIME_NOW,
                 ];
-                $fluent->update('torrents')
-                    ->set($set)
-                    ->where('id = ?', $book['id'])
-                    ->execute();
+                $sql = "UPDATE torrents SET ... WHERE ...";
+$this->db->perform($sql, [/* params */]);;
             }
         }
     }
@@ -391,10 +387,8 @@ function images_update()
         $set = [
             'info_updated' => TIME_NOW,
         ];
-        $fluent->update('torrents')
-            ->set($set)
-            ->where('imdb_id = ?', $imdbid['imdb_id'])
-            ->execute();
+        $sql = "UPDATE torrents SET ... WHERE ...";
+$this->db->perform($sql, [/* params */]);;
     }
     echo _f('%d torrents imdb info cached', count($imdbids)) . "\n";
 
@@ -462,10 +456,8 @@ function images_update()
             $set = [
                 'updated' => TIME_NOW,
             ];
-            $fluent->update('offers')
-                ->set($set)
-                ->where('id = ?', $link['id'])
-                ->execute();
+            $sql = "UPDATE offers SET ... WHERE ...";
+$this->db->perform($sql, [/* params */]);;
         }
     }
     if (!empty($offer_links)) {
@@ -494,10 +486,8 @@ function images_update()
             $set = [
                 'updated' => TIME_NOW,
             ];
-            $fluent->update('requests')
-                ->set($set)
-                ->where('id = ?', $link['id'])
-                ->execute();
+            $sql = "UPDATE requests SET ... WHERE ...";
+$this->db->perform($sql, [/* params */]);;
         }
     }
     if (!empty($request_links)) {

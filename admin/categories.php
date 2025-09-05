@@ -91,10 +91,8 @@ function move_cat($params)
         'category' => $params['new_cat_id'],
     ];
 
-    $results = $fluent->update('torrents')
-                      ->set($set)
-                      ->where('category = ?', $params['id'])
-                      ->execute();
+    $results = $sql = "UPDATE torrents SET ... WHERE ...";
+$this->db->perform($sql, [/* params */]);;
 
     flush_torrents($params['id']);
     flush_torrents($params['new_cat_id']);
@@ -199,9 +197,8 @@ function add_cat($params)
         'hidden' => $params['cat_hidden'],
     ];
     $fluent = $container->get(Database::class);
-    $insert = $fluent->insertInto('categories')
-                     ->values($values)
-                     ->execute();
+    $insert = $sql = "INSERT INTO categories (...) VALUES (...)";
+$this->db->perform($sql, [/* params */]);;
 
     $cache = $container->get(Cache::class);
     $cache->delete('genrelist_grouped_');
@@ -248,9 +245,8 @@ function delete_cat($params)
         stderr(_('Error'), _('There are still torrents assigned to this category'));
     }
 
-    $results = $fluent->deleteFrom('categories')
-                      ->where('id  = ?', $params['id'])
-                      ->execute();
+    $results = $sql = "DELETE FROM categories WHERE ...";
+$this->db->perform($sql, [/* params */]);;
 
     $cache->delete('genrelist_grouped_');
     $cache->delete('genrelist_ordered_');
@@ -354,10 +350,8 @@ function edit_cat($params)
         'hidden' => $params['cat_hidden'],
     ];
     $fluent = $container->get(Database::class);
-    $update = $fluent->update('categories')
-                     ->set($set)
-                     ->where('id = ?', $params['id'])
-                     ->execute();
+    $update = $sql = "UPDATE categories SET ... WHERE ...";
+$this->db->perform($sql, [/* params */]);;
 
     if ($update) {
         set_ordered($params);
@@ -614,10 +608,8 @@ function reorder_cats(bool $redirect = true)
             'ordered' => ++$i,
         ];
 
-        $fluent->update('categories')
-               ->set($set)
-               ->where('id = ?', $cat['id'])
-               ->execute();
+        $sql = "UPDATE categories SET ... WHERE ...";
+$this->db->perform($sql, [/* params */]);;
     }
 
     flush_torrents(0);
@@ -647,11 +639,8 @@ function set_ordered(array $params)
     $set = [
         'ordered' => new Literal('ordered + 1'),
     ];
-    $fluent->update('categories')
-           ->set($set)
-           ->where('ordered>= ?', $params['order_id'])
-           ->where('id != ?', $params['id'])
-           ->execute();
+    $sql = "UPDATE categories SET ... WHERE ...";
+$this->db->perform($sql, [/* params */]);;
 }
 
 /**

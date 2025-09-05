@@ -24,10 +24,8 @@ if (empty($id) || !isset($notified)) {
 $fluent = $container->get(Database::class);
 if ($notified) {
     try {
-        $fluent->deleteFrom('request_notify')
-               ->where('userid = ?', $user['id'])
-               ->where('requestid = ?', $id)
-               ->execute();
+        $sql = "DELETE FROM request_notify WHERE ...";
+$this->db->perform($sql, [/* params */]);;
         echo json_encode(['notify' => 0]);
         app_halt('Exit called');
     } catch (Exception $e) {
@@ -39,9 +37,8 @@ if ($notified) {
         'requestid' => $id,
     ];
     try {
-        $notify_id = $fluent->insertInto('request_notify')
-                            ->values($values)
-                            ->execute();
+        $notify_id = $sql = "INSERT INTO request_notify (...) VALUES (...)";
+$this->db->perform($sql, [/* params */]);;
 
         echo json_encode(['notify' => $notify_id]);
         app_halt('Exit called');

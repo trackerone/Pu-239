@@ -26,9 +26,8 @@ function backup_update($data)
     $days = $dt - (3 * 86400);
     $hours = $dt - (6 * 3600);
     $fluent = $container->get(Database::class);
-    $fluent->deleteFrom('dbbackup')
-           ->where('added < ?', $days)
-           ->execute();
+    $sql = "DELETE FROM dbbackup WHERE ...";
+$this->db->perform($sql, [/* params */]);;
 
     $paths = [
         BACKUPS_DIR . 'db' . DIRECTORY_SEPARATOR => $days,

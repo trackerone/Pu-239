@@ -60,9 +60,8 @@ if (isset($_POST['action2'])) {
                         'name' => $name,
                         'boxnumber' => $box,
                     ];
-                    $fluent->insertInto('pmboxes')
-                           ->values($values)
-                           ->execute();
+                    $sql = "INSERT INTO pmboxes (...) VALUES (...)";
+$this->db->perform($sql, [/* params */]);;
                     $cache->delete('get_all_boxes_' . $CURUSER['id']);
                     $cache->delete('insertJumpTo_' . $CURUSER['id']);
                 }
@@ -87,10 +86,8 @@ if (isset($_POST['action2'])) {
                     $set = [
                         'name' => $name,
                     ];
-                    $fluent->update('pmboxes')
-                           ->set($set)
-                           ->where('id = ?', $row['id'])
-                           ->execute();
+                    $sql = "UPDATE pmboxes SET ... WHERE ...";
+$this->db->perform($sql, [/* params */]);;
                     $cache->delete('get_all_boxes_' . $CURUSER['id']);
                     $cache->delete('insertJumpTo_' . $CURUSER['id']);
                     $worked = '&name=1';

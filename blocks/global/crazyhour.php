@@ -48,10 +48,8 @@ function crazyhour()
                 'var' => $crazyhour['crazyhour']['var'],
                 'amount' => $crazyhour['crazyhour']['amount'],
             ];
-            $fluent->update('freeleech')
-                   ->set($update)
-                   ->where("type = 'crazyhour'")
-                   ->execute();
+            $sql = "UPDATE freeleech SET ... WHERE ...";
+$this->db->perform($sql, [/* params */]);;
         }
         $cache->set('crazyhour_', $crazyhour['crazyhour'], 0);
     }
@@ -66,10 +64,8 @@ function crazyhour()
                 'var' => $crazyhour['crazyhour']['var'],
                 'amount' => $crazyhour['crazyhour']['amount'],
             ];
-            $fluent->update('freeleech')
-                   ->set($update)
-                   ->where("type = 'crazyhour'")
-                   ->execute();
+            $sql = "UPDATE freeleech SET ... WHERE ...";
+$this->db->perform($sql, [/* params */]);;
             $cache->set('crazyhour_', $crazyhour['crazyhour'], 0);
             write_log('Next [color=#FFCC00][b]Crazyhour[/b][/color] is at ' . get_date((int) $crazyhour['crazyhour']['var'] + ($CURUSER['time_offset'] - 3600), 'LONG') . '');
             $msg = 'Next [color=orange][b]Crazyhour[/b][/color] is at ' . get_date((int) $crazyhour['crazyhour']['var'] + ($CURUSER['time_offset'] - 3600), 'LONG');
@@ -83,10 +79,8 @@ function crazyhour()
                 $update = [
                     'amount' => $crazyhour['crazyhour']['amount'],
                 ];
-                $fluent->update('freeleech')
-                       ->set($update)
-                       ->where("type = 'crazyhour'")
-                       ->execute();
+                $sql = "UPDATE freeleech SET ... WHERE ...";
+$this->db->perform($sql, [/* params */]);;
                 $cache->set('crazyhour_', $crazyhour['crazyhour'], 0);
                 $msg = _("It's CrazyHour");
                 write_log($msg);

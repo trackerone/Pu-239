@@ -116,17 +116,14 @@ if ($do === 'view_page') {
         'code' => $token,
         'added' => TIME_NOW,
     ];
-    $fluent->insertInto('invite_codes')
-           ->values($values)
-           ->execute();
+    $sql = "INSERT INTO invite_codes (...) VALUES (...)";
+$this->db->perform($sql, [/* params */]);;
 
     $set = [
         'invites' => $user['invites'] - 1,
     ];
-    $fluent->update('users')
-           ->set($set)
-           ->where('id = ?', $user['id'])
-           ->execute();
+    $sql = "UPDATE users SET ... WHERE ...";
+$this->db->perform($sql, [/* params */]);;
 
     $update['invites'] = ($user['invites'] - 1);
     $cache->update_row('user_' . $user['id'], [
@@ -169,10 +166,8 @@ if ($do === 'view_page') {
         if (!validemail($email)) {
             stderr(_('Error'), _("That doesn't look like a valid email address."));
         }
-        $fluent->update('invite_codes')
-               ->set(['email' => $email])
-               ->where('code = ?', $_POST['code'])
-               ->execute();
+        $sql = "UPDATE invite_codes SET ... WHERE ...";
+$this->db->perform($sql, [/* params */]);;
 
         $inviter = htmlsafechars($user['username']);
         $title = $site_config['site']['name'];
@@ -235,20 +230,15 @@ if ($do === 'view_page') {
     if (!$sure) {
         stderr(_('Delete Invite'), _fe('Are you sure you want to delete this invite code? Click {0}here{1} to delete it or {2}here{3} to go back.', "<a href='{$_SERVER['PHP_SELF']}?do=delete_invite&amp;id={$id}&amp;sender={$user['id']}&amp;sure=yes'><span class='has-text-danger'>", '</span></a>', "<a href='{$_SERVER['PHP_SELF']}?do=view_page'><span class='has-text-success'>", '</span></a>'));
     }
-    $fluent->deleteFrom('invite_codes')
-           ->where('id = ?', $id)
-           ->where('sender = ?', $user['id'])
-           ->where('status = "Pending"')
-           ->execute();
+    $sql = "DELETE FROM invite_codes WHERE ...";
+$this->db->perform($sql, [/* params */]);;
 
     $set = [
         'invites' => $user['invites'] + 1,
     ];
 
-    $fluent->update('users')
-           ->set($set)
-           ->where('id = ?', $user['id'])
-           ->execute();
+    $sql = "UPDATE users SET ... WHERE ...";
+$this->db->perform($sql, [/* params */]);;
     $update['invites'] = ($user['invites'] + 1);
 
     $cache->update_row('user_' . $user['id'], [

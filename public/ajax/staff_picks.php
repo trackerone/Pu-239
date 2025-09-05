@@ -28,10 +28,8 @@ $set = [
     'staff_picks' => $staff_picks,
 ];
 $fluent = $container->get(Database::class);
-$result = $fluent->update('torrents')
-                 ->set($set)
-                 ->where('id = ?', $id)
-                 ->execute();
+$result = $sql = "UPDATE torrents SET ... WHERE ...";
+$this->db->perform($sql, [/* params */]);;
 
 if ($result) {
     $cache = $container->get(Cache::class);

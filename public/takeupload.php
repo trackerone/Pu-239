@@ -475,13 +475,8 @@ if ($recipe > 0) {
         'torrentid' => $id,
         'status' => 'uploaded',
     ];
-    $cooker = $fluent->update('upcoming')
-                     ->set($update)
-                     ->where('id = ?', $recipe);
-    if ($user['class'] < UC_STAFF) {
-        $cooker = $cooker->where('userid = ?', $user['id']);
-    }
-    $cooker = $cooker->execute();
+    $cooker = $sql = "UPDATE upcoming SET ... WHERE ...";
+$this->db->perform($sql, [/* params */]);;
     if (!empty($cooker)) {
         $recipes = $fluent->from('upcoming_notify')
                           ->select(null)
@@ -532,10 +527,8 @@ if ($offer > 0) {
         'torrentid' => $id,
         'updated' => $dt,
     ];
-    $fluent->update('offers')
-           ->set($set)
-           ->where('id = ?', $offer)
-           ->execute();
+    $sql = "UPDATE offers SET ... WHERE ...";
+$this->db->perform($sql, [/* params */]);;
 }
 $filled = 0;
 if ($request > 0) {
@@ -571,10 +564,8 @@ if ($request > 0) {
         'torrentid' => $id,
         'updated' => $dt,
     ];
-    $fluent->update('requests')
-           ->set($set)
-           ->where('id = ?', $request)
-           ->execute();
+    $sql = "UPDATE requests SET ... WHERE ...";
+$this->db->perform($sql, [/* params */]);;
 
     $users_achieve = $container->get(Usersachiev::class);
     $update = [

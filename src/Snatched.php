@@ -99,11 +99,8 @@ class Snatched
      */
     public function update(array $set, int $tid, int $userid)
     {
-        $this->fluent->update('snatched')
-                     ->set($set)
-                     ->where('torrentid = ?', $tid)
-                     ->where('userid = ?', $userid)
-                     ->execute();
+        $sql = "UPDATE snatched SET ... WHERE ...";
+$this->db->perform($sql, [/* params */]);;
     }
 
     /**
@@ -117,10 +114,8 @@ class Snatched
      */
     public function update_by_id(array $set, int $id)
     {
-        $result = $this->fluent->update('snatched')
-                               ->set($set)
-                               ->where('id = ?', $id)
-                               ->execute();
+        $result = $sql = "UPDATE snatched SET ... WHERE ...";
+$this->db->perform($sql, [/* params */]);;
 
         return $result;
     }
@@ -147,10 +142,8 @@ class Snatched
      */
     public function flush(int $userid)
     {
-        $result = $this->fluent->update('snatched')
-                               ->set(['seeder' => 'no'])
-                               ->where('userid = ?', $userid)
-                               ->execute();
+        $result = $sql = "UPDATE snatched SET ... WHERE ...";
+$this->db->perform($sql, [/* params */]);;
 
         return $result;
     }
@@ -209,11 +202,8 @@ class Snatched
     {
         $set = ['mark_of_cain' => 'no'];
 
-        $this->fluent->update('snatched')
-                     ->set($set)
-                     ->where('(real_uploaded > real_downloaded OR seedtime > ?)', $time)
-                     ->where('mark_of_cain = "yes"')
-                     ->execute();
+        $sql = "UPDATE snatched SET ... WHERE ...";
+$this->db->perform($sql, [/* params */]);;
     }
 
     /**
@@ -224,10 +214,8 @@ class Snatched
     public function set_cain(array $cains)
     {
         $set = ['mark_of_cain' => 'yes'];
-        $this->fluent->update('snatched')
-                     ->set($set)
-                     ->where('id', $cains)
-                     ->execute();
+        $sql = "UPDATE snatched SET ... WHERE ...";
+$this->db->perform($sql, [/* params */]);;
     }
 
     /**
@@ -343,10 +331,7 @@ class Snatched
         $update = [
             'seeder' => 'no',
         ];
-        $this->fluent->update('snatched')
-                     ->set($update)
-                     ->where('last_action < ?', $deadtime)
-                     ->where('seeder = "yes"')
-                     ->execute();
+        $sql = "UPDATE snatched SET ... WHERE ...";
+$this->db->perform($sql, [/* params */]);;
     }
 }

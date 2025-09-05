@@ -68,10 +68,8 @@ class Usersachiev
     public function add(array $values)
     {
         try {
-            return $this->fluent->insertInto('usersachiev')
-                                ->values($values)
-                                ->ignore()
-                                ->execute();
+            return $sql = "INSERT INTO usersachiev (...) VALUES (...)";
+$this->db->perform($sql, [/* params */]);;
         } catch (\Exception $e) {
             return $e->getMessage();
         }
@@ -86,10 +84,8 @@ class Usersachiev
     public function update(array $set, int $userid)
     {
         try {
-            return $this->fluent->update('usersachiev')
-                                ->set($set)
-                                ->where('userid = ?', $userid)
-                                ->execute();
+            return $sql = "UPDATE usersachiev SET ... WHERE ...";
+$this->db->perform($sql, [/* params */]);;
         } catch (\Exception $e) {
             return $e->getMessage();
         }

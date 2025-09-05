@@ -28,10 +28,8 @@ $set = [
     'navbar' => $show,
 ];
 $fluent = $container->get(Database::class);
-$result = $fluent->update('staffpanel')
-                 ->set($set)
-                 ->where('id = ?', $_POST['id'])
-                 ->execute();
+$result = $sql = "UPDATE staffpanel SET ... WHERE ...";
+$this->db->perform($sql, [/* params */]);;
 
 if ($result) {
     $cache = $container->get(Cache::class);

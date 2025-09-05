@@ -71,9 +71,8 @@ class Message
         }
         $count = (int) ($this->limit / max(array_map('count', $values)));
         foreach (array_chunk($values, $count) as $t) {
-            $result = $this->fluent->insertInto('messages')
-                                   ->values($t)
-                                   ->execute();
+            $result = $sql = "INSERT INTO messages (...) VALUES (...)";
+$this->db->perform($sql, [/* params */]);;
         }
 
         foreach ($values as $user) {
@@ -173,10 +172,8 @@ class Message
      */
     public function update(array $set, int $id)
     {
-        $result = $this->fluent->update('messages')
-                               ->set($set)
-                               ->where('id = ?', $id)
-                               ->execute();
+        $result = $sql = "UPDATE messages SET ... WHERE ...";
+$this->db->perform($sql, [/* params */]);;
 
         return $result;
     }
@@ -190,11 +187,8 @@ class Message
      */
     public function update_location(array $set, int $location, int $userid)
     {
-        $this->fluent->update('messages')
-                     ->set($set)
-                     ->where('location = ?', $location)
-                     ->where('receiver = ?', $userid)
-                     ->execute();
+        $sql = "UPDATE messages SET ... WHERE ...";
+$this->db->perform($sql, [/* params */]);;
     }
 
     /**

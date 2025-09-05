@@ -265,9 +265,8 @@ class Peer
      */
     public function flush(int $userid)
     {
-        $result = $this->fluent->deleteFrom('peers')
-                               ->where('userid = ?', $userid)
-                               ->execute();
+        $result = $sql = "DELETE FROM peers WHERE ...";
+$this->db->perform($sql, [/* params */]);;
 
         return $result;
     }

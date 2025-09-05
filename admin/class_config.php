@@ -58,49 +58,29 @@ $db = $container->get(Database::class);;
 
     $fluent = $container->get(Database::class);
     if ($direction === 'increment') {
-        $fluent->update('forums')
-               ->set(['min_class_read' => new Literal('min_class_read + 1')])
-               ->where('min_class_read >= ?', $value)
-               ->execute();
+        $sql = "UPDATE forums SET ... WHERE ...";
+$this->db->perform($sql, [/* params */]);;
 
-        $fluent->update('forums')
-               ->set(['min_class_write' => new Literal('min_class_write + 1')])
-               ->where('min_class_write >= ?', $value)
-               ->execute();
+        $sql = "UPDATE forums SET ... WHERE ...";
+$this->db->perform($sql, [/* params */]);;
 
-        $fluent->update('forums')
-               ->set(['min_class_create' => new Literal('min_class_create + 1')])
-               ->where('min_class_create >= ?', $value)
-               ->execute();
+        $sql = "UPDATE forums SET ... WHERE ...";
+$this->db->perform($sql, [/* params */]);;
 
-        $fluent->update('forum_config')
-               ->set(['min_delete_view_class' => new Literal('min_delete_view_class + 1')])
-               ->where('min_delete_view_class >= ?', $value)
-               ->execute();
+        $sql = "UPDATE forum_config SET ... WHERE ...";
+$this->db->perform($sql, [/* params */]);;
     } else {
-        $fluent->update('forums')
-               ->set(['min_class_read' => new Literal('min_class_read - 1')])
-               ->where('min_class_read >= ?', $value)
-               ->where('min_class_read > 0')
-               ->execute();
+        $sql = "UPDATE forums SET ... WHERE ...";
+$this->db->perform($sql, [/* params */]);;
 
-        $fluent->update('forums')
-               ->set(['min_class_write' => new Literal('min_class_write - 1')])
-               ->where('min_class_write >= ?', $value)
-               ->where('min_class_write>0')
-               ->execute();
+        $sql = "UPDATE forums SET ... WHERE ...";
+$this->db->perform($sql, [/* params */]);;
 
-        $fluent->update('forums')
-               ->set(['min_class_create' => new Literal('min_class_create - 1')])
-               ->where('min_class_create >= ?', $value)
-               ->where('min_class_create>0')
-               ->execute();
+        $sql = "UPDATE forums SET ... WHERE ...";
+$this->db->perform($sql, [/* params */]);;
 
-        $fluent->update('forum_config')
-               ->set(['min_delete_view_class' => new Literal('min_delete_view_class - 1')])
-               ->where('min_delete_view_class >= ?', $value)
-               ->where('min_delete_view_class>0')
-               ->execute();
+        $sql = "UPDATE forum_config SET ... WHERE ...";
+$this->db->perform($sql, [/* params */]);;
     }
 }
 
@@ -135,11 +115,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         'classcolor' => is_array($classcolor) ? implode('|', $classcolor) : $classcolor,
                         'classpic' => is_array($classpic) ? implode('|', $classpic) : $classpic,
                     ];
-                    $fluent->update('class_config')
-                           ->set($set)
-                           ->where('template = ?', $style)
-                           ->where('name = ?', $current_name)
-                           ->execute();
+                    $sql = "UPDATE class_config SET ... WHERE ...";
+$this->db->perform($sql, [/* params */]);;
 
                     write_class_files($style);
                     $edited = true;
@@ -178,10 +155,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $update = [
                     'value' => $arr['value'] + 1,
                 ];
-                $fluent->update('class_config')
-                       ->set($update)
-                       ->where("name = 'UC_MAX")
-                       ->execute();
+                $sql = "UPDATE class_config SET ... WHERE ...";
+$this->db->perform($sql, [/* params */]);;
             }
 
             $res = $fluent->from('class_config')
@@ -192,10 +167,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         $update = [
                             'value' => $arr['value'] + 1,
                         ];
-                        $fluent->update('class_config')
-                               ->set($update)
-                               ->where("name = 'UC_STAFF")
-                               ->execute();
+                        $sql = "UPDATE class_config SET ... WHERE ...";
+$this->db->perform($sql, [/* params */]);;
                     }
                 }
             }
@@ -229,9 +202,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     'classpic' => $pic,
                     'template' => $stylesheet['id'],
                 ];
-                $class_id = $fluent->insertInto('class_config')
-                                   ->values($values)
-                                   ->execute();
+                $class_id = $sql = "INSERT INTO class_config (...) VALUES (...)";
+$this->db->perform($sql, [/* params */]);;
 
                 write_class_files($stylesheet['id']);
             }
@@ -245,12 +217,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
     } elseif ($mode === 'remove') {
         $value = (int) $_POST['class'];
-        $deleted = $fluent->deleteFrom('class_config')
-                          ->where('value = ?', $value)
-                          ->where('name != ?', 'UC_MIN')
-                          ->where('name != ?', 'UC_MAX')
-                          ->where('name != ?', 'UC_STAFF')
-                          ->execute();
+        $deleted = $sql = "DELETE FROM class_config WHERE ...";
+$this->db->perform($sql, [/* params */]);;
         if ($deleted) {
             $max = $fluent->from('class_config')
                           ->select(null)
@@ -260,38 +228,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $set = [
                 'value' => new Literal('value - 1'),
             ];
-            $result = $fluent->update('class_config')
-                             ->set($set)
-                             ->where('name = ?', 'UC_MAX')
-                             ->execute();
-            $fluent->update('class_config')
-                   ->set($set)
-                   ->where('name = ?', 'UC_STAFF')
-                   ->execute();
-            $fluent->update('class_config')
-                   ->set($set)
-                   ->where('value > ?', $value)
-                   ->where('value <= ?', $max)
-                   ->where('name != ?', 'UC_MIN')
-                   ->where('name != ?', 'UC_MAX')
-                   ->where('name != ?', 'UC_STAFF')
-                   ->execute();
+            $result = $sql = "UPDATE class_config SET ... WHERE ...";
+$this->db->perform($sql, [/* params */]);;
+            $sql = "UPDATE class_config SET ... WHERE ...";
+$this->db->perform($sql, [/* params */]);;
+            $sql = "UPDATE class_config SET ... WHERE ...";
+$this->db->perform($sql, [/* params */]);;
             $set = [
                 'class' => new Literal('class - 1'),
             ];
-            $fluent->update('users')
-                   ->set($set)
-                   ->where('class > ?', $value)
-                   ->where('class <= ?', $max)
-                   ->execute();
+            $sql = "UPDATE users SET ... WHERE ...";
+$this->db->perform($sql, [/* params */]);;
             $set = [
                 'av_class' => new Literal('av_class - 1'),
             ];
-            $fluent->update('staffpanel')
-                   ->set($set)
-                   ->where('av_class > ?', $value)
-                   ->where('av_class <= ?', $max)
-                   ->execute();
+            $sql = "UPDATE staffpanel SET ... WHERE ...";
+$this->db->perform($sql, [/* params */]);;
 
             $stylesheets = $fluent->from('stylesheets')
                                   ->select(null)

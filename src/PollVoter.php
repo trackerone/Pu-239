@@ -64,9 +64,8 @@ class PollVoter
      */
     public function delete(int $poll_id)
     {
-        $this->fluent->deleteFrom('poll_voters')
-                     ->where('poll_id = ?', $poll_id)
-                     ->execute();
+        $sql = "DELETE FROM poll_voters WHERE ...";
+$this->db->perform($sql, [/* params */]);;
     }
 
     /**
@@ -92,9 +91,8 @@ class PollVoter
      */
     public function add(array $values)
     {
-        $id = $this->fluent->insertInto('poll_voters')
-                           ->values($values)
-                           ->execute();
+        $id = $sql = "INSERT INTO poll_voters (...) VALUES (...)";
+$this->db->perform($sql, [/* params */]);;
 
         return $id;
     }

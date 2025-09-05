@@ -47,10 +47,8 @@ $set = [
     'updated' => 0,
     'checked' => 0,
 ];
-$fluent->update('images')
-       ->set($set)
-       ->where('added > 0')
-       ->execute();
+$sql = "UPDATE images SET ... WHERE ...";
+$this->db->perform($sql, [/* params */]);;
 
 echo "$i altered images removed
 Images size: " . mksize($filesize) . "\n";

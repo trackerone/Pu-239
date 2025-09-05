@@ -47,10 +47,8 @@ class Image
      */
     public function insert(array $values)
     {
-        $this->fluent->insertInto('images')
-                     ->values($values)
-                     ->ignore()
-                     ->execute();
+        $sql = "INSERT INTO images (...) VALUES (...)";
+$this->db->perform($sql, [/* params */]);;
     }
 
     /**
@@ -179,9 +177,8 @@ class Image
      */
     public function delete_image(string $url)
     {
-        $this->fluent->deleteFrom('images')
-                     ->where('url = ?', $url)
-                     ->execute();
+        $sql = "DELETE FROM images WHERE ...";
+$this->db->perform($sql, [/* params */]);;
     }
 
     /**

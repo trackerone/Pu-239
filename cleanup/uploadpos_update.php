@@ -71,11 +71,8 @@ function uploadpos_update($data)
             'modcomment' => new Literal("CONCAT(\"$comment\", modcomment)"),
         ];
 
-        $fluent->update('users')
-               ->set($set)
-               ->where('uploadpos < ?', $dt)
-               ->where('uploadpos > 1')
-               ->execute();
+        $sql = "UPDATE users SET ... WHERE ...";
+$this->db->perform($sql, [/* params */]);;
     }
 
     $time_end = microtime(true);

@@ -85,10 +85,8 @@ if ($action === 'viewbug') {
             'staff' => $curuser['id'],
             'comment' => !empty($_POST['comment']) ? htmlsafechars($_POST['comment']) : '',
         ];
-        $fluent->update('bugs')
-               ->set($update)
-               ->where('id = ?', $id)
-               ->execute();
+        $sql = "UPDATE bugs SET ... WHERE ...";
+$this->db->perform($sql, [/* params */]);;
         $cache->delete('bug_mess_');
         header("location: {$_SERVER['PHP_SELF']}?action=bugs");
     }
@@ -314,9 +312,8 @@ if ($action === 'viewbug') {
             'sender' => $curuser['id'],
             'added' => $dt,
         ];
-        $result = $fluent->insertInto('bugs')
-                         ->values($values)
-                         ->execute();
+        $result = $sql = "INSERT INTO bugs (...) VALUES (...)";
+$this->db->perform($sql, [/* params */]);;
         $cache->delete('bug_mess_');
 
         if ($result) {

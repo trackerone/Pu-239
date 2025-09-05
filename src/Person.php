@@ -59,10 +59,8 @@ class Person
     public function update_by_imdb(array $update, string $imdb_id)
     {
         try {
-            return $this->fluent->update('person')
-                                ->set($update)
-                                ->where('imdb_id = ?', $imdb_id)
-                                ->execute();
+            return $sql = "UPDATE person SET ... WHERE ...";
+$this->db->perform($sql, [/* params */]);;
         } catch (\Exception $e) {
             return $e->getMessage();
         }
@@ -77,10 +75,8 @@ class Person
     public function update_by_url(array $update, string $url)
     {
         try {
-            return $this->fluent->update('person')
-                                ->set($update)
-                                ->where('photo = ?', $url)
-                                ->execute();
+            return $sql = "UPDATE person SET ... WHERE ...";
+$this->db->perform($sql, [/* params */]);;
         } catch (\Exception $e) {
             return $e->getMessage();
         }

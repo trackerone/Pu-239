@@ -52,9 +52,8 @@ class Wiki
     public function add(array $values)
     {
         try {
-            return $this->fluent->insertInto('wiki')
-                                ->values($values)
-                                ->execute();
+            return $sql = "INSERT INTO wiki (...) VALUES (...)";
+$this->db->perform($sql, [/* params */]);;
         } catch (\Exception $e) {
             return $e->getMessage();
         }
@@ -69,10 +68,8 @@ class Wiki
     public function update(array $update, int $id)
     {
         try {
-            return $this->fluent->update('wiki')
-                                ->set($update)
-                                ->where('id = ?', $id)
-                                ->execute();
+            return $sql = "UPDATE wiki SET ... WHERE ...";
+$this->db->perform($sql, [/* params */]);;
         } catch (\Exception $e) {
             return $e->getMessage();
         }
@@ -134,9 +131,8 @@ class Wiki
     public function delete(int $id)
     {
         try {
-            return $this->fluent->deleteFrom('wiki')
-                                ->where('id = ?', $id)
-                                ->execute();
+            return $sql = "DELETE FROM wiki WHERE ...";
+$this->db->perform($sql, [/* params */]);;
         } catch (\Exception $e) {
             return $e->getMessage();
         }

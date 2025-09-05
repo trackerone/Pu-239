@@ -36,10 +36,8 @@ function freetorrents_update($data)
             'free' => 0,
         ];
 
-        $fluent->update('torrents')
-               ->set($set)
-               ->where('id = ?', $arr['id'])
-               ->execute();
+        $sql = "UPDATE torrents SET ... WHERE ...";
+$this->db->perform($sql, [/* params */]);;
 
         $cache->update_row('torrent_details_' . $arr['id'], [
             'free' => 0,

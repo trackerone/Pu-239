@@ -27,11 +27,8 @@ if ($voted === 'yes') {
         'vote' => 'no',
     ];
     try {
-        $fluent->update('request_votes')
-               ->set($update)
-               ->where('user_id = ?', $user['id'])
-               ->where('request_id = ?', $id)
-               ->execute();
+        $sql = "UPDATE request_votes SET ... WHERE ...";
+$this->db->perform($sql, [/* params */]);;
         echo json_encode(['voted' => 'no']);
         app_halt('Exit called');
     } catch (Exception $e) {
@@ -39,10 +36,8 @@ if ($voted === 'yes') {
     }
 } elseif ($voted === 'no') {
     try {
-        $fluent->deleteFrom('request_votes')
-               ->where('user_id = ?', $user['id'])
-               ->where('request_id = ?', $id)
-               ->execute();
+        $sql = "DELETE FROM request_votes WHERE ...";
+$this->db->perform($sql, [/* params */]);;
         echo json_encode(['voted' => 0]);
         app_halt('Exit called');
     } catch (Exception $e) {
@@ -55,9 +50,8 @@ if ($voted === 'yes') {
         'request_id' => $id,
     ];
     try {
-        $fluent->insertInto('request_votes')
-               ->values($values)
-               ->execute();
+        $sql = "INSERT INTO request_votes (...) VALUES (...)";
+$this->db->perform($sql, [/* params */]);;
         echo json_encode(['voted' => 'yes']);
         app_halt('Exit called');
     } catch (Exception $e) {

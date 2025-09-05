@@ -55,11 +55,8 @@ $id = $arr_user_stuff['id'];
 $update = [
     'unread' => 'no',
 ];
-$fluent->update('messages')
-       ->set($update)
-       ->where('id = ?', $pm_id)
-       ->where('receiver = ?', $user['id'])
-       ->execute();
+$sql = "UPDATE messages SET ... WHERE ...";
+$this->db->perform($sql, [/* params */]);;
 $cache->decrement('inbox_' . $user['id']);
 if ($message['friend'] > 0) {
     $friends = '

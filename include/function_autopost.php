@@ -50,17 +50,14 @@ function auto_post($subject = 'Error - Subject Missing', $body = 'Error - No Bod
                 'forum_id' => $site_config['staff_forums'][0],
                 'topic_name' => $subject,
             ];
-            $topicid = $fluent->insertInto('topics')
-                              ->values($values)
-                              ->execute();
+            $topicid = $sql = "INSERT INTO topics (...) VALUES (...)";
+$this->db->perform($sql, [/* params */]);;
 
             $set = [
                 'topic_count' => new Literal('topic_count + 1'),
             ];
-            $fluent->update('forums')
-                   ->set($set)
-                   ->where('id = ?', $site_config['staff_forums'][0])
-                   ->execute();
+            $sql = "UPDATE forums SET ... WHERE ...";
+$this->db->perform($sql, [/* params */]);;
         }
 
         $values = [
@@ -69,25 +66,20 @@ function auto_post($subject = 'Error - Subject Missing', $body = 'Error - No Bod
             'added' => TIME_NOW,
             'body' => $body,
         ];
-        $postid = $fluent->insertInto('posts')
-                         ->values($values)
-                         ->execute();
+        $postid = $sql = "INSERT INTO posts (...) VALUES (...)";
+$this->db->perform($sql, [/* params */]);;
 
         $set = [
             'last_post' => $postid,
         ];
-        $fluent->update('topics')
-               ->set($set)
-               ->where('id = ?', $topicid)
-               ->execute();
+        $sql = "UPDATE topics SET ... WHERE ...";
+$this->db->perform($sql, [/* params */]);;
 
         $set = [
             'post_count' => new Literal('post_count + 1'),
         ];
-        $fluent->update('forums')
-               ->set($set)
-               ->where('id = ?', $site_config['staff_forums'][0])
-               ->execute();
+        $sql = "UPDATE forums SET ... WHERE ...";
+$this->db->perform($sql, [/* params */]);;
 
         $cache = $container->get(Cache::class);
         $cache->delete('last_posts_' . $CURUSER['class']);

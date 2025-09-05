@@ -47,9 +47,8 @@ class Bounty
     public function add(array $values)
     {
         try {
-            $id = $this->fluent->insertInto('bounties')
-                               ->values($values)
-                               ->execute();
+            $id = $sql = "INSERT INTO bounties (...) VALUES (...)";
+$this->db->perform($sql, [/* params */]);;
 
             return $id;
         } catch (\Exception $e) {
@@ -77,11 +76,8 @@ class Bounty
     public function update(array $update, int $userid, int $requestid)
     {
         try {
-            $id = $this->fluent->update('bounties')
-                               ->set($update)
-                               ->where('userid = ?', $userid)
-                               ->where('requestid = ?', $requestid)
-                               ->execute();
+            $id = $sql = "UPDATE bounties SET ... WHERE ...";
+$this->db->perform($sql, [/* params */]);;
 
             return $id;
         } catch (\Exception $e) {
@@ -98,10 +94,8 @@ class Bounty
     public function pay(array $update, int $requestid)
     {
         try {
-            $id = $this->fluent->update('bounties')
-                               ->set($update)
-                               ->where('requestid = ?', $requestid)
-                               ->execute();
+            $id = $sql = "UPDATE bounties SET ... WHERE ...";
+$this->db->perform($sql, [/* params */]);;
 
             return $id;
         } catch (\Exception $e) {

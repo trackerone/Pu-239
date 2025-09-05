@@ -83,9 +83,8 @@ if (isset($_POST['do_it'])) {
         '2nd_value' => $id_2,
     ];
 
-    $fluent->insertInto('reports')
-           ->values($values)
-           ->execute();
+    $sql = "INSERT INTO reports (...) VALUES (...)";
+$this->db->perform($sql, [/* params */]);;
     $cache = $container->get(Cache::class);
     $cache->delete('new_report_');
     $session = $container->get(Session::class);

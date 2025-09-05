@@ -115,9 +115,8 @@ if (in_array($tool, $staff_tools) && file_exists(ADMIN_DIR . $staff_tools[$tool]
             stderr(_('Sanity check'), _('Are you sure you want to delete this page') . ': "' . htmlsafechars($arr['page_name']) . '"? ' . _('Click') . ' <a href="' . $_SERVER['PHP_SELF'] . '?action=' . $action . '&amp;id=' . $id . '&amp;sure=yes">' . _('here') . '</a> ' . _('to delete it or') . ' <a href="' . $_SERVER['PHP_SELF'] . '">' . _('here') . '</a> ' . _('to go back') . '.');
         }
         $cache->delete('staff_classes_');
-        $result = $fluent->deleteFrom('staffpanel')
-                         ->where('id = ?', $id)
-                         ->execute();
+        $result = $sql = "DELETE FROM staffpanel WHERE ...";
+$this->db->perform($sql, [/* params */]);;
         $cache->delete('av_class_');
         $cache->delete('staff_panels_6');
         $cache->delete('staff_panels_5');
@@ -152,9 +151,8 @@ if (in_array($tool, $staff_tools) && file_exists(ADMIN_DIR . $staff_tools[$tool]
         header('Location: ' . $_SERVER['PHP_SELF']);
         app_halt('Exit called');
     } elseif ($action === 'clear_ajaxchat' && has_access($user['class'], UC_SYSOP, 'coder')) {
-        $fluent->deleteFrom('ajax_chat_messages')
-               ->where('id>0')
-               ->execute();
+        $sql = "DELETE FROM ajax_chat_messages WHERE ...";
+$this->db->perform($sql, [/* params */]);;
         $session->set('is-success', 'You deleted [i]all[/i] messages in AJAX Chat.');
         header('Location: ' . $_SERVER['PHP_SELF']);
         app_halt('Exit called');
@@ -257,9 +255,8 @@ if (in_array($tool, $staff_tools) && file_exists(ADMIN_DIR . $staff_tools[$tool]
                         'navbar' => $navbar,
                     ];
                     try {
-                        $new_id = $fluent->insertInto('staffpanel')
-                                         ->values($values)
-                                         ->execute();
+                        $new_id = $sql = "INSERT INTO staffpanel (...) VALUES (...)";
+$this->db->perform($sql, [/* params */]);;
                     } catch (Exception $e) {
                         $errors[] = $e->getMessage();
                     }
@@ -281,10 +278,8 @@ if (in_array($tool, $staff_tools) && file_exists(ADMIN_DIR . $staff_tools[$tool]
                         'type' => $type,
                         'av_class' => (int) $_POST['av_class'],
                     ];
-                    $res = $fluent->update('staffpanel')
-                                  ->set($set)
-                                  ->where('id=?', $id)
-                                  ->execute();
+                    $res = $sql = "UPDATE staffpanel SET ... WHERE ...";
+$this->db->perform($sql, [/* params */]);;
                     $cache->delete('av_class_');
                     $classes = $fluent->from('class_config')
                                       ->select(null)

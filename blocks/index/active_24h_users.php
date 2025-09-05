@@ -56,10 +56,8 @@ if ($active24 === false || is_null($active24)) {
             'value_i' => $count,
             'value_u' => TIME_NOW,
         ];
-        $fluent->update('avps')
-               ->set($set)
-               ->where('arg = ?', 'last24')
-               ->execute();
+        $sql = "UPDATE avps SET ... WHERE ...";
+$this->db->perform($sql, [/* params */]);;
     }
 
     $cache->set('last24_users_', $active24, $site_config['expires']['last24']);

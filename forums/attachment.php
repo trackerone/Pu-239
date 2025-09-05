@@ -62,9 +62,8 @@ function upload_attachments(int $post_id)
                             'size' => $size,
                         ];
                         $fluent = $container->get(Database::class);
-                        $fluent->insertInto('attachments')
-                               ->values($values)
-                               ->execute();
+                        $sql = "INSERT INTO attachments (...) VALUES (...)";
+$this->db->perform($sql, [/* params */]);;
                         copy($_FILES['attachment']['tmp_name'][$key], $upload_to);
                         chmod($upload_to, 0777);
                 }

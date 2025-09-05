@@ -69,33 +69,26 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $parentname = (isset($parent) ? $parent : '') . '::' . $name;
         if (!isset($set['name'])) {
             if ($id != 0) {
-                $fluent->deleteFrom('site_config')
-                       ->where('id = ?', $id)
-                       ->execute();
+                $sql = "DELETE FROM site_config WHERE ...";
+$this->db->perform($sql, [/* params */]);;
                 $session->set('is-success', "$parentname " . _('Deleted'));
             }
         } elseif ($id === 'Add') {
             if (isset($item) && $item !== '') {
                 $set['value'] = implode('|', $item) . '|' . $value;
-                $fluent->update('site_config')
-                       ->set($set)
-                       ->where('parent = ?', $parent)
-                       ->where('name = ?', $name)
-                       ->execute();
+                $sql = "UPDATE site_config SET ... WHERE ...";
+$this->db->perform($sql, [/* params */]);;
                 $session->set('is-success', "$parentname " . _('Updated'));
             } else {
                 if (!isset($item)) {
-                    $fluent->insertInto('site_config')
-                           ->values($set)
-                           ->execute();
+                    $sql = "INSERT INTO site_config (...) VALUES (...)";
+$this->db->perform($sql, [/* params */]);;
                     $session->set('is-success', "$parentname " . _('Added'));
                 }
             }
         } else {
-            $results = $fluent->update('site_config')
-                              ->set($set)
-                              ->where('id = ?', $id)
-                              ->execute();
+            $results = $sql = "UPDATE site_config SET ... WHERE ...";
+$this->db->perform($sql, [/* params */]);;
             if ($results) {
                 $session->set('is-success', "$parentname " . _('Updated'));
             }

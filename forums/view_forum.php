@@ -17,17 +17,15 @@ if (!is_valid_id($forum_id)) {
 }
 $fluent = $db; // alias
 $fluent = $container->get(Database::class);
-$fluent->deleteFrom('now_viewing')
-       ->where('user_id = ?', $CURUSER['id'])
-       ->execute();
+$sql = "DELETE FROM now_viewing WHERE ...";
+$this->db->perform($sql, [/* params */]);;
 $values = [
     'user_id' => $CURUSER['id'],
     'forum_id' => $forum_id,
     'added' => TIME_NOW,
 ];
-$fluent->insertInto('now_viewing')
-       ->values($values)
-       ->execute();
+$sql = "INSERT INTO now_viewing (...) VALUES (...)";
+$this->db->perform($sql, [/* params */]);;
 
 $arr = $fluent->from('forums')
               ->where('min_class_read <= ?', $CURUSER['class'])

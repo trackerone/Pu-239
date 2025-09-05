@@ -253,13 +253,11 @@ $values = [
     'topic_id' => $topic_id,
     'added' => TIME_NOW,
 ];
-$fluent->deleteFrom('now_viewing')
-       ->where('user_id = ?', $CURUSER['id'])
-       ->execute();
+$sql = "DELETE FROM now_viewing WHERE ...";
+$this->db->perform($sql, [/* params */]);;
 if (!get_anonymous($CURUSER['id'])) {
-    $fluent->insertInto('now_viewing')
-           ->values($values)
-           ->execute();
+    $sql = "INSERT INTO now_viewing (...) VALUES (...)";
+$this->db->perform($sql, [/* params */]);;
 }
 $cache = $container->get(Cache::class);
 $topic_users_cache = $cache->get('now_viewing_topic_');
@@ -297,19 +295,15 @@ if (!empty($topic_users)) {
 $set = [
     'views' => new Literal('views + 1'),
 ];
-$fluent->update('topics')
-       ->set($set)
-       ->where('id = ?', $topic_id)
-       ->execute();
+$sql = "UPDATE topics SET ... WHERE ...";
+$this->db->perform($sql, [/* params */]);;
 
 $res_count = $db->run(');
     $attachments = '';
 }
 
-$fluent->deleteFrom('read_posts')
-       ->where('user_id = ?', $CURUSER['id'])
-       ->where('topic_id = ?', $topic_id)
-       ->execute();
+$sql = "DELETE FROM read_posts WHERE ...";
+$this->db->perform($sql, [/* params */]);;
 
 $values = [
     'user_id' => $CURUSER['id'],

@@ -49,9 +49,8 @@ if ($action === 'takeappdelete') {
             $session->set('is-warning', _("Twix are for kids.. Check at least one application stupid...You can't delete nothing!"));
         }
         $in = str_repeat('?,', count($ids) - 1) . '?';
-        $fluent->deleteFrom('uploadapp')
-               ->where('id IN (' . $in . ')', $ids)
-               ->execute();
+        $sql = "DELETE FROM uploadapp WHERE ...";
+$this->db->perform($sql, [/* params */]);;
         $cache->delete('new_uploadapp_');
         $session->set('is-success', _('The upload applications were successfully deleted.'));
     }
@@ -81,10 +80,8 @@ if ($action === 'takeappdelete') {
         'comment' => $note,
         'moderator' => $CURUSER['username'],
     ];
-    $fluent->update('uploadapp')
-           ->set($update)
-           ->where('id = ?', $id)
-           ->execute();
+    $sql = "UPDATE uploadapp SET ... WHERE ...";
+$this->db->perform($sql, [/* params */]);;
     $user_class = $container->get(User::class);
     $setbits = $clrbits = 0;
     $setbits |= Roles::UPLOADER;
@@ -143,10 +140,8 @@ if ($action === 'rejectapp') {
         'comment' => $reason,
         'moderator' => $CURUSER['username'],
     ];
-    $fluent->update('uploadapp')
-           ->set($update)
-           ->where('id = ?', $id)
-           ->execute();
+    $sql = "UPDATE uploadapp SET ... WHERE ...";
+$this->db->perform($sql, [/* params */]);;
     $messages_class->insert($msgs_buffer);
     $cache->delete('new_uploadapp_');
     $session->set('is-success', _('The application was successfully rejected. The user has been sent a PM notification.'));

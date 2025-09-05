@@ -69,9 +69,8 @@ if (!$row || !is_file($fn) || !is_readable($fn)) {
         'torrentid' => $id,
         'multiplier' => $multiplier,
     ];
-    $fluent->insertInto('happyhour')
-           ->values($values)
-           ->execute();
+    $sql = "INSERT INTO happyhour (...) VALUES (...)";
+$this->db->perform($sql, [/* params */]);;
 }
 if ($site_config['bonus']['on'] && $row['owner'] != $user['id']) {
     $downloaded = $cache->get('downloaded_' . $user['id'] . '_' . $id);

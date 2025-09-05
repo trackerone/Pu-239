@@ -34,8 +34,7 @@ class Sitelog
      */
     public function insert(array $values)
     {
-        $this->fluent->insertInto('sitelog')
-                     ->values($values)
-                     ->execute();
+        $sql = "INSERT INTO sitelog (...) VALUES (...)";
+$this->db->perform($sql, [/* params */]);;
     }
 }

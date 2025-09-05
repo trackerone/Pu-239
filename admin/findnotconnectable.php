@@ -99,9 +99,8 @@ $fluent = $container->get(Database::class);
             'user' => $CURUSER['id'],
             'date' => $dt,
         ];
-        $fluent->insertInto('notconnectablepmlog')
-               ->values($values)
-               ->execute();
+        $sql = "INSERT INTO notconnectablepmlog (...) VALUES (...)";
+$this->db->perform($sql, [/* params */]);;
         $session->set('is-success', _('PM Sent to all non connectable peers'));
     } else {
         $session->set('is-warning', _('No non-connectable peers'));

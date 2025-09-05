@@ -53,9 +53,8 @@ if ($action === 'add') {
             'text' => $body,
             'ori_text' => $body,
         ];
-        $newid = $fluent->insertInto('usercomments')
-                        ->values($values)
-                        ->execute();
+        $newid = $sql = "INSERT INTO usercomments (...) VALUES (...)";
+$this->db->perform($sql, [/* params */]);;
         $count = $fluent->from('usercomments')
                         ->select(null)
                         ->select('COUNT(id) AS count')
@@ -134,10 +133,8 @@ if ($action === 'add') {
             'editedat' => TIME_NOW,
             'editedby' => $user['id'],
         ];
-        $fluent->update('usercomments')
-               ->set($set)
-               ->where('id = ?', $commentid)
-               ->execute();
+        $sql = "UPDATE usercomments SET ... WHERE ...";
+$this->db->perform($sql, [/* params */]);;
         if ($returnto) {
             header("Location: $returnto");
         } else {
@@ -180,9 +177,8 @@ if ($action === 'add') {
     if ($arr['id'] != $user['id'] && has_access($user['class'], UC_STAFF, 'coder')) {
         stderr(_('Error'), 'Permission denied.');
     }
-    $deleted = $fluent->deleteFrom('usercomments')
-                      ->where('id = ?', $commentid)
-                      ->execute();
+    $deleted = $sql = "DELETE FROM usercomments WHERE ...";
+$this->db->perform($sql, [/* params */]);;
 
     if ($userid && $deleted) {
         $count = $fluent->from('usercomments')

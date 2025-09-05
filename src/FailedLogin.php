@@ -61,10 +61,8 @@ class FailedLogin
      */
     public function set(array $set, string $ip)
     {
-        $this->fluent->update('failedlogins')
-                     ->set($set)
-                     ->where('INET6_NTOA(ip) = ?', $ip)
-                     ->execute();
+        $sql = "UPDATE failedlogins SET ... WHERE ...";
+$this->db->perform($sql, [/* params */]);;
     }
 
     /**
@@ -87,8 +85,7 @@ class FailedLogin
      */
     public function delete(string $ip)
     {
-        $this->fluent->deleteFrom('failedlogins')
-                     ->where('INET6_NTOA(ip) = ?', $ip)
-                     ->execute();
+        $sql = "DELETE FROM failedlogins WHERE ...";
+$this->db->perform($sql, [/* params */]);;
     }
 }

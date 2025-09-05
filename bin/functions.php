@@ -70,9 +70,8 @@ function get_classes(array $styles, bool $create)
             } else {
                 foreach ($all_classes[0] as $values) {
                     $values['template'] = $style;
-                    $fluent->insertInto('class_config')
-                           ->values($values)
-                           ->execute();
+                    $sql = "INSERT INTO class_config (...) VALUES (...)";
+$this->db->perform($sql, [/* params */]);;
                 }
                 app_halt("Classes added for template {$style}\n");
             }
@@ -187,11 +186,8 @@ function toggle_site_status(bool $before)
     if ($before) {
         clear_di_cache();
     }
-    $fluent->update('site_config')
-           ->set($set)
-           ->where('parent = "site"')
-           ->where('name = "online"')
-           ->execute();
+    $sql = "UPDATE site_config SET ... WHERE ...";
+$this->db->perform($sql, [/* params */]);;
     if (!$before) {
         clear_di_cache();
     }

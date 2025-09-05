@@ -77,10 +77,8 @@ class Userblock
     public function add(array $values)
     {
         try {
-            return $this->fluent->insertInto('user_blocks')
-                                ->values($values)
-                                ->ignore()
-                                ->execute();
+            return $sql = "INSERT INTO user_blocks (...) VALUES (...)";
+$this->db->perform($sql, [/* params */]);;
         } catch (\Exception $e) {
             return $e->getMessage();
         }

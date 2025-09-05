@@ -28,11 +28,8 @@ function visible_update($data)
     $set = [
         'visible' => 'no',
     ];
-    $fluent->update('torrents')
-           ->set($set)
-           ->where('visible = "yes"')
-           ->where('last_action < ?', $deadtime_tor)
-           ->execute();
+    $sql = "UPDATE torrents SET ... WHERE ...";
+$this->db->perform($sql, [/* params */]);;
 
     $time_end = microtime(true);
     $run_time = $time_end - $time_start;

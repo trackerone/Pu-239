@@ -45,9 +45,8 @@ class Achievementlist
     public function add(array $values)
     {
         try {
-            return $this->fluent->insertInto('achievementlist')
-                                ->values($values)
-                                ->execute();
+            return $sql = "INSERT INTO achievementlist (...) VALUES (...)";
+$this->db->perform($sql, [/* params */]);;
         } catch (\Exception $e) {
             return $e->getMessage();
         }

@@ -72,11 +72,8 @@ function sendpmpos_update($data)
                 'sendpmpos' => 1,
                 'modcomment' => new Literal("CONCAT(\"$comment\", modcomment)"),
             ];
-            $fluent->update('users')
-                   ->set($set)
-                   ->where('sendpmpos > 1')
-                   ->where('sendpmpos < ?', $dt)
-                   ->execute();
+            $sql = "UPDATE users SET ... WHERE ...";
+$this->db->perform($sql, [/* params */]);;
         }
         $time_end = microtime(true);
         $run_time = $time_end - $time_start;

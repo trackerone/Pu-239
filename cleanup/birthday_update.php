@@ -78,11 +78,8 @@ function birthday_update($data)
             $set = [
                 'uploaded' => new Literal('uploaded + 10737418240'),
             ];
-            $fluent->update('users')
-                   ->set($set)
-                   ->where('MONTH(birthday) = ?', $date['mon'])
-                   ->where('DAYOFMONTH(birthday) = ?', $date['mday'])
-                   ->execute();
+            $sql = "UPDATE users SET ... WHERE ...";
+$this->db->perform($sql, [/* params */]);;
         }
     }
     $time_end = microtime(true);

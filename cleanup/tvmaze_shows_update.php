@@ -74,10 +74,8 @@ function tvmaze_shows_update($data)
                 }
             }
             if (!empty($values)) {
-                $fluent->update('tvmaze')
-                       ->set($values)
-                       ->where('tvmaze_id = ?', $tvmaze_id)
-                       ->execute();
+                $sql = "UPDATE tvmaze SET ... WHERE ...";
+$this->db->perform($sql, [/* params */]);;
             }
             echo "TVMaze ID #{$tvmaze_id} updated.\n";
             if (++$limit >= 50) {

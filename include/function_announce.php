@@ -33,13 +33,8 @@ function crazyhour_announce()
         if ($cz['crazyhour'] === false) {
             $cz['crazyhour']['var'] = random_int(TIME_NOW, (TIME_NOW + 86400));
             $cz['crazyhour']['amount'] = 0;
-            $fluent->update('freeleech')
-                   ->set([
-                       'var' => $cz['crazyhour']['var'],
-                       'amount' => $cz['crazyhour']['amount'],
-                   ])
-                   ->where('type = ?', 'crazyhour')
-                   ->execute();
+            $sql = "UPDATE freeleech SET ... WHERE ...";
+$this->db->perform($sql, [/* params */]);;
         }
         $cache->set('crazyhour_', $cz['crazyhour'], 0);
     }
@@ -55,10 +50,8 @@ function crazyhour_announce()
                 'var' => $cz['crazyhour']['var'],
                 'amount' => $cz['crazyhour']['amount'],
             ];
-            $fluent->update('freeleech')
-                   ->set($set)
-                   ->where('type = ?', 'crazyhour')
-                   ->execute();
+            $sql = "UPDATE freeleech SET ... WHERE ...";
+$this->db->perform($sql, [/* params */]);;
 
             $cache->set('crazyhour_', $cz['crazyhour'], 0);
 
@@ -70,9 +63,8 @@ function crazyhour_announce()
                 'added' => TIME_NOW,
                 'txt' => $text,
             ];
-            $fluent->insertInto('sitelog')
-                   ->values($values)
-                   ->execute();
+            $sql = "INSERT INTO sitelog (...) VALUES (...)";
+$this->db->perform($sql, [/* params */]);;
         }
 
         return false;
@@ -81,10 +73,8 @@ function crazyhour_announce()
             $cz['crazyhour']['amount'] = 1;
             if (($cz_lock = $cache->set('crazyhour_lock_', 1, 10)) !== false) {
                 $set = ['amount' => $cz['crazyhour']['amount']];
-                $fluent->update('freeleech')
-                       ->set($set)
-                       ->where('type = ?', 'crazyhour')
-                       ->execute();
+                $sql = "UPDATE freeleech SET ... WHERE ...";
+$this->db->perform($sql, [/* params */]);;
 
                 $cache->set('crazyhour_', $cz['crazyhour'], 0);
 
@@ -96,9 +86,8 @@ function crazyhour_announce()
                     'added' => TIME_NOW,
                     'txt' => $text,
                 ];
-                $fluent->insertInto('sitelog')
-                       ->values($values)
-                       ->execute();
+                $sql = "INSERT INTO sitelog (...) VALUES (...)";
+$this->db->perform($sql, [/* params */]);;
             }
         }
 

@@ -42,10 +42,8 @@ if (!$site_config['forum_config']['online'] && !has_access($user['class'], UC_ST
 $HTMLOUT = '';
 $fluent = $db; // alias
 $fluent = $container->get(Database::class);
-$fluent->update('users')
-       ->set(['forum_access' => TIME_NOW])
-       ->where('id = ?', $user['id'])
-       ->execute();
+$sql = "UPDATE users SET ... WHERE ...";
+$this->db->perform($sql, [/* params */]);;
 
 $posted_action = isset($_GET['action']) ? htmlsafechars($_GET['action']) : (isset($_POST['action']) ? htmlsafechars($_POST['action']) : '');
 if (has_access($user['class'], UC_STAFF, 'coder') || has_access($user['class'], UC_STAFF, 'forum_mod')) {

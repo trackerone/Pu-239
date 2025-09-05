@@ -48,10 +48,8 @@ function trivia_update($data)
                     'asked' => 0,
                     'current' => 0,
                 ];
-                $fluent->update('triviaq')
-                       ->set($set)
-                       ->where('asked = 1')
-                       ->execute();
+                $sql = "UPDATE triviaq SET ... WHERE ...";
+$this->db->perform($sql, [/* params */]);;
                 $cache->delete('triviaquestions_');
                 $qids = get_qids();
             }
@@ -70,18 +68,14 @@ function trivia_update($data)
             $set = [
                 'current' => 0,
             ];
-            $fluent->update('triviaq')
-                   ->set($set)
-                   ->where('current = 1')
-                   ->execute();
+            $sql = "UPDATE triviaq SET ... WHERE ...";
+$this->db->perform($sql, [/* params */]);;
             $set = [
                 'asked' => 1,
                 'current' => 1,
             ];
-            $fluent->update('triviaq')
-                   ->set($set)
-                   ->where('qid = ?', $qid)
-                   ->execute();
+            $sql = "UPDATE triviaq SET ... WHERE ...";
+$this->db->perform($sql, [/* params */]);;
 
             $values = $fluent->from('triviaq')
                              ->select('question')

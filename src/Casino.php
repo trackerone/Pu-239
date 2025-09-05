@@ -35,13 +35,8 @@ class Casino
     public function reset_trys(int $userid)
     {
         $set = ['trys' => 0];
-        $this->fluent->update('casino')
-                     ->set($set)
-                     ->where('date < ?', TIME_NOW)
-                     ->where('trys >= 51')
-                     ->where('enableplay = "yes"')
-                     ->where('userid = ?', $userid)
-                     ->execute();
+        $sql = "UPDATE casino SET ... WHERE ...";
+$this->db->perform($sql, [/* params */]);;
     }
 
     /**
@@ -58,9 +53,8 @@ class Casino
             'userid' => $userid,
             'date' => TIME_NOW,
         ];
-        $this->fluent->insertInto('casino')
-                     ->values($values)
-                     ->execute();
+        $sql = "INSERT INTO casino (...) VALUES (...)";
+$this->db->perform($sql, [/* params */]);;
 
         return $this->get_user($userid);
     }
@@ -108,9 +102,7 @@ class Casino
      */
     public function update_user(array $set, int $userid)
     {
-        $this->fluent->update('casino')
-                     ->set($set)
-                     ->where('userid = ?', $userid)
-                     ->execute();
+        $sql = "UPDATE casino SET ... WHERE ...";
+$this->db->perform($sql, [/* params */]);;
     }
 }

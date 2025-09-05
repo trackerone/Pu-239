@@ -50,10 +50,8 @@ class Upcoming
         $set = [
             'views' => new Literal('views + 1'),
         ];
-        $this->fluent->update('upcoming')
-                     ->set($set)
-                     ->where('id = ?', $id)
-                     ->execute();
+        $sql = "UPDATE upcoming SET ... WHERE ...";
+$this->db->perform($sql, [/* params */]);;
     }
 
     /**
@@ -114,9 +112,8 @@ class Upcoming
      */
     public function insert(array $values)
     {
-        $id = $this->fluent->insertInto('upcoming')
-                           ->values($values)
-                           ->execute();
+        $id = $sql = "INSERT INTO upcoming (...) VALUES (...)";
+$this->db->perform($sql, [/* params */]);;
 
         return $id;
     }
@@ -133,12 +130,8 @@ class Upcoming
      */
     public function delete(int $id, bool $staff, int $userid)
     {
-        $result = $this->fluent->deleteFrom('upcoming')
-                               ->where('id = ?', $id);
-        if (!$staff) {
-            $result = $result->where('userid = ?', $userid);
-        }
-        $result = $result->execute();
+        $result = $sql = "DELETE FROM upcoming WHERE ...";
+$this->db->perform($sql, [/* params */]);;
 
         return $result;
     }
@@ -154,10 +147,8 @@ class Upcoming
      */
     public function update(array $set, int $upcomingid)
     {
-        $result = $this->fluent->update('upcoming')
-                               ->set($set)
-                               ->where('id = ?', $upcomingid)
-                               ->execute();
+        $result = $sql = "UPDATE upcoming SET ... WHERE ...";
+$this->db->perform($sql, [/* params */]);;
 
         return $result;
     }

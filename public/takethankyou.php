@@ -48,9 +48,8 @@ $values = [
     'torid' => $id,
     'thank_date' => TIME_NOW,
 ];
-$fluent->insertInto('thankyou')
-       ->values($values)
-       ->execute();
+$sql = "INSERT INTO thankyou (...) VALUES (...)";
+$this->db->perform($sql, [/* params */]);;
 $values = [
     'user' => $user['id'],
     'torrent' => $id,
@@ -58,18 +57,15 @@ $values = [
     'text' => $text,
     'ori_text' => $text,
 ];
-$fluent->insertInto('comments')
-       ->values($values)
-       ->execute();
+$sql = "INSERT INTO comments (...) VALUES (...)";
+$this->db->perform($sql, [/* params */]);;
 
 $set = [
     'thanks' => new Literal('thanks + 1'),
     'comments' => new Literal('comments + 1'),
 ];
-$fluent->update('torrents')
-       ->set($set)
-       ->where('id = ?', $id)
-       ->execute();
+$sql = "UPDATE torrents SET ... WHERE ...";
+$this->db->perform($sql, [/* params */]);;
 
 $cache->deleteMulti([
     'latest_comments_',
@@ -79,10 +75,8 @@ if ($site_config['bonus']['on']) {
     $set = [
         'seedbonus' => new Literal('seedbonus + ' . $site_config['bonus']['per_comment']),
     ];
-    $fluent->update('users')
-           ->set($set)
-           ->where('id = ?', $user['id'])
-           ->execute();
+    $sql = "UPDATE users SET ... WHERE ...";
+$this->db->perform($sql, [/* params */]);;
 }
 $session = $container->get(Session::class);
 $session->set('is-success', "Your 'Thank you' has been registered!");

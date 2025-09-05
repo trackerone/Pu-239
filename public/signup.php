@@ -101,10 +101,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     'accounts_made' => new Literal('accounts_made + 1'),
                     'users' => empty($valid['users']) ? $userid : $valid['users'] . '|' . $userid,
                 ];
-                $fluent->update('promo')
-                       ->set($set)
-                       ->where('link = ?', $valid['link'])
-                       ->execute();
+                $sql = "UPDATE promo SET ... WHERE ...";
+$this->db->perform($sql, [/* params */]);;
 
                 $set = [
                     'join_type' => 'promo',
@@ -123,11 +121,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             'receiver' => $userid,
             'status' => 'Confirmed',
         ];
-        $fluent->update('invite_codes')
-               ->set($set)
-               ->where('sender = ?', $inviter)
-               ->where('id = ?', $invite_id)
-               ->execute();
+        $sql = "UPDATE invite_codes SET ... WHERE ...";
+$this->db->perform($sql, [/* params */]);;
     }
     $session->unset('signup_variables');
     header("Location: {$site_config['paths']['baseurl']}/login.php");
