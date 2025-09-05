@@ -1,7 +1,7 @@
 <?php
 /**
- * Batch 37.4 – TODO FluentPDO refactor
- * Marks complex patterns for manual review.
+ * Batch 37.5 – TODO FluentPDO refactor
+ * Marks complex/unhandled FluentPDO queries with TODO, without deleting large blocks.
  */
 
 $root = dirname(__DIR__);
@@ -16,8 +16,9 @@ foreach ($rii as $file) {
     $contents = file_get_contents($path);
     $orig = $contents;
 
+    // Match en enkelt kæde: from(...) ... ->fetchAll/fetch/execute
     $contents = preg_replace(
-        '/(\$this->fluent|\$fluent)->.*?->(fetchAll|fetch|execute)\(\)/s',
+        '/(\$this->fluent|\$fluent)->[a-zA-Z0-9_]+\([^)]*\)(?:->[a-zA-Z0-9_]+\([^)]*\))*->(fetchAll|fetch|execute)\(\)/',
         '// TODO: review query' . "\n" .
         '$sql = "SELECT/INSERT/UPDATE/DELETE ...";' . "\n" .
         '$this->db->perform($sql, [/* params */]);',
