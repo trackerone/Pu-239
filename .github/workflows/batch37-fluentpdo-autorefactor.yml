@@ -1,0 +1,35 @@
+name: Batch 37 – FluentPDO Auto-Refactor
+
+on:
+  workflow_dispatch:
+
+jobs:
+  refactor:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.3'
+          tools: composer
+
+      - name: Run auto-refactor script
+        run: php tools/fluentpdo-autorefactor.php
+
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v6
+        with:
+          token: ${{ secrets.GH_PAT }}
+          commit-message: "chore: auto-refactor FluentPDO -> Aura.Sql"
+          title: "Batch 37 – Auto-refactor FluentPDO"
+          body: |
+            This PR was generated automatically by Batch 37.
+            It replaces common FluentPDO calls with Aura.Sql equivalents.
+          branch: batches/batch37-fluentpdo-autorefactor
+          delete-branch: true
