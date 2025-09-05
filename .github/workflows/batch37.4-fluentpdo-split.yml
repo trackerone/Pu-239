@@ -1,0 +1,52 @@
+name: Batch 37.4 – FluentPDO Split Refactor
+
+on:
+  workflow_dispatch:
+
+jobs:
+  refactor:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.3'
+
+      - name: Run safe refactor (simple patterns)
+        run: php tools/fluentpdo-refactor-safe.php > refactor-safe-log.txt
+
+      - name: Create PR for safe refactor
+        uses: peter-evans/create-pull-request@v6
+        with:
+          token: ${{ secrets.GH_PAT }}
+          commit-message: "chore: auto-refactor FluentPDO (safe patterns)"
+          title: "Batch 37.4 – Auto-refactor (safe)"
+          body: |
+            This PR replaces simple FluentPDO calls with Aura.Sql equivalents.
+            It only handles FROM/INSERT/UPDATE/DELETE with simple params.
+          branch: batches/batch37.4-refactor
+          delete-branch: true
+          add-paths: |
+            .
+
+      - name: Run TODO refactor (complex patterns)
+        run: php tools/fluentpdo-refactor-todo.php > refactor-todo-log.txt
+
+      - name: Create PR for TODO refactor
+        uses: peter-evans/create-pull-request@v6
+        with:
+          token: ${{ secrets.GH_PAT }}
+          commit-message: "chore: mark complex FluentPDO queries with TODO"
+          title: "Batch 37.4 – TODO queries (manual review)"
+          body: |
+            This PR marks complex FluentPDO queries with TODO comments for manual review.
+          branch: batches/batch37.4-todo
+          delete-branch: true
+          add-paths: |
+            .
