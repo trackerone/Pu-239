@@ -20,7 +20,7 @@ foreach ($rii as $file) {
 
     // INSERT: ->insertInto('table')->values($values)->execute()
     $contents = preg_replace(
-        '/(\$[a-zA-Z0-9_]+\s*=\s*)?(?:\$this->fluent|\$fluent)->insertInto\'([a-zA-Z0-9_]+)\'\s*->values(\$[a-zA-Z0-9_]+)\s*->execute/s',
+        '/(\$[a-zA-Z0-9_]+\s*=\s*)?(?:\$this->fluent|\$fluent)->insertInto\(\'([a-zA-Z0-9_]+)\'\)\s*->values\((\$[a-zA-Z0-9_]+)\)\s*->execute\(\)/s',
         '$1$sql = "INSERT INTO $2 (/* columns */) VALUES (/* values */)"' . "\n" .
         '$this->db->perform($sql, $3)',
         $contents
@@ -28,10 +28,30 @@ foreach ($rii as $file) {
 
     // DELETE: ->deleteFrom('table')->where('col = ?', $var)->execute()
     $contents = preg_replace(
-        '/(\$[a-zA-Z0-9_]+\s*=\s*)?(?:\$this->fluent|\$fluent)->deleteFrom\'([a-zA-Z0-9_]+)\'\s*->where\'([a-zA-Z0-9_]+)\s*=\s*\?\',\s*(\$[a-zA-Z0-9_\[\'"]+)\)\s*->execute/s',
+        '/(\$[a-zA-Z0-9_]+\s*=\s*)?(?:\$this->fluent|\$fluent)->deleteFrom\(\'([a-zA-Z0-9_]+)\'\)\s*->where\(\'([a-zA-Z0-9_]+)\s*=\s*\?\',\s*(\$[a-zA-Z0-9_\[\]\'"]+)\)\s*->execute\(\)/s',
         '$1$sql = "DELETE FROM $2 WHERE $3 = :$3"' . "\n" .
         '$this->db->perform($sql, [\'$3\' => $4])',
         $contents
     );
 
-    // UPDATE: ->update('table')->set($set)->where('col = ?', $
+    // UPDATE: ->update('table')->set($set)->where('col = ?', $var)->execute()
+    $contents = preg_replace(
+        '/(\$[a-zA-Z0-9_]+\s*=\s*)?(?:\$this->fluent|\$fluent)->update\(\'([a-zA-Z0-9_]+)\'\)\s*->set\((\$[a-zA-Z0-9_]+)\)\s*->where\(\'([a-zA-Z0-9_]+)\s*=\s*\?\',\s*(\$[a-zA-Z0-9_\[\]\'"]+)\)\s*->execute\(\)/s',
+        '$1$sql = "UPDATE $2 SET /* columns */ WHERE $4 = :$4"' . "\n" .
+        '$this->db->perform($sql, array_merge($3, [\'$4\' => $5]))',
+        $contents
+    );
+
+    // UPDATE uden where: ->update('table')->set($set)->execute()
+    $contents = preg_replace(
+        '/(\$[a-zA-Z0-9_]+\s*=\s*)?(?:\$this->fluent|\$fluent)->update\(\'([a-zA-Z0-9_]+)\'\)\s*->set\((\$[a-zA-Z0-9_]+)\)\s*->execute\(\)/s',
+        '$1$sql = "UPDATE $2 SET /* columns */"' . "\n" .
+        '$this->db->perform($sql, $3)',
+        $contents
+    );
+
+    if ($contents !== $orig) {
+        file_put_contents($path, $contents);
+        echo "Refactored safe: $path\n";
+    }
+}
