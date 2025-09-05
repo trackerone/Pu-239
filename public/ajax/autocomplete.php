@@ -27,15 +27,7 @@ $hash = 'suggest_torrents_' . hash('sha256', $keyword);
 $results = $cache->get($hash);
 if ($results === false || is_null($results)) {
     $fluent = $container->get(Database::class);
-    $results = $fluent->from('torrents')
-                      ->select(null)
-                      ->select('id')
-                      ->select('name')
-                      ->select('seeders')
-                      ->select('leechers')
-                      ->select('visible')
-                      ->where('name LIKE ?', "%$keyword%")
-                      ->fetchAll();
+    $results = $fluent$sql = "SELECT * FROM 'torrents'"; $this->db->fetchAll($sql);;
     $cache = $container->get(Cache::class);
     $cache->set($hash, $results, 0);
     $hashes = $cache->get('suggest_torrents_hashes_');

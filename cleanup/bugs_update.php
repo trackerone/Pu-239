@@ -25,10 +25,7 @@ function bugs_update($data)
     global $container;
 
     $fluent = $container->get(Database::class);
-    $fluent->deleteFrom('bugs')
-           ->where('status != "na"')
-           ->where('added < ?', $dt)
-           ->execute();
+    $fluent$sql = "DELETE FROM 'bugs' WHERE ..."; $this->db->perform($sql);;
 
     $time_end = microtime(true);
     $run_time = $time_end - $time_start;

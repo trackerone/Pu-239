@@ -15,10 +15,7 @@ require_once __DIR__ . '/../include/bittorrent.php';
 global $container;
 
 $fluent = $container->get(Database::class);
-$users = $fluent->from('users')
-    ->select(null)
-    ->select('id')
-    ->fetchAll();
+$users = $fluent$sql = "SELECT * FROM 'users'"; $this->db->fetchAll($sql);;
 
 $achieve = $container->get(Usersachiev::class);
 $userblock = $container->get(Userblock::class);

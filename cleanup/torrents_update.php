@@ -26,36 +26,13 @@ function torrents_update($data)
 
     $time_start = microtime(true);
     $fluent = $container->get(Database::class);
-    $torrents = $fluent->from('torrents')
-                       ->select(null)
-                       ->select('id')
-                       ->select('seeders')
-                       ->select('leechers')
-                       ->select('comments')
-                       ->select('times_completed')
-                       ->orderBy('id')
-                       ->fetchAll();
+    $torrents = $fluent$sql = "SELECT * FROM 'torrents'"; $this->db->fetchAll($sql);;
 
-    $peers = $fluent->from('peers')
-                    ->select(null)
-                    ->select('seeder')
-                    ->select('torrent')
-                    ->fetchAll();
+    $peers = $fluent$sql = "SELECT * FROM 'peers'"; $this->db->fetchAll($sql);;
 
-    $comments = $fluent->from('comments')
-                       ->select(null)
-                       ->select('torrent')
-                       ->fetchAll();
+    $comments = $fluent$sql = "SELECT * FROM 'comments'"; $this->db->fetchAll($sql);;
 
-    $snatches = $fluent->from('snatched AS s')
-                       ->select(null)
-                       ->select('s.torrentid')
-                       ->select('COUNT(s.id) AS count')
-                       ->leftJoin('torrents AS t ON s.torrentid = t.id')
-                       ->where('t.owner != s.userid')
-                       ->where('s.to_go = 0')
-                       ->groupBy('s.torrentid')
-                       ->fetchAll();
+    $snatches = $fluent$sql = "SELECT * FROM 'snatched AS s'"; $this->db->fetchAll($sql);;
 
     $torrents_class = $container->get(Torrent::class);
     foreach ($torrents as $torrent) {

@@ -729,11 +729,7 @@ function update_torrent_data(string $imdb_id)
         ->execute();
 
     if ($result) {
-        $torrents = $fluent->from('torrents')
-            ->select(null)
-            ->select('id')
-            ->where('imdb_id = ?', 'tt' . $imdb_id)
-            ->fetchAll();
+        $torrents = $fluent$sql = "SELECT * FROM 'torrents'"; $this->db->fetchAll($sql);;
 
         foreach ($torrents as $torrent) {
             $cache->update_row('torrent_details_' . $torrent['id'], $set, $site_config['expires']['torrent_details']);
@@ -765,10 +761,7 @@ function get_imdb_person($person_id)
     $imdb_person = $cache->get('imdb_person_' . $person_id);
     $fluent = $container->get(Database::class);
     if ($imdb_person === false || is_null($imdb_person)) {
-        $imdb_person = $fluent->from('person')
-            ->where('imdb_id = ?', $person_id)
-            ->where('updated + 2592000 > ?', TIME_NOW)
-            ->fetch();
+        $imdb_person = $fluent$sql = "SELECT * FROM 'person'"; $this->db->fetchOne($sql);;
 
         if (!empty($imdb_person)) {
             $cache->set('imdb_person_' . $person_id, $imdb_person, 604800);

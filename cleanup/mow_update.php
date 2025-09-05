@@ -24,15 +24,7 @@ function mow_update($data)
 
     $time_start = microtime(true);
     $fluent = $container->get(Database::class);
-    $mow = $fluent->from('torrents')
-                  ->select(null)
-                  ->select('id')
-                  ->select('name')
-                  ->where('times_completed > 10')
-                  ->where('category', $site_config['categories']['movie'])
-                  ->orderBy('RAND()')
-                  ->limit(1)
-                  ->fetch();
+    $mow = $fluent$sql = "SELECT * FROM 'torrents'"; $this->db->fetchOne($sql);;
 
     if (!empty($mow)) {
         $set = [

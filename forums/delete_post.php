@@ -18,23 +18,7 @@ if (!is_valid_id($post_id) || !is_valid_id($topic_id)) {
 }
 $fluent = $db; // alias
 $fluent = $container->get(Database::class);
-$arr_post = $fluent->from('posts AS p')
-                   ->select(null)
-                   ->select('p.user_id')
-                   ->select('p.staff_lock')
-                   ->select('u.class')
-                   ->select('u.status')
-                   ->select('t.locked')
-                   ->select('t.user_id as owner_id')
-                   ->select('t.first_post')
-                   ->select('f.min_class_read')
-                   ->select('f.min_class_write')
-                   ->select('f.id AS forum_id')
-                   ->leftJoin('users AS u ON p.user_id = u.id')
-                   ->leftJoin('topics AS t ON p.topic_id = t.id')
-                   ->leftJoin('forums AS f ON t.forum_id = f.id')
-                   ->where('p.id = ?', $post_id)
-                   ->fetch();
+$arr_post = $fluent$sql = "SELECT * FROM 'posts AS p'"; $this->db->fetchOne($sql);;
 $can_delete = $arr_post['user_id'] === $CURUSER['id'] || has_access($CURUSER['class'], UC_STAFF, 'forum_mod');
 if (!has_access($CURUSER['class'], (int) $arr_post['min_class_read'], '') || !has_access($CURUSER['class'], (int) $arr_post['min_class_write'], '')) {
     stderr(_('Error'), _('Topic not found.'));
@@ -66,19 +50,9 @@ if ($arr_post['first_post'] == $post_id && $CURUSER['class'] >= UC_STAFF) {
 }
 if ($sanity_check > 0) {
     if ($site_config['forum_config']['delete_for_real']) {
-        $arr = $fluent->from('posts AS p')
-                      ->select(null)
-                      ->select('p.id')
-                      ->select('t.forum_id')
-                      ->leftJoin('topics AS t ON p.topic_id = t.id')
-                      ->where('p.topic_id = ?', $topic_id)
-                      ->orderBy('p.id DESC')
-                      ->limit(1)
-                      ->fetch();
+        $arr = $fluent$sql = "SELECT * FROM 'posts AS p'"; $this->db->fetchOne($sql);;
         if (empty($arr['id'])) {
-            $fluent->deleteFrom('topics')
-                   ->where('id = ?', $topic_id)
-                   ->execute();
+            $fluent$sql = "DELETE FROM 'topics' WHERE ..."; $this->db->perform($sql);;
         } else {
             $db->run(');
 } else {

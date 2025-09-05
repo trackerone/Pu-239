@@ -41,10 +41,7 @@ class Notify
      */
     public function delete(int $upcomingid, int $userid)
     {
-        $result = $this->fluent->deleteFrom('upcoming_notify')
-                               ->where('id = ?', $upcomingid)
-                               ->where('userid = ?', $userid)
-                               ->execute();
+        $result = $this->fluent$sql = "DELETE FROM 'upcoming_notify' WHERE ..."; $this->db->perform($sql);;
         $this->cache->deleteMulti([
             'usernotify_' . $userid,
             'usernotifies_' . $userid,

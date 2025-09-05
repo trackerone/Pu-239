@@ -44,9 +44,7 @@ switch ($action) {
         if (!$id) {
             stderr(_('Error'), _('Invalid ID'));
         }
-        $fluent->deleteFrom('over_forums')
-               ->where('id = ?', $id)
-               ->execute();
+        $fluent$sql = "DELETE FROM 'over_forums' WHERE ..."; $this->db->perform($sql);;
         header('Location: ' . $_SERVER['PHP_SELF'] . '?tool=over_forums');
         app_halt('Exit called');
         break;
@@ -55,117 +53,7 @@ switch ($action) {
         if (!$name && !$desc && !$id) {
             stderr(_('Error'), _('Missing Form Data.'));
         }
-        $count = $fluent->from('over_forums')
-                        ->select(null)
-                        ->select('COUNT(id) AS count')
-                        ->where('name != ?', $name)
-                        ->where('sort = ?', $sort)
-                        ->fetch('count');
-        if ($count > 0) {
-            stderr(_('Error'), _('Over Forum Sort number in use. Please select another Over Forum Sort number!'));
-        }
-        $set = [
-            'sort' => $sort,
-            'name' => $name,
-            'description' => $desc,
-            'min_class_view' => $min_class_view,
-        ];
-        $fluent->update('over_forums')
-               ->set($set)
-               ->where('id = ?', $id)
-               ->execute();
-        header('Location: ' . $_SERVER['PHP_SELF'] . '?tool=over_forums');
-        app_halt('Exit called');
-        break;
-
-    case 'add_forum':
-        if (!$name && !$desc) {
-            stderr(_('Error'), _('Missing Form Data.'));
-        }
-        $count = $fluent->from('over_forums')
-                        ->select(null)
-                        ->select('COUNT(id) AS count')
-                        ->where('sort = ?', $sort)
-                        ->fetch('count');
-        if ($count > 0) {
-            stderr(_('Error'), _('Over Forum Sort number in use. Please select another Over Forum Sort number!'));
-        }
-        $values = [
-            'sort' => $sort,
-            'name' => $name,
-            'description' => $desc,
-            'min_class_view' => $min_class_view,
-        ];
-        $fluent->insertInto('over_forums')
-               ->values($values)
-               ->execute();
-
-        header('Location: ' . $_SERVER['PHP_SELF'] . '?tool=over_forums');
-        app_halt('Exit called');
-        break;
-
-    case 'edit_forum_page':
-        $row = $fluent->from('over_forums')
-                      ->where('id = ?', $id)
-                      ->fetch();
-        if (!empty($row)) {
-            $HTMLOUT .= $main_links . '
-            <form method="post" action="staffpanel.php?tool=over_forums&amp;action=over_forums" accept-charset="utf-8">
-            <input type="hidden" name="action2" value="edit_forum">
-            <input type="hidden" name="id" value="' . $id . '">
-            <table class="table table-bordered table-striped">
-            <tr>
-                <td colspan="2">' . _('edit overforum') . ': ' . htmlsafechars($row['name']) . '</td>
-            </tr>
-                <td><span class="has-text-weight-bold">' . _('Overforum name') . ':</span></td>
-            <td><input name="name" type="text" class="w-100" maxlength="60" value="' . htmlsafechars($row['name']) . '"></td>
-          </tr>
-          <tr>
-            <td><span class="has-text-weight-bold">' . _('Overforum description') . ':</span>  </td>
-            <td><input name="desc" type="text" class="w-100" maxlength="200" value="' . htmlsafechars($row['description']) . '"></td>
-          </tr>
-            <tr>
-            <td><span class="has-text-weight-bold">' . _('Minimun view permission') . ':</span></td>
-            <td>
-            <select name="min_class_view">';
-            for ($i = 0; $i <= $maxclass; ++$i) {
-                $over_forums .= '<option class="body" value="' . $i . '" ' . ($row['min_class_view'] == $i ? 'selected' : '') . '>' . get_user_class_name((int) $i) . '</option>';
-            }
-            $HTMLOUT .= $over_forums . '</select></td></tr><tr> 
-            <td><span class="has-text-weight-bold">' . _('Over forum Sort') . ':</span></td>
-            <td>
-            <select name="sort">';
-            $count = $fluent->from('over_forums')
-                            ->select(null)
-                            ->select('COUNT(id) AS count')
-                            ->fetch('count');
-
-            $maxclass = $count + 1;
-            for ($i = 0; $i <= $maxclass; ++$i) {
-                $sorted .= '<option class="body" value="' . $i . '" ' . ($row['sort'] == $i ? 'selected' : '') . '>' . $i . '</option>';
-            }
-            $HTMLOUT .= $sorted . '</select></td></tr>
-            <tr>
-                <td colspan="2" class="has-text-centered">
-                <input type="submit" name="button" class="button is-small margin20" value="' . _('Edit overforum') . '">
-                </td>
-          </tr>
-        </table></form>';
-        }
-        break;
-
-    case 'forum':
-        $HTMLOUT .= $main_links;
-        $heading = '
-            <tr>
-                <th class="has-text-centered">' . _('Sort') . '</th>
-                <th>' . _('Name') . '</th>
-                <th class="has-text-centered">' . _('Minimun Class View') . '</th>
-                <th class="has-text-centered">' . _('Modify') . '</th>
-            </tr>';
-        $query = $fluent->from('over_forums')
-                        ->orderBy('sort')
-                        ->fetchAll();
+        $count = $fluent$sql = "SELECT * FROM 'over_forums'"; $this->db->fetchAll($sql);;
         if (!empty($query)) {
             $body = '';
             foreach ($query as $row) {

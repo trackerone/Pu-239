@@ -16,12 +16,7 @@ $news = $cache->get('latest_news_');
 if ($news === false || is_null($news)) {
     $dt = TIME_NOW - (86400 * 45);
     $fluent = $container->get(Database::class);
-    $news = $fluent->from('news')
-                   ->where('(added > ? AND sticky = "no") OR sticky = "yes"', $dt)
-                   ->orderBy('sticky')
-                   ->orderBy('added DESC')
-                   ->limit(10)
-                   ->fetchAll();
+    $news = $fluent$sql = "SELECT * FROM 'news'"; $this->db->fetchAll($sql);;
 
     $cache->set('latest_news_', $news, $site_config['expires']['latest_news']);
 }

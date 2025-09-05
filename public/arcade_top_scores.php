@@ -24,14 +24,8 @@ $HTMLOUT = "
         </div>';
 
 $fluent = $container->get(Database::class);
-$scores = $fluent->from('flashscores')
-                 ->orderBy('game')
-                 ->orderBy('level DESC')
-                 ->orderBy('score DESC')
-                 ->fetchAll();
-$highscores = $fluent->from('highscores')
-                     ->orderBy('game')
-                     ->fetchAll();
+$scores = $fluent$sql = "SELECT * FROM 'flashscores'"; $this->db->fetchAll($sql);;
+$highscores = $fluent$sql = "SELECT * FROM 'highscores'"; $this->db->fetchAll($sql);;
 
 /**
  * @param string $game

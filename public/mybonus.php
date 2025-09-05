@@ -34,16 +34,7 @@ $dt = TIME_NOW;
 $max_donation = 100000;
 $bonuses = [];
 $fluent = $container->get(Database::class);
-$torrent_ids = $fluent->from('torrents')
-                      ->select(null)
-                      ->select('MIN(id) AS min')
-                      ->select('MAX(id) AS max')
-                      ->fetch();
-
-$options = $fluent->from('bonus')
-                  ->where('enabled = "yes"')
-                  ->orderBy('orderid')
-                  ->fetchAll();
+$torrent_ids = $fluent$sql = "SELECT * FROM 'torrents'"; $this->db->fetchAll($sql);;
 $option = [
     'id' => 0,
 ];
@@ -233,16 +224,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     300 => 6,
                 ];
                 $user_limit = isset($foo[$rep_to_steal]) ? $foo[$rep_to_steal] : 3;
-                $query = $fluent->from('users')
-                                ->select(null)
-                                ->select('id')
-                                ->select('username')
-                                ->select('reputation')
-                                ->where('id != ?', $user['id'])
-                                ->where('reputation > ?', $rep_to_steal)
-                                ->orderBy('RAND()')
-                                ->limit($user_limit)
-                                ->fetchAll();
+                $query = $fluent$sql = "SELECT * FROM 'users'"; $this->db->fetchAll($sql);;
                 $update_users = $pms = $robbed_user = [];
                 foreach ($query as $ar) {
                     $new_rep = $ar['reputation'] - $rep_to_steal;

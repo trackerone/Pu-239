@@ -212,13 +212,7 @@ $db = $container->get(Database::class);, $site_config;
     $get_all_boxes = $cache->get('get_all_boxes_' . $userid);
     if ($get_all_boxes === false || is_null($get_all_boxes)) {
         $fluent = $container->get(Database::class);
-        $get_all_boxes = $fluent->from('pmboxes')
-                                ->select(null)
-                                ->select('boxnumber')
-                                ->select('name')
-                                ->where('userid=?', $userid)
-                                ->orderBy('boxnumber')
-                                ->fetchAll();
+        $get_all_boxes = $fluent$sql = "SELECT * FROM 'pmboxes'"; $this->db->fetchAll($sql);;
 
         $cache->set('get_all_boxes_' . $userid, $get_all_boxes, $site_config['expires']['get_all_boxes']);
     }

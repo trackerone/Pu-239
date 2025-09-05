@@ -45,38 +45,7 @@ if (isset($_POST['action2'])) {
             if ($_POST['new'] === '') {
                 stderr(_('Error'), _('to add new PM boxes you MUST enter at least one PM box name!'));
             }
-            $boxnumber = $fluent->from('pmboxes')
-                                ->select(null)
-                                ->select('MAX(boxnumber) AS boxnumber')
-                                ->fetch('boxnumber');
-            $box = $boxnumber < 2 ? 2 : $boxnumber++;
-            $new_box = preg_replace('/[^\da-z\-_]/i', '', $_POST['new']);
-            foreach ($new_box as $key => $add_it) {
-                $add_it = preg_replace('/[^\da-z\-_]/i', '', $add_it);
-                if (!empty($add_it)) {
-                    $name = htmlsafechars($add_it);
-                    $values = [
-                        'userid' => $CURUSER['id'],
-                        'name' => $name,
-                        'boxnumber' => $box,
-                    ];
-                    $fluent->insertInto('pmboxes')
-                           ->values($values)
-                           ->execute();
-                    $cache->delete('get_all_boxes_' . $CURUSER['id']);
-                    $cache->delete('insertJumpTo_' . $CURUSER['id']);
-                }
-                ++$box;
-                $worked = '&boxes=1';
-            }
-            header('Location: ' . $_SERVER['PHP_SELF'] . '?action=edit_mailboxes' . $worked);
-            app_halt('Exit called');
-            break;
-
-        case 'edit_boxes':
-            $boxes = $fluent->from('pmboxes')
-                            ->where('userid = ?', $CURUSER['id'])
-                            ->fetchAll();
+            $boxnumber = $fluent$sql = "SELECT * FROM 'pmboxes'"; $this->db->fetchAll($sql);;
 
             if (empty($boxes)) {
                 stderr(_('Error'), _('No Mailboxes to edit'));
@@ -127,10 +96,7 @@ if (isset($_POST['action2'])) {
             $emailnotif = isset($_POST['emailnotif']) ? $_POST['emailnotif'] : '';
             $notifs = $pmnotif == 'yes' ? '[pm]' : '';
             $notifs .= $emailnotif == 'yes' ? '[email]' : '';
-            $category_ids = $fluent->from('categories')
-                                   ->select(null)
-                                   ->select('id')
-                                   ->fetchAll();
+            $category_ids = $fluent$sql = "SELECT * FROM 'categories'"; $this->db->fetchAll($sql);;
 
             $rows = count($category_ids);
             for ($i = 0; $i < $rows; ++$i) {
@@ -162,10 +128,7 @@ if (isset($_POST['action2'])) {
     }
 }
 
-$boxes = $fluent->from('pmboxes')
-                ->where('userid = ?', $CURUSER['id'])
-                ->orderBy('boxnumber')
-                ->fetchAll();
+$boxes = $fluent$sql = "SELECT * FROM 'pmboxes'"; $this->db->fetchAll($sql);;
 $count_boxes = !empty($boxes) ? count($boxes) : 0;
 
 if (!empty($boxes)) {

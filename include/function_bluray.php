@@ -84,14 +84,7 @@ function get_bluray_info(bool $images = false)
             }
 
             $fluent = $container->get(Database::class);
-            $imdb_info = $fluent->from('imdb_info')
-                ->select('null')
-                ->select('imdb_id')
-                ->select('plot')
-                ->select('runtime')
-                ->where('title = ?', $movie)
-                ->limit(1)
-                ->fetch();
+            $imdb_info = $fluent$sql = "SELECT * FROM 'imdb_info'"; $this->db->fetchOne($sql);;
 
             if (!empty($imdb_info['imdb_id'])) {
                 get_imdb_info_short($imdb_info['imdb_id']);

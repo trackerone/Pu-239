@@ -42,9 +42,7 @@ class Person
     public function get_person_by_name(string $name)
     {
         try {
-            return $this->fluent->from('person')
-                                ->where('name = ?', $name)
-                                ->fetch();
+            return $this->fluent$sql = "SELECT * FROM 'person'"; $this->db->fetchOne($sql);;
         } catch (\Exception $e) {
             return $e->getMessage();
         }

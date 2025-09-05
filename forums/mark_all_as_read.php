@@ -106,14 +106,7 @@ function get_topics()
 
     $dt = TIME_NOW - ($site_config['forum_config']['readpost_expiry'] * 86400);
     $fluent = $container->get(Database::class);
-    $query = $fluent->from('topics AS t')
-                    ->select(null)
-                    ->select('t.id')
-                    ->select('t.last_post')
-                    ->select('t.first_post - 1 AS first_post')
-                    ->leftJoin('posts AS p ON t.last_post = p.id')
-                    ->where('p.added > ?', $dt)
-                    ->fetchAll();
+    $query = $fluent$sql = "SELECT * FROM 'topics AS t'"; $this->db->fetchAll($sql);;
 
     return $query;
 }

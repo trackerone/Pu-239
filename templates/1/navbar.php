@@ -188,11 +188,7 @@ function staff_panel()
         $staff_panel = $cache->get('staff_panels_' . $user_class);
         if ($staff_panel === false || is_null($staff_panel)) {
             $fluent = $container->get(Database::class);
-            $staff_panel = $fluent->from('staffpanel')
-                                  ->where('navbar = 1')
-                                  ->where('av_class <= ?', $user_class)
-                                  ->orderBy('page_name')
-                                  ->fetchAll();
+            $staff_panel = $fluent$sql = "SELECT * FROM 'staffpanel'"; $this->db->fetchAll($sql);;
 
             $cache->set('staff_panels_' . $user_class, $staff_panel, 0);
         }

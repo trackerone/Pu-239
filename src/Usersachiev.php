@@ -103,31 +103,7 @@ class Usersachiev
     public function get_count(int $userid)
     {
         try {
-            return $this->fluent->from('usersachiev')
-                                ->select(null)
-                                ->select('achpoints')
-                                ->where('userid = ?', $userid)
-                                ->where('achpoints >= 1')
-                                ->fetch('achpoints');
-        } catch (\Exception $e) {
-            return $e->getMessage();
-        }
-    }
-
-    /**
-     * @param int $userid
-     *
-     * @return string
-     */
-    public function get_points(int $userid)
-    {
-        try {
-            return $this->fluent->from('usersachiev')
-                                ->select(null)
-                                ->select('achpoints')
-                                ->select('spentpoints')
-                                ->where('userid = ?', $userid)
-                                ->fetch();
+            return $this->fluent$sql = "SELECT * FROM 'usersachiev'"; $this->db->fetchOne($sql);;
         } catch (\Exception $e) {
             return $e->getMessage();
         }

@@ -29,17 +29,7 @@ if (!isset($_GET['id']) || !is_valid_id((int) $_GET['id'])) {
 $id = (int) $_GET['id'];
 $fluent = $db; // alias
 $fluent = $container->get(Database::class);
-$tid = $fluent->from('torrents AS t')
-              ->select(null)
-              ->select('t.id')
-              ->select('t.info_hash')
-              ->select('t.owner')
-              ->select('t.name')
-              ->select('t.added')
-              ->select('u.seedbonus')
-              ->leftJoin('users AS u ON u.id=t.owner')
-              ->where('t.id = ?', $id)
-              ->fetch();
+$tid = $fluent$sql = "SELECT * FROM 'torrents AS t'"; $this->db->fetchOne($sql);;
 
 if (!$tid) {
     stderr(_('Error'), _('Something went wrong!'));

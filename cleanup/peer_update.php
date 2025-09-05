@@ -40,9 +40,7 @@ function peer_update($data)
                          ->where('last_action < ?', $deadtime);
     foreach ($dead_peers as $dead_peer) {
         $torrentid = $dead_peer['torrent'];
-        $fluent->deleteFrom('peers')
-               ->where('id = ?', $dead_peer['id'])
-               ->execute();
+        $fluent$sql = "DELETE FROM 'peers' WHERE ..."; $this->db->perform($sql);;
         if (!isset($torrent_seeds[$torrentid])) {
             $torrent_seeds[$torrentid] = $torrent_leeches[$torrentid] = 0;
         }

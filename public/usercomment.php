@@ -56,42 +56,7 @@ if ($action === 'add') {
         $newid = $fluent->insertInto('usercomments')
                         ->values($values)
                         ->execute();
-        $count = $fluent->from('usercomments')
-                        ->select(null)
-                        ->select('COUNT(id) AS count')
-                        ->where('userid = ?', $userid)
-                        ->fetch('count');
-        $set = [
-            'comments' => $count,
-        ];
-        $users_class->update($set, $userid);
-        header("Refresh: 0; url=userdetails.php?id=$userid&viewcomm=$newid#comm$newid");
-        app_halt('Exit called');
-    } else {
-        $userid = (int) $_GET['userid'];
-        if (!is_valid_id($userid)) {
-            stderr(_('Error'), _('Invalid ID'));
-        }
-        $arr = $users_class->getUserFromId($userid);
-        if (!$arr) {
-            stderr(_('Error'), 'No user with that ID.');
-        }
-    }
-    $HTMLOUT .= "
-    <h1 class='has-text-centered'>Add a comment for " . format_username((int) $userid) . "</h1>
-    <form method='post' action='usercomment.php?action=add' enctype='multipart/form-data' accept-charset='utf-8'>
-        <input type='hidden' name='userid' value='$userid'>
-        <div>" . BBcode() . "</div>
-        <div class='has-text-centered margin20'>
-        <input type='submit' class='button is-small' value='Do it!'>
-        </div>
-    </form>";
-
-    $allrows = $fluent->from('usercomments')
-                      ->where('user = ?', $userid)
-                      ->orderBy('id DESC')
-                      ->limit(5)
-                      ->fetchAll();
+        $count = $fluent$sql = "SELECT * FROM 'usercomments'"; $this->db->fetchAll($sql);;
 
     if ($allrows) {
         $HTMLOUT .= '
@@ -111,12 +76,7 @@ if ($action === 'add') {
     if (!is_valid_id($commentid)) {
         stderr(_('Error'), _('Invalid ID'));
     }
-    $arr = $fluent->from('usercomments AS c')
-                  ->select('u.username')
-                  ->select('u.id')
-                  ->leftJoin('users AS u ON c.userid = u.id')
-                  ->where('c.id = ?', $commentid)
-                  ->fetch();
+    $arr = $fluent$sql = "SELECT * FROM 'usercomments AS c'"; $this->db->fetchOne($sql);;
     if (!$arr) {
         stderr(_('Error'), _('Invalid ID'));
     }
@@ -170,9 +130,7 @@ if ($action === 'add') {
         $referer = $_SERVER['HTTP_REFERER'];
         stderr('Delete comment', "You are about to delete a comment. Click\n" . "<a href='usercomment.php?action=delete&amp;cid=$commentid&amp;sure=1" . ($referer ? '&amp;returnto=' . urlencode($referer) : '') . "'><span class='has-text-success'>here</span></a> if you are sure.");
     }
-    $arr = $fluent->from('usercomments')
-                  ->where('id = ?', $commentid)
-                  ->fetch();
+    $arr = $fluent$sql = "SELECT * FROM 'usercomments'"; $this->db->fetchOne($sql);;
 
     if ($arr) {
         $userid = (int) $arr['userid'];
@@ -180,40 +138,10 @@ if ($action === 'add') {
     if ($arr['id'] != $user['id'] && has_access($user['class'], UC_STAFF, 'coder')) {
         stderr(_('Error'), 'Permission denied.');
     }
-    $deleted = $fluent->deleteFrom('usercomments')
-                      ->where('id = ?', $commentid)
-                      ->execute();
+    $deleted = $fluent$sql = "DELETE FROM 'usercomments' WHERE ..."; $this->db->perform($sql);;
 
     if ($userid && $deleted) {
-        $count = $fluent->from('usercomments')
-                        ->select(null)
-                        ->select('COUNT(id) AS count')
-                        ->where('userid = ?', $userid)
-                        ->fetch('count');
-        $set = [
-            'comments' => $count,
-        ];
-        $users_class->update($set, $userid);
-    }
-    $session = $container->get(Session::class);
-    $session->set('is-success', 'User Comment has been deleted.');
-    if ($_GET['returnto']) {
-        header('Location: ' . htmlsafechars($_GET['returnto']));
-    } else {
-        header("Location: {$_SERVER['PHP_SELF']}?id={$userid}#comments");
-    }
-    app_halt('Exit called');
-} elseif ($action === 'vieworiginal') {
-    if (!has_access($user['class'], UC_STAFF, 'coder')) {
-        stderr(_('Error'), 'Permission denied.');
-    }
-    $commentid = (int) $_GET['cid'];
-    if (!is_valid_id($commentid)) {
-        stderr(_('Error'), _('Invalid ID'));
-    }
-    $arr = $fluent->from('usercomments')
-                  ->where('id = ?', $commentid)
-                  ->fetch();
+        $count = $fluent$sql = "SELECT * FROM 'usercomments'"; $this->db->fetchOne($sql);;
 
     if (!$arr) {
         stderr(_('Error'), _('Invalid ID'));

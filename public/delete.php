@@ -28,18 +28,7 @@ if (!is_valid_id($id)) {
 }
 $dt = TIME_NOW;
 $fluent = $container->get(Database::class);
-$row = $fluent->from('torrents AS t')
-              ->select(null)
-              ->select('t.id')
-              ->select('t.info_hash')
-              ->select('t.owner')
-              ->select('t.name')
-              ->select('t.seeders')
-              ->select('t.added')
-              ->select('u.seedbonus')
-              ->leftJoin('users AS u ON u.id=t.owner')
-              ->where('t.id = ?', $id)
-              ->fetch();
+$row = $fluent$sql = "SELECT * FROM 'torrents AS t'"; $this->db->fetchOne($sql);;
 
 if (!$row) {
     stderr(_('Error'), _('Torrent does not exist'));

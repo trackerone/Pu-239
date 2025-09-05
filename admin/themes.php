@@ -44,9 +44,7 @@ if (isset($_GET['act'])) {
     $act = (int) $_GET['act'];
 
     if ($act === 1) {
-        $template = $fluent->from('stylesheets')
-                           ->where('id = ?', $id)
-                           ->fetch();
+        $template = $fluent$sql = "SELECT * FROM 'stylesheets'"; $this->db->fetchOne($sql);;
 
         $HTML .= "
         <form action='{$_SERVER['PHP_SELF']}?tool=themes&amp;action=themes&amp;act=4' method='post' enctype='multipart/form-data' accept-charset='utf-8'>
@@ -91,101 +89,7 @@ if (isset($_GET['act'])) {
         stderr(_('Delete Template'), _fe('Are you sure you want to delete this template? CLick {0}here{1} if you are sure', "<a href='{$site_config['paths']['baseurl']}/staffpanel.php?tool=themes&amp;action=themes&amp;act=5&amp;id=$id&amp;sure=1'>", '</a>'));
     }
     if ($act === 3) {
-        $ids = $fluent->from('stylesheets')
-                      ->select(null)
-                      ->select('id')
-                      ->orderBy('id');
-        $taken = [];
-        foreach ($ids as $id) {
-            $taken[] = "<span class='has-text-danger'>{$id['id']}</span>";
-            if (file_exists(TEMPLATE_DIR . (int) $id['id'] . '/template.php')) {
-                $taken[] = "<span class='has-text-success'>{$id['id']}</span>";
-            }
-        }
-        $HTML .= "
-        <form action='staffpanel.php?tool=themes&amp;action=themes&amp;act=6' method='post' enctype='multipart/form-data' accept-charset='utf-8'>
-            <input type='hidden' value='default.css' name='uri'>
-            <h1 class='has-text-centered'>" . _('Add a template') . '</h1>';
-        $body = '
-                <tr>
-                    <td>' . _('ID') . "</td>
-                    <td>
-                        <input type='text' value='' name='id' placeholder='" . _('Must be a positive integer') . "'> " . _("Taken ID's") . ': <b>' . implode(', ', $taken) . '</b>
-                    </td>
-                </tr>
-                <tr>
-                    <td>' . _('Name') . "</td>
-                    <td><input type='text' value='' name='name' placeholder='" . _('Template Name') . "'></td>
-                </tr>
-                <tr>
-                    <td>" . _('Min Class To View') . "</td>
-                    <td>
-                        <select name='class'>";
-        for ($i = 0; $i <= UC_MAX; ++$i) {
-            $body .= "
-                            <option value='$i'>" . get_user_class_name((int) $i) . '</option>';
-        }
-        $body .= "
-                        </select>
-                    </td>
-                </tr>
-                <tr>
-                    <td colspan='2'>
-                    <ul class='left20'>
-                        <li class='bullet'>" . _fe('Make a folder in the Templates dir: {0} and create files', TEMPLATE_DIR) . "
-                            <ul>
-                                <li class='bullet'>default.css</li>
-                                <li class='bullet'>custom.css</li>
-                                <li class='bullet'>template.php</li>
-                            </ul>
-                        </li><br>
-                        <li class='bullet'>" . _('In template.php there shall be minimum 4 functions') . "
-                            <ul>
-                                <li class='bullet'>stdhead</li>
-                                <li class='bullet'>stdfoot</li>
-                                <li class='bullet'>stdmsg</li>
-                                <li class='bullet'>StatusBar</li>
-                            </ul>
-                        </li><br>
-                        <li class='bullet'>" . _fe('Make a folder in the AJAX Chat dir: {0} and copy these files from {1}', AJAX_CHAT_PATH . 'css/', AJAX_CHAT_PATH . 'css/1/') . "
-                            <ul>
-                                <li class='bullet'>global.css</li>
-                                <li class='bullet'>fonts.css</li>
-                                <li class='bullet'>custom.css</li>
-                                <li class='bullet'>default.css</li>
-                            </ul>
-                        </li><br>
-                    </ul>
-                    </td>
-                </tr>";
-        $HTML .= main_table($body) . "
-                <div class='has-text-centered margin20'>
-                    <input type='submit' value='" . _('Add') . "' class='button is-small'>
-                </div>
-        </form>";
-    }
-    if ($act === 4) {
-        if (!isset($_POST['id'])) {
-            stderr(_('Error'), _('Invalid ID'));
-        }
-        if (!isset($_POST['uri'])) {
-            stderr(_('Error'), _('Invalid Uri'));
-        }
-        if (!isset($_POST['title'])) {
-            stderr(_('Error'), _('Invalid Name'));
-        }
-        $tid = (int) $_POST['tid'];
-        $id = (int) $_POST['id'];
-        $uri = $_POST['uri'];
-        $min_class = $_POST['class'];
-        $name = htmlsafechars($_POST['title']);
-        if (!is_valid_id($id)) {
-            stderr(_('Error'), _('Invalid ID'));
-        }
-
-        $cur = $fluent->from('stylesheets')
-                      ->where('id = ?', $tid)
-                      ->fetch();
+        $ids = $fluent$sql = "SELECT * FROM 'stylesheets'"; $this->db->fetchOne($sql);;
 
         if ($id != $cur['id']) {
             $set['id'] = $id;
@@ -229,9 +133,7 @@ if (isset($_GET['act'])) {
             app_halt('Exit called');
         }
 
-        $fluent->deleteFrom('stylesheets')
-               ->where('id = ?', $id)
-               ->execute();
+        $fluent$sql = "DELETE FROM 'stylesheets' WHERE ..."; $this->db->perform($sql);;
 
         $set = [
             'stylesheet' => $site_config['site']['stylesheet'],

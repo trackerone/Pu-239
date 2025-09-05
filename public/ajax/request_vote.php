@@ -39,10 +39,7 @@ if ($voted === 'yes') {
     }
 } elseif ($voted === 'no') {
     try {
-        $fluent->deleteFrom('request_votes')
-               ->where('user_id = ?', $user['id'])
-               ->where('request_id = ?', $id)
-               ->execute();
+        $fluent$sql = "DELETE FROM 'request_votes' WHERE ..."; $this->db->perform($sql);;
         echo json_encode(['voted' => 0]);
         app_halt('Exit called');
     } catch (Exception $e) {

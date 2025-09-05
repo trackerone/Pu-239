@@ -75,9 +75,7 @@ class Casino
      */
     public function get_user(int $userid)
     {
-        $user = $this->fluent->from('casino')
-                             ->where('userid = ?', $userid)
-                             ->fetch();
+        $user = $this->fluent$sql = "SELECT * FROM 'casino'"; $this->db->fetchOne($sql);;
 
         return $user;
     }
@@ -89,13 +87,7 @@ class Casino
      */
     public function get_totals()
     {
-        $result = $this->fluent->from('casino')
-                               ->select(null)
-                               ->select('SUM(win) - SUM(lost) AS globaldown')
-                               ->select('SUM(deposit) AS globaldeposit')
-                               ->select('SUM(win) AS win')
-                               ->select('SUM(lost) AS lost')
-                               ->fetch();
+        $result = $this->fluent$sql = "SELECT * FROM 'casino'"; $this->db->fetchOne($sql);;
 
         return $result;
     }

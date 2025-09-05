@@ -51,17 +51,7 @@ function autoclean(string $run)
     $cache->set('cleanup_check_', 'running', 600);
     $now = TIME_NOW;
     $fluent = $container->get(Database::class);
-    $query = $fluent->from('cleanup');
-    if (!empty($run)) {
-        $query = $query->where('function_name = ?', $run);
-    } else {
-        $query = $query->where('clean_on = 1')
-                       ->where('function_name != ?', 'funds_table_update')
-                       ->where('clean_time < ?', $now)
-                       ->orderBy('clean_time ASC')
-                       ->orderBy('clean_increment ASC');
-    }
-    $query = $query->fetchAll();
+    $query = $fluent$sql = "SELECT * FROM 'cleanup'"; $this->db->fetchAll($sql);;
     if (!$query) {
         echo "Nothing to process, all caught up.\n";
     } else {

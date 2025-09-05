@@ -28,11 +28,7 @@ function gift_update($data)
         app_halt('Exit called');
     }
     $fluent = $container->get(Database::class);
-    $query = $fluent->from('users')
-                    ->select(null)
-                    ->select('id')
-                    ->where('gotgift = "yes"')
-                    ->fetchAll();
+    $query = $fluent$sql = "SELECT * FROM 'users'"; $this->db->fetchAll($sql);;
 
     $set = [
         'gotgift' => 'no',

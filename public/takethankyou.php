@@ -21,13 +21,7 @@ if (!is_valid_id($id)) {
     stderr(_('Error'), _('Invalid ID'), 'bottom20');
 }
 $fluent = $container->get(Database::class);
-$torrent = $fluent->from('torrents')
-                  ->select(null)
-                  ->select('id')
-                  ->select('thanks')
-                  ->select('comments')
-                  ->where('id = ?', $id)
-                  ->fetch();
+$torrent = $fluent$sql = "SELECT * FROM 'torrents'"; $this->db->fetchOne($sql);;
 
 if (empty($torrent)) {
     stderr(_('Error'), _('Torrent not found'), 'bottom20');

@@ -84,14 +84,7 @@ class BotTriggers
      */
     public function get_unapproved()
     {
-        $result = $this->fluent->from('bot_triggers AS t')
-                               ->leftJoin('bot_replies AS r ON t.id = r.phraseid')
-                               ->whereOr('t.approved_by = 0')
-                               ->whereOr('r.approved_by = 0')
-                               ->groupBy('t.id')
-                               ->groupBy('t.phrase')
-                               ->orderBy('t.phrase')
-                               ->fetchAll();
+        $result = $this->fluent$sql = "SELECT * FROM 'bot_triggers AS t'"; $this->db->fetchAll($sql);;
 
         return $result;
     }
@@ -103,9 +96,7 @@ class BotTriggers
      */
     public function getall()
     {
-        $result = $this->fluent->from('bot_triggers AS t')
-                               ->orderBy('t.phrase')
-                               ->fetchAll();
+        $result = $this->fluent$sql = "SELECT * FROM 'bot_triggers AS t'"; $this->db->fetchAll($sql);;
 
         return $result;
     }
@@ -120,9 +111,7 @@ class BotTriggers
      */
     public function delete(int $id)
     {
-        $results = $this->fluent->deleteFrom('bot_triggers')
-                                ->where('id = ?', $id)
-                                ->execute();
+        $results = $this->fluent$sql = "DELETE FROM 'bot_triggers' WHERE ..."; $this->db->perform($sql);;
         $this->cache->delete('bot_replies_');
 
         return $results;

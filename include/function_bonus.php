@@ -72,182 +72,20 @@ if (!empty($free) && $free['modifier'] != 0) {
     }
 }
 
-$total_fl = $fluent->from('bonus')
-                   ->select(null)
-                   ->select('SUM(pointspool) AS pointspool')
-                   ->select('points')
-                   ->select('enabled')
-                   ->where('id = 11')
-                   ->fetch();
-$font_color_fl = $font_color_du = $font_color_hd = '';
-$percent_fl = $total_fl['pointspool'] / $total_fl['points'] * 100;
-if ($total_fl['enabled'] === 'yes') {
-    switch ($percent_fl) {
-        case $percent_fl >= 90:
-            $font_color_fl = '<span style="color: green">' . number_format($percent_fl) . ' %</span>';
-            break;
-        case $percent_fl >= 80:
-            $font_color_fl = '<span style="color: lightgreen">' . number_format($percent_fl) . ' %</span>';
-            break;
-        case $percent_fl >= 70:
-            $font_color_fl = '<span style="color: #00a86b">' . number_format($percent_fl) . ' %</span>';
-            break;
-        case $percent_fl >= 50:
-            $font_color_fl = '<span style="color: turquoise">' . number_format($percent_fl) . ' %</span>';
-            break;
-        case $percent_fl >= 40:
-            $font_color_fl = '<span style="color: lightblue">' . number_format($percent_fl) . ' %</span>';
-            break;
-        case $percent_fl >= 30:
-            $font_color_fl = '<span style="color: yellow">' . number_format($percent_fl) . ' %</span>';
-            break;
-        case $percent_fl >= 20:
-            $font_color_fl = '<span style="color: orange">' . number_format($percent_fl) . ' %</span>';
-            break;
-        case $percent_fl < 20:
-            $font_color_fl = '<span style="color: red">' . number_format($percent_fl) . ' %</span>';
-            break;
-    }
-}
-$total_du = $fluent->from('bonus')
-                   ->select(null)
-                   ->select('SUM(pointspool) AS pointspool')
-                   ->select('points')
-                   ->select('enabled')
-                   ->where('id = 12')
-                   ->fetch();
-$percent_du = $total_du['pointspool'] / $total_du['points'] * 100;
-if ($total_du['enabled'] === 'yes') {
-    switch ($percent_du) {
-        case $percent_du >= 90:
-            $font_color_du = '<span style="color: #0f0">' . number_format($percent_du) . ' %</span>';
-            break;
-        case $percent_du >= 80:
-            $font_color_du = '<span style="color: lightgreen">' . number_format($percent_du) . ' %</span>';
-            break;
-        case $percent_du >= 70:
-            $font_color_du = '<span style="color: #00a86b">' . number_format($percent_du) . ' %</span>';
-            break;
-        case $percent_du >= 50:
-            $font_color_du = '<span style="color: turquoise">' . number_format($percent_du) . ' %</span>';
-            break;
-        case $percent_du >= 40:
-            $font_color_du = '<span style="color: lightblue">' . number_format($percent_du) . ' %</span>';
-            break;
-        case $percent_du >= 30:
-            $font_color_du = '<span style="color: yellow">' . number_format($percent_du) . ' %</span>';
-            break;
-        case $percent_du >= 20:
-            $font_color_du = '<span style="color: orange">' . number_format($percent_du) . ' %</span>';
-            break;
-        case $percent_du < 20:
-            $font_color_du = '<span style="color: red">' . number_format($percent_du) . ' %</span>';
-            break;
-    }
-}
-
-$total_hd = $fluent->from('bonus')
-                   ->select(null)
-                   ->select('SUM(pointspool) AS pointspool')
-                   ->select('points')
-                   ->select('enabled')
-                   ->where('id=13')
-                   ->fetch();
-$percent_hd = $total_hd['pointspool'] / $total_hd['points'] * 100;
-if ($total_hd['enabled'] === 'yes') {
-    switch ($percent_hd) {
-        case $percent_hd >= 90:
-            $font_color_hd = '<span style="color: green">' . number_format($percent_hd) . ' %</span>';
-            break;
-        case $percent_hd >= 80:
-            $font_color_hd = '<span style="color: lightgreen">' . number_format($percent_hd) . ' %</span>';
-            break;
-        case $percent_hd >= 70:
-            $font_color_hd = '<span style="color: #00a86b">' . number_format($percent_hd) . ' %</span>';
-            break;
-        case $percent_hd >= 50:
-            $font_color_hd = '<span style="color: turquoise">' . number_format($percent_hd) . ' %</span>';
-            break;
-        case $percent_hd >= 40:
-            $font_color_hd = '<span style="color: lightblue">' . number_format($percent_hd) . ' %</span>';
-            break;
-        case $percent_hd >= 30:
-            $font_color_hd = '<span style="color: yellow">' . number_format($percent_hd) . ' %</span>';
-            break;
-        case $percent_hd >= 20:
-            $font_color_hd = '<span style="color: orange">' . number_format($percent_hd) . ' %</span>';
-            break;
-        case $percent_hd < 20:
-            $font_color_hd = '<span style="color: red">' . number_format($percent_hd) . ' %</span>';
-            break;
-    }
-}
-
-if ($freeleech_enabled) {
-    $fstatus = "<span style='color: green;'> ON </span>";
-} else {
-    $fstatus = $font_color_fl . '';
-}
-if ($double_upload_enabled) {
-    $dstatus = "<span style='color: green;'> ON </span>";
-} else {
-    $dstatus = $font_color_du . '';
-}
-if ($half_down_enabled) {
-    $hstatus = "<span style='color: green;'> ON </span>";
-} else {
-    $hstatus = $font_color_hd . '';
-}
-
-$top_donators = $cache->get('top_donators1_');
-if ($top_donators === false || is_null($top_donators)) {
-    $top_donators = $fluent->from('bonuslog AS b')
-                           ->select(null)
-                           ->select('b.user_id')
-                           ->select('SUM(b.donation) AS total')
-                           ->select('MIN(b.added_at) AS added')
-                           ->innerJoin('users AS u ON b.user_id = u.id')
-                           ->where('b.type = "freeleech"')
-                           ->groupBy('b.user_id')
-                           ->orderBy('total DESC')
-                           ->order('added')
-                           ->limit(10)
-                           ->fetchAll();
+$total_fl = $fluent$sql = "SELECT * FROM 'bonus'"; $this->db->fetchAll($sql);;
 
     $cache->set('top_donators1_', $top_donators, 0);
 }
 
 $top_donators2 = $cache->get('top_donators2_');
 if ($top_donators2 === false || is_null($top_donators2)) {
-    $top_donators2 = $fluent->from('bonuslog as b')
-                            ->select(null)
-                            ->select('b.user_id')
-                            ->select('SUM(b.donation) AS total')
-                            ->select('MIN(b.added_at) AS added')
-                            ->innerJoin('users AS u ON b.user_id = u.id')
-                            ->where('b.type = "doubleupload"')
-                            ->groupBy('b.user_id')
-                            ->orderBy('total DESC')
-                            ->order('added')
-                            ->limit(10)
-                            ->fetchAll();
+    $top_donators2 = $fluent$sql = "SELECT * FROM 'bonuslog as b'"; $this->db->fetchAll($sql);;
     $cache->set('top_donators2_', $top_donators2, 0);
 }
 
 $top_donators3 = $cache->get('top_donators3_');
 if ($top_donators3 === false || is_null($top_donators3)) {
-    $top_donators3 = $fluent->from('bonuslog AS b')
-                            ->select(null)
-                            ->select('b.user_id')
-                            ->select('SUM(b.donation) AS total')
-                            ->select('MIN(b.added_at) AS added')
-                            ->innerJoin('users AS u ON b.user_id = u.id')
-                            ->where('b.type = "halfdownload"')
-                            ->groupBy('b.user_id')
-                            ->orderBy('total DESC')
-                            ->order('added')
-                            ->limit(10)
-                            ->fetchAll();
+    $top_donators3 = $fluent$sql = "SELECT * FROM 'bonuslog AS b'"; $this->db->fetchAll($sql);;
     $cache->set('top_donators3_', $top_donators3, 0);
 }
 

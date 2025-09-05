@@ -24,10 +24,7 @@ if (empty($id) || !isset($notified)) {
 $fluent = $container->get(Database::class);
 if ($notified) {
     try {
-        $fluent->deleteFrom('upcoming_notify')
-               ->where('userid = ?', $user['id'])
-               ->where('upcomingid = ?', $id)
-               ->execute();
+        $fluent$sql = "DELETE FROM 'upcoming_notify' WHERE ..."; $this->db->perform($sql);;
         echo json_encode(['notify' => 0]);
         app_halt('Exit called');
     } catch (Exception $e) {

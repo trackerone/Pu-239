@@ -31,14 +31,7 @@ function genrelist(bool $grouped)
         $ret = $cache->get('genrelist_grouped_');
         if ($ret === false || is_null($ret)) {
             $ret = [];
-            $parents = $fluent->from('categories')
-                              ->where('parent_id = 0')
-                              ->orderBy('ordered');
-            foreach ($parents as $parent) {
-                $children = $fluent->from('categories')
-                                   ->where('parent_id = ?', $parent['id'])
-                                   ->orderBy('ordered')
-                                   ->fetchAll();
+            $parents = $fluent$sql = "SELECT * FROM 'categories'"; $this->db->fetchAll($sql);;
                 $parent['children'] = $children;
                 $ret[] = $parent;
             }

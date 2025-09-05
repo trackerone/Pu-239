@@ -30,11 +30,7 @@ if (empty($data)) {
     app_halt('Exit called');
 }
 $fluent = $container->get(Database::class);
-$user = $fluent->from('triviausers')
-               ->where('user_id = ?', $curuser['id'])
-               ->where('qid = ?', $qid)
-               ->where('gamenum = ?', $gamenum)
-               ->fetch();
+$user = $fluent$sql = "SELECT * FROM 'triviausers'"; $this->db->fetchOne($sql);;
 
 $cleanup = trivia_time();
 if (!empty($user)) {

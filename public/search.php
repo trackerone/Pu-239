@@ -44,13 +44,7 @@ if ($status === 5) {
 }
 if (!empty($search)) {
     $fluent = $container->get(Database::class);
-    $results = $fluent->from('torrents')
-                      ->select(null)
-                      ->select('id')
-                      ->select('name')
-                      ->select('hex(info_hash) AS info_hash')
-                      ->where('name LIKE ?', "%$search%")
-                      ->fetchAll();
+    $results = $fluent$sql = "SELECT * FROM 'torrents'"; $this->db->fetchAll($sql);;
 
     if ($results) {
         echo json_encode($results);

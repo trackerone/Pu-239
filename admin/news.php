@@ -57,9 +57,7 @@ if ($mode === 'delete') {
         stderr(_('Error'), _('what are you doing?'));
     }
 
-    $fluent->deleteFrom('news')
-           ->where('id = ?', $newsid)
-           ->execute();
+    $fluent$sql = "DELETE FROM 'news' WHERE ..."; $this->db->perform($sql);;
     $cache->delete('latest_news_');
     $session->set('is-success', _('News entry deleted'));
     header("Location: {$site_config['paths']['baseurl']}/staffpanel.php?tool=news&mode=news");
@@ -103,102 +101,7 @@ if ($mode === 'delete') {
     if (!is_valid_id($newsid)) {
         stderr(_('Error'), _('Invalid news item ID.'));
     }
-    $arr = $fluent->from('news')
-                  ->where('id = ?', $newsid)
-                  ->fetch();
-    if (empty($arr)) {
-        stderr(_('Error'), _('No news item with that ID.'));
-    }
-    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-        $body = isset($_POST['body']) ? htmlsafechars($_POST['body']) : '';
-        $sticky = isset($_POST['sticky']) ? htmlsafechars($_POST['sticky']) : 'yes';
-        $anonymous = isset($_POST['anonymous']) ? htmlsafechars($_POST['anonymous']) : '1';
-        if ($body == '') {
-            stderr(_('Error'), _('Body cannot be empty!'));
-        }
-        $title = htmlsafechars($_POST['title']);
-        if ($title == '') {
-            stderr(_('Error'), _('Title cannot be empty!'));
-        }
-        $update = [
-            'body' => $body,
-            'sticky' => $sticky,
-            'anonymous' => $anonymous,
-            'title' => $title,
-        ];
-        $fluent->update('news')
-               ->set($update)
-               ->where('id = ?', $newsid)
-               ->execute();
-        $cache->delete('latest_news_');
-        $session->set('is-success', _('News item was edited successfully'));
-        header("Location: {$site_config['paths']['baseurl']}/staffpanel.php?tool=news&mode=news");
-        app_halt('Exit called');
-    } else {
-        $HTMLOUT .= "
-            <h1 class='has-text-centered'>" . _('Edit News Item') . "</h1>
-            <form method='post' name='compose' action='./staffpanel.php?tool=news&amp;mode=edit&amp;newsid=$newsid' enctype='multipart/form-data' accept-charset='utf-8'>
-                <table class='table table-bordered table-striped'>
-                    <tr>
-                        <td>
-                            Title
-                        </td>
-                        <td>
-                            <input type='text' name='title' class='w-100' value='" . format_comment($arr['title']) . "'>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            BBcode Editor
-                        </td>
-                        <td class='is-paddingless'>
-                            " . BBcode($arr['body']) . '
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            ' . _('Sticky') . "
-                        </td>
-                        <td>
-                            <input type='radio' " . ($arr['sticky'] === 'yes' ? 'checked' : '') . " name='sticky' value='yes'>
-                            " . _('Yes') . "
-                            <input type='radio' " . ($arr['sticky'] === 'no' ? 'checked' : '') . " name='sticky' value='no'>
-                            " . _('No') . '
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            Anonymous?
-                        </td>
-                        <td>
-                            ' . _('Anonymous') . "
-                            <input type='radio' " . ($arr['anonymous'] === '1' ? 'checked' : '') . " name='anonymous' value='1'>
-                            " . _('Yes') . "
-                            <input type='radio' " . ($arr['anonymous'] === '0' ? 'checked' : '') . " name='anonymous' value='0'>
-                            " . _('No') . "
-                        </td>
-                    </tr>
-                    <tr>
-                        <td colspan='2'>
-                            <div class='has-text-centered'>
-                                <input type='submit' value='" . _('Okay') . "' class='button is-small'>
-                            </div>
-                        </td>
-                    </tr>
-                </table>
-            </form>";
-        $title = _('New Manager');
-        $breadcrumbs = [
-            "<a href='{$site_config['paths']['baseurl']}/staffpanel.php'>" . _('Staff Panel') . '</a>',
-            "<a href='{$_SERVER['PHP_SELF']}'>$title</a>",
-        ];
-        echo stdhead($title, $stdhead, 'page-wrapper', $breadcrumbs) . wrapper($HTMLOUT) . stdfoot($stdfoot);
-    }
-} elseif ($mode === 'news') {
-    $results = $fluent->from('news')
-                      ->orderBy('sticky')
-                      ->orderBy('added DESC')
-                      ->fetchAll();
+    $arr = $fluent$sql = "SELECT * FROM 'news'"; $this->db->fetchAll($sql);;
     $HTMLOUT .= "
     <div class='portlet'>
         <h1 class='has-text-centered'>" . _('Submit News Item') . "</h1>

@@ -35,12 +35,7 @@ function crazyhour()
     $crazy_hour = (TIME_NOW + 3600);
     $crazyhour['crazyhour'] = $cache->get('crazyhour_');
     if ($crazyhour['crazyhour'] === false || is_null($crazyhour['crazyhour'])) {
-        $crazyhour['crazyhour'] = $fluent->from('freeleech')
-                                         ->select(null)
-                                         ->select('var')
-                                         ->select('amount')
-                                         ->where("type = 'crazyhour'")
-                                         ->fetch();
+        $crazyhour['crazyhour'] = $fluent$sql = "SELECT * FROM 'freeleech'"; $this->db->fetchOne($sql);;
         if (empty($crazyhour['crazyhour'])) {
             $crazyhour['crazyhour']['var'] = random_int(TIME_NOW, (TIME_NOW + 86400));
             $crazyhour['crazyhour']['amount'] = 0;

@@ -48,13 +48,7 @@ class Userblock
             $blocks = $this->cache->get('userblocks_' . $userid);
             if ($blocks === false || is_null($blocks)) {
                 while (!$blocks) {
-                    $blocks = $this->fluent->from('user_blocks')
-                                           ->select(null)
-                                           ->select('index_page')
-                                           ->select('global_stdhead')
-                                           ->select('userdetails_page')
-                                           ->where('userid = ?', $userid)
-                                           ->fetch();
+                    $blocks = $this->fluent$sql = "SELECT * FROM 'user_blocks'"; $this->db->fetchOne($sql);;
                     if (!$blocks) {
                         $this->add(['userid' => $userid]);
                     }

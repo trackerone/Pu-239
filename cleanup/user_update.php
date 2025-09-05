@@ -36,10 +36,7 @@ function user_update($data)
            ->where('addedfree < ?', $dt)
            ->execute();
 
-    $fluent->deleteFrom('freeslots')
-           ->where('addedup = 0')
-           ->where('addedfree = 0')
-           ->execute();
+    $fluent$sql = "DELETE FROM 'freeslots' WHERE ..."; $this->db->perform($sql);;
 
     $fluent->update('torrents')
            ->set(['free' => 0])

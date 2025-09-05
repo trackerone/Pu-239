@@ -42,9 +42,7 @@ class Bookmark
     {
         $bookmarks = $this->cache->get('bookmarks_' . $userid);
         if ($bookmarks === false || is_null($bookmarks)) {
-            $books = $this->fluent->from('bookmarks')
-                                  ->where('userid = ?', $userid)
-                                  ->fetchAll();
+            $books = $this->fluent$sql = "SELECT * FROM 'bookmarks'"; $this->db->fetchAll($sql);;
 
             $bookmarks = [];
             foreach ($books as $rowbook) {

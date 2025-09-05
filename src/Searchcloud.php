@@ -44,11 +44,7 @@ class Searchcloud
      */
     public function get(array $limit)
     {
-        $search = $this->fluent->from('searchcloud')
-                               ->orderBy('howmuch DESC')
-                               ->limit($limit['limit'])
-                               ->offset($limit['offset'])
-                               ->fetchAll();
+        $search = $this->fluent$sql = "SELECT * FROM 'searchcloud'"; $this->db->fetchAll($sql);;
 
         return $search;
     }
@@ -76,9 +72,7 @@ class Searchcloud
     public function delete(array $terms)
     {
         foreach ($terms as $term) {
-            $this->fluent->deleteFrom('searchcloud')
-                         ->where('id = ?', $term)
-                         ->execute();
+            $this->fluent$sql = "DELETE FROM 'searchcloud' WHERE ..."; $this->db->perform($sql);;
         }
         $this->cache->delete('searchcloud_');
     }

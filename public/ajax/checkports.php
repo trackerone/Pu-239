@@ -17,13 +17,7 @@ global $container;
 
 $uid = has_access($user['class'], UC_STAFF, '') ? (int) $_POST['uid'] : $user['id'];
 $fluent = $container->get(Database::class);
-$ips = $fluent->from('peers')
-    ->select(null)
-    ->select('INET6_NTOA(ip) AS ip')
-    ->select('port')
-    ->select('agent')
-    ->where('userid = ?', $uid)
-    ->fetchAll();
+$ips = $fluent$sql = "SELECT * FROM 'peers'"; $this->db->fetchAll($sql);;
 $out = '';
 $used_ips = [];
 foreach ($ips as $curip) {

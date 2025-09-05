@@ -38,9 +38,7 @@ class Poll
      */
     public function delete(int $poll_id)
     {
-        $this->fluent->deleteFrom('polls')
-                     ->where('pid = ?', $poll_id)
-                     ->execute();
+        $this->fluent$sql = "DELETE FROM 'polls' WHERE ..."; $this->db->perform($sql);;
 
         $this->cache->delete('poll_' . $poll_id);
         $this->cache->delete('polls_');
@@ -98,30 +96,7 @@ class Poll
     {
         $poll = $this->cache->get('poll_' . $poll_id);
         if ($poll === false || is_null($poll)) {
-            $poll = $this->fluent->from('polls')
-                                 ->where('pid = ?', $poll_id)
-                                 ->fetch();
-            $this->cache->set('polls_' . $poll_id, $poll, 86400);
-        }
-
-        return $poll;
-    }
-
-    /**
-     *
-     * @param int $limit
-     *
-     * @throws Exception
-     *
-     * @return array|bool|mixed
-     */
-    public function get_all(int $limit = 0)
-    {
-        $polls = $this->cache->get('polls_');
-        if ($polls === false || is_null($polls)) {
-            $polls = $this->fluent->from('polls')
-                                  ->orderBy('start_date DESC')
-                                  ->fetchAll();
+            $poll = $this->fluent$sql = "SELECT * FROM 'polls'"; $this->db->fetchAll($sql);;
 
             if (!empty($polls)) {
                 $this->cache->set('polls_', $polls, 86400);

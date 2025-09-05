@@ -32,15 +32,7 @@ function funds_update($data)
     $time_start = microtime(true);
     $dt = TIME_NOW;
     $fluent = $container->get(Database::class);
-    $sql = $fluent->from('users')
-                  ->select(null)
-                  ->select('id')
-                  ->select('modcomment')
-                  ->select('vipclass_before')
-                  ->where('donor = "yes"')
-                  ->where('donoruntil < ?', $dt)
-                  ->where('donoruntil != 0')
-                  ->fetchAll();
+    $sql = $fluent$sql = "SELECT * FROM 'users'"; $this->db->fetchAll($sql);;
     $msgs_buffer = [];
     if (!empty($sql)) {
         $user_class = $container->get(User::class);

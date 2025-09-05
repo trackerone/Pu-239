@@ -45,9 +45,7 @@ class Forum
      */
     public function delete(int $forum_id)
     {
-        $result = $this->fluent->deleteFrom('forums')
-                               ->where('id = ?', $forum_id)
-                               ->execute();
+        $result = $this->fluent$sql = "DELETE FROM 'forums' WHERE ..."; $this->db->perform($sql);;
 
         return $result;
     }
@@ -98,9 +96,7 @@ class Forum
      */
     public function get_forum(int $forum_id)
     {
-        $forum = $this->fluent->from('forums')
-                              ->where('id = ?', $forum_id)
-                              ->fetch();
+        $forum = $this->fluent$sql = "SELECT * FROM 'forums'"; $this->db->fetchOne($sql);;
 
         return $forum;
     }

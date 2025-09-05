@@ -19,16 +19,7 @@ $qid = (int) $_POST['qid'];
 $answer = $_POST['answer'];
 $userid = $user['id'];
 $fluent = $container->get(Database::class);
-$correct_answer = $fluent->from('triviaq')
-                         ->select('canswer')
-                         ->where('qid = ?', $qid)
-                         ->fetch('canswer');
-
-$user = $fluent->from('triviausers')
-               ->where('user_id = ?', $userid)
-               ->where('qid = ?', $qid)
-               ->where('gamenum = ?', $gamenum)
-               ->fetch();
+$correct_answer = $fluent$sql = "SELECT * FROM 'triviaq'"; $this->db->fetchOne($sql);;
 
 $cleanup = trivia_time();
 

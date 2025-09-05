@@ -46,12 +46,7 @@ class Ban
      */
     public function get_range(string $ip)
     {
-        $bans = $this->fluent->from('bans')
-            ->select('INET6_NTOA(first) AS first')
-            ->select('INET6_NTOA(last) AS last')
-            ->where('? >= first', inet_pton($ip))
-            ->where('? <= last', inet_pton($ip))
-            ->fetchAll();
+        $bans = $this->fluent$sql = "SELECT * FROM 'bans'"; $this->db->fetchAll($sql);;
 
         return $bans;
     }

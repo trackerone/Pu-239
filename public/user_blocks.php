@@ -429,13 +429,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                    ->where('userid = ?', $id)
                    ->execute();
         }
-        $blocks = $fluent->from('user_blocks')
-                         ->select(null)
-                         ->select('index_page')
-                         ->select('global_stdhead')
-                         ->select('userdetails_page')
-                         ->where('userid = ?', $id)
-                         ->fetch();
+        $blocks = $fluent$sql = "SELECT * FROM 'user_blocks'"; $this->db->fetchOne($sql);;
 
         $update['blocks'] = $blocks;
         $cache->update_row('user_' . $id, $update);

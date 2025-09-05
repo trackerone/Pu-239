@@ -23,10 +23,7 @@ $_POST['choice'] = isset($_POST['choice']) ? $_POST['choice'] : [];
 global $container, $site_config;
 
 $fluent = $container->get(Database::class);
-$poll_data = $fluent->from('polls')
-                    ->where('polls.pid = ?', $poll_id)
-                    ->leftJoin('poll_voters ON polls.pid = poll_voters.poll_id AND poll_voters.user_id = ?', $user['id'])
-                    ->fetch();
+$poll_data = $fluent$sql = "SELECT * FROM 'polls'"; $this->db->fetchOne($sql);;
 
 if (empty($poll_data)) {
     stderr(_('Error'), _('Invalid ID'));

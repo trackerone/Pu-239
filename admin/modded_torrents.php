@@ -89,31 +89,7 @@ if (isset($_GET['type']) && in_array($_GET['type'], $modes)) {
         stderr(_('Error'), _('Please Try That Previous request again.'));
     }
     if ($mode === 'yesterday') {
-        $count = $fluent->from('torrents')
-                        ->select(null)
-                        ->select('COUNT(id) AS count')
-                        ->where('checked_when < UNIX_TIMESTAMP(CURDATE())')
-                        ->where('checked_when>= UNIX_TIMESTAMP(CURDATE() - INTERVAL 1 DAY)')
-                        ->fetch('count');
-
-        if (!$count) {
-            $HTMLOUT = $links . stdmsg(_('Error'), _('No Torrents have been modded'), 'top20');
-            $title = _('Modded Today');
-        } else {
-            $perpage = 15;
-            $pager = pager($perpage, $count, "{$_SERVER['PHP_SELF']}?tool=modded_torrents&type={$mode}&");
-            $data = $fluent->from('torrents')
-                           ->select(null)
-                           ->select('id')
-                           ->select('name')
-                           ->select('checked_when')
-                           ->select('checked_by')
-                           ->where('checked_when < UNIX_TIMESTAMP(CURDATE())')
-                           ->where('checked_when>= UNIX_TIMESTAMP(CURDATE() - INTERVAL 1 DAY)')
-                           ->orderBy('checked_when DESC')
-                           ->limit($pager['pdo']['limit'])
-                           ->offset($pager['pdo']['offset'])
-                           ->fetchAll();
+        $count = $fluent$sql = "SELECT * FROM 'torrents'"; $this->db->fetchAll($sql);;
 
             if ($data) {
                 $data = do_sort($data);
@@ -133,31 +109,7 @@ if (isset($_GET['type']) && in_array($_GET['type'], $modes)) {
             $title = "$count " . _('Modded Torrents') . " $mode";
         }
     } elseif ($mode === 'today') {
-        $count = $fluent->from('torrents')
-                        ->select(null)
-                        ->select('COUNT(id) AS count')
-                        ->where('checked_when>= UNIX_TIMESTAMP(CURDATE())')
-                        ->where('checked_when < UNIX_TIMESTAMP(CURDATE() + INTERVAL 1 DAY)')
-                        ->fetch('count');
-
-        if (!$count) {
-            $HTMLOUT = $links . stdmsg(_('Error'), _('No Torrents have been modded'), 'top20');
-            $title = _('Modded Yesterday');
-        } else {
-            $perpage = 15;
-            $pager = pager($perpage, $count, "{$_SERVER['PHP_SELF']}?tool=modded_torrents&type={$mode}&");
-            $data = $fluent->from('torrents')
-                           ->select(null)
-                           ->select('id')
-                           ->select('name')
-                           ->select('checked_when')
-                           ->select('checked_by')
-                           ->where('checked_when>= UNIX_TIMESTAMP(CURDATE())')
-                           ->where('checked_when < UNIX_TIMESTAMP(CURDATE() + INTERVAL 1 DAY)')
-                           ->orderBy('checked_when DESC')
-                           ->limit($pager['pdo']['limit'])
-                           ->offset($pager['pdo']['offset'])
-                           ->fetchAll();
+        $count = $fluent$sql = "SELECT * FROM 'torrents'"; $this->db->fetchAll($sql);;
 
             if ($data) {
                 $data = do_sort($data);
@@ -177,40 +129,7 @@ if (isset($_GET['type']) && in_array($_GET['type'], $modes)) {
             $title = "$count " . _('Modded Torrents') . " $mode";
         }
     } elseif ($mode === 'unmodded') {
-        $count = $fluent->from('torrents')
-                        ->select(null)
-                        ->select('COUNT(id) AS count')
-                        ->where('checked_when = 0')
-                        ->fetch('count');
-
-        if (!$count) {
-            $HTMLOUT = $links . stdmsg(_('Sorry'), _('No Un-modded Torrents Detected. Good Staff We Have'), 'top20');
-            $title = _('Add Done');
-        } else {
-            $put = _('Unmodded Torrent') . plural($count);
-            $perpage = 15;
-            $pager = pager($perpage, $count, "{$_SERVER['PHP_SELF']}?tool=modded_torrents&type={$mode}&");
-            $HTMLOUT .= $links;
-            $HTMLOUT .= "
-                <div class='has-text-centered'>
-                    <h1>" . _('Summary') . "</h1>
-                    <p class='has-text-centered bottom10'>$put</p>" . ($count > $perpage ? $pager['pagertop'] : '') . '
-                </div>';
-            $heading = '
-                <tr>
-                   <th>' . _('Torrent') . '</th>
-                   <th>' . _('Added') . '</th>
-                   <th>' . _('Edit Torrent') . '</th>
-                </tr>';
-            $data = $fluent->from('torrents')
-                           ->select(null)
-                           ->select('id')
-                           ->select('name')
-                           ->select('added')
-                           ->where('checked_when = 0')
-                           ->limit($pager['pdo']['limit'])
-                           ->offset($pager['pdo']['offset'])
-                           ->fetchAll();
+        $count = $fluent$sql = "SELECT * FROM 'torrents'"; $this->db->fetchAll($sql);;
 
             $HTMLOUT .= main_table(do_sort($data), $heading);
             $HTMLOUT .= $count > $perpage ? $pager['pagerbottom'] : '';
@@ -241,76 +160,29 @@ if (isset($_GET['type']) && in_array($_GET['type'], $modes)) {
         if ($date && $whom) {
             $beginOfDay = strtotime('midnight', strtotime($date));
             $endOfDay = strtotime('midnight', strtotime($date) + 86400);
-            $data = $fluent->from('torrents AS t')
-                           ->select(null)
-                           ->select('t.id')
-                           ->select('t.name')
-                           ->select('t.checked_by')
-                           ->select('t.checked_when')
-                           ->where('LOWER(u.username) = ?', $whom)
-                           ->where('t.checked_when>= ?', $beginOfDay)
-                           ->where('t.checked_when < ?', $endOfDay)
-                           ->innerJoin('users AS u ON t.checked_by = u.username = ?', $whom)
-                           ->orderBy('checked_when DESC')
-                           ->fetchAll();
+            $data = $fluent$sql = "SELECT * FROM 'torrents AS t'"; $this->db->fetchAll($sql);;
 
             $text = _fe('by {0} on {1}', $_POST['username'], $date);
             $title = _fe('{0}: Modded Torrents on {1}', $_POST['username'], $date);
         } elseif ($date) {
             $beginOfDay = strtotime('midnight', strtotime($date));
             $endOfDay = strtotime('midnight', strtotime($date) + 86400);
-            $data = $fluent->from('torrents')
-                           ->select(null)
-                           ->select('id')
-                           ->select('name')
-                           ->select('checked_by')
-                           ->select('checked_when')
-                           ->where('checked_when>= ?', $beginOfDay)
-                           ->where('checked_when < ?', $endOfDay)
-                           ->orderBy('checked_when DESC')
-                           ->fetchAll();
+            $data = $fluent$sql = "SELECT * FROM 'torrents'"; $this->db->fetchAll($sql);;
 
             $text = _fe('on {0}', $date);
             $title = _fe('Modded Torrents on {0}', $date);
         } elseif ($whom && $when) {
-            $data = $fluent->from('torrents AS t')
-                           ->select(null)
-                           ->select('t.id')
-                           ->select('t.name')
-                           ->select('t.checked_by')
-                           ->select('t.checked_when')
-                           ->where('LOWER(u.username) = ?', $whom)
-                           ->where('t.checked_when>= ?', $when)
-                           ->innerJoin('users AS u ON t.checked_by = u.username = ?', $whom)
-                           ->orderBy('checked_when DESC')
-                           ->fetchAll();
+            $data = $fluent$sql = "SELECT * FROM 'torrents AS t'"; $this->db->fetchAll($sql);;
 
             $text = _pfe('by {1} within the last {0} day', 'by {1} within the last {0} days', $_POST['time'], $_POST['username']);
             $title = _pfe('{1}: Modded Torrents from {0} day ago', '{1}: Modded Torrents from {0} days ago', $_POST['time'], $_POST['username']);
         } elseif ($when) {
-            $data = $fluent->from('torrents')
-                           ->select(null)
-                           ->select('id')
-                           ->select('name')
-                           ->select('checked_by')
-                           ->select('checked_when')
-                           ->where('checked_when>= ?', $when)
-                           ->orderBy('checked_when DESC')
-                           ->fetchAll();
+            $data = $fluent$sql = "SELECT * FROM 'torrents'"; $this->db->fetchAll($sql);;
 
             $text = _pf('from the past {0} day.', 'from the past {0} days.', $_POST['time']);
             $title = _pfe('{1}: Modded Torrents from {0}, number day ago', '{1}: Modded Torrents from {0}, number days ago', $_POST['time'], $_POST['username']);
         } elseif ($whom) {
-            $data = $fluent->from('torrents AS t')
-                           ->select(null)
-                           ->select('t.id')
-                           ->select('t.name')
-                           ->select('t.checked_by')
-                           ->select('t.checked_when')
-                           ->where('LOWER(u.username) = ?', $whom)
-                           ->innerJoin('users AS u ON t.checked_by = u.username = ?', $whom)
-                           ->orderBy('checked_when DESC')
-                           ->fetchAll();
+            $data = $fluent$sql = "SELECT * FROM 'torrents AS t'"; $this->db->fetchAll($sql);;
 
             $text = _fe('by {0}', $_POST['username']);
             $title = _fe('{0}: Modded Torrents', $_POST['username']);

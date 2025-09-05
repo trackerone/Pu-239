@@ -16,20 +16,7 @@ $active24 = $cache->get('last24_users_');
 if ($active24 === false || is_null($active24)) {
     $list = [];
     $fluent = $container->get(Database::class);
-    $record = $fluent->from('avps')
-                     ->where('arg = ?', 'last24')
-                     ->fetch();
-
-    $dt = TIME_NOW - 86400;
-    $query = $fluent->from('users')
-                    ->select(null)
-                    ->select('id')
-                    ->where('last_access > ?', $dt)
-                    ->where('anonymous_until < ?', TIME_NOW)
-                    ->where('perms < ?', PERMS_STEALTH)
-                    ->where('id != 2')
-                    ->orderBy('username')
-                    ->fetchAll();
+    $record = $fluent$sql = "SELECT * FROM 'avps'"; $this->db->fetchAll($sql);;
 
     $count = count($query);
     $i = 0;

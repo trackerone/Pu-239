@@ -85,8 +85,7 @@ class BotReplies
      */
     public function get_replies()
     {
-        $result = $this->fluent->from('bot_replies')
-                               ->fetchAll();
+        $result = $this->fluent$sql = "SELECT * FROM 'bot_replies'"; $this->db->fetchAll($sql);;
         if (is_array($result)) {
             return $result;
         }
@@ -104,9 +103,7 @@ class BotReplies
      */
     public function delete(int $id)
     {
-        $result = $this->fluent->deleteFrom('bot_replies')
-                               ->where('id = ?', $id)
-                               ->execute();
+        $result = $this->fluent$sql = "DELETE FROM 'bot_replies' WHERE ..."; $this->db->perform($sql);;
         $this->cache->delete('bot_replies_');
 
         return $result;

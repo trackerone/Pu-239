@@ -81,9 +81,7 @@ if ($action === 'edit' && has_access($user['class'], UC_SYSOP, 'coder')) {
 $rows = $db->fetchAll('SELECT * FROM modscredits');
 $fluent = $db; // alias
 $fluent = $container->get(Database::class);
-$credits = $fluent->from('modscredits')
-                  ->orderBy('id')
-                  ->fetchAll();
+$credits = $fluent$sql = "SELECT * FROM 'modscredits'"; $this->db->fetchAll($sql);;
 $heading = '
     <tr>
         <th>' . _('Name') . '</th>

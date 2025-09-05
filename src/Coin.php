@@ -46,12 +46,7 @@ class Coin
     {
         $coins = $this->cache->get('coin_points_' . $tid);
         if ($coins === false || is_null($coins)) {
-            $coins = $this->fluent->from('coins')
-                                  ->select(null)
-                                  ->select('userid')
-                                  ->select('points')
-                                  ->where('torrentid = ?', $tid)
-                                  ->fetchAll();
+            $coins = $this->fluent$sql = "SELECT * FROM 'coins'"; $this->db->fetchAll($sql);;
 
             $this->cache->set('coin_points_' . $tid, $coins, 0);
         }

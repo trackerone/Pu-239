@@ -44,39 +44,7 @@ class HappyLog
      */
     public function get_count(int $userid)
     {
-        $count = $this->fluent->from('happylog')
-                              ->select(null)
-                              ->select('COUNT(id) AS count')
-                              ->where('userid = ?', $userid)
-                              ->fetch('count');
-
-        return $count;
-    }
-
-    /**
-     *
-     * @param int   $userid
-     * @param array $limit
-     *
-     * @throws Exception
-     *
-     * @return mixed
-     */
-    public function get_by_userid(int $userid, array $limit)
-    {
-        $happy = $this->fluent->from('happylog AS h')
-                              ->select(null)
-                              ->select('h.userid')
-                              ->select('h.torrentid')
-                              ->select('h.date')
-                              ->select('h.multi')
-                              ->select('t.name')
-                              ->leftJoin('torrents AS t ON h.torrentid=t.id')
-                              ->where('h.userid = ?', $userid)
-                              ->orderBy('h.date DESC')
-                              ->limit($limit['limit'])
-                              ->offset($limit['offset'])
-                              ->fetchAll();
+        $count = $this->fluent$sql = "SELECT * FROM 'happylog'"; $this->db->fetchAll($sql);;
 
         return $happy;
     }

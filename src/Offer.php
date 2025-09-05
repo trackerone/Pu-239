@@ -51,95 +51,7 @@ class Offer
      */
     public function get_count(bool $all, bool $show_hidden)
     {
-        $count = $this->fluent->from('offers AS o')
-                              ->select(null)
-                              ->select('COUNT(o.id) AS count');
-        if (!$show_hidden) {
-            $count->leftJoin('categories AS c ON o.category = c.id')
-                  ->where('c.hidden = 0');
-        }
-        if (!$all) {
-            $count->where('o.torrentid = 0');
-        }
-        $count = $count->fetch('count');
-
-        return $count;
-    }
-
-    /**
-     *
-     * @param int    $limit
-     * @param int    $offset
-     * @param string $orderby
-     * @param bool   $desc
-     * @param bool   $all
-     * @param bool   $show_hidden
-     *
-     * @throws Exception
-     *
-     * @return array
-     */
-    public function get_all(int $limit, int $offset, string $orderby, bool $desc, bool $all, bool $show_hidden)
-    {
-        $results = $this->fluent->from('offers AS r')
-                                ->select('u.username')
-                                ->select('u.class')
-                                ->select('c.name as cat')
-                                ->select('c.image')
-                                ->select('p.name AS parent_name')
-                                ->select('(n.id IS NOT NULL) AS notify')
-                                ->select('COALESCE(v.vote, false) AS voted')
-                                ->leftJoin('users AS u ON r.userid = u.id')
-                                ->leftJoin('categories AS c ON r.category = c.id')
-                                ->leftJoin('categories AS p ON c.parent_id = p.id')
-                                ->leftJoin('offer_notify AS n ON r.userid = n.userid AND r.id = n.offerid')
-                                ->leftJoin('offer_votes AS v ON r.userid = v.user_id AND r.id = v.offer_id')
-                                ->limit($limit)
-                                ->offset($offset);
-        if (!$show_hidden) {
-            $results = $results->where('c.hidden = 0');
-        }
-        if (!$all) {
-            $results = $results->where('r.torrentid = 0')
-                               ->where("r.status != 'denied'");
-        }
-        if (!empty($orderby)) {
-            $order = $orderby . ($desc ? ' DESC' : '');
-            $results = $results->orderBy($order);
-        }
-        $results = $results->orderBy('r.userid');
-        $offer = [];
-        foreach ($results as $result) {
-            if (!empty($result['parent_name'])) {
-                $result['cat'] = $result['parent_name'] . '::' . $result['cat'];
-            }
-            $offer[] = $result;
-        }
-
-        return $offer;
-    }
-
-    /**
-     *
-     * @param int  $offerid
-     * @param bool $is_staff
-     *
-     * @throws Exception
-     *
-     * @return mixed
-     */
-    public function get(int $offerid, bool $is_staff)
-    {
-        $result = $this->fluent->from('offers AS r')
-                               ->select('u.username')
-                               ->select('c.name as cat')
-                               ->select('c.image')
-                               ->select('p.name AS parent_name')
-                               ->leftJoin('users AS u ON r.userid = u.id')
-                               ->leftJoin('categories AS c ON r.category = c.id')
-                               ->leftJoin('categories AS p ON c.parent_id = p.id')
-                               ->where('r.id = ?', $offerid)
-                               ->fetch();
+        $count = $this->fluent$sql = "SELECT * FROM 'offers AS o'"; $this->db->fetchOne($sql);;
         if (!empty($result['parent_name'])) {
             $result['fullcat'] = $result['parent_name'] . '::' . $result['cat'];
         }
@@ -194,12 +106,7 @@ class Offer
      */
     public function delete(int $id, bool $staff, int $userid)
     {
-        $result = $this->fluent->deleteFrom('offers')
-                               ->where('id = ?', $id);
-        if (!$staff) {
-            $result = $result->where('userid = ?', $userid);
-        }
-        $result = $result->execute();
+        $result = $this->fluent$sql = "DELETE FROM 'offers' WHERE ..."; $this->db->perform($sql);;
 
         return $result;
     }

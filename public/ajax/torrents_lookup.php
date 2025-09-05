@@ -113,102 +113,7 @@ function get_uploaded(int $userid)
 
     $torrents = [];
     $fluent = $container->get(Database::class);
-    $count = $fluent->from('torrents')
-                    ->select(null)
-                    ->select('COUNT(id) AS count')
-                    ->where('owner = ?', $userid)
-                    ->fetch('count');
-
-    if ($count === 0) {
-        return false;
-    }
-    $cache = $container->get(Cache::class);
-    $query = $fluent->from('torrents AS t')
-                    ->select(null)
-                    ->select('t.id AS torrentid')
-                    ->select('t.name')
-                    ->select('t.seeders')
-                    ->select('t.leechers')
-                    ->select('t.size')
-                    ->select('c.name AS catname')
-                    ->select('c.image')
-                    ->select('p.name AS parent_name')
-                    ->leftJoin('categories AS c ON t.category = c.id')
-                    ->leftJoin('categories AS p ON c.parent_id = p.id')
-                    ->where('t.owner = ?', $userid)
-                    ->orderBy('t.name');
-
-    foreach ($query as $results) {
-        $sums = $cache->get("sums_{$userid}_{$results['torrentid']}");
-        if ($sums === false || is_null($sums)) {
-            $sums = $fluent->from('snatched')
-                           ->select(null)
-                           ->select('SUM(uploaded) AS uploaded')
-                           ->select('SUM(downloaded) AS downloaded')
-                           ->where('userid = ?', $userid)
-                           ->where('torrentid = ?', $results['torrentid'])
-                           ->fetch();
-
-            $results['uploaded'] = $sums['uploaded'];
-            $results['downloaded'] = $sums['downloaded'];
-            $sums = $results;
-            $cache->set("sums_{$userid}_{$results['torrentid']}", $sums, 300);
-        }
-        $torrents[] = $sums;
-    }
-
-    return $torrents;
-}
-
-/**
- *
- * @param int $userid
- *
- * @throws DependencyException
- * @throws NotFoundException
- * @throws \Envms\FluentPDO\Exception
- *
- * @return array|bool
- */
-function get_seeding(int $userid)
-{
-    global $container;
-
-    $fluent = $container->get(Database::class);
-    $count = $fluent->from('peers')
-                    ->select(null)
-                    ->select('COUNT(id) AS count')
-                    ->where('userid = ?', $userid)
-                    ->where('seeder = "yes"')
-                    ->fetch('count');
-
-    if ($count === 0) {
-        return false;
-    }
-
-    $torrents = $fluent->from('peers AS z')
-                       ->select(null)
-                       ->select('z.torrent AS torrentid')
-                       ->select('z.uploaded')
-                       ->select('z.downloaded')
-                       ->select('z.seeder')
-                       ->select('z.last_action')
-                       ->select('t.added')
-                       ->select('t.name')
-                       ->select('t.size')
-                       ->select('t.seeders')
-                       ->select('t.leechers')
-                       ->select('t.owner')
-                       ->select('c.name AS catname')
-                       ->select('c.image')
-                       ->select('p.name AS parent_name')
-                       ->innerJoin('torrents AS t ON z.torrent = t.id')
-                       ->leftJoin('categories AS c ON t.category = c.id')
-                       ->leftJoin('categories AS p ON c.parent_id = p.id')
-                       ->where('z.userid = ?', $userid)
-                       ->where('z.seeder = "yes"')
-                       ->orderBy('z.last_action DESC')
-                       ->fetchAll();
+    $count = $fluent$sql = "SELECT * FROM 'torrents'"; $this->db->fetchAll($sql);;
 
     return $torrents;
 }
@@ -228,40 +133,7 @@ function get_leeching(int $userid)
     global $container;
 
     $fluent = $container->get(Database::class);
-    $count = $fluent->from('peers')
-                    ->select(null)
-                    ->select('COUNT(id) AS count')
-                    ->where('userid = ?', $userid)
-                    ->where('seeder = "no"')
-                    ->fetch('count');
-
-    if ($count === 0) {
-        return false;
-    }
-
-    $torrents = $fluent->from('peers AS z')
-                       ->select(null)
-                       ->select('z.torrent AS torrentid')
-                       ->select('z.uploaded')
-                       ->select('z.downloaded')
-                       ->select('z.seeder')
-                       ->select('z.last_action')
-                       ->select('t.added')
-                       ->select('t.name')
-                       ->select('t.size')
-                       ->select('t.seeders')
-                       ->select('t.leechers')
-                       ->select('t.owner')
-                       ->select('c.name AS catname')
-                       ->select('c.image')
-                       ->select('p.name AS parent_name')
-                       ->innerJoin('torrents AS t ON z.torrent = t.id')
-                       ->leftJoin('categories AS c ON t.category = c.id')
-                       ->leftJoin('categories AS p ON c.parent_id = p.id')
-                       ->where('z.userid = ?', $userid)
-                       ->where('z.seeder = "no"')
-                       ->orderBy('z.last_action DESC')
-                       ->fetchAll();
+    $count = $fluent$sql = "SELECT * FROM 'peers'"; $this->db->fetchAll($sql);;
 
     return $torrents;
 }
@@ -281,28 +153,7 @@ function get_snatched(int $userid)
     global $container;
 
     $fluent = $container->get(Database::class);
-    $count = $fluent->from('snatched')
-                    ->select(null)
-                    ->select('COUNT(id) AS count')
-                    ->where('userid = ?', $userid)
-                    ->fetch('count');
-
-    if ($count === 0) {
-        return false;
-    }
-
-    $torrents = $fluent->from('snatched AS s')
-                       ->select('t.name')
-                       ->select('t.category AS catid')
-                       ->select('c.name AS catname')
-                       ->select('c.image')
-                       ->select('p.name AS parent_name')
-                       ->innerJoin('torrents AS t ON s.torrentid = t.id')
-                       ->leftJoin('categories AS c ON t.category = c.id')
-                       ->leftJoin('categories AS p ON c.parent_id = p.id')
-                       ->where('s.userid = ?', $userid)
-                       ->orderBy('s.last_action DESC')
-                       ->fetchAll();
+    $count = $fluent$sql = "SELECT * FROM 'snatched'"; $this->db->fetchAll($sql);;
 
     return $torrents;
 }
@@ -322,36 +173,7 @@ function get_snatched_staff(int $userid)
     global $container;
 
     $fluent = $container->get(Database::class);
-    $count = $fluent->from('snatched')
-                    ->select(null)
-                    ->select('COUNT(id) AS count')
-                    ->where('userid = ?', $userid)
-                    ->fetch('count');
-
-    if ($count === 0) {
-        return false;
-    }
-
-    $torrents = $fluent->from('snatched AS s')
-                       ->select('t.name AS torrent_name')
-                       ->select('t.seeders')
-                       ->select('t.leechers')
-                       ->select('t.size')
-                       ->select('t.owner')
-                       ->select('c.name AS catname')
-                       ->select('p.name AS parent_name')
-                       ->select('c.image')
-                       ->select('z.agent')
-                       ->select('z.connectable')
-                       ->select('z.port')
-                       ->select('INET6_NTOA(z.ip) AS ip')
-                       ->innerJoin('torrents AS t ON s.torrentid = t.id')
-                       ->leftJoin('categories AS c ON t.category = c.id')
-                       ->leftJoin('categories AS p ON c.parent_id = p.id')
-                       ->leftJoin('peers AS z ON t.id = z.torrent AND z.userid = s.userid')
-                       ->where('s.userid = ?', $userid)
-                       ->orderBy('s.last_action DESC')
-                       ->fetchAll();
+    $count = $fluent$sql = "SELECT * FROM 'snatched'"; $this->db->fetchAll($sql);;
 
     return $torrents;
 }

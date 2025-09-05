@@ -65,10 +65,7 @@ $db = $container->get(Database::class);, $site_config;
         } else {
             $fluent = $db; // alias
 $fluent = $container->get(Database::class);
-            $categories = $fluent->from('categories')
-                                 ->select(null)
-                                 ->select('id')
-                                 ->fetchAll();
+            $categories = $fluent$sql = "SELECT * FROM 'categories'"; $this->db->fetchAll($sql);;
 
             shuffle($categories);
             $todo = $categories[0];

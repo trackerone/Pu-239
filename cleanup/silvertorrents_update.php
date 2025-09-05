@@ -27,13 +27,7 @@ function silvertorrents_update($data)
     $time_start = microtime(true);
     $dt = TIME_NOW;
     $fluent = $container->get(Database::class);
-    $torrents = $fluent->from('torrents')
-                       ->select(null)
-                       ->select('id')
-                       ->select('silver')
-                       ->where('silver > 1')
-                       ->where('silver < ?', $dt)
-                       ->fetchAll();
+    $torrents = $fluent$sql = "SELECT * FROM 'torrents'"; $this->db->fetchAll($sql);;
 
     $count = count($torrents);
     if ($count > 0) {

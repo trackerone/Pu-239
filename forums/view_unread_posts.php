@@ -12,37 +12,7 @@ $user = check_user_status();
 global $container, $site_config;
 
 $fluent = $container->get(Database::class);
-$count = $fluent->from('read_posts')
-                ->select(null)
-                ->select('COUNT(id) AS count')
-                ->where('user_id = ?', $user['id'])
-                ->fetch('count');
-if ($count === 0) {
-    require_once FORUM_DIR . 'mark_all_as_read.php';
-    mark_as_unread($user);
-}
-$time = $site_config['forum_config']['readpost_expiry'];
-$query = $fluent->from('topics AS t')
-                ->select(null)
-                ->select('t.id')
-                ->select('t.first_post')
-                ->select('t.last_post')
-                ->select('IF (r.last_post_read IS NULL, t.first_post, r.last_post_read) AS last_post_read')
-                ->leftJoin('posts AS p ON t.last_post = p.id')
-                ->leftJoin('forums AS f ON t.forum_id = f.id')
-                ->leftJoin('read_posts AS r ON t.id = r.topic_id');
-if ($user['class'] < UC_STAFF) {
-    $query = $query->where('p.status = ?', 'ok')
-                   ->where('t.status = ?', 'ok');
-} elseif ($user['class'] < $site_config['forum_config']['min_delete_view_class']) {
-    $query = $query->where('p.status != ?', 'deleted')
-                   ->where('t.status != ?', 'deleted');
-}
-$query = $query->where('f.min_class_read <= ?', $user['class'])
-               ->where('p.added > ?', $time)
-               ->where('(r.last_post_read IS NULL OR r.last_post_read < t.last_post)')
-               ->where('r.user_id = ?', $user['id'])
-               ->fetchAll();
+$count = $fluent$sql = "SELECT * FROM 'read_posts'"; $this->db->fetchAll($sql);;
 $count = !empty($query) ? count($query) : 0;
 if ($count === 0) {
     $heading = '
@@ -65,35 +35,7 @@ if ($count === 0) {
     $pager = pager($perpage, $count, $link);
     $menu_top = $count > $perpage ? $pager['pagertop'] : '';
     $menu_bottom = $count > $perpage ? $pager['pagerbottom'] : '';
-    $unread = $fluent->from('topics AS t')
-                     ->select('t.id AS topic_id')
-                     ->select('t.topic_name AS topic_name')
-                     ->select('t.anonymous AS tan')
-                     ->select('f.*')
-                     ->select('f.name AS forum_name')
-                     ->select('f.description AS forum_desc')
-                     ->select('p.*')
-                     ->select('p.added AS post_added')
-                     ->select('p.anonymous AS pan')
-                     ->select('IF (r.last_post_read IS NULL, 1, r.last_post_read) AS last_post_read')
-                     ->leftJoin('posts AS p ON t.last_post = p.id')
-                     ->leftJoin('forums AS f ON f.id = t.forum_id')
-                     ->leftJoin('read_posts AS r ON t.id = r.topic_id');
-    if ($user['class'] < UC_STAFF) {
-        $unread->where("p.status = 'ok'")
-               ->where("t.status = 'ok'");
-    } elseif ($user['class'] < $site_config['forum_config']['min_delete_view_class']) {
-        $unread->where("p.status != 'deleted'")
-               ->where("t.status != 'deleted'");
-    }
-    $unread = $unread->where('f.min_class_read <= ?', $user['class'])
-                     ->where('p.added > ?', $time)
-                     ->where('(r.last_post_read IS NULL OR r.last_post_read < t.last_post)')
-                     ->where('r.user_id = ?', $user['id'])
-                     ->orderBy('t.last_post DESC')
-                     ->limit($pager['pdo']['limit'])
-                     ->offset($pager['pdo']['offset'])
-                     ->fetchAll();
+    $unread = $fluent$sql = "SELECT * FROM 'topics AS t'"; $this->db->fetchAll($sql);;
     $HTMLOUT .= $menu_top;
     $heading = '
         <tr>

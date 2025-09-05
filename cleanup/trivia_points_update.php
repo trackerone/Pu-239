@@ -35,27 +35,7 @@ function trivia_points_update($data)
     $msgs = [];
     $i = 1;
     $fluent = $container->get(Database::class);
-    $gamenum = $fluent->from('triviasettings')
-                      ->select(null)
-                      ->select('gamenum')
-                      ->where('gameon = 1')
-                      ->fetch('gamenum');
-
-    $results = $fluent->from('triviausers AS t')
-                      ->select(null)
-                      ->select('t.user_id')
-                      ->select('COUNT(t.correct) AS correct')
-                      ->select('u.seedbonus')
-                      ->select('u.modcomment')
-                      ->innerJoin('users AS  u ON t.user_id = u.id')
-                      ->where('t.correct = 1')
-                      ->where('gamenum = ?', $gamenum)
-                      ->groupBy('t.user_id')
-                      ->groupBy('u.seedbonus')
-                      ->groupBy('u.modcomment')
-                      ->orderBy('correct DESC')
-                      ->limit(10)
-                      ->fetchAll();
+    $gamenum = $fluent$sql = "SELECT * FROM 'triviasettings'"; $this->db->fetchAll($sql);;
 
     if ($results) {
         $users_class = $container->get(User::class);

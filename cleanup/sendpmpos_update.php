@@ -33,13 +33,7 @@ function sendpmpos_update($data)
     $time_start = microtime(true);
     $dt = TIME_NOW;
     $fluent = $container->get(Database::class);
-    $users = $fluent->from('users')
-                    ->select(null)
-                    ->select('id')
-                    ->select('modcomment')
-                    ->where('sendpmpos > 1')
-                    ->where('sendpmpos < ?', $dt)
-                    ->fetchAll();
+    $users = $fluent$sql = "SELECT * FROM 'users'"; $this->db->fetchAll($sql);;
 
     $msgs_buffer = $users_buffer = [];
     $count = count($users);

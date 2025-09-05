@@ -34,20 +34,7 @@ function bounties_update($data)
     $time_start = microtime(true);
     $dt = TIME_NOW;
     $fluent = $container->get(Database::class);
-    $bounties = $fluent->from('bounties AS b')
-                       ->select(null)
-                       ->select('SUM(b.amount) AS amount')
-                       ->select('r.filled_by_user_id')
-                       ->select('r.id')
-                       ->select('r.name')
-                       ->innerJoin('requests AS r ON b.requestid = r.id')
-                       ->innerJoin('torrents AS t ON r.torrentid = t.id')
-                       ->where("b.paid = 'no'")
-                       ->where('r.filled_by_user_id != 0')
-                       ->where('FROM_UNIXTIME(t.added + 86400 * 2) < NOW()')
-                       ->groupBy('r.id')
-                       ->groupBy('r.filled_by_user_id')
-                       ->fetchAll();
+    $bounties = $fluent$sql = "SELECT * FROM 'bounties AS b'"; $this->db->fetchAll($sql);;
     $msgs_buffer = [];
     if (!empty($bounties)) {
         $bounty_class = $container->get(Bounty::class);

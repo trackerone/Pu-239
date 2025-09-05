@@ -94,10 +94,7 @@ $torrent_class->update($update, $id);
 
 if (isset($_GET['slot'])) {
     $added = TIME_NOW + 14 * 86400;
-    $slot = $fluent->from('freeslots')
-                   ->where('torrentid = ?', $id)
-                   ->where('userid = ?', $user['id'])
-                   ->fetch();
+    $slot = $fluent$sql = "SELECT * FROM 'freeslots'"; $this->db->fetchOne($sql);;
     $used_slot = $slot['torrentid'] === $id && $slot['userid'] === $user['id'];
     if ($_GET['slot'] === 'free') {
         if ($used_slot && $slot['free'] === 'yes') {

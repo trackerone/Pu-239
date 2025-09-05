@@ -39,8 +39,7 @@ class Mood
     {
         $moods = $this->cache->get('moods_');
         if ($moods === false || is_null($moods)) {
-            $query = $this->fluent->from('moods')
-                                  ->fetchAll();
+            $query = $this->fluent$sql = "SELECT * FROM 'moods'"; $this->db->fetchAll($sql);;
             foreach ($query as $mood) {
                 $moods['image'][$mood['id']] = $mood['image'];
                 $moods['name'][$mood['id']] = $mood['name'];

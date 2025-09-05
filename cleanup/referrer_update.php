@@ -25,9 +25,7 @@ function referrer_update($data)
     $time_start = microtime(true);
     $days = 180 * 86400;
     $dt = TIME_NOW - $days;
-    $fluent->deleteFrom('referrers')
-           ->where('date < ?', $dt)
-           ->execute();
+    $fluent$sql = "DELETE FROM 'referrers' WHERE ..."; $this->db->perform($sql);;
 
     $time_end = microtime(true);
     $run_time = $time_end - $time_start;

@@ -84,13 +84,7 @@ foreach ($vars as $var) {
     }
 }
 $fluent = $container->get(Database::class);
-$res_cooker = $fluent->from('upcoming')
-                     ->select(null)
-                     ->select('id')
-                     ->select('name')
-                     ->where('torrentid = 0')
-                     ->orderBy('name')
-                     ->fetchAll();
+$res_cooker = $fluent$sql = "SELECT * FROM 'upcoming'"; $this->db->fetchAll($sql);;
 
 if ($res_cooker) {
     $has_recipes = '
@@ -108,13 +102,7 @@ if ($res_cooker) {
                 </td>
             </tr>';
 }
-$res_requests = $fluent->from('requests')
-                       ->select(null)
-                       ->select('id')
-                       ->select('name')
-                       ->where('filled_by_user_id = 0')
-                       ->orderBy('name')
-                       ->fetchAll();
+$res_requests = $fluent$sql = "SELECT * FROM 'requests'"; $this->db->fetchAll($sql);;
 
 if ($res_requests) {
     $has_requests = '
@@ -133,14 +121,7 @@ if ($res_requests) {
             </tr>';
 }
 
-$res_offers = $fluent->from('offers')
-                     ->select(null)
-                     ->select('id')
-                     ->select('name')
-                     ->where('userid = ?', $user['id'])
-                     ->where('status = "approved"')
-                     ->orderBy('name')
-                     ->fetchAll();
+$res_offers = $fluent$sql = "SELECT * FROM 'offers'"; $this->db->fetchAll($sql);;
 
 if ($res_offers) {
     $has_offers = '

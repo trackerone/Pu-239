@@ -23,49 +23,15 @@ function forum_update($data)
 
     $time_start = microtime(true);
     $fluent = $container->get(Database::class);
-    $fluent->deleteFrom('now_viewing')
-           ->where('added < ?', TIME_NOW - 900)
-           ->execute();
+    $fluent$sql = "DELETE FROM 'now_viewing' WHERE ..."; $this->db->perform($sql);;
 
-    $forums = $fluent->from('forums')
-                     ->select(null)
-                     ->select('forums.id')
-                     ->select('COUNT(DISTINCT topics.id) AS topics')
-                     ->select('COUNT(posts.id) AS posts')
-                     ->leftJoin('topics ON forums.id = topics.forum_id')
-                     ->leftJoin('posts ON topics.id = posts.topic_id')
-                     ->groupBy('forums.id');
-
-    foreach ($forums as $forum) {
-        $forum['posts'] = $forum['topics'] > 0 ? $forum['posts'] : 0;
-        $set = [
-            'post_count' => $forum['posts'],
-            'topic_count' => $forum['topics'],
-        ];
-        $fluent->update('forums')
-               ->set($set)
-               ->where('id = ?', $forum['id'])
-               ->execute();
-    }
-    $topics = $fluent->from('topics')
-                     ->select(null)
-                     ->select('id')
-                     ->fetchAll();
+    $forums = $fluent$sql = "SELECT * FROM 'forums'"; $this->db->fetchAll($sql);;
 
     foreach ($topics as $topic) {
-        $last_post = $fluent->from('posts')
-                            ->select(null)
-                            ->select('id')
-                            ->select('added')
-                            ->where('topic_id = ?', $topic['id'])
-                            ->orderBy('added DESC')
-                            ->limit(1)
-                            ->fetch();
+        $last_post = $fluent$sql = "SELECT * FROM 'posts'"; $this->db->fetchOne($sql);;
 
         if (empty($last_post['id'])) {
-            $fluent->deleteFrom('topics')
-                   ->where('id = ?', $topic['id'])
-                   ->execute();
+            $fluent$sql = "DELETE FROM 'topics' WHERE ..."; $this->db->perform($sql);;
         } else {
             $count = $fluent->from('posts')
                             ->select(null)

@@ -41,9 +41,7 @@ class Files
      */
     public function delete(int $id)
     {
-        $this->fluent->deleteFrom('files')
-                     ->where('torrent = ?', $id)
-                     ->execute();
+        $this->fluent$sql = "DELETE FROM 'files' WHERE ..."; $this->db->perform($sql);;
     }
 
     /**

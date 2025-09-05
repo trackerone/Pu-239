@@ -66,14 +66,7 @@ class Upcoming
      */
     public function get(int $upcomingid)
     {
-        $result = $this->fluent->from('upcoming AS r')
-                               ->select('u.username')
-                               ->select('c.name as cat')
-                               ->select('c.image')
-                               ->leftJoin('users AS u ON r.userid = u.id')
-                               ->leftJoin('categories AS c ON r.category = c.id')
-                               ->where('r.id = ?', $upcomingid)
-                               ->fetch();
+        $result = $this->fluent$sql = "SELECT * FROM 'upcoming AS r'"; $this->db->fetchOne($sql);;
 
         return $result;
     }
@@ -133,12 +126,7 @@ class Upcoming
      */
     public function delete(int $id, bool $staff, int $userid)
     {
-        $result = $this->fluent->deleteFrom('upcoming')
-                               ->where('id = ?', $id);
-        if (!$staff) {
-            $result = $result->where('userid = ?', $userid);
-        }
-        $result = $result->execute();
+        $result = $this->fluent$sql = "DELETE FROM 'upcoming' WHERE ..."; $this->db->perform($sql);;
 
         return $result;
     }

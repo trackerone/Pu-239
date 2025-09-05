@@ -45,9 +45,7 @@ class Block
     {
         $blocks = $this->cache->get('blocks_' . $userid);
         if ($blocks === false || is_null($blocks)) {
-            $blocks = $this->fluent->from('blocks')
-                                   ->where('userid = ?', $userid)
-                                   ->fetch();
+            $blocks = $this->fluent$sql = "SELECT * FROM 'blocks'"; $this->db->fetchOne($sql);;
 
             $this->cache->set('blocks_' . $userid, $blocks, $this->env['expires']['user_blocks']);
         }

@@ -33,63 +33,7 @@ class Wiki
     public function get_last()
     {
         try {
-            return $this->fluent->from('wiki')
-                                ->select(null)
-                                ->select('name')
-                                ->orderBy('id DESC')
-                                ->limit(1)
-                                ->fetch('name');
-        } catch (\Exception $e) {
-            return $e->getMessage();
-        }
-    }
-
-    /**
-     * @param array $values
-     *
-     * @return string
-     */
-    public function add(array $values)
-    {
-        try {
-            return $this->fluent->insertInto('wiki')
-                                ->values($values)
-                                ->execute();
-        } catch (\Exception $e) {
-            return $e->getMessage();
-        }
-    }
-
-    /**
-     * @param array $update
-     * @param int   $id
-     *
-     * @return bool|int|PDOStatement|string
-     */
-    public function update(array $update, int $id)
-    {
-        try {
-            return $this->fluent->update('wiki')
-                                ->set($update)
-                                ->where('id = ?', $id)
-                                ->execute();
-        } catch (\Exception $e) {
-            return $e->getMessage();
-        }
-    }
-
-    /**
-     * @param string $name
-     *
-     * @return string
-     */
-    public function get_by_name(string $name)
-    {
-        try {
-            return $this->fluent->from('wiki')
-                                ->where('name LIKE ?', "%{$name}%")
-                                ->orderBy('GREATEST(time, lastedit) DESC')
-                                ->fetchAll();
+            return $this->fluent$sql = "SELECT * FROM 'wiki'"; $this->db->fetchAll($sql);;
         } catch (\Exception $e) {
             return $e->getMessage();
         }
@@ -103,24 +47,7 @@ class Wiki
     public function get_by_id(int $id)
     {
         try {
-            return $this->fluent->from('wiki')
-                                ->where('id = ?', $id)
-                                ->fetch();
-        } catch (\Exception $e) {
-            return $e->getMessage();
-        }
-    }
-
-    /**
-     * @return string
-     */
-    public function get_latest()
-    {
-        try {
-            return $this->fluent->from('wiki')
-                                ->orderBy('GREATEST(time, lastedit) DESC')
-                                ->limit(25)
-                                ->fetchAll();
+            return $this->fluent$sql = "SELECT * FROM 'wiki'"; $this->db->fetchAll($sql);;
         } catch (\Exception $e) {
             return $e->getMessage();
         }
@@ -134,9 +61,7 @@ class Wiki
     public function delete(int $id)
     {
         try {
-            return $this->fluent->deleteFrom('wiki')
-                                ->where('id = ?', $id)
-                                ->execute();
+            return $this->fluent$sql = "DELETE FROM 'wiki' WHERE ..."; $this->db->perform($sql);;
         } catch (\Exception $e) {
             return $e->getMessage();
         }

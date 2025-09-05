@@ -22,47 +22,7 @@ function get_styles()
     global $container;
 
     $fluent = $container->get(Database::class);
-    $query = $fluent->from('stylesheets')
-                    ->select(null)
-                    ->select('id')
-                    ->select('uri');
-
-    $styles = [];
-    foreach ($query as $style) {
-        $styles[] = $style['id'];
-    }
-
-    return $styles;
-}
-
-/**
- *
- * @param array $styles
- * @param bool  $create
- *
- * @throws NotFoundException
- * @throws \Envms\FluentPDO\Exception
- * @throws DependencyException
- *
- * @return array
- */
-function get_classes(array $styles, bool $create)
-{
-    global $container;
-
-    $fluent = $container->get(Database::class);
-    $all_classes = [];
-    foreach ($styles as $style) {
-        $classes = $fluent->from('class_config')
-                          ->select(null)
-                          ->select('name')
-                          ->select('value')
-                          ->select('classname')
-                          ->select('classcolor')
-                          ->select('classpic')
-                          ->orderBy('value')
-                          ->where('template = ?', $style)
-                          ->fetchAll();
+    $query = $fluent$sql = "SELECT * FROM 'stylesheets'"; $this->db->fetchAll($sql);;
 
         if (empty($classes)) {
             if (!$create) {

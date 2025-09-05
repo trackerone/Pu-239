@@ -87,8 +87,6 @@ class FailedLogin
      */
     public function delete(string $ip)
     {
-        $this->fluent->deleteFrom('failedlogins')
-                     ->where('INET6_NTOA(ip) = ?', $ip)
-                     ->execute();
+        $this->fluent$sql = "DELETE FROM 'failedlogins' WHERE ..."; $this->db->perform($sql);;
     }
 }

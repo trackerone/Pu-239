@@ -29,12 +29,7 @@ function get_banner($imdb_id)
         $images = $cache->get('banners_' . $imdb_id);
         if ($images === false || is_null($images)) {
             $fluent = $container->get(Database::class);
-            $images = $fluent->from('images')
-                             ->select(null)
-                             ->select('url')
-                             ->where('type = "banner"')
-                             ->where('imdb_id = ?', $imdb_id)
-                             ->fetchAll();
+            $images = $fluent$sql = "SELECT * FROM 'images'"; $this->db->fetchAll($sql);;
 
             $cache->set('banners_' . $imdb_id, $images, 86400);
         }
@@ -67,12 +62,7 @@ function get_poster($imdb_id)
         $images = $cache->get('posters_' . $imdb_id);
         if ($images === false || is_null($images)) {
             $fluent = $container->get(Database::class);
-            $images = $fluent->from('images')
-                             ->select(null)
-                             ->select('url')
-                             ->where('type = "poster"')
-                             ->where('imdb_id = ?', $imdb_id)
-                             ->fetchAll();
+            $images = $fluent$sql = "SELECT * FROM 'images'"; $this->db->fetchAll($sql);;
             $cache->set('posters_' . $imdb_id, $images, 86400);
         }
 

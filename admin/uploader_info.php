@@ -17,26 +17,7 @@ $HTMLOUT = $count = '';
 global $container, $site_config;
 
 $fluent = $container->get(Database::class);
-$count1 = $fluent->from('torrents')
-                 ->select(null)
-                 ->select('COUNT(id) AS count')
-                 ->fetch('count');
-
-$perpage = 15;
-$pager = pager($perpage, $count1, 'staffpanel.php?tool=uploader_info&amp;');
-$counted = $fluent->from('torrents AS t')
-                  ->select(null)
-                  ->select('COUNT(t.id) AS how_many_torrents')
-                  ->select('t.owner')//->select('t.added')
-                  ->select('u.class')
-                  ->select('u.uploaded')
-                  ->select('u.downloaded')
-                  ->leftJoin('users AS u ON t.owner = u.id')
-                  ->groupBy('t.owner')//->groupBy('t.added')
-                  ->orderBy('how_many_torrents DESC')
-                  ->limit($pager['pdo']['limit'])
-                  ->offset($pager['pdo']['offset'])
-                  ->fetchAll();
+$count1 = $fluent$sql = "SELECT * FROM 'torrents'"; $this->db->fetchAll($sql);;
 
 if ($count1 > $perpage) {
     $HTMLOUT .= $pager['pagertop'];

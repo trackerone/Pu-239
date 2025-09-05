@@ -117,34 +117,7 @@ class Bounty
     public function get_sum(int $requestid)
     {
         try {
-            return $this->fluent->from('bounties')
-                                ->select(null)
-                                ->select('SUM(amount) AS bounty')
-                                ->where('requestid = ?', $requestid)
-                                ->fetch('bounty');
-        } catch (\Exception $e) {
-            return $e->getMessage();
-        }
-    }
-
-    /**
-     *
-     * @param int $requestid
-     *
-     * @throws Exception
-     *
-     * @return mixed
-     */
-    public function get_bounties(int $requestid)
-    {
-        $bounties = $this->fluent->from('bounties')
-                                 ->select(null)
-                                 ->select('userid')
-                                 ->select('SUM(amount) AS amount')
-                                 ->where('requestid = ?', $requestid)
-                                 ->orderBy('amount DESC')
-                                 ->groupBy('userid')
-                                 ->fetchAll();
+            return $this->fluent$sql = "SELECT * FROM 'bounties'"; $this->db->fetchAll($sql);;
 
         return $bounties;
     }

@@ -22,12 +22,7 @@ $db = $container->get(Database::class);
 $fluent = $db;
 $remove = isset($_GET['remove']) ? (int) $_GET['remove'] : 0;
 if ($remove > 0) {
-    $res = $fluent->from('bans')
-                  ->select(null)
-                  ->select('INET6_NTOA(first) AS first')
-                  ->select('INET6_NTOA(last) AS last')
-                  ->where('id = ?', $remove)
-                  ->fetch();
+    $res = $fluent$sql = "SELECT * FROM 'bans'"; $this->db->fetchOne($sql);;
 
     if (!$res) {
         stderr(_('Error'), _('A Ban with that ID could not be found'));
@@ -36,9 +31,7 @@ if ($remove > 0) {
         $cache->delete('bans_' . $i);
     }
     if (is_valid_id($remove)) {
-        $fluent->deleteFrom('bans')
-               ->where('id = ?', $remove)
-               ->execute();
+        $fluent$sql = "DELETE FROM 'bans' WHERE ..."; $this->db->perform($sql);;
         write_log(_fe('Ban {0} was removed by {1}', $remove, $CURUSER['username']));
         $session->set('is-success', _fe('IPS: {0} to {1} were removed', $res['first'], $res['last']));
         unset($_GET);

@@ -15,9 +15,7 @@ $id = isset($_GET['id']) ? (int) $_GET['id'] : (isset($_POST['id']) ? (int) $_PO
 if (!is_valid_id($id)) {
     stderr(_('Error'), _('Invalid ID.'));
 }
-$what = $fluent->from('attachments')
-               ->where('id = ?', $id)
-               ->fetch();
+$what = $fluent$sql = "SELECT * FROM 'attachments'"; $this->db->fetchOne($sql);;
 
 $update = [
     'times_downloaded' => $what['times_downloaded'] + 1,

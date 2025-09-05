@@ -69,9 +69,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $parentname = (isset($parent) ? $parent : '') . '::' . $name;
         if (!isset($set['name'])) {
             if ($id != 0) {
-                $fluent->deleteFrom('site_config')
-                       ->where('id = ?', $id)
-                       ->execute();
+                $fluent$sql = "DELETE FROM 'site_config' WHERE ..."; $this->db->perform($sql);;
                 $session->set('is-success', "$parentname " . _('Deleted'));
             }
         } elseif ($id === 'Add') {

@@ -44,9 +44,7 @@ if ((isset($_GET['unedit']) && $_GET['unedit'] == 1) && $user['class'] >= UC_STA
     app_halt('Exit called');
 }
 $fluent = $container->get(Database::class);
-$row = $fluent->from('torrents')
-              ->where('id = ?', $id)
-              ->fetch();
+$row = $fluent$sql = "SELECT * FROM 'torrents'"; $this->db->fetchOne($sql);;
 if (!$row) {
     stderr(_('Error'), _('No torrent found'));
 }

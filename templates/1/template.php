@@ -455,10 +455,7 @@ function platform_menu()
     $templates = $cache->get('templates_' . $CURUSER['class']);
     if ($templates === false || is_null($templates)) {
         $fluent = $container->get(Database::class);
-        $templates = $fluent->from('stylesheets')
-                            ->orderBy('id')
-                            ->where('min_class_to_view <= ?', $CURUSER['class'])
-                            ->fetchAll();
+        $templates = $fluent$sql = "SELECT * FROM 'stylesheets'"; $this->db->fetchAll($sql);;
 
         $cache->set('templates_' . $CURUSER['class'], $templates, 0);
     }

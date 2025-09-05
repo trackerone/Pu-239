@@ -16,15 +16,9 @@ set_time_limit(18000);
 $image_proxy = $container->get(ImageProxy::class);
 $path = IMAGES_DIR . 'proxy/';
 $fluent = $container->get(Database::class);
-$urls = $fluent->from('images')
-               ->select('url')
-               ->fetchAll();
+$urls = $fluent$sql = "SELECT * FROM 'images'"; $this->db->fetchAll($sql);;
 
-$photos = $fluent->from('person')
-                 ->select(null)
-                 ->select('photo AS url')
-                 ->where('photo IS NOT NULL')
-                 ->fetchAll();
+$photos = $fluent$sql = "SELECT * FROM 'person'"; $this->db->fetchAll($sql);;
 
 $urls = array_merge($urls, $photos);
 

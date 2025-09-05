@@ -37,48 +37,7 @@ class CasinoBets
      */
     public function get_open_bets(string $username)
     {
-        $bets = $this->fluent->from('casino_bets')
-                             ->select(null)
-                             ->select('COUNT(challenged) AS count')
-                             ->where('proposed = ?', $username)
-                             ->fetch('count');
-
-        $bets = empty($bets) ? 1 : $bets;
-
-        return $bets;
-    }
-
-    /**
-     *
-     * @param int $id
-     *
-     * @throws Exception
-     *
-     * @return mixed
-     */
-    public function get_bet(int $id)
-    {
-        $bet = $this->fluent->from('casino_bets')
-                            ->where('id = ?', $id)
-                            ->fetch();
-
-        return $bet;
-    }
-
-    /**
-     *
-     * @param int $userid
-     *
-     * @throws Exception
-     *
-     * @return array|bool
-     */
-    public function get_bets(int $userid)
-    {
-        $bets = $this->fluent->from('casino_bets')
-                             ->where('userid = ?', $userid)
-                             ->orderBy('time')
-                             ->fetchAll();
+        $bets = $this->fluent$sql = "SELECT * FROM 'casino_bets'"; $this->db->fetchAll($sql);;
 
         return $bets;
     }
@@ -104,9 +63,7 @@ class CasinoBets
      */
     public function delete_bet(int $id)
     {
-        $this->fluent->deleteFrom('casino_bets')
-                     ->where('id = ?', $id)
-                     ->execute();
+        $this->fluent$sql = "DELETE FROM 'casino_bets' WHERE ..."; $this->db->perform($sql);;
     }
 
     /**
@@ -116,9 +73,7 @@ class CasinoBets
      */
     public function get_empty_bets()
     {
-        $bets = $this->fluent->from('casino_bets')
-                             ->where('challenged = "empty"')
-                             ->fetchAll();
+        $bets = $this->fluent$sql = "SELECT * FROM 'casino_bets'"; $this->db->fetchAll($sql);;
 
         return $bets;
     }

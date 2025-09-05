@@ -92,25 +92,7 @@ function get_event(bool $all)
     if (!$all) {
         $free = $cache->get('site_events_');
         if ($free === false || is_null($free)) {
-            $free = $fluent->from('events')
-                           ->where('expires>?', TIME_NOW)
-                           ->orderBy('id DESC')
-                           ->limit(1)
-                           ->fetch();
-
-            if (empty($free)) {
-                $free = [
-                    'modifier' => 0,
-                    'expires' => 0,
-                ];
-            }
-            $cache->set('site_events_', $free, $free['expires']);
-        }
-    } else {
-        $free = $fluent->from('events')
-                       ->orderBy('id DESC')
-                       ->limit(20)
-                       ->fetchAll();
+            $free = $fluent$sql = "SELECT * FROM 'events'"; $this->db->fetchAll($sql);;
 
         $free = array_reverse($free);
     }

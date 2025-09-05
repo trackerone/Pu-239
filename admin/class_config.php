@@ -245,12 +245,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
     } elseif ($mode === 'remove') {
         $value = (int) $_POST['class'];
-        $deleted = $fluent->deleteFrom('class_config')
-                          ->where('value = ?', $value)
-                          ->where('name != ?', 'UC_MIN')
-                          ->where('name != ?', 'UC_MAX')
-                          ->where('name != ?', 'UC_STAFF')
-                          ->execute();
+        $deleted = $fluent$sql = "DELETE FROM 'class_config' WHERE ..."; $this->db->perform($sql);;
         if ($deleted) {
             $max = $fluent->from('class_config')
                           ->select(null)

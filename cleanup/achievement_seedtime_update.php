@@ -33,18 +33,7 @@ $db = $container->get(Database::class);, $site_config;
     $seedtime10 = 31536000; //1year
     $fluent = $db; // alias
 $fluent = $container->get(Database::class);
-    $query = $fluent->from('snatched AS s')
-                    ->select(null)
-                    ->select('DISTINCT s.userid')
-                    ->select('s.seedtime')
-                    ->select('a.dayseed')
-                    ->leftJoin('usersachiev AS a ON s.userid = a.userid')
-                    ->where('seedtime >= ?', $seedtime)
-                    ->groupBy('s.userid')
-                    ->groupBy('s.seedtime')
-                    ->groupBy('a.dayseed')
-                    ->orderBy('a.dayseed')
-                    ->fetchAll();
+    $query = $fluent$sql = "SELECT * FROM 'snatched AS s'"; $this->db->fetchAll($sql);;
 
     $msgs_buffer = $usersachiev_buffer = $achievements_buffer = $userids = [];
     if (!empty($query)) {

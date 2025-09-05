@@ -35,10 +35,7 @@ class Ach_bonus
     public function get_random()
     {
         try {
-            return $this->fluent->from('ach_bonus')
-                                ->orderBy('RAND()')
-                                ->limit(1)
-                                ->fetch();
+            return $this->fluent$sql = "SELECT * FROM 'ach_bonus'"; $this->db->fetchOne($sql);;
         } catch (\Exception $e) {
             return $e->getMessage();
         }

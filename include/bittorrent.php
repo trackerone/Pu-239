@@ -254,9 +254,7 @@ function make_freeslots(int $userid, string $key, bool $clear)
     $slot = $cache->get($key . $userid);
     if ($slot === false || is_null($slot)) {
         $fluent = $container->get(Database::class);
-        $slot = $fluent->from('freeslots')
-            ->where('userid = ?', $userid)
-            ->fetchAll();
+        $slot = $fluent$sql = "SELECT * FROM 'freeslots'"; $this->db->fetchAll($sql);;
 
         $cache->set($key . $userid, $slot, 86400 * 7);
     }
@@ -983,13 +981,7 @@ function countries()
     $countries = $cache->get('countries_arr_');
     if ($countries === false || is_null($countries)) {
         $fluent = $container->get(Database::class);
-        $countries = $fluent->from('countries')
-            ->select(null)
-            ->select('id')
-            ->select('name')
-            ->select('flagpic')
-            ->orderBy('name')
-            ->fetchAll();
+        $countries = $fluent$sql = "SELECT * FROM 'countries'"; $this->db->fetchAll($sql);;
 
         $cache->set('countries_arr_', $countries, $site_config['expires']['user_flag']);
     }
@@ -1270,9 +1262,7 @@ function get_show_id(string $name)
     $id_array = $cache->get('tvshow_ids_' . $hash);
     if ($id_array === false || is_null($id_array)) {
         $fluent = $container->get(Database::class);
-        $items = $fluent->from('tvmaze')
-            ->where('MATCH (name) AGAINST (? IN NATURAL LANGUAGE MODE)', $name)
-            ->fetchAll();
+        $items = $fluent$sql = "SELECT * FROM 'tvmaze'"; $this->db->fetchAll($sql);;
         if ($items) {
             $id_array = $items[0];
             foreach ($items as $item) {
@@ -1314,246 +1304,7 @@ function get_show_id_by_imdb(string $imdbid)
     $id_array = $cache->get('tvshow_ids_' . $imdbid);
     if ($id_array === false || is_null($id_array)) {
         $fluent = $container->get(Database::class);
-        $id_array = $fluent->from('tvmaze')
-            ->where('imdb_id = ?', $imdbid)
-            ->fetch();
-        if ($id_array) {
-            $cache->set('tvshow_ids_' . $imdbid, $id_array, 0);
-        }
-    }
-
-    if (!empty($id_array)) {
-        return $id_array;
-    }
-
-    return false;
-}
-
-/**
- * @param      $timestamp
- * @param bool $sec
- *
- * @throws NotFoundException
- * @throws \Envms\FluentPDO\Exception
- * @throws DependencyException
- *
- * @return false|mixed|string
- *
- *
- */
-function time24to12($timestamp, $sec = false)
-{
-    if ($sec) {
-        return get_date((int) $timestamp, 'WITH_SEC', 1, 0);
-    }
-
-    return get_date((int) $timestamp, 'WITHOUT_SEC', 1, 0);
-}
-
-/**
- * @param $path
- * @param $human
- * @param $count
- *
- * @return array|int|string
- */
-function GetDirectorySize($path, $human, $count)
-{
-    $bytestotal = $files = 0;
-    $path = realpath($path);
-    if ($path !== false && !empty($path) && is_dir($path)) {
-        foreach (new RecursiveIteratorIterator(new RecursiveDirectoryIterator($path, FilesystemIterator::SKIP_DOTS)) as $object) {
-            $bytestotal += $object->getSize();
-            ++$files;
-        }
-    }
-
-    if ($count) {
-        if ($human) {
-            return [
-                mksize($bytestotal),
-                $files,
-            ];
-        }
-
-        return [
-            $bytestotal,
-            $files,
-        ];
-    }
-    if ($human) {
-        return mksize($bytestotal);
-    }
-
-    return $bytestotal;
-}
-
-/**
- * @param $query
- *
- * @return string|string[]|null
- */
-function formatQuery($query)
-{
-    $query = preg_replace('/\b(WHERE|FROM|GROUP BY|HAVING|ORDER BY|LIMIT|OFFSET|UNION|ON DUPLICATE KEY UPDATE|VALUES|SET)\b/i', "\n$0", $query);
-    $query = preg_replace('/\b(INNER|OUTER|LEFT|RIGHT|FULL|CASE|WHEN|END|ELSE|AND)\b/i', "\n\t$0", $query);
-    $query = preg_replace("/\s+\n/", "\n", $query); // remove trailing spaces
-    return $query;
-}
-
-/**
- *
- * @param string $type
- * @param int    $userid
- *
- * @throws \Envms\FluentPDO\Exception
- * @throws DependencyException
- * @throws NotFoundException
- *
- * @return bool
- *
- *
- */
-function insert_update_ip(string $type, int $userid)
-{
-    global $container;
-    $ips_class = $container->get(IP::class);
-    $ips_class->insert($userid, $type, getip($userid));
-
-    return true;
-}
-
-/**
- *
- * @param string    $url
- * @param bool|null $fresh
- * @param bool|null $async
- *
- * @throws \Envms\FluentPDO\Exception
- * @throws DependencyException
- * @throws NotFoundException
- *
- * @return bool|mixed|string
- *
- *
- */
-function fetch(string $url, ?bool $fresh = true, ?bool $async = false)
-{
-    global $container;
-
-    $expires = 86400;
-    $cache = $container->get(Cache::class);
-    $key = hash('sha256', $url);
-    $file = URL_CACHE_DIR . $key . '.cache';
-    $gzip = $file . '.gz';
-    if (!$fresh) {
-        $result = $cache->get($key);
-        if (empty($result) && file_exists($gzip)) {
-            if (filemtime($gzip) <= (time() - $expires)) {
-                unlink($gzip);
-            } else {
-                $result = file_get_contents('compress.zlib://' . $gzip);
-            }
-        }
-        if (!empty($result)) {
-            return $result;
-        }
-    }
-    $client = new GuzzleHttp\Client([
-        'curl' => [
-            CURLOPT_SSL_VERIFYPEER => false,
-            CURLOPT_SSL_VERIFYHOST => false,
-        ],
-        'synchronous' => $async,
-        'http_errors' => false,
-        'headers' => [
-            'User-Agent' => get_random_useragent(),
-        ],
-        'verify' => false,
-    ]);
-    try {
-        if ($res = $client->request('GET', $url)) {
-            if ($res->getStatusCode() === 200) {
-                $contents = $res->getBody()->getContents();
-                if (!$fresh) {
-                    $cache->set($key, $contents, $expires);
-                    file_put_contents($file, $contents);
-                    if (gzCompressFile($file)) {
-                        unlink($file);
-                    }
-                }
-
-                return $contents;
-            }
-        }
-    } catch (GuzzleHttp\Exception\GuzzleException $e) {
-    }
-    if (!$fresh) {
-        $cache->set($key, 'No Results', $expires);
-    }
-
-    return false;
-}
-
-/**
- * @param $source
- * @param int $level
- *
- * @return false|string
- */
-function gzCompressFile($source, $level = 9)
-{
-    $dest = $source . '.gz';
-    $mode = 'wb' . $level;
-    $error = false;
-    if ($fp_out = gzopen($dest, $mode)) {
-        if ($fp_in = fopen($source, 'rb')) {
-            while (!feof($fp_in)) {
-                gzwrite($fp_out, fread($fp_in, 1024 * 512));
-            }
-            fclose($fp_in);
-        } else {
-            $error = true;
-        }
-        gzclose($fp_out);
-    } else {
-        $error = true;
-    }
-    if ($error) {
-        return false;
-    } else {
-        return $dest;
-    }
-}
-
-/**
- *
- * @param bool $details
- *
- * @throws \Envms\FluentPDO\Exception
- * @throws DependencyException
- * @throws NotFoundException
- *
- * @return mixed|string
- *
- *
- */
-function get_body_image(bool $details)
-{
-    global $container, $imdb_id;
-
-    $cache = $container->get(Cache::class);
-    $fluent = $container->get(Database::class);
-    $image = '';
-    if ($details && !empty($imdb_id)) {
-        $images = $cache->get('backgrounds_' . $imdb_id);
-        if ($images === false || is_null($images)) {
-            $images = $fluent->from('images')
-                ->select(null)
-                ->select('url')
-                ->where('type = "background"')
-                ->where('imdb_id = ?', $imdb_id)
-                ->fetchAll();
+        $id_array = $fluent$sql = "SELECT * FROM 'tvmaze'"; $this->db->fetchAll($sql);;
             if (!empty($images)) {
                 $cache->set('backgrounds_' . $imdb_id, $images, 86400);
             } else {
@@ -1571,60 +1322,7 @@ function get_body_image(bool $details)
 
     $backgrounds = $cache->get('backgrounds_');
     if ($backgrounds === false || is_null($backgrounds)) {
-        $results = $fluent->from('images')
-            ->select(null)
-            ->select('url')
-            ->where('type = "background"');
-
-        $backgrounds = [];
-        foreach ($results as $background) {
-            $backgrounds[] = $background['url'];
-        }
-        if (!empty($backgrounds)) {
-            $cache->set('backgrounds_', $backgrounds, 86400);
-        } else {
-            $cache->set('backgrounds_', [], 86400);
-        }
-    }
-
-    $image = '';
-    if (!empty($backgrounds)) {
-        shuffle($backgrounds);
-        $image = array_pop($backgrounds);
-        if (count($backgrounds) <= 3) {
-            $cache->delete('backgrounds_');
-        } else {
-            $cache->set('backgrounds_', $backgrounds, 86400);
-        }
-    }
-
-    return $image;
-}
-
-/**
- * @throws DependencyException
- * @throws NotFoundException
- * @throws \Envms\FluentPDO\Exception
- *
- * @return bool|mixed
- *
- *
- */
-function get_random_useragent()
-{
-    global $container, $site_config;
-
-    $cache = $container->get(Cache::class);
-
-    $browsers = $cache->get('browser_user_agents_');
-    if ($browsers === false || is_null($browsers)) {
-        $fluent = $container->get(Database::class);
-        $results = $fluent->from('users')
-            ->select(null)
-            ->select('DISTINCT browser AS browser')
-            ->where('browser IS NOT null')
-            ->limit(100)
-            ->fetchAll();
+        $results = $fluent$sql = "SELECT * FROM 'images'"; $this->db->fetchAll($sql);;
         $browsers = [];
         if (empty($results)) {
             $browsers = [
