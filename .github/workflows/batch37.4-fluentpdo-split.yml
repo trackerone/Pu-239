@@ -1,52 +1,55 @@
-name: Batch 37.4 – FluentPDO Split Refactor
+<?php
+/**
+ * Batch 37.4 – Safe FluentPDO refactor
+ * Converts simple patterns (from+where, insert, update, delete).
+ */
 
-on:
-  workflow_dispatch:
+$root = dirname(__DIR__);
+$rii = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($root));
 
-jobs:
-  refactor:
-    runs-on: ubuntu-latest
-    permissions:
-      contents: write
-      pull-requests: write
+foreach ($rii as $file) {
+    if ($file->isDir()) continue;
+    $path = $file->getPathname();
+    if (strpos($path, '/vendor/') !== false) continue;
+    if (substr($path, -4) !== '.php') continue;
 
-    steps:
-      - uses: actions/checkout@v4
+    $contents = file_get_contents($path);
+    $orig = $contents;
 
-      - name: Setup PHP
-        uses: shivammathur/setup-php@v2
-        with:
-          php-version: '8.3'
+    // FROM ... WHERE id
+    $contents = preg_replace(
+        '/(\$this->fluent|\$fluent)->from\(\'([a-zA-Z0-9_]+)\'\).*?->where\(\'([a-zA-Z0-9_]+)\',\s*(\$[a-zA-Z0-9_]+)\).*?->fetchAll\(\)/s',
+        '$sql = "SELECT * FROM $2 WHERE $3 = :$3";' . "\n" .
+        '$result = $this->db->fetchAll($sql, [\'$3\' => $4]);',
+        $contents
+    );
 
-      - name: Run safe refactor (simple patterns)
-        run: php tools/fluentpdo-refactor-safe.php > refactor-safe-log.txt
+    // INSERT simple
+    $contents = preg_replace(
+        '/(\$this->fluent|\$fluent)->insertInto\(\'([a-zA-Z0-9_]+)\'\).*?->execute\(\)/s',
+        '$sql = "INSERT INTO $2 (...) VALUES (...)";' . "\n" .
+        '$this->db->perform($sql, [/* params */]);',
+        $contents
+    );
 
-      - name: Create PR for safe refactor
-        uses: peter-evans/create-pull-request@v6
-        with:
-          token: ${{ secrets.GH_PAT }}
-          commit-message: "chore: auto-refactor FluentPDO (safe patterns)"
-          title: "Batch 37.4 – Auto-refactor (safe)"
-          body: |
-            This PR replaces simple FluentPDO calls with Aura.Sql equivalents.
-            It only handles FROM/INSERT/UPDATE/DELETE with simple params.
-          branch: batches/batch37.4-refactor
-          delete-branch: true
-          add-paths: |
-            .
+    // UPDATE simple
+    $contents = preg_replace(
+        '/(\$this->fluent|\$fluent)->update\(\'([a-zA-Z0-9_]+)\'\).*?->execute\(\)/s',
+        '$sql = "UPDATE $2 SET ... WHERE ...";' . "\n" .
+        '$this->db->perform($sql, [/* params */]);',
+        $contents
+    );
 
-      - name: Run TODO refactor (complex patterns)
-        run: php tools/fluentpdo-refactor-todo.php > refactor-todo-log.txt
+    // DELETE simple
+    $contents = preg_replace(
+        '/(\$this->fluent|\$fluent)->deleteFrom\(\'([a-zA-Z0-9_]+)\'\).*?->execute\(\)/s',
+        '$sql = "DELETE FROM $2 WHERE ...";' . "\n" .
+        '$this->db->perform($sql, [/* params */]);',
+        $contents
+    );
 
-      - name: Create PR for TODO refactor
-        uses: peter-evans/create-pull-request@v6
-        with:
-          token: ${{ secrets.GH_PAT }}
-          commit-message: "chore: mark complex FluentPDO queries with TODO"
-          title: "Batch 37.4 – TODO queries (manual review)"
-          body: |
-            This PR marks complex FluentPDO queries with TODO comments for manual review.
-          branch: batches/batch37.4-todo
-          delete-branch: true
-          add-paths: |
-            .
+    if ($contents !== $orig) {
+        file_put_contents($path, $contents);
+        echo "Refactored safe: $path\n";
+    }
+}
