@@ -32,10 +32,9 @@ $update = [
     'status' => $to_status,
 ];
 try {
-    $fluent->update('offers')
-           ->set($update)
-           ->where('id = ?', $id)
-           ->execute();
+    // TODO: review update
+$sql = "UPDATE table SET ... WHERE ...";
+$this->db->perform($sql, [/* params */]);;
     echo json_encode(['status' => $to_status]);
     app_halt('Exit called');
 } catch (Exception $e) {

@@ -51,17 +51,9 @@ function autoclean(string $run)
     $cache->set('cleanup_check_', 'running', 600);
     $now = TIME_NOW;
     $fluent = $container->get(Database::class);
-    $query = $fluent->from('cleanup');
-    if (!empty($run)) {
-        $query = $query->where('function_name = ?', $run);
-    } else {
-        $query = $query->where('clean_on = 1')
-                       ->where('function_name != ?', 'funds_table_update')
-                       ->where('clean_time < ?', $now)
-                       ->orderBy('clean_time ASC')
-                       ->orderBy('clean_increment ASC');
-    }
-    $query = $query->fetchAll();
+    $query = // TODO: review query
+$sql = "SELECT * FROM table WHERE ...";
+$this->db->fetchAll($sql, [/* params */]);;
     if (!$query) {
         echo "Nothing to process, all caught up.\n";
     } else {
@@ -71,10 +63,9 @@ function autoclean(string $run)
                 $set = [
                     'clean_time' => $next_clean,
                 ];
-                $fluent->update('cleanup')
-                       ->set($set)
-                       ->where('clean_id=?', $row['clean_id'])
-                       ->execute();
+                // TODO: review update
+$sql = "UPDATE table SET ... WHERE ...";
+$this->db->perform($sql, [/* params */]);;
 
                 if (file_exists(CLEAN_DIR . $row['clean_file'])) {
                     require_once CLEAN_DIR . $row['clean_file'];

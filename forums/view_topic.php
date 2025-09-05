@@ -7,7 +7,7 @@ require_once __DIR__ . '/../include/bittorrent.php';
 require_once FORUM_DIR . 'quick_reply.php';
 require_once INCL_DIR . 'function_users.php';
 
-use Envms\FluentPDO\Literal;
+// removed FluentPDO Literal
 use Pu239\Cache;
 use Pu239\Database;
 use Pu239\Mood;
@@ -31,84 +31,9 @@ $db = $container->get(Database::class);, $site_config, $CURUSER;
 $_forum_sort = isset($CURUSER['forum_sort']) ? $CURUSER['forum_sort'] : 'DESC';
 $fluent = $db; // alias
 $fluent = $container->get(Database::class);
-$arr = $fluent->from('topics AS t')
-              ->select(null)
-              ->select('t.id AS topic_id')
-              ->select('t.user_id')
-              ->select('t.topic_name')
-              ->select('t.locked')
-              ->select('t.last_post')
-              ->select('t.sticky')
-              ->select('t.status')
-              ->select('t.views')
-              ->select('t.poll_id')
-              ->select('t.num_ratings')
-              ->select('t.rating_sum')
-              ->select('t.topic_desc')
-              ->select('t.forum_id')
-              ->select('t.anonymous')
-              ->select('t.user_likes')
-              ->select('f.name AS forum_name')
-              ->select('f.min_class_read')
-              ->select('f.min_class_write')
-              ->select('f.parent_forum')
-              ->innerJoin('forums AS f ON t.forum_id=f.id')
-              ->where('t.id = ?', $topic_id);
-if (!has_access($CURUSER['class'], UC_STAFF, 'forum_mod')) {
-    $arr = $arr->where('t.status = "ok"');
-}
-if (!has_access($CURUSER['class'], $site_config['forum_config']['min_delete_view_class'], 'forum_mod')) {
-    $arr = $arr->where('t.status != "deleted"');
-}
-$arr = $arr->fetch();
-if (empty($arr) || !has_access($CURUSER['class'], $arr['min_class_read'], '') || !is_valid_id($arr['topic_id']) || !has_access($CURUSER['class'], $site_config['forum_config']['min_delete_view_class'], '') && $status === 'deleted' || !has_access($CURUSER['class'], UC_STAFF, '') && $status === 'recycled') {
-    stderr(_('Error'), _('Invalid ID.'));
-}
-
-$status = htmlsafechars($arr['status']);
-switch ($status) {
-    case 'ok':
-        $status = '';
-        $status_image = '';
-        break;
-
-    case 'recycled':
-        $status = 'recycled';
-        $status_image = '<img src="' . $image . '" data-src="' . $site_config['paths']['images_baseurl'] . 'forums/recycle_bin.gif" alt="' . _('Recycled') . '" title="' . _('This thread is currently') . ' ' . _('in the recycle-bin') . '" class="tooltipper emoticon lazy">';
-        break;
-
-    case 'deleted':
-        $status = 'deleted';
-        $status_image = '<img src="' . $image . '" data-src="' . $site_config['paths']['images_baseurl'] . 'forums/delete_icon.gif" alt="' . _('Deleted') . '" title="' . _('This thread is currently') . ' ' . _('Deleted') . '" class="tooltipper emoticon lazy">';
-        break;
-}
-
-$forum_id = $arr['forum_id'];
-$topic_owner = $arr['anonymous'] === '1' ? get_anonymous_name() : format_username($arr['user_id']);
-$topic_name = !empty($arr['topic_name']) ? format_comment($arr['topic_name']) : '';
-$topic_desc1 = !empty($arr['topic_desc']) ? format_comment($arr['topic_desc']) : '';
-
-if ($arr['poll_id'] > 0) {
-    $arr_poll = $fluent->from('forum_poll')
-                       ->where('id = ?', $arr['poll_id'])
-                       ->fetch();
-    if (!empty($arr_poll)) {
-        if (has_access($CURUSER['class'], UC_STAFF, '')) {
-            $query = $fluent->from('forum_poll_votes')
-                            ->where('forum_poll_votes.id>0')
-                            ->where('poll_id = ?', $arr['poll_id']);
-            $who_voted = $query ? '<hr>' : 'no votes yet';
-            foreach ($query as $arr_poll_voted) {
-                $who_voted .= format_username((int) $arr_poll_voted['user_id']);
-            }
-        }
-
-        $query = $fluent->from('forum_poll_votes')
-                        ->select(null)
-                        ->select('options')
-                        ->where('poll_id = ?', $arr['poll_id'])
-                        ->where('user_id = ?', $CURUSER['id'])
-                        ->fetchAll();
+$arr = // TODO: review query
+$sql = "SELECT * FROM table WHERE ...";
+$this->db->fetchAll($sql, [/* params */]);;
 
         $voted = 0;
         $members_vote = 1000;
@@ -253,13 +178,13 @@ $values = [
     'topic_id' => $topic_id,
     'added' => TIME_NOW,
 ];
-$fluent->deleteFrom('now_viewing')
-       ->where('user_id = ?', $CURUSER['id'])
-       ->execute();
+// TODO: review delete
+$sql = "DELETE FROM table WHERE ...";
+$this->db->perform($sql, [/* params */]);;
 if (!get_anonymous($CURUSER['id'])) {
-    $fluent->insertInto('now_viewing')
-           ->values($values)
-           ->execute();
+    // TODO: review insert
+$sql = "INSERT INTO table (...) VALUES (...)";
+$this->db->perform($sql, [/* params */]);;
 }
 $cache = $container->get(Cache::class);
 $topic_users_cache = $cache->get('now_viewing_topic_');
@@ -297,19 +222,17 @@ if (!empty($topic_users)) {
 $set = [
     'views' => new Literal('views + 1'),
 ];
-$fluent->update('topics')
-       ->set($set)
-       ->where('id = ?', $topic_id)
-       ->execute();
+// TODO: review update
+$sql = "UPDATE table SET ... WHERE ...";
+$this->db->perform($sql, [/* params */]);;
 
 $res_count = $db->run(');
     $attachments = '';
 }
 
-$fluent->deleteFrom('read_posts')
-       ->where('user_id = ?', $CURUSER['id'])
-       ->where('topic_id = ?', $topic_id)
-       ->execute();
+// TODO: review delete
+$sql = "DELETE FROM table WHERE ...";
+$this->db->perform($sql, [/* params */]);;
 
 $values = [
     'user_id' => $CURUSER['id'],
@@ -319,9 +242,9 @@ $values = [
 $update = [
     'last_post_read' => $postid,
 ];
-$fluent->insertInto('read_posts', $values)
-       ->onDuplicateKeyUpdate($update)
-       ->execute();
+// TODO: review insert
+$sql = "INSERT INTO table (...) VALUES (...)";
+$this->db->perform($sql, [/* params */]);;
 $cache->delete('last_read_post_' . $topic_id . '_' . $CURUSER['id']);
 $cache->delete('sv_last_read_post_' . $topic_id . '_' . $CURUSER['id']);
 $HTMLOUT .= '

@@ -6,7 +6,7 @@ require_once __DIR__ . '/../include/bootstrap_pdo.php';
 
 declare(strict_types = 1);
 
-use Envms\FluentPDO\Literal;
+// removed FluentPDO Literal
 use Pu239\Cache;
 use Pu239\Database;
 use Pu239\Message;
@@ -49,9 +49,9 @@ if ($action === 'takeappdelete') {
             $session->set('is-warning', _("Twix are for kids.. Check at least one application stupid...You can't delete nothing!"));
         }
         $in = str_repeat('?,', count($ids) - 1) . '?';
-        $fluent->deleteFrom('uploadapp')
-               ->where('id IN (' . $in . ')', $ids)
-               ->execute();
+        // TODO: review delete
+$sql = "DELETE FROM table WHERE ...";
+$this->db->perform($sql, [/* params */]);;
         $cache->delete('new_uploadapp_');
         $session->set('is-success', _('The upload applications were successfully deleted.'));
     }
@@ -61,119 +61,14 @@ if ($action === 'takeappdelete') {
     if (!is_valid_id($id)) {
         stderr(_('Error'), _('It appears that there is no uploader application with that ID.'));
     }
-    $arr = $fluent->from('uploadapp AS a')
-                  ->select(null)
-                  ->select('a.userid AS uid')
-                  ->select('a.id')
-                  ->select('u.modcomment')
-                  ->select('u.username')
-                  ->leftJoin('users AS u ON a.userid = u.id')
-                  ->where('a.id = ?', $id)
-                  ->fetch();
-
-    $note = htmlsafechars($_POST['note']);
-    $subject = _('Uploader Promotion');
-    $msg = _fe('Congratulations, your uploader application has been accepted! You have been given  to Uploader Role and you are now able to upload torrents. Please make sure you have read the {0}guidelines on uploading{1} before you do.', "[url={$site_config['paths']['baseurl']}/rules.php]", '[/url]') . "\n\n" . _('Note: ') . " $note";
-    $msg1 = '' . _('User') . " [url={$site_config['paths']['baseurl']}/userdetails.php?id=" . (int) $arr['uid'] . "][b]{$arr['username']}[/b][/url] " . _('has been promoted to Uploader by') . " {$CURUSER['username']}.";
-    $modcomment = get_date((int) $dt, 'DATE', 1) . ' - ' . _fe("Promoted to 'Uploader' by {0}.", $CURUSER['username']) . ($arr['modcomment'] != '' ? "\n" : '') . "{$arr['modcomment']}";
-    $update = [
-        'status' => 'accepted',
-        'comment' => $note,
-        'moderator' => $CURUSER['username'],
-    ];
-    $fluent->update('uploadapp')
-           ->set($update)
-           ->where('id = ?', $id)
-           ->execute();
-    $user_class = $container->get(User::class);
-    $setbits = $clrbits = 0;
-    $setbits |= Roles::UPLOADER;
-    $update = [
-        'roles_mask' => new Literal('((roles_mask | ' . $setbits . ') & ~' . $clrbits . ')'),
-        'modcomment' => $modcomment,
-    ];
-    $user_class->update($update, $arr['uid']);
-    $msgs_buffer[] = [
-        'poster' => $CURUSER['id'],
-        'receiver' => $arr['uid'],
-        'added' => $dt,
-        'msg' => $msg,
-        'subject' => $subject,
-    ];
-    foreach ($site_config['is_staff'] as $staff) {
-        $msgs_buffer[] = [
-            'poster' => $CURUSER['id'],
-            'receiver' => $staff,
-            'added' => $dt,
-            'msg' => $msg1,
-            'subject' => $subject,
-        ];
-    }
-    if (!empty($msgs_buffer)) {
-        $messages_class->insert($msgs_buffer);
-    }
-    $cache->delete('new_uploadapp_');
-    $session->set('is-success', _('The application was successfully accepted. The user has been promoted and has been sent a PM notification.'));
-    $action = 'show';
-}
-if ($action === 'rejectapp') {
-    $id = (int) $_POST['id'];
-    if (!is_valid_id($id)) {
-        stderr(_('Error'), _('It appears that there is no uploader application with that ID.'));
-    }
-    $arr = $fluent->from('uploadapp')
-                  ->select(null)
-                  ->select('userid AS uid')
-                  ->select('id')
-                  ->where('id = ?', $id)
-                  ->fetch();
-
-    $reason = htmlsafechars($_POST['reason']);
-    $subject = _('Uploader Promotion');
-    $msg = '' . _('Sorry, your uploader application has been rejected. It appears that you are not qualified enough to become uploader.') . "\n\n" . _('Reason') . ": $reason";
-    $msgs_buffer[] = [
-        'poster' => $CURUSER['id'],
-        'receiver' => $arr['uid'],
-        'added' => $dt,
-        'msg' => $msg,
-        'subject' => $subject,
-    ];
-    $update = [
-        'status' => 'rejected',
-        'comment' => $reason,
-        'moderator' => $CURUSER['username'],
-    ];
-    $fluent->update('uploadapp')
-           ->set($update)
-           ->where('id = ?', $id)
-           ->execute();
-    $messages_class->insert($msgs_buffer);
-    $cache->delete('new_uploadapp_');
-    $session->set('is-success', _('The application was successfully rejected. The user has been sent a PM notification.'));
-    $action = 'show';
-}
-
-if ($action === 'app' || $action === 'show') {
-    if ($action === 'show') {
-        $hide = "<a href='{$site_config['paths']['baseurl']}/staffpanel.php?tool=uploadapps&amp;action=app'>" . _('Hide accepted/rejected') . '</a>';
-        $res = $fluent->from('uploadapp AS a')
-                      ->select('u.uploaded')
-                      ->select('u.downloaded')
-                      ->select('u.registered')
-                      ->select('u.class')
-                      ->leftJoin('users AS u ON a.userid = u.id')
-                      ->where('a.status != "pending"')
-                      ->fetchAll();
+    $arr = // TODO: review query
+$sql = "SELECT * FROM table WHERE ...";
+$this->db->fetchAll($sql, [/* params */]);;
     } else {
         $hide = "<a href='{$site_config['paths']['baseurl']}/staffpanel.php?tool=uploadapps&amp;action=show'>" . _('Show accepted/rejected') . '</a>';
-        $res = $fluent->from('uploadapp AS a')
-                      ->select('u.uploaded')
-                      ->select('u.downloaded')
-                      ->select('u.registered')
-                      ->select('u.class')
-                      ->leftJoin('users AS u ON a.userid = u.id')
-                      ->where('a.status = "pending"')
-                      ->fetchAll();
+        $res = // TODO: review query
+$sql = "SELECT * FROM table WHERE ...";
+$this->db->fetchAll($sql, [/* params */]);;
     }
 
     $count = count($res);
@@ -242,14 +137,9 @@ if ($action === 'app' || $action === 'show') {
     }
 } elseif ($action === 'viewapp') {
     $id = (int) $_GET['id'];
-    $arr = $fluent->from('uploadapp AS a')
-                  ->select('u.uploaded')
-                  ->select('u.downloaded')
-                  ->select('u.registered')
-                  ->select('u.class')
-                  ->leftJoin('users AS u ON a.userid = u.id')
-                  ->where('a.id = ?', $id)
-                  ->fetch();
+    $arr = // TODO: review query
+$sql = "SELECT * FROM table WHERE ...";
+$this->db->fetchOne($sql, [/* params */]);;
 
     $membertime = get_date((int) $arr['registered'], '', 0, 1);
     $elapsed = get_date((int) $arr['applied'], '', 0, 1);

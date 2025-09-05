@@ -61,10 +61,9 @@ function tvmaze_update($data)
         }
     }
     if (!empty($values)) {
-        $fluent->insertInto('tvmaze')
-               ->values($values)
-               ->ignore()
-               ->execute();
+        // TODO: review insert
+$sql = "INSERT INTO table (...) VALUES (...)";
+$this->db->perform($sql, [/* params */]);;
     }
 
     $time_end = microtime(true);

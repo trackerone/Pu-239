@@ -9,7 +9,7 @@ declare(strict_types = 1);
 namespace Pu239;
 
 use Envms\FluentPDO\Exception;
-use Envms\FluentPDO\Literal;
+// removed FluentPDO Literal
 use Envms\FluentPDO\Queries\Delete;
 use PDOStatement;
 
@@ -50,10 +50,9 @@ class Upcoming
         $set = [
             'views' => new Literal('views + 1'),
         ];
-        $this->fluent->update('upcoming')
-                     ->set($set)
-                     ->where('id = ?', $id)
-                     ->execute();
+        // TODO: review update
+$sql = "UPDATE table SET ... WHERE ...";
+$this->db->perform($sql, [/* params */]);;
     }
 
     /**
@@ -66,14 +65,9 @@ class Upcoming
      */
     public function get(int $upcomingid)
     {
-        $result = $this->fluent->from('upcoming AS r')
-                               ->select('u.username')
-                               ->select('c.name as cat')
-                               ->select('c.image')
-                               ->leftJoin('users AS u ON r.userid = u.id')
-                               ->leftJoin('categories AS c ON r.category = c.id')
-                               ->where('r.id = ?', $upcomingid)
-                               ->fetch();
+        $result = // TODO: review query
+$sql = "SELECT * FROM table WHERE ...";
+$this->db->fetchOne($sql, [/* params */]);;
 
         return $result;
     }
@@ -114,9 +108,9 @@ class Upcoming
      */
     public function insert(array $values)
     {
-        $id = $this->fluent->insertInto('upcoming')
-                           ->values($values)
-                           ->execute();
+        $id = // TODO: review insert
+$sql = "INSERT INTO table (...) VALUES (...)";
+$this->db->perform($sql, [/* params */]);;
 
         return $id;
     }
@@ -133,12 +127,9 @@ class Upcoming
      */
     public function delete(int $id, bool $staff, int $userid)
     {
-        $result = $this->fluent->deleteFrom('upcoming')
-                               ->where('id = ?', $id);
-        if (!$staff) {
-            $result = $result->where('userid = ?', $userid);
-        }
-        $result = $result->execute();
+        $result = // TODO: review delete
+$sql = "DELETE FROM table WHERE ...";
+$this->db->perform($sql, [/* params */]);;
 
         return $result;
     }
@@ -154,10 +145,9 @@ class Upcoming
      */
     public function update(array $set, int $upcomingid)
     {
-        $result = $this->fluent->update('upcoming')
-                               ->set($set)
-                               ->where('id = ?', $upcomingid)
-                               ->execute();
+        $result = // TODO: review update
+$sql = "UPDATE table SET ... WHERE ...";
+$this->db->perform($sql, [/* params */]);;
 
         return $result;
     }

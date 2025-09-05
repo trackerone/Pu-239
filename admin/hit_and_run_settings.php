@@ -21,10 +21,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $updated = false;
     foreach ($site_config['hnr_config'] as $c_name => $c_value) {
         if (isset($_POST[$c_name]) && $_POST[$c_name] != $c_value) {
-            $fluent->update('hit_and_run_settings')
-                   ->set(['value' => $_POST[$c_name]])
-                   ->where('name = ?', $c_name)
-                   ->execute();
+            // TODO: review update
+$sql = "UPDATE table SET ... WHERE ...";
+$this->db->perform($sql, [/* params */]);;
 
             $updated = true;
         }

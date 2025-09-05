@@ -229,11 +229,9 @@ function update_config(array $set, string $parent, string $name)
     global $container;
 
     $fluent = $container->get(Database::class);
-    $fluent->update('site_config')
-           ->set($set)
-           ->where('parent = ?', $parent)
-           ->where('name = ?', $name)
-           ->execute();
+    // TODO: review update
+$sql = "UPDATE table SET ... WHERE ...";
+$this->db->perform($sql, [/* params */]);;
 }
 
 /**
@@ -264,14 +262,13 @@ function update_user(int $userid, int $class)
         'verified' => 1,
         'roles_mask' => 288,
     ];
-    $fluent->update('users')
-           ->set($set)
-           ->where('id = ?', $userid)
-           ->execute();
-    $fluent->insertInto('usersachiev')
-           ->values(['userid' => $userid])
-           ->execute();
-    $fluent->insertInto('user_blocks')
-           ->values(['userid' => $userid])
-           ->execute();
+    // TODO: review update
+$sql = "UPDATE table SET ... WHERE ...";
+$this->db->perform($sql, [/* params */]);;
+    // TODO: review insert
+$sql = "INSERT INTO table (...) VALUES (...)";
+$this->db->perform($sql, [/* params */]);;
+    // TODO: review insert
+$sql = "INSERT INTO table (...) VALUES (...)";
+$this->db->perform($sql, [/* params */]);;
 }

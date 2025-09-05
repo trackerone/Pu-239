@@ -46,12 +46,9 @@ class Ban
      */
     public function get_range(string $ip)
     {
-        $bans = $this->fluent->from('bans')
-            ->select('INET6_NTOA(first) AS first')
-            ->select('INET6_NTOA(last) AS last')
-            ->where('? >= first', inet_pton($ip))
-            ->where('? <= last', inet_pton($ip))
-            ->fetchAll();
+        $bans = // TODO: review query
+$sql = "SELECT * FROM table WHERE ...";
+$this->db->fetchAll($sql, [/* params */]);;
 
         return $bans;
     }
@@ -136,8 +133,8 @@ class Ban
             'comment' => $comment,
             'added' => TIME_NOW,
         ];
-        $this->fluent->insertInto('bans')
-            ->values($values)
-            ->execute();
+        // TODO: review insert
+$sql = "INSERT INTO table (...) VALUES (...)";
+$this->db->perform($sql, [/* params */]);;
     }
 }

@@ -8,7 +8,7 @@ declare(strict_types = 1);
 
 use Pu239\Database;
 
-use Envms\FluentPDO\Literal;
+// removed FluentPDO Literal
 use Pu239\Achievement;
 use Pu239\Cache;
 use Pu239\Message;

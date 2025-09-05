@@ -101,31 +101,9 @@ if (empty($torrent)) {
 $downloaders = [];
 $seeders = [];
 $fluent = $container->get(Database::class);
-$peers = $fluent->from('peers AS p')
-                ->select('t.anonymous AS tanonymous')
-                ->select('t.owner')
-                ->select('p.seeder')
-                ->select('p.finishedat')
-                ->select('p.downloadoffset')
-                ->select('p.uploadoffset')
-                ->select('INET6_NTOA(p.ip) AS ip')
-                ->select('p.port')
-                ->select('p.uploaded')
-                ->select('p.downloaded')
-                ->select('p.to_go')
-                ->select('p.started AS st')
-                ->select('p.connectable')
-                ->select('p.agent')
-                ->select('p.last_action AS la')
-                ->select('p.userid')
-                ->select('p.peer_id')
-                ->select('u.username')
-                ->select('u.anonymous_until')
-                ->select('u.paranoia')
-                ->innerJoin('torrents AS t ON t.id = p.torrent')
-                ->leftJoin('users AS u ON u.id = p.userid')
-                ->where('p.torrent = ?', $id)
-                ->fetchAll();
+$peers = // TODO: review query
+$sql = "SELECT * FROM table WHERE ...";
+$this->db->fetchAll($sql, [/* params */]);;
 
 if (empty($peers)) {
     stderr(_('Error'), _('No downloader/uploader data available!'));

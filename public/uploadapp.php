@@ -31,89 +31,9 @@ if ($auth->hasRole(Roles::UPLOADER)) {
 }
 function check_status(Database $fluent, int $userid)
 {
-    $applicant = $fluent->from('uploadapp')
-        ->where('userid = ?', $userid)
-        ->fetch();
-    if (!empty($applicant)) {
-        if ($applicant['status'] === 'pending') {
-            stderr(
-                _('Access Denied'),
-                _('It appears you are currently pending confirmation of your uploader application.')
-            );
-        } elseif ($applicant['status'] === 'rejected') {
-            stderr(
-                _('Access Denied'),
-                _(
-                    'It appears you have applied for uploader before and have been rejected. If you would like a second chance please contact an administrator.'
-                )
-            );
-        }
-    }
-}
-check_status($fluent, $user['id']);
-
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    if (!is_valid_id((int) $_POST['userid'])) {
-        stderr(_('Error'), _fe('It appears something went wrong while sending your application. Please {0}try again{1}', "<a href='{$site_config['paths']['baseurl']}/uploadapp.php'>", '</a>'));
-    }
-    if (!$_POST['speed']) {
-        stderr(_('Error'), _('It appears you have left the field with your upload speed blank.'));
-    }
-    if (!$_POST['offer']) {
-        stderr(_('Error'), _('It appears you have left the field with the things you have to offer blank.'));
-    }
-    if (!$_POST['reason']) {
-        stderr(_('Error'), _('It appears you have left the field with the reason why we should promote you blank.'));
-    }
-    if ($_POST['sites'] === 'yes' && empty($_POST['sitenames'])) {
-        stderr(_('Error'), _('It appears you have left the field with the sites you are uploader at blank.'));
-    }
-    check_status($fluent, $_POST['userid']);
-    $validator = $container->get(Validator::class);
-    $validation = $validator->validate($_POST, [
-        'userid' => 'required|integer',
-        'connectable' => 'required|in:Pending,Yes,Yo',
-        'speed' => 'required',
-        'offer' => 'required',
-        'reason' => 'required',
-        'sites' => 'required|in:yes,no',
-        'sitenames' => 'required',
-        'scene' => 'required|in:yes,no',
-        'creating' => 'required|in:yes,no',
-        'seeding' => 'required|in:yes,no',
-    ]);
-    if ($validation->fails()) {
-        stderr(_('Error'), 'Invalid data supplied');
-    }
-    $values = [
-        'userid' => (int) $_POST['userid'],
-        'applied' => TIME_NOW,
-        'connectable' => htmlsafechars($_POST['connectable']),
-        'speed' => htmlsafechars($_POST['speed']),
-        'offer' => htmlsafechars($_POST['offer']),
-        'reason' => htmlsafechars($_POST['reason']),
-        'sites' => htmlsafechars($_POST['sites']),
-        'sitenames' => htmlsafechars($_POST['sitenames']),
-        'scene' => htmlsafechars($_POST['scene']),
-        'moderator' => '',
-        'creating' => htmlsafechars($_POST['creating']),
-        'seeding' => htmlsafechars($_POST['seeding']),
-    ];
-    $res = $fluent->insertInto('uploadapp')
-        ->values($values)
-        ->execute();
-    $cache->delete('new_uploadapp_');
-    if (!$res) {
-        stderr(_('Error'), _fe('It appears something went wrong while sending your application. Please {0}try again{1}', "<a href='{$site_config['paths']['baseurl']}/uploadapp.php'>", '</a>'));
-    } else {
-        $subject = 'Uploader application';
-        $msg = "An uploader application has just been filled in by [url={$site_config['paths']['baseurl']}/userdetails.php?id=" . (int) $user['id'] . "][b]{$user['username']}[/b][/url]. Click [url={$site_config['paths']['baseurl']}/staffpanel.php?tool=uploadapps&action=app][b]Here[/b][/url] to go to the uploader applications page.";
-        $dt = TIME_NOW;
-        $subres = $fluent->from('users')
-            ->select(null)
-            ->select('id')
-            ->where('class >= ?', UC_STAFF)
-            ->fetchAll();
+    $applicant = // TODO: review query
+$sql = "SELECT * FROM table WHERE ...";
+$this->db->fetchAll($sql, [/* params */]);;
 
         foreach ($subres as $arr) {
             $msgs_buffer[] = [
@@ -131,11 +51,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 }
 
 $ratio = member_ratio($user['uploaded'], $user['downloaded']);
-$connect = $fluent->from('peers')
-    ->select(null)
-    ->select('connectable')
-    ->where('userid = ?', $user['id'])
-    ->fetch();
+$connect = // TODO: review query
+$sql = "SELECT * FROM table WHERE ...";
+$this->db->fetchOne($sql, [/* params */]);;
 if (!empty($connect)) {
     $Conn_Y = 'yes';
     if ($connect == $Conn_Y) {

@@ -65,10 +65,9 @@ $db = $container->get(Database::class);, $site_config;
         } else {
             $fluent = $db; // alias
 $fluent = $container->get(Database::class);
-            $categories = $fluent->from('categories')
-                                 ->select(null)
-                                 ->select('id')
-                                 ->fetchAll();
+            $categories = // TODO: review query
+$sql = "SELECT * FROM table WHERE ...";
+$this->db->fetchAll($sql, [/* params */]);;
 
             shuffle($categories);
             $todo = $categories[0];

@@ -82,9 +82,9 @@ function foxnews_shout($links = [])
                 $values = [
                     'link' => $link,
                 ];
-                $query = $fluent->insertInto('newsrss')
-                                ->values($values);
-                $newid = $query->execute();
+                $query = // TODO: review insert
+$sql = "INSERT INTO table (...) VALUES (...)";
+$this->db->perform($sql, [/* params */]);;
                 if ($newid) {
                     if (!$empty || $count === $i++) {
                         $msg = "[color=yellow]In $key News:[/color] [url={$pub['link']}]{$pub['title']}[/url]";
@@ -160,9 +160,9 @@ function tfreak_shout($links = [])
             $values = [
                 'link' => $link,
             ];
-            $query = $fluent->insertInto('newsrss')
-                            ->values($values);
-            $newid = $query->execute();
+            $query = // TODO: review insert
+$sql = "INSERT INTO table (...) VALUES (...)";
+$this->db->perform($sql, [/* params */]);;
             if ($newid) {
                 if (!$empty || $count === $i++) {
                     $msg = "[color=yellow]TFreak News:[/color] [url={$pub['link']}]{$pub['title']}[/url]";
@@ -250,9 +250,9 @@ function github_shout($links = [])
                 $values = [
                     'link' => $link,
                 ];
-                $query = $fluent->insertInto('newsrss')
-                                ->values($values);
-                $newid = $query->execute();
+                $query = // TODO: review insert
+$sql = "INSERT INTO table (...) VALUES (...)";
+$this->db->perform($sql, [/* params */]);;
                 if ($newid) {
                     if (!$empty || $count === $i++) {
                         $msg = "[color=yellow]Git Commit [$key branch]:[/color] [url={$pub['link']}]{$pub['title']}[/url] => {$pub['commit']}";

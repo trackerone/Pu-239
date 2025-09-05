@@ -35,13 +35,9 @@ class Casino
     public function reset_trys(int $userid)
     {
         $set = ['trys' => 0];
-        $this->fluent->update('casino')
-                     ->set($set)
-                     ->where('date < ?', TIME_NOW)
-                     ->where('trys >= 51')
-                     ->where('enableplay = "yes"')
-                     ->where('userid = ?', $userid)
-                     ->execute();
+        // TODO: review update
+$sql = "UPDATE table SET ... WHERE ...";
+$this->db->perform($sql, [/* params */]);;
     }
 
     /**
@@ -58,9 +54,9 @@ class Casino
             'userid' => $userid,
             'date' => TIME_NOW,
         ];
-        $this->fluent->insertInto('casino')
-                     ->values($values)
-                     ->execute();
+        // TODO: review insert
+$sql = "INSERT INTO table (...) VALUES (...)";
+$this->db->perform($sql, [/* params */]);;
 
         return $this->get_user($userid);
     }
@@ -75,9 +71,9 @@ class Casino
      */
     public function get_user(int $userid)
     {
-        $user = $this->fluent->from('casino')
-                             ->where('userid = ?', $userid)
-                             ->fetch();
+        $user = // TODO: review query
+$sql = "SELECT * FROM table WHERE ...";
+$this->db->fetchOne($sql, [/* params */]);;
 
         return $user;
     }
@@ -89,13 +85,9 @@ class Casino
      */
     public function get_totals()
     {
-        $result = $this->fluent->from('casino')
-                               ->select(null)
-                               ->select('SUM(win) - SUM(lost) AS globaldown')
-                               ->select('SUM(deposit) AS globaldeposit')
-                               ->select('SUM(win) AS win')
-                               ->select('SUM(lost) AS lost')
-                               ->fetch();
+        $result = // TODO: review query
+$sql = "SELECT * FROM table WHERE ...";
+$this->db->fetchOne($sql, [/* params */]);;
 
         return $result;
     }
@@ -108,9 +100,8 @@ class Casino
      */
     public function update_user(array $set, int $userid)
     {
-        $this->fluent->update('casino')
-                     ->set($set)
-                     ->where('userid = ?', $userid)
-                     ->execute();
+        // TODO: review update
+$sql = "UPDATE table SET ... WHERE ...";
+$this->db->perform($sql, [/* params */]);;
     }
 }

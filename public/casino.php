@@ -4,7 +4,7 @@ require_once __DIR__ . '/../include/runtime_safe.php';
 
 declare(strict_types = 1);
 
-use Envms\FluentPDO\Literal;
+// removed FluentPDO Literal
 use Pu239\Cache;
 use Pu239\Casino;
 use Pu239\CasinoBets;

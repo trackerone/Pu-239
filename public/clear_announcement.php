@@ -20,11 +20,9 @@ $set = [
     'curr_ann_last_check' => 0,
 ];
 $fluent = $container->get(Database::class);
-$fluent->update('users')
-       ->set($set)
-       ->where('id = ?', $user['id'])
-       ->where('curr_ann_id != 0')
-       ->execute();
+// TODO: review update
+$sql = "UPDATE table SET ... WHERE ...";
+$this->db->perform($sql, [/* params */]);;
 
 $cache = $container->get(Cache::class);
 $cache->update_row('user_' . $user['id'], [

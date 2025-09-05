@@ -24,14 +24,12 @@ $HTMLOUT = "
         </div>';
 
 $fluent = $container->get(Database::class);
-$scores = $fluent->from('flashscores')
-                 ->orderBy('game')
-                 ->orderBy('level DESC')
-                 ->orderBy('score DESC')
-                 ->fetchAll();
-$highscores = $fluent->from('highscores')
-                     ->orderBy('game')
-                     ->fetchAll();
+$scores = // TODO: review query
+$sql = "SELECT * FROM table WHERE ...";
+$this->db->fetchAll($sql, [/* params */]);;
+$highscores = // TODO: review query
+$sql = "SELECT * FROM table WHERE ...";
+$this->db->fetchAll($sql, [/* params */]);;
 
 /**
  * @param string $game

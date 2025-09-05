@@ -44,11 +44,9 @@ if ($private === 'true') {
         'private' => $private,
     ];
 
-    $fluent->update('bookmarks')
-           ->set($set)
-           ->where('torrentid = ?', $tid)
-           ->where('userid = ?', $user['id'])
-           ->execute();
+    // TODO: review update
+$sql = "UPDATE table SET ... WHERE ...";
+$this->db->perform($sql, [/* params */]);;
 
     $cache->delete('bookmarks_' . $user['id']);
     echo json_encode([
@@ -85,9 +83,9 @@ if (!empty($bookmark)) {
         'userid' => $user['id'],
         'torrentid' => $tid,
     ];
-    $fluent->insertInto('bookmarks')
-           ->values($values)
-           ->execute();
+    // TODO: review insert
+$sql = "INSERT INTO table (...) VALUES (...)";
+$this->db->perform($sql, [/* params */]);;
     $cache->delete('bookmarks_' . $user['id']);
     echo json_encode([
         'content' => 'added',

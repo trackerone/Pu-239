@@ -8,7 +8,7 @@ declare(strict_types = 1);
 
 use DI\DependencyException;
 use DI\NotFoundException;
-use Envms\FluentPDO\Literal;
+// removed FluentPDO Literal
 use Pu239\Cache;
 use Pu239\Database;
 use Pu239\Message;
@@ -64,9 +64,9 @@ $fluent = $container->get(Database::class);
             $update = [
                 'value' => new Literal('VALUES(value)'),
             ];
-            $fluent->insertInto('lottery_config', $values)
-                   ->onDuplicateKeyUpdate($update)
-                   ->execute();
+            // TODO: review insert
+$sql = "INSERT INTO table (...) VALUES (...)";
+$this->db->perform($sql, [/* params */]);;
             if ($site_config['site']['autoshout_chat'] || $site_config['site']['autoshout_irc']) {
                 $fund = number_format($site_config['auto_lotto']['prize_fund']);
                 $cost = number_format($site_config['auto_lotto']['ticket_amount']);

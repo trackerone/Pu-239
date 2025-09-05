@@ -6,7 +6,7 @@ declare(strict_types = 1);
 
 use DI\DependencyException;
 use DI\NotFoundException;
-use Envms\FluentPDO\Literal;
+// removed FluentPDO Literal
 use MatthiasMullie\Scrapbook\Exception\UnbegunTransaction;
 use Pu239\Cache;
 use Pu239\Database;
@@ -44,9 +44,9 @@ function nologip(int $userid, bool $nologip = true)
         $users_class->update($update, $userid, false);
     }
     $fluent = $container->get(Database::class);
-    $fluent->deleteFrom('ips')
-           ->where('userid = ?', $userid)
-           ->execute();
+    // TODO: review delete
+$sql = "DELETE FROM table WHERE ...";
+$this->db->perform($sql, [/* params */]);;
     $cache = $container->get(Cache::class);
     $cache->delete('ip_history_' . $userid);
     write_log('Member [b][url=userdetails.php?id=' . $userid . ']' . (htmlsafechars($user['username'])) . '[/url][/b] is ' . $display . ' Logging IP thanks to [b]' . $CURUSER['username'] . '[/b]');

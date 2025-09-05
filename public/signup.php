@@ -5,7 +5,7 @@ require_once __DIR__ . '/../include/runtime_safe.php';
 declare(strict_types = 1);
 
 use Delight\Auth\Auth;
-use Envms\FluentPDO\Literal;
+// removed FluentPDO Literal
 use Pu239\Database;
 use Pu239\Message;
 use Pu239\Session;
@@ -101,10 +101,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     'accounts_made' => new Literal('accounts_made + 1'),
                     'users' => empty($valid['users']) ? $userid : $valid['users'] . '|' . $userid,
                 ];
-                $fluent->update('promo')
-                       ->set($set)
-                       ->where('link = ?', $valid['link'])
-                       ->execute();
+                // TODO: review update
+$sql = "UPDATE table SET ... WHERE ...";
+$this->db->perform($sql, [/* params */]);;
 
                 $set = [
                     'join_type' => 'promo',
@@ -123,11 +122,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             'receiver' => $userid,
             'status' => 'Confirmed',
         ];
-        $fluent->update('invite_codes')
-               ->set($set)
-               ->where('sender = ?', $inviter)
-               ->where('id = ?', $invite_id)
-               ->execute();
+        // TODO: review update
+$sql = "UPDATE table SET ... WHERE ...";
+$this->db->perform($sql, [/* params */]);;
     }
     $session->unset('signup_variables');
     header("Location: {$site_config['paths']['baseurl']}/login.php");

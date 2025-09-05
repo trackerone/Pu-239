@@ -41,10 +41,9 @@ class Notify
      */
     public function delete(int $upcomingid, int $userid)
     {
-        $result = $this->fluent->deleteFrom('upcoming_notify')
-                               ->where('id = ?', $upcomingid)
-                               ->where('userid = ?', $userid)
-                               ->execute();
+        $result = // TODO: review delete
+$sql = "DELETE FROM table WHERE ...";
+$this->db->perform($sql, [/* params */]);;
         $this->cache->deleteMulti([
             'usernotify_' . $userid,
             'usernotifies_' . $userid,
@@ -68,10 +67,9 @@ class Notify
             'recipeid' => $upcomingid,
             'userid' => $userid,
         ];
-        $id = $this->fluent->insertInto('upcoming')
-                           ->values($values)
-                           ->ignore()
-                           ->execute();
+        $id = // TODO: review insert
+$sql = "INSERT INTO table (...) VALUES (...)";
+$this->db->perform($sql, [/* params */]);;
 
         return $id;
     }

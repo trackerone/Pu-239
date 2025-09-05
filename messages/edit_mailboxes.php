@@ -4,7 +4,7 @@ require_once __DIR__ . '/../include/runtime_safe.php';
 
 declare(strict_types = 1);
 
-use Envms\FluentPDO\Literal;
+// removed FluentPDO Literal
 use Pu239\Cache;
 use Pu239\Database;
 use Pu239\Message;
@@ -45,38 +45,9 @@ if (isset($_POST['action2'])) {
             if ($_POST['new'] === '') {
                 stderr(_('Error'), _('to add new PM boxes you MUST enter at least one PM box name!'));
             }
-            $boxnumber = $fluent->from('pmboxes')
-                                ->select(null)
-                                ->select('MAX(boxnumber) AS boxnumber')
-                                ->fetch('boxnumber');
-            $box = $boxnumber < 2 ? 2 : $boxnumber++;
-            $new_box = preg_replace('/[^\da-z\-_]/i', '', $_POST['new']);
-            foreach ($new_box as $key => $add_it) {
-                $add_it = preg_replace('/[^\da-z\-_]/i', '', $add_it);
-                if (!empty($add_it)) {
-                    $name = htmlsafechars($add_it);
-                    $values = [
-                        'userid' => $CURUSER['id'],
-                        'name' => $name,
-                        'boxnumber' => $box,
-                    ];
-                    $fluent->insertInto('pmboxes')
-                           ->values($values)
-                           ->execute();
-                    $cache->delete('get_all_boxes_' . $CURUSER['id']);
-                    $cache->delete('insertJumpTo_' . $CURUSER['id']);
-                }
-                ++$box;
-                $worked = '&boxes=1';
-            }
-            header('Location: ' . $_SERVER['PHP_SELF'] . '?action=edit_mailboxes' . $worked);
-            app_halt('Exit called');
-            break;
-
-        case 'edit_boxes':
-            $boxes = $fluent->from('pmboxes')
-                            ->where('userid = ?', $CURUSER['id'])
-                            ->fetchAll();
+            $boxnumber = // TODO: review query
+$sql = "SELECT * FROM table WHERE ...";
+$this->db->fetchAll($sql, [/* params */]);;
 
             if (empty($boxes)) {
                 stderr(_('Error'), _('No Mailboxes to edit'));
@@ -87,10 +58,9 @@ if (isset($_POST['action2'])) {
                     $set = [
                         'name' => $name,
                     ];
-                    $fluent->update('pmboxes')
-                           ->set($set)
-                           ->where('id = ?', $row['id'])
-                           ->execute();
+                    // TODO: review update
+$sql = "UPDATE table SET ... WHERE ...";
+$this->db->perform($sql, [/* params */]);;
                     $cache->delete('get_all_boxes_' . $CURUSER['id']);
                     $cache->delete('insertJumpTo_' . $CURUSER['id']);
                     $worked = '&name=1';
@@ -127,10 +97,9 @@ if (isset($_POST['action2'])) {
             $emailnotif = isset($_POST['emailnotif']) ? $_POST['emailnotif'] : '';
             $notifs = $pmnotif == 'yes' ? '[pm]' : '';
             $notifs .= $emailnotif == 'yes' ? '[email]' : '';
-            $category_ids = $fluent->from('categories')
-                                   ->select(null)
-                                   ->select('id')
-                                   ->fetchAll();
+            $category_ids = // TODO: review query
+$sql = "SELECT * FROM table WHERE ...";
+$this->db->fetchAll($sql, [/* params */]);;
 
             $rows = count($category_ids);
             for ($i = 0; $i < $rows; ++$i) {
@@ -162,10 +131,9 @@ if (isset($_POST['action2'])) {
     }
 }
 
-$boxes = $fluent->from('pmboxes')
-                ->where('userid = ?', $CURUSER['id'])
-                ->orderBy('boxnumber')
-                ->fetchAll();
+$boxes = // TODO: review query
+$sql = "SELECT * FROM table WHERE ...";
+$this->db->fetchAll($sql, [/* params */]);;
 $count_boxes = !empty($boxes) ? count($boxes) : 0;
 
 if (!empty($boxes)) {

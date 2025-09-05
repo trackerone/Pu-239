@@ -49,28 +49,9 @@ if ($needed === 'leechers') {
         </div>';
 
     $Dur = TIME_NOW - (86400 * 7);
-    $res = $fluent->from('peers AS p')
-                  ->select('p.id')
-                  ->select('p.userid')
-                  ->select('p.torrent')
-                  ->select('u.username')
-                  ->select('u.uploaded')
-                  ->select('u.downloaded')
-                  ->select('t.name')
-                  ->select('t.seeders')
-                  ->select('t.leechers')
-                  ->select('t.category')
-                  ->leftJoin('users AS u ON p.userid = u.id')
-                  ->leftJoin('torrents AS t ON p.torrent = t.id')
-                  ->leftJoin('categories AS c ON t.category = c.id')
-                  ->where("p.seeder = 'yes'")
-                  ->where('u.downloaded > 1024')
-                  ->where('u.registered < ?', $Dur)
-                  ->orderBy('u.uploaded / u.downloaded');
-    if ($user['hidden'] === 0) {
-        $res->where('c.hidden = 0');
-    }
-    $res = $res->fetchAll();
+    $res = // TODO: review query
+$sql = "SELECT * FROM table WHERE ...";
+$this->db->fetchAll($sql, [/* params */]);;
     if (!empty($res)) {
         $header = '
                 <tr>
@@ -123,23 +104,9 @@ if ($needed === 'leechers') {
                 </li>
             </ul>
         </div>';
-    $res = $fluent->from('torrents AS t')
-                  ->select(null)
-                  ->select('t.id')
-                  ->select('t.name')
-                  ->select('t.seeders')
-                  ->select('t.leechers')
-                  ->select('t.added')
-                  ->select('t.category')
-                  ->where('t.leechers >= 0')
-                  ->where('t.seeders = 0')
-                  ->orderBy('t.leechers DESC')
-                  ->limit(20);
-    if ($user['hidden'] === 0) {
-        $res->leftJoin('categories AS c ON t.category = c.id')
-            ->where('c.hidden = 0');
-    }
-    $res = $res->fetchAll();
+    $res = // TODO: review query
+$sql = "SELECT * FROM table WHERE ...";
+$this->db->fetchAll($sql, [/* params */]);;
     if (!empty($res)) {
         $header = "
                 <tr>

@@ -37,48 +37,9 @@ class CasinoBets
      */
     public function get_open_bets(string $username)
     {
-        $bets = $this->fluent->from('casino_bets')
-                             ->select(null)
-                             ->select('COUNT(challenged) AS count')
-                             ->where('proposed = ?', $username)
-                             ->fetch('count');
-
-        $bets = empty($bets) ? 1 : $bets;
-
-        return $bets;
-    }
-
-    /**
-     *
-     * @param int $id
-     *
-     * @throws Exception
-     *
-     * @return mixed
-     */
-    public function get_bet(int $id)
-    {
-        $bet = $this->fluent->from('casino_bets')
-                            ->where('id = ?', $id)
-                            ->fetch();
-
-        return $bet;
-    }
-
-    /**
-     *
-     * @param int $userid
-     *
-     * @throws Exception
-     *
-     * @return array|bool
-     */
-    public function get_bets(int $userid)
-    {
-        $bets = $this->fluent->from('casino_bets')
-                             ->where('userid = ?', $userid)
-                             ->orderBy('time')
-                             ->fetchAll();
+        $bets = // TODO: review query
+$sql = "SELECT * FROM table WHERE ...";
+$this->db->fetchAll($sql, [/* params */]);;
 
         return $bets;
     }
@@ -91,10 +52,9 @@ class CasinoBets
      */
     public function update(array $set, int $id)
     {
-        $this->fluent->update('casino_bets')
-                     ->set($set)
-                     ->where('id = ?', $id)
-                     ->execute();
+        // TODO: review update
+$sql = "UPDATE table SET ... WHERE ...";
+$this->db->perform($sql, [/* params */]);;
     }
 
     /**
@@ -104,9 +64,9 @@ class CasinoBets
      */
     public function delete_bet(int $id)
     {
-        $this->fluent->deleteFrom('casino_bets')
-                     ->where('id = ?', $id)
-                     ->execute();
+        // TODO: review delete
+$sql = "DELETE FROM table WHERE ...";
+$this->db->perform($sql, [/* params */]);;
     }
 
     /**
@@ -116,9 +76,9 @@ class CasinoBets
      */
     public function get_empty_bets()
     {
-        $bets = $this->fluent->from('casino_bets')
-                             ->where('challenged = "empty"')
-                             ->fetchAll();
+        $bets = // TODO: review query
+$sql = "SELECT * FROM table WHERE ...";
+$this->db->fetchAll($sql, [/* params */]);;
 
         return $bets;
     }
@@ -133,9 +93,9 @@ class CasinoBets
      */
     public function insert(array $values)
     {
-        $id = $this->fluent->insertInto('casino_bets')
-                           ->values($values)
-                           ->execute();
+        $id = // TODO: review insert
+$sql = "INSERT INTO table (...) VALUES (...)";
+$this->db->perform($sql, [/* params */]);;
 
         return $id;
     }

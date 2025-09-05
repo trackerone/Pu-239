@@ -4,7 +4,7 @@ require_once __DIR__ . '/../include/runtime_safe.php';
 
 declare(strict_types = 1);
 
-use Envms\FluentPDO\Literal;
+// removed FluentPDO Literal
 use Pu239\Database;
 use Pu239\Session;
 
@@ -21,13 +21,9 @@ if (!is_valid_id($id)) {
     stderr(_('Error'), _('Invalid ID'), 'bottom20');
 }
 $fluent = $container->get(Database::class);
-$torrent = $fluent->from('torrents')
-                  ->select(null)
-                  ->select('id')
-                  ->select('thanks')
-                  ->select('comments')
-                  ->where('id = ?', $id)
-                  ->fetch();
+$torrent = // TODO: review query
+$sql = "SELECT * FROM table WHERE ...";
+$this->db->fetchOne($sql, [/* params */]);;
 
 if (empty($torrent)) {
     stderr(_('Error'), _('Torrent not found'), 'bottom20');
@@ -48,9 +44,9 @@ $values = [
     'torid' => $id,
     'thank_date' => TIME_NOW,
 ];
-$fluent->insertInto('thankyou')
-       ->values($values)
-       ->execute();
+// TODO: review insert
+$sql = "INSERT INTO table (...) VALUES (...)";
+$this->db->perform($sql, [/* params */]);;
 $values = [
     'user' => $user['id'],
     'torrent' => $id,
@@ -58,18 +54,17 @@ $values = [
     'text' => $text,
     'ori_text' => $text,
 ];
-$fluent->insertInto('comments')
-       ->values($values)
-       ->execute();
+// TODO: review insert
+$sql = "INSERT INTO table (...) VALUES (...)";
+$this->db->perform($sql, [/* params */]);;
 
 $set = [
     'thanks' => new Literal('thanks + 1'),
     'comments' => new Literal('comments + 1'),
 ];
-$fluent->update('torrents')
-       ->set($set)
-       ->where('id = ?', $id)
-       ->execute();
+// TODO: review update
+$sql = "UPDATE table SET ... WHERE ...";
+$this->db->perform($sql, [/* params */]);;
 
 $cache->deleteMulti([
     'latest_comments_',
@@ -79,10 +74,9 @@ if ($site_config['bonus']['on']) {
     $set = [
         'seedbonus' => new Literal('seedbonus + ' . $site_config['bonus']['per_comment']),
     ];
-    $fluent->update('users')
-           ->set($set)
-           ->where('id = ?', $user['id'])
-           ->execute();
+    // TODO: review update
+$sql = "UPDATE table SET ... WHERE ...";
+$this->db->perform($sql, [/* params */]);;
 }
 $session = $container->get(Session::class);
 $session->set('is-success', "Your 'Thank you' has been registered!");

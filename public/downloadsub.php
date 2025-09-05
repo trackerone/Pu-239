@@ -21,13 +21,9 @@ if ($action === 'download') {
     } else {
         $fluent = $db; // alias
 $fluent = $container->get(Database::class);
-        $subtitle = $fluent->from('subtitles')
-                           ->select(null)
-                           ->select('id')
-                           ->select('name')
-                           ->select('filename')
-                           ->where('id = ?', $id)
-                           ->fetch();
+        $subtitle = // TODO: review query
+$sql = "SELECT * FROM table WHERE ...";
+$this->db->fetchOne($sql, [/* params */]);;
         $ext = pathinfo($subtitle['filename'], PATHINFO_EXTENSION);
         $file_name = str_replace([
             ' ',

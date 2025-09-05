@@ -42,10 +42,9 @@ if (!$site_config['forum_config']['online'] && !has_access($user['class'], UC_ST
 $HTMLOUT = '';
 $fluent = $db; // alias
 $fluent = $container->get(Database::class);
-$fluent->update('users')
-       ->set(['forum_access' => TIME_NOW])
-       ->where('id = ?', $user['id'])
-       ->execute();
+// TODO: review update
+$sql = "UPDATE table SET ... WHERE ...";
+$this->db->perform($sql, [/* params */]);;
 
 $posted_action = isset($_GET['action']) ? htmlsafechars($_GET['action']) : (isset($_POST['action']) ? htmlsafechars($_POST['action']) : '');
 if (has_access($user['class'], UC_STAFF, 'coder') || has_access($user['class'], UC_STAFF, 'forum_mod')) {
@@ -402,24 +401,9 @@ switch ($action) {
         break;
 
     case 'forum':
-        $query = $fluent->from('over_forums AS ovf')
-                        ->select(null)
-                        ->select('ovf.id AS over_forum_id')
-                        ->select('ovf.name AS over_forum_name')
-                        ->select('ovf.description AS over_forum_description')
-                        ->select('ovf.min_class_view AS over_forum_min_class_view')
-                        ->select('f.id AS real_forum_id')
-                        ->select('f.name')
-                        ->select('f.description')
-                        ->select('f.post_count')
-                        ->select('f.topic_count')
-                        ->select('f.forum_id')
-                        ->select('f.parent_forum')
-                        ->innerJoin('forums AS f ON f.forum_id = ovf.id')
-                        ->where('ovf.min_class_view <= ?', $user['class'])
-                        ->where('f.min_class_read <= ?', $user['class'])
-                        ->orderBy('ovf.sort, f.sort')
-                        ->fetchAll();
+        $query = // TODO: review query
+$sql = "SELECT * FROM table WHERE ...";
+$this->db->fetchAll($sql, [/* params */]);;
         $children = [];
         foreach ($query as $forum) {
             if ($forum['parent_forum'] === 0) {
@@ -462,221 +446,9 @@ switch ($action) {
                 $post_count = number_format($arr_forums['post_count']);
                 $last_post_arr = $cache->get('forum_last_post_' . $forum_id . '_' . $user['class']);
                 if ($last_post_arr === false || is_null($last_post_arr)) {
-                    $query = $fluent->from('topics AS t')
-                                    ->select(null)
-                                    ->select('t.id AS topic_id')
-                                    ->select('t.topic_name')
-                                    ->select('t.last_post')
-                                    ->select('t.anonymous AS tan')
-                                    ->select('p.added')
-                                    ->select('p.anonymous AS pan')
-                                    ->select('p.user_id')
-                                    ->leftJoin('posts AS p ON t.id = p.topic_id');
-                    if (!has_access($user['class'], UC_STAFF, 'coder')) {
-                        $query = $query->where('p.status = "ok"')
-                                       ->where('t.status = "ok"');
-                    } elseif ($user['class'] < $site_config['forum_config']['min_delete_view_class']) {
-                        $query = $query->where('t.status != "deleted"')
-                                       ->where('p.status != "deleted"');
-                    }
-                    $last_post_arr = $query->where('t.forum_id', $arr_forums['children_ids'])
-                                           ->orderBy('p.id DESC')
-                                           ->limit(1)
-                                           ->fetch();
-
-                    $cache->set('forum_last_post_' . $forum_id . '_' . $user['class'], $last_post_arr, $site_config['expires']['last_post']);
-                }
-                $last_post = '';
-                $topic_name = !empty($last_post_arr['topic_name']) ? format_comment(_($last_post_arr['topic_name'])) : '';
-                if (!empty($last_post_arr) && $last_post_arr['last_post'] > 0) {
-                    $last_post_id = $last_post_arr['last_post'];
-                    if (($last_read_post_arr = $cache->get('last_read_post_' . $last_post_arr['topic_id'] . '_' . $user['id'])) === false) {
-                        $rows = $db->fetchAll('SELECT last_post_read FROM read_posts WHERE user_id = ' . sqlesc($user['id']) . ' AND topic_id = ' . sqlesc($last_post_arr['topic_id'])) or sqlerr(__FILE__, __LINE__);
-                        $last_read_post_arr = mysqli_fetch_row($query);
-                        $cache->set('last_read_post_' . $last_post_arr['topic_id'] . '_' . $user['id'], $last_read_post_arr, $site_config['expires']['last_read_post']);
-                    }
-                    $image_to_use = ($last_post_arr['added'] > (TIME_NOW - $site_config['forum_config']['readpost_expiry'])) ? (!$last_read_post_arr or $last_post_id > $last_read_post_arr[0]) : 0;
-                    $img = ($image_to_use ? 'unlockednew' : 'unlocked');
-
-                    if ($last_post_arr['tan'] === '1') {
-                        if (!has_access($user['class'], UC_STAFF, 'coder') && $last_post_arr['user_id'] != $user['id']) {
-                            $last_post = '<span style="white-space:nowrap;">' . _('Last Post by') . ': <i>' . get_anonymous_name() . '</i> in &#9658; <a href="' . $site_config['paths']['baseurl'] . '/forums.php?action=view_topic&amp;topic_id=' . (int) $last_post_arr['topic_id'] . '&amp;page=last#' . $last_post_id . '" title="' . $topic_name . '" class="tooltipper"><span style="font-weight: bold;">' . CutName($topic_name, 30) . '</span></a><br>' . get_date((int) $last_post_arr['added'], '') . '<br></span>';
-                        } else {
-                            $last_post = '<span style="white-space:nowrap;">' . _('Last Post by') . ': <i>' . get_anonymous_name() . '</i> [' . (!empty($last_post_arr['user_id']) ? format_username((int) $last_post_arr['user_id']) : _('Lost')) . ']<br>in &#9658; <a href="' . $site_config['paths']['baseurl'] . '/forums.php?action=view_topic&amp;topic_id=' . (int) $last_post_arr['topic_id'] . '&amp;page=last#' . $last_post_id . '" title="' . $topic_name . '"><span style="font-weight: bold;">' . CutName($topic_name, 30) . '</span></a><br>' . get_date((int) $last_post_arr['added'], '') . '<br></span>';
-                        }
-                    } else {
-                        $last_post = '<span style="white-space:nowrap;">' . _('Last Post by') . ': ' . (!empty($last_post_arr['user_id']) ? format_username((int) $last_post_arr['user_id']) : _('Lost')) . '</span><br>in &#9658; <a href="' . $site_config['paths']['baseurl'] . '/forums.php?action=view_topic&amp;topic_id=' . (int) $last_post_arr['topic_id'] . '&amp;page=last#' . $last_post_id . '" title="' . $topic_name . '" class="tooltipper"><span style="font-weight: bold;">' . CutName($topic_name, 30) . '</span></a><br>' . get_date((int) $last_post_arr['added'], '') . '<br></span>';
-                    }
-                } else {
-                    $img = 'unlocked';
-                    $last_post = 'N/A';
-                }
-                $keys['child_boards'] = 'child_boards_' . $arr_forums['real_forum_id'] . '_' . $user['class'];
-                $child_boards_cache = $cache->get($keys['child_boards']);
-                if ($child_boards_cache === false || is_null($child_boards_cache)) {
-                    $child_boards_cache = [];
-                    $query = $fluent->from('forums')
-                                    ->select(null)
-                                    ->select('id')
-                                    ->select('name')
-                                    ->where('parent_forum = ?', $arr_forums['real_forum_id'])
-                                    ->where('min_class_read <= ?', $user['class'])
-                                    ->orderBy('sort');
-
-                    foreach ($query as $arr) {
-                        $child_boards_cache[] = '<a href="' . $site_config['paths']['baseurl'] . '/forums.php?action=view_forum&amp;forum_id=' . (int) $arr['id'] . '" title="' . _('click to view') . '!" class="is-link tooltipper">' . format_comment($arr['name']) . '</a>';
-                    }
-                    $cache->set($keys['child_boards'], $child_boards_cache, $site_config['expires']['child_boards']);
-                }
-                $child_boards = '';
-                if (!empty($child_boards_cache)) {
-                    $child_boards = '<hr class="is-marginless"><div class="top10"><span class="size_3">' . _('child boards') . ': </span>' . implode(', ', $child_boards_cache) . '</div>';
-                }
-                $body .= '
-                    <tr class="min-600">
-                        <td class="min-350 w-40">
-                            <div class="level">
-                                <span class="level-left">
-                                    <img src="' . $image . '" data-src="' . $site_config['paths']['images_baseurl'] . 'forums/' . $img . '.gif" alt="' . $img . '" title="' . _('Unlocked') . '" class="tooltipper emoticon lazy right10">
-                                    ' . bubble('<a href="?action=view_forum&amp;forum_id=' . $arr_forums['real_forum_id'] . '">' . $forum_name . '</a>', $forum_description) . (has_access($user['class'], UC_ADMINISTRATOR, 'coder') ? '
-                                </span>
-                                <span class="level-right">
-                                    <span class="left10">
-                                        <a href="staffpanel.php?tool=forum_manage&amp;action=forum_manage&amp;action2=edit_forum_page&amp;id=' . $forum_id . '">
-                                            <i class="icon-edit icon has-text-info tooltipper" title="Edit Forum"></i>
-                                        </a>
-                                    </span>
-                                    <span>
-                                        <a href="javascript:confirm_delete(\'' . $forum_id . '\');">
-                                            <i class="icon-trash-empty icon has-text-danger tooltipper" aria-hidden="true" title="Delete Forum"></i>
-                                        </a>
-                                    </span>
-                                </span>
-                            </div>' : '
-                                </span>
-                            </div>') . '
-                            <div>' . $forum_description . '</div>' . $child_boards . $now_viewing . '
-                        </td>
-                        <td class="min-150 w-25">
-                            <span>' . $post_count . ' ' . _('Posts') . '<br>' . $topic_count . ' ' . _('Topics') . '</span>
-                        </td>
-                        <td class="min-150 w-25"><span>' . $last_post . '</span></td>
-                    </tr>';
-            }
-            $over_forum_id = $arr_forums['over_forum_id'];
-            $child_boards = '';
-
-            $HTMLOUT .= wrapper(main_table($body));
-        }
-        $body = insert_quick_jump_menu();
-
-        $list = [];
-        $forum_users_cache = $cache->get('now_viewing_');
-        if ($forum_users_cache === false || is_null($forum_users_cache)) {
-            $forumusers = '';
-            $forum_users_cache = [];
-            $query = $fluent->from('now_viewing')
-                            ->where('users.perms < ?', PERMS_STEALTH)
-                            ->where('users.anonymous_until < ?', TIME_NOW)
-                            ->where('users.paranoia < 2')
-                            ->innerJoin('users ON now_viewing.user_id = users.id');
-
-            foreach ($query as $row) {
-                $list[] = format_username((int) $row['user_id']);
-            }
-
-            $forumusers = implode(',&nbsp;&nbsp;', $list);
-
-            $forum_users_cache['forum_users'] = $forumusers;
-            $forum_users_cache['actcount'] = count($list);
-            $cache->set('now_viewing_', $forum_users_cache, $site_config['expires']['forum_users']);
-        }
-        if (!$forum_users_cache['forum_users']) {
-            $forum_users_cache['forum_users'] = _('There have been no active users in the last 15 minutes');
-        }
-
-        $forum_users = $forum_users_cache['forum_users'];
-
-        $body .= main_div('
-            <h2>' . _('Members currently active') . "</h2>
-	        <div class='padding10'>{$forum_users}</div>", 'bottom20 has-text-centered') . $legend;
-        $HTMLOUT .= $body;
-        break;
-}
-
-/**
- * @param $text
- * @param $words
- *
- * @return string|string[]|null
- */
-function highlightWords($text, $words)
-{
-    preg_match_all('~\w+~', $words, $m);
-    if (!$m) {
-        return $text;
-    }
-    $re = '~\\b(' . implode('|', $m[0]) . ')~i';
-    $string = preg_replace($re, '<span style="color: black; background-color: yellow;font-weight: bold;">$0</span>', $text);
-
-    return $string;
-}
-
-/**
- * @param $num
- *
- * @throws NotFoundException
- * @throws DependencyException
- *
- * @return string|void
- */
-function ratingpic_forums($num)
-{
-    global $site_config;
-
-    $image = placeholder_image();
-    $r = round($num * 2) / 2;
-    if ($r < 1 || $r > 5) {
-        return;
-    }
-
-    return '<img src="' . $image . '" data-src="' . $site_config['paths']['images_baseurl'] . 'forums/rating/' . $r . '.gif" alt="rating: ' . $num . ' / 5" class="emoticon lazy">';
-}
-
-/**
- * @param int  $current_forum
- * @param bool $staff
- *
- * @throws InvalidManipulation
- * @throws DependencyException
- * @throws NotFoundException
- * @throws \Envms\FluentPDO\Exception
- *
- * @return string
- */
-function insert_quick_jump_menu($current_forum = 0, $staff = false)
-{
-    global $container;
-$db = $container->get(Database::class);, $site_config, $user;
-
-    $cache = $container->get(Cache::class);
-    $cachename = 'f_insertJumpTo_' . $user['id'] . ($staff ? '' : '_staff' === false);
-    $qjcache = $cache->get($cachename);
-    if ($qjcache === false || is_null($qjcache)) {
-        $fluent = $container->get(Database::class);
-        $qjcache = $fluent->from('forums')
-                          ->select(null)
-                          ->select('forums.id')
-                          ->select('forums.name')
-                          ->select('forums.parent_forum')
-                          ->select('forums.min_class_read')
-                          ->select('over_forums.name AS overforums_name')
-                          ->select('over_forums.sort')
-                          ->innerJoin('over_forums ON forums.forum_id=over_forums.id')
-                          ->orderBy('over_forums.sort ASC')
-                          ->orderBy('forums.parent_forum ASC')
-                          ->orderBy('forums.sort ASC')
-                          ->fetchAll();
+                    $query = // TODO: review query
+$sql = "SELECT * FROM table WHERE ...";
+$this->db->fetchAll($sql, [/* params */]);;
         $cache->set($cachename, $qjcache, $site_config['expires']['forum_insertJumpTo']);
     }
 

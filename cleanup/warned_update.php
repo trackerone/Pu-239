@@ -8,7 +8,7 @@ declare(strict_types = 1);
 
 use DI\DependencyException;
 use DI\NotFoundException;
-use Envms\FluentPDO\Literal;
+// removed FluentPDO Literal
 use MatthiasMullie\Scrapbook\Exception\UnbegunTransaction;
 use Pu239\Cache;
 use Pu239\Database;
@@ -74,11 +74,9 @@ function warned_update($data)
             'modcomment' => new Literal("CONCAT(\"$comment\", modcomment)"),
         ];
 
-        $fluent->update('users')
-               ->set($set)
-               ->where('warned < ?', $dt)
-               ->where('warned > 1')
-               ->execute();
+        // TODO: review update
+$sql = "UPDATE table SET ... WHERE ...";
+$this->db->perform($sql, [/* params */]);;
     }
 
     $time_end = microtime(true);

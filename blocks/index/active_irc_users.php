@@ -16,15 +16,9 @@ $irc = $cache->get('ircusers_');
 if ($irc === false || is_null($irc)) {
     $irc = $list = [];
     $fluent = $container->get(Database::class);
-    $query = $fluent->from('users')
-                    ->select(null)
-                    ->select('id')
-                    ->where('onirc = ?', 'yes')
-                    ->where('perms < ?', PERMS_STEALTH)
-                    ->where('anonymous_until < ?', TIME_NOW)
-                    ->where('id != 2')
-                    ->orderBy('username')
-                    ->fetchAll();
+    $query = // TODO: review query
+$sql = "SELECT * FROM table WHERE ...";
+$this->db->fetchAll($sql, [/* params */]);;
 
     $count = count($query);
     $i = 0;

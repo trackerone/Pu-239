@@ -40,10 +40,9 @@ class BotTriggers
      */
     public function insert(array $values)
     {
-        $result = $this->fluent->insertInto('bot_triggers')
-                               ->ignore()
-                               ->values($values)
-                               ->execute();
+        $result = // TODO: review insert
+$sql = "INSERT INTO table (...) VALUES (...)";
+$this->db->perform($sql, [/* params */]);;
 
         if (!$result) {
             return false;
@@ -64,10 +63,9 @@ class BotTriggers
      */
     public function update(array $set, int $id)
     {
-        $result = $this->fluent->update('bot_triggers')
-                               ->set($set)
-                               ->where('id = ?', $id)
-                               ->execute();
+        $result = // TODO: review update
+$sql = "UPDATE table SET ... WHERE ...";
+$this->db->perform($sql, [/* params */]);;
 
         if (!$result) {
             return false;
@@ -84,14 +82,9 @@ class BotTriggers
      */
     public function get_unapproved()
     {
-        $result = $this->fluent->from('bot_triggers AS t')
-                               ->leftJoin('bot_replies AS r ON t.id = r.phraseid')
-                               ->whereOr('t.approved_by = 0')
-                               ->whereOr('r.approved_by = 0')
-                               ->groupBy('t.id')
-                               ->groupBy('t.phrase')
-                               ->orderBy('t.phrase')
-                               ->fetchAll();
+        $result = // TODO: review query
+$sql = "SELECT * FROM table WHERE ...";
+$this->db->fetchAll($sql, [/* params */]);;
 
         return $result;
     }
@@ -103,9 +96,9 @@ class BotTriggers
      */
     public function getall()
     {
-        $result = $this->fluent->from('bot_triggers AS t')
-                               ->orderBy('t.phrase')
-                               ->fetchAll();
+        $result = // TODO: review query
+$sql = "SELECT * FROM table WHERE ...";
+$this->db->fetchAll($sql, [/* params */]);;
 
         return $result;
     }
@@ -120,9 +113,9 @@ class BotTriggers
      */
     public function delete(int $id)
     {
-        $results = $this->fluent->deleteFrom('bot_triggers')
-                                ->where('id = ?', $id)
-                                ->execute();
+        $results = // TODO: review delete
+$sql = "DELETE FROM table WHERE ...";
+$this->db->perform($sql, [/* params */]);;
         $this->cache->delete('bot_replies_');
 
         return $results;

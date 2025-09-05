@@ -28,12 +28,9 @@ function sitepot_update($data)
         'value_s' => '0',
     ];
     $fluent = $container->get(Database::class);
-    $fluent->update('avps')
-           ->set($set)
-           ->where('arg = ?', 'sitepot')
-           ->where('value_u < ?', TIME_NOW)
-           ->where('value_s = ?', '1')
-           ->execute();
+    // TODO: review update
+$sql = "UPDATE table SET ... WHERE ...";
+$this->db->perform($sql, [/* params */]);;
     $cache = $container->get(Cache::class);
     $cache->delete('Sitepot_');
     $time_end = microtime(true);

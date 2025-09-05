@@ -27,24 +27,18 @@ function silvertorrents_update($data)
     $time_start = microtime(true);
     $dt = TIME_NOW;
     $fluent = $container->get(Database::class);
-    $torrents = $fluent->from('torrents')
-                       ->select(null)
-                       ->select('id')
-                       ->select('silver')
-                       ->where('silver > 1')
-                       ->where('silver < ?', $dt)
-                       ->fetchAll();
+    $torrents = // TODO: review query
+$sql = "SELECT * FROM table WHERE ...";
+$this->db->fetchAll($sql, [/* params */]);;
 
     $count = count($torrents);
     if ($count > 0) {
         $set = [
             'silver' => 0,
         ];
-        $fluent->update('torrents')
-               ->set($set)
-               ->where('silver > 1')
-               ->where('silver < ?', $dt)
-               ->execute();
+        // TODO: review update
+$sql = "UPDATE table SET ... WHERE ...";
+$this->db->perform($sql, [/* params */]);;
     }
     $cache = $container->get(Cache::class);
     foreach ($torrents as $torrent) {

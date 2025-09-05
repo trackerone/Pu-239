@@ -134,11 +134,9 @@ if ($action === 'avatar') {
         }
         $r = $db->run(');
         $msg = _('User ') . "[url={$site_config['paths']['baseurl']}/userdetails.php?id=" . $user['id'] . '][b]' . htmlsafechars($user['username']) . '[/b][/url]' . _(' changed email address :') . _(' Old email was ') . htmlsafechars($user['email']) . _(' new email is ') . "$email" . _(', please check this was for a legitimate reason') . '';
-        $pmstaff = $fluent->from('users')
-                          ->select(null)
-                          ->select('id')
-                          ->where('class >= ?', UC_ADMINISTRATOR)
-                          ->fetchAll();
+        $pmstaff = // TODO: review query
+$sql = "SELECT * FROM table WHERE ...";
+$this->db->fetchAll($sql, [/* params */]);;
         foreach ($pmstaff as $arr) {
             $msgs_buffer[] = [
                 'receiver' => $arr['id'],
@@ -273,12 +271,9 @@ if ($setbits2 || $clrbits2) {
     sql_query($sql) or sqlerr(__FILE__, __LINE__);
 }
 
-$opt = $fluent->from('users')
-              ->select(null)
-              ->select('opt1')
-              ->select('opt2')
-              ->where('id = ?', $user['id'])
-              ->fetch();
+$opt = // TODO: review query
+$sql = "SELECT * FROM table WHERE ...";
+$this->db->fetchOne($sql, [/* params */]);;
 
 $cache->update_row('user_' . $user['id'], [
     'opt1' => $opt['opt1'],

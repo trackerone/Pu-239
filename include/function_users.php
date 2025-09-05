@@ -43,9 +43,9 @@ function autoshout(string $msg, int $channel = 0, int $ttl = 3600)
         ];
 
         $fluent = $container->get(Database::class);
-        $fluent->insertInto('ajax_chat_messages')
-               ->values($values)
-               ->execute();
+        // TODO: review insert
+$sql = "INSERT INTO table (...) VALUES (...)";
+$this->db->perform($sql, [/* params */]);;
     }
 }
 

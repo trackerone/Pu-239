@@ -42,9 +42,9 @@ class Person
     public function get_person_by_name(string $name)
     {
         try {
-            return $this->fluent->from('person')
-                                ->where('name = ?', $name)
-                                ->fetch();
+            return // TODO: review query
+$sql = "SELECT * FROM table WHERE ...";
+$this->db->fetchOne($sql, [/* params */]);;
         } catch (\Exception $e) {
             return $e->getMessage();
         }
@@ -59,10 +59,9 @@ class Person
     public function update_by_imdb(array $update, string $imdb_id)
     {
         try {
-            return $this->fluent->update('person')
-                                ->set($update)
-                                ->where('imdb_id = ?', $imdb_id)
-                                ->execute();
+            return // TODO: review update
+$sql = "UPDATE table SET ... WHERE ...";
+$this->db->perform($sql, [/* params */]);;
         } catch (\Exception $e) {
             return $e->getMessage();
         }
@@ -77,10 +76,9 @@ class Person
     public function update_by_url(array $update, string $url)
     {
         try {
-            return $this->fluent->update('person')
-                                ->set($update)
-                                ->where('photo = ?', $url)
-                                ->execute();
+            return // TODO: review update
+$sql = "UPDATE table SET ... WHERE ...";
+$this->db->perform($sql, [/* params */]);;
         } catch (\Exception $e) {
             return $e->getMessage();
         }

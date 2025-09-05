@@ -61,10 +61,9 @@ class FailedLogin
      */
     public function set(array $set, string $ip)
     {
-        $this->fluent->update('failedlogins')
-                     ->set($set)
-                     ->where('INET6_NTOA(ip) = ?', $ip)
-                     ->execute();
+        // TODO: review update
+$sql = "UPDATE table SET ... WHERE ...";
+$this->db->perform($sql, [/* params */]);;
     }
 
     /**
@@ -75,9 +74,9 @@ class FailedLogin
      */
     public function insert(array $values, array $update)
     {
-        $this->fluent->insertInto('failedlogins', $values)
-                     ->onDuplicateKeyUpdate($update)
-                     ->execute();
+        // TODO: review insert
+$sql = "INSERT INTO table (...) VALUES (...)";
+$this->db->perform($sql, [/* params */]);;
     }
 
     /**
@@ -87,8 +86,8 @@ class FailedLogin
      */
     public function delete(string $ip)
     {
-        $this->fluent->deleteFrom('failedlogins')
-                     ->where('INET6_NTOA(ip) = ?', $ip)
-                     ->execute();
+        // TODO: review delete
+$sql = "DELETE FROM table WHERE ...";
+$this->db->perform($sql, [/* params */]);;
     }
 }

@@ -8,7 +8,7 @@ declare(strict_types = 1);
 
 use DI\DependencyException;
 use DI\NotFoundException;
-use Envms\FluentPDO\Literal;
+// removed FluentPDO Literal
 use Pu239\Cache;
 use Pu239\Database;
 use Pu239\Searchcloud;

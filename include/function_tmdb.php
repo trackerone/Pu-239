@@ -462,10 +462,9 @@ $db = $container->get(Database::class);;
         'tmdb_id' => $tmdb_id,
     ];
     $fluent = $container->get(Database::class);
-    $fluent->update('images')
-        ->set($set)
-        ->where('imdb_id = ?', $imdb_id)
-        ->execute();
+    // TODO: review update
+$sql = "UPDATE table SET ... WHERE ...";
+$this->db->perform($sql, [/* params */]);;
 }
 
 /**

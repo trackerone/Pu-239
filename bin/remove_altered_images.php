@@ -16,15 +16,13 @@ set_time_limit(18000);
 $image_proxy = $container->get(ImageProxy::class);
 $path = IMAGES_DIR . 'proxy/';
 $fluent = $container->get(Database::class);
-$urls = $fluent->from('images')
-               ->select('url')
-               ->fetchAll();
+$urls = // TODO: review query
+$sql = "SELECT * FROM table WHERE ...";
+$this->db->fetchAll($sql, [/* params */]);;
 
-$photos = $fluent->from('person')
-                 ->select(null)
-                 ->select('photo AS url')
-                 ->where('photo IS NOT NULL')
-                 ->fetchAll();
+$photos = // TODO: review query
+$sql = "SELECT * FROM table WHERE ...";
+$this->db->fetchAll($sql, [/* params */]);;
 
 $urls = array_merge($urls, $photos);
 
@@ -47,10 +45,9 @@ $set = [
     'updated' => 0,
     'checked' => 0,
 ];
-$fluent->update('images')
-       ->set($set)
-       ->where('added > 0')
-       ->execute();
+// TODO: review update
+$sql = "UPDATE table SET ... WHERE ...";
+$this->db->perform($sql, [/* params */]);;
 
 echo "$i altered images removed
 Images size: " . mksize($filesize) . "\n";

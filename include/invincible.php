@@ -6,7 +6,7 @@ declare(strict_types = 1);
 
 use DI\DependencyException;
 use DI\NotFoundException;
-use Envms\FluentPDO\Literal;
+// removed FluentPDO Literal
 use MatthiasMullie\Scrapbook\Exception\UnbegunTransaction;
 use Pu239\Session;
 use Pu239\User;

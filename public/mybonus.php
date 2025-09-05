@@ -5,7 +5,7 @@ require_once __DIR__ . '/../include/runtime_safe.php';
 declare(strict_types = 1);
 
 use Delight\Auth\Auth;
-use Envms\FluentPDO\Literal;
+// removed FluentPDO Literal
 use Pu239\Bonuslog;
 use Pu239\Database;
 use Pu239\Message;
@@ -34,16 +34,9 @@ $dt = TIME_NOW;
 $max_donation = 100000;
 $bonuses = [];
 $fluent = $container->get(Database::class);
-$torrent_ids = $fluent->from('torrents')
-                      ->select(null)
-                      ->select('MIN(id) AS min')
-                      ->select('MAX(id) AS max')
-                      ->fetch();
-
-$options = $fluent->from('bonus')
-                  ->where('enabled = "yes"')
-                  ->orderBy('orderid')
-                  ->fetchAll();
+$torrent_ids = // TODO: review query
+$sql = "SELECT * FROM table WHERE ...";
+$this->db->fetchAll($sql, [/* params */]);;
 $option = [
     'id' => 0,
 ];
@@ -126,10 +119,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             'pointspool' => (int) $options[$option]['pointspool'] + $donate,
                         ];
                     }
-                    $fluent->update('bonus')
-                           ->set($update)
-                           ->where('id = ?', $post['option'])
-                           ->execute();
+                    // TODO: review update
+$sql = "UPDATE table SET ... WHERE ...";
+$this->db->perform($sql, [/* params */]);;
                     $bonuslog->insert($values);
                     $session->set('is-success', _fe('{0} You donated {1} Karma {2} to the {3} fund.', ':woot:', "[b]{$options[$option]['bonusname']}[/b]", number_format($donate), number_format($options[$option]['points'])));
                 } else {
@@ -233,16 +225,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     300 => 6,
                 ];
                 $user_limit = isset($foo[$rep_to_steal]) ? $foo[$rep_to_steal] : 3;
-                $query = $fluent->from('users')
-                                ->select(null)
-                                ->select('id')
-                                ->select('username')
-                                ->select('reputation')
-                                ->where('id != ?', $user['id'])
-                                ->where('reputation > ?', $rep_to_steal)
-                                ->orderBy('RAND()')
-                                ->limit($user_limit)
-                                ->fetchAll();
+                $query = // TODO: review query
+$sql = "SELECT * FROM table WHERE ...";
+$this->db->fetchAll($sql, [/* params */]);;
                 $update_users = $pms = $robbed_user = [];
                 foreach ($query as $ar) {
                     $new_rep = $ar['reputation'] - $rep_to_steal;

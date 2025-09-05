@@ -75,54 +75,24 @@ function bjtable($res, $frame_caption)
 
 $mingames = 10;
 $fluent = $container->get(Database::class);
-$res = $fluent->from('users')
-              ->select('id')
-              ->select('username')
-              ->select('bjwins AS wins')
-              ->select('bjlosses AS losses')
-              ->select('bjwins + bjlosses AS games')
-              ->where('bjwins + bjlosses > ?', $mingames)
-              ->orderBy('games')
-              ->limit(10)
-              ->fetchAll();
+$res = // TODO: review query
+$sql = "SELECT * FROM table WHERE ...";
+$this->db->fetchAll($sql, [/* params */]);;
 $HTMLOUT = bjtable($res, _('Most Games Played'));
 
-$res = $fluent->from('users')
-              ->select('id')
-              ->select('username')
-              ->select('bjwins AS wins')
-              ->select('bjlosses AS losses')
-              ->select('bjwins + bjlosses AS games')
-              ->select('bjwins / (bjwins + bjlosses) AS winperc')
-              ->where('bjwins + bjlosses > ?', $mingames)
-              ->orderBy('winperc')
-              ->limit(10)
-              ->fetchAll();
+$res = // TODO: review query
+$sql = "SELECT * FROM table WHERE ...";
+$this->db->fetchAll($sql, [/* params */]);;
 $HTMLOUT .= bjtable($res, _('Highest Win Percentage'));
 
-$res = $fluent->from('users')
-              ->select('id')
-              ->select('username')
-              ->select('bjwins AS wins')
-              ->select('bjlosses AS losses')
-              ->select('bjwins - bjlosses AS winnings')
-              ->where('bjwins + bjlosses > ?', $mingames)
-              ->orderBy('winnings')
-              ->limit(10)
-              ->fetchAll();
+$res = // TODO: review query
+$sql = "SELECT * FROM table WHERE ...";
+$this->db->fetchAll($sql, [/* params */]);;
 $HTMLOUT .= bjtable($res, _('Most Credit Won'));
 
-$res = $fluent->from('users')
-              ->select('id')
-              ->select('username')
-              ->select('bjwins AS wins')
-              ->select('bjlosses AS losses')
-              ->select('bjlosses - bjwins AS losings')
-              ->select('bjwins / (bjwins + bjlosses) AS winperc')
-              ->where('bjwins + bjlosses > ?', $mingames)
-              ->orderBy('losings')
-              ->limit(10)
-              ->fetchAll();
+$res = // TODO: review query
+$sql = "SELECT * FROM table WHERE ...";
+$this->db->fetchAll($sql, [/* params */]);;
 $HTMLOUT .= bjtable($res, _('Most Credit Lost'));
 $title = _('Blackjack Stats');
 $breadcrumbs = [

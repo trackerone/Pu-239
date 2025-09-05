@@ -36,19 +36,9 @@ if ($id !== 0) {
     <table>
         <tr>
             <td>';
-    $query = $fluent->from('users as u')
-                    ->select(null)
-                    ->select('u.id')
-                    ->select('u.username')
-                    ->select('u.uploaded')
-                    ->select('u.downloaded')
-                    ->select('u.email')
-                    ->select('i.status')
-                    ->leftJoin('invite_codes AS i ON u.id = i.receiver')
-                    ->where('u.invitedby = ?', $id)
-                    ->where("u.join_type = 'invite'")
-                    ->orderBy('u.registered')
-                    ->fetchAll();
+    $query = // TODO: review query
+$sql = "SELECT * FROM table WHERE ...";
+$this->db->fetchAll($sql, [/* params */]);;
     if (empty($query)) {
         $HTMLOUT .= stdmsg(_('Error'), _('No invitees yet.'));
     } else {
@@ -65,19 +55,9 @@ if ($id !== 0) {
         foreach ($query as $arr_invited) {
             $deeper = '';
             if (isset($_GET['deeper']) || isset($_GET['really_deep'])) {
-                $query2 = $fluent->from('users as u')
-                                 ->select(null)
-                                 ->select('u.id')
-                                 ->select('u.username')
-                                 ->select('u.uploaded')
-                                 ->select('u.downloaded')
-                                 ->select('u.email')
-                                 ->select('i.status')
-                                 ->leftJoin('invite_codes AS i ON u.id = i.receiver')
-                                 ->where('u.invitedby = ?', $arr_invited['id'])
-                                 ->where("u.join_type = 'invite'")
-                                 ->orderBy('u.registered')
-                                 ->fetchAll();
+                $query2 = // TODO: review query
+$sql = "SELECT * FROM table WHERE ...";
+$this->db->fetchAll($sql, [/* params */]);;
 
                 if (!empty($query2)) {
                     $deeper .= '
@@ -95,19 +75,9 @@ if ($id !== 0) {
                                     </tr>';
                     foreach ($query2 as $arr_invited_deeper) {
                         if (isset($_GET['really_deep'])) {
-                            $query3 = $fluent->from('users as u')
-                                             ->select(null)
-                                             ->select('u.id')
-                                             ->select('u.username')
-                                             ->select('u.uploaded')
-                                             ->select('u.downloaded')
-                                             ->select('u.email')
-                                             ->select('i.status')
-                                             ->leftJoin('invite_codes AS i ON u.id = i.receiver')
-                                             ->where('u.invitedby = ?', $arr_invited_deeper['id'])
-                                             ->where("u.join_type = 'invite'")
-                                             ->orderBy('u.registered')
-                                             ->fetchAll();
+                            $query3 = // TODO: review query
+$sql = "SELECT * FROM table WHERE ...";
+$this->db->fetchAll($sql, [/* params */]);;
 
                             if (!empty($query3)) {
                                 $deeper .= '

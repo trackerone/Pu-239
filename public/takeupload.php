@@ -4,7 +4,7 @@ require_once __DIR__ . '/../include/runtime_safe.php';
 
 declare(strict_types = 1);
 
-use Envms\FluentPDO\Literal;
+// removed FluentPDO Literal
 use Pu239\Cache;
 use Pu239\Database;
 use Pu239\Files;
@@ -241,253 +241,9 @@ if (empty($dict['info'])) {
 $info = &$dict['info'];
 $infohash = pack('H*', sha1(bencdec::encode($info)));
 $fluent = $container->get(Database::class);
-$count = $fluent->from('torrents')
-                ->select(null)
-                ->select('COUNT(id) AS count')
-                ->where('info_hash = ?', $infohash)
-                ->fetch('count');
-
-if ($count > 0) {
-    $session->set('is-warning', _('This torrent has already been uploaded! Please use the search function before uploading.'));
-    why_die(_('This torrent has already been uploaded! Please use the search function before uploading.'));
-}
-if (bencdec::get_type($info) != 'dictionary') {
-    $session->set('is-warning', _('invalid torrent, info is not a dictionary'));
-    why_die(_('invalid torrent, info is not a dictionary'));
-}
-if (empty($info['name']) || empty($info['piece length']) || empty($info['pieces'])) {
-    $session->set('is-warning', _('invalid torrent, missing parts of the info dictionary'));
-    why_die(_('invalid torrent, missing parts of the info dictionary'));
-}
-if (bencdec::get_type($info['name']) != 'string' || bencdec::get_type($info['piece length']) != 'integer' || bencdec::get_type($info['pieces']) != 'string') {
-    $session->set('is-warning', _('invalid torrent, invalid types in the info dictionary'));
-    why_die(_('invalid torrent, invalid types in the info dictionary'));
-}
-$dname = $info['name'];
-$plen = $info['piece length'];
-$pieces_len = strlen($info['pieces']);
-if ($pieces_len % 20 != 0) {
-    $session->set('is-warning', _('invalid pieces'));
-    why_die(_('invalid pieces'));
-}
-if ($plen % 4096) {
-    $session->set('is-warning', _('piece size is not mod(4096), invalid torrent.'));
-    why_die(_('piece size is not mod(4096), invalid torrent.'));
-}
-$filelist = [];
-if (!empty($info['length'])) {
-    if (bencdec::get_type($info['length']) != 'integer') {
-        $session->set('is-warning', _('Invalid filename!'));
-        why_die(_('Invalid filename!'));
-    }
-    $totallen = $info['length'];
-    $filelist[] = [
-        $dname,
-        $totallen,
-    ];
-} else {
-    if (empty($info['files'])) {
-        $session->set('is-warning', _('missing both length and files'));
-        why_die(_('missing both length and files'));
-    }
-    if (bencdec::get_type($info['files']) != 'list') {
-        $session->set('is-warning', _('invalid files, not a list'));
-        why_die(_('invalid files, not a list'));
-    }
-    $flist = &$info['files'];
-    if (!count($flist)) {
-        $session->set('is-warning', _('no files'));
-        why_die(_('no files'));
-    }
-    $totallen = 0;
-    $fn = [
-        'length' => 0,
-        'path' => '',
-    ];
-    foreach ($flist as $fn) {
-        if (empty($fn['length']) || empty($fn['path'])) {
-            $session->set('is-warning', _('file info not found, empty filename in torrent file?'));
-            why_die(_('file info not found, empty filename in torrent file?'));
-        }
-        if (bencdec::get_type($fn['length']) != 'integer' || bencdec::get_type($fn['path']) != 'list') {
-            $session->set('is-warning', _('invalid file info'));
-            why_die(_('invalid file info'));
-        }
-        $ll = $fn['length'];
-        $ff = $fn['path'];
-        $totallen += $ll;
-        $ffa = [];
-        foreach ($ff as $ffe) {
-            if (bencdec::get_type($ffe) != 'string') {
-                $session->set('is-warning', _('filename type error'));
-                why_die(_('filename type error'));
-            }
-            $ffa[] = $ffe;
-        }
-        if (!count($ffa)) {
-            $session->set('is-warning', _('filename error'));
-            why_die(_('filename error'));
-        }
-        $ffe = implode('/', $ffa);
-        $filelist[] = [
-            $ffe,
-            $ll,
-        ];
-    }
-}
-
-$num_pieces = $pieces_len / 20;
-$expected_pieces = (int) ceil($totallen / $plen);
-if ($num_pieces != $expected_pieces) {
-    $session->set('is-warning', _('total file size and number of pieces do not match'));
-    why_die(_('total file size and number of pieces do not match'));
-}
-
-$tmaker = !empty($dict['created by']) && !empty($dict['created by']) ? $dict['created by'] : _('Unknown');
-$dict['comment'] = _('In using this torrent you are bound by the Crafty Confidentiality Agreement By Law');
-
-$visible = 'no';
-$torrent = str_replace('_', ' ', $torrent);
-$vip = (!empty($vip) ? '1' : '0');
-
-$values = [
-    'isbn' => $isbn,
-    'title' => $title,
-    'search_text' => searchfield("$shortfname $dname $torrent"),
-    'filename' => $fname,
-    'owner' => $owner_id,
-    'visible' => $visible,
-    'vip' => $vip,
-    'release_group' => $release_group,
-    'newgenre' => $genre,
-    'poster' => $poster,
-    'anonymous' => $anonymous,
-    'allow_comments' => $allow_comments,
-    'info_hash' => $infohash,
-    'name' => $torrent,
-    'size' => $totallen,
-    'numfiles' => count($filelist),
-    'offer' => $offer,
-    'request' => $request,
-    'url' => $url,
-    'subs' => $subs,
-    'audios' => $audios,
-    'descr' => $descr,
-    'ori_descr' => $descr,
-    'description' => $description,
-    'category' => $catid,
-    'free' => $free2,
-    'silver' => $silver,
-    'save_as' => $dname,
-    'youtube' => $youtube,
-    'tags' => $tags,
-    'added' => $dt,
-    'last_action' => get_date($dt, 'MYSQL', 1, 0),
-    'mtime' => $dt,
-    'ctime' => $dt,
-    'freetorrent' => $freetorrent,
-    'nfo' => $nfo,
-    'client_created_by' => $tmaker,
-];
-if (!empty($imdb)) {
-    $values['imdb_id'] = $imdb;
-}
-$torrents_class = $container->get(Torrent::class);
-$id = (int) $torrents_class->add($values);
-
-if (!$id) {
-    $session->set('is-warning', _('Upload failed!'));
-    why_die(_('Upload failed!'));
-}
-
-$torrents_class->remove_torrent($infohash);
-$torrents_class->get_torrent_from_hash($infohash);
-$cache->delete('peers_' . $owner_id);
-$peer_class = $container->get(Peer::class);
-$peer_class->getPeersFromUserId($owner_id);
-clear_image_cache();
-
-$files = $container->get(Files::class);
-$files->delete($id);
-
-/**
- * @param $arr
- * @param $id
- *
- * @return array
- */
-function file_list($arr, $id)
-{
-    $new = [];
-    foreach ($arr as $v) {
-        $new[] = [
-            'torrent' => $id,
-            'filename' => $v[0],
-            'size' => $v[1],
-        ];
-    }
-
-    return $new;
-}
-
-$files->insert(file_list($filelist, $id));
-$dir = TORRENTS_DIR . $id . '.torrent';
-if (!bencdec::encode_file($dir, $dict)) {
-    $session->set('is-warning', _('Could not properly encode file'));
-    why_die(_('Could not properly encode file'));
-}
-try {
-    unlink($tmpname);
-} catch (Exception $e) {
-    //TODO
-}
-if ($site_config['bonus']['on']) {
-    $seedbonus = $user['seedbonus'];
-    $update = [
-        'seedbonus' => $user['seedbonus'] + $site_config['bonus']['per_upload'],
-        'numuploads' => $user['numuploads'] + 1,
-    ];
-    $users_class->update($update, $owner_id);
-}
-$cat_name = get_fullname_from_id($catid);
-if ($site_config['site']['autoshout_chat']) {
-    if (!empty($uplver) && $uplver === 'yes') {
-        $msg = get_anonymous_name() . " has just added a torrent in [color=lightgreen][b]{$cat_name}[/b][/color]
-        [url={$site_config['paths']['baseurl']}/details.php?id=$id&hit=1] [b][i]" . htmlsafechars($torrent) . '[/i][/b][/url]
-        [b]Size:[/b] ' . mksize($totallen) . (!empty($free_text) ? "
-        $free_text" : '');
-    } else {
-        $msg = htmlsafechars($user['username']) . " has just added a torrent in [color=lightgreen][b]{$cat_name}[/b][/color]
-        [url={$site_config['paths']['baseurl']}/details.php?id=$id&hit=1] [b][i]" . htmlsafechars($torrent) . '[/i][/b][/url]
-        [b]Size:[/b] ' . mksize($totallen) . (!empty($free_text) ? "
-        $free_text" : '');
-    }
-    autoshout($msg);
-    autoshout($msg, 2, 0);
-}
-if ($site_config['site']['autoshout_irc']) {
-    $messages = "\0034New Torrent\0039 in \0038$cat_name\0039 $torrent \0034Uploaded By:\0039 $anon \0034Size:\0039 " . mksize($totallen) . "{$free_text_irc}\0034 Link:\0038 " . $site_config['paths']['baseurl'] . '/details.php?id=' . $id . '&hit=1';
-    ircbot($messages);
-}
-$messages_class = $container->get(Message::class);
-if ($recipe > 0) {
-    $update = [
-        'torrentid' => $id,
-        'status' => 'uploaded',
-    ];
-    $cooker = $fluent->update('upcoming')
-                     ->set($update)
-                     ->where('id = ?', $recipe);
-    if ($user['class'] < UC_STAFF) {
-        $cooker = $cooker->where('userid = ?', $user['id']);
-    }
-    $cooker = $cooker->execute();
-    if (!empty($cooker)) {
-        $recipes = $fluent->from('upcoming_notify')
-                          ->select(null)
-                          ->select('userid')
-                          ->where('upcomingid = ?', $recipe)
-                          ->fetchAll();
+$count = // TODO: review query
+$sql = "SELECT * FROM table WHERE ...";
+$this->db->fetchAll($sql, [/* params */]);;
         $subject = _('A Recipe has just come out of the oven');
         $msg = "Hi, \n An reciper you were interested in has been uploaded!!! \n\n Click  [url=" . $site_config['paths']['baseurl'] . '/details.php?id=' . $id . '&hit=1]' . htmlsafechars($torrent) . '[/url] to see the torrent details page!';
         foreach ($recipes as $arr_recipe) {
@@ -506,13 +262,9 @@ if ($recipe > 0) {
 }
 
 if ($offer > 0) {
-    $offers = $fluent->from('offer_votes')
-                     ->select(null)
-                     ->select('user_id')
-                     ->where('vote = "yes"')
-                     ->where('user_id != ?', $owner_id)
-                     ->where('offer_id = ?', $offer)
-                     ->fetchAll();
+    $offers = // TODO: review query
+$sql = "SELECT * FROM table WHERE ...";
+$this->db->fetchAll($sql, [/* params */]);;
     $subject = _('An offer you voted for has been uploaded!');
     $msg = "Hi, \n An recipe you were interested in has been uploaded!!! \n\n Click  [url=" . $site_config['paths']['baseurl'] . '/details.php?id=' . $id . '&hit=1]' . htmlsafechars($torrent) . '[/url] to see the torrent details page!';
     foreach ($offers as $arr_offer) {
@@ -532,20 +284,15 @@ if ($offer > 0) {
         'torrentid' => $id,
         'updated' => $dt,
     ];
-    $fluent->update('offers')
-           ->set($set)
-           ->where('id = ?', $offer)
-           ->execute();
+    // TODO: review update
+$sql = "UPDATE table SET ... WHERE ...";
+$this->db->perform($sql, [/* params */]);;
 }
 $filled = 0;
 if ($request > 0) {
-    $requests = $fluent->from('request_votes')
-                       ->select(null)
-                       ->select('user_id')
-                       ->where('vote = "yes"')
-                       ->where('user_id != ?', $owner_id)
-                       ->where('request_id = ?', $request)
-                       ->fetchAll();
+    $requests = // TODO: review query
+$sql = "SELECT * FROM table WHERE ...";
+$this->db->fetchAll($sql, [/* params */]);;
 
     $subject = _('A request you were interested in has been uploaded!');
     $msg = "Hi :D \n A request you were interested in has been uploaded!!! \n\n Click  [url=" . $site_config['paths']['baseurl'] . '/details.php?id=' . $id . '&hit=1]' . htmlsafechars($torrent) . '[/url] to see the torrent details page!';
@@ -571,10 +318,9 @@ if ($request > 0) {
         'torrentid' => $id,
         'updated' => $dt,
     ];
-    $fluent->update('requests')
-           ->set($set)
-           ->where('id = ?', $request)
-           ->execute();
+    // TODO: review update
+$sql = "UPDATE table SET ... WHERE ...";
+$this->db->perform($sql, [/* params */]);;
 
     $users_achieve = $container->get(Usersachiev::class);
     $update = [

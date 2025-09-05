@@ -28,10 +28,9 @@ $set = [
     'navbar' => $show,
 ];
 $fluent = $container->get(Database::class);
-$result = $fluent->update('staffpanel')
-                 ->set($set)
-                 ->where('id = ?', $_POST['id'])
-                 ->execute();
+$result = // TODO: review update
+$sql = "UPDATE table SET ... WHERE ...";
+$this->db->perform($sql, [/* params */]);;
 
 if ($result) {
     $cache = $container->get(Cache::class);

@@ -8,7 +8,7 @@ declare(strict_types = 1);
 
 use DI\DependencyException;
 use DI\NotFoundException;
-use Envms\FluentPDO\Literal;
+// removed FluentPDO Literal
 use Pu239\Cache;
 use Pu239\Database;
 
@@ -93,9 +93,9 @@ function anime_titles_update($data)
                 ];
                 $fluent = $container->get(Database::class);
                 foreach (array_chunk($values, $count) as $t) {
-                    $fluent->insertInto('anime_titles', $t)
-                           ->onDuplicateKeyUpdate($update)
-                           ->execute();
+                    // TODO: review insert
+$sql = "INSERT INTO table (...) VALUES (...)";
+$this->db->perform($sql, [/* params */]);;
                 }
             }
 

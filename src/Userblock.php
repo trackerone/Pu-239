@@ -48,13 +48,9 @@ class Userblock
             $blocks = $this->cache->get('userblocks_' . $userid);
             if ($blocks === false || is_null($blocks)) {
                 while (!$blocks) {
-                    $blocks = $this->fluent->from('user_blocks')
-                                           ->select(null)
-                                           ->select('index_page')
-                                           ->select('global_stdhead')
-                                           ->select('userdetails_page')
-                                           ->where('userid = ?', $userid)
-                                           ->fetch();
+                    $blocks = // TODO: review query
+$sql = "SELECT * FROM table WHERE ...";
+$this->db->fetchOne($sql, [/* params */]);;
                     if (!$blocks) {
                         $this->add(['userid' => $userid]);
                     }
@@ -77,10 +73,9 @@ class Userblock
     public function add(array $values)
     {
         try {
-            return $this->fluent->insertInto('user_blocks')
-                                ->values($values)
-                                ->ignore()
-                                ->execute();
+            return // TODO: review insert
+$sql = "INSERT INTO table (...) VALUES (...)";
+$this->db->perform($sql, [/* params */]);;
         } catch (\Exception $e) {
             return $e->getMessage();
         }

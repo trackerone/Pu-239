@@ -21,16 +21,12 @@ foreach ($argv as $arg) {
 }
 if ($purge) {
     $fluent = $container->get(Database::class);
-    $images = $fluent->from('images')
-                     ->select('null')
-                     ->select('url')
-                     ->select('type')
-                     ->fetchAll();
-    $photos = $fluent->from('person')
-                     ->select('null')
-                     ->select('photo AS url')
-                     ->where('photo IS NOT null')
-                     ->fetchAll();
+    $images = // TODO: review query
+$sql = "SELECT * FROM table WHERE ...";
+$this->db->fetchAll($sql, [/* params */]);;
+    $photos = // TODO: review query
+$sql = "SELECT * FROM table WHERE ...";
+$this->db->fetchAll($sql, [/* params */]);;
     $hashes = [];
     $urls = array_merge($images, $photos);
     foreach ($urls as $url) {

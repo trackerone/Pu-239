@@ -41,10 +41,9 @@ class BotReplies
      */
     public function insert(array $values)
     {
-        $result = $this->fluent->insertInto('bot_replies')
-                               ->ignore()
-                               ->values($values)
-                               ->execute();
+        $result = // TODO: review insert
+$sql = "INSERT INTO table (...) VALUES (...)";
+$this->db->perform($sql, [/* params */]);;
 
         if (!$result) {
             return false;
@@ -65,10 +64,9 @@ class BotReplies
      */
     public function update(array $set, int $id)
     {
-        $result = $this->fluent->update('bot_replies')
-                               ->set($set)
-                               ->where('id = ?', $id)
-                               ->execute();
+        $result = // TODO: review update
+$sql = "UPDATE table SET ... WHERE ...";
+$this->db->perform($sql, [/* params */]);;
 
         if (!$result) {
             return false;
@@ -85,8 +83,9 @@ class BotReplies
      */
     public function get_replies()
     {
-        $result = $this->fluent->from('bot_replies')
-                               ->fetchAll();
+        $result = // TODO: review query
+$sql = "SELECT * FROM table WHERE ...";
+$this->db->fetchAll($sql, [/* params */]);;
         if (is_array($result)) {
             return $result;
         }
@@ -104,9 +103,9 @@ class BotReplies
      */
     public function delete(int $id)
     {
-        $result = $this->fluent->deleteFrom('bot_replies')
-                               ->where('id = ?', $id)
-                               ->execute();
+        $result = // TODO: review delete
+$sql = "DELETE FROM table WHERE ...";
+$this->db->perform($sql, [/* params */]);;
         $this->cache->delete('bot_replies_');
 
         return $result;

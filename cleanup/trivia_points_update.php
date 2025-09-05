@@ -35,27 +35,9 @@ function trivia_points_update($data)
     $msgs = [];
     $i = 1;
     $fluent = $container->get(Database::class);
-    $gamenum = $fluent->from('triviasettings')
-                      ->select(null)
-                      ->select('gamenum')
-                      ->where('gameon = 1')
-                      ->fetch('gamenum');
-
-    $results = $fluent->from('triviausers AS t')
-                      ->select(null)
-                      ->select('t.user_id')
-                      ->select('COUNT(t.correct) AS correct')
-                      ->select('u.seedbonus')
-                      ->select('u.modcomment')
-                      ->innerJoin('users AS  u ON t.user_id = u.id')
-                      ->where('t.correct = 1')
-                      ->where('gamenum = ?', $gamenum)
-                      ->groupBy('t.user_id')
-                      ->groupBy('u.seedbonus')
-                      ->groupBy('u.modcomment')
-                      ->orderBy('correct DESC')
-                      ->limit(10)
-                      ->fetchAll();
+    $gamenum = // TODO: review query
+$sql = "SELECT * FROM table WHERE ...";
+$this->db->fetchAll($sql, [/* params */]);;
 
     if ($results) {
         $users_class = $container->get(User::class);
@@ -125,18 +107,17 @@ function trivia_points_update($data)
         'gameon' => 0,
         'finished' => date('Y-m-d H:i:s', $dt),
     ];
-    $fluent->update('triviasettings')
-           ->set($set)
-           ->where('gameon = 1')
-           ->execute();
+    // TODO: review update
+$sql = "UPDATE table SET ... WHERE ...";
+$this->db->perform($sql, [/* params */]);;
 
     $values = [
         'gameon' => 1,
         'started' => date('Y-m-d H:i:s', $dt),
     ];
-    $fluent->insertInto('triviasettings')
-           ->values($values)
-           ->execute();
+    // TODO: review insert
+$sql = "INSERT INTO table (...) VALUES (...)";
+$this->db->perform($sql, [/* params */]);;
 
     $time_end = microtime(true);
     $run_time = $time_end - $time_start;

@@ -133,24 +133,21 @@ function get_imdb_info(string $imdb_id, bool $title, bool $data_only, ?int $tid,
 
         $fluent = $container->get(Database::class);
         if (!empty($persons)) {
-            $fluent->insertInto('person')
-                ->values($persons)
-                ->ignore()
-                ->execute();
+            // TODO: review insert
+$sql = "INSERT INTO table (...) VALUES (...)";
+$this->db->perform($sql, [/* params */]);;
         }
 
         if (!empty($cast)) {
-            $fluent->insertInto('imdb_person')
-                ->values($cast)
-                ->ignore()
-                ->execute();
+            // TODO: review insert
+$sql = "INSERT INTO table (...) VALUES (...)";
+$this->db->perform($sql, [/* params */]);;
         }
 
         if (!empty($roles)) {
-            $fluent->insertInto('imdb_role')
-                ->values($roles)
-                ->ignore()
-                ->execute();
+            // TODO: review insert
+$sql = "INSERT INTO table (...) VALUES (...)";
+$this->db->perform($sql, [/* params */]);;
         }
 
         unset($cast, $persons, $roles);
@@ -169,9 +166,9 @@ function get_imdb_info(string $imdb_id, bool $title, bool $data_only, ?int $tid,
                 'top250' => $imdb_data['top250'],
                 'rating' => $imdb_data['rating'],
             ];
-            $fluent->insertInto('imdb_info', $values)
-                ->onDuplicateKeyUpdate($update)
-                ->execute();
+            // TODO: review insert
+$sql = "INSERT INTO table (...) VALUES (...)";
+$this->db->perform($sql, [/* params */]);;
         }
 
         $cache->delete('cast_' . $imdb_id);
@@ -723,17 +720,14 @@ function update_torrent_data(string $imdb_id)
         'rating' => $imdb_data['rating'],
     ]);
     $fluent = $container->get(Database::class);
-    $result = $fluent->update('torrents')
-        ->set($set)
-        ->where('imdb_id = ?', 'tt' . $imdb_id)
-        ->execute();
+    $result = // TODO: review update
+$sql = "UPDATE table SET ... WHERE ...";
+$this->db->perform($sql, [/* params */]);;
 
     if ($result) {
-        $torrents = $fluent->from('torrents')
-            ->select(null)
-            ->select('id')
-            ->where('imdb_id = ?', 'tt' . $imdb_id)
-            ->fetchAll();
+        $torrents = // TODO: review query
+$sql = "SELECT * FROM table WHERE ...";
+$this->db->fetchAll($sql, [/* params */]);;
 
         foreach ($torrents as $torrent) {
             $cache->update_row('torrent_details_' . $torrent['id'], $set, $site_config['expires']['torrent_details']);
@@ -765,10 +759,9 @@ function get_imdb_person($person_id)
     $imdb_person = $cache->get('imdb_person_' . $person_id);
     $fluent = $container->get(Database::class);
     if ($imdb_person === false || is_null($imdb_person)) {
-        $imdb_person = $fluent->from('person')
-            ->where('imdb_id = ?', $person_id)
-            ->where('updated + 2592000 > ?', TIME_NOW)
-            ->fetch();
+        $imdb_person = // TODO: review query
+$sql = "SELECT * FROM table WHERE ...";
+$this->db->fetchOne($sql, [/* params */]);;
 
         if (!empty($imdb_person)) {
             $cache->set('imdb_person_' . $person_id, $imdb_person, 604800);
@@ -786,10 +779,9 @@ function get_imdb_person($person_id)
             $set = [
                 'updated' => TIME_NOW,
             ];
-            $fluent->update('person')
-                ->set($set)
-                ->where('imdb_id = ?', $person_id)
-                ->execute();
+            // TODO: review update
+$sql = "UPDATE table SET ... WHERE ...";
+$this->db->perform($sql, [/* params */]);;
 
             return false;
         }
@@ -838,19 +830,18 @@ function get_imdb_person($person_id)
         $imdb_person['updated'] = TIME_NOW;
         $update = $imdb_person;
         unset($update['name']);
-        $fluent->insertInto('person', $imdb_person)
-            ->onDuplicateKeyUpdate($update)
-            ->execute();
+        // TODO: review insert
+$sql = "INSERT INTO table (...) VALUES (...)";
+$this->db->perform($sql, [/* params */]);;
 
         $cache->set('imdb_person_' . $person_id, $imdb_person, 604800);
     } else {
         $set = [
             'updated' => TIME_NOW,
         ];
-        $fluent->update('person')
-            ->set($set)
-            ->where('imdb_id = ?', $person_id)
-            ->execute();
+        // TODO: review update
+$sql = "UPDATE table SET ... WHERE ...";
+$this->db->perform($sql, [/* params */]);;
     }
 
     return $imdb_person;

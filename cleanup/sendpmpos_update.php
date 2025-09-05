@@ -8,7 +8,7 @@ declare(strict_types = 1);
 
 use DI\DependencyException;
 use DI\NotFoundException;
-use Envms\FluentPDO\Literal;
+// removed FluentPDO Literal
 use MatthiasMullie\Scrapbook\Exception\UnbegunTransaction;
 use Pu239\Cache;
 use Pu239\Database;
@@ -33,13 +33,9 @@ function sendpmpos_update($data)
     $time_start = microtime(true);
     $dt = TIME_NOW;
     $fluent = $container->get(Database::class);
-    $users = $fluent->from('users')
-                    ->select(null)
-                    ->select('id')
-                    ->select('modcomment')
-                    ->where('sendpmpos > 1')
-                    ->where('sendpmpos < ?', $dt)
-                    ->fetchAll();
+    $users = // TODO: review query
+$sql = "SELECT * FROM table WHERE ...";
+$this->db->fetchAll($sql, [/* params */]);;
 
     $msgs_buffer = $users_buffer = [];
     $count = count($users);
@@ -72,11 +68,9 @@ function sendpmpos_update($data)
                 'sendpmpos' => 1,
                 'modcomment' => new Literal("CONCAT(\"$comment\", modcomment)"),
             ];
-            $fluent->update('users')
-                   ->set($set)
-                   ->where('sendpmpos > 1')
-                   ->where('sendpmpos < ?', $dt)
-                   ->execute();
+            // TODO: review update
+$sql = "UPDATE table SET ... WHERE ...";
+$this->db->perform($sql, [/* params */]);;
         }
         $time_end = microtime(true);
         $run_time = $time_end - $time_start;

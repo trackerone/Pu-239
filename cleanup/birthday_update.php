@@ -8,7 +8,7 @@ declare(strict_types = 1);
 
 use DI\DependencyException;
 use DI\NotFoundException;
-use Envms\FluentPDO\Literal;
+// removed FluentPDO Literal
 use MatthiasMullie\Scrapbook\Exception\UnbegunTransaction;
 use Pu239\Cache;
 use Pu239\Database;
@@ -78,11 +78,9 @@ function birthday_update($data)
             $set = [
                 'uploaded' => new Literal('uploaded + 10737418240'),
             ];
-            $fluent->update('users')
-                   ->set($set)
-                   ->where('MONTH(birthday) = ?', $date['mon'])
-                   ->where('DAYOFMONTH(birthday) = ?', $date['mday'])
-                   ->execute();
+            // TODO: review update
+$sql = "UPDATE table SET ... WHERE ...";
+$this->db->perform($sql, [/* params */]);;
         }
     }
     $time_end = microtime(true);

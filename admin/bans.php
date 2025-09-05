@@ -22,12 +22,9 @@ $db = $container->get(Database::class);
 $fluent = $db;
 $remove = isset($_GET['remove']) ? (int) $_GET['remove'] : 0;
 if ($remove > 0) {
-    $res = $fluent->from('bans')
-                  ->select(null)
-                  ->select('INET6_NTOA(first) AS first')
-                  ->select('INET6_NTOA(last) AS last')
-                  ->where('id = ?', $remove)
-                  ->fetch();
+    $res = // TODO: review query
+$sql = "SELECT * FROM table WHERE ...";
+$this->db->fetchOne($sql, [/* params */]);;
 
     if (!$res) {
         stderr(_('Error'), _('A Ban with that ID could not be found'));
@@ -36,9 +33,9 @@ if ($remove > 0) {
         $cache->delete('bans_' . $i);
     }
     if (is_valid_id($remove)) {
-        $fluent->deleteFrom('bans')
-               ->where('id = ?', $remove)
-               ->execute();
+        // TODO: review delete
+$sql = "DELETE FROM table WHERE ...";
+$this->db->perform($sql, [/* params */]);;
         write_log(_fe('Ban {0} was removed by {1}', $remove, $CURUSER['username']));
         $session->set('is-success', _fe('IPS: {0} to {1} were removed', $res['first'], $res['last']));
         unset($_GET);
@@ -67,9 +64,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $CURUSER['class'] >= UC_MAX) {
         'comment' => $comment,
     ];
 
-    $fluent->insertInto('bans')
-           ->values($values)
-           ->execute();
+    // TODO: review insert
+$sql = "INSERT INTO table (...) VALUES (...)";
+$this->db->perform($sql, [/* params */]);;
 
     $key = 'bans_' . $ip;
     $session->set('is-success', "IPs: $first to $last added to Bans");

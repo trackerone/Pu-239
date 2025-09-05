@@ -43,22 +43,16 @@ if (!has_access($CURUSER['class'], UC_STAFF, '')) {
     if ($to_user['acceptpms'] === 'no') {
         stderr(_('Error'), _("This user dosen't accept PMs."));
     }
-    $blocked = $fluent->from('blocks')
-                      ->select(null)
-                      ->select('id')
-                      ->where('userid = ?', $to_user['id'])
-                      ->where('blockid = ?', $CURUSER['id'])
-                      ->fetch();
+    $blocked = // TODO: review query
+$sql = "SELECT * FROM table WHERE ...";
+$this->db->fetchOne($sql, [/* params */]);;
     if (!$blocked) {
         stderr(_('Refused'), _('This member has blocked PMs from you.'));
     }
     if ($to_user['acceptpms'] === 'friends') {
-        $friend = $fluent->from('friends')
-                         ->select(null)
-                         ->select('id')
-                         ->where('userid = ?', $to_user['id'])
-                         ->where('friendid = ?', $CURUSER['id'])
-                         ->fetch();
+        $friend = // TODO: review query
+$sql = "SELECT * FROM table WHERE ...";
+$this->db->fetchOne($sql, [/* params */]);;
         if (!$friend) {
             stderr(_('Refused'), _('This member only accepts PMs from members on their friends list.'));
         }

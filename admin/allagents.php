@@ -16,13 +16,9 @@ global $container;
 
 $db = $container->get(Database::class);
 $fluent = $db;
-$agents = $fluent->from('peers')
-                 ->select(null)
-                 ->select('agent')
-                 ->select('LEFT(peer_id, 8) AS peer_id')
-                 ->groupBy('agent')
-                 ->groupBy('peer_id')
-                 ->fetchAll();
+$agents = // TODO: review query
+$sql = "SELECT * FROM table WHERE ...";
+$this->db->fetchAll($sql, [/* params */]);;
 
 if (!empty($agents)) {
     $heading = '

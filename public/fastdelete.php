@@ -29,17 +29,9 @@ if (!isset($_GET['id']) || !is_valid_id((int) $_GET['id'])) {
 $id = (int) $_GET['id'];
 $fluent = $db; // alias
 $fluent = $container->get(Database::class);
-$tid = $fluent->from('torrents AS t')
-              ->select(null)
-              ->select('t.id')
-              ->select('t.info_hash')
-              ->select('t.owner')
-              ->select('t.name')
-              ->select('t.added')
-              ->select('u.seedbonus')
-              ->leftJoin('users AS u ON u.id=t.owner')
-              ->where('t.id = ?', $id)
-              ->fetch();
+$tid = // TODO: review query
+$sql = "SELECT * FROM table WHERE ...";
+$this->db->fetchOne($sql, [/* params */]);;
 
 if (!$tid) {
     stderr(_('Error'), _('Something went wrong!'));
@@ -67,10 +59,9 @@ if ($site_config['bonus']['on']) {
         $set = [
             'seedbonus' => $sb,
         ];
-        $fluent->update('users')
-               ->set($set)
-               ->where('id = ?', $tid['owner'])
-               ->execute();
+        // TODO: review update
+$sql = "UPDATE table SET ... WHERE ...";
+$this->db->perform($sql, [/* params */]);;
 
         $cache->update_row('user_' . $tid['owner'], [
             'seedbonus' => $sb,

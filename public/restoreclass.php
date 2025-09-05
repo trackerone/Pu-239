@@ -21,9 +21,9 @@ $set = [
 $users_class = $container->get(User::class);
 $users_class->update($set, $user['id']);
 $fluent = $container->get(Database::class);
-$fluent->deleteFrom('ajax_chat_online')
-       ->where('userID = ?', $user['id'])
-       ->execute();
+// TODO: review delete
+$sql = "DELETE FROM table WHERE ...";
+$this->db->perform($sql, [/* params */]);;
 $cache = $container->get(Cache::class);
 $cache->delete('chat_users_list_');
 header("Location: {$site_config['paths']['baseurl']}");

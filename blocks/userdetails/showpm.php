@@ -15,18 +15,14 @@ if ($CURUSER['id'] != $user['id']) {
     if ($CURUSER['class'] >= UC_STAFF) {
         $showpmbutton = 1;
     } elseif ($user['acceptpms'] === 'yes') {
-        $blocked = $fluent->from('blocks')
-                          ->select('id')
-                          ->where('userid = ?', $user['id'])
-                          ->where('blockid = ?', $CURUSER['id'])
-                          ->fetch();
+        $blocked = // TODO: review query
+$sql = "SELECT * FROM table WHERE ...";
+$this->db->fetchOne($sql, [/* params */]);;
         $showpmbutton = !empty($blocked) ? false : true;
     } elseif ($user['acceptpms'] === 'friends') {
-        $friend = $fluent->from('friends')
-                         ->select('id')
-                         ->where('userid = ?', $user['id'])
-                         ->where('friendid = ?', $CURUSER['id'])
-                         ->fetch();
+        $friend = // TODO: review query
+$sql = "SELECT * FROM table WHERE ...";
+$this->db->fetchOne($sql, [/* params */]);;
         $showpmbutton = !empty($friend) ? true : false;
     }
 }
