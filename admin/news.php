@@ -57,9 +57,8 @@ if ($mode === 'delete') {
         stderr(_('Error'), _('what are you doing?'));
     }
 
-    $fluent->deleteFrom('news')
-           ->where('id = ?', $newsid)
-           ->execute();
+    $sql = "DELETE FROM news WHERE id = :id"
+$this->db->perform($sql, ['id' => $newsid]);
     $cache->delete('latest_news_');
     $session->set('is-success', _('News entry deleted'));
     header("Location: {$site_config['paths']['baseurl']}/staffpanel.php?tool=news&mode=news");
@@ -87,9 +86,8 @@ if ($mode === 'delete') {
         'sticky' => $sticky,
         'anonymous' => $anonymous,
     ];
-    $results = $fluent->insertInto('news')
-                      ->values($values)
-                      ->execute();
+    $results = $sql = "INSERT INTO news (/* columns */) VALUES (/* values */)"
+$this->db->perform($sql, $values);
     if (!empty($results)) {
         $cache->delete('latest_news_');
         $session->set('is-success', _('News entry was added successfully.'));
@@ -126,10 +124,8 @@ if ($mode === 'delete') {
             'anonymous' => $anonymous,
             'title' => $title,
         ];
-        $fluent->update('news')
-               ->set($update)
-               ->where('id = ?', $newsid)
-               ->execute();
+        $sql = "UPDATE news SET /* columns */ WHERE id = :id"
+$this->db->perform($sql, array_merge($update, ['id' => $newsid]));
         $cache->delete('latest_news_');
         $session->set('is-success', _('News item was edited successfully'));
         header("Location: {$site_config['paths']['baseurl']}/staffpanel.php?tool=news&mode=news");

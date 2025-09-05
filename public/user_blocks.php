@@ -418,16 +418,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (!empty($addset) || !empty($removeset)) {
         $fluent = $container->get(Database::class);
         if (!empty($addset)) {
-            $query = $fluent->update('user_blocks')
-                            ->set($addset)
-                            ->where('userid = ?', $id)
-                            ->execute();
+            $query = $sql = "UPDATE user_blocks SET /* columns */ WHERE userid = :userid"
+$this->db->perform($sql, array_merge($addset, ['userid' => $id]));
         }
         if (!empty($removeset)) {
-            $fluent->update('user_blocks')
-                   ->set($removeset)
-                   ->where('userid = ?', $id)
-                   ->execute();
+            $sql = "UPDATE user_blocks SET /* columns */ WHERE userid = :userid"
+$this->db->perform($sql, array_merge($removeset, ['userid' => $id]));
         }
         $blocks = $fluent->from('user_blocks')
                          ->select(null)

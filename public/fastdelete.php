@@ -67,10 +67,8 @@ if ($site_config['bonus']['on']) {
         $set = [
             'seedbonus' => $sb,
         ];
-        $fluent->update('users')
-               ->set($set)
-               ->where('id = ?', $tid['owner'])
-               ->execute();
+        $sql = "UPDATE users SET /* columns */ WHERE id = :id"
+$this->db->perform($sql, array_merge($set, ['id' => $tid['owner']]));
 
         $cache->update_row('user_' . $tid['owner'], [
             'seedbonus' => $sb,

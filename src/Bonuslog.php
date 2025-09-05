@@ -37,9 +37,8 @@ class Bonuslog
      */
     public function insert(array $values)
     {
-        $this->fluent->insertInto('bonuslog')
-                     ->values($values)
-                     ->execute();
+        $sql = "INSERT INTO bonuslog (/* columns */) VALUES (/* values */)"
+$this->db->perform($sql, $values);
 
         $this->cache->deleteMulti([
             'top_donators1_',

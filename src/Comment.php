@@ -150,9 +150,8 @@ class Comment
      */
     public function delete(int $id)
     {
-        $result = $this->fluent->deleteFrom('comments')
-                               ->where('id = ?', $id)
-                               ->execute();
+        $result = $sql = "DELETE FROM comments WHERE id = :id"
+$this->db->perform($sql, ['id' => $id]);
 
         $this->cache->delete('latest_comments_');
 
@@ -170,10 +169,8 @@ class Comment
      */
     public function update(array $set, int $id)
     {
-        $result = $this->fluent->update('comments')
-                               ->set($set)
-                               ->where('id = ?', $id)
-                               ->execute();
+        $result = $sql = "UPDATE comments SET /* columns */ WHERE id = :id"
+$this->db->perform($sql, array_merge($set, ['id' => $id]));
 
         $this->cache->delete('latest_comments_');
 
@@ -190,9 +187,8 @@ class Comment
      */
     public function add(array $values)
     {
-        $id = $this->fluent->insertInto('comments')
-                           ->values($values)
-                           ->execute();
+        $id = $sql = "INSERT INTO comments (/* columns */) VALUES (/* values */)"
+$this->db->perform($sql, $values);
 
         return $id;
     }

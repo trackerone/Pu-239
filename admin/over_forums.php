@@ -44,9 +44,8 @@ switch ($action) {
         if (!$id) {
             stderr(_('Error'), _('Invalid ID'));
         }
-        $fluent->deleteFrom('over_forums')
-               ->where('id = ?', $id)
-               ->execute();
+        $sql = "DELETE FROM over_forums WHERE id = :id"
+$this->db->perform($sql, ['id' => $id]);
         header('Location: ' . $_SERVER['PHP_SELF'] . '?tool=over_forums');
         app_halt('Exit called');
         break;
@@ -70,10 +69,8 @@ switch ($action) {
             'description' => $desc,
             'min_class_view' => $min_class_view,
         ];
-        $fluent->update('over_forums')
-               ->set($set)
-               ->where('id = ?', $id)
-               ->execute();
+        $sql = "UPDATE over_forums SET /* columns */ WHERE id = :id"
+$this->db->perform($sql, array_merge($set, ['id' => $id]));
         header('Location: ' . $_SERVER['PHP_SELF'] . '?tool=over_forums');
         app_halt('Exit called');
         break;
@@ -96,9 +93,8 @@ switch ($action) {
             'description' => $desc,
             'min_class_view' => $min_class_view,
         ];
-        $fluent->insertInto('over_forums')
-               ->values($values)
-               ->execute();
+        $sql = "INSERT INTO over_forums (/* columns */) VALUES (/* values */)"
+$this->db->perform($sql, $values);
 
         header('Location: ' . $_SERVER['PHP_SELF'] . '?tool=over_forums');
         app_halt('Exit called');

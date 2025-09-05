@@ -126,10 +126,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             'pointspool' => (int) $options[$option]['pointspool'] + $donate,
                         ];
                     }
-                    $fluent->update('bonus')
-                           ->set($update)
-                           ->where('id = ?', $post['option'])
-                           ->execute();
+                    $sql = "UPDATE bonus SET /* columns */ WHERE id = :id"
+$this->db->perform($sql, array_merge($update, ['id' => $post['option']]));
                     $bonuslog->insert($values);
                     $session->set('is-success', _fe('{0} You donated {1} Karma {2} to the {3} fund.', ':woot:', "[b]{$options[$option]['bonusname']}[/b]", number_format($donate), number_format($options[$option]['points'])));
                 } else {

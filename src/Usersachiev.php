@@ -86,10 +86,8 @@ class Usersachiev
     public function update(array $set, int $userid)
     {
         try {
-            return $this->fluent->update('usersachiev')
-                                ->set($set)
-                                ->where('userid = ?', $userid)
-                                ->execute();
+            return $sql = "UPDATE usersachiev SET /* columns */ WHERE userid = :userid"
+$this->db->perform($sql, array_merge($set, ['userid' => $userid]));
         } catch (\Exception $e) {
             return $e->getMessage();
         }

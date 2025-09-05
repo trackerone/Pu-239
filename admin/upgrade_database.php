@@ -39,9 +39,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     'id' => (int) $id,
                     'query' => $sql,
                 ];
-                $fluent->insertInto('database_updates')
-                       ->values($values)
-                       ->execute();
+                $sql = "INSERT INTO database_updates (/* columns */) VALUES (/* values */)"
+$this->db->perform($sql, $values);
 
                 if ($flush) {
                     $cache->flushDB();
@@ -70,9 +69,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 'id' => (int) $id,
                 'query' => $sql,
             ];
-            $fluent->insertInto('database_updates')
-                   ->values($values)
-                   ->execute();
+            $sql = "INSERT INTO database_updates (/* columns */) VALUES (/* values */)"
+$this->db->perform($sql, $values);
             $session->set('is-success', "Query #$id has been ignored");
         }
     }

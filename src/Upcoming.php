@@ -50,10 +50,8 @@ class Upcoming
         $set = [
             'views' => new Literal('views + 1'),
         ];
-        $this->fluent->update('upcoming')
-                     ->set($set)
-                     ->where('id = ?', $id)
-                     ->execute();
+        $sql = "UPDATE upcoming SET /* columns */ WHERE id = :id"
+$this->db->perform($sql, array_merge($set, ['id' => $id]));
     }
 
     /**
@@ -114,9 +112,8 @@ class Upcoming
      */
     public function insert(array $values)
     {
-        $id = $this->fluent->insertInto('upcoming')
-                           ->values($values)
-                           ->execute();
+        $id = $sql = "INSERT INTO upcoming (/* columns */) VALUES (/* values */)"
+$this->db->perform($sql, $values);
 
         return $id;
     }
@@ -154,10 +151,8 @@ class Upcoming
      */
     public function update(array $set, int $upcomingid)
     {
-        $result = $this->fluent->update('upcoming')
-                               ->set($set)
-                               ->where('id = ?', $upcomingid)
-                               ->execute();
+        $result = $sql = "UPDATE upcoming SET /* columns */ WHERE id = :id"
+$this->db->perform($sql, array_merge($set, ['id' => $upcomingid]));
 
         return $result;
     }

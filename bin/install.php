@@ -264,10 +264,8 @@ function update_user(int $userid, int $class)
         'verified' => 1,
         'roles_mask' => 288,
     ];
-    $fluent->update('users')
-           ->set($set)
-           ->where('id = ?', $userid)
-           ->execute();
+    $sql = "UPDATE users SET /* columns */ WHERE id = :id"
+$this->db->perform($sql, array_merge($set, ['id' => $userid]));
     $fluent->insertInto('usersachiev')
            ->values(['userid' => $userid])
            ->execute();

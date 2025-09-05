@@ -179,9 +179,8 @@ class Image
      */
     public function delete_image(string $url)
     {
-        $this->fluent->deleteFrom('images')
-                     ->where('url = ?', $url)
-                     ->execute();
+        $sql = "DELETE FROM images WHERE url = :url"
+$this->db->perform($sql, ['url' => $url]);
     }
 
     /**

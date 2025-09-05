@@ -71,10 +71,8 @@ function autoclean(string $run)
                 $set = [
                     'clean_time' => $next_clean,
                 ];
-                $fluent->update('cleanup')
-                       ->set($set)
-                       ->where('clean_id=?', $row['clean_id'])
-                       ->execute();
+                $sql = "UPDATE cleanup SET /* columns */ WHERE clean_id = :clean_id"
+$this->db->perform($sql, array_merge($set, ['clean_id' => $row['clean_id']]));
 
                 if (file_exists(CLEAN_DIR . $row['clean_file'])) {
                     require_once CLEAN_DIR . $row['clean_file'];

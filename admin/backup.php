@@ -164,9 +164,8 @@ if (empty($mode)) {
         'added' => $dt,
         'userid' => $CURUSER['id'],
     ];
-    $fluent->insertInto('dbbackup')
-           ->values($values)
-           ->execute();
+    $sql = "INSERT INTO dbbackup (/* columns */) VALUES (/* values */)"
+$this->db->perform($sql, $values);
 
     if ($site_config['backup']['write_to_log']) {
         write_log($CURUSER['username'] . '(' . get_user_class_name((int) $CURUSER['class']) . ') ' . _('successfully backed-up the database.'));

@@ -56,9 +56,8 @@ switch ($action) {
             ];
         }
         $fluent = $container->get(Database::class);
-        $fluent->insertInto('sitelog')
-               ->values($values)
-               ->execute();
+        $sql = "INSERT INTO sitelog (/* columns */) VALUES (/* values */)"
+$this->db->perform($sql, $values);
         break;
 
     case 'staff_notes':

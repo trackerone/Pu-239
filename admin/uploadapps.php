@@ -81,10 +81,8 @@ if ($action === 'takeappdelete') {
         'comment' => $note,
         'moderator' => $CURUSER['username'],
     ];
-    $fluent->update('uploadapp')
-           ->set($update)
-           ->where('id = ?', $id)
-           ->execute();
+    $sql = "UPDATE uploadapp SET /* columns */ WHERE id = :id"
+$this->db->perform($sql, array_merge($update, ['id' => $id]));
     $user_class = $container->get(User::class);
     $setbits = $clrbits = 0;
     $setbits |= Roles::UPLOADER;
@@ -143,10 +141,8 @@ if ($action === 'rejectapp') {
         'comment' => $reason,
         'moderator' => $CURUSER['username'],
     ];
-    $fluent->update('uploadapp')
-           ->set($update)
-           ->where('id = ?', $id)
-           ->execute();
+    $sql = "UPDATE uploadapp SET /* columns */ WHERE id = :id"
+$this->db->perform($sql, array_merge($update, ['id' => $id]));
     $messages_class->insert($msgs_buffer);
     $cache->delete('new_uploadapp_');
     $session->set('is-success', _('The application was successfully rejected. The user has been sent a PM notification.'));

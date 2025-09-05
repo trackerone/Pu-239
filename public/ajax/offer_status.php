@@ -32,10 +32,8 @@ $update = [
     'status' => $to_status,
 ];
 try {
-    $fluent->update('offers')
-           ->set($update)
-           ->where('id = ?', $id)
-           ->execute();
+    $sql = "UPDATE offers SET /* columns */ WHERE id = :id"
+$this->db->perform($sql, array_merge($update, ['id' => $id]));
     echo json_encode(['status' => $to_status]);
     app_halt('Exit called');
 } catch (Exception $e) {

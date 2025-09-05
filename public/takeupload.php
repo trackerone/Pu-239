@@ -532,10 +532,8 @@ if ($offer > 0) {
         'torrentid' => $id,
         'updated' => $dt,
     ];
-    $fluent->update('offers')
-           ->set($set)
-           ->where('id = ?', $offer)
-           ->execute();
+    $sql = "UPDATE offers SET /* columns */ WHERE id = :id"
+$this->db->perform($sql, array_merge($set, ['id' => $offer]));
 }
 $filled = 0;
 if ($request > 0) {
@@ -571,10 +569,8 @@ if ($request > 0) {
         'torrentid' => $id,
         'updated' => $dt,
     ];
-    $fluent->update('requests')
-           ->set($set)
-           ->where('id = ?', $request)
-           ->execute();
+    $sql = "UPDATE requests SET /* columns */ WHERE id = :id"
+$this->db->perform($sql, array_merge($set, ['id' => $request]));
 
     $users_achieve = $container->get(Usersachiev::class);
     $update = [

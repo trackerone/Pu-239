@@ -38,9 +38,8 @@ class Poll
      */
     public function delete(int $poll_id)
     {
-        $this->fluent->deleteFrom('polls')
-                     ->where('pid = ?', $poll_id)
-                     ->execute();
+        $sql = "DELETE FROM polls WHERE pid = :pid"
+$this->db->perform($sql, ['pid' => $poll_id]);
 
         $this->cache->delete('poll_' . $poll_id);
         $this->cache->delete('polls_');
@@ -57,10 +56,8 @@ class Poll
      */
     public function update(array $set, int $poll_id)
     {
-        $result = $this->fluent->update('polls')
-                               ->set($set)
-                               ->where('pid = ?', $poll_id)
-                               ->execute();
+        $result = $sql = "UPDATE polls SET /* columns */ WHERE pid = :pid"
+$this->db->perform($sql, array_merge($set, ['pid' => $poll_id]));
         $this->cache->delete('poll_' . $poll_id);
         $this->cache->delete('polls_');
 
@@ -77,9 +74,8 @@ class Poll
      */
     public function insert(array $values)
     {
-        $poll_id = $this->fluent->insertInto('polls')
-                                ->values($values)
-                                ->execute();
+        $poll_id = $sql = "INSERT INTO polls (/* columns */) VALUES (/* values */)"
+$this->db->perform($sql, $values);
 
         $this->cache->delete('polls_');
 

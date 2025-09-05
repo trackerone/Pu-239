@@ -44,9 +44,8 @@ class Post
      */
     public function insert(array $values)
     {
-        $id = $this->fluent->insertInto('posts')
-                           ->values($values)
-                           ->execute();
+        $id = $sql = "INSERT INTO posts (/* columns */) VALUES (/* values */)"
+$this->db->perform($sql, $values);
 
         return (int) $id;
     }
