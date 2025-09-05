@@ -24,15 +24,9 @@ function mow_update($data)
 
     $time_start = microtime(true);
     $fluent = $container->get(Database::class);
-    $mow = $fluent->from('torrents')
-                  ->select(null)
-                  ->select('id')
-                  ->select('name')
-                  ->where('times_completed > 10')
-                  ->where('category', $site_config['categories']['movie'])
-                  ->orderBy('RAND()')
-                  ->limit(1)
-                  ->fetch();
+    $mow = // TODO: review query
+$sql = "SELECT/INSERT/UPDATE/DELETE ...";
+$this->db->perform($sql, [/* params */]);;
 
     if (!empty($mow)) {
         $set = [
@@ -51,10 +45,9 @@ function mow_update($data)
             write_log("'Best Film of the Week' was emptied by system");
         }
     }
-    $fluent->update('avps')
-           ->set($set)
-           ->where("avps.arg = 'bestfilmofweek'")
-           ->execute();
+    // TODO: review query
+$sql = "SELECT/INSERT/UPDATE/DELETE ...";
+$this->db->perform($sql, [/* params */]);;
     $cache = $container->get(Cache::class);
     $cache->delete('motw_');
     $time_end = microtime(true);

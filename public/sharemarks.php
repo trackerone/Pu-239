@@ -130,10 +130,9 @@ function sharetable($res, $userid, $user, $variant = 'index')
                             </a>
                         </td>" : '');
         $fluent = $container->get(Database::class);
-        $bms = $fluent->from('bookmarks')
-                      ->where('torrentid = ?', $id)
-                      ->where('userid = ?', $userid)
-                      ->fetch();
+        $bms = // TODO: review query
+$sql = "SELECT/INSERT/UPDATE/DELETE ...";
+$this->db->perform($sql, [/* params */]);;
 
         $bookmarked = (empty($bms) ? "
                             <span data-tid='{$id}' data-remove='false' data-private='false' class='bookmarks tooltipper' title='" . _('Add Bookmark') . "'>
@@ -229,47 +228,9 @@ $HTMLOUT .= '
     </div>';
 
 $fluent = $container->get(Database::class);
-$count = $fluent->from('bookmarks')
-                ->select(null)
-                ->select('COUNT(id) AS count')
-                ->where('private = "no"')
-                ->where('userid = ?', $userid)
-                ->fetch('count');
-
-$torrentsperpage = $user['torrentsperpage'];
-if (empty($torrentsperpage)) {
-    $torrentsperpage = 25;
-}
-if ($count) {
-    $pager = pager($torrentsperpage, $count, 'sharemarks.php?&amp;');
-    $sharemarks = $fluent->from('bookmarks AS b')
-                         ->select(null)
-                         ->select('b.id as bookmarkid')
-                         ->select('t.owner')
-                         ->select('t.id')
-                         ->select('t.name')
-                         ->select('t.comments')
-                         ->select('t.leechers')
-                         ->select('t.seeders')
-                         ->select('t.save_as')
-                         ->select('t.numfiles')
-                         ->select('t.added')
-                         ->select('t.filename')
-                         ->select('t.size')
-                         ->select('t.views')
-                         ->select('t.visible')
-                         ->select('t.hits')
-                         ->select('t.times_completed')
-                         ->select('t.category')
-                         ->select('u.username')
-                         ->innerJoin('torrents AS t ON b.torrentid=t.id')
-                         ->leftJoin('users AS u on b.userid=u.id')
-                         ->where('private = "no"')
-                         ->where('b.userid = ?', $userid)
-                         ->orderBy('t.id DESC')
-                         ->limit($pager['pdo']['limit'])
-                         ->offset($pager['pdo']['offset'])
-                         ->fetchAll();
+$count = // TODO: review query
+$sql = "SELECT/INSERT/UPDATE/DELETE ...";
+$this->db->perform($sql, [/* params */]);;
 
     $HTMLOUT .= $count > $torrentsperpage ? $pager['pagertop'] : '';
     $HTMLOUT .= sharetable($sharemarks, $userid, $user, 'index');

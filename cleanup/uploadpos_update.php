@@ -33,49 +33,9 @@ function uploadpos_update($data)
     $time_start = microtime(true);
     $dt = TIME_NOW;
     $fluent = $container->get(Database::class);
-    $res = $fluent->from('users')
-                  ->select(null)
-                  ->select('id')
-                  ->select('modcomment')
-                  ->where('uploadpos < ?', $dt)
-                  ->where('uploadpos > 1');
-
-    $subject = 'Upload Ban expired.';
-    $msg = "Your Upload Ban has timed out and has been auto-removed by the system. If you would like to have it again, exchange some Karma Bonus Points again. Cheers!\n";
-    $msgs = [];
-    $cache = $container->get(Cache::class);
-    $comment = get_date((int) $dt, 'DATE', 1) . " - Upload Ban Automatically Removed By System.\n";
-    foreach ($res as $arr) {
-        $modcomment = $comment . $arr['modcomment'];
-        $msgs[] = [
-            'receiver' => $arr['id'],
-            'added' => $dt,
-            'msg' => $msg,
-            'subject' => $subject,
-        ];
-        $user = $cache->get('user_' . $arr['id']);
-        if (!empty($user)) {
-            $cache->update_row('user_' . $arr['id'], [
-                'uploadpos' => 1,
-                'modcomment' => $modcomment,
-            ], $site_config['expires']['user_cache']);
-        }
-    }
-
-    $count = count($msgs);
-    if ($count) {
-        $messages_class = $container->get(Message::class);
-        $messages_class->insert($msgs);
-        $set = [
-            'uploadpos' => 1,
-            'modcomment' => new Literal("CONCAT(\"$comment\", modcomment)"),
-        ];
-
-        $fluent->update('users')
-               ->set($set)
-               ->where('uploadpos < ?', $dt)
-               ->where('uploadpos > 1')
-               ->execute();
+    $res = // TODO: review query
+$sql = "SELECT/INSERT/UPDATE/DELETE ...";
+$this->db->perform($sql, [/* params */]);;
     }
 
     $time_end = microtime(true);

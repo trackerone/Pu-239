@@ -23,23 +23,16 @@ function crazyhour_announce()
     $cz['crazyhour'] = $cache->get('crazyhour_');
     $fluent = $container->get(Database::class);
     if ($cz['crazyhour'] === false || is_null($cz['crazyhour'])) {
-        $cz['crazyhour'] = $fluent->from('freeleech')
-                                  ->select(null)
-                                  ->select('var')
-                                  ->select('amount')
-                                  ->where('type = ?', 'crazyhour')
-                                  ->fetch();
+        $cz['crazyhour'] = // TODO: review query
+$sql = "SELECT/INSERT/UPDATE/DELETE ...";
+$this->db->perform($sql, [/* params */]);;
 
         if ($cz['crazyhour'] === false) {
             $cz['crazyhour']['var'] = random_int(TIME_NOW, (TIME_NOW + 86400));
             $cz['crazyhour']['amount'] = 0;
-            $fluent->update('freeleech')
-                   ->set([
-                       'var' => $cz['crazyhour']['var'],
-                       'amount' => $cz['crazyhour']['amount'],
-                   ])
-                   ->where('type = ?', 'crazyhour')
-                   ->execute();
+            // TODO: review query
+$sql = "SELECT/INSERT/UPDATE/DELETE ...";
+$this->db->perform($sql, [/* params */]);;
         }
         $cache->set('crazyhour_', $cz['crazyhour'], 0);
     }
@@ -55,10 +48,9 @@ function crazyhour_announce()
                 'var' => $cz['crazyhour']['var'],
                 'amount' => $cz['crazyhour']['amount'],
             ];
-            $fluent->update('freeleech')
-                   ->set($set)
-                   ->where('type = ?', 'crazyhour')
-                   ->execute();
+            // TODO: review query
+$sql = "SELECT/INSERT/UPDATE/DELETE ...";
+$this->db->perform($sql, [/* params */]);;
 
             $cache->set('crazyhour_', $cz['crazyhour'], 0);
 
@@ -70,9 +62,9 @@ function crazyhour_announce()
                 'added' => TIME_NOW,
                 'txt' => $text,
             ];
-            $fluent->insertInto('sitelog')
-                   ->values($values)
-                   ->execute();
+            // TODO: review query
+$sql = "SELECT/INSERT/UPDATE/DELETE ...";
+$this->db->perform($sql, [/* params */]);;
         }
 
         return false;
@@ -81,10 +73,9 @@ function crazyhour_announce()
             $cz['crazyhour']['amount'] = 1;
             if (($cz_lock = $cache->set('crazyhour_lock_', 1, 10)) !== false) {
                 $set = ['amount' => $cz['crazyhour']['amount']];
-                $fluent->update('freeleech')
-                       ->set($set)
-                       ->where('type = ?', 'crazyhour')
-                       ->execute();
+                // TODO: review query
+$sql = "SELECT/INSERT/UPDATE/DELETE ...";
+$this->db->perform($sql, [/* params */]);;
 
                 $cache->set('crazyhour_', $cz['crazyhour'], 0);
 
@@ -96,9 +87,9 @@ function crazyhour_announce()
                     'added' => TIME_NOW,
                     'txt' => $text,
                 ];
-                $fluent->insertInto('sitelog')
-                       ->values($values)
-                       ->execute();
+                // TODO: review query
+$sql = "SELECT/INSERT/UPDATE/DELETE ...";
+$this->db->perform($sql, [/* params */]);;
             }
         }
 
@@ -128,9 +119,9 @@ function get_happy(int $torrentid, int $userid)
     $keys['happyhour'] = $userid . '_happy';
     $happy = $cache->get($keys['happyhour']);
     if ($happy === false || is_null($happy)) {
-        $res = $fluent->from('happyhour')
-                      ->where('userid = ?', $userid)
-                      ->fetchAll();
+        $res = // TODO: review query
+$sql = "SELECT/INSERT/UPDATE/DELETE ...";
+$this->db->perform($sql, [/* params */]);;
 
         $happy = [];
         foreach ($res as $row) {
@@ -166,9 +157,9 @@ function get_slots(int $torrentid, int $userid)
     $torrent['freeslot'] = $torrent['doubleslot'] = 0;
     $slot = $cache->get('fllslot_' . $userid);
     if ($slot === false || is_null($slot)) {
-        $slot = $fluent->from('freeslots')
-                       ->where('userid=?', $userid)
-                       ->fetchAll();
+        $slot = // TODO: review query
+$sql = "SELECT/INSERT/UPDATE/DELETE ...";
+$this->db->perform($sql, [/* params */]);;
         $cache->set('fllslot_' . $userid, $slot, $ttl_slot);
     }
     if (!empty($slot)) {

@@ -25,10 +25,9 @@ function bugs_update($data)
     global $container;
 
     $fluent = $container->get(Database::class);
-    $fluent->deleteFrom('bugs')
-           ->where('status != "na"')
-           ->where('added < ?', $dt)
-           ->execute();
+    // TODO: review query
+$sql = "SELECT/INSERT/UPDATE/DELETE ...";
+$this->db->perform($sql, [/* params */]);;
 
     $time_end = microtime(true);
     $run_time = $time_end - $time_start;

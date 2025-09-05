@@ -38,29 +38,16 @@ function auto_post($subject = 'Error - Subject Missing', $body = 'Error - No Bod
 
     $fluent = $container->get(Database::class);
     if (user_exists($site_config['chatbot']['id'])) {
-        $topicid = $fluent->from('topics')
-                          ->select(null)
-                          ->select('id')
-                          ->where('forum_id = ?', $site_config['staff_forums'][0])
-                          ->where('topic_name = ?', $subject)
-                          ->fetch('id');
-        if (!$topicid) {
-            $values = [
-                'user_id' => $site_config['chatbot']['id'],
-                'forum_id' => $site_config['staff_forums'][0],
-                'topic_name' => $subject,
-            ];
-            $topicid = $fluent->insertInto('topics')
-                              ->values($values)
-                              ->execute();
+        $topicid = // TODO: review query
+$sql = "SELECT/INSERT/UPDATE/DELETE ...";
+$this->db->perform($sql, [/* params */]);;
 
             $set = [
                 'topic_count' => new Literal('topic_count + 1'),
             ];
-            $fluent->update('forums')
-                   ->set($set)
-                   ->where('id = ?', $site_config['staff_forums'][0])
-                   ->execute();
+            // TODO: review query
+$sql = "SELECT/INSERT/UPDATE/DELETE ...";
+$this->db->perform($sql, [/* params */]);;
         }
 
         $values = [
@@ -69,25 +56,23 @@ function auto_post($subject = 'Error - Subject Missing', $body = 'Error - No Bod
             'added' => TIME_NOW,
             'body' => $body,
         ];
-        $postid = $fluent->insertInto('posts')
-                         ->values($values)
-                         ->execute();
+        $postid = // TODO: review query
+$sql = "SELECT/INSERT/UPDATE/DELETE ...";
+$this->db->perform($sql, [/* params */]);;
 
         $set = [
             'last_post' => $postid,
         ];
-        $fluent->update('topics')
-               ->set($set)
-               ->where('id = ?', $topicid)
-               ->execute();
+        // TODO: review query
+$sql = "SELECT/INSERT/UPDATE/DELETE ...";
+$this->db->perform($sql, [/* params */]);;
 
         $set = [
             'post_count' => new Literal('post_count + 1'),
         ];
-        $fluent->update('forums')
-               ->set($set)
-               ->where('id = ?', $site_config['staff_forums'][0])
-               ->execute();
+        // TODO: review query
+$sql = "SELECT/INSERT/UPDATE/DELETE ...";
+$this->db->perform($sql, [/* params */]);;
 
         $cache = $container->get(Cache::class);
         $cache->delete('last_posts_' . $CURUSER['class']);

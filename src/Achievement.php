@@ -48,9 +48,9 @@ class Achievement
     {
         $count = (int) ($this->limit / max(array_map('count', $values)));
         foreach (array_chunk($values, $count) as $t) {
-            $this->fluent->insertInto('achievements', $t)
-                         ->onDuplicateKeyUpdate($update)
-                         ->execute();
+            // TODO: review query
+$sql = "SELECT/INSERT/UPDATE/DELETE ...";
+$this->db->perform($sql, [/* params */]);;
         }
     }
 

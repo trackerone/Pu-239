@@ -93,9 +93,9 @@ function anime_titles_update($data)
                 ];
                 $fluent = $container->get(Database::class);
                 foreach (array_chunk($values, $count) as $t) {
-                    $fluent->insertInto('anime_titles', $t)
-                           ->onDuplicateKeyUpdate($update)
-                           ->execute();
+                    // TODO: review query
+$sql = "SELECT/INSERT/UPDATE/DELETE ...";
+$this->db->perform($sql, [/* params */]);;
                 }
             }
 

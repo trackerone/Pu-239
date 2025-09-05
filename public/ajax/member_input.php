@@ -56,9 +56,9 @@ switch ($action) {
             ];
         }
         $fluent = $container->get(Database::class);
-        $fluent->insertInto('sitelog')
-               ->values($values)
-               ->execute();
+        // TODO: review query
+$sql = "SELECT/INSERT/UPDATE/DELETE ...";
+$this->db->perform($sql, [/* params */]);;
         break;
 
     case 'staff_notes':

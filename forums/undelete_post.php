@@ -13,24 +13,9 @@ global $container, $site_config, $CURUSER;
 $post_id = isset($_GET['post_id']) ? (int) $_GET['post_id'] : (isset($_POST['post_id']) ? (int) $_POST['post_id'] : 0);
 $topic_id = isset($_GET['topic_id']) ? (int) $_GET['topic_id'] : (isset($_POST['topic_id']) ? (int) $_POST['topic_id'] : 0);
 $fluent = $container->get(Database::class);
-$arr_post = $fluent->from('posts AS p')
-                   ->select(null)
-                   ->select('p.user_id')
-                   ->select('p.staff_lock')
-                   ->select('p.status AS post_status')
-                   ->select('u.class')
-                   ->select('u.status')
-                   ->select('t.locked')
-                   ->select('t.user_id as owner_id')
-                   ->select('t.first_post')
-                   ->select('f.min_class_read')
-                   ->select('f.min_class_write')
-                   ->select('f.id AS forum_id')
-                   ->leftJoin('users AS u ON p.user_id = u.id')
-                   ->leftJoin('topics AS t ON p.topic_id = t.id')
-                   ->leftJoin('forums AS f ON t.forum_id = f.id')
-                   ->where('p.id = ?', $post_id)
-                   ->fetch();
+$arr_post = // TODO: review query
+$sql = "SELECT/INSERT/UPDATE/DELETE ...";
+$this->db->perform($sql, [/* params */]);;
 
 $can_delete = $arr_post['user_id'] === $CURUSER['id'] || has_access($CURUSER['class'], UC_STAFF, 'forum_mod');
 if (!has_access($CURUSER['class'], (int) $arr_post['min_class_read'], '') || !has_access($CURUSER['class'], (int) $arr_post['min_class_write'], '')) {
@@ -61,24 +46,21 @@ if ($arr_post['post_status'] !== 'deleted') {
 $update = [
     'status' => 'ok',
 ];
-$fluent->update('posts')
-       ->set($update)
-       ->where('id =?', $post_id)
-       ->execute();
+// TODO: review query
+$sql = "SELECT/INSERT/UPDATE/DELETE ...";
+$this->db->perform($sql, [/* params */]);;
 $update = [
     'post_count' => new Literal('post_count + 1'),
 ];
-$fluent->update('forums')
-       ->set($update)
-       ->where('id = ?', $arr_post['forum_id'])
-       ->execute();
+// TODO: review query
+$sql = "SELECT/INSERT/UPDATE/DELETE ...";
+$this->db->perform($sql, [/* params */]);;
 $update = [
     'forumposts' => new Literal('forumposts + 1'),
 ];
-$fluent->update('usersachiev')
-       ->set($update)
-       ->where('userid = ?', $arr_post['user_id'])
-       ->execute();
+// TODO: review query
+$sql = "SELECT/INSERT/UPDATE/DELETE ...";
+$this->db->perform($sql, [/* params */]);;
 
 clr_forums_cache((int) $post_id);
 $cache = $container->get(Cache::class);

@@ -418,24 +418,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (!empty($addset) || !empty($removeset)) {
         $fluent = $container->get(Database::class);
         if (!empty($addset)) {
-            $query = $fluent->update('user_blocks')
-                            ->set($addset)
-                            ->where('userid = ?', $id)
-                            ->execute();
+            $query = // TODO: review query
+$sql = "SELECT/INSERT/UPDATE/DELETE ...";
+$this->db->perform($sql, [/* params */]);;
         }
         if (!empty($removeset)) {
-            $fluent->update('user_blocks')
-                   ->set($removeset)
-                   ->where('userid = ?', $id)
-                   ->execute();
+            // TODO: review query
+$sql = "SELECT/INSERT/UPDATE/DELETE ...";
+$this->db->perform($sql, [/* params */]);;
         }
-        $blocks = $fluent->from('user_blocks')
-                         ->select(null)
-                         ->select('index_page')
-                         ->select('global_stdhead')
-                         ->select('userdetails_page')
-                         ->where('userid = ?', $id)
-                         ->fetch();
+        $blocks = // TODO: review query
+$sql = "SELECT/INSERT/UPDATE/DELETE ...";
+$this->db->perform($sql, [/* params */]);;
 
         $update['blocks'] = $blocks;
         $cache->update_row('user_' . $id, $update);

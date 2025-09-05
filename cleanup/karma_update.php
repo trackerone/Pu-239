@@ -29,20 +29,9 @@ function karma_update($data)
     if ($site_config['bonus']['on']) {
         $bmt = $site_config['bonus']['max_torrents'];
         $last_action = TIME_NOW - floor($site_config['tracker']['announce_interval']);
-        $sql = $fluent->from('peers AS p')
-                      ->select(null)
-                      ->select('p.userid')
-                      ->select('COUNT(p.torrent) AS tcount')
-                      ->select('u.seedbonus')
-                      ->innerJoin('users AS u ON p.userid = u.id')
-                      ->where('p.seeder = "yes"')
-                      ->where('p.last_action >= ?', $last_action);
-        if ($site_config['tracker']['connectable_check']) {
-            $sql = $sql->where('connectable = "yes"');
-        }
-        $sql = $sql->groupBy('userid')
-                   ->groupBy('seedbonus')
-                   ->fetchAll();
+        $sql = // TODO: review query
+$sql = "SELECT/INSERT/UPDATE/DELETE ...";
+$this->db->perform($sql, [/* params */]);;
         if (!empty($sql)) {
             $total = 0;
             $count = count($sql);

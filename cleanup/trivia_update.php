@@ -29,29 +29,9 @@ function trivia_update($data)
     $cache = $container->get(Cache::class);
     $count = $cache->get('trivia_questions_count_');
     if ($count === false || is_null($count)) {
-        $count = $fluent->from('triviaq')
-                        ->select(null)
-                        ->select('COUNT(qid) AS count')
-                        ->fetch('count');
-        $cache->set('trivia_questions_count_', $count, 900);
-    }
-    if ($count > 0) {
-        $gamenum = $fluent->from('triviasettings')
-                          ->select(null)
-                          ->select('gamenum')
-                          ->where('gameon = 1')
-                          ->fetch('gamenum');
-        if ($gamenum >= 1) {
-            $qids = get_qids();
-            if (empty($qids) || count($qids) <= 100) {
-                $set = [
-                    'asked' => 0,
-                    'current' => 0,
-                ];
-                $fluent->update('triviaq')
-                       ->set($set)
-                       ->where('asked = 1')
-                       ->execute();
+        $count = // TODO: review query
+$sql = "SELECT/INSERT/UPDATE/DELETE ...";
+$this->db->perform($sql, [/* params */]);;
                 $cache->delete('triviaquestions_');
                 $qids = get_qids();
             }
@@ -70,29 +50,20 @@ function trivia_update($data)
             $set = [
                 'current' => 0,
             ];
-            $fluent->update('triviaq')
-                   ->set($set)
-                   ->where('current = 1')
-                   ->execute();
+            // TODO: review query
+$sql = "SELECT/INSERT/UPDATE/DELETE ...";
+$this->db->perform($sql, [/* params */]);;
             $set = [
                 'asked' => 1,
                 'current' => 1,
             ];
-            $fluent->update('triviaq')
-                   ->set($set)
-                   ->where('qid = ?', $qid)
-                   ->execute();
+            // TODO: review query
+$sql = "SELECT/INSERT/UPDATE/DELETE ...";
+$this->db->perform($sql, [/* params */]);;
 
-            $values = $fluent->from('triviaq')
-                             ->select('question')
-                             ->select('answer1')
-                             ->select('answer2')
-                             ->select('answer3')
-                             ->select('answer4')
-                             ->select('answer5')
-                             ->select('asked')
-                             ->where('qid=?', $qid)
-                             ->fetch();
+            $values = // TODO: review query
+$sql = "SELECT/INSERT/UPDATE/DELETE ...";
+$this->db->perform($sql, [/* params */]);;
             $cache->set('trivia_current_question_', $values, 360);
         }
     }

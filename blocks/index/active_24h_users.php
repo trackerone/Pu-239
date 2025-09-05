@@ -16,20 +16,14 @@ $active24 = $cache->get('last24_users_');
 if ($active24 === false || is_null($active24)) {
     $list = [];
     $fluent = $container->get(Database::class);
-    $record = $fluent->from('avps')
-                     ->where('arg = ?', 'last24')
-                     ->fetch();
+    $record = // TODO: review query
+$sql = "SELECT/INSERT/UPDATE/DELETE ...";
+$this->db->perform($sql, [/* params */]);;
 
     $dt = TIME_NOW - 86400;
-    $query = $fluent->from('users')
-                    ->select(null)
-                    ->select('id')
-                    ->where('last_access > ?', $dt)
-                    ->where('anonymous_until < ?', TIME_NOW)
-                    ->where('perms < ?', PERMS_STEALTH)
-                    ->where('id != 2')
-                    ->orderBy('username')
-                    ->fetchAll();
+    $query = // TODO: review query
+$sql = "SELECT/INSERT/UPDATE/DELETE ...";
+$this->db->perform($sql, [/* params */]);;
 
     $count = count($query);
     $i = 0;
@@ -56,10 +50,9 @@ if ($active24 === false || is_null($active24)) {
             'value_i' => $count,
             'value_u' => TIME_NOW,
         ];
-        $fluent->update('avps')
-               ->set($set)
-               ->where('arg = ?', 'last24')
-               ->execute();
+        // TODO: review query
+$sql = "SELECT/INSERT/UPDATE/DELETE ...";
+$this->db->perform($sql, [/* params */]);;
     }
 
     $cache->set('last24_users_', $active24, $site_config['expires']['last24']);

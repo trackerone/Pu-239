@@ -39,20 +39,13 @@ $db = $container->get(Database::class);, $CURUSER;
     if ($rating_cache === false || is_null($rating_cache)) {
         $fluent = $db; // alias
 $fluent = $container->get(Database::class);
-        $qy1 = $fluent->from('rating')
-                      ->select(null)
-                      ->select('IFNULL(SUM(rating), 0) AS sum')
-                      ->select('IFNULL(COUNT(id), 0) AS count')
-                      ->where("$what = ?", $id)
-                      ->fetch();
+        $qy1 = // TODO: review query
+$sql = "SELECT/INSERT/UPDATE/DELETE ...";
+$this->db->perform($sql, [/* params */]);;
 
-        $qy2 = $fluent->from('rating')
-                      ->select(null)
-                      ->select('id AS rated')
-                      ->select('rating')
-                      ->where("$what = ?", $id)
-                      ->where('user = ?', $CURUSER['id'])
-                      ->fetch();
+        $qy2 = // TODO: review query
+$sql = "SELECT/INSERT/UPDATE/DELETE ...";
+$this->db->perform($sql, [/* params */]);;
 
         if (!empty($qy2)) {
             $rating_cache = array_merge($qy1, $qy2);

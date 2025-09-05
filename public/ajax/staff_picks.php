@@ -28,10 +28,9 @@ $set = [
     'staff_picks' => $staff_picks,
 ];
 $fluent = $container->get(Database::class);
-$result = $fluent->update('torrents')
-                 ->set($set)
-                 ->where('id = ?', $id)
-                 ->execute();
+$result = // TODO: review query
+$sql = "SELECT/INSERT/UPDATE/DELETE ...";
+$this->db->perform($sql, [/* params */]);;
 
 if ($result) {
     $cache = $container->get(Cache::class);

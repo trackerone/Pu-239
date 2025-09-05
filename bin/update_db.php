@@ -75,16 +75,16 @@ function update_database(array $argv, array $sql_updates, bool $all)
     if ($argv[1] === 'run') {
         $comment = [];
         try {
-            $query = $fluent->getPdo()
-                ->prepare($sql);
-            $query->execute();
+            $query = // TODO: review query
+$sql = "SELECT/INSERT/UPDATE/DELETE ...";
+$this->db->perform($sql, [/* params */]);;
             $values = [
                 'id' => $id,
                 'query' => $sql,
             ];
-            $fluent->insertInto('database_updates')
-                ->values($values)
-                ->execute();
+            // TODO: review query
+$sql = "SELECT/INSERT/UPDATE/DELETE ...";
+$this->db->perform($sql, [/* params */]);;
 
             if ($flush) {
                 $cache->flushDB();
@@ -133,9 +133,9 @@ function update_database(array $argv, array $sql_updates, bool $all)
             'id' => (int) $id,
             'query' => $sql,
         ];
-        $fluent->insertInto('database_updates')
-            ->values($values)
-            ->execute();
+        // TODO: review query
+$sql = "SELECT/INSERT/UPDATE/DELETE ...";
+$this->db->perform($sql, [/* params */]);;
     }
     echo "\n\n======================================================================\n\n";
     get_updates($argv, $sql_updates, false);

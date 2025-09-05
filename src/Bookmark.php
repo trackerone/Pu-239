@@ -42,9 +42,9 @@ class Bookmark
     {
         $bookmarks = $this->cache->get('bookmarks_' . $userid);
         if ($bookmarks === false || is_null($bookmarks)) {
-            $books = $this->fluent->from('bookmarks')
-                                  ->where('userid = ?', $userid)
-                                  ->fetchAll();
+            $books = // TODO: review query
+$sql = "SELECT/INSERT/UPDATE/DELETE ...";
+$this->db->perform($sql, [/* params */]);;
 
             $bookmarks = [];
             foreach ($books as $rowbook) {

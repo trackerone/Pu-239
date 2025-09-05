@@ -31,18 +31,9 @@ function peer_update($data)
     require_once INCL_DIR . 'function_announce.php';
     $torrent_seeds = $torrent_leeches = [];
     $deadtime = TIME_NOW - floor($site_config['tracker']['announce_interval'] * 1.3);
-    $dead_peers = $fluent->from('peers')
-                         ->select(null)
-                         ->select('id')
-                         ->select('torrent')
-                         ->select('userid')
-                         ->select('seeder')
-                         ->where('last_action < ?', $deadtime);
-    foreach ($dead_peers as $dead_peer) {
-        $torrentid = $dead_peer['torrent'];
-        $fluent->deleteFrom('peers')
-               ->where('id = ?', $dead_peer['id'])
-               ->execute();
+    $dead_peers = // TODO: review query
+$sql = "SELECT/INSERT/UPDATE/DELETE ...";
+$this->db->perform($sql, [/* params */]);;
         if (!isset($torrent_seeds[$torrentid])) {
             $torrent_seeds[$torrentid] = $torrent_leeches[$torrentid] = 0;
         }

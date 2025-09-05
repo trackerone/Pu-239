@@ -28,18 +28,9 @@ if (!is_valid_id($id)) {
 }
 $dt = TIME_NOW;
 $fluent = $container->get(Database::class);
-$row = $fluent->from('torrents AS t')
-              ->select(null)
-              ->select('t.id')
-              ->select('t.info_hash')
-              ->select('t.owner')
-              ->select('t.name')
-              ->select('t.seeders')
-              ->select('t.added')
-              ->select('u.seedbonus')
-              ->leftJoin('users AS u ON u.id=t.owner')
-              ->where('t.id = ?', $id)
-              ->fetch();
+$row = // TODO: review query
+$sql = "SELECT/INSERT/UPDATE/DELETE ...";
+$this->db->perform($sql, [/* params */]);;
 
 if (!$row) {
     stderr(_('Error'), _('Torrent does not exist'));

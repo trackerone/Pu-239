@@ -24,25 +24,14 @@ set_time_limit(18000);
 $image_proxy = $container->get(ImageProxy::class);
 $path = IMAGES_DIR . 'proxy/';
 $fluent = $container->get(Database::class);
-$images = $fluent->from('images')
-                 ->select(null)
-                 ->select('url')
-                 ->select('type')
-                 ->where('fetched = "no"')
-                 ->orderBy('added DESC')
-                 ->limit($limit)
-                 ->offset($offset)
-                 ->fetchAll();
+$images = // TODO: review query
+$sql = "SELECT/INSERT/UPDATE/DELETE ...";
+$this->db->perform($sql, [/* params */]);;
 $count += process_images($images, 'images');
 
-$photos = $fluent->from('person')
-                 ->select(null)
-                 ->select('photo AS url')
-                 ->where('photo IS NOT NULL')
-                 ->where('updated + 604800 < ?', TIME_NOW)
-                 ->limit($limit)
-                 ->offset($offset)
-                 ->fetchAll();
+$photos = // TODO: review query
+$sql = "SELECT/INSERT/UPDATE/DELETE ...";
+$this->db->perform($sql, [/* params */]);;
 
 $count += process_images($photos, 'person');
 

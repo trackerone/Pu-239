@@ -53,9 +53,9 @@ function mark_as_read(array $user)
         $update = [
             'last_post_read' => $topic['last_post'],
         ];
-        $fluent->insertInto('read_posts', $values)
-               ->onDuplicateKeyUpdate($update)
-               ->execute();
+        // TODO: review query
+$sql = "SELECT/INSERT/UPDATE/DELETE ...";
+$this->db->perform($sql, [/* params */]);;
         $cache->delete('last_read_post_' . $topic['id'] . '_' . $user['id']);
         $cache->delete('sv_last_read_post_' . $topic['id'] . '_' . $user['id']);
     }
@@ -84,9 +84,9 @@ function mark_as_unread(array $user)
         $update = [
             'last_post_read' => $topic['first_post'],
         ];
-        $fluent->insertInto('read_posts', $values)
-               ->onDuplicateKeyUpdate($update)
-               ->execute();
+        // TODO: review query
+$sql = "SELECT/INSERT/UPDATE/DELETE ...";
+$this->db->perform($sql, [/* params */]);;
 
         $cache->delete('last_read_post_' . $topic['id'] . '_' . $user['id']);
         $cache->delete('sv_last_read_post_' . $topic['id'] . '_' . $user['id']);
@@ -106,14 +106,9 @@ function get_topics()
 
     $dt = TIME_NOW - ($site_config['forum_config']['readpost_expiry'] * 86400);
     $fluent = $container->get(Database::class);
-    $query = $fluent->from('topics AS t')
-                    ->select(null)
-                    ->select('t.id')
-                    ->select('t.last_post')
-                    ->select('t.first_post - 1 AS first_post')
-                    ->leftJoin('posts AS p ON t.last_post = p.id')
-                    ->where('p.added > ?', $dt)
-                    ->fetchAll();
+    $query = // TODO: review query
+$sql = "SELECT/INSERT/UPDATE/DELETE ...";
+$this->db->perform($sql, [/* params */]);;
 
     return $query;
 }

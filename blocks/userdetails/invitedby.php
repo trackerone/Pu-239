@@ -20,36 +20,9 @@ if ($invite_by > 0 && $type === 'invite') {
         </tr>';
 } elseif ($invite_by > 0 && $type === 'promo') {
     $fluent = $container->get(Database::class);
-    $name = $fluent->from('promo')
-                   ->select(null)
-                   ->select('name')
-                   ->where('id = ?', $invite_by)
-                   ->fetch('name');
-    $name = !empty($name) ? htmlsafechars($name) : 'Promo has been Deleted';
-    $HTMLOUT .= '
-        <tr>
-            <td class="rowhead">' . _('Invited By') . '</td>
-            <td><a href="' . $site_config['paths']['baseurl'] . '/promo.php">Promo: ' . $name . '</a></td>
-        </tr>';
-} else {
-    $HTMLOUT .= '
-        <tr>
-            <td class="rowhead">' . _('Invited By') . '</td>
-            <td><b>' . _('Open Signups') . '</b></td>
-        </tr>';
-}
-$invited = $fluent->from('users AS u')
-                  ->select(null)
-                  ->select('u.id')
-                  ->select('u.email')
-                  ->select('u.uploaded')
-                  ->select('u.downloaded')
-                  ->select('i.status')
-                  ->leftJoin('invite_codes AS i ON u.id = i.receiver')
-                  ->where('u.invitedby = ?', $viewer['id'])
-                  ->where('u.join_type = "invite"')
-                  ->orderBy('u.registered')
-                  ->fetchAll();
+    $name = // TODO: review query
+$sql = "SELECT/INSERT/UPDATE/DELETE ...";
+$this->db->perform($sql, [/* params */]);;
 
 $inviteted_by_this_member = '';
 if (empty($invited)) {

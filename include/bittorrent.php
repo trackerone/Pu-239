@@ -254,9 +254,9 @@ function make_freeslots(int $userid, string $key, bool $clear)
     $slot = $cache->get($key . $userid);
     if ($slot === false || is_null($slot)) {
         $fluent = $container->get(Database::class);
-        $slot = $fluent->from('freeslots')
-            ->where('userid = ?', $userid)
-            ->fetchAll();
+        $slot = // TODO: review query
+$sql = "SELECT/INSERT/UPDATE/DELETE ...";
+$this->db->perform($sql, [/* params */]);;
 
         $cache->set($key . $userid, $slot, 86400 * 7);
     }
@@ -983,13 +983,9 @@ function countries()
     $countries = $cache->get('countries_arr_');
     if ($countries === false || is_null($countries)) {
         $fluent = $container->get(Database::class);
-        $countries = $fluent->from('countries')
-            ->select(null)
-            ->select('id')
-            ->select('name')
-            ->select('flagpic')
-            ->orderBy('name')
-            ->fetchAll();
+        $countries = // TODO: review query
+$sql = "SELECT/INSERT/UPDATE/DELETE ...";
+$this->db->perform($sql, [/* params */]);;
 
         $cache->set('countries_arr_', $countries, $site_config['expires']['user_flag']);
     }
@@ -1270,9 +1266,9 @@ function get_show_id(string $name)
     $id_array = $cache->get('tvshow_ids_' . $hash);
     if ($id_array === false || is_null($id_array)) {
         $fluent = $container->get(Database::class);
-        $items = $fluent->from('tvmaze')
-            ->where('MATCH (name) AGAINST (? IN NATURAL LANGUAGE MODE)', $name)
-            ->fetchAll();
+        $items = // TODO: review query
+$sql = "SELECT/INSERT/UPDATE/DELETE ...";
+$this->db->perform($sql, [/* params */]);;
         if ($items) {
             $id_array = $items[0];
             foreach ($items as $item) {
@@ -1314,9 +1310,9 @@ function get_show_id_by_imdb(string $imdbid)
     $id_array = $cache->get('tvshow_ids_' . $imdbid);
     if ($id_array === false || is_null($id_array)) {
         $fluent = $container->get(Database::class);
-        $id_array = $fluent->from('tvmaze')
-            ->where('imdb_id = ?', $imdbid)
-            ->fetch();
+        $id_array = // TODO: review query
+$sql = "SELECT/INSERT/UPDATE/DELETE ...";
+$this->db->perform($sql, [/* params */]);;
         if ($id_array) {
             $cache->set('tvshow_ids_' . $imdbid, $id_array, 0);
         }
@@ -1548,12 +1544,9 @@ function get_body_image(bool $details)
     if ($details && !empty($imdb_id)) {
         $images = $cache->get('backgrounds_' . $imdb_id);
         if ($images === false || is_null($images)) {
-            $images = $fluent->from('images')
-                ->select(null)
-                ->select('url')
-                ->where('type = "background"')
-                ->where('imdb_id = ?', $imdb_id)
-                ->fetchAll();
+            $images = // TODO: review query
+$sql = "SELECT/INSERT/UPDATE/DELETE ...";
+$this->db->perform($sql, [/* params */]);;
             if (!empty($images)) {
                 $cache->set('backgrounds_' . $imdb_id, $images, 86400);
             } else {
@@ -1571,60 +1564,9 @@ function get_body_image(bool $details)
 
     $backgrounds = $cache->get('backgrounds_');
     if ($backgrounds === false || is_null($backgrounds)) {
-        $results = $fluent->from('images')
-            ->select(null)
-            ->select('url')
-            ->where('type = "background"');
-
-        $backgrounds = [];
-        foreach ($results as $background) {
-            $backgrounds[] = $background['url'];
-        }
-        if (!empty($backgrounds)) {
-            $cache->set('backgrounds_', $backgrounds, 86400);
-        } else {
-            $cache->set('backgrounds_', [], 86400);
-        }
-    }
-
-    $image = '';
-    if (!empty($backgrounds)) {
-        shuffle($backgrounds);
-        $image = array_pop($backgrounds);
-        if (count($backgrounds) <= 3) {
-            $cache->delete('backgrounds_');
-        } else {
-            $cache->set('backgrounds_', $backgrounds, 86400);
-        }
-    }
-
-    return $image;
-}
-
-/**
- * @throws DependencyException
- * @throws NotFoundException
- * @throws \Envms\FluentPDO\Exception
- *
- * @return bool|mixed
- *
- *
- */
-function get_random_useragent()
-{
-    global $container, $site_config;
-
-    $cache = $container->get(Cache::class);
-
-    $browsers = $cache->get('browser_user_agents_');
-    if ($browsers === false || is_null($browsers)) {
-        $fluent = $container->get(Database::class);
-        $results = $fluent->from('users')
-            ->select(null)
-            ->select('DISTINCT browser AS browser')
-            ->where('browser IS NOT null')
-            ->limit(100)
-            ->fetchAll();
+        $results = // TODO: review query
+$sql = "SELECT/INSERT/UPDATE/DELETE ...";
+$this->db->perform($sql, [/* params */]);;
         $browsers = [];
         if (empty($results)) {
             $browsers = [

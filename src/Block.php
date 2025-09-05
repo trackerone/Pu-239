@@ -45,9 +45,9 @@ class Block
     {
         $blocks = $this->cache->get('blocks_' . $userid);
         if ($blocks === false || is_null($blocks)) {
-            $blocks = $this->fluent->from('blocks')
-                                   ->where('userid = ?', $userid)
-                                   ->fetch();
+            $blocks = // TODO: review query
+$sql = "SELECT/INSERT/UPDATE/DELETE ...";
+$this->db->perform($sql, [/* params */]);;
 
             $this->cache->set('blocks_' . $userid, $blocks, $this->env['expires']['user_blocks']);
         }

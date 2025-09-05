@@ -23,90 +23,9 @@ $valid_search = [
 global $container, $site_config;
 
 $fluent = $container->get(Database::class);
-$count = $fluent->from('torrents AS t')
-                ->select(null)
-                ->select('COUNT(t.id) AS count')
-                ->where('t.category', $site_config['categories']['movie']);
-
-$select = $fluent->from('torrents AS t')
-                 ->select(null)
-                 ->select('t.id')
-                 ->select('t.name')
-                 ->select('t.poster')
-                 ->select('t.imdb_id')
-                 ->select('t.seeders')
-                 ->select('t.leechers')
-                 ->select('t.year')
-                 ->select('t.rating')
-                 ->where('t.category', $site_config['categories']['movie'])
-                 ->groupBy('t.imdb_id, t.id');
-if ($user['hidden'] === 0) {
-    $count->leftJoin('categories AS c ON t.category = c.id')
-          ->where('c.hidden = 0');
-    $select->leftJoin('categories AS c ON t.category = c.id')
-           ->where('c.hidden = 0');
-}
-
-$addparam = [];
-foreach ($valid_search as $search) {
-    if (!empty($_GET[$search])) {
-        $cleaned = searchfield($_GET[$search]);
-        if ($search != 'srs' && $search != 'sre') {
-            $addparam[] = "{$search}=" . urlencode($cleaned);
-        }
-    }
-}
-if (!empty($_GET['sn'])) {
-    $count->where('MATCH (t.name) AGAINST (? IN NATURAL LANGUAGE MODE)', searchfield($_GET['sn']));
-    $select->where('MATCH (t.name) AGAINST (? IN NATURAL LANGUAGE MODE)', searchfield($_GET['sn']));
-}
-if (!empty($_GET['sys'])) {
-    $count->where('t.year >= ?', (int) $_GET['sys']);
-    $select->where('t.year >= ?', (int) $_GET['sys'])
-           ->orderBy('t.year DESC');
-}
-if (!empty($_GET['sye'])) {
-    $count->where('t.year <= ?', (int) $_GET['sye']);
-    $select->where('t.year <= ?', (int) $_GET['sye'])
-           ->orderBy('t.year DESC');
-}
-if (!empty($_GET['srs'])) {
-    $addparam[] = "{$search}=" . urlencode($_GET['srs']);
-    $count->where('t.rating >= ?', (float) $_GET['srs']);
-    $select->where('t.rating >= ?', (float) $_GET['srs'])
-           ->orderBy('t.rating DESC');
-}
-if (!empty($_GET['sre'])) {
-    $addparam[] = "{$search}=" . urlencode($_GET['sre']);
-    $count->where('t.rating <= ?', (float) $_GET['sre']);
-    $select->where('t.rating <= ?', (float) $_GET['sre'])
-           ->orderBy('t.rating DESC');
-}
-$count = $count->fetch('count');
-$perpage = 25;
-$addparam = !empty($addparam) ? '?' . implode('&amp;', $addparam) . '&amp;' : '?';
-$pager = pager($perpage, $count, "{$site_config['paths']['baseurl']}/tmovies.php{$addparam}");
-$select->limit($pager['pdo']['limit'])
-       ->offset($pager['pdo']['offset'])
-       ->orderBy('t.added DESC');
-$HTMLOUT = "
-    <h1 class='has-text-centered top20'>" . _('Movies') . '</h1>';
-
-$body = "
-        <div class='masonry padding20'>";
-$images_class = $container->get(Image::class);
-foreach ($select as $torrent) {
-    $cast = $cache->get('cast_' . $torrent['imdb_id']);
-    if ($cast === false || is_null($cast)) {
-        $cast = $fluent->from('person AS p')
-                       ->select(null)
-                       ->select('p.name')
-                       ->innerJoin('imdb_person AS i ON p.imdb_id = i.person_id')
-                       ->where('i.imdb_id = ?', str_replace('tt', '', $torrent['imdb_id']))
-                       ->where('i.type = "cast"')
-                       ->orderBy('p.name')
-                       ->limit(7)
-                       ->fetchAll();
+$count = // TODO: review query
+$sql = "SELECT/INSERT/UPDATE/DELETE ...";
+$this->db->perform($sql, [/* params */]);;
         $cache->set('cast_' . $torrent['imdb_id'], $cast, 604800);
     }
 

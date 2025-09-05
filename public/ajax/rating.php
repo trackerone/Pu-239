@@ -48,19 +48,12 @@ $completeres = $db->run(');
             ], $site_config['expires']['user_cache']);
         }
         $keys['rating'] = 'rating_' . $what . '_' . $id . '_' . $user['id'];
-        $qy1 = $fluent->from('rating')
-                      ->select(null)
-                      ->select('SUM(rating) AS sum')
-                      ->select('COUNT(id) AS count')
-                      ->where("$what = ?", $id)
-                      ->fetchAll();
-        $qy2 = $fluent->from('rating')
-                      ->select(null)
-                      ->select('id AS rated')
-                      ->select('rating')
-                      ->where("$what = ?", $id)
-                      ->where('user = ?', $user['id'])
-                      ->fetchAll();
+        $qy1 = // TODO: review query
+$sql = "SELECT/INSERT/UPDATE/DELETE ...";
+$this->db->perform($sql, [/* params */]);;
+        $qy2 = // TODO: review query
+$sql = "SELECT/INSERT/UPDATE/DELETE ...";
+$this->db->perform($sql, [/* params */]);;
 
         $rating_cache = array_merge($qy1[0], $qy2[0]);
         $ratings = $cache->get('ratings_' . $id);

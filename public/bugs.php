@@ -51,9 +51,9 @@ if ($action === 'viewbug') {
         if (!$id || !is_valid_id($id)) {
             stderr(_('Error'), _('Invalid ID'));
         }
-        $bug = $fluent->from('bugs')
-                      ->where('id = ?', $id)
-                      ->fetch();
+        $bug = // TODO: review query
+$sql = "SELECT/INSERT/UPDATE/DELETE ...";
+$this->db->perform($sql, [/* params */]);;
         $user = $user_class->getUserFromId($bug['sender']);
         $precomment = "\n[precode]{$comment}[/precode]";
         switch ($status) {
@@ -85,10 +85,9 @@ if ($action === 'viewbug') {
             'staff' => $curuser['id'],
             'comment' => !empty($_POST['comment']) ? htmlsafechars($_POST['comment']) : '',
         ];
-        $fluent->update('bugs')
-               ->set($update)
-               ->where('id = ?', $id)
-               ->execute();
+        // TODO: review query
+$sql = "SELECT/INSERT/UPDATE/DELETE ...";
+$this->db->perform($sql, [/* params */]);;
         $cache->delete('bug_mess_');
         header("location: {$_SERVER['PHP_SELF']}?action=bugs");
     }
@@ -99,15 +98,9 @@ if ($action === 'viewbug') {
     if (!has_access($curuser['class'], UC_STAFF, 'coder')) {
         stderr(_('Error'), _('Only staff can view bugs'));
     }
-    $bug = $fluent->from('bugs AS b')
-                  ->select('u.username')
-                  ->select('u.class')
-                  ->select('s.username AS st')
-                  ->select('s.class AS stclass')
-                  ->leftJoin('users AS u ON b.sender = u.id')
-                  ->leftJoin('users AS s ON b.staff = u.id')
-                  ->where('b.id = ?', $id)
-                  ->fetch();
+    $bug = // TODO: review query
+$sql = "SELECT/INSERT/UPDATE/DELETE ...";
+$this->db->perform($sql, [/* params */]);;
     if (empty($bug)) {
         stderr(_('Error'), _('Invalid ID'));
     }
@@ -200,123 +193,13 @@ if ($action === 'viewbug') {
     if (!has_access($curuser['class'], UC_STAFF, 'coder')) {
         stderr(_('Error'), _('Only staff can view bugs'));
     }
-    $count = $fluent->from('bugs')
-                    ->select(null)
-                    ->select('COUNT(id) AS count')
-                    ->fetch('count');
-    $perpage = 25;
-    $pager = pager($perpage, $count, $site_config['paths']['baseurl'] . '/bugs.php?action=bugs&amp;');
-    $bugs = $fluent->from('bugs AS b')
-                   ->select(null)
-                   ->select('b.id')
-                   ->select('b.sender')
-                   ->select('b.added')
-                   ->select('b.priority')
-                   ->select('b.problem')
-                   ->select('b.comment')
-                   ->select('b.status')
-                   ->select('b.staff')
-                   ->select('b.title')
-                   ->select('u.username')
-                   ->select('u.class')
-                   ->select('s.username AS st')
-                   ->select('s.class AS stclass')
-                   ->leftJoin('users AS u ON b.sender = u.id')
-                   ->leftJoin('users AS s ON b.staff = s.id')
-                   ->orderBy('b.added DESC')
-                   ->limit($pager['pdo']['limit'])
-                   ->offset($pager['pdo']['offset'])
-                   ->fetchAll();
+    $count = // TODO: review query
+$sql = "SELECT/INSERT/UPDATE/DELETE ...";
+$this->db->perform($sql, [/* params */]);;
 
-    $na_count = $fluent->from('bugs')
-                       ->select(null)
-                       ->select('COUNT(id) AS count')
-                       ->where('status = "na"')
-                       ->fetch('count');
-
-    if ($count > 0) {
-        $HTMLOUT .= $count > $perpage ? $pager['pagertop'] : '';
-        $HTMLOUT .= "
-        <h1 class='has-text-centered'>" . _pfe('There is {0} new bug. Please check it.', 'There is {0} new bugs. Please check them.', $na_count) . "</h1>
-        <div class='has-text-centered size_3'>" . _('All solved bugs will be deleted after 30 days (from added date).') . '</div>';
-        $heading = '        
-    <tr>
-        <th>' . _('Title') . '</th>
-        <th>' . _('Added / By') . '</th>
-        <th>' . _('Priority') . '</th>
-        <th>' . _('Status') . '</th>
-        <th>' . _('Coder') . '</th>
-        <th>' . _('Staff Comment') . '</th>
-    </tr>';
-        $body = '';
-        foreach ($bugs as $bug) {
-            switch ($bug['priority']) {
-                case 'low':
-                    $priority = "<span class='has-text-green'>" . _('Low') . '</span>';
-                    break;
-
-                case 'high':
-                    $priority = "<span class='has-text-danger'>" . _('High') . '</span>';
-                    break;
-
-                case 'veryhigh':
-                    $priority = "<span class='has-text-danger'><b><u>" . _('Very High') . '</u></b></span>';
-                    break;
-            }
-            switch ($bug['status']) {
-                case 'fixed':
-                    $status = "<span class='has-text-green'><b>" . _('Fixed') . '</b></span>';
-                    break;
-
-                case 'ignored':
-                    $status = "<span class='has-text-orange'><b>" . _('Ignored') . '</b></span>';
-                    break;
-
-                default:
-                    $status = "<span class='has-text-gold'><b>N/A</b></span>";
-                    break;
-            }
-            $body .= "
-    <tr>
-        <td class='w-25 min-150'><a href='?action=viewbug&amp;id=" . $bug['id'] . "'>" . format_comment($bug['title']) . '</a></td>
-        <td>' . get_date($bug['added'], 'TINY') . '<br>' . format_username($bug['sender']) . "</td>
-        <td>{$priority}</td>
-        <td>{$status}</td>
-        <td>" . ($bug['status'] != 'na' ? format_username($bug['staff']) : '---') . "</td>
-        <td class='w-25 min-350'>" . (!empty($bug['comment']) ? format_comment($bug['comment']) : '---') . '</td>
-    </tr>';
-        }
-        $HTMLOUT .= main_table($body, $heading);
-        $HTMLOUT .= $count > $perpage ? $pager['pagerbottom'] : '';
-    } else {
-        $session->set('is-warning', _('There are no reported bugs :).'));
-        header('Location: ' . $site_config['paths']['baseurl']);
-        app_halt('Exit called');
-    }
-} elseif ($action === 'add') {
-    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-        $title = htmlsafechars($_POST['title']);
-        $priority = htmlsafechars($_POST['priority']);
-        $problem = htmlsafechars($_POST['problem']);
-        if (empty($title) || empty($priority) || empty($problem)) {
-            stderr(_('Error'), _('You missing something?<br>Please try again.'));
-        }
-        if (strlen($problem) < 20) {
-            stderr(_('Error'), _("We can't use a problem text there is less then 20 chars."));
-        }
-        if (strlen($title) < 5) {
-            stderr(_('Error'), _("We can't use a title there is less then 5 chars."));
-        }
-        $values = [
-            'title' => $title,
-            'priority' => $priority,
-            'problem' => $problem,
-            'sender' => $curuser['id'],
-            'added' => $dt,
-        ];
-        $result = $fluent->insertInto('bugs')
-                         ->values($values)
-                         ->execute();
+    $na_count = // TODO: review query
+$sql = "SELECT/INSERT/UPDATE/DELETE ...";
+$this->db->perform($sql, [/* params */]);;
         $cache->delete('bug_mess_');
 
         if ($result) {

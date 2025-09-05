@@ -19,20 +19,9 @@ global $container, $site_config, $CURUSER;
 
 $users_class = $container->get(User::class);
 $fluent = $container->get(Database::class);
-$query = $fluent->from('posts AS p')
-                ->select('t.topic_name AS topic_name')
-                ->select('f.name AS forum_name')
-                ->leftJoin('topics AS t ON p.topic_id = t.id')
-                ->leftJoin('forums AS f ON t.forum_id = f.id')
-                ->where('p.id = ?', $post_id);
-if ($CURUSER['class'] < UC_STAFF) {
-    $query = $query->where("p.status = 'ok'")
-                   ->where("t.status = 'ok'");
-} elseif ($CURUSER['class'] < $site_config['forum_config']['min_delete_view_class']) {
-    $query = $query->where("p.status != 'deleted'")
-                   ->where("t.status != 'deleted'");
-}
-$query = $query->fetch();
+$query = // TODO: review query
+$sql = "SELECT/INSERT/UPDATE/DELETE ...";
+$this->db->perform($sql, [/* params */]);;
 $arr_edited = $users_class->getUserFromId($query['edited_by']);
 $icon = htmlsafechars($query['icon']);
 $post_title = htmlsafechars($query['post_title']);

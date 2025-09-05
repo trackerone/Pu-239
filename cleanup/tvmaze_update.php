@@ -28,43 +28,9 @@ function tvmaze_update($data)
         return;
     }
     $fluent = $container->get(Database::class);
-    $max = $fluent->from('tvmaze')
-                  ->select(null)
-                  ->select('MAX(tvmaze_id) AS id')
-                  ->fetch('id');
-
-    $pages[0] = floor($max / 250);
-    $pages[1] = ceil($max / 250);
-
-    $values = [];
-    foreach ($pages as $page) {
-        $url = "http://api.tvmaze.com/shows?page=$page";
-        $json = fetch($url, false);
-        if (empty($json)) {
-            return false;
-        }
-        $shows = json_decode($json, true);
-        if ($shows) {
-            foreach ($shows as $show) {
-                if (!empty($show['id'])) {
-                    $values[] = [
-                        'name' => get_or_empty($show['name'], false),
-                        'tvmaze_id' => get_or_empty($show['id'], true),
-                        'tvrage_id' => get_or_empty($show['externals']['tvrage'], true),
-                        'thetvdb_id' => get_or_empty($show['externals']['thetvdb'], true),
-                    ];
-                    if (!empty($update['externals']['imdb']) && preg_match('/tt\d{7,8}$/', $update['externals']['imdb'])) {
-                        $values['imdb_id'] = get_or_empty($update['externals']['imdb'], false);
-                    }
-                }
-            }
-        }
-    }
-    if (!empty($values)) {
-        $fluent->insertInto('tvmaze')
-               ->values($values)
-               ->ignore()
-               ->execute();
+    $max = // TODO: review query
+$sql = "SELECT/INSERT/UPDATE/DELETE ...";
+$this->db->perform($sql, [/* params */]);;
     }
 
     $time_end = microtime(true);

@@ -69,9 +69,9 @@ if (!$row || !is_file($fn) || !is_readable($fn)) {
         'torrentid' => $id,
         'multiplier' => $multiplier,
     ];
-    $fluent->insertInto('happyhour')
-           ->values($values)
-           ->execute();
+    // TODO: review query
+$sql = "SELECT/INSERT/UPDATE/DELETE ...";
+$this->db->perform($sql, [/* params */]);;
 }
 if ($site_config['bonus']['on'] && $row['owner'] != $user['id']) {
     $downloaded = $cache->get('downloaded_' . $user['id'] . '_' . $id);
@@ -94,10 +94,9 @@ $torrent_class->update($update, $id);
 
 if (isset($_GET['slot'])) {
     $added = TIME_NOW + 14 * 86400;
-    $slot = $fluent->from('freeslots')
-                   ->where('torrentid = ?', $id)
-                   ->where('userid = ?', $user['id'])
-                   ->fetch();
+    $slot = // TODO: review query
+$sql = "SELECT/INSERT/UPDATE/DELETE ...";
+$this->db->perform($sql, [/* params */]);;
     $used_slot = $slot['torrentid'] === $id && $slot['userid'] === $user['id'];
     if ($_GET['slot'] === 'free') {
         if ($used_slot && $slot['free'] === 'yes') {
@@ -120,9 +119,9 @@ if (isset($_GET['slot'])) {
             'free' => 'yes',
             'addedfree' => $added,
         ];
-        $fluent->insertInto('freeslots', $values)
-               ->onDuplicateKeyUpdate($update)
-               ->execute();
+        // TODO: review query
+$sql = "SELECT/INSERT/UPDATE/DELETE ...";
+$this->db->perform($sql, [/* params */]);;
     } elseif ($_GET['slot'] === 'double') {
         if ($used_slot && $slot['doubleup'] === 'yes') {
             show_error(_('Error'), _('Doubleseed slot already in use.'));
@@ -144,9 +143,9 @@ if (isset($_GET['slot'])) {
             'doubleup' => 'yes',
             'addedup' => $added,
         ];
-        $fluent->insertInto('freeslots', $values)
-               ->onDuplicateKeyUpdate($update)
-               ->execute();
+        // TODO: review query
+$sql = "SELECT/INSERT/UPDATE/DELETE ...";
+$this->db->perform($sql, [/* params */]);;
     } else {
         show_error(_('Error'), _('An unknown error has occurred.'));
     }

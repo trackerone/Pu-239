@@ -31,36 +31,9 @@ $db = $container->get(Database::class);, $site_config, $CURUSER;
 $_forum_sort = isset($CURUSER['forum_sort']) ? $CURUSER['forum_sort'] : 'DESC';
 $fluent = $db; // alias
 $fluent = $container->get(Database::class);
-$arr = $fluent->from('topics AS t')
-              ->select(null)
-              ->select('t.id AS topic_id')
-              ->select('t.user_id')
-              ->select('t.topic_name')
-              ->select('t.locked')
-              ->select('t.last_post')
-              ->select('t.sticky')
-              ->select('t.status')
-              ->select('t.views')
-              ->select('t.poll_id')
-              ->select('t.num_ratings')
-              ->select('t.rating_sum')
-              ->select('t.topic_desc')
-              ->select('t.forum_id')
-              ->select('t.anonymous')
-              ->select('t.user_likes')
-              ->select('f.name AS forum_name')
-              ->select('f.min_class_read')
-              ->select('f.min_class_write')
-              ->select('f.parent_forum')
-              ->innerJoin('forums AS f ON t.forum_id=f.id')
-              ->where('t.id = ?', $topic_id);
-if (!has_access($CURUSER['class'], UC_STAFF, 'forum_mod')) {
-    $arr = $arr->where('t.status = "ok"');
-}
-if (!has_access($CURUSER['class'], $site_config['forum_config']['min_delete_view_class'], 'forum_mod')) {
-    $arr = $arr->where('t.status != "deleted"');
-}
-$arr = $arr->fetch();
+$arr = // TODO: review query
+$sql = "SELECT/INSERT/UPDATE/DELETE ...";
+$this->db->perform($sql, [/* params */]);;
 if (empty($arr) || !has_access($CURUSER['class'], $arr['min_class_read'], '') || !is_valid_id($arr['topic_id']) || !has_access($CURUSER['class'], $site_config['forum_config']['min_delete_view_class'], '') && $status === 'deleted' || !has_access($CURUSER['class'], UC_STAFF, '') && $status === 'recycled') {
     stderr(_('Error'), _('Invalid ID.'));
 }
@@ -89,26 +62,14 @@ $topic_name = !empty($arr['topic_name']) ? format_comment($arr['topic_name']) : 
 $topic_desc1 = !empty($arr['topic_desc']) ? format_comment($arr['topic_desc']) : '';
 
 if ($arr['poll_id'] > 0) {
-    $arr_poll = $fluent->from('forum_poll')
-                       ->where('id = ?', $arr['poll_id'])
-                       ->fetch();
+    $arr_poll = // TODO: review query
+$sql = "SELECT/INSERT/UPDATE/DELETE ...";
+$this->db->perform($sql, [/* params */]);;
     if (!empty($arr_poll)) {
         if (has_access($CURUSER['class'], UC_STAFF, '')) {
-            $query = $fluent->from('forum_poll_votes')
-                            ->where('forum_poll_votes.id>0')
-                            ->where('poll_id = ?', $arr['poll_id']);
-            $who_voted = $query ? '<hr>' : 'no votes yet';
-            foreach ($query as $arr_poll_voted) {
-                $who_voted .= format_username((int) $arr_poll_voted['user_id']);
-            }
-        }
-
-        $query = $fluent->from('forum_poll_votes')
-                        ->select(null)
-                        ->select('options')
-                        ->where('poll_id = ?', $arr['poll_id'])
-                        ->where('user_id = ?', $CURUSER['id'])
-                        ->fetchAll();
+            $query = // TODO: review query
+$sql = "SELECT/INSERT/UPDATE/DELETE ...";
+$this->db->perform($sql, [/* params */]);;
 
         $voted = 0;
         $members_vote = 1000;
@@ -122,194 +83,30 @@ if ($arr['poll_id'] > 0) {
         $poll_open = $arr_poll['poll_closed'] === 'yes' || $arr_poll['poll_starts'] > TIME_NOW || ($arr_poll['poll_ends'] != 1356048000 && $arr_poll['poll_ends'] < TIME_NOW) ? 0 : 1;
         $poll_options = json_decode($arr_poll['poll_answers'], true);
         $multi_options = $arr_poll['multi_options'];
-        $total_votes = $fluent->from('forum_poll_votes')
-                              ->select(null)
-                              ->select('COUNT(id) AS count')
-                              ->where('options < 21')
-                              ->where('poll_id = ?', $arr['poll_id'])
-                              ->fetch('count');
-
-        $num_non_votes = $fluent->from('forum_poll_votes')
-                                ->select(null)
-                                ->select('COUNT(id) AS count')
-                                ->where('options > 20')
-                                ->where('poll_id = ?', $arr['poll_id'])
-                                ->fetch('count');
-
-        $total_non_votes = $num_non_votes > 0 ? ' [ ' . _pfe('{0} member just wanted to see the results', '{0} members just wanted to see the results', number_format($num_non_votes)) . ' ]' : '';
-        $topic_poll .= ($voted || $poll_open === 0 ? '' : '
-    <form action="' . $site_config['paths']['baseurl'] . '/forums.php?action=poll" method="post" name="poll" accept-charset="utf-8">
-        <input type="hidden" name="topic_id" value="' . $topic_id . '">
-        <input type="hidden" name="action_2" value="poll_vote">') . '
-        <div class="level-wide bottom20 padding20">
-            <div class="level-left">
-                <img src="' . $image . '" data-src="' . $site_config['paths']['images_baseurl'] . 'forums/poll.gif" alt="" class="tooltipper emoticon lazy">
-            </div>
-            <div class="level-center-center size_7">
-                <img src="' . $image . '" data-src="' . $site_config['paths']['images_baseurl'] . 'forums/poll_question.png" alt="" class="tooltipper emoticon lazy right20">           
-                ' . format_comment($arr_poll['question']) . '
-            </div>
-            <div class="level-right">
-                <span class="right20">' . ($arr_poll['poll_closed'] === 'yes' ? 'Poll :: Closed</span>' : ($arr_poll['poll_starts'] > TIME_NOW ? 'Poll :: Starts: </span>' . get_date((int) $arr_poll['poll_starts'], '') : ($arr_poll['poll_ends'] == 1356048000 ? '</span>' : ($arr_poll['poll_ends'] > TIME_NOW ? 'Poll :: Ends: </span>' . get_date((int) $arr_poll['poll_ends'], 'LONG', 0, 1) : '</span>')))) . ($CURUSER['class'] < UC_STAFF ? '' : '
-                    <a href="' . $site_config['paths']['baseurl'] . '/forums.php?action=poll&amp;action_2=poll_edit&amp;topic_id=' . $topic_id . '" class="is-link">
-                        <img src="' . $image . '" data-src="' . $site_config['paths']['images_baseurl'] . 'forums/modify.gif" alt="" class="tooltipper emoticon lazy" title="' . _('Edit') . '">
-                    </a>
-                    <a href="' . $site_config['paths']['baseurl'] . '/forums.php?action=poll&amp;action_2=poll_reset&amp;topic_id=' . $topic_id . '" class="is-link">
-                        <img src="' . $image . '" data-src="' . $site_config['paths']['images_baseurl'] . 'forums/stop_watch.png" alt=" " class="tooltipper emoticon lazy" title="' . _('Reset') . '">
-                    </a>' . (($arr_poll['poll_ends'] > TIME_NOW || $arr_poll['poll_closed'] === 'no') ? '
-                    <a href="' . $site_config['paths']['baseurl'] . '/forums.php?action=poll&amp;action_2=poll_close&amp;topic_id=' . $topic_id . '" class="is-link">
-                        <img src="' . $image . '" data-src="' . $site_config['paths']['images_baseurl'] . 'forums/clock.png" alt="" class="emoticon lazy" title="Close">
-                    </a>' : '
-                    <a href="' . $site_config['paths']['baseurl'] . '/forums.php?action=poll&amp;action_2=poll_open&amp;topic_id=' . $topic_id . '" class="is-link">
-                        <img src="' . $image . '" data-src="' . $site_config['paths']['images_baseurl'] . 'forums/clock.png" alt="" class="emoticon lazy" title="' . _('Start') . '">
-                    </a>') . '
-                    <a href="' . $site_config['paths']['baseurl'] . '/forums.php?action=poll&amp;action_2=poll_delete&amp;topic_id=' . $topic_id . '" class="is-link">
-                        <img src="' . $image . '" data-src="' . $site_config['paths']['images_baseurl'] . 'forums/delete.gif" alt="" class="tooltipper emoticon lazy" title="' . _('Delete') . '">
-                    </a>') . '
-                </span>
-            </div>
-        </div>' . (($voted || $poll_open === 0) ? '' : '
-        <div class="has-text-centered bottom20 bg-02 min-350 w-50 round10 padding20">
-            <h3 class="bottom20">You may select up to ' . $multi_options . ' option' . plural($multi_options) . '.</h3>');
-        $number_of_options = $arr_poll['number_of_options'];
-        for ($i = 0; $i < $number_of_options; ++$i) {
-            if ($voted) {
-                $vote_count = $fluent->from('forum_poll_votes')
-                                     ->select(null)
-                                     ->select('COUNT(id) AS count')
-                                     ->where('options = ?', $i)
-                                     ->where('poll_id = ?', $arr['poll_id'])
-                                     ->fetch('count');
-
-                $math = $vote_count > 0 ? round(($vote_count / $total_votes) * 100) : 0;
-                $math_text = $math . '% with ' . $vote_count . ' vote' . plural($vote_count);
-                $math_image = '
-            <div style="padding: 0; background-image: url(' . $site_config['paths']['images_baseurl'] . '/forums/vote_img_bg.gif); background-repeat: repeat-x">
-                <span class="tooltipper" title="' . $math_text . '">
-                    <i class="icon-search icon" aria-hidden="true"></i>
-                </span>
-            </div>';
-            }
-            $topic_poll .= ($voted || $poll_open === 0 ? '' : '
-            <span class="level-center-center padding10">
-                <span class="right20">' . ($multi_options === 1 ? '
-                    <input type="radio" name="vote" value="' . $i . '" class="right10">' : '
-                    <input type="checkbox" name="vote[]" id="vote[]" value="' . $i . '" class="right10"> ') . ($i + 1) . '.
-                </span>
-                <span>' . format_comment($poll_options[$i]) . $math_image . $math_text . (in_array($i, $members_votes) ? '
-                    <img src="' . $image . '" data-src="' . $site_config['paths']['images_baseurl'] . 'forums/check.gif" alt=" " class="tooltipper emoticon lazy">' . _('Your vote') . '!' : '') . '
-                </span>
-            </span>');
-        }
-        $topic_poll .= ($change_vote === 1 && $voted ? '
-            <a href="' . $site_config['paths']['baseurl'] . '/forums.php?action=poll&amp;action_2=reset_vote&amp;topic_id=' . $topic_id . '" class="is-link">
-                <img src="' . $image . '" data-src="' . $site_config['paths']['images_baseurl'] . 'forums/stop_watch.png" alt="" class="tooltipper emoticon lazy"> ' . _('Reset Your Vote') . '!
-            </a>' : '') . ($voted ? _('Total votes') . ': ' . number_format($total_votes) . $total_non_votes . ($CURUSER['class'] < UC_STAFF ? '' : '<br>
-            <a class="is-link"  title="' . _('List voters') . '" id="toggle_voters">' . _('List voters') . '</a>
-            <div id="voters" style="display:none">' . $who_voted . '</div>') : ($poll_open === 0 ? '' : '
-            <div class="margin20">' . ($multi_options === 1 ? '
-                <input type="radio" name="vote" value="666">' : '
-                <input type="checkbox" name="vote[]" id="vote[]" value="666">') . '
-                <span class="left10">' . _('I just want to see the results') . '!</span>
-            </div>') . ($voted || $poll_open === 0 ? '' : '
-            <div class="has-text-centered">
-                <input type="submit" name="button" class="button is-small" value="' . _('Vote') . '!">
-            </div>'));
-
-        $topic_poll .= ($voted || $poll_open === 0 ? '' : '
-        </div>') . '
-    </form>';
-    }
-}
-$topic_poll = main_div($topic_poll, '', 'has-text-centered padding20');
-if (isset($_GET['search'])) {
-    $search = htmlsafechars($_GET['search']);
-    $topic_name = highlightWords($topic_name, $search);
-}
-$forum_desc = (!empty($arr['topic_desc']) ? '<span>' . htmlsafechars($arr['topic_desc']) . '</span>' : '');
-$locked = ($arr['locked'] === 'yes' ? 'yes' : 'no');
-$sticky = ($arr['sticky'] === 'yes' ? 'yes' : 'no');
-$views = number_format($arr['views']);
-
-$forum_name = htmlsafechars($arr['forum_name']);
-
-if ($arr['num_ratings'] != 0) {
-    $rating = round($arr['rating_sum'] / $arr['num_ratings'], 1);
-}
-
-$subscribed = $fluent->from('subscriptions')
-                     ->select(null)
-                     ->select('id')
-                     ->where('topic_id = ?', $topic_id)
-                     ->where('user_id = ?', $CURUSER['id'])
-                     ->fetch('id');
-
-$subscriptions = $subscribed ? "<a href='{$site_config['paths']['baseurl']}/forums.php?action=delete_subscription&amp;topic_id={$topic_id}'>" . _('Unsubscribe from this topic') . '</a>' : "
-        <a href='{$site_config['paths']['baseurl']}/forums.php?action=add_subscription&amp;forum_id={$forum_id}&amp;topic_id={$topic_id}'>" . _('Subscribe to this topic') . '</a>';
-
-$values = [
-    'user_id' => $CURUSER['id'],
-    'forum_id' => $forum_id,
-    'topic_id' => $topic_id,
-    'added' => TIME_NOW,
-];
-$fluent->deleteFrom('now_viewing')
-       ->where('user_id = ?', $CURUSER['id'])
-       ->execute();
+        $total_votes = // TODO: review query
+$sql = "SELECT/INSERT/UPDATE/DELETE ...";
+$this->db->perform($sql, [/* params */]);;
 if (!get_anonymous($CURUSER['id'])) {
-    $fluent->insertInto('now_viewing')
-           ->values($values)
-           ->execute();
+    // TODO: review query
+$sql = "SELECT/INSERT/UPDATE/DELETE ...";
+$this->db->perform($sql, [/* params */]);;
 }
 $cache = $container->get(Cache::class);
 $topic_users_cache = $cache->get('now_viewing_topic_');
 if ($topic_users_cache === false || is_null($topic_users_cache)) {
     $topicusers = '';
     $topic_users_cache = [];
-    $query = $fluent->from('now_viewing')
-                    ->select(null)
-                    ->select('now_viewing.user_id')
-                    ->select('users.perms')
-                    ->innerJoin('users ON now_viewing.user_id=users.id')
-                    ->where('topic_id = ?', $topic_id)
-                    ->where('users.anonymous_until < ?', TIME_NOW)
-                    ->where('users.perms < ?', PERMS_STEALTH)
-                    ->where('users.paranoia < ?', 2);
-
-    foreach ($query as $row) {
-        $list[] = format_username((int) $row['user_id']);
-    }
-
-    $topicusers = empty($list) ? '' : implode(',&nbsp;&nbsp;', $list);
-    $topic_users_cache['topic_users'] = $topicusers;
-    $topic_users_cache['actcount'] = empty($list) ? 0 : count($list);
-    $cache->set('now_viewing_topic_', $topic_users_cache, $site_config['expires']['forum_users']);
-}
-if (!$topic_users_cache['topic_users']) {
-    $topic_users_cache['topic_users'] = _('There have been no active users in the last 15 minutes.');
-}
-
-$topic_users = $topic_users_cache['topic_users'];
-if (!empty($topic_users)) {
-    $topic_users = _('Currently viewing this topic') . ': ' . $topic_users;
-}
-
-$set = [
-    'views' => new Literal('views + 1'),
-];
-$fluent->update('topics')
-       ->set($set)
-       ->where('id = ?', $topic_id)
-       ->execute();
+    $query = // TODO: review query
+$sql = "SELECT/INSERT/UPDATE/DELETE ...";
+$this->db->perform($sql, [/* params */]);;
 
 $res_count = $db->run(');
     $attachments = '';
 }
 
-$fluent->deleteFrom('read_posts')
-       ->where('user_id = ?', $CURUSER['id'])
-       ->where('topic_id = ?', $topic_id)
-       ->execute();
+// TODO: review query
+$sql = "SELECT/INSERT/UPDATE/DELETE ...";
+$this->db->perform($sql, [/* params */]);;
 
 $values = [
     'user_id' => $CURUSER['id'],
@@ -319,9 +116,9 @@ $values = [
 $update = [
     'last_post_read' => $postid,
 ];
-$fluent->insertInto('read_posts', $values)
-       ->onDuplicateKeyUpdate($update)
-       ->execute();
+// TODO: review query
+$sql = "SELECT/INSERT/UPDATE/DELETE ...";
+$this->db->perform($sql, [/* params */]);;
 $cache->delete('last_read_post_' . $topic_id . '_' . $CURUSER['id']);
 $cache->delete('sv_last_read_post_' . $topic_id . '_' . $CURUSER['id']);
 $HTMLOUT .= '

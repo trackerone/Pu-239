@@ -68,13 +68,9 @@ function notify_owner(array $tids)
         return false;
     }
     $fluent = $container->get(Database::class);
-    $torrents = $fluent->from('torrents')
-                       ->select(null)
-                       ->select('id')
-                       ->select('owner')
-                       ->select('name')
-                       ->where('id', $tids)
-                       ->fetch();
+    $torrents = // TODO: review query
+$sql = "SELECT/INSERT/UPDATE/DELETE ...";
+$this->db->perform($sql, [/* params */]);;
 
     $dt = TIME_NOW;
     $subject = _('Dead Torrent Notice');
@@ -90,10 +86,9 @@ function notify_owner(array $tids)
         $set = [
             'notified' => $dt,
         ];
-        $fluent->update('deathrow')
-               ->set($set)
-               ->where('tid = ?', $torrent['id'])
-               ->execute();
+        // TODO: review query
+$sql = "SELECT/INSERT/UPDATE/DELETE ...";
+$this->db->perform($sql, [/* params */]);;
     }
     if (!empty($values)) {
         $messages_class = $container->get(Message::class);
@@ -126,116 +121,22 @@ $dz_time = TIME_NOW - $z_time;
 
 $dead = $ids = [];
 $fluent = $container->get(Database::class);
-$query1 = $fluent->from('torrents AS t')
-                 ->select(null)
-                 ->select('t.id')
-                 ->select('t.name')
-                 ->select('t.owner')
-                 ->select('u.username')
-                 ->leftJoin('users AS u ON t.owner = u.id')
-                 ->where('t.seeders + t.leechers = 0')
-                 ->where('t.last_action < ?', $dx_time);
-
-foreach ($query1 as $arr) {
-    $dead[] = [
-        'tid' => $arr['id'],
-        'torrent_name' => $arr['name'],
-        'uid' => $arr['owner'],
-        'username' => $arr['username'],
-        'reason' => 1,
-    ];
-    $ids[] = $arr['id'];
-}
-
-$query2 = $fluent->from('torrents AS t')
-                 ->select(null)
-                 ->select('t.id')
-                 ->select('t.name')
-                 ->select('t.owner')
-                 ->select('s.complete_date')
-                 ->select('u.username')
-                 ->leftJoin('users AS u ON t.owner = u.id')
-                 ->leftJoin('snatched AS s ON t.id=s.torrentid')
-                 ->where('t.seeders + t.leechers = 0')
-                 ->where('t.last_action < ?', $dx_time)
-                 ->where('s.complete_date>0');
-
-foreach ($query2 as $arr) {
-    if ($arr['complete_date'] < $dy_time && !in_array($arr['id'], $ids)) {
-        $dead[] = [
-            'tid' => $arr['id'],
-            'torrent_name' => $arr['name'],
-            'uid' => $arr['owner'],
-            'username' => $arr['username'],
-            'reason' => 2,
-        ];
-    }
-}
-
-$query3 = $fluent->from('torrents AS t')
-                 ->select(null)
-                 ->select('t.id')
-                 ->select('t.name')
-                 ->select('t.added')
-                 ->select('t.owner')
-                 ->select('p.last_action')
-                 ->select('u.username')
-                 ->leftJoin('users AS u ON t.owner = u.id')
-                 ->leftJoin('peers AS p ON t.id=p.torrent')
-                 ->where('t.seeders + t.leechers = 0')
-                 ->where('t.last_action < ?', $dx_time)
-                 ->where('t.added < ?', TIME_NOW - 86400);
-
-foreach ($query3 as $arr) {
-    if (empty($arr['last_action']) && !in_array($arr['id'], $ids)) {
-        $peer = $fluent->from('peers')
-                       ->select(null)
-                       ->select('id')
-                       ->where('torrent = ?', $arr['id'])
-                       ->where('seeder = "yes"')
-                       ->fetch('id');
-
-        if (empty($peer)) {
-            $dead[] = [
-                'tid' => $arr['id'],
-                'torrent_name' => $arr['name'],
-                'uid' => $arr['owner'],
-                'username' => $arr['username'],
-                'reason' => 3,
-            ];
-        }
-    }
-}
-
-$fluent->delete('deathrow')
-       ->from('deathrow')
-       ->innerJoin('peers AS p ON deathrow.tid=p.torrent')
-       ->where('p.seeder = "yes"')
-       ->execute();
+$query1 = // TODO: review query
+$sql = "SELECT/INSERT/UPDATE/DELETE ...";
+$this->db->perform($sql, [/* params */]);;
 
 foreach ($dead as $values) {
     $update = [
         'reason' => new Literal('VALUES(reason)'),
     ];
-    $fluent->insertInto('deathrow')
-           ->values($values)
-           ->onDuplicateKeyUpdate($update)
-           ->execute();
+    // TODO: review query
+$sql = "SELECT/INSERT/UPDATE/DELETE ...";
+$this->db->perform($sql, [/* params */]);;
 }
 
-$count = $fluent->from('deathrow')
-                ->select(null)
-                ->select('COUNT(uid) AS count')
-                ->fetch('count');
-
-if ($count) {
-    $perpage = 25;
-    $pager = pager($perpage, $count, 'staffpanel.php?tool=deathrow&amp;');
-    $torrents = $fluent->from('deathrow')
-                       ->orderBy('username')
-                       ->limit($pager['pdo']['limit'])
-                       ->offset($pager['pdo']['offset'])
-                       ->fetchAll();
+$count = // TODO: review query
+$sql = "SELECT/INSERT/UPDATE/DELETE ...";
+$this->db->perform($sql, [/* params */]);;
 
     $HTMLOUT .= "
         <h1 class='has-text-centered'>" . _pfe('{0} Torrent On Deathrow', '{0} Torrents On Deathrow', $count) . '</h1>' . ($count > $perpage ? $pager['pagertop'] : '') . "

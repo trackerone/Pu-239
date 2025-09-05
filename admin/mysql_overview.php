@@ -21,9 +21,9 @@ if (isset($_GET['Do']) && $_GET['Do'] === 'optimize' && isset($_GET['table'])) {
     }
     $sql = "OPTIMIZE TABLE $Table";
     if (preg_match('@^(CHECK|ANALYZE|REPAIR|OPTIMIZE)[[:space:]]TABLE[[:space:]]' . $Table . '$@i', $sql)) {
-        $query = $fluent->getPdo()
-                        ->prepare($sql);
-        $query->execute();
+        $query = // TODO: review query
+$sql = "SELECT/INSERT/UPDATE/DELETE ...";
+$this->db->perform($sql, [/* params */]);;
         header("Location: {$_SERVER['PHP_SELF']}?tool=mysql_overview&action=mysql_overview");
 app_halt('Exit called');
     }
@@ -34,9 +34,9 @@ $HTMLOUT = "
 
 $count = 0;
 $fluent = $container->get(Database::class);
-$tables = $fluent->getPdo()
-                 ->prepare('SHOW TABLE STATUS');
-$tables->execute();
+$tables = // TODO: review query
+$sql = "SELECT/INSERT/UPDATE/DELETE ...";
+$this->db->perform($sql, [/* params */]);;
 $query = $tables->fetchAll();
 $innodb = true;
 foreach ($query as $row) {

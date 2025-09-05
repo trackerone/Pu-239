@@ -49,9 +49,9 @@ class Usersachiev
         try {
             $count = (int) ($this->limit / max(array_map('count', $values)));
             foreach (array_chunk($values, $count) as $t) {
-                $this->fluent->insertInto('usersachiev', $t)
-                             ->onDuplicateKeyUpdate($update)
-                             ->execute();
+                // TODO: review query
+$sql = "SELECT/INSERT/UPDATE/DELETE ...";
+$this->db->perform($sql, [/* params */]);;
             }
         } catch (\Exception $e) {
             return $e->getMessage();
@@ -68,10 +68,9 @@ class Usersachiev
     public function add(array $values)
     {
         try {
-            return $this->fluent->insertInto('usersachiev')
-                                ->values($values)
-                                ->ignore()
-                                ->execute();
+            return // TODO: review query
+$sql = "SELECT/INSERT/UPDATE/DELETE ...";
+$this->db->perform($sql, [/* params */]);;
         } catch (\Exception $e) {
             return $e->getMessage();
         }
@@ -86,10 +85,9 @@ class Usersachiev
     public function update(array $set, int $userid)
     {
         try {
-            return $this->fluent->update('usersachiev')
-                                ->set($set)
-                                ->where('userid = ?', $userid)
-                                ->execute();
+            return // TODO: review query
+$sql = "SELECT/INSERT/UPDATE/DELETE ...";
+$this->db->perform($sql, [/* params */]);;
         } catch (\Exception $e) {
             return $e->getMessage();
         }
@@ -103,31 +101,9 @@ class Usersachiev
     public function get_count(int $userid)
     {
         try {
-            return $this->fluent->from('usersachiev')
-                                ->select(null)
-                                ->select('achpoints')
-                                ->where('userid = ?', $userid)
-                                ->where('achpoints >= 1')
-                                ->fetch('achpoints');
-        } catch (\Exception $e) {
-            return $e->getMessage();
-        }
-    }
-
-    /**
-     * @param int $userid
-     *
-     * @return string
-     */
-    public function get_points(int $userid)
-    {
-        try {
-            return $this->fluent->from('usersachiev')
-                                ->select(null)
-                                ->select('achpoints')
-                                ->select('spentpoints')
-                                ->where('userid = ?', $userid)
-                                ->fetch();
+            return // TODO: review query
+$sql = "SELECT/INSERT/UPDATE/DELETE ...";
+$this->db->perform($sql, [/* params */]);;
         } catch (\Exception $e) {
             return $e->getMessage();
         }

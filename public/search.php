@@ -44,13 +44,9 @@ if ($status === 5) {
 }
 if (!empty($search)) {
     $fluent = $container->get(Database::class);
-    $results = $fluent->from('torrents')
-                      ->select(null)
-                      ->select('id')
-                      ->select('name')
-                      ->select('hex(info_hash) AS info_hash')
-                      ->where('name LIKE ?', "%$search%")
-                      ->fetchAll();
+    $results = // TODO: review query
+$sql = "SELECT/INSERT/UPDATE/DELETE ...";
+$this->db->perform($sql, [/* params */]);;
 
     if ($results) {
         echo json_encode($results);

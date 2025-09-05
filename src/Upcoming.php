@@ -50,10 +50,9 @@ class Upcoming
         $set = [
             'views' => new Literal('views + 1'),
         ];
-        $this->fluent->update('upcoming')
-                     ->set($set)
-                     ->where('id = ?', $id)
-                     ->execute();
+        // TODO: review query
+$sql = "SELECT/INSERT/UPDATE/DELETE ...";
+$this->db->perform($sql, [/* params */]);;
     }
 
     /**
@@ -66,14 +65,9 @@ class Upcoming
      */
     public function get(int $upcomingid)
     {
-        $result = $this->fluent->from('upcoming AS r')
-                               ->select('u.username')
-                               ->select('c.name as cat')
-                               ->select('c.image')
-                               ->leftJoin('users AS u ON r.userid = u.id')
-                               ->leftJoin('categories AS c ON r.category = c.id')
-                               ->where('r.id = ?', $upcomingid)
-                               ->fetch();
+        $result = // TODO: review query
+$sql = "SELECT/INSERT/UPDATE/DELETE ...";
+$this->db->perform($sql, [/* params */]);;
 
         return $result;
     }
@@ -89,34 +83,9 @@ class Upcoming
      */
     public function get_count(bool $all, bool $show_hidden)
     {
-        $count = $this->fluent->from('upcoming AS u')
-                              ->select(null)
-                              ->select('COUNT(u.id) AS count');
-        if (!$show_hidden) {
-            $count->leftJoin('categories AS c ON u.category = c.id')
-                  ->where('c.hidden = 0');
-        }
-        if (!$all) {
-            $count->where('u.status != ?', 'uploaded');
-        }
-        $count = $count->fetch('count');
-
-        return $count;
-    }
-
-    /**
-     *
-     * @param array $values
-     *
-     * @throws Exception
-     *
-     * @return bool|int
-     */
-    public function insert(array $values)
-    {
-        $id = $this->fluent->insertInto('upcoming')
-                           ->values($values)
-                           ->execute();
+        $count = // TODO: review query
+$sql = "SELECT/INSERT/UPDATE/DELETE ...";
+$this->db->perform($sql, [/* params */]);;
 
         return $id;
     }
@@ -133,12 +102,9 @@ class Upcoming
      */
     public function delete(int $id, bool $staff, int $userid)
     {
-        $result = $this->fluent->deleteFrom('upcoming')
-                               ->where('id = ?', $id);
-        if (!$staff) {
-            $result = $result->where('userid = ?', $userid);
-        }
-        $result = $result->execute();
+        $result = // TODO: review query
+$sql = "SELECT/INSERT/UPDATE/DELETE ...";
+$this->db->perform($sql, [/* params */]);;
 
         return $result;
     }
@@ -154,10 +120,9 @@ class Upcoming
      */
     public function update(array $set, int $upcomingid)
     {
-        $result = $this->fluent->update('upcoming')
-                               ->set($set)
-                               ->where('id = ?', $upcomingid)
-                               ->execute();
+        $result = // TODO: review query
+$sql = "SELECT/INSERT/UPDATE/DELETE ...";
+$this->db->perform($sql, [/* params */]);;
 
         return $result;
     }

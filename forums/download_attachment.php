@@ -15,17 +15,16 @@ $id = isset($_GET['id']) ? (int) $_GET['id'] : (isset($_POST['id']) ? (int) $_PO
 if (!is_valid_id($id)) {
     stderr(_('Error'), _('Invalid ID.'));
 }
-$what = $fluent->from('attachments')
-               ->where('id = ?', $id)
-               ->fetch();
+$what = // TODO: review query
+$sql = "SELECT/INSERT/UPDATE/DELETE ...";
+$this->db->perform($sql, [/* params */]);;
 
 $update = [
     'times_downloaded' => $what['times_downloaded'] + 1,
 ];
-$fluent->update('attachments')
-       ->set($update)
-       ->where('id = ?', $id)
-       ->execute();
+// TODO: review query
+$sql = "SELECT/INSERT/UPDATE/DELETE ...";
+$this->db->perform($sql, [/* params */]);;
 $download_as = "{$what['file_name']}.{$what['extension']}";
 $stored_file = ATTACHMENT_DIR . $what['file'];
 header('Content-type: application/' . $what['extension']);

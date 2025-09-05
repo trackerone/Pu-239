@@ -80,9 +80,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 'added' => $date,
                 'owner' => $owner,
             ];
-            $id = $fluent->insertInto('subtitles')
-                         ->values($values)
-                         ->execute();
+            $id = // TODO: review query
+$sql = "SELECT/INSERT/UPDATE/DELETE ...";
+$this->db->perform($sql, [/* params */]);;
             move_uploaded_file($temp_name, UPLOADSUB_DIR . $filename);
             header("Refresh: 0; url=subtitles.php?mode=details&id=$id");
         }
@@ -91,9 +91,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             if ($id == 0) {
                 stderr(_('Error'), _('Invalid ID'));
             } else {
-                $arr = $fluent->from('subtitles')
-                              ->where('id = ?', $id)
-                              ->fetch();
+                $arr = // TODO: review query
+$sql = "SELECT/INSERT/UPDATE/DELETE ...";
+$this->db->perform($sql, [/* params */]);;
                 if (empty($arr)) {
                     stderr(_('Error'), _('Invalid ID'));
                 }
@@ -123,10 +123,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     $updateset['comment'] = $comment;
                 }
                 if (count($updateset) > 0) {
-                    $fluent->update('subtitle')
-                           ->set($updateset)
-                           ->where('id = ?', $id)
-                           ->execute();
+                    // TODO: review query
+$sql = "SELECT/INSERT/UPDATE/DELETE ...";
+$this->db->perform($sql, [/* params */]);;
                 }
                 header("Refresh: 0; url=subtitles.php?mode=details&id=$id");
             }
@@ -140,9 +139,9 @@ if ($mode === 'upload' || $mode === 'edit') {
         if ($id == 0) {
             stderr(_('Error'), _('Invalid ID'));
         } else {
-            $arr = $fluent->from('subtitles')
-                          ->where('id = ?', $id)
-                          ->fetch();
+            $arr = // TODO: review query
+$sql = "SELECT/INSERT/UPDATE/DELETE ...";
+$this->db->perform($sql, [/* params */]);;
             if (empty($arr)) {
                 stderr(_('Error'), _('Invalid ID'));
             }
@@ -264,9 +263,9 @@ if ($mode === 'upload' || $mode === 'edit') {
     if ($id == 0) {
         stderr(_('Error'), _('Invalid ID'));
     } else {
-        $arr = $fluent->from('subtitles')
-                      ->where('id = ?', $id)
-                      ->fetch();
+        $arr = // TODO: review query
+$sql = "SELECT/INSERT/UPDATE/DELETE ...";
+$this->db->perform($sql, [/* params */]);;
         if (empty($arr)) {
             stderr(_('Error'), _('Invalid ID'));
         }
@@ -274,9 +273,9 @@ if ($mode === 'upload' || $mode === 'edit') {
         if ($sure === 'no') {
             stderr(_('Sanity check...'), _fe('Your are about to delete subtitle <b>{0}</b>, Click {1}here{2} if you are sure.', format_comment($arr['name']) . "<a href='{$site_config['paths']['baseurl']}/subtitles.php?mode=delete&amp;id=$id&amp;sure=yes'>", '</a>'));
         } else {
-            $fluent->deleteFrom('subtitles')
-                   ->where('id = ?', $id)
-                   ->execute();
+            // TODO: review query
+$sql = "SELECT/INSERT/UPDATE/DELETE ...";
+$this->db->perform($sql, [/* params */]);;
             $file = UPLOADSUB_DIR . $arr['filename'];
             @unlink($file);
             header('Refresh: 0; url=subtitles.php');
@@ -287,9 +286,9 @@ if ($mode === 'upload' || $mode === 'edit') {
     if ($id == 0) {
         stderr(_('Error'), _('Invalid ID'));
     } else {
-        $arr = $fluent->from('subtitles AS s')
-                      ->where('s.id = ?', $id)
-                      ->fetch();
+        $arr = // TODO: review query
+$sql = "SELECT/INSERT/UPDATE/DELETE ...";
+$this->db->perform($sql, [/* params */]);;
         if (empty($arr)) {
             stderr(_('Error'), _('Invalid ID'));
         }
@@ -355,9 +354,9 @@ if ($mode === 'upload' || $mode === 'edit') {
     if ($id == 0) {
         stderr(_('Error'), _('Invalid ID'));
     } else {
-        $arr = $fluent->from('subtitles')
-                      ->where('id = ?', $id)
-                      ->fetch();
+        $arr = // TODO: review query
+$sql = "SELECT/INSERT/UPDATE/DELETE ...";
+$this->db->perform($sql, [/* params */]);;
         if (empty($arr)) {
             stderr(_('Error'), _('Invalid ID'));
         }
@@ -380,32 +379,9 @@ if ($mode === 'upload' || $mode === 'edit') {
 } else {
     $s = isset($_GET['s']) ? htmlsafechars($_GET['s']) : '';
     $w = isset($_GET['w']) ? htmlsafechars($_GET['w']) : '';
-    $count = $fluent->from('subtitles')
-                    ->select(null)
-                    ->select('COUNT(id) AS count');
-    $select = $fluent->from('subtitles AS s');
-    if ($s && $w === 'name') {
-        $count = $count->where('name LIKE ?', '%' . $s . '%');
-        $select = $select->where('s.name LIKE ?', '%' . $s . '%');
-    } elseif ($s && $w === 'imdb') {
-        $count = $count->where('imdb LIKE ?', '%' . $s . '%');
-        $select = $select->where('s.imdb LIKE ?', '%' . $s . '%');
-    } elseif ($s && $w === 'comment') {
-        $count = $count->where('comment LIKE ?', '%' . $s . '%');
-        $select = $select->where('s.comment LIKE ?', '%' . $s . '%');
-    }
-    $link = ($s && $w ? "s=$s&amp;w=$w&amp;" : '');
-    $count = $count->fetch('count');
-    $title = empty($s) ? _('Search') : _fe("Search result for <i>'{0}'</i>", format_comment($s));
-    if ($count === 0 && !$s && !$w) {
-        stdmsg(_('Error'), _fe('There are no subtitles, go {0}here{1} and start uploading.', '<a href="' . $site_config['paths']['baseurl'] . '/subtitles.php?mode=upload">', '</a>'));
-    }
-    $perpage = 15;
-    $pager = pager($perpage, $count, 'subtitles.php?' . $link);
-    $select = $select->orderBy('s.added')
-                     ->limit($pager['pdo']['limit'])
-                     ->offset($pager['pdo']['offset'])
-                     ->fetchAll();
+    $count = // TODO: review query
+$sql = "SELECT/INSERT/UPDATE/DELETE ...";
+$this->db->perform($sql, [/* params */]);;
     $HTMLOUT .= "
     <ul class='bg-06 level-center'>
         <li class='margin10'><a href='subtitles.php?mode=upload'>" . _('Upload a Subtitle') . "</a></li>

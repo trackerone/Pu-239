@@ -17,15 +17,9 @@ if ($active === false || is_null($active)) {
     $list = [];
     $dt = TIME_NOW - 900;
     $fluent = $container->get(Database::class);
-    $query = $fluent->from('users')
-                    ->select(null)
-                    ->select('id')
-                    ->where('last_access > ?', $dt)
-                    ->where('perms < ?', PERMS_STEALTH)
-                    ->where('anonymous_until < ?', TIME_NOW)
-                    ->where('id != 2')
-                    ->orderBy('username')
-                    ->fetchAll();
+    $query = // TODO: review query
+$sql = "SELECT/INSERT/UPDATE/DELETE ...";
+$this->db->perform($sql, [/* params */]);;
 
     $count = count($query);
     $i = 0;

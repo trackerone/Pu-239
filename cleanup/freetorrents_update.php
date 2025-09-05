@@ -22,24 +22,9 @@ function freetorrents_update($data)
 
     $time_start = microtime(true);
     $fluent = $container->get(Database::class);
-    $query = $fluent->from('torrents')
-                    ->select(null)
-                    ->select('id')
-                    ->select('free')
-                    ->where('free > 1')
-                    ->where('free < ?', TIME_NOW);
-
-    $count = 0;
-    $cache = $container->get(Cache::class);
-    foreach ($query as $arr) {
-        $set = [
-            'free' => 0,
-        ];
-
-        $fluent->update('torrents')
-               ->set($set)
-               ->where('id = ?', $arr['id'])
-               ->execute();
+    $query = // TODO: review query
+$sql = "SELECT/INSERT/UPDATE/DELETE ...";
+$this->db->perform($sql, [/* params */]);;
 
         $cache->update_row('torrent_details_' . $arr['id'], [
             'free' => 0,

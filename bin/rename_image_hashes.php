@@ -14,17 +14,13 @@ if (!isset($argv[1]) || $argv[1] !== 'rehash') {
 }
 
 $fluent = $container->get(Database::class);
-$urls = $fluent->from('images')
-               ->select('null')
-               ->select('url')
-               ->select('type')
-               ->fetchAll();
+$urls = // TODO: review query
+$sql = "SELECT/INSERT/UPDATE/DELETE ...";
+$this->db->perform($sql, [/* params */]);;
 
-$photos = $fluent->from('person')
-                 ->select(null)
-                 ->select('photo AS url')
-                 ->where('photo IS NOT NULL')
-                 ->fetchAll();
+$photos = // TODO: review query
+$sql = "SELECT/INSERT/UPDATE/DELETE ...";
+$this->db->perform($sql, [/* params */]);;
 
 $urls = array_merge($urls, $photos);
 $i = 0;
