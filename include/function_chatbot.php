@@ -130,9 +130,9 @@ function bot_respond($user)
                 'ttl' => 0,
                 'text' => $msg,
             ];
-            $fluent->insertInto('ajax_chat_messages')
-                   ->values($values)
-                   ->execute();
+            // TODO: review query
+$sql = "SELECT/INSERT/UPDATE/DELETE ...";
+$this->db->perform($sql, [/* params */]);;
 
             return true;
         }
@@ -257,8 +257,8 @@ function random_gifts($user)
             'text' => $msg,
         ];
         $fluent = $container->get(Database::class);
-        $fluent->insertInto('ajax_chat_messages')
-               ->values($values)
-               ->execute();
+        // TODO: review query
+$sql = "SELECT/INSERT/UPDATE/DELETE ...";
+$this->db->perform($sql, [/* params */]);;
     }
 }

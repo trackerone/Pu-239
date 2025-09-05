@@ -41,9 +41,9 @@ class Files
      */
     public function delete(int $id)
     {
-        $this->fluent->deleteFrom('files')
-                     ->where('torrent = ?', $id)
-                     ->execute();
+        // TODO: review query
+$sql = "SELECT/INSERT/UPDATE/DELETE ...";
+$this->db->perform($sql, [/* params */]);;
     }
 
     /**
@@ -56,9 +56,9 @@ class Files
      */
     public function insert(array $values)
     {
-        $id = $this->fluent->insertInto('files')
-            ->values($values)
-            ->execute();
+        $id = // TODO: review query
+$sql = "SELECT/INSERT/UPDATE/DELETE ...";
+$this->db->perform($sql, [/* params */]);;
 
         return $id;
     }

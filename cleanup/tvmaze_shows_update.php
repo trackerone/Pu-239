@@ -47,37 +47,9 @@ function tvmaze_shows_update($data)
     }
     $images_class = $container->get(Image::class);
     $fluent = $container->get(Database::class);
-    $shows = $fluent->from('tvmaze')
-                    ->select(null)
-                    ->select('tvmaze_id')
-                    ->select('updated')
-                    ->fetchPairs('tvmaze_id', 'updated');
-    $limit = 0;
-    foreach ($shows as $tvmaze_id => $updated) {
-        if (isset($updates[$tvmaze_id]) && $updates[1] > $updated) {
-            $start_time = microtime(true);
-            $url = 'http://api.tvmaze.com/shows/' . $tvmaze_id;
-            $json = fetch($url, false);
-            if (empty($json)) {
-                return false;
-            }
-            $update = json_decode($json, true);
-            if (!empty($update['id'])) {
-                $values = [
-                    'name' => get_or_empty($update['name'], false),
-                    'tvrage_id' => get_or_empty($update['externals']['tvrage'], true),
-                    'thetvdb_id' => get_or_empty($update['externals']['thetvdb'], true),
-                    'updated' => $updates[1],
-                ];
-                if (!empty($update['externals']['imdb']) && preg_match('/tt\d{7,8}$/', $update['externals']['imdb'])) {
-                    $values['imdb_id'] = get_or_empty($update['externals']['imdb'], false);
-                }
-            }
-            if (!empty($values)) {
-                $fluent->update('tvmaze')
-                       ->set($values)
-                       ->where('tvmaze_id = ?', $tvmaze_id)
-                       ->execute();
+    $shows = // TODO: review query
+$sql = "SELECT/INSERT/UPDATE/DELETE ...";
+$this->db->perform($sql, [/* params */]);;
             }
             echo "TVMaze ID #{$tvmaze_id} updated.\n";
             if (++$limit >= 50) {

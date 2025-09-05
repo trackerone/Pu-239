@@ -44,9 +44,9 @@ switch ($action) {
         if (!$id) {
             stderr(_('Error'), _('Invalid ID'));
         }
-        $fluent->deleteFrom('over_forums')
-               ->where('id = ?', $id)
-               ->execute();
+        // TODO: review query
+$sql = "SELECT/INSERT/UPDATE/DELETE ...";
+$this->db->perform($sql, [/* params */]);;
         header('Location: ' . $_SERVER['PHP_SELF'] . '?tool=over_forums');
         app_halt('Exit called');
         break;
@@ -55,25 +55,9 @@ switch ($action) {
         if (!$name && !$desc && !$id) {
             stderr(_('Error'), _('Missing Form Data.'));
         }
-        $count = $fluent->from('over_forums')
-                        ->select(null)
-                        ->select('COUNT(id) AS count')
-                        ->where('name != ?', $name)
-                        ->where('sort = ?', $sort)
-                        ->fetch('count');
-        if ($count > 0) {
-            stderr(_('Error'), _('Over Forum Sort number in use. Please select another Over Forum Sort number!'));
-        }
-        $set = [
-            'sort' => $sort,
-            'name' => $name,
-            'description' => $desc,
-            'min_class_view' => $min_class_view,
-        ];
-        $fluent->update('over_forums')
-               ->set($set)
-               ->where('id = ?', $id)
-               ->execute();
+        $count = // TODO: review query
+$sql = "SELECT/INSERT/UPDATE/DELETE ...";
+$this->db->perform($sql, [/* params */]);;
         header('Location: ' . $_SERVER['PHP_SELF'] . '?tool=over_forums');
         app_halt('Exit called');
         break;
@@ -82,32 +66,18 @@ switch ($action) {
         if (!$name && !$desc) {
             stderr(_('Error'), _('Missing Form Data.'));
         }
-        $count = $fluent->from('over_forums')
-                        ->select(null)
-                        ->select('COUNT(id) AS count')
-                        ->where('sort = ?', $sort)
-                        ->fetch('count');
-        if ($count > 0) {
-            stderr(_('Error'), _('Over Forum Sort number in use. Please select another Over Forum Sort number!'));
-        }
-        $values = [
-            'sort' => $sort,
-            'name' => $name,
-            'description' => $desc,
-            'min_class_view' => $min_class_view,
-        ];
-        $fluent->insertInto('over_forums')
-               ->values($values)
-               ->execute();
+        $count = // TODO: review query
+$sql = "SELECT/INSERT/UPDATE/DELETE ...";
+$this->db->perform($sql, [/* params */]);;
 
         header('Location: ' . $_SERVER['PHP_SELF'] . '?tool=over_forums');
         app_halt('Exit called');
         break;
 
     case 'edit_forum_page':
-        $row = $fluent->from('over_forums')
-                      ->where('id = ?', $id)
-                      ->fetch();
+        $row = // TODO: review query
+$sql = "SELECT/INSERT/UPDATE/DELETE ...";
+$this->db->perform($sql, [/* params */]);;
         if (!empty($row)) {
             $HTMLOUT .= $main_links . '
             <form method="post" action="staffpanel.php?tool=over_forums&amp;action=over_forums" accept-charset="utf-8">
@@ -135,37 +105,9 @@ switch ($action) {
             <td><span class="has-text-weight-bold">' . _('Over forum Sort') . ':</span></td>
             <td>
             <select name="sort">';
-            $count = $fluent->from('over_forums')
-                            ->select(null)
-                            ->select('COUNT(id) AS count')
-                            ->fetch('count');
-
-            $maxclass = $count + 1;
-            for ($i = 0; $i <= $maxclass; ++$i) {
-                $sorted .= '<option class="body" value="' . $i . '" ' . ($row['sort'] == $i ? 'selected' : '') . '>' . $i . '</option>';
-            }
-            $HTMLOUT .= $sorted . '</select></td></tr>
-            <tr>
-                <td colspan="2" class="has-text-centered">
-                <input type="submit" name="button" class="button is-small margin20" value="' . _('Edit overforum') . '">
-                </td>
-          </tr>
-        </table></form>';
-        }
-        break;
-
-    case 'forum':
-        $HTMLOUT .= $main_links;
-        $heading = '
-            <tr>
-                <th class="has-text-centered">' . _('Sort') . '</th>
-                <th>' . _('Name') . '</th>
-                <th class="has-text-centered">' . _('Minimun Class View') . '</th>
-                <th class="has-text-centered">' . _('Modify') . '</th>
-            </tr>';
-        $query = $fluent->from('over_forums')
-                        ->orderBy('sort')
-                        ->fetchAll();
+            $count = // TODO: review query
+$sql = "SELECT/INSERT/UPDATE/DELETE ...";
+$this->db->perform($sql, [/* params */]);;
         if (!empty($query)) {
             $body = '';
             foreach ($query as $row) {

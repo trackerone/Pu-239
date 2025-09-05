@@ -183,46 +183,9 @@ if (!$enabled) {
 } elseif ($viewer['id'] != $user['id']) {
     $friend = $cache->get('Friends_' . $user['id']);
     if ($friend === false || is_null($friend)) {
-        $friend = $fluent->from('friends')
-                         ->select(null)
-                         ->select('COUNT(id) AS count')
-                         ->where('userid = ?', $user['id'])
-                         ->where('friendid = ?', $viewer['id'])
-                         ->fetch('count');
-        $cache->set('Friends_' . $user['id'], $friend, $site_config['expires']['user_friends']);
-    }
-    $block = $cache->get('Blocks_' . $user['id']);
-    if ($block === false || is_null($block)) {
-        $block = $fluent->from('blocks')
-                        ->select(null)
-                        ->select('COUNT(id) AS count')
-                        ->where('userid = ?', $user['id'])
-                        ->where('blockid = ?', $viewer['id'])
-                        ->fetch('count');
-        $cache->set('Blocks_' . $user['id'], $block, $site_config['expires']['user_blocks']);
-    }
-    if ($friend > 0) {
-        $friend_links .= "<li class='is-link margin10'><a href='{$site_config['paths']['baseurl']}/friends.php?action=delete&amp;type=friend&amp;targetid=${user['id']}'>" . _('Remove from Friends') . '</a></li>';
-    } else {
-        $friend_links .= "<li class='is-link margin10'><a href='{$site_config['paths']['baseurl']}/friends.php?action=add&amp;type=friend&amp;targetid=${user['id']}'>" . _('Add to Friends') . '</a></li>';
-    }
-    if ($block > 0) {
-        $friend_links .= "<li class='is-link margin10'><a href='{$site_config['paths']['baseurl']}/friends.php?action=delete&amp;type=block&amp;targetid=${user['id']}'>" . _('Remove from Flocks') . '</a></li>';
-    } else {
-        $friend_links .= "<li class='is-link margin10'><a href='{$site_config['paths']['baseurl']}/friends.php?action=add&amp;type=block&amp;targetid=${user['id']}'>" . _('Add to Blocks') . '</a></li>';
-    }
-}
-
-if (has_access($viewer['class'], UC_STAFF, 'coder')) {
-    $shitty = '';
-    $shit_list = $cache->get('shit_list_' . $user['id']);
-    if ($shit_list === false || is_null($shit_list)) {
-        $suspect = $fluent->from('shit_list')
-                          ->select(null)
-                          ->select('suspect')
-                          ->where('userid = ?', $user['id'])
-                          ->where('suspect = ?', $viewer['id'])
-                          ->fetchAll();
+        $friend = // TODO: review query
+$sql = "SELECT/INSERT/UPDATE/DELETE ...";
+$this->db->perform($sql, [/* params */]);;
         $cache->set('shit_list_' . $user['id'], $shit_list, $site_config['expires']['shit_list']);
     }
     if ($shit_list > 0) {

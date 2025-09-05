@@ -26,29 +26,9 @@ if (empty($user)) {
 $fluent = $container->get(Database::class);
 $cache = $container->get(Cache::class);
 if ($private === 'true') {
-    $bookmark = $fluent->from('bookmarks')
-                       ->select(null)
-                       ->select('private')
-                       ->where('torrentid = ?', $tid)
-                       ->where('userid = ?', $user['id'])
-                       ->fetch('private');
-
-    if ($bookmark === 'yes') {
-        $private = 'no';
-        $text = _('Mark Bookmark Private!');
-    } else {
-        $private = 'yes';
-        $text = _('Mark Bookmark Public!');
-    }
-    $set = [
-        'private' => $private,
-    ];
-
-    $fluent->update('bookmarks')
-           ->set($set)
-           ->where('torrentid = ?', $tid)
-           ->where('userid = ?', $user['id'])
-           ->execute();
+    $bookmark = // TODO: review query
+$sql = "SELECT/INSERT/UPDATE/DELETE ...";
+$this->db->perform($sql, [/* params */]);;
 
     $cache->delete('bookmarks_' . $user['id']);
     echo json_encode([
@@ -61,17 +41,9 @@ if ($private === 'true') {
     app_halt('Exit called');
 }
 
-$bookmark = $fluent->from('bookmarks')
-                   ->select(null)
-                   ->select('id')
-                   ->where('torrentid = ?', $tid)
-                   ->where('userid = ?', $user['id'])
-                   ->fetch('id');
-
-if (!empty($bookmark)) {
-    $fluent->delete('bookmarks')
-           ->where('id = ?', $bookmark)
-           ->execute();
+$bookmark = // TODO: review query
+$sql = "SELECT/INSERT/UPDATE/DELETE ...";
+$this->db->perform($sql, [/* params */]);;
     $cache->delete('bookmarks_' . $user['id']);
     echo json_encode([
         'content' => 'deleted',
@@ -85,9 +57,9 @@ if (!empty($bookmark)) {
         'userid' => $user['id'],
         'torrentid' => $tid,
     ];
-    $fluent->insertInto('bookmarks')
-           ->values($values)
-           ->execute();
+    // TODO: review query
+$sql = "SELECT/INSERT/UPDATE/DELETE ...";
+$this->db->perform($sql, [/* params */]);;
     $cache->delete('bookmarks_' . $user['id']);
     echo json_encode([
         'content' => 'added',

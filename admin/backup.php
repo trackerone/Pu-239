@@ -31,9 +31,9 @@ $mode = (isset($_GET['mode']) ? $_GET['mode'] : (isset($_POST['mode']) ? $_POST[
 
 $fluent = $container->get(Database::class);
 if (empty($mode)) {
-    $backups = $fluent->from('dbbackup')
-                      ->orderBy('added DESC')
-                      ->fetchAll();
+    $backups = // TODO: review query
+$sql = "SELECT/INSERT/UPDATE/DELETE ...";
+$this->db->perform($sql, [/* params */]);;
 
     if ($backups) {
         $HTMLOUT .= "
@@ -164,9 +164,9 @@ if (empty($mode)) {
         'added' => $dt,
         'userid' => $CURUSER['id'],
     ];
-    $fluent->insertInto('dbbackup')
-           ->values($values)
-           ->execute();
+    // TODO: review query
+$sql = "SELECT/INSERT/UPDATE/DELETE ...";
+$this->db->perform($sql, [/* params */]);;
 
     if ($site_config['backup']['write_to_log']) {
         write_log($CURUSER['username'] . '(' . get_user_class_name((int) $CURUSER['class']) . ') ' . _('successfully backed-up the database.'));
@@ -183,11 +183,9 @@ if (empty($mode)) {
                 stderr(_('Error'), _('Invalid ID'));
             }
         }
-        $files = $fluent->from('dbbackup')
-                        ->select(null)
-                        ->select('name')
-                        ->where('id', $ids)
-                        ->fetchAll();
+        $files = // TODO: review query
+$sql = "SELECT/INSERT/UPDATE/DELETE ...";
+$this->db->perform($sql, [/* params */]);;
 
         if ($files) {
             $count = count($files);
@@ -200,9 +198,9 @@ if (empty($mode)) {
                     }
                 }
             }
-            $fluent->deleteFrom('dbbackup')
-                   ->where('id', $ids)
-                   ->execute();
+            // TODO: review query
+$sql = "SELECT/INSERT/UPDATE/DELETE ...";
+$this->db->perform($sql, [/* params */]);;
 
             if ($site_config['backup']['write_to_log']) {
                 write_log($CURUSER['username'] . '(' . get_user_class_name((int) $CURUSER['class']) . ') ' . _('successfully deleted') . ' ' . $count . ' ' . ($count > 1 ? _('databases') : _('database')) . '.');

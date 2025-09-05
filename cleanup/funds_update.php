@@ -32,15 +32,9 @@ function funds_update($data)
     $time_start = microtime(true);
     $dt = TIME_NOW;
     $fluent = $container->get(Database::class);
-    $sql = $fluent->from('users')
-                  ->select(null)
-                  ->select('id')
-                  ->select('modcomment')
-                  ->select('vipclass_before')
-                  ->where('donor = "yes"')
-                  ->where('donoruntil < ?', $dt)
-                  ->where('donoruntil != 0')
-                  ->fetchAll();
+    $sql = // TODO: review query
+$sql = "SELECT/INSERT/UPDATE/DELETE ...";
+$this->db->perform($sql, [/* params */]);;
     $msgs_buffer = [];
     if (!empty($sql)) {
         $user_class = $container->get(User::class);

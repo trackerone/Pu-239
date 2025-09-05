@@ -78,30 +78,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
     $fluent = $db; // alias
 $fluent = $container->get(Database::class);
-    $users = $fluent->from('peers')
-                    ->select(null)
-                    ->select('DISTINCT userid AS userid')
-                    ->where('connectable = "no"');
-
-    foreach ($users as $user) {
-        $values[] = [
-            'receiver' => $user['userid'],
-            'added' => $dt,
-            'msg' => $msg,
-            'subject' => 'Connectability',
-        ];
-    }
-    $session = $container->get(Session::class);
-    if (!empty($values)) {
-        $messages_class = $container->get(Message::class);
-        $messages_class->insert($values);
-        $values = [
-            'user' => $CURUSER['id'],
-            'date' => $dt,
-        ];
-        $fluent->insertInto('notconnectablepmlog')
-               ->values($values)
-               ->execute();
+    $users = // TODO: review query
+$sql = "SELECT/INSERT/UPDATE/DELETE ...";
+$this->db->perform($sql, [/* params */]);;
         $session->set('is-success', _('PM Sent to all non connectable peers'));
     } else {
         $session->set('is-warning', _('No non-connectable peers'));

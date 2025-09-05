@@ -84,13 +84,9 @@ foreach ($vars as $var) {
     }
 }
 $fluent = $container->get(Database::class);
-$res_cooker = $fluent->from('upcoming')
-                     ->select(null)
-                     ->select('id')
-                     ->select('name')
-                     ->where('torrentid = 0')
-                     ->orderBy('name')
-                     ->fetchAll();
+$res_cooker = // TODO: review query
+$sql = "SELECT/INSERT/UPDATE/DELETE ...";
+$this->db->perform($sql, [/* params */]);;
 
 if ($res_cooker) {
     $has_recipes = '
@@ -108,13 +104,9 @@ if ($res_cooker) {
                 </td>
             </tr>';
 }
-$res_requests = $fluent->from('requests')
-                       ->select(null)
-                       ->select('id')
-                       ->select('name')
-                       ->where('filled_by_user_id = 0')
-                       ->orderBy('name')
-                       ->fetchAll();
+$res_requests = // TODO: review query
+$sql = "SELECT/INSERT/UPDATE/DELETE ...";
+$this->db->perform($sql, [/* params */]);;
 
 if ($res_requests) {
     $has_requests = '
@@ -133,14 +125,9 @@ if ($res_requests) {
             </tr>';
 }
 
-$res_offers = $fluent->from('offers')
-                     ->select(null)
-                     ->select('id')
-                     ->select('name')
-                     ->where('userid = ?', $user['id'])
-                     ->where('status = "approved"')
-                     ->orderBy('name')
-                     ->fetchAll();
+$res_offers = // TODO: review query
+$sql = "SELECT/INSERT/UPDATE/DELETE ...";
+$this->db->perform($sql, [/* params */]);;
 
 if ($res_offers) {
     $has_offers = '

@@ -48,9 +48,9 @@ $valid_sort = [
 $column = isset($_GET['sort'], $valid_sort[$_GET['sort']]) ? $valid_sort[$_GET['sort']] : 'started';
 if (isset($_GET['delete']) && is_valid_id((int) $_GET['delete'])) {
     $fluent = $container->get(Database::class);
-    $fluent->deleteFrom('peers')
-           ->where('id = ?', (int) $_GET['delete'])
-           ->execute();
+    // TODO: review query
+$sql = "SELECT/INSERT/UPDATE/DELETE ...";
+$this->db->perform($sql, [/* params */]);;
     $session = $container->get(Session::class);
     $session->set('is-success', 'Peer ' . $_GET['delete'] . ' has been deleted.');
 }

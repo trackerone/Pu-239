@@ -75,26 +75,9 @@ function move_cat($params)
         stderr(_('Error'), _('You can not move torrents into the same category'));
     }
     $fluent = $container->get(Database::class);
-    $count = $fluent->from('categories')
-                    ->select(null)
-                    ->select('COUNT(id) AS count')
-                    ->where('id', [
-                        $params['id'],
-                        $params['new_cat_id'],
-                    ])
-                    ->fetch('count');
-
-    if ($count != 2) {
-        stderr(_('Error'), _('That category does not exist or has been deleted'));
-    }
-    $set = [
-        'category' => $params['new_cat_id'],
-    ];
-
-    $results = $fluent->update('torrents')
-                      ->set($set)
-                      ->where('category = ?', $params['id'])
-                      ->execute();
+    $count = // TODO: review query
+$sql = "SELECT/INSERT/UPDATE/DELETE ...";
+$this->db->perform($sql, [/* params */]);;
 
     flush_torrents($params['id']);
     flush_torrents($params['new_cat_id']);
@@ -199,9 +182,9 @@ function add_cat($params)
         'hidden' => $params['cat_hidden'],
     ];
     $fluent = $container->get(Database::class);
-    $insert = $fluent->insertInto('categories')
-                     ->values($values)
-                     ->execute();
+    $insert = // TODO: review query
+$sql = "SELECT/INSERT/UPDATE/DELETE ...";
+$this->db->perform($sql, [/* params */]);;
 
     $cache = $container->get(Cache::class);
     $cache->delete('genrelist_grouped_');
@@ -231,26 +214,16 @@ function delete_cat($params)
         stderr(_('Error'), _('No category ID selected'));
     }
     $fluent = $container->get(Database::class);
-    $cat = $fluent->from('categories')
-                  ->where('id = ?', $params['id'])
-                  ->fetch();
+    $cat = // TODO: review query
+$sql = "SELECT/INSERT/UPDATE/DELETE ...";
+$this->db->perform($sql, [/* params */]);;
 
     if (!$cat) {
         stderr(_('Error'), _('That category does not exist or has been deleted'));
     }
-    $count = $fluent->from('torrents')
-                    ->select(null)
-                    ->select('COUNT(id) AS count')
-                    ->where('category = ?', $params['id'])
-                    ->fetch('count');
-
-    if ($count) {
-        stderr(_('Error'), _('There are still torrents assigned to this category'));
-    }
-
-    $results = $fluent->deleteFrom('categories')
-                      ->where('id  = ?', $params['id'])
-                      ->execute();
+    $count = // TODO: review query
+$sql = "SELECT/INSERT/UPDATE/DELETE ...";
+$this->db->perform($sql, [/* params */]);;
 
     $cache->delete('genrelist_grouped_');
     $cache->delete('genrelist_ordered_');
@@ -282,82 +255,9 @@ function delete_cat_form($params)
         stderr(_('Error'), _('That category does not exist or has been deleted'));
     }
     $fluent = $container->get(Database::class);
-    $count = $fluent->from('torrents')
-                    ->select(null)
-                    ->select('COUNT(id) AS count')
-                    ->where('category = ?', $params['id'])
-                    ->fetch('count');
-
-    if ($count) {
-        stderr(_('Error'), _('There are still torrents assigned to this category'));
-    }
-
-    $htmlout = "
-        <form action='{$_SERVER['PHP_SELF']}?tool=categories' method='post' enctype='multipart/form-data' accept-charset='utf-8'>
-            <input type='hidden' name='mode' value='takedel_cat'>
-            <input type='hidden' name='id' value='{$cat['id']}'>";
-    $htmlout .= main_div("
-            <div class='w-50 has-text-centered padding20'>
-                <h2 class='has-text-centered'>" . _('You are about to delete category') . ": {$cat['name']}</h2>
-                <p class='has-text-danger level'>" . _('Cat Name') . ": <span class='has-text-primary'>{$cat['name']}</span></p>
-                <p class='has-text-danger level'>" . _('Parent Name') . ": <span class='has-text-primary'>{$cat['parent_name']}</span></p>
-                <p class='has-text-danger level'>" . _('Description') . ": <span class='has-text-primary'>{$cat['cat_desc']}</span></p>
-                <p class='has-text-danger level'>" . _('Image') . ": <span class='has-text-primary'>{$cat['image']}</span></p>
-                <input type='submit' class='button is-small right20' value='" . _('Delete') . "'>
-                <input type='button' class='button is-small' value='" . _('Cancel') . "' onclick=\"history.go(-1)\">
-            </div>");
-    $htmlout .= '
-        </form>';
-
-    $title = _('Delete Category');
-    $breadcrumbs = [
-        "<a href='{$site_config['paths']['baseurl']}/staffpanel.php'>" . _('Staff Panel') . '</a>',
-        "<a href='{$_SERVER['PHP_SELF']}'>$title</a>",
-    ];
-    echo stdhead($title, [], 'page-wrapper', $breadcrumbs) . wrapper($htmlout) . stdfoot();
-}
-
-/**
- * @param mixed $params
- *
- * @throws \Envms\FluentPDO\Exception
- * @throws Exception
- */
-function edit_cat($params)
-{
-    global $container;
-
-    $cache = $container->get(Cache::class);
-    if (!isset($params['id']) || !is_valid_id((int) $params['id'])) {
-        stderr(_('Error'), _('No category ID selected'));
-    }
-    foreach ([
-        'cat_name',
-        'cat_desc',
-        'parent_id',
-        'order_id',
-    ] as $x) {
-        if (!isset($params[$x])) {
-            stderr(_('Error'), _('Some fields were left blank '));
-        }
-    }
-    if (!empty($params['cat_image']) && !preg_match("/^[A-Za-z0-9_\-]+\.(?:gif|jpg|jpeg|png)$/i", $params['cat_image'])) {
-        stderr(_('Error'), _('File name is not allowed'));
-    }
-
-    $set = [
-        'name' => $params['cat_name'],
-        'cat_desc' => $params['cat_desc'],
-        'image' => !empty($params['cat_image']) ? $params['cat_image'] : '',
-        'ordered' => $params['order_id'],
-        'parent_id' => $params['parent_id'],
-        'hidden' => $params['cat_hidden'],
-    ];
-    $fluent = $container->get(Database::class);
-    $update = $fluent->update('categories')
-                     ->set($set)
-                     ->where('id = ?', $params['id'])
-                     ->execute();
+    $count = // TODO: review query
+$sql = "SELECT/INSERT/UPDATE/DELETE ...";
+$this->db->perform($sql, [/* params */]);;
 
     if ($update) {
         set_ordered($params);
@@ -563,11 +463,9 @@ function get_parents(array $cat)
     global $container;
 
     $fluent = $container->get(Database::class);
-    $parents = $fluent->from('categories')
-                      ->select('IF (cat_desc IS NULL, "", cat_desc) AS cat_desc')
-                      ->where('parent_id = 0')
-                      ->orderBy('ordered')
-                      ->fetchAll();
+    $parents = // TODO: review query
+$sql = "SELECT/INSERT/UPDATE/DELETE ...";
+$this->db->perform($sql, [/* params */]);;
 
     foreach ($parents as $parent) {
         $parent['name'] = format_comment($parent['name']);
@@ -606,18 +504,9 @@ function reorder_cats(bool $redirect = true)
     $fluent = $container->get(Database::class);
 
     $i = 0;
-    $cats = $fluent->from('categories')
-                   ->orderBy('ordered');
-
-    foreach ($cats as $cat) {
-        $set = [
-            'ordered' => ++$i,
-        ];
-
-        $fluent->update('categories')
-               ->set($set)
-               ->where('id = ?', $cat['id'])
-               ->execute();
+    $cats = // TODO: review query
+$sql = "SELECT/INSERT/UPDATE/DELETE ...";
+$this->db->perform($sql, [/* params */]);;
     }
 
     flush_torrents(0);
@@ -647,11 +536,9 @@ function set_ordered(array $params)
     $set = [
         'ordered' => new Literal('ordered + 1'),
     ];
-    $fluent->update('categories')
-           ->set($set)
-           ->where('ordered>= ?', $params['order_id'])
-           ->where('id != ?', $params['id'])
-           ->execute();
+    // TODO: review query
+$sql = "SELECT/INSERT/UPDATE/DELETE ...";
+$this->db->perform($sql, [/* params */]);;
 }
 
 /**
@@ -719,9 +606,9 @@ function get_cat(int $id)
     global $container;
 
     $fluent = $container->get(Database::class);
-    $cat = $fluent->from('categories')
-                  ->where('id = ?', $id)
-                  ->fetch();
+    $cat = // TODO: review query
+$sql = "SELECT/INSERT/UPDATE/DELETE ...";
+$this->db->perform($sql, [/* params */]);;
 
     $current_cat['parent_name'] = $fluent->from('categories')
                                          ->select(null)

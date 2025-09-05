@@ -19,16 +19,9 @@ $qid = (int) $_POST['qid'];
 $answer = $_POST['answer'];
 $userid = $user['id'];
 $fluent = $container->get(Database::class);
-$correct_answer = $fluent->from('triviaq')
-                         ->select('canswer')
-                         ->where('qid = ?', $qid)
-                         ->fetch('canswer');
-
-$user = $fluent->from('triviausers')
-               ->where('user_id = ?', $userid)
-               ->where('qid = ?', $qid)
-               ->where('gamenum = ?', $gamenum)
-               ->fetch();
+$correct_answer = // TODO: review query
+$sql = "SELECT/INSERT/UPDATE/DELETE ...";
+$this->db->perform($sql, [/* params */]);;
 
 $cleanup = trivia_time();
 
@@ -52,9 +45,9 @@ if (!empty($user)) {
         $answered = "<h3 class='has-text-danger top20'>" . _('Sorry, that was not the correct answer') . '</h3>';
         $values['correct'] = 0;
     }
-    $fluent->insertInto('triviausers')
-           ->values($values)
-           ->execute();
+    // TODO: review query
+$sql = "SELECT/INSERT/UPDATE/DELETE ...";
+$this->db->perform($sql, [/* params */]);;
 }
 $cache = $container->get(Cache::class);
 $cache->delete('triviaq_');

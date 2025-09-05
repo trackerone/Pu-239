@@ -31,9 +31,9 @@ if ($auth->hasRole(Roles::UPLOADER)) {
 }
 function check_status(Database $fluent, int $userid)
 {
-    $applicant = $fluent->from('uploadapp')
-        ->where('userid = ?', $userid)
-        ->fetch();
+    $applicant = // TODO: review query
+$sql = "SELECT/INSERT/UPDATE/DELETE ...";
+$this->db->perform($sql, [/* params */]);;
     if (!empty($applicant)) {
         if ($applicant['status'] === 'pending') {
             stderr(
@@ -99,9 +99,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         'creating' => htmlsafechars($_POST['creating']),
         'seeding' => htmlsafechars($_POST['seeding']),
     ];
-    $res = $fluent->insertInto('uploadapp')
-        ->values($values)
-        ->execute();
+    $res = // TODO: review query
+$sql = "SELECT/INSERT/UPDATE/DELETE ...";
+$this->db->perform($sql, [/* params */]);;
     $cache->delete('new_uploadapp_');
     if (!$res) {
         stderr(_('Error'), _fe('It appears something went wrong while sending your application. Please {0}try again{1}', "<a href='{$site_config['paths']['baseurl']}/uploadapp.php'>", '</a>'));
@@ -109,11 +109,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $subject = 'Uploader application';
         $msg = "An uploader application has just been filled in by [url={$site_config['paths']['baseurl']}/userdetails.php?id=" . (int) $user['id'] . "][b]{$user['username']}[/b][/url]. Click [url={$site_config['paths']['baseurl']}/staffpanel.php?tool=uploadapps&action=app][b]Here[/b][/url] to go to the uploader applications page.";
         $dt = TIME_NOW;
-        $subres = $fluent->from('users')
-            ->select(null)
-            ->select('id')
-            ->where('class >= ?', UC_STAFF)
-            ->fetchAll();
+        $subres = // TODO: review query
+$sql = "SELECT/INSERT/UPDATE/DELETE ...";
+$this->db->perform($sql, [/* params */]);;
 
         foreach ($subres as $arr) {
             $msgs_buffer[] = [
@@ -131,11 +129,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 }
 
 $ratio = member_ratio($user['uploaded'], $user['downloaded']);
-$connect = $fluent->from('peers')
-    ->select(null)
-    ->select('connectable')
-    ->where('userid = ?', $user['id'])
-    ->fetch();
+$connect = // TODO: review query
+$sql = "SELECT/INSERT/UPDATE/DELETE ...";
+$this->db->perform($sql, [/* params */]);;
 if (!empty($connect)) {
     $Conn_Y = 'yes';
     if ($connect == $Conn_Y) {

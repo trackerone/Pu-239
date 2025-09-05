@@ -50,23 +50,9 @@ class PollVoter
      */
     public function get_count()
     {
-        $search = $this->fluent->from('poll_voters')
-                               ->select('COUNT(vid) AS count')
-                               ->fetch('count');
-
-        return $search;
-    }
-
-    /**
-     * @param int $poll_id
-     *
-     * @throws Exception
-     */
-    public function delete(int $poll_id)
-    {
-        $this->fluent->deleteFrom('poll_voters')
-                     ->where('poll_id = ?', $poll_id)
-                     ->execute();
+        $search = // TODO: review query
+$sql = "SELECT/INSERT/UPDATE/DELETE ...";
+$this->db->perform($sql, [/* params */]);;
     }
 
     /**
@@ -77,9 +63,9 @@ class PollVoter
      */
     public function insert(array $values, array $update)
     {
-        $this->fluent->insertInto('poll_voters', $values)
-                     ->onDuplicateKeyUpdate($update)
-                     ->execute();
+        // TODO: review query
+$sql = "SELECT/INSERT/UPDATE/DELETE ...";
+$this->db->perform($sql, [/* params */]);;
     }
 
     /**
@@ -92,9 +78,9 @@ class PollVoter
      */
     public function add(array $values)
     {
-        $id = $this->fluent->insertInto('poll_voters')
-                           ->values($values)
-                           ->execute();
+        $id = // TODO: review query
+$sql = "SELECT/INSERT/UPDATE/DELETE ...";
+$this->db->perform($sql, [/* params */]);;
 
         return $id;
     }
@@ -126,14 +112,9 @@ class PollVoter
         if ($poll_data === false || is_null($poll_data)) {
             $poll_data = $this->polls_class->get_all(1);
             if (!empty($poll_data)) {
-                $vote_data = $this->fluent->from('poll_voters')
-                                          ->select(null)
-                                          ->select('user_id')
-                                          ->select('vote_date')
-                                          ->where('user_id = ?', $userid)
-                                          ->where('poll_id = ?', $poll_data['pid'])
-                                          ->limit(1)
-                                          ->fetch();
+                $vote_data = // TODO: review query
+$sql = "SELECT/INSERT/UPDATE/DELETE ...";
+$this->db->perform($sql, [/* params */]);;
 
                 $poll_data['user_id'] = $vote_data['user_id'];
                 $poll_data['vote_date'] = $vote_data['vote_date'];

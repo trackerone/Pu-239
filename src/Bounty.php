@@ -47,9 +47,9 @@ class Bounty
     public function add(array $values)
     {
         try {
-            $id = $this->fluent->insertInto('bounties')
-                               ->values($values)
-                               ->execute();
+            $id = // TODO: review query
+$sql = "SELECT/INSERT/UPDATE/DELETE ...";
+$this->db->perform($sql, [/* params */]);;
 
             return $id;
         } catch (\Exception $e) {
@@ -77,11 +77,9 @@ class Bounty
     public function update(array $update, int $userid, int $requestid)
     {
         try {
-            $id = $this->fluent->update('bounties')
-                               ->set($update)
-                               ->where('userid = ?', $userid)
-                               ->where('requestid = ?', $requestid)
-                               ->execute();
+            $id = // TODO: review query
+$sql = "SELECT/INSERT/UPDATE/DELETE ...";
+$this->db->perform($sql, [/* params */]);;
 
             return $id;
         } catch (\Exception $e) {
@@ -98,10 +96,9 @@ class Bounty
     public function pay(array $update, int $requestid)
     {
         try {
-            $id = $this->fluent->update('bounties')
-                               ->set($update)
-                               ->where('requestid = ?', $requestid)
-                               ->execute();
+            $id = // TODO: review query
+$sql = "SELECT/INSERT/UPDATE/DELETE ...";
+$this->db->perform($sql, [/* params */]);;
 
             return $id;
         } catch (\Exception $e) {
@@ -117,34 +114,9 @@ class Bounty
     public function get_sum(int $requestid)
     {
         try {
-            return $this->fluent->from('bounties')
-                                ->select(null)
-                                ->select('SUM(amount) AS bounty')
-                                ->where('requestid = ?', $requestid)
-                                ->fetch('bounty');
-        } catch (\Exception $e) {
-            return $e->getMessage();
-        }
-    }
-
-    /**
-     *
-     * @param int $requestid
-     *
-     * @throws Exception
-     *
-     * @return mixed
-     */
-    public function get_bounties(int $requestid)
-    {
-        $bounties = $this->fluent->from('bounties')
-                                 ->select(null)
-                                 ->select('userid')
-                                 ->select('SUM(amount) AS amount')
-                                 ->where('requestid = ?', $requestid)
-                                 ->orderBy('amount DESC')
-                                 ->groupBy('userid')
-                                 ->fetchAll();
+            return // TODO: review query
+$sql = "SELECT/INSERT/UPDATE/DELETE ...";
+$this->db->perform($sql, [/* params */]);;
 
         return $bounties;
     }

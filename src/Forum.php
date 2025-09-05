@@ -45,9 +45,9 @@ class Forum
      */
     public function delete(int $forum_id)
     {
-        $result = $this->fluent->deleteFrom('forums')
-                               ->where('id = ?', $forum_id)
-                               ->execute();
+        $result = // TODO: review query
+$sql = "SELECT/INSERT/UPDATE/DELETE ...";
+$this->db->perform($sql, [/* params */]);;
 
         return $result;
     }
@@ -63,10 +63,9 @@ class Forum
      */
     public function update(array $set, int $forum_id)
     {
-        $result = $this->fluent->update('forums')
-                               ->set($set)
-                               ->where('id = ?', $forum_id)
-                               ->execute();
+        $result = // TODO: review query
+$sql = "SELECT/INSERT/UPDATE/DELETE ...";
+$this->db->perform($sql, [/* params */]);;
 
         return $result;
     }
@@ -81,9 +80,9 @@ class Forum
      */
     public function add(array $values)
     {
-        $id = $this->fluent->insertInto('forums')
-                           ->values($values)
-                           ->execute();
+        $id = // TODO: review query
+$sql = "SELECT/INSERT/UPDATE/DELETE ...";
+$this->db->perform($sql, [/* params */]);;
 
         return $id;
     }
@@ -98,9 +97,9 @@ class Forum
      */
     public function get_forum(int $forum_id)
     {
-        $forum = $this->fluent->from('forums')
-                              ->where('id = ?', $forum_id)
-                              ->fetch();
+        $forum = // TODO: review query
+$sql = "SELECT/INSERT/UPDATE/DELETE ...";
+$this->db->perform($sql, [/* params */]);;
 
         return $forum;
     }

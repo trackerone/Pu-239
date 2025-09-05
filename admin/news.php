@@ -57,9 +57,9 @@ if ($mode === 'delete') {
         stderr(_('Error'), _('what are you doing?'));
     }
 
-    $fluent->deleteFrom('news')
-           ->where('id = ?', $newsid)
-           ->execute();
+    // TODO: review query
+$sql = "SELECT/INSERT/UPDATE/DELETE ...";
+$this->db->perform($sql, [/* params */]);;
     $cache->delete('latest_news_');
     $session->set('is-success', _('News entry deleted'));
     header("Location: {$site_config['paths']['baseurl']}/staffpanel.php?tool=news&mode=news");
@@ -87,9 +87,9 @@ if ($mode === 'delete') {
         'sticky' => $sticky,
         'anonymous' => $anonymous,
     ];
-    $results = $fluent->insertInto('news')
-                      ->values($values)
-                      ->execute();
+    $results = // TODO: review query
+$sql = "SELECT/INSERT/UPDATE/DELETE ...";
+$this->db->perform($sql, [/* params */]);;
     if (!empty($results)) {
         $cache->delete('latest_news_');
         $session->set('is-success', _('News entry was added successfully.'));
@@ -103,9 +103,9 @@ if ($mode === 'delete') {
     if (!is_valid_id($newsid)) {
         stderr(_('Error'), _('Invalid news item ID.'));
     }
-    $arr = $fluent->from('news')
-                  ->where('id = ?', $newsid)
-                  ->fetch();
+    $arr = // TODO: review query
+$sql = "SELECT/INSERT/UPDATE/DELETE ...";
+$this->db->perform($sql, [/* params */]);;
     if (empty($arr)) {
         stderr(_('Error'), _('No news item with that ID.'));
     }
@@ -126,10 +126,9 @@ if ($mode === 'delete') {
             'anonymous' => $anonymous,
             'title' => $title,
         ];
-        $fluent->update('news')
-               ->set($update)
-               ->where('id = ?', $newsid)
-               ->execute();
+        // TODO: review query
+$sql = "SELECT/INSERT/UPDATE/DELETE ...";
+$this->db->perform($sql, [/* params */]);;
         $cache->delete('latest_news_');
         $session->set('is-success', _('News item was edited successfully'));
         header("Location: {$site_config['paths']['baseurl']}/staffpanel.php?tool=news&mode=news");
@@ -195,10 +194,9 @@ if ($mode === 'delete') {
         echo stdhead($title, $stdhead, 'page-wrapper', $breadcrumbs) . wrapper($HTMLOUT) . stdfoot($stdfoot);
     }
 } elseif ($mode === 'news') {
-    $results = $fluent->from('news')
-                      ->orderBy('sticky')
-                      ->orderBy('added DESC')
-                      ->fetchAll();
+    $results = // TODO: review query
+$sql = "SELECT/INSERT/UPDATE/DELETE ...";
+$this->db->perform($sql, [/* params */]);;
     $HTMLOUT .= "
     <div class='portlet'>
         <h1 class='has-text-centered'>" . _('Submit News Item') . "</h1>

@@ -26,36 +26,21 @@ function torrents_update($data)
 
     $time_start = microtime(true);
     $fluent = $container->get(Database::class);
-    $torrents = $fluent->from('torrents')
-                       ->select(null)
-                       ->select('id')
-                       ->select('seeders')
-                       ->select('leechers')
-                       ->select('comments')
-                       ->select('times_completed')
-                       ->orderBy('id')
-                       ->fetchAll();
+    $torrents = // TODO: review query
+$sql = "SELECT/INSERT/UPDATE/DELETE ...";
+$this->db->perform($sql, [/* params */]);;
 
-    $peers = $fluent->from('peers')
-                    ->select(null)
-                    ->select('seeder')
-                    ->select('torrent')
-                    ->fetchAll();
+    $peers = // TODO: review query
+$sql = "SELECT/INSERT/UPDATE/DELETE ...";
+$this->db->perform($sql, [/* params */]);;
 
-    $comments = $fluent->from('comments')
-                       ->select(null)
-                       ->select('torrent')
-                       ->fetchAll();
+    $comments = // TODO: review query
+$sql = "SELECT/INSERT/UPDATE/DELETE ...";
+$this->db->perform($sql, [/* params */]);;
 
-    $snatches = $fluent->from('snatched AS s')
-                       ->select(null)
-                       ->select('s.torrentid')
-                       ->select('COUNT(s.id) AS count')
-                       ->leftJoin('torrents AS t ON s.torrentid = t.id')
-                       ->where('t.owner != s.userid')
-                       ->where('s.to_go = 0')
-                       ->groupBy('s.torrentid')
-                       ->fetchAll();
+    $snatches = // TODO: review query
+$sql = "SELECT/INSERT/UPDATE/DELETE ...";
+$this->db->perform($sql, [/* params */]);;
 
     $torrents_class = $container->get(Torrent::class);
     foreach ($torrents as $torrent) {

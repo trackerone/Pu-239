@@ -88,10 +88,9 @@ function getTVImagesByTVDb($thetvdb_id, $type = 'showbackground', $season = 0)
                     'type' => $type,
                     'lang' => !empty($image['lang']) ? $image['lang'] : 'unknown',
                 ];
-                $fluent->insertInto('images')
-                       ->values($values)
-                       ->ignore()
-                       ->execute();
+                // TODO: review query
+$sql = "SELECT/INSERT/UPDATE/DELETE ...";
+$this->db->perform($sql, [/* params */]);;
             }
 
             shuffle($images);

@@ -46,56 +46,17 @@ if ($score === 0) {
     header('Location: ' . $site_config['paths']['baseurl'] . "/arcade_top_scores.php#{$gname}");
     app_halt('Exit called');
 }
-$fluent->insertInto('flashscores')
-       ->values($values)
-       ->execute();
+// TODO: review query
+$sql = "SELECT/INSERT/UPDATE/DELETE ...";
+$this->db->perform($sql, [/* params */]);;
 
 $game_id = array_search($gname, $site_config['arcade']['games']);
 $game = $site_config['arcade']['game_names'][$game_id];
 $link = '[url=' . $site_config['paths']['baseurl'] . '/flash.php?gameURI=' . $gname . '.swf&gamename=' . $gname . '&game_id=' . $game_id . ']' . $game . '[/url]';
 $classColor = get_user_class_color($user['class']);
-$scores = $fluent->from('flashscores')
-                 ->select(null)
-                 ->select('score')
-                 ->where('game = ?', $gname)
-                 ->where('score != ?', $score)
-                 ->orderBy('level DESC')
-                 ->orderBy('score DESC')
-                 ->fetch('score');
-$highScore = !empty($scores) ? $scores : 0;
-if ($highScore < $score) {
-    $message = "[color=#$classColor][b]{$user['username']}[/b][/color] has just set a new high score of " . number_format($score) . " in $link and earned {$site_config['arcade']['top_score_points']} karma points.";
-    $bonuscomment = get_date((int) TIME_NOW, 'DATE', 1) . " - {$site_config['arcade']['top_score_points']} Points for setting a new high score in $game.\n ";
-    $set = [
-        'bonuscomment' => $bonuscomment . $user['bonuscomment'],
-        'seedbonus' => $site_config['arcade']['top_score_points'] + $user['seedbonus'],
-    ];
-    $users_class = $container->get(User::class);
-    $users_class->update($set, $user['id']);
-} elseif ($score >= .9 * $highScore) {
-    $message = "[color=#$classColor][b]" . format_comment($user['username']) . "[/b][/color] has just played $link and scored a whopping " . number_format($score) . '. Excellent! The high score remains ' . number_format($highScore) . '.';
-} else {
-    $message = "[color=#$classColor][b]" . format_comment($user['username']) . "[/b][/color] has just played $link and scored a measly " . number_format($score) . '. Try again. The high score remains ' . number_format($highScore) . '.';
-}
-if ($site_config['site']['autoshout_chat']) {
-    require_once INCL_DIR . 'function_users.php';
-    autoshout($message);
-}
-$high = $fluent->from('highscores')
-               ->select(null)
-               ->select('score')
-               ->where('game = ?', $gname)
-               ->fetch('score');
-if (!empty($high) && $score > $high) {
-    $update = [
-        'score' => $score,
-        'level' => $level,
-        'user_id' => $user['id'],
-    ];
-    $fluent->update('highscores')
-           ->set($update)
-           ->where('game = ?', $gname)
-           ->execute();
+$scores = // TODO: review query
+$sql = "SELECT/INSERT/UPDATE/DELETE ...";
+$this->db->perform($sql, [/* params */]);;
 } elseif (empty($high)) {
     $set = [
         'game' => $gname,
@@ -103,8 +64,8 @@ if (!empty($high) && $score > $high) {
         'level' => $level,
         'user_id' => $user['id'],
     ];
-    $fluent->insertInto('highscores')
-           ->values($values)
-           ->execute();
+    // TODO: review query
+$sql = "SELECT/INSERT/UPDATE/DELETE ...";
+$this->db->perform($sql, [/* params */]);;
 }
 header('Location: ' . $site_config['paths']['baseurl'] . "/arcade_top_scores.php#{$gname}");

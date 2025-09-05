@@ -25,9 +25,9 @@ function tables($no_data = '')
     $tables = $temp = [];
     $no_data = explode('|', $no_data);
     $fluent = $container->get(Database::class);
-    $query = $fluent->getPdo()
-                    ->prepare('SHOW TABLES');
-    $query->execute();
+    $query = // TODO: review query
+$sql = "SELECT/INSERT/UPDATE/DELETE ...";
+$this->db->perform($sql, [/* params */]);;
     $all_tables = $query->fetchAll();
 
     foreach ($all_tables as $values) {
@@ -93,18 +93,17 @@ function backupdb($data)
     $set = [
         'last_access' => $dt,
     ];
-    $fluent->update('users')
-           ->set($set)
-           ->where('id = ?', $site_config['chatbot']['id'])
-           ->execute();
+    // TODO: review query
+$sql = "SELECT/INSERT/UPDATE/DELETE ...";
+$this->db->perform($sql, [/* params */]);;
     $values = [
         'name' => $filename,
         'added' => $dt,
         'userid' => $site_config['site']['owner'],
     ];
-    $fluent->insertInto('dbbackup')
-           ->values($values)
-           ->execute();
+    // TODO: review query
+$sql = "SELECT/INSERT/UPDATE/DELETE ...";
+$this->db->perform($sql, [/* params */]);;
 
     $time_end = microtime(true);
     $run_time = $time_end - $time_start;

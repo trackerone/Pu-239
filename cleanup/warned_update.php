@@ -35,50 +35,9 @@ function warned_update($data)
     $time_start = microtime(true);
     $dt = TIME_NOW;
 
-    $res = $fluent->from('users')
-                  ->select(null)
-                  ->select('id')
-                  ->select('modcomment')
-                  ->where('warned < ?', $dt)
-                  ->where('warned > 1');
-
-    $subject = 'Warning expired.';
-    $msg = "Your Warning has timed out and has been auto-removed by the system. Cheers!\n";
-    $msgs = [];
-    $comment = get_date((int) $dt, 'DATE', 1) . " - Warning Automatically Removed By System.\n";
-    foreach ($res as $arr) {
-        $modcomment = $comment . $arr['modcomment'];
-        $msgs[] = [
-            'receiver' => $arr['id'],
-            'added' => $dt,
-            'msg' => $msg,
-            'subject' => $subject,
-        ];
-
-        $cache = $container->get(Cache::class);
-        $user = $cache->get('user_' . $arr['id']);
-        if (!empty($user)) {
-            $cache->update_row('user_' . $arr['id'], [
-                'warned' => 0,
-                'modcomment' => $modcomment,
-            ], $site_config['expires']['user_cache']);
-        }
-    }
-
-    $count = count($msgs);
-    if ($count) {
-        $messages_class = $container->get(Message::class);
-        $messages_class->insert($msgs);
-        $set = [
-            'warned' => 0,
-            'modcomment' => new Literal("CONCAT(\"$comment\", modcomment)"),
-        ];
-
-        $fluent->update('users')
-               ->set($set)
-               ->where('warned < ?', $dt)
-               ->where('warned > 1')
-               ->execute();
+    $res = // TODO: review query
+$sql = "SELECT/INSERT/UPDATE/DELETE ...";
+$this->db->perform($sql, [/* params */]);;
     }
 
     $time_end = microtime(true);

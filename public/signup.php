@@ -71,40 +71,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if (!empty($invite_id) && !empty($invite_code)) {
             $email = validate_invite($invite_id, $invite_code);
             if (!empty($email)) {
-                $inviter = $fluent->from('invite_codes')
-                                  ->select(null)
-                                  ->select('sender')
-                                  ->where('id = ?', $invite_id)
-                                  ->where('code = ?', $invite_code)
-                                  ->where('status = "Pending"')
-                                  ->fetch('sender');
-                $msg = "Hey there [you]! :wave:\nYour invitation to " . htmlsafechars($post['username']) . " has been accepted! :clap2:\n\ncheers\n";
-                $subject = 'Someone you invited has arrived!';
-                $msgs_buffer[] = [
-                    'receiver' => $inviter,
-                    'added' => TIME_NOW,
-                    'msg' => $msg,
-                    'subject' => $subject,
-                ];
-                $messages_class = $container->get(Message::class);
-                $messages_class->insert($msgs_buffer);
-                $set = [
-                    'join_type' => 'invite',
-                    'invitedby' => $inviter,
-                ];
-                $user->update($set, $userid);
-            }
-        } elseif (!empty($promo)) {
-            $valid = validate_promo($promo, true);
-            if ($valid) {
-                $set = [
-                    'accounts_made' => new Literal('accounts_made + 1'),
-                    'users' => empty($valid['users']) ? $userid : $valid['users'] . '|' . $userid,
-                ];
-                $fluent->update('promo')
-                       ->set($set)
-                       ->where('link = ?', $valid['link'])
-                       ->execute();
+                $inviter = // TODO: review query
+$sql = "SELECT/INSERT/UPDATE/DELETE ...";
+$this->db->perform($sql, [/* params */]);;
 
                 $set = [
                     'join_type' => 'promo',
@@ -123,11 +92,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             'receiver' => $userid,
             'status' => 'Confirmed',
         ];
-        $fluent->update('invite_codes')
-               ->set($set)
-               ->where('sender = ?', $inviter)
-               ->where('id = ?', $invite_id)
-               ->execute();
+        // TODO: review query
+$sql = "SELECT/INSERT/UPDATE/DELETE ...";
+$this->db->perform($sql, [/* params */]);;
     }
     $session->unset('signup_variables');
     header("Location: {$site_config['paths']['baseurl']}/login.php");

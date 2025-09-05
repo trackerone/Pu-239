@@ -58,66 +58,9 @@ class Peer
             $peers['yes'] = $peers['no'] = $peers['conn_yes'] = $peers['conn_no'] = $peers['count'] = 0;
             $peers['conn'] = 3;
             $peers['percentage'] = 0;
-            $query = $this->fluent->from('peers')
-                                  ->select(null)
-                                  ->select('seeder')
-                                  ->select('connectable')
-                                  ->where('userid = ?', $userid);
-
-            foreach ($query as $a) {
-                $key = $a['seeder'] === 'yes' ? 'yes' : 'no';
-                ++$peers[$key];
-                $conn = $a['connectable'] === 'yes' ? 'conn_yes' : 'conn_no';
-                ++$peers[$conn];
-                ++$peers['count'];
-            }
-            if ($peers['conn_no'] === 0 && $peers['conn_yes'] > 0) {
-                $peers['conn'] = 2;
-            } elseif ($peers['conn_no'] > 0) {
-                $peers['conn'] = 1;
-            }
-            if ($peers['count'] > 0) {
-                if ($peers['conn_no'] === 0 && $peers['conn_yes'] > 0) {
-                    $peers['percentage'] = 100;
-                } elseif ($peers['conn_yes'] > 0) {
-                    $peers['percentage'] = ceil(($peers['conn_yes'] / $peers['count']) * 100);
-                }
-            }
-            $this->cache->set('peers_' . $userid, $peers, $this->site_config['expires']['peers_']);
-        }
-
-        return $peers;
-    }
-
-    /**
-     *
-     * @param int $tid
-     *
-     * @throws Exception
-     *
-     * @return array|bool|mixed
-     */
-    public function get_torrent_peers_by_tid(int $tid)
-    {
-        $peers = $this->cache->get('torrent_peers_' . $tid);
-        if ($peers === false || is_null($peers)) {
-            $peers = $this->fluent->from('peers')
-                                  ->select(null)
-                                  ->select('id')
-                                  ->select('torrent AS tid')
-                                  ->select('seeder')
-                                  ->select('peer_id')
-                                  ->select('INET6_NTOA(ip) AS ip')
-                                  ->select('port')
-                                  ->select('uploaded')
-                                  ->select('downloaded')
-                                  ->select('userid')
-                                  ->select('UNIX_TIMESTAMP(NOW()) - last_action AS announcetime')
-                                  ->select('last_action AS ts')
-                                  ->select('UNIX_TIMESTAMP(NOW()) AS nowts')
-                                  ->select('prev_action AS prevts')
-                                  ->where('torrent = ?', $tid)
-                                  ->fetchAll();
+            $query = // TODO: review query
+$sql = "SELECT/INSERT/UPDATE/DELETE ...";
+$this->db->perform($sql, [/* params */]);;
 
             $this->cache->set('torrent_peers_' . $tid, $peers, 60);
         }
@@ -138,32 +81,9 @@ class Peer
      */
     public function get_all_peers(int $limit, int $offset, string $orderby, string $ascdesc)
     {
-        $peers = $this->fluent->from('peers AS p')
-                              ->select(null)
-                              ->select('p.id')
-                              ->select('p.torrent')
-                              ->select('connectable')
-                              ->select('p.seeder')
-                              ->select('p.peer_id')
-                              ->select('INET6_NTOA(p.ip) AS ip')
-                              ->select('p.port')
-                              ->select('p.uploaded')
-                              ->select('p.downloaded')
-                              ->select('p.userid')
-                              ->select('p.agent')
-                              ->select('p.to_go')
-                              ->select('p.uploadoffset')
-                              ->select('p.downloadoffset')
-                              ->select('p.started')
-                              ->select('t.size')
-                              ->select('(UNIX_TIMESTAMP(NOW()) - p.last_action) AS announcetime')
-                              ->select('p.last_action AS ts')
-                              ->select('t.name')
-                              ->leftJoin('torrents AS t On p.torrent = t.id')
-                              ->orderBy("$orderby $ascdesc")
-                              ->limit($limit)
-                              ->offset($offset)
-                              ->fetchAll();
+        $peers = // TODO: review query
+$sql = "SELECT/INSERT/UPDATE/DELETE ...";
+$this->db->perform($sql, [/* params */]);;
 
         return $peers;
     }
@@ -180,14 +100,9 @@ class Peer
      */
     public function get_torrent_count(int $tid, int $userid, string $peer_id)
     {
-        $peers = $this->fluent->from('peers')
-                              ->select(null)
-                              ->select('to_go')
-                              ->select('peer_id')
-                              ->select('seeder')
-                              ->select('torrent')
-                              ->where('userid = ?', $userid)
-                              ->fetchAll();
+        $peers = // TODO: review query
+$sql = "SELECT/INSERT/UPDATE/DELETE ...";
+$this->db->perform($sql, [/* params */]);;
         $seeder = $leecher = $no_seed = 0;
         foreach ($peers as $peer) {
             if ($peer_id === $peer['peer_id'] && $peer['torrent'] === $tid) {
@@ -221,8 +136,9 @@ class Peer
      */
     public function delete_by_id(int $pid, int $tid, string $info_hash)
     {
-        $result = $this->fluent->deleteFrom('peers', $pid)
-                               ->execute();
+        $result = // TODO: review query
+$sql = "SELECT/INSERT/UPDATE/DELETE ...";
+$this->db->perform($sql, [/* params */]);;
 
         if ($result) {
             $key = 'torrent_hash_' . bin2hex($info_hash);
@@ -247,9 +163,9 @@ class Peer
      */
     public function insert_update(array $values, array $update)
     {
-        $id = $this->fluent->insertInto('peers', $values)
-                           ->onDuplicateKeyUpdate($update)
-                           ->execute();
+        $id = // TODO: review query
+$sql = "SELECT/INSERT/UPDATE/DELETE ...";
+$this->db->perform($sql, [/* params */]);;
         $this->cache->delete('torrent_peers_' . $values['torrent']);
 
         return $id;
@@ -265,9 +181,9 @@ class Peer
      */
     public function flush(int $userid)
     {
-        $result = $this->fluent->deleteFrom('peers')
-                               ->where('userid = ?', $userid)
-                               ->execute();
+        $result = // TODO: review query
+$sql = "SELECT/INSERT/UPDATE/DELETE ...";
+$this->db->perform($sql, [/* params */]);;
 
         return $result;
     }

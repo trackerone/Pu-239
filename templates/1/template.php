@@ -455,10 +455,9 @@ function platform_menu()
     $templates = $cache->get('templates_' . $CURUSER['class']);
     if ($templates === false || is_null($templates)) {
         $fluent = $container->get(Database::class);
-        $templates = $fluent->from('stylesheets')
-                            ->orderBy('id')
-                            ->where('min_class_to_view <= ?', $CURUSER['class'])
-                            ->fetchAll();
+        $templates = // TODO: review query
+$sql = "SELECT/INSERT/UPDATE/DELETE ...";
+$this->db->perform($sql, [/* params */]);;
 
         $cache->set('templates_' . $CURUSER['class'], $templates, 0);
     }

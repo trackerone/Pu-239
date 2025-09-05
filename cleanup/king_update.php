@@ -32,36 +32,9 @@ function king_update($data)
     $time_start = microtime(true);
     $dt = TIME_NOW;
     $fluent = $container->get(Database::class);
-    $res = $fluent->from('users')
-                  ->select(null)
-                  ->select('id')
-                  ->select('modcomment')
-                  ->where('king < ?', $dt)
-                  ->where('king > 0');
-
-    $subject = 'King status expired.';
-    $msg = "Your King status has timed out and has been auto-removed by the system. If you would like to have it again, exchange some Karma Bonus Points again. Cheers!\n";
-
-    $values = [];
-    $cache = $container->get(Cache::class);
-    foreach ($res as $arr) {
-        $modcomment = $arr['modcomment'];
-        $modcomment = get_date((int) $dt, 'DATE', 1) . " - King Status Automatically Removed By System.\n" . $modcomment;
-        $values[] = [
-            'receiver' => $arr['id'],
-            'added' => $dt,
-            'msg' => $msg,
-            'subject' => $subject,
-        ];
-        $set = [
-            'king' => 0,
-            'modcomment' => $modcomment,
-        ];
-
-        $fluent->update('users')
-               ->set($set)
-               ->where('id = ?', $arr['id'])
-               ->execute();
+    $res = // TODO: review query
+$sql = "SELECT/INSERT/UPDATE/DELETE ...";
+$this->db->perform($sql, [/* params */]);;
 
         $cache->update_row('user_' . $arr['id'], $set, $site_config['expires']['user_cache']);
     }

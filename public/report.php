@@ -62,30 +62,9 @@ if (isset($_POST['do_it'])) {
         stderr(_('Error'), _('You MUST enter a reason for this report! Use your back button and fill in the reason'));
     }
     $fluent = $container->get(Database::class);
-    $previous = $fluent->from('reports')
-                       ->select(null)
-                       ->select('id')
-                       ->where('reported_by = ?', $user['id'])
-                       ->where('reporting_what = ?', $id)
-                       ->where('reporting_type = ?', $type)
-                       ->fetch('id');
-
-    if (!empty($previous)) {
-        stderr(_('Report Failure!'), _fe('You have already reported: {0} with id: {1}!', str_replace('_', ' ', $type), $id));
-    }
-
-    $values = [
-        'reported_by' => $user['id'],
-        'reporting_what' => $id,
-        'reporting_type' => $type,
-        'reason' => $reason,
-        'added' => TIME_NOW,
-        '2nd_value' => $id_2,
-    ];
-
-    $fluent->insertInto('reports')
-           ->values($values)
-           ->execute();
+    $previous = // TODO: review query
+$sql = "SELECT/INSERT/UPDATE/DELETE ...";
+$this->db->perform($sql, [/* params */]);;
     $cache = $container->get(Cache::class);
     $cache->delete('new_report_');
     $session = $container->get(Session::class);

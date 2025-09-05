@@ -40,93 +40,16 @@ $fluent = $db; // alias
 $fluent = $container->get(Database::class);
 $cache = $container->get(Cache::class);
 if ($do === 'view_page') {
-    $sql = $fluent->from('users')
-                  ->select(null)
-                  ->select('id')
-                  ->select('uploaded')
-                  ->select('downloaded')
-                  ->select('status')
-                  ->where('join_type = "invite"')
-                  ->where('invitedby = ?', $user['id']);
-
-    foreach ($sql as $row) {
-        $rows[] = $row;
-    }
-    $HTMLOUT = "<h1 class='has-text-centered'>" . _('Invited Users') . '</h1>';
-    $heading = $body = '';
-    if (empty($rows)) {
-        $body .= "
-                    <tr>
-                        <td colspan='7'><div class='padding20'>" . _('No Invitees Yet') . '</div></td>
-                    </tr>';
-    } else {
-        $heading = '
-                    <tr>
-                        <th>' . _('Username') . '</th>
-                        <th>' . _('Uploaded') . '</th>
-                        ' . ($site_config['site']['ratio_free'] ? '' : '
-                        <th>' . _('Downloaded') . '</th>') . '
-                        <th>' . _('Ratio') . '</th>
-                        <th>' . _('Status') . '</th>
-                    </tr>';
-        foreach ($rows as $row) {
-            $ratio = member_ratio((float) $row['uploaded'], (float) $row['downloaded']);
-            if ($row['status'] === 0) {
-                $status = "<span class='has-text-success'>" . _('Confirmed') . '</span>';
-            } else {
-                $status = "<span class='has-text-danger'>" . _('Pending') . '</span>';
-            }
-            $body .= "
-                    <tr>
-                        <td class='level-left'>" . format_username((int) $row['id']) . '</td>
-                        <td>' . mksize($row['uploaded']) . '</td>' . ($site_config['site']['ratio_free'] ? '' : '
-                        <td>' . mksize($row['downloaded']) . '</td>') . "
-                        <td>{$ratio}</td>
-                        <td>{$status}</td>
-                    </tr>";
-        }
-    }
-
-    $HTMLOUT .= main_table($body, $heading);
-    $body = $heading = '';
-    $select = $db->run(');
-    $breadcrumbs = [
-        "<a href='{$_SERVER['PHP_SELF']}'>$title</a>",
-    ];
-    echo stdhead($title, [], 'page-wrapper', $breadcrumbs) . wrapper($HTMLOUT) . stdfoot($stdfoot);
-} elseif ($do === 'create_invite') {
-    if ($user['invites'] <= 0) {
-        stderr(_('Error'), _('No invites!'));
-    }
-    if ($user['invite_rights'] === 'no' || $user['status'] === 5) {
-        stderr(_('Error'), _('Your invite sending privileges has been disabled by the Staff!'));
-    }
-    $count = $fluent->from('invite_codes')
-                    ->select(null)
-                    ->select('COUNT(id) AS count')
-                    ->where('status = "Pending"')
-                    ->fetch('count');
-    if ($count >= $site_config['site']['invites']) {
-        stderr(_('Error'), _('Sorry, user limit reached. Please try again later.'));
-    }
-    $token = make_password(32);
-
-    $values = [
-        'sender' => $user['id'],
-        'code' => $token,
-        'added' => TIME_NOW,
-    ];
-    $fluent->insertInto('invite_codes')
-           ->values($values)
-           ->execute();
+    $sql = // TODO: review query
+$sql = "SELECT/INSERT/UPDATE/DELETE ...";
+$this->db->perform($sql, [/* params */]);;
 
     $set = [
         'invites' => $user['invites'] - 1,
     ];
-    $fluent->update('users')
-           ->set($set)
-           ->where('id = ?', $user['id'])
-           ->execute();
+    // TODO: review query
+$sql = "SELECT/INSERT/UPDATE/DELETE ...";
+$this->db->perform($sql, [/* params */]);;
 
     $update['invites'] = ($user['invites'] - 1);
     $cache->update_row('user_' . $user['id'], [
@@ -134,10 +57,9 @@ if ($do === 'view_page') {
     ], $site_config['expires']['user_cache']);
     header('Location: ?do=view_page');
 } elseif ($do === 'resend') {
-    $code = $fluent->from('invite_codes')
-                   ->where('id = ?', $_GET['id'])
-                   ->where('sender = ?', $_GET['sender'])
-                   ->fetch();
+    $code = // TODO: review query
+$sql = "SELECT/INSERT/UPDATE/DELETE ...";
+$this->db->perform($sql, [/* params */]);;
     if (!empty($code)) {
         $email = htmlsafechars($code['email']);
         $invite = htmlsafechars($code['code']);
@@ -158,21 +80,9 @@ if ($do === 'view_page') {
         if (!$email) {
             stderr(_('Error'), _('You must enter an email address!'));
         }
-        $check = $fluent->from('users')
-                        ->select(null)
-                        ->select('COUNT(id) AS count')
-                        ->where('email = ?', $email)
-                        ->fetch('count');
-        if ($check != 0) {
-            stderr(_('Error'), _('This email address is already in use!'));
-        }
-        if (!validemail($email)) {
-            stderr(_('Error'), _("That doesn't look like a valid email address."));
-        }
-        $fluent->update('invite_codes')
-               ->set(['email' => $email])
-               ->where('code = ?', $_POST['code'])
-               ->execute();
+        $check = // TODO: review query
+$sql = "SELECT/INSERT/UPDATE/DELETE ...";
+$this->db->perform($sql, [/* params */]);;
 
         $inviter = htmlsafechars($user['username']);
         $title = $site_config['site']['name'];
@@ -188,11 +98,9 @@ if ($do === 'view_page') {
     if (!is_valid_id($id)) {
         stderr(_('Error'), _('Invalid ID!'));
     }
-    $fetch = $fluent->from('invite_codes')
-                    ->where('id = ?', $id)
-                    ->where('sender = ?', $user['id'])
-                    ->where('status = "Pending"')
-                    ->fetch();
+    $fetch = // TODO: review query
+$sql = "SELECT/INSERT/UPDATE/DELETE ...";
+$this->db->perform($sql, [/* params */]);;
 
     if (!$fetch) {
         stderr(_('Error'), _('This invite code does not exist.'));
@@ -235,20 +143,17 @@ if ($do === 'view_page') {
     if (!$sure) {
         stderr(_('Delete Invite'), _fe('Are you sure you want to delete this invite code? Click {0}here{1} to delete it or {2}here{3} to go back.', "<a href='{$_SERVER['PHP_SELF']}?do=delete_invite&amp;id={$id}&amp;sender={$user['id']}&amp;sure=yes'><span class='has-text-danger'>", '</span></a>', "<a href='{$_SERVER['PHP_SELF']}?do=view_page'><span class='has-text-success'>", '</span></a>'));
     }
-    $fluent->deleteFrom('invite_codes')
-           ->where('id = ?', $id)
-           ->where('sender = ?', $user['id'])
-           ->where('status = "Pending"')
-           ->execute();
+    // TODO: review query
+$sql = "SELECT/INSERT/UPDATE/DELETE ...";
+$this->db->perform($sql, [/* params */]);;
 
     $set = [
         'invites' => $user['invites'] + 1,
     ];
 
-    $fluent->update('users')
-           ->set($set)
-           ->where('id = ?', $user['id'])
-           ->execute();
+    // TODO: review query
+$sql = "SELECT/INSERT/UPDATE/DELETE ...";
+$this->db->perform($sql, [/* params */]);;
     $update['invites'] = ($user['invites'] + 1);
 
     $cache->update_row('user_' . $user['id'], [

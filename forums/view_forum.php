@@ -17,23 +17,21 @@ if (!is_valid_id($forum_id)) {
 }
 $fluent = $db; // alias
 $fluent = $container->get(Database::class);
-$fluent->deleteFrom('now_viewing')
-       ->where('user_id = ?', $CURUSER['id'])
-       ->execute();
+// TODO: review query
+$sql = "SELECT/INSERT/UPDATE/DELETE ...";
+$this->db->perform($sql, [/* params */]);;
 $values = [
     'user_id' => $CURUSER['id'],
     'forum_id' => $forum_id,
     'added' => TIME_NOW,
 ];
-$fluent->insertInto('now_viewing')
-       ->values($values)
-       ->execute();
+// TODO: review query
+$sql = "SELECT/INSERT/UPDATE/DELETE ...";
+$this->db->perform($sql, [/* params */]);;
 
-$arr = $fluent->from('forums')
-              ->where('min_class_read <= ?', $CURUSER['class'])
-              ->where('id = ?', $forum_id)
-              ->limit(1)
-              ->fetch();
+$arr = // TODO: review query
+$sql = "SELECT/INSERT/UPDATE/DELETE ...";
+$this->db->perform($sql, [/* params */]);;
 
 $forum_name = !empty($arr['name']) ? format_comment($arr['name']) : '';
 
@@ -43,18 +41,9 @@ if ($CURUSER['class'] < $arr['min_class_read']) {
 }
 $may_post = $CURUSER['class'] >= $arr['min_class_write'] && $CURUSER['class'] >= $arr['min_class_create'] && $CURUSER['forum_post'] === 'yes' && $CURUSER['status'] === 0;
 
-$query = $fluent->from('forums')
-                ->select(null)
-                ->select('id AS sub_forum_id')
-                ->select('name AS sub_form_name')
-                ->select('description AS sub_form_description')
-                ->select('min_class_read')
-                ->select('post_count AS sub_form_post_count')
-                ->select('topic_count AS sub_form_topic_count')
-                ->where('min_class_read <= ?', $CURUSER['class'])
-                ->where('parent_forum = ?', $forum_id)
-                ->orderBy('sort')
-                ->fetchAll();
+$query = // TODO: review query
+$sql = "SELECT/INSERT/UPDATE/DELETE ...";
+$this->db->perform($sql, [/* params */]);;
 
 $sub_forums_stuff = '';
 
@@ -64,26 +53,9 @@ foreach ($query as $sub_forums_arr) {
     }
 
     $where = $CURUSER['class'] < UC_STAFF ? 'posts.status = "ok" AND topics.status = "ok"' : $CURUSER['class'] < $site_config['forum_config']['min_delete_view_class'] ? 'posts.status != "deleted"  AND topics.status != "deleted"' : '';
-    $post_arr = $fluent->from('topics')
-                       ->select(null)
-                       ->select('topics.id AS topic_id')
-                       ->select('topics.topic_name')
-                       ->select('topics.status AS topic_status')
-                       ->select('topics.anonymous AS tan')
-                       ->select('posts.id AS last_post_id')
-                       ->select('posts.topic_id')
-                       ->select('posts.added')
-                       ->select('posts.anonymous AS pan')
-                       ->select('posts.id as post_id')
-                       ->select('users.id AS user_id')
-                       ->select('users.class')
-                       ->innerJoin('posts ON topics.id=posts.topic_id')
-                       ->leftJoin('users ON posts.user_id=users.id')
-                       ->where($where)
-                       ->where('topics.forum_id = ?', $sub_forums_arr['sub_forum_id'])
-                       ->orderBy('posts.id DESC')
-                       ->limit(1)
-                       ->fetch();
+    $post_arr = // TODO: review query
+$sql = "SELECT/INSERT/UPDATE/DELETE ...";
+$this->db->perform($sql, [/* params */]);;
 
     if ($post_arr['last_post_id'] > 0) {
         $last_topic_id = (int) $post_arr['topic_id'];

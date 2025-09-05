@@ -58,9 +58,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $do === 'addpromo') {
         'bonus_invites' => $bonus_invites,
         'bonus_karma' => $bonus_karma,
     ];
-    $promo_id = $fluent->insertInto('promo')
-                       ->values($values)
-                       ->execute();
+    $promo_id = // TODO: review query
+$sql = "SELECT/INSERT/UPDATE/DELETE ...";
+$this->db->perform($sql, [/* params */]);;
     if (empty($promo_id)) {
         stderr(_('Error'), 'Something wrong happened, please retry');
     } else {
@@ -68,18 +68,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $do === 'addpromo') {
         unset($_POST);
     }
 } elseif ($do === 'delete' && $id > 0) {
-    $r = $fluent->from('promo')
-                ->select(null)
-                ->select('name')
-                ->where('id = ?', $id)
-                ->fetch('name');
-
-    if ($sure === 'no') {
-        stderr('Sanity check...', 'You are about to delete promo <b>' . htmlsafechars($r) . '</b>, if you are sure click <a href="' . $_SERVER['PHP_SELF'] . '?tool=promo&amp;do=delete&amp;id=' . $id . '&amp;sure=yes"><span class="has-text-danger">here</span></a>');
-    } elseif ($sure === 'yes') {
-        $deleted = $fluent->deleteFrom('promo')
-                          ->where('id = ?', $id)
-                          ->execute();
+    $r = // TODO: review query
+$sql = "SELECT/INSERT/UPDATE/DELETE ...";
+$this->db->perform($sql, [/* params */]);;
         if (!empty($deleted)) {
             $session->set('is-success', 'Promo was deleted!');
         } else {
@@ -148,12 +139,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $do === 'addpromo') {
     if (empty($link)) {
         stderr(_('Error'), 'Invalid Promo ID');
     }
-    $name = $fluent->from('promo')
-                   ->select(null)
-                   ->select('name')
-                   ->select('users')
-                   ->where('link = ?', $link)
-                   ->fetch();
+    $name = // TODO: review query
+$sql = "SELECT/INSERT/UPDATE/DELETE ...";
+$this->db->perform($sql, [/* params */]);;
     $accounts = [];
     if (!empty($name)) {
         $accounts = explode('|', $name['users']);
@@ -196,8 +184,9 @@ if (empty($_POST)) {
     if (!has_access($user['class'], UC_STAFF, 'coder')) {
         stderr(_('Error'), 'There is nothing for you here! Go play somewhere else');
     }
-    $r = $fluent->from('promo')
-                ->fetchAll();
+    $r = // TODO: review query
+$sql = "SELECT/INSERT/UPDATE/DELETE ...";
+$this->db->perform($sql, [/* params */]);;
     if (empty($r)) {
         stderr(_('Error'), _fe('There are no promotions. If you want to make one click {0}here{1}', '<a href="' . $_SERVER['PHP_SELF'] . '?tool=promo&amp;do=addpromo">', '</a>'), 'bottom20');
     } else {

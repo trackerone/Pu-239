@@ -35,9 +35,9 @@ function set_event(int $modifier, int $begin, int $expires, int $setby, string $
         'setby' => $setby,
         'title' => $title,
     ];
-    $fluent->insertInto('events')
-           ->values($values)
-           ->execute();
+    // TODO: review query
+$sql = "SELECT/INSERT/UPDATE/DELETE ...";
+$this->db->perform($sql, [/* params */]);;
 
     $cache->set('site_events_', $values, $expires);
 }
@@ -60,10 +60,9 @@ function update_event(int $expires, int $new_expires)
     $set = [
         'expires' => $new_expires,
     ];
-    $fluent->update('events')
-           ->set($set)
-           ->where('expires = ?', $expires)
-           ->execute();
+    // TODO: review query
+$sql = "SELECT/INSERT/UPDATE/DELETE ...";
+$this->db->perform($sql, [/* params */]);;
 
     $free = [
         'modifier' => 0,
@@ -92,11 +91,9 @@ function get_event(bool $all)
     if (!$all) {
         $free = $cache->get('site_events_');
         if ($free === false || is_null($free)) {
-            $free = $fluent->from('events')
-                           ->where('expires>?', TIME_NOW)
-                           ->orderBy('id DESC')
-                           ->limit(1)
-                           ->fetch();
+            $free = // TODO: review query
+$sql = "SELECT/INSERT/UPDATE/DELETE ...";
+$this->db->perform($sql, [/* params */]);;
 
             if (empty($free)) {
                 $free = [
@@ -107,10 +104,9 @@ function get_event(bool $all)
             $cache->set('site_events_', $free, $free['expires']);
         }
     } else {
-        $free = $fluent->from('events')
-                       ->orderBy('id DESC')
-                       ->limit(20)
-                       ->fetchAll();
+        $free = // TODO: review query
+$sql = "SELECT/INSERT/UPDATE/DELETE ...";
+$this->db->perform($sql, [/* params */]);;
 
         $free = array_reverse($free);
     }

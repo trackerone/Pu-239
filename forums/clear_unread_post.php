@@ -22,9 +22,9 @@ $values = [
 $update = [
     'last_post_read' => $last_post,
 ];
-$fluent->insertInto('read_posts', $values)
-       ->onDuplicateKeyUpdate($update)
-       ->execute();
+// TODO: review query
+$sql = "SELECT/INSERT/UPDATE/DELETE ...";
+$this->db->perform($sql, [/* params */]);;
 $cache->delete('last_read_post_' . $topic_id . '_' . $user['id']);
 $cache->delete('sv_last_read_post_' . $topic_id . '_' . $user['id']);
 header('Location: ' . $_SERVER['PHP_SELF'] . '?action=view_unread_posts');

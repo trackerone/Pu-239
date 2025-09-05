@@ -15,30 +15,17 @@ global $container, $site_config;
 
 $subject = $friends = '';
 $fluent = $container->get(Database::class);
-$message = $fluent->from('messages AS m')
-                  ->select('f.id AS friend')
-                  ->select('b.id AS blocked')
-                  ->select('a.id AS attachment')
-                  ->select('u.title')
-                  ->select('u.last_access')
-                  ->select('u.show_email')
-                  ->select('u.email')
-                  ->select('u.website')
-                  ->select('u.seedbonus')
-                  ->where('m.id = ?', $pm_id)
-                  ->leftJoin('friends AS f ON f.userid = ? AND f.friendid = m.sender', $user['id'])
-                  ->leftJoin('blocks AS b ON b.userid = ? AND b.blockid = m.sender', $user['id'])
-                  ->leftJoin('attachments AS a ON m.added = a.post_id')
-                  ->leftJoin('users AS u ON m.sender = u.id')
-                  ->fetch();
+$message = // TODO: review query
+$sql = "SELECT/INSERT/UPDATE/DELETE ...";
+$this->db->perform($sql, [/* params */]);;
 if (empty($message) || ($message['receiver'] != $user['id'] && $message['sender'] != $user['id'])) {
     stderr(_('Error'), _('You do not have permission to view this message.'));
 }
 $attachment = '';
 if (!empty($message['attachment'])) {
-    $attachments = $fluent->from('attachments')
-                          ->where('post_id = ?', $message['added'])
-                          ->fetchAll();
+    $attachments = // TODO: review query
+$sql = "SELECT/INSERT/UPDATE/DELETE ...";
+$this->db->perform($sql, [/* params */]);;
     $i = 0;
     foreach ($attachments as $file) {
         ++$i;
@@ -55,11 +42,9 @@ $id = $arr_user_stuff['id'];
 $update = [
     'unread' => 'no',
 ];
-$fluent->update('messages')
-       ->set($update)
-       ->where('id = ?', $pm_id)
-       ->where('receiver = ?', $user['id'])
-       ->execute();
+// TODO: review query
+$sql = "SELECT/INSERT/UPDATE/DELETE ...";
+$this->db->perform($sql, [/* params */]);;
 $cache->decrement('inbox_' . $user['id']);
 if ($message['friend'] > 0) {
     $friends = '

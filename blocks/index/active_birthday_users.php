@@ -17,15 +17,9 @@ if ($birthday === false || is_null($birthday)) {
     $birthday = $list = [];
     $current_date = getdate();
     $fluent = $container->get(Database::class);
-    $query = $fluent->from('users')
-                    ->select(null)
-                    ->select('id')
-                    ->where('MONTH(birthday) = ?', $current_date['mon'])
-                    ->where('DAYOFMONTH(birthday) = ?', $current_date['mday'])
-                    ->where('perms < ?', PERMS_STEALTH)
-                    ->where('anonymous_until < ?', TIME_NOW)
-                    ->orderBy('username')
-                    ->fetchAll();
+    $query = // TODO: review query
+$sql = "SELECT/INSERT/UPDATE/DELETE ...";
+$this->db->perform($sql, [/* params */]);;
 
     $count = count($query);
     $i = 0;

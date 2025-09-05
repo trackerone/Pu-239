@@ -23,53 +23,13 @@ if (isset($_GET['total_donors'])) {
     if ($total_donors != '1') {
         stderr(_('Error'), _('I smell a rat!'));
     }
-    $count = $fluent->from('users')
-                    ->select(null)
-                    ->select('COUNT(id) AS count')
-                    ->where('total_donated > 0')
-                    ->where('status = 0')
-                    ->fetch('count');
-    $perpage = 15;
-    $pager = pager($perpage, $count, $site_config['paths']['baseurl'] . '/staffpanel.php?tool=donations&amp;action=donations&amp;');
-    $sql = $fluent->from('users')
-                  ->select(null)
-                  ->select('id')
-                  ->select('username')
-                  ->select('email')
-                  ->select('registered')
-                  ->select('donated')
-                  ->select('donoruntil')
-                  ->select('total_donated')
-                  ->where('total_donated >= 0')
-                  ->where('status = 0')
-                  ->orderBy('id')
-                  ->limit($pager['pdo']['limit'])
-                  ->offset($pager['pdo']['offset'])
-                  ->fetchAll();
+    $count = // TODO: review query
+$sql = "SELECT/INSERT/UPDATE/DELETE ...";
+$this->db->perform($sql, [/* params */]);;
 } else {
-    $count = $fluent->from('users')
-                    ->select(null)
-                    ->select('COUNT(id) AS count')
-                    ->where("donor = 'yes'")
-                    ->where('status = 0')
-                    ->fetch('count');
-    $perpage = 15;
-    $pager = pager($perpage, $count, $site_config['paths']['baseurl'] . '/staffpanel.php?tool=donations&amp;action=donations&amp;');
-    $sql = $fluent->from('users')
-                  ->select(null)
-                  ->select('id')
-                  ->select('username')
-                  ->select('email')
-                  ->select('registered')
-                  ->select('donated')
-                  ->select('donoruntil')
-                  ->select('total_donated')
-                  ->where("donor = 'yes'")
-                  ->where('status = 0')
-                  ->orderBy('id')
-                  ->limit($pager['pdo']['limit'])
-                  ->offset($pager['pdo']['offset'])
-                  ->fetchAll();
+    $count = // TODO: review query
+$sql = "SELECT/INSERT/UPDATE/DELETE ...";
+$this->db->perform($sql, [/* params */]);;
 }
 if ($count > $perpage) {
     $HTMLOUT .= $pager['pagertop'];

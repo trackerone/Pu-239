@@ -38,9 +38,9 @@ class Poll
      */
     public function delete(int $poll_id)
     {
-        $this->fluent->deleteFrom('polls')
-                     ->where('pid = ?', $poll_id)
-                     ->execute();
+        // TODO: review query
+$sql = "SELECT/INSERT/UPDATE/DELETE ...";
+$this->db->perform($sql, [/* params */]);;
 
         $this->cache->delete('poll_' . $poll_id);
         $this->cache->delete('polls_');
@@ -57,10 +57,9 @@ class Poll
      */
     public function update(array $set, int $poll_id)
     {
-        $result = $this->fluent->update('polls')
-                               ->set($set)
-                               ->where('pid = ?', $poll_id)
-                               ->execute();
+        $result = // TODO: review query
+$sql = "SELECT/INSERT/UPDATE/DELETE ...";
+$this->db->perform($sql, [/* params */]);;
         $this->cache->delete('poll_' . $poll_id);
         $this->cache->delete('polls_');
 
@@ -77,9 +76,9 @@ class Poll
      */
     public function insert(array $values)
     {
-        $poll_id = $this->fluent->insertInto('polls')
-                                ->values($values)
-                                ->execute();
+        $poll_id = // TODO: review query
+$sql = "SELECT/INSERT/UPDATE/DELETE ...";
+$this->db->perform($sql, [/* params */]);;
 
         $this->cache->delete('polls_');
 
@@ -98,9 +97,9 @@ class Poll
     {
         $poll = $this->cache->get('poll_' . $poll_id);
         if ($poll === false || is_null($poll)) {
-            $poll = $this->fluent->from('polls')
-                                 ->where('pid = ?', $poll_id)
-                                 ->fetch();
+            $poll = // TODO: review query
+$sql = "SELECT/INSERT/UPDATE/DELETE ...";
+$this->db->perform($sql, [/* params */]);;
             $this->cache->set('polls_' . $poll_id, $poll, 86400);
         }
 
@@ -119,9 +118,9 @@ class Poll
     {
         $polls = $this->cache->get('polls_');
         if ($polls === false || is_null($polls)) {
-            $polls = $this->fluent->from('polls')
-                                  ->orderBy('start_date DESC')
-                                  ->fetchAll();
+            $polls = // TODO: review query
+$sql = "SELECT/INSERT/UPDATE/DELETE ...";
+$this->db->perform($sql, [/* params */]);;
 
             if (!empty($polls)) {
                 $this->cache->set('polls_', $polls, 86400);

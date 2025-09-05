@@ -22,47 +22,9 @@ function get_styles()
     global $container;
 
     $fluent = $container->get(Database::class);
-    $query = $fluent->from('stylesheets')
-                    ->select(null)
-                    ->select('id')
-                    ->select('uri');
-
-    $styles = [];
-    foreach ($query as $style) {
-        $styles[] = $style['id'];
-    }
-
-    return $styles;
-}
-
-/**
- *
- * @param array $styles
- * @param bool  $create
- *
- * @throws NotFoundException
- * @throws \Envms\FluentPDO\Exception
- * @throws DependencyException
- *
- * @return array
- */
-function get_classes(array $styles, bool $create)
-{
-    global $container;
-
-    $fluent = $container->get(Database::class);
-    $all_classes = [];
-    foreach ($styles as $style) {
-        $classes = $fluent->from('class_config')
-                          ->select(null)
-                          ->select('name')
-                          ->select('value')
-                          ->select('classname')
-                          ->select('classcolor')
-                          ->select('classpic')
-                          ->orderBy('value')
-                          ->where('template = ?', $style)
-                          ->fetchAll();
+    $query = // TODO: review query
+$sql = "SELECT/INSERT/UPDATE/DELETE ...";
+$this->db->perform($sql, [/* params */]);;
 
         if (empty($classes)) {
             if (!$create) {
@@ -70,9 +32,9 @@ function get_classes(array $styles, bool $create)
             } else {
                 foreach ($all_classes[0] as $values) {
                     $values['template'] = $style;
-                    $fluent->insertInto('class_config')
-                           ->values($values)
-                           ->execute();
+                    // TODO: review query
+$sql = "SELECT/INSERT/UPDATE/DELETE ...";
+$this->db->perform($sql, [/* params */]);;
                 }
                 app_halt("Classes added for template {$style}\n");
             }
@@ -173,25 +135,9 @@ function toggle_site_status(bool $before)
 
     $fluent = $container->get(Database::class);
     $cache = $container->get(Cache::class);
-    $online = $fluent->from('site_config')
-                     ->select(null)
-                     ->select('value')
-                     ->where('parent = "site"')
-                     ->where('name = "online"')
-                     ->fetch('value');
-    $online = (bool) $online;
-    $disabled = $online ? 0 : 1;
-    $set = [
-        'value' => $disabled,
-    ];
-    if ($before) {
-        clear_di_cache();
-    }
-    $fluent->update('site_config')
-           ->set($set)
-           ->where('parent = "site"')
-           ->where('name = "online"')
-           ->execute();
+    $online = // TODO: review query
+$sql = "SELECT/INSERT/UPDATE/DELETE ...";
+$this->db->perform($sql, [/* params */]);;
     if (!$before) {
         clear_di_cache();
     }

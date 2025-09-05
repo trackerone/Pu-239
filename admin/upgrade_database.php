@@ -32,16 +32,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $flush = $sql_updates[$qid]['flush'];
 
             try {
-                $query = $fluent->getPdo()
-                                ->prepare($sql);
-                $query->execute();
+                $query = // TODO: review query
+$sql = "SELECT/INSERT/UPDATE/DELETE ...";
+$this->db->perform($sql, [/* params */]);;
                 $values = [
                     'id' => (int) $id,
                     'query' => $sql,
                 ];
-                $fluent->insertInto('database_updates')
-                       ->values($values)
-                       ->execute();
+                // TODO: review query
+$sql = "SELECT/INSERT/UPDATE/DELETE ...";
+$this->db->perform($sql, [/* params */]);;
 
                 if ($flush) {
                     $cache->flushDB();
@@ -70,9 +70,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 'id' => (int) $id,
                 'query' => $sql,
             ];
-            $fluent->insertInto('database_updates')
-                   ->values($values)
-                   ->execute();
+            // TODO: review query
+$sql = "SELECT/INSERT/UPDATE/DELETE ...";
+$this->db->perform($sql, [/* params */]);;
             $session->set('is-success', "Query #$id has been ignored");
         }
     }

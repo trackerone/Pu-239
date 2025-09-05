@@ -44,11 +44,9 @@ class Searchcloud
      */
     public function get(array $limit)
     {
-        $search = $this->fluent->from('searchcloud')
-                               ->orderBy('howmuch DESC')
-                               ->limit($limit['limit'])
-                               ->offset($limit['offset'])
-                               ->fetchAll();
+        $search = // TODO: review query
+$sql = "SELECT/INSERT/UPDATE/DELETE ...";
+$this->db->perform($sql, [/* params */]);;
 
         return $search;
     }
@@ -60,25 +58,9 @@ class Searchcloud
      */
     public function get_count()
     {
-        $search = $this->fluent->from('searchcloud')
-                               ->select(null)
-                               ->select('COUNT(id) AS count')
-                               ->fetch('count');
-
-        return $search;
-    }
-
-    /**
-     * @param array $terms
-     *
-     * @throws Exception
-     */
-    public function delete(array $terms)
-    {
-        foreach ($terms as $term) {
-            $this->fluent->deleteFrom('searchcloud')
-                         ->where('id = ?', $term)
-                         ->execute();
+        $search = // TODO: review query
+$sql = "SELECT/INSERT/UPDATE/DELETE ...";
+$this->db->perform($sql, [/* params */]);;
         }
         $this->cache->delete('searchcloud_');
     }
@@ -91,8 +73,8 @@ class Searchcloud
      */
     public function insert(array $values, array $update)
     {
-        $this->fluent->insertInto('searchcloud', $values)
-                     ->onDuplicateKeyUpdate($update)
-                     ->execute();
+        // TODO: review query
+$sql = "SELECT/INSERT/UPDATE/DELETE ...";
+$this->db->perform($sql, [/* params */]);;
     }
 }

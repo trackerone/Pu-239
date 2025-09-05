@@ -49,15 +49,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 if (empty($set['canswer'])) {
                     $session->set('is-warning', _('No answer was set as the correct answer!'));
                 } else {
-                    $fluent->update('triviaq')
-                           ->set($set)
-                           ->where('qid = ?', $id)
-                           ->execute();
+                    // TODO: review query
+$sql = "SELECT/INSERT/UPDATE/DELETE ...";
+$this->db->perform($sql, [/* params */]);;
                 }
             } elseif ($type === 'delete' && isset($_POST['id']) && is_numeric($_POST['id'])) {
-                $fluent->deleteFrom('triviaq')
-                       ->where('qid = ?', $_POST['id'])
-                       ->execute();
+                // TODO: review query
+$sql = "SELECT/INSERT/UPDATE/DELETE ...";
+$this->db->perform($sql, [/* params */]);;
                 $session->set('is-success', _fe('Trivia Question #{0} was deleted.', $_POST['id']));
             } elseif ($type === 'insert') {
                 $values = $_POST;
@@ -71,45 +70,27 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 if (empty($values['canswer'])) {
                     $session->set('is-warning', _('No answer was set as the correct answer!'));
                 } else {
-                    $newid = $fluent->insertInto('triviaq')
-                                    ->values($values)
-                                    ->execute();
+                    $newid = // TODO: review query
+$sql = "SELECT/INSERT/UPDATE/DELETE ...";
+$this->db->perform($sql, [/* params */]);;
                     if (!empty($newid)) {
                         $session->set('is-success', _fe('Trivia Questions #{0} inserted correctly.', $newid));
                     }
                 }
             } elseif ($type === 'search') {
                 $search = $_POST['keywords'];
-                $count = $fluent->from('triviaq')
-                                ->select(null)
-                                ->select('COUNT(qid) AS count')
-                                ->where('MATCH (question, answer1, answer2, answer3, answer4, answer5) AGAINST (? IN NATURAL LANGUAGE MODE)', $search)
-                                ->fetch('count');
-
-                $pager = pager(15, $count, "{$site_config['paths']['baseurl']}/staffpanel.php?tool=trivia_config&");
-                $questions = $fluent->from('triviaq')
-                                    ->where('MATCH (question, answer1, answer2, answer3, answer4, answer5) AGAINST (? IN NATURAL LANGUAGE MODE)', $search)
-                                    ->orderBy('qid')
-                                    ->limit($pager['pdo']['limit'])
-                                    ->offset($pager['pdo']['offset'])
-                                    ->fetchAll();
+                $count = // TODO: review query
+$sql = "SELECT/INSERT/UPDATE/DELETE ...";
+$this->db->perform($sql, [/* params */]);;
             }
         }
     }
 }
 
 if (empty($search)) {
-    $count = $fluent->from('triviaq')
-                    ->select(null)
-                    ->select('COUNT(qid) AS count')
-                    ->fetch('count');
-
-    $pager = pager(15, $count, "{$site_config['paths']['baseurl']}/staffpanel.php?tool=trivia_config&");
-    $questions = $fluent->from('triviaq')
-                        ->orderBy('qid')
-                        ->limit($pager['pdo']['limit'])
-                        ->offset($pager['pdo']['offset'])
-                        ->fetchAll();
+    $count = // TODO: review query
+$sql = "SELECT/INSERT/UPDATE/DELETE ...";
+$this->db->perform($sql, [/* params */]);;
 }
 
 $HTMLOUT = "

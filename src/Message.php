@@ -71,9 +71,9 @@ class Message
         }
         $count = (int) ($this->limit / max(array_map('count', $values)));
         foreach (array_chunk($values, $count) as $t) {
-            $result = $this->fluent->insertInto('messages')
-                                   ->values($t)
-                                   ->execute();
+            $result = // TODO: review query
+$sql = "SELECT/INSERT/UPDATE/DELETE ...";
+$this->db->perform($sql, [/* params */]);;
         }
 
         foreach ($values as $user) {
@@ -113,31 +113,9 @@ class Message
      */
     public function get_last_message(int $receiver, int $sender)
     {
-        $message_id = $this->fluent->from('messages')
-                                   ->select(null)
-                                   ->select('id')
-                                   ->where('receiver = ?', $receiver)
-                                   ->where('sender = ?', $sender)
-                                   ->orderBy('id DESC')
-                                   ->fetch('id');
-
-        return $message_id;
-    }
-
-    /**
-     *
-     * @param int $id
-     * @param int $userid
-     *
-     * @throws Exception
-     *
-     * @return bool
-     */
-    public function delete(int $id, int $userid)
-    {
-        $result = $this->fluent->delete('messages')
-                               ->where('id = ?', $id)
-                               ->execute();
+        $message_id = // TODO: review query
+$sql = "SELECT/INSERT/UPDATE/DELETE ...";
+$this->db->perform($sql, [/* params */]);;
 
         $this->cache->decrement('inbox_' . $userid);
         $this->cache->decrement('message_count_' . $userid);
@@ -155,9 +133,9 @@ class Message
      */
     public function get_by_id(int $id)
     {
-        $message = $this->fluent->from('messages')
-                                ->where('id = ?', $id)
-                                ->fetch();
+        $message = // TODO: review query
+$sql = "SELECT/INSERT/UPDATE/DELETE ...";
+$this->db->perform($sql, [/* params */]);;
 
         return $message;
     }
@@ -173,10 +151,9 @@ class Message
      */
     public function update(array $set, int $id)
     {
-        $result = $this->fluent->update('messages')
-                               ->set($set)
-                               ->where('id = ?', $id)
-                               ->execute();
+        $result = // TODO: review query
+$sql = "SELECT/INSERT/UPDATE/DELETE ...";
+$this->db->perform($sql, [/* params */]);;
 
         return $result;
     }
@@ -190,11 +167,9 @@ class Message
      */
     public function update_location(array $set, int $location, int $userid)
     {
-        $this->fluent->update('messages')
-                     ->set($set)
-                     ->where('location = ?', $location)
-                     ->where('receiver = ?', $userid)
-                     ->execute();
+        // TODO: review query
+$sql = "SELECT/INSERT/UPDATE/DELETE ...";
+$this->db->perform($sql, [/* params */]);;
     }
 
     /**
@@ -214,84 +189,13 @@ class Message
             $pmCount = $this->cache->get('inbox_' . $userid);
         }
         if ($pmCount === false || is_null($pmCount)) {
-            $pmCount = $this->fluent->from('messages')
-                                    ->select(null)
-                                    ->select('COUNT(id) AS count');
-            if ($location === $this->site_config['pm']['sent']) {
-                $pmCount = $pmCount->where('sender = ?', $userid)
-                                   ->where('location = ?', $this->site_config['pm']['inbox']);
-            } else {
-                $pmCount = $pmCount->where('receiver = ?', $userid)
-                                   ->where('location = ?', $location);
-            }
-            if ($unread) {
-                $pmCount = $pmCount->where('unread = "yes"');
-            }
-            $pmCount = $pmCount->where('draft = "no"')
-                               ->fetch('count');
-            if ($location === $this->site_config['pm']['inbox'] && $unread) {
-                $this->cache->set('inbox_' . $userid, $pmCount, $this->site_config['expires']['unread']);
-            }
-        }
+            $pmCount = // TODO: review query
+$sql = "SELECT/INSERT/UPDATE/DELETE ...";
+$this->db->perform($sql, [/* params */]);;
 
-        return is_int($pmCount) ? $pmCount : 0;
-    }
-
-    /**
-     *
-     * @param int $userid
-     *
-     * @throws Exception
-     *
-     * @return mixed
-     */
-    public function get_total_count(int $userid)
-    {
-        $pmCount = $this->cache->get('message_count_' . $userid);
-        if ($pmCount === false || is_null($pmCount)) {
-            $pmCount = $this->fluent->from('messages')
-                                    ->select(null)
-                                    ->select('COUNT(id) AS count')
-                                    ->where('receiver = ?', $userid)
-                                    ->fetch('count');
-
-            $this->cache->set('message_count_' . $userid, $pmCount, $this->site_config['expires']['unread']);
-        }
-
-        return $pmCount;
-    }
-
-    /**
-     *
-     * @param int $dt
-     *
-     * @throws Exception
-     *
-     * @return int
-     */
-    public function delete_old_messages(int $dt)
-    {
-        $messages_1 = $this->fluent->from('messages')
-                                   ->select(null)
-                                   ->select('receiver')
-                                   ->where('location = ?', $this->site_config['pm']['deleted'])
-                                   ->where('added <= ?', $dt);
-
-        $this->fluent->delete('messages')
-                     ->where('location = ?', $this->site_config['pm']['deleted'])
-                     ->where('added <= ?', $dt)
-                     ->execute();
-
-        $messages_2 = $this->fluent->from('messages')
-                                   ->select(null)
-                                   ->select('receiver')
-                                   ->where('location = ?', $this->site_config['pm']['inbox'])
-                                   ->where('added <= ?', $dt);
-
-        $this->fluent->delete('messages')
-                     ->where('location = ?', $this->site_config['pm']['inbox'])
-                     ->where('added <= ?', $dt)
-                     ->execute();
+        $messages_2 = // TODO: review query
+$sql = "SELECT/INSERT/UPDATE/DELETE ...";
+$this->db->perform($sql, [/* params */]);;
 
         $i = 0;
         foreach ($messages_1 as $message) {
@@ -320,37 +224,9 @@ class Message
      */
     public function get_messages(int $userid, int $location, int $limit, int $offset, string $orderby)
     {
-        $messages = $this->fluent->from('messages AS m');
-        if ($location === $this->site_config['pm']['sent']) {
-            $messages = $messages->where('sender = ?', $userid)
-                                 ->where('location = ?', $this->site_config['pm']['inbox']);
-        } else {
-            $messages = $messages->where('receiver = ?', $userid)
-                                 ->where('location = ?', $location);
-        }
-        $messages = $messages->select(null)
-                             ->select('m.poster')
-                             ->select('m.sender')
-                             ->select('m.receiver')
-                             ->select('m.added')
-                             ->select('m.subject')
-                             ->select('m.unread')
-                             ->select('m.urgent')
-                             ->select('m.id AS message_id')
-                             ->select('f.id AS friend')
-                             ->select('b.id AS blocked')
-                             ->select('u.id');
-        if ($location === $this->site_config['pm']['sent']) {
-            $messages = $messages->leftJoin('users AS u ON m.receiver = u.id');
-        } else {
-            $messages = $messages->leftJoin('users AS u ON m.sender = u.id');
-        }
-        $messages = $messages->leftJoin('friends AS f ON m.receiver = f.userid AND m.sender = f.friendid')
-                             ->leftJoin('blocks AS b ON m.receiver = b.userid AND m.sender = b.blockid')
-                             ->limit($limit)
-                             ->offset($offset)
-                             ->orderBy($orderby)
-                             ->fetchAll();
+        $messages = // TODO: review query
+$sql = "SELECT/INSERT/UPDATE/DELETE ...";
+$this->db->perform($sql, [/* params */]);;
 
         return $messages;
     }

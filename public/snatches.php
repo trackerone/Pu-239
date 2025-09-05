@@ -28,58 +28,9 @@ if (!is_valid_id($id)) {
 }
 
 $fluent = $container->get(Database::class);
-$count = $fluent->from('snatched AS s')
-                ->select(null)
-                ->select('COUNT(s.id) AS count')
-                ->leftJoin('torrents AS t ON s.torrentid = t.id')
-                ->where('s.torrentid = ?', $id)
-                ->where('t.owner != s.userid')
-                ->where('s.to_go = 0')
-                ->fetch('count');
-
-$perpage = 25;
-$pager = pager($perpage, $count, $site_config['paths']['baseurl'] . "/snatches.php?id=$id&amp;");
-if (!$count) {
-    stderr(_('No Snatches'), _fe('It appears that there are currently no snatches for this {0}torrent.{1}', "<a href='{$site_config['paths']['baseurl']}/details.php?id={$id}'>", '</a>'));
-}
-$torrent = $container->get(Torrent::class);
-$name = $torrent->get_items(['name'], $id);
-$HTMLOUT .= "
-    <h1 class='has-text-centered'>Snatches for torrent</h1>
-    <h3 class='has-text-centered'><a href='{$site_config['paths']['baseurl']}/details.php?id={$id}'>" . htmlsafechars((string) $name) . "</a></h3>
-    <h3 class='has-text-centered'>Currently $count snatch" . ($count === 1 ? '' : 'es') . '</h3>';
-if ($count > $perpage) {
-    $HTMLOUT .= $pager['pagertop'];
-}
-$header = "
-        <tr>
-            <th class='has-text-left'>" . _('Username') . "</th>
-            <th class='has-text-right'>" . _('Uploaded') . "</th>
-            <th class='has-text-right'>" . _('Upspeed') . '</th>
-            ' . ($site_config['site']['ratio_free'] ? '' : "<th class='has-text-right'>" . _('Downloaded') . '</th>') . '
-            ' . ($site_config['site']['ratio_free'] ? '' : "<th class='has-text-right'>" . _('Downspeed') . '</th>') . "
-            <th class='has-text-right'>" . _('Ratio') . "</th>
-            <th class='has-text-right'>" . _('Completed') . "</th>
-            <th class='has-text-right'>" . _('Seed time') . "</th>
-            <th class='has-text-right'>" . _('Leech time') . "</th>
-            <th class='has-text-centered'>" . _('Last action') . "</th>
-            <th class='has-text-centered'>" . _('Completed at') . "</th>
-            <th class='has-text-centered'>" . _('Announced') . '</th>
-        </tr>';
-
-$snatches = $fluent->from('snatched AS s')
-                   ->select('u.paranoia')
-                   ->select('t.anonymous')
-                   ->select('t.size')
-                   ->select('t.owner')
-                   ->leftJoin('torrents AS t ON s.torrentid = t.id')
-                   ->leftJoin('users AS u ON s.userid = u.id')
-                   ->where('s.torrentid = ?', $id)
-                   ->where('t.owner != s.userid')
-                   ->where('s.to_go = 0')
-                   ->limit($pager['pdo']['limit'])
-                   ->offset($pager['pdo']['offset'])
-                   ->fetchAll();
+$count = // TODO: review query
+$sql = "SELECT/INSERT/UPDATE/DELETE ...";
+$this->db->perform($sql, [/* params */]);;
 
 $body = '';
 foreach ($snatches as $arr) {

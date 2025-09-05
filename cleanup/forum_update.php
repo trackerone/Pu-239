@@ -23,63 +23,31 @@ function forum_update($data)
 
     $time_start = microtime(true);
     $fluent = $container->get(Database::class);
-    $fluent->deleteFrom('now_viewing')
-           ->where('added < ?', TIME_NOW - 900)
-           ->execute();
+    // TODO: review query
+$sql = "SELECT/INSERT/UPDATE/DELETE ...";
+$this->db->perform($sql, [/* params */]);;
 
-    $forums = $fluent->from('forums')
-                     ->select(null)
-                     ->select('forums.id')
-                     ->select('COUNT(DISTINCT topics.id) AS topics')
-                     ->select('COUNT(posts.id) AS posts')
-                     ->leftJoin('topics ON forums.id = topics.forum_id')
-                     ->leftJoin('posts ON topics.id = posts.topic_id')
-                     ->groupBy('forums.id');
-
-    foreach ($forums as $forum) {
-        $forum['posts'] = $forum['topics'] > 0 ? $forum['posts'] : 0;
-        $set = [
-            'post_count' => $forum['posts'],
-            'topic_count' => $forum['topics'],
-        ];
-        $fluent->update('forums')
-               ->set($set)
-               ->where('id = ?', $forum['id'])
-               ->execute();
+    $forums = // TODO: review query
+$sql = "SELECT/INSERT/UPDATE/DELETE ...";
+$this->db->perform($sql, [/* params */]);;
     }
-    $topics = $fluent->from('topics')
-                     ->select(null)
-                     ->select('id')
-                     ->fetchAll();
+    $topics = // TODO: review query
+$sql = "SELECT/INSERT/UPDATE/DELETE ...";
+$this->db->perform($sql, [/* params */]);;
 
     foreach ($topics as $topic) {
-        $last_post = $fluent->from('posts')
-                            ->select(null)
-                            ->select('id')
-                            ->select('added')
-                            ->where('topic_id = ?', $topic['id'])
-                            ->orderBy('added DESC')
-                            ->limit(1)
-                            ->fetch();
+        $last_post = // TODO: review query
+$sql = "SELECT/INSERT/UPDATE/DELETE ...";
+$this->db->perform($sql, [/* params */]);;
 
         if (empty($last_post['id'])) {
-            $fluent->deleteFrom('topics')
-                   ->where('id = ?', $topic['id'])
-                   ->execute();
+            // TODO: review query
+$sql = "SELECT/INSERT/UPDATE/DELETE ...";
+$this->db->perform($sql, [/* params */]);;
         } else {
-            $count = $fluent->from('posts')
-                            ->select(null)
-                            ->select('COUNT(id) AS count')
-                            ->where('topic_id = ?', $topic['id'])
-                            ->fetch('count');
-            $set = [
-                'last_post' => $last_post['id'],
-                'post_count' => $count,
-            ];
-            $fluent->update('topics')
-                   ->set($set)
-                   ->where('id = ?', $topic['id'])
-                   ->execute();
+            $count = // TODO: review query
+$sql = "SELECT/INSERT/UPDATE/DELETE ...";
+$this->db->perform($sql, [/* params */]);;
         }
     }
 

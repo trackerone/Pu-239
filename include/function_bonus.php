@@ -72,13 +72,9 @@ if (!empty($free) && $free['modifier'] != 0) {
     }
 }
 
-$total_fl = $fluent->from('bonus')
-                   ->select(null)
-                   ->select('SUM(pointspool) AS pointspool')
-                   ->select('points')
-                   ->select('enabled')
-                   ->where('id = 11')
-                   ->fetch();
+$total_fl = // TODO: review query
+$sql = "SELECT/INSERT/UPDATE/DELETE ...";
+$this->db->perform($sql, [/* params */]);;
 $font_color_fl = $font_color_du = $font_color_hd = '';
 $percent_fl = $total_fl['pointspool'] / $total_fl['points'] * 100;
 if ($total_fl['enabled'] === 'yes') {
@@ -109,13 +105,9 @@ if ($total_fl['enabled'] === 'yes') {
             break;
     }
 }
-$total_du = $fluent->from('bonus')
-                   ->select(null)
-                   ->select('SUM(pointspool) AS pointspool')
-                   ->select('points')
-                   ->select('enabled')
-                   ->where('id = 12')
-                   ->fetch();
+$total_du = // TODO: review query
+$sql = "SELECT/INSERT/UPDATE/DELETE ...";
+$this->db->perform($sql, [/* params */]);;
 $percent_du = $total_du['pointspool'] / $total_du['points'] * 100;
 if ($total_du['enabled'] === 'yes') {
     switch ($percent_du) {
@@ -146,13 +138,9 @@ if ($total_du['enabled'] === 'yes') {
     }
 }
 
-$total_hd = $fluent->from('bonus')
-                   ->select(null)
-                   ->select('SUM(pointspool) AS pointspool')
-                   ->select('points')
-                   ->select('enabled')
-                   ->where('id=13')
-                   ->fetch();
+$total_hd = // TODO: review query
+$sql = "SELECT/INSERT/UPDATE/DELETE ...";
+$this->db->perform($sql, [/* params */]);;
 $percent_hd = $total_hd['pointspool'] / $total_hd['points'] * 100;
 if ($total_hd['enabled'] === 'yes') {
     switch ($percent_hd) {
@@ -201,53 +189,26 @@ if ($half_down_enabled) {
 
 $top_donators = $cache->get('top_donators1_');
 if ($top_donators === false || is_null($top_donators)) {
-    $top_donators = $fluent->from('bonuslog AS b')
-                           ->select(null)
-                           ->select('b.user_id')
-                           ->select('SUM(b.donation) AS total')
-                           ->select('MIN(b.added_at) AS added')
-                           ->innerJoin('users AS u ON b.user_id = u.id')
-                           ->where('b.type = "freeleech"')
-                           ->groupBy('b.user_id')
-                           ->orderBy('total DESC')
-                           ->order('added')
-                           ->limit(10)
-                           ->fetchAll();
+    $top_donators = // TODO: review query
+$sql = "SELECT/INSERT/UPDATE/DELETE ...";
+$this->db->perform($sql, [/* params */]);;
 
     $cache->set('top_donators1_', $top_donators, 0);
 }
 
 $top_donators2 = $cache->get('top_donators2_');
 if ($top_donators2 === false || is_null($top_donators2)) {
-    $top_donators2 = $fluent->from('bonuslog as b')
-                            ->select(null)
-                            ->select('b.user_id')
-                            ->select('SUM(b.donation) AS total')
-                            ->select('MIN(b.added_at) AS added')
-                            ->innerJoin('users AS u ON b.user_id = u.id')
-                            ->where('b.type = "doubleupload"')
-                            ->groupBy('b.user_id')
-                            ->orderBy('total DESC')
-                            ->order('added')
-                            ->limit(10)
-                            ->fetchAll();
+    $top_donators2 = // TODO: review query
+$sql = "SELECT/INSERT/UPDATE/DELETE ...";
+$this->db->perform($sql, [/* params */]);;
     $cache->set('top_donators2_', $top_donators2, 0);
 }
 
 $top_donators3 = $cache->get('top_donators3_');
 if ($top_donators3 === false || is_null($top_donators3)) {
-    $top_donators3 = $fluent->from('bonuslog AS b')
-                            ->select(null)
-                            ->select('b.user_id')
-                            ->select('SUM(b.donation) AS total')
-                            ->select('MIN(b.added_at) AS added')
-                            ->innerJoin('users AS u ON b.user_id = u.id')
-                            ->where('b.type = "halfdownload"')
-                            ->groupBy('b.user_id')
-                            ->orderBy('total DESC')
-                            ->order('added')
-                            ->limit(10)
-                            ->fetchAll();
+    $top_donators3 = // TODO: review query
+$sql = "SELECT/INSERT/UPDATE/DELETE ...";
+$this->db->perform($sql, [/* params */]);;
     $cache->set('top_donators3_', $top_donators3, 0);
 }
 

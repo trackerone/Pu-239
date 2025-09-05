@@ -62,12 +62,9 @@ class Comment
         $pager = pager($perpage, $count, $this->env['paths']['baseurl'] . "/details.php?id=$tid&amp;", [
             'lastpagedefault' => 1,
         ]);
-        $comments = $this->fluent->from('comments')
-                                 ->where('torrent = ?', $tid)
-                                 ->orderBy('id DESC')
-                                 ->limit($pager['pdo']['limit'])
-                                 ->offset($pager['pdo']['offset'])
-                                 ->fetchAll();
+        $comments = // TODO: review query
+$sql = "SELECT/INSERT/UPDATE/DELETE ...";
+$this->db->perform($sql, [/* params */]);;
 
         return [
             $comments,
@@ -85,74 +82,9 @@ class Comment
         $comments = $this->cache->get('latest_comments_');
         if ($comments === false || is_null($comments)) {
             $comments = [];
-            $torrents = $this->fluent->from('comments AS c')
-                                     ->select(null)
-                                     ->select('c.id AS comment_id')
-                                     ->select('c.user')
-                                     ->select('c.torrent AS id')
-                                     ->select('c.added')
-                                     ->select('c.text')
-                                     ->select('c.anonymous')
-                                     ->select('c.user_likes')
-                                     ->select('t.id')
-                                     ->select('t.added')
-                                     ->select('t.seeders')
-                                     ->select('t.leechers')
-                                     ->select('t.name')
-                                     ->select('t.size')
-                                     ->select('t.poster')
-                                     ->select('t.anonymous')
-                                     ->select('t.owner')
-                                     ->select('t.imdb_id')
-                                     ->select('t.times_completed')
-                                     ->select('t.rating')
-                                     ->select('t.year')
-                                     ->select('t.subs AS subtitles')
-                                     ->select('t.audios')
-                                     ->select('t.newgenre AS genre')
-                                     ->select('u.username')
-                                     ->select('u.class')
-                                     ->select('p.name AS parent_name')
-                                     ->select('s.name AS cat')
-                                     ->select('s.image')
-                                     ->innerJoin('torrents AS t ON t.id=c.torrent')
-                                     ->leftJoin('users AS u ON u.id = c.user')
-                                     ->leftJoin('categories AS s ON t.category = s.id')
-                                     ->leftJoin('categories AS p ON s.parent_id = p.id')
-                                     ->where('c.torrent > 0')
-                                     ->orderBy('c.id DESC')
-                                     ->limit(5);
-
-            foreach ($torrents as $torrent) {
-                if (!empty($torrent['parent_name'])) {
-                    $torrent['cat'] = $torrent['parent_name'] . '::' . $torrent['cat'];
-                }
-                $comments[] = $torrent;
-            }
-            $this->cache->set('latest_comments_', $comments, $this->site_config['expires']['latestcomments']);
-        }
-        foreach ($comments as $comment) {
-            if (empty($comment['poster']) && !empty($comment['imdb_id'])) {
-                $this->image->find_images($comment['imdb_id']);
-            }
-        }
-
-        return $comments;
-    }
-
-    /**
-     *
-     * @param int $id
-     *
-     * @throws Exception
-     *
-     * @return bool
-     */
-    public function delete(int $id)
-    {
-        $result = $this->fluent->deleteFrom('comments')
-                               ->where('id = ?', $id)
-                               ->execute();
+            $torrents = // TODO: review query
+$sql = "SELECT/INSERT/UPDATE/DELETE ...";
+$this->db->perform($sql, [/* params */]);;
 
         $this->cache->delete('latest_comments_');
 
@@ -170,10 +102,9 @@ class Comment
      */
     public function update(array $set, int $id)
     {
-        $result = $this->fluent->update('comments')
-                               ->set($set)
-                               ->where('id = ?', $id)
-                               ->execute();
+        $result = // TODO: review query
+$sql = "SELECT/INSERT/UPDATE/DELETE ...";
+$this->db->perform($sql, [/* params */]);;
 
         $this->cache->delete('latest_comments_');
 
@@ -190,9 +121,9 @@ class Comment
      */
     public function add(array $values)
     {
-        $id = $this->fluent->insertInto('comments')
-                           ->values($values)
-                           ->execute();
+        $id = // TODO: review query
+$sql = "SELECT/INSERT/UPDATE/DELETE ...";
+$this->db->perform($sql, [/* params */]);;
 
         return $id;
     }
@@ -207,16 +138,9 @@ class Comment
      */
     public function get_comment_by_column(string $column, int $id)
     {
-        $comments = $this->fluent->from('comments');
-        if ($column === 'request') {
-            $comments = $comments->where('request = ?', $id);
-        } elseif ($column === 'offer') {
-            $comments = $comments->where('offer = ?', $id);
-        } elseif ($column === 'recipe') {
-            $comments = $comments->where('recipe = ?', $id);
-        }
-        $comments = $comments->orderBy('id DESC')
-                             ->fetchAll();
+        $comments = // TODO: review query
+$sql = "SELECT/INSERT/UPDATE/DELETE ...";
+$this->db->perform($sql, [/* params */]);;
 
         return $comments;
     }
@@ -231,9 +155,9 @@ class Comment
      */
     public function get_comment_by_id(int $commentid)
     {
-        $comment = $this->fluent->from('comments')
-                                ->where('id = ?', $commentid)
-                                ->fetch();
+        $comment = // TODO: review query
+$sql = "SELECT/INSERT/UPDATE/DELETE ...";
+$this->db->perform($sql, [/* params */]);;
 
         return $comment;
     }

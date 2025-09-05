@@ -23,10 +23,9 @@ $_POST['choice'] = isset($_POST['choice']) ? $_POST['choice'] : [];
 global $container, $site_config;
 
 $fluent = $container->get(Database::class);
-$poll_data = $fluent->from('polls')
-                    ->where('polls.pid = ?', $poll_id)
-                    ->leftJoin('poll_voters ON polls.pid = poll_voters.poll_id AND poll_voters.user_id = ?', $user['id'])
-                    ->fetch();
+$poll_data = // TODO: review query
+$sql = "SELECT/INSERT/UPDATE/DELETE ...";
+$this->db->perform($sql, [/* params */]);;
 
 if (empty($poll_data)) {
     stderr(_('Error'), _('Invalid ID'));
@@ -91,10 +90,9 @@ if (!$_POST['nullvote']) {
         'votes' => new Literal('votes + 1'),
         'choices' => $choices,
     ];
-    $result = $fluent->update('polls')
-                     ->set($set)
-                     ->where('pid = ?', $poll_data['pid'])
-                     ->execute();
+    $result = // TODO: review query
+$sql = "SELECT/INSERT/UPDATE/DELETE ...";
+$this->db->perform($sql, [/* params */]);;
 
     if (!$result) {
         stderr(_('Error'), _('Could not update records'));
