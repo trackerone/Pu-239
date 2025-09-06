@@ -15,9 +15,8 @@ if (!is_dir($dir)) {
 }
 
 $files = glob($dir . '/*.php');
-if ($files === false) {
-    fwrite(STDERR, "glob() failed for admin/*.php\n");
-    exit(1);
+if (!is_array($files)) {
+    $files = [];
 }
 
 $scanned = 0;
@@ -26,9 +25,10 @@ $changed = 0;
 foreach ($files as $path) {
     $src = file_get_contents($path);
     if ($src === false) {
+        // unreadable file; skip
         continue;
     }
-}
+
     $orig = $src;
     $scanned++;
 
@@ -62,12 +62,12 @@ foreach ($files as $path) {
         $blockBody
     );
     if ($blockBodyNoDeclare === null) {
-        // If PCRE fails for any reason, fall back to original body
+        // PCRE failure fallback
         $blockBodyNoDeclare = $blockBody;
     }
 
-    // Trim leading newlines in the first block body
-    $blockBodyNoDeclare = ltrim($blockBodyNoDeclare, "\r\n");
+    // Trim leading newlines in the first block body (keep comments/code otherwise)
+    $blockBodyNoDeclare = preg_replace('/^\R+/', '', $blockBodyNoDeclare);
 
     // Rebuild first block so declare is the very first statement
     $rebuilt =
