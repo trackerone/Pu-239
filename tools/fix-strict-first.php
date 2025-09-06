@@ -11,14 +11,15 @@ declare(strict_types=1);
  * Strategy:
  *   - Strip BOM.
  *   - Replace ALL "?>" with a newline (flatten to a single PHP block).
- *   - Remove ALL additional "<?php" occurrences except the very first one.
+ *   - Remove ALL additional "<?php" occurrences except the first one.
  *   - Remove ALL existing declare(strict_types=1) occurrences.
- *   - Rebuild the file to start with:
+ *   - Rebuild the file to start with exactly:
  *       <?php
  *       declare(strict_types=1);
- *       <blank line>
- *       <rest of content (without leading <?php or declare)>
+ *
+ *       <rest of content>
  */
+
 $root = getcwd();
 $dir  = $root . '/admin';
 
@@ -32,47 +33,70 @@ $changed = 0;
 
 $it = new DirectoryIterator($dir);
 foreach ($it as $f) {
-    if ($f->isDot() || !$f->isFile()) continue;
-    if (strtolower($f->getExtension()) !== 'php') continue;
+    if ($f->isDot() || !$f->isFile()) {
+        continue;
+    }
+    if (strtolower($f->getExtension()) !== 'php') {
+        continue;
+    }
 
     $path = $f->getPathname();
     $src  = file_get_contents($path);
-    if ($src === false) continue;
+    if ($src === false) {
+        continue;
+    }
     $orig = $src;
     $scanned++;
 
-    // 0) Strip BOM
+    // 0) Strip UTF-8 BOM
     $src = preg_replace('/^\xEF\xBB\xBF/', '', $src);
 
-    // 1) If file has any text before the first "<?php", prepend opener
+    // 1) Ensure we have an opening tag at the top
     if (!preg_match('/^\s*<\?php/i', $src)) {
         $src = "<?php\n" . ltrim($src);
     }
 
-    // 2) Remove ALL closing tags "?>" (we keep a single PHP block)
+    // 2) Flatten to a single PHP block: remove all closing tags
     $src = str_replace("?>", "\n", $src);
 
-    // 3) Remove ALL additional open tags beyond the first
-    //    Keep the first "<?php" only
-    $src = preg_replace('/^\s*<\?php/i', "<?php", $src, 1); // normalize first
-    $src = preg_replace('/<\?php/i', '', $src);             // strip any subsequent ones
+    // 3) Keep only the first opening tag; remove subsequent ones
+    // Normalize the very first one exactly to "<?php\n"
+    $src = preg_replace('/^\s*<\?php\s*/i', "<?php\n", $src, 1);
+    // Remove any other "<?php" occurrences later in the file
+    $src = preg_replace('/<\?php\s*/i', '', $src);
 
-    // 4) Remove ALL existing declare(strict_types=1);
+    // 4) Remove any existing declare(strict_types=1);
     $src = preg_replace('/declare\s*\(\s*strict_types\s*=\s*1\s*\)\s*;\s*/i', '', $src);
 
-    // 5) Remove any accidental blank lines right at the start (after we cleaned up)
+    // 5) Remove empty lines right after the (normalized) opener
     $src = preg_replace('/^<\?php\s*\R+/i', "<?php\n", $src, 1);
 
-    // 6) Rebuild with declare strictly first
-    $src = "<?php\n" . "declare(strict_types=1);\n\n" . ltrim(substr($src, strlen("<?php\n")));
+    // 6) Rebuild with declare() as the very first statement
+    // Split into lines so we can ensure an empty line after declare for readability
+    $lines = explode("\n", $src);
 
-    // 7) Sanity: ensure we still start correctly
-    if (!str_starts_with($src, "<?php\ndeclare(strict_types=1);\n")) {
-        $src = "<?php\ndeclare(strict_types=1);\n\n" . ltrim($src);
+    // Guarantee the first line is exactly "<?php"
+    if (!isset($lines[0]) || trim($lines[0]) !== '<?php') {
+        array_unshift($lines, '<?php');
     }
 
-    if ($src !== $orig) {
-        file_put_contents($path, $src);
+    // Remove any blank lines after the opener
+    $idx = 1;
+    while (isset($lines[$idx]) && trim($lines[$idx]) === '') {
+        array_splice($lines, $idx, 1);
+    }
+
+    // Insert declare(strict_types=1); as line 2 if it's not there already
+    if (!isset($lines[1]) || stripos($lines[1], 'declare(strict_types=1);') === false) {
+        array_splice($lines, 1, 0, 'declare(strict_types=1);');
+        // Add a blank line after declare for readability
+        array_splice($lines, 2, 0, '');
+    }
+
+    $new = implode("\n", $lines);
+
+    if ($new !== $orig) {
+        file_put_contents($path, $new);
         $changed++;
     }
 }
