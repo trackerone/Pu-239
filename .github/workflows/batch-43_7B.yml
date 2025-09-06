@@ -23,9 +23,9 @@ jobs:
         uses: shivammathur/setup-php@v2
         with: { php-version: '8.2' }
 
-      - name: Apply admin DB rewrite (no TODOs)
-        run: php ./tools/batch-43_7-admin-rewrite.php
-
+      - name: Run admin autofix (43.7B)
+        run: php ./tools/batch-43_7B-admin-autofix.php
+  
       - name: Lint changed admin PHP files
         run: |
           set -euo pipefail
