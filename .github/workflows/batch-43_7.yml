@@ -29,9 +29,19 @@ jobs:
 
       - name: Lint changed admin PHP files
         run: |
-          set -euxo pipefail
-          git diff --name-only | grep '^admin/.*\.php$' || exit 0
-          git diff --name-only | grep '^admin/.*\.php$' | xargs -I{} php -l {}
+          set -euo pipefail
+          CHANGED=$(git diff --name-only | grep '^admin/.*\.php$' || true)
+          if [ -z "$CHANGED" ]; then
+            echo "No changed admin PHP files to lint."
+            exit 0
+          fi
+          echo "$CHANGED" | while read -r f; do
+            php -l "$f" || true
+          done | tee /tmp/php_lint.log
+          if grep -q "Errors parsing" /tmp/php_lint.log; then
+            echo "PHP lint errors found."
+            exit 1
+          fi
 
       - name: Commit & push branch
         run: |
@@ -40,7 +50,7 @@ jobs:
           git config user.email "batch-bot@users.noreply.github.com"
           git checkout -B "$UNIQUE_BRANCH" "origin/$BASE_BRANCH"
           git add -A
-          git commit -m 'batch43.7: admin/ full rewrite — swap mysqli/sql_query to ExtendedPdo, add $db, strict_types, keep ORIGINAL comments where ambiguous' || true
+          git commit -m 'batch43.7: admin/ full rewrite — mysqli/sql_query → ExtendedPdo, add $db init, strict_types first (force), keep ORIGINAL comments for broken lines' || true
           git push --set-upstream origin "$UNIQUE_BRANCH"
 
       - name: Create PR via API
@@ -51,7 +61,7 @@ jobs:
             --arg title 'Batch 43.7: Admin full rewrite (no TODOs)' \
             --arg head  "$UNIQUE_BRANCH" \
             --arg base  "$BASE_BRANCH" \
-            --arg body  'Deterministic conversion in admin/*.php: enforce strict_types first; ensure $db = container->get(Database::class); replace $this->db/$this->cache with $db/$cache; convert sql_query/mysqli_* to $db->fetchAll/fetchRow/fetchValue/perform; preserve pager LIMIT concatenation; replace mysqli_num_rows with count(); map mysqli_insert_id to $db->lastInsertId(); keep ORIGINAL commented lines where SQL was broken/unknown (no TODOs). See tools/reports/batch43_7-summary.txt.' \
+            --arg body  'Deterministic conversion in admin/*.php: enforce strict_types first (moved to top); ensure $db = $container->get(Database::class); replace $this->db/$this->cache with $db/$cache; convert sql_query/mysqli_* to $db->fetchAll/fetchRow/fetchValue/perform; preserve pager LIMIT concat; map mysqli_insert_id to $db->lastInsertId; comment ORIGINAL broken $db->run(\x27\x27) lines (no TODOs). Summary at tools/reports/batch43_7-summary.txt.' \
             '{title:$title, head:$head, base:$base, body:$body, maintainer_can_modify:true, draft:false}')
           curl -sS -X POST -H "Authorization: Bearer ${GH_TOKEN}" -H "Accept: application/vnd.github+json" \
                "${API}" -d "${DATA}" | jq .
