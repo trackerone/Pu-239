@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 $db = $container->get(Database::class);
 
 require_once __DIR__ . '/../include/runtime_safe.php';
@@ -35,7 +37,7 @@ $HTMLOUT = "
     <h1 class='has-text-centered is-wrapped'>" . _('MySQL Server Table Status') . '</h1>';
 
 $count = 0;
-// $fluent removed — use $this->db (ExtendedPdo)
+// $fluent removed — use $db (ExtendedPdo)
 $tables = $fluent->getPdo()
                  ->prepare('SHOW TABLE STATUS');
 $tables->execute();

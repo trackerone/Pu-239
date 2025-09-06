@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 require_once __DIR__ . '/../include/runtime_safe.php';
 
 
@@ -38,15 +40,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         stderr(_('Error'), _('Something went wrong!'));
     }
     if ($act === 'delete' && has_access($CURUSER['class'], UC_SYSOP, 'coder')) {
-        $res_del = $db->run(');
-            }
+        $res_del = // TODO(batch43.3): previously broken $db->run(...) removed; supply proper SQL here.
+}
         } else {
             stderr(_('Error'), _('Something went wrong!'));
         }
     }
     if ($act === 'disable') {
-        if ($db->run(');
-        $body = _fe('Hey, your Hit and Run warning was removed by {0}. Please keep in your best behaviour from now on.', $CURUSER['username']);
+        if (// TODO(batch43.3): previously broken $db->run(...) removed; supply proper SQL here.
+$body = _fe('Hey, your Hit and Run warning was removed by {0}. Please keep in your best behaviour from now on.', $CURUSER['username']);
         $pms = [];
         foreach ($_uids as $id) {
             $pms[] = '(2,' . $id . ',' . sqlesc($sub) . ',' . sqlesc($body) . ',' . sqlesc(TIME_NOW) . ')';
@@ -55,8 +57,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             'hnrwarn' => 'no',
         ], $site_config['expires']['user_cache']);
         if (!empty($pms) && count($pms)) {
-            $g = $db->run(');
-            if ($g && $q1) {
+            $g = // TODO(batch43.3): previously broken $db->run(...) removed; supply proper SQL here.
+if ($g && $q1) {
                 header('Refresh: 2; url=' . $r);
                 stderr(_('Success'), _pfe("{0} user HnR's warning removed", "{0} users HnR's warning removed", count($pms)));
             } else {

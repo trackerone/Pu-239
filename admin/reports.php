@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 require_once __DIR__ . '/../include/runtime_safe.php';
 
 require_once __DIR__ . '/../include/bootstrap_pdo.php';
@@ -134,7 +136,7 @@ if ($count === 0) {
         }
 
         if ($arr_info['delt_with']) {
-            $res_who = $db->run(');
+            $res_who = // TODO(batch43.3): previously broken $db->run(...) removed; supply proper SQL here.
 }
 $title = _('Active Reports');
 $breadcrumbs = [

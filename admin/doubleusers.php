@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 require_once __DIR__ . '/../include/runtime_safe.php';
 
 require_once __DIR__ . '/../include/bootstrap_pdo.php';
@@ -41,7 +43,7 @@ if ($remove) {
                 'subject' => _('DoubleSeed Notice!'),
             ];
             $messages_class->insert($msgs_buffer);
-            $db->run(');
+            // TODO(batch43.3): previously broken $db->run(...) removed; supply proper SQL here.
 $count = mysqli_num_rows($res2);
 $perpage = 25;
 $pager = pager($perpage, $count, "{$site_config['paths']['baseurl']}/staffpanel.php?tool=doubleusers&amp;");

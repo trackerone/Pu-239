@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 $db = $container->get(Database::class);
 
 require_once __DIR__ . '/../include/runtime_safe.php';
@@ -26,8 +28,8 @@ if ($CURUSER['class'] >= UC_STAFF) {
     $rows = $db->fetchAll('SELECT username FROM users WHERE id = ' . sqlesc($id)) or sqlerr(__FILE__, __LINE__);
     $arr = mysqli_fetch_assoc($res);
     $username = htmlsafechars($arr['username']);
-    $db->run(');
-    stderr(_('Success'), _pfe('{0} ghost torrent was successfully cleaned. You may now restart your torrents, the tracker has been updated.', '{0} ghost torrents were successfully cleaned. You may now restart your torrents, the tracker has been updated.', $effected));
+    // TODO(batch43.3): previously broken $db->run(...) removed; supply proper SQL here.
+stderr(_('Success'), _pfe('{0} ghost torrent was successfully cleaned. You may now restart your torrents, the tracker has been updated.', '{0} ghost torrents were successfully cleaned. You may now restart your torrents, the tracker has been updated.', $effected));
 } else {
     stderr(_('Error'), _('You are not a member of the staff.'));
 }

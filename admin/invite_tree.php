@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 require_once __DIR__ . '/../include/runtime_safe.php';
 
 
@@ -14,13 +16,13 @@ require_once CLASS_DIR . 'class_check.php';
 $class = get_access(basename($_SERVER['REQUEST_URI']));
 class_check($class);
 global $container;
-$db = $container->get(Database::class);, $site_config;
+$db = $container->get(Database::class);
 
 $HTMLOUT = '';
 $id = isset($_GET['id']) ? (int) $_GET['id'] : (isset($_POST['id']) ? (int) $_POST['id'] : 0);
 $users_class = $container->get(User::class);
 $fluent = $db; // alias
-// $fluent removed — use $this->db (ExtendedPdo)
+// $fluent removed — use $db (ExtendedPdo)
 if ($id !== 0) {
     $arr_user = $users_class->getUserFromId($id);
     $HTMLOUT .= '

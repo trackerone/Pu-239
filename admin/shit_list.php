@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 $db = $container->get(Database::class);
 
 require_once __DIR__ . '/../include/runtime_safe.php';
@@ -43,8 +45,8 @@ switch ($action2) {
         if (!is_valid_id($shit_list_id)) {
             stderr(_('Error'), _('Invalid ID'));
         }
-        $res_name = $db->run(');
-        $cache->delete('shit_list_' . $shit_list_id);
+        $res_name = // TODO(batch43.3): previously broken $db->run(...) removed; supply proper SQL here.
+$cache->delete('shit_list_' . $shit_list_id);
         $message = '<h1>' . _('Success! Member added to your personal shitlist!') . '</h1><a class="is-link" href="' . $return_to . '"><span class="button is-small" style="padding:1px;">' . _('go back to where you were?') . '</span></a>';
         break;
     //=== action2: delete
@@ -55,7 +57,7 @@ switch ($action2) {
         if (!is_valid_id($shit_list_id)) {
             stderr(_('Error'), _('Invalid ID'));
         }
-        $res_name = $db->run(');
+        $res_name = // TODO(batch43.3): previously broken $db->run(...) removed; supply proper SQL here.
 //=== default page
 $HTMLOUT .= $message . '
    <legend>' . _fe('Shit List for {0}', format_comment($CURUSER['username'])) . '</legend>

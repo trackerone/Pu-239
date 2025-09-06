@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 require_once __DIR__ . '/../include/runtime_safe.php';
 
 require_once __DIR__ . '/../include/bootstrap_pdo.php';
@@ -17,7 +19,7 @@ global $container;
 $db = $container->get(Database::class);, $site_config, $CURUSER;
 
 $fluent = $db; // alias
-// $fluent removed — use $this->db (ExtendedPdo)
+// $fluent removed — use $db (ExtendedPdo)
 $promos = $fluent->from('class_promo')
     ->orderBy('id');
 foreach ($promos as $ac) {
@@ -100,8 +102,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         } else {
             $session->set('is-error', _('We cannot have empty low ratio!'));
         }
-        if ($db->run(');
-        }
+        if (// TODO(batch43.3): previously broken $db->run(...) removed; supply proper SQL here.
+}
     }
 }
 
