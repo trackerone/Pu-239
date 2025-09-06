@@ -24,6 +24,9 @@ jobs:
         with:
           php-version: '8.2'
 
+      - name: Fix strict_types to be first in all admin/*.php
+        run: php ./tools/fix-strict-first.php
+
       - name: Apply admin full rewrite (no TODOs)
         run: php ./tools/batch-43_7-admin-rewrite.php
 
@@ -50,7 +53,7 @@ jobs:
           git config user.email "batch-bot@users.noreply.github.com"
           git checkout -B "$UNIQUE_BRANCH" "origin/$BASE_BRANCH"
           git add -A
-          git commit -m 'batch43.7: admin/ full rewrite — mysqli/sql_query → ExtendedPdo, add $db init, strict_types first (force), keep ORIGINAL comments for broken lines' || true
+          git commit -m 'batch43.7: admin/ rewrite — strict_types first, $db init placed after use + runtime_safe, mysqli/sql_query → ExtendedPdo, ORIGINAL comments for broken lines' || true
           git push --set-upstream origin "$UNIQUE_BRANCH"
 
       - name: Create PR via API
@@ -61,7 +64,7 @@ jobs:
             --arg title 'Batch 43.7: Admin full rewrite (no TODOs)' \
             --arg head  "$UNIQUE_BRANCH" \
             --arg base  "$BASE_BRANCH" \
-            --arg body  'Deterministic conversion in admin/*.php: enforce strict_types first (moved to top); ensure $db = $container->get(Database::class); replace $this->db/$this->cache with $db/$cache; convert sql_query/mysqli_* to $db->fetchAll/fetchRow/fetchValue/perform; preserve pager LIMIT concat; map mysqli_insert_id to $db->lastInsertId; comment ORIGINAL broken $db->run(\x27\x27) lines (no TODOs). Summary at tools/reports/batch43_7-summary.txt.' \
+            --arg body  'Runs a strict-first pass, then rewrites admin/*.php to ExtendedPdo: declare(strict_types=1) as first statement, inserts $db after use + runtime_safe, converts sql_query/mysqli_* to $db->fetchAll/fetchRow/fetchValue/perform, preserves LIMIT text, maps mysqli_insert_id, and comments ORIGINAL broken $db->run( ) lines. All code comments in English. Summary: tools/reports/batch43_7-summary.txt.' \
             '{title:$title, head:$head, base:$base, body:$body, maintainer_can_modify:true, draft:false}')
           curl -sS -X POST -H "Authorization: Bearer ${GH_TOKEN}" -H "Accept: application/vnd.github+json" \
                "${API}" -d "${DATA}" | jq .
