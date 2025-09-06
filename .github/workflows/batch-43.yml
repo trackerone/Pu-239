@@ -1,0 +1,54 @@
+name: Batch 43 - FluentPDO Auto-Fixes (API PR, uses reports)
+
+on:
+  workflow_dispatch:
+
+jobs:
+  run-batch-43:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+    env:
+      BASE_BRANCH: ${{ github.event.repository.default_branch }}
+      UNIQUE_BRANCH: batch-43-${{ github.run_id }}-${{ github.run_attempt }}
+      GH_REPO: ${{ github.repository }}
+      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.2'
+          coverage: none
+          tools: none
+
+      - name: Run auto-fixes driven by tools/reports/*
+        run: php ./tools/batch-43-apply.php
+
+      - name: Commit & push branch
+        run: |
+          set -euxo pipefail
+          git config user.name "batch-bot"
+          git config user.email "batch-bot@users.noreply.github.com"
+          git checkout -B "$UNIQUE_BRANCH" "origin/$BASE_BRANCH"
+          git add -A
+          git commit -m "batch43: apply safe ExtendedPdo conversions driven by reports" || true
+          git push --set-upstream origin "$UNIQUE_BRANCH"
+
+      - name: Create PR via API
+        run: |
+          set -euxo pipefail
+          API="https://api.github.com/repos/${GH_REPO}/pulls"
+          DATA=$(jq -n \
+            --arg title "Batch 43: Safe FluentPDO → ExtendedPdo conversions (report-driven)" \
+            --arg head  "$UNIQUE_BRANCH" \
+            --arg base  "$BASE_BRANCH" \
+            --arg body  "Uses tools/reports/* mapping to perform safe, deterministic conversions to \$this->db (ExtendedPdo). Includes change report in tools/reports/." \
+            '{title:$title, head:$head, base:$base, body:$body, maintainer_can_modify:true, draft:false}')
+          curl -sS -X POST -H "Authorization: Bearer ${GH_TOKEN}" -H "Accept: application/vnd.github+json" \
+               "${API}" -d "${DATA}" | jq .
