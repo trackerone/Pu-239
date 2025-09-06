@@ -28,6 +28,7 @@ foreach ($files as $path) {
     if ($src === false) {
         continue;
     }
+}
     $orig = $src;
     $scanned++;
 
