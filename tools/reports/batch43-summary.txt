@@ -1,0 +1,5 @@
+Batch 43 — SAFE conversions applied
+=================================
+Files considered: 396
+Files changed:   26
+Date: 2025-09-06T13:07:31+00:00

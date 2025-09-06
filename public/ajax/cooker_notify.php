@@ -21,7 +21,7 @@ if (empty($id) || !isset($notified)) {
     echo json_encode(['notify' => 'invalid']);
     app_halt('Exit called');
 }
-$fluent = $container->get(Database::class);
+// $fluent removed — use $this->db (ExtendedPdo)
 if ($notified) {
     try {
         $fluent->deleteFrom('upcoming_notify')

@@ -167,9 +167,7 @@ $this->db->perform($sql, array_merge($set, ['id' => $commentid]));
         $referer = $_SERVER['HTTP_REFERER'];
         stderr('Delete comment', "You are about to delete a comment. Click\n" . "<a href='usercomment.php?action=delete&amp;cid=$commentid&amp;sure=1" . ($referer ? '&amp;returnto=' . urlencode($referer) : '') . "'><span class='has-text-success'>here</span></a> if you are sure.");
     }
-    $arr = $fluent->from('usercomments')
-                  ->where('id = ?', $commentid)
-                  ->fetch(); // TODO(batch41): replace with $this->db->fetchRow("SELECT ...", [...])
+    $arr = $row = $this->db->fetchRow("SELECT * FROM usercomments WHERE id = :id", ["id" => (int) $commentid]); // TODO(batch41): replace with $this->db->fetchRow("SELECT ...", [...])
 
     if ($arr) {
         $userid = (int) $arr['userid'];
@@ -207,9 +205,7 @@ $deleted = $this->db->perform($sql, ['id' => $commentid]);
     if (!is_valid_id($commentid)) {
         stderr(_('Error'), _('Invalid ID'));
     }
-    $arr = $fluent->from('usercomments')
-                  ->where('id = ?', $commentid)
-                  ->fetch(); // TODO(batch41): replace with $this->db->fetchRow("SELECT ...", [...])
+    $arr = $row = $this->db->fetchRow("SELECT * FROM usercomments WHERE id = :id", ["id" => (int) $commentid]); // TODO(batch41): replace with $this->db->fetchRow("SELECT ...", [...])
 
     if (!$arr) {
         stderr(_('Error'), _('Invalid ID'));

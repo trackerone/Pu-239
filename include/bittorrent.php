@@ -1368,7 +1368,7 @@ function GetDirectorySize($path, $human, $count)
         }
     }
 
-    if ($count) {
+    if ($refCount > 0) {
         if ($human) {
             return [
                 mksize($bytestotal),

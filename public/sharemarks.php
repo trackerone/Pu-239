@@ -240,7 +240,7 @@ $torrentsperpage = $user['torrentsperpage'];
 if (empty($torrentsperpage)) {
     $torrentsperpage = 25;
 }
-if ($count) {
+if ($refCount > 0) {
     $pager = pager($torrentsperpage, $count, 'sharemarks.php?&amp;');
     $sharemarks = $fluent->from('bookmarks AS b')
                          ->select(null)

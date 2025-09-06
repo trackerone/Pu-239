@@ -78,7 +78,7 @@ $this->db->perform($sql, array_merge($set, ['id' => $arr['id']]));
 
     $count = count($values);
     $messages_class = $container->get(Message::class);
-    if ($count) {
+    if ($refCount > 0) {
         $messages_class->insert($values);
     }
 

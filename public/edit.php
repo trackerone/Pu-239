@@ -44,9 +44,7 @@ if ((isset($_GET['unedit']) && $_GET['unedit'] == 1) && $user['class'] >= UC_STA
     app_halt('Exit called');
 }
 // $fluent removed — use $this->db (ExtendedPdo)
-$row = $fluent->from('torrents')
-              ->where('id = ?', $id)
-              ->fetch(); // TODO(batch41): replace with $this->db->fetchRow("SELECT ...", [...])
+$row = $row = $this->db->fetchRow("SELECT * FROM torrents WHERE id = :id", ["id" => (int) $id]); // TODO(batch41): replace with $this->db->fetchRow("SELECT ...", [...])
 if (!$row) {
     stderr(_('Error'), _('No torrent found'));
 }

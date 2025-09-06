@@ -44,9 +44,7 @@ if (isset($_GET['act'])) {
     $act = (int) $_GET['act'];
 
     if ($act === 1) {
-        $template = $fluent->from('stylesheets')
-                           ->where('id = ?', $id)
-                           ->fetch(); // TODO(batch41): replace with $this->db->fetchRow("SELECT ...", [...])
+        $template = $row = $this->db->fetchRow("SELECT * FROM stylesheets WHERE id = :id", ["id" => (int) $id]); // TODO(batch41): replace with $this->db->fetchRow("SELECT ...", [...])
 
         $HTML .= "
         <form action='{$_SERVER['PHP_SELF']}?tool=themes&amp;action=themes&amp;act=4' method='post' enctype='multipart/form-data' accept-charset='utf-8'>
@@ -183,9 +181,7 @@ if (isset($_GET['act'])) {
             stderr(_('Error'), _('Invalid ID'));
         }
 
-        $cur = $fluent->from('stylesheets')
-                      ->where('id = ?', $tid)
-                      ->fetch(); // TODO(batch41): replace with $this->db->fetchRow("SELECT ...", [...])
+        $cur = $row = $this->db->fetchRow("SELECT * FROM stylesheets WHERE id = :id", ["id" => (int) $tid]); // TODO(batch41): replace with $this->db->fetchRow("SELECT ...", [...])
 
         if ($id != $cur['id']) {
             $set['id'] = $id;

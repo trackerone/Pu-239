@@ -88,9 +88,7 @@ $topic_name = !empty($arr['topic_name']) ? format_comment($arr['topic_name']) : 
 $topic_desc1 = !empty($arr['topic_desc']) ? format_comment($arr['topic_desc']) : '';
 
 if ($arr['poll_id'] > 0) {
-    $arr_poll = $fluent->from('forum_poll')
-                       ->where('id = ?', $arr['poll_id'])
-                       ->fetch(); // TODO(batch41): replace with $this->db->fetchRow("SELECT ...", [...])
+    $arr_poll = $row = $this->db->fetchRow("SELECT * FROM forum_poll WHERE id = :id", ["id" => (int) $arr['poll_id']]); // TODO(batch41): replace with $this->db->fetchRow("SELECT ...", [...])
     if (!empty($arr_poll)) {
         if (has_access($CURUSER['class'], UC_STAFF, '')) {
             $query = $fluent->from('forum_poll_votes')

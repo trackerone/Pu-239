@@ -263,7 +263,7 @@ if (empty($torrentsperpage)) {
     $torrentsperpage = 25;
 }
 
-if ($count) {
+if ($refCount > 0) {
     $pager = pager($torrentsperpage, $count, 'bookmarks.php?&amp;');
     $bookmarks = $fluent->from('bookmarks AS b')
                         ->select(null)

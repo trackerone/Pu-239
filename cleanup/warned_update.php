@@ -66,7 +66,7 @@ function warned_update($data)
     }
 
     $count = count($msgs);
-    if ($count) {
+    if ($refCount > 0) {
         $messages_class = $container->get(Message::class);
         $messages_class->insert($msgs);
         $set = [

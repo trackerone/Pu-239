@@ -51,9 +51,7 @@ if ($action === 'viewbug') {
         if (!$id || !is_valid_id($id)) {
             stderr(_('Error'), _('Invalid ID'));
         }
-        $bug = $fluent->from('bugs')
-                      ->where('id = ?', $id)
-                      ->fetch(); // TODO(batch41): replace with $this->db->fetchRow("SELECT ...", [...])
+        $bug = $row = $this->db->fetchRow("SELECT * FROM bugs WHERE id = :id", ["id" => (int) $id]); // TODO(batch41): replace with $this->db->fetchRow("SELECT ...", [...])
         $user = $user_class->getUserFromId($bug['sender']);
         $precomment = "\n[precode]{$comment}[/precode]";
         switch ($status) {

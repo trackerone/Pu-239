@@ -47,7 +47,7 @@ $valid_sort = [
 ];
 $column = isset($_GET['sort'], $valid_sort[$_GET['sort']]) ? $valid_sort[$_GET['sort']] : 'started';
 if (isset($_GET['delete']) && is_valid_id((int) $_GET['delete'])) {
-    $fluent = $container->get(Database::class);
+    // $fluent removed — use $this->db (ExtendedPdo)
     $fluent->deleteFrom('peers')
            ->where('id = ?', (int) $_GET['delete'])
            ->execute();

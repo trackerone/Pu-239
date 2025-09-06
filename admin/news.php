@@ -101,9 +101,7 @@ $results = $this->db->perform($sql, $values);
     if (!is_valid_id($newsid)) {
         stderr(_('Error'), _('Invalid news item ID.'));
     }
-    $arr = $fluent->from('news')
-                  ->where('id = ?', $newsid)
-                  ->fetch(); // TODO(batch41): replace with $this->db->fetchRow("SELECT ...", [...])
+    $arr = $row = $this->db->fetchRow("SELECT * FROM news WHERE id = :id", ["id" => (int) $newsid]); // TODO(batch41): replace with $this->db->fetchRow("SELECT ...", [...])
     if (empty($arr)) {
         stderr(_('Error'), _('No news item with that ID.'));
     }

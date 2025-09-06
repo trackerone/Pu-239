@@ -226,7 +226,7 @@ $count = $fluent->from('deathrow')
                 ->select('COUNT(uid) AS count')
                 ->fetch("count"); // TODO(batch41): use $this->db->fetchValue("SELECT COUNT(...) ...", [...])
 
-if ($count) {
+if ($refCount > 0) {
     $perpage = 25;
     $pager = pager($perpage, $count, 'staffpanel.php?tool=deathrow&amp;');
     $torrents = $fluent->from('deathrow')

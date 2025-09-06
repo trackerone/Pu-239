@@ -101,9 +101,7 @@ $this->db->perform($sql, $values);
         break;
 
     case 'edit_forum_page':
-        $row = $fluent->from('over_forums')
-                      ->where('id = ?', $id)
-                      ->fetch(); // TODO(batch41): replace with $this->db->fetchRow("SELECT ...", [...])
+        $row = $row = $this->db->fetchRow("SELECT * FROM over_forums WHERE id = :id", ["id" => (int) $id]); // TODO(batch41): replace with $this->db->fetchRow("SELECT ...", [...])
         if (!empty($row)) {
             $HTMLOUT .= $main_links . '
             <form method="post" action="staffpanel.php?tool=over_forums&amp;action=over_forums" accept-charset="utf-8">

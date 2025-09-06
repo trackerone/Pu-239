@@ -90,9 +90,7 @@ $id = $this->db->perform($sql, $values);
             if ($id == 0) {
                 stderr(_('Error'), _('Invalid ID'));
             } else {
-                $arr = $fluent->from('subtitles')
-                              ->where('id = ?', $id)
-                              ->fetch(); // TODO(batch41): replace with $this->db->fetchRow("SELECT ...", [...])
+                $arr = $row = $this->db->fetchRow("SELECT * FROM subtitles WHERE id = :id", ["id" => (int) $id]); // TODO(batch41): replace with $this->db->fetchRow("SELECT ...", [...])
                 if (empty($arr)) {
                     stderr(_('Error'), _('Invalid ID'));
                 }
@@ -137,9 +135,7 @@ if ($mode === 'upload' || $mode === 'edit') {
         if ($id == 0) {
             stderr(_('Error'), _('Invalid ID'));
         } else {
-            $arr = $fluent->from('subtitles')
-                          ->where('id = ?', $id)
-                          ->fetch(); // TODO(batch41): replace with $this->db->fetchRow("SELECT ...", [...])
+            $arr = $row = $this->db->fetchRow("SELECT * FROM subtitles WHERE id = :id", ["id" => (int) $id]); // TODO(batch41): replace with $this->db->fetchRow("SELECT ...", [...])
             if (empty($arr)) {
                 stderr(_('Error'), _('Invalid ID'));
             }
@@ -261,9 +257,7 @@ if ($mode === 'upload' || $mode === 'edit') {
     if ($id == 0) {
         stderr(_('Error'), _('Invalid ID'));
     } else {
-        $arr = $fluent->from('subtitles')
-                      ->where('id = ?', $id)
-                      ->fetch(); // TODO(batch41): replace with $this->db->fetchRow("SELECT ...", [...])
+        $arr = $row = $this->db->fetchRow("SELECT * FROM subtitles WHERE id = :id", ["id" => (int) $id]); // TODO(batch41): replace with $this->db->fetchRow("SELECT ...", [...])
         if (empty($arr)) {
             stderr(_('Error'), _('Invalid ID'));
         }
@@ -351,9 +345,7 @@ $this->db->perform($sql, ['id' => $id]);
     if ($id == 0) {
         stderr(_('Error'), _('Invalid ID'));
     } else {
-        $arr = $fluent->from('subtitles')
-                      ->where('id = ?', $id)
-                      ->fetch(); // TODO(batch41): replace with $this->db->fetchRow("SELECT ...", [...])
+        $arr = $row = $this->db->fetchRow("SELECT * FROM subtitles WHERE id = :id", ["id" => (int) $id]); // TODO(batch41): replace with $this->db->fetchRow("SELECT ...", [...])
         if (empty($arr)) {
             stderr(_('Error'), _('Invalid ID'));
         }
