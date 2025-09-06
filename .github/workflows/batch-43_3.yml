@@ -43,10 +43,10 @@ jobs:
           set -euxo pipefail
           API="https://api.github.com/repos/${GH_REPO}/pulls"
           DATA=$(jq -n \
-            --arg title "Batch 43.3: Admin hotfix ($db init, no this->db, strict_types first)" \
+            --arg title 'Batch 43.3: Admin hotfix (\$db init, no \$this->db, strict_types first)' \
             --arg head  "$UNIQUE_BRANCH" \
             --arg base  "$BASE_BRANCH" \
-            --arg body  "Repo scope: admin/*.php only. Ensures script-style DB via db=container->get(Database::class), replaces this->db with db, moves declare(strict_types=1) to top, removes TODOs and broken lines, writes tools/reports/batch43_3-summary.txt." \
+            --arg body  'Repo scope: admin/*.php only. Ensures script-style DB via db=container->get(Database::class), replaces \$this->db with \$db, moves declare(strict_types=1) to top, removes TODOs and broken lines, writes tools/reports/batch43_3-summary.txt.' \
             '{title:$title, head:$head, base:$base, body:$body, maintainer_can_modify:true, draft:false}')
           curl -sS -X POST -H "Authorization: Bearer ${GH_TOKEN}" -H "Accept: application/vnd.github+json" \
                "${API}" -d "${DATA}" | jq .
