@@ -253,13 +253,11 @@ $values = [
     'topic_id' => $topic_id,
     'added' => TIME_NOW,
 ];
-$fluent->deleteFrom('now_viewing')
-       ->where('user_id = ?', $CURUSER['id'])
-       ->execute();
+$sql = "DELETE FROM now_viewing WHERE user_id = :user_id";
+$this->db->perform($sql, ['user_id' => $CURUSER['id']]);;
 if (!get_anonymous($CURUSER['id'])) {
-    $fluent->insertInto('now_viewing')
-           ->values($values)
-           ->execute();
+    $sql = "INSERT INTO now_viewing (/* columns */) VALUES (/* values */)";
+$this->db->perform($sql, $values);;
 }
 $cache = $container->get(Cache::class);
 $topic_users_cache = $cache->get('now_viewing_topic_');
@@ -297,10 +295,8 @@ if (!empty($topic_users)) {
 $set = [
     'views' => new Literal('views + 1'),
 ];
-$fluent->update('topics')
-       ->set($set)
-       ->where('id = ?', $topic_id)
-       ->execute();
+$sql = "UPDATE topics SET /* columns */ WHERE id = :id";
+$this->db->perform($sql, array_merge($set, ['id' => $topic_id]));;
 
 $res_count = $db->run(');
     $attachments = '';

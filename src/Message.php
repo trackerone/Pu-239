@@ -71,9 +71,8 @@ class Message
         }
         $count = (int) ($this->limit / max(array_map('count', $values)));
         foreach (array_chunk($values, $count) as $t) {
-            $result = $this->fluent->insertInto('messages')
-                                   ->values($t)
-                                   ->execute();
+            $sql = "INSERT INTO messages (/* columns */) VALUES (/* values */)";
+$result = $this->db->perform($sql, $t);;
         }
 
         foreach ($values as $user) {
@@ -173,10 +172,8 @@ class Message
      */
     public function update(array $set, int $id)
     {
-        $result = $this->fluent->update('messages')
-                               ->set($set)
-                               ->where('id = ?', $id)
-                               ->execute();
+        $sql = "UPDATE messages SET /* columns */ WHERE id = :id";
+$result = $this->db->perform($sql, array_merge($set, ['id' => $id]));;
 
         return $result;
     }

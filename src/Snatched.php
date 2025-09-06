@@ -117,10 +117,8 @@ class Snatched
      */
     public function update_by_id(array $set, int $id)
     {
-        $result = $this->fluent->update('snatched')
-                               ->set($set)
-                               ->where('id = ?', $id)
-                               ->execute();
+        $sql = "UPDATE snatched SET /* columns */ WHERE id = :id";
+$result = $this->db->perform($sql, array_merge($set, ['id' => $id]));;
 
         return $result;
     }

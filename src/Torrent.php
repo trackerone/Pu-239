@@ -55,9 +55,8 @@ class Torrent
      */
     public function delete_by_id(int $tid)
     {
-        $this->fluent->deleteFrom('torrents')
-            ->where('id = ?', $tid)
-            ->execute();
+        $sql = "DELETE FROM torrents WHERE id = :id";
+$this->db->perform($sql, ['id' => $tid]);;
 
         $query = $this->fluent->getPdo()
             ->prepare('DELETE likes, comments
@@ -67,29 +66,23 @@ class Torrent
         $query->bindParam(1, $tid);
         $query->execute();
 
-        $this->fluent->deleteFrom('comments')
-            ->where('torrent = ?', $tid)
-            ->execute();
+        $sql = "DELETE FROM comments WHERE torrent = :torrent";
+$this->db->perform($sql, ['torrent' => $tid]);;
 
-        $this->fluent->deleteFrom('coins')
-            ->where('torrentid = ?', $tid)
-            ->execute();
+        $sql = "DELETE FROM coins WHERE torrentid = :torrentid";
+$this->db->perform($sql, ['torrentid' => $tid]);;
 
-        $this->fluent->deleteFrom('rating')
-            ->where('torrent = ?', $tid)
-            ->execute();
+        $sql = "DELETE FROM rating WHERE torrent = :torrent";
+$this->db->perform($sql, ['torrent' => $tid]);;
 
-        $this->fluent->deleteFrom('snatched')
-            ->where('torrentid = ?', $tid)
-            ->execute();
+        $sql = "DELETE FROM snatched WHERE torrentid = :torrentid";
+$this->db->perform($sql, ['torrentid' => $tid]);;
 
-        $this->fluent->deleteFrom('peers')
-            ->where('torrent = ?', $tid)
-            ->execute();
+        $sql = "DELETE FROM peers WHERE torrent = :torrent";
+$this->db->perform($sql, ['torrent' => $tid]);;
 
-        $this->fluent->deleteFrom('deathrow')
-            ->where('tid = ?', $tid)
-            ->execute();
+        $sql = "DELETE FROM deathrow WHERE tid = :tid";
+$this->db->perform($sql, ['tid' => $tid]);;
         $update = [
             'torrentid' => 0,
             'status' => 'sourcing',
@@ -310,10 +303,8 @@ class Torrent
      */
     public function update(array $set, int $tid, bool $seeders = false)
     {
-        $query = $this->fluent->update('torrents')
-            ->set($set)
-            ->where('id = ?', $tid)
-            ->execute();
+        $sql = "UPDATE torrents SET /* columns */ WHERE id = :id";
+$query = $this->db->perform($sql, array_merge($set, ['id' => $tid]));;
 
         if ($query) {
             $this->cache->update_row('torrent_details_' . $tid, $set, $this->site_config['expires']['torrent_details']);
@@ -388,10 +379,8 @@ class Torrent
             $set = [
                 'seedbonus' => $seedbonus - $this->site_config['bonus']['per_delete'],
             ];
-            $this->fluent->update('users')
-                ->set($set)
-                ->where('id = ?', $owner)
-                ->execute();
+            $sql = "UPDATE users SET /* columns */ WHERE id = :id";
+$this->db->perform($sql, array_merge($set, ['id' => $owner]));;
 
             $this->cache->update_row('user_' . $owner, $set, $this->site_config['expires']['user_cache']);
         }
@@ -461,9 +450,8 @@ class Torrent
      */
     public function add(array $values)
     {
-        $id = $this->fluent->insertInto('torrents')
-            ->values($values)
-            ->execute();
+        $sql = "INSERT INTO torrents (/* columns */) VALUES (/* values */)";
+$id = $this->db->perform($sql, $values);;
 
         return $id;
     }

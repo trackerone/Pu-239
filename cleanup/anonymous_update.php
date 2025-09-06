@@ -56,10 +56,8 @@ function anonymous_update($data)
             'anonymous_until' => 0,
             'modcomment' => $modcomment,
         ];
-        $fluent->update('users')
-               ->set($set)
-               ->where('id = ?', $arr['id'])
-               ->execute();
+        $sql = "UPDATE users SET /* columns */ WHERE id = :id";
+$this->db->perform($sql, array_merge($set, ['id' => $arr['id']]));;
 
         $cache->update_row('user_' . $arr['id'], $set, $site_config['expires']['user_cache']);
     }

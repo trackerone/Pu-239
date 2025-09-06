@@ -36,9 +36,8 @@ if ($remove > 0) {
         $cache->delete('bans_' . $i);
     }
     if (is_valid_id($remove)) {
-        $fluent->deleteFrom('bans')
-               ->where('id = ?', $remove)
-               ->execute();
+        $sql = "DELETE FROM bans WHERE id = :id";
+$this->db->perform($sql, ['id' => $remove]);;
         write_log(_fe('Ban {0} was removed by {1}', $remove, $CURUSER['username']));
         $session->set('is-success', _fe('IPS: {0} to {1} were removed', $res['first'], $res['last']));
         unset($_GET);
@@ -67,9 +66,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $CURUSER['class'] >= UC_MAX) {
         'comment' => $comment,
     ];
 
-    $fluent->insertInto('bans')
-           ->values($values)
-           ->execute();
+    $sql = "INSERT INTO bans (/* columns */) VALUES (/* values */)";
+$this->db->perform($sql, $values);;
 
     $key = 'bans_' . $ip;
     $session->set('is-success', "IPs: $first to $last added to Bans");
