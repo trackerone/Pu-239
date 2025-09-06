@@ -9,9 +9,14 @@ jobs:
     permissions:
       contents: write
       pull-requests: write
+    env:
+      BASE_BRANCH: ${{ github.event.repository.default_branch }}
+      UNIQUE_BRANCH: batch-38-admin-categories-${{ github.run_id }}-${{ github.run_attempt }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
@@ -24,39 +29,41 @@ jobs:
         run: |
           php ./tools/batch-38-apply.php
 
-      - name: Show diff
+      - name: Detect changes
+        id: changes
         run: |
-          git status
-          git diff --name-only | tee /tmp/changed.txt
+          set -e
+          git diff --name-only > /tmp/changed.txt || true
+          if [ -s /tmp/changed.txt ]; then
+            echo "has_changes=true" >> $GITHUB_OUTPUT
+          else
+            echo "has_changes=false" >> $GITHUB_OUTPUT
+          fi
           git diff > batch-38.diff || true
 
       - name: Create branch, commit and push changes
-        if: always()
+        if: steps.changes.outputs.has_changes == 'true'
         run: |
           set -euxo pipefail
-          BRANCH="batch-38-admin-categories"
           git config user.name "batch-bot"
           git config user.email "batch-bot@users.noreply.github.com"
-          git checkout -b "$BRANCH"
-          # Only commit if there are changes
-          if [ -s /tmp/changed.txt ]; then
-            git add -A
-            git commit -m "batch38(admin): migrate admin categories & peers snippets from FluentPDO to ExtendedPdo; remove Literal import"
-            git push --set-upstream origin "$BRANCH"
-          else
-            echo "No changes detected by batch script."
-          fi
+          git checkout -B "$UNIQUE_BRANCH" "origin/$BASE_BRANCH"
+          git add -A
+          git commit -m "batch38(admin): migrate admin categories & peers snippets from FluentPDO to ExtendedPdo; remove Literal import"
+          git push --set-upstream origin "$UNIQUE_BRANCH"
 
       - name: Create Pull Request
-        if: always()
+        if: steps.changes.outputs.has_changes == 'true'
         uses: peter-evans/create-pull-request@v6
         with:
-          branch: batch-38-admin-categories
+          base: ${{ env.BASE_BRANCH }}
+          branch: ${{ env.UNIQUE_BRANCH }}
           title: "Batch 38: Admin • Categories migration (FluentPDO → ExtendedPdo)"
           body: |
             This PR was created by the Batch 38 action. It removes FluentPDO usage in admin category flows,
             updates queries to ExtendedPdo, removes `Envms\FluentPDO\Literal`, and hardens guards.
           labels: batch, automated, admin
+          delete-branch: true
 
       - name: Upload diff artifact
         uses: actions/upload-artifact@v4
