@@ -1,7 +1,8 @@
 <?php
 /**
- * Batch 37.7 – TODO FluentPDO refactor
- * Marks leftover FluentPDO queries with TODO AND logs all findings.
+ * Batch 37.8 – TODO FluentPDO refactor
+ * Marks leftover FluentPDO queries with TODO and logs them.
+ * Stram regex og korrekt semikolon.
  */
 
 $root = dirname(__DIR__);
@@ -19,8 +20,7 @@ foreach ($rii as $file) {
     $contents = file_get_contents($path);
     $orig = $contents;
 
-    // Matcher én kæde
-    $pattern = '/(\$this->fluent|\$fluent)->[a-zA-Z0-9_]+\([^)]*\)(?:->[a-zA-Z0-9_]+\([^)]*\))*->(fetchAll|fetch|execute)\(\)/';
+    $pattern = '/(\$this->fluent|\$fluent)->[a-zA-Z0-9_]+\([^)]*\)(?:->[a-zA-Z0-9_]+\([^)]*\))*->(fetchAll|fetch|execute)\(\);?/';
 
     if (preg_match_all($pattern, $contents, $matches, PREG_OFFSET_CAPTURE)) {
         foreach ($matches[0] as $m) {
@@ -44,5 +44,4 @@ foreach ($rii as $file) {
 }
 
 file_put_contents("refactor-todo-log.txt", implode("\n", $log) . "\nTotal matches: $totalMatches\n");
-
 echo "Total matches: $totalMatches\n";
