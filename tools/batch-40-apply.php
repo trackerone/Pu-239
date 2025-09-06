@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 /**
- * Batch 40 (classic) — Full repo FluentPDO sweep
+ * Batch 40 (classic, API PR) — Full repo FluentPDO sweep
  * - Always writes reports so there's something to commit.
  * - Conservative fixes only (imports/docblocks/$fluent hints + a few admin patterns).
  */
@@ -27,7 +27,7 @@ if (!$reportFp) {
 }
 
 $needles = [
-    'Envms\\\FluentPDO','->from(','->select(','->update(','->delete(',
+    'Envms\\FluentPDO','->from(','->select(','->update(','->delete(',
     '->insertInto(','->values(','->fetchAll(','->fetch(','->groupBy(',
 ];
 
@@ -54,52 +54,9 @@ foreach ($rii as $file) {
 
         // Conservative fixes
         $updated = $src;
-
-        // A) Remove Literal import
         $updated = preg_replace('/^\s*use\s+Envms\\\\FluentPDO\\\\Literal;\s*$/m', '', $updated);
-
-        // B) Docblock exception
         $updated = preg_replace('/@throws\s+\\\\Envms\\\\FluentPDO\\\\Exception/', '@throws \\\\PDOException', $updated);
-
-        // C) $fluent from container
         $updated = preg_replace('/\$fluent\s*=\s*\$container->get\(Database::class\);/', '// $fluent removed — use $this->db (ExtendedPdo)', $updated);
-
-        // D) Admin peers/agents aggregation
-        $updated = preg_replace(
-            '#\$agents\s*=\s*\$fluent->from\(\'peers\'\)\s*->select\(null\)\s*->select\(\'agent\'\)\s*->select\(\'LEFT\(peer_id,\s*8\)\s+AS\s+peer_id\'\)\s*->groupBy\(\'agent\'\)\s*->groupBy\(\'peer_id\'\)\s*->fetchAll\(\);\s*#s',
-            '$sql = "SELECT agent, LEFT(peer_id, 8) AS peer_id FROM peers GROUP BY agent, LEFT(peer_id, 8)";' . "\n" .
-            '$agents = $this->db->fetchAll($sql);' . "\n",
-            $updated
-        );
-
-        // E) Categories ordered list (iterator or fetchAll)
-        $updated = preg_replace(
-            '#\$cats\s*=\s*\$fluent->from\(\'categories\'\)\s*->orderBy\(\'ordered\'\)\s*;#s',
-            '$sql = "SELECT * FROM categories ORDER BY ordered, id";' . "\n" .
-            '$cats = $this->db->fetchAll($sql);' . "\n",
-            $updated
-        );
-        $updated = preg_replace(
-            '#\$cats\s*=\s*\$fluent->from\(\'categories\'\)\s*->orderBy\(\'ordered\'\)\s*->fetchAll\(\);\s*#s',
-            '$sql = "SELECT * FROM categories ORDER BY ordered, id";' . "\n" .
-            '$cats = $this->db->fetchAll($sql);' . "\n",
-            $updated
-        );
-
-        // F) Categories children by parent
-        $updated = preg_replace(
-            '#\$children\s*=\s*\$fluent->from\(\'categories\'\)\s*->where\(\'parent_id\s*=\s*\?\',\s*\$parentId\)\s*->orderBy\(\'ordered\'\)\s*->fetchAll\(\);\s*#s',
-            '$sql = "SELECT * FROM categories WHERE parent_id = :pid ORDER BY ordered, id";' . "\n" .
-            '$children = $this->db->fetchAll($sql, [\'pid\' => (int) $parentId]);' . "\n",
-            $updated
-        );
-
-        // G) Delete category by id
-        $updated = preg_replace(
-            '#\$fluent->deleteFrom\(\'categories\'\)\s*->where\(\'id\s*=\s*\?\',\s*\$params\[\'id\'\]\)\s*->execute\(\);\s*#s',
-            '$this->db->perform("DELETE FROM categories WHERE id = :id", ["id" => (int) $params["id"]]);' . "\n",
-            $updated
-        );
 
         if ($updated !== $src) {
             file_put_contents($path, $updated);
@@ -118,4 +75,4 @@ $summary = "Batch 40 (classic) FluentPDO sweep summary\n"
         .  "Date: " . gmdate('c') . "\n";
 file_put_contents($summaryPath, $summary);
 
-echo "Batch 40 (classic) completed.\\n";
+echo "Batch 40 (classic) completed.\n";
