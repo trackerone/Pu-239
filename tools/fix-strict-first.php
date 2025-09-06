@@ -2,22 +2,21 @@
 declare(strict_types=1);
 
 /**
- * Force declare(strict_types=1) to be the very first statement in every admin/*.php,
- * robustly handling files that:
- *   - start with BOM,
- *   - contain multiple PHP open/close tags,
- *   - have any code before declare.
+ * Ensure declare(strict_types=1) is the very first statement in the FIRST PHP block
+ * of every admin/*.php. Do NOT flatten the file; preserve later PHP blocks and any HTML.
  *
- * Strategy:
- *   - Strip BOM.
- *   - Replace ALL "?>" with a newline (flatten to a single PHP block).
- *   - Remove ALL additional "<?php" occurrences except the first one.
- *   - Remove ALL existing declare(strict_types=1) occurrences.
- *   - Rebuild the file to start with exactly:
- *       <?php
- *       declare(strict_types=1);
+ * Strategy (per file):
+ *  - Strip UTF-8 BOM.
+ *  - Find first "<?php". If none, skip file.
+ *  - Identify end of the first PHP block (first "?>", or end-of-file if none).
+ *  - Inside that first block:
+ *      * Remove any existing declare(strict_types=1);
+ *      * Rebuild the block so it starts with:
+ *          <?php
+ *          declare(strict_types=1);
  *
- *       <rest of content>
+ *          <rest of original first-block code (minus old declare)>
+ *  - Keep prefix (before first "<?php") and suffix (after end of first block) unchanged.
  */
 
 $root = getcwd();
@@ -49,54 +48,50 @@ foreach ($it as $f) {
     $scanned++;
 
     // 0) Strip UTF-8 BOM
-    $src = preg_replace('/^\xEF\xBB\xBF/', '', $src);
-
-    // 1) Ensure we have an opening tag at the top
-    if (!preg_match('/^\s*<\?php/i', $src)) {
-        $src = "<?php\n" . ltrim($src);
+    if (strncmp($src, "\xEF\xBB\xBF", 3) === 0) {
+        $src = substr($src, 3);
     }
 
-    // 2) Flatten to a single PHP block: remove all closing tags
-    $src = str_replace("?>", "\n", $src);
-
-    // 3) Keep only the first opening tag; remove subsequent ones
-    // Normalize the very first one exactly to "<?php\n"
-    $src = preg_replace('/^\s*<\?php\s*/i', "<?php\n", $src, 1);
-    // Remove any other "<?php" occurrences later in the file
-    $src = preg_replace('/<\?php\s*/i', '', $src);
-
-    // 4) Remove any existing declare(strict_types=1);
-    $src = preg_replace('/declare\s*\(\s*strict_types\s*=\s*1\s*\)\s*;\s*/i', '', $src);
-
-    // 5) Remove empty lines right after the (normalized) opener
-    $src = preg_replace('/^<\?php\s*\R+/i', "<?php\n", $src, 1);
-
-    // 6) Rebuild with declare() as the very first statement
-    // Split into lines so we can ensure an empty line after declare for readability
-    $lines = explode("\n", $src);
-
-    // Guarantee the first line is exactly "<?php"
-    if (!isset($lines[0]) || trim($lines[0]) !== '<?php') {
-        array_unshift($lines, '<?php');
+    // 1) Find first opening tag
+    $openPos = stripos($src, '<?php');
+    if ($openPos === false) {
+        // No PHP block — nothing to do
+        continue;
     }
 
-    // Remove any blank lines after the opener
-    $idx = 1;
-    while (isset($lines[$idx]) && trim($lines[$idx]) === '') {
-        array_splice($lines, $idx, 1);
-    }
+    // 2) Find end of first block (first "?>" after opener)
+    $afterOpen = $openPos + 5; // length of "<?php"
+    $closePos  = strpos($src, '?>', $afterOpen);
+    $blockEnd  = ($closePos === false) ? strlen($src) : $closePos; // exclusive
 
-    // Insert declare(strict_types=1); as line 2 if it's not there already
-    if (!isset($lines[1]) || stripos($lines[1], 'declare(strict_types=1);') === false) {
-        array_splice($lines, 1, 0, 'declare(strict_types=1);');
-        // Add a blank line after declare for readability
-        array_splice($lines, 2, 0, '');
-    }
+    // Split into parts
+    $prefix    = substr($src, 0, $openPos);
+    $phpOpen   = '<?php';
+    $blockBody = substr($src, $afterOpen, $blockEnd - $afterOpen);
+    $suffix    = ($closePos === false) ? '' : substr($src, $closePos); // includes '?>' and the rest
 
-    $new = implode("\n", $lines);
+    // Normalize block body newlines
+    // Remove any existing declare(strict_types=1); in the first block
+    $blockBodyNoDeclare = preg_replace(
+        '/\bdeclare\s*\(\s*strict_types\s*=\s*1\s*\)\s*;\s*/i',
+        '',
+        $blockBody
+    );
 
-    if ($new !== $orig) {
-        file_put_contents($path, $new);
+    // Trim leading blank lines in the block (whitespace/comments before declare are allowed by PHP,
+    // but we keep it clean and deterministic)
+    $blockBodyNoDeclare = ltrim($blockBodyNoDeclare, "\r\n");
+
+    // Rebuild first block: opener + declare + blank line + (rest of block as-is)
+    $rebuilt =
+        $prefix .
+        $phpOpen . "\n" .
+        "declare(strict_types=1);\n\n" .
+        $blockBodyNoDeclare .
+        $suffix;
+
+    if ($rebuilt !== $orig) {
+        file_put_contents($path, $rebuilt);
         $changed++;
     }
 }
