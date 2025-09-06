@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 require_once __DIR__ . '/../include/runtime_safe.php';
 
 
@@ -21,7 +23,7 @@ $search = array_merge($_POST, $_GET);
 $cache = $container->get(Cache::class);
 $oldest = $cache->get('oldest_');
 $fluent = $db; // alias
-// $fluent removed — use $this->db (ExtendedPdo)
+// $fluent removed — use $db (ExtendedPdo)
 if ($oldest === false || is_null($oldest)) {
     $oldest = $fluent->from('users')
                      ->select(null)

@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 require_once __DIR__ . '/../include/runtime_safe.php';
 
 require_once __DIR__ . '/../include/bootstrap_pdo.php';
@@ -87,8 +89,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         break;
 
                     case 'all_friends':
-                        $fq = $db->run(');
-        } else {
+                        $fq = // TODO(batch43.3): previously broken $db->run(...) removed; supply proper SQL here.
+} else {
             $err[] = _('There are not any users in the groups you selected!');
         }
     }

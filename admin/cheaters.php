@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 $db = $container->get(Database::class);
 
 require_once __DIR__ . '/../include/runtime_safe.php';
@@ -29,11 +31,11 @@ if (isset($_POST['nowarned']) && $_POST['nowarned'] === 'nowarned') {
         stderr(_('Error'), _('You must select a user.'));
     }
     if (!empty($_POST['remove'])) {
-        $db->run(');
-    }
+        // TODO(batch43.3): previously broken $db->run(...) removed; supply proper SQL here.
+}
     if (!empty($_POST['desact'])) {
-        $db->run(');
-        $this->cache->deleteMulti($_POST['desact']);
+        // TODO(batch43.3): previously broken $db->run(...) removed; supply proper SQL here.
+$this->cache->deleteMulti($_POST['desact']);
     }
 }
 $rows = $db->fetchAll('SELECT COUNT(id) FROM cheaters');

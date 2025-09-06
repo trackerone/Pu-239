@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 $db = $container->get(Database::class);
 
 require_once __DIR__ . '/../include/runtime_safe.php';
@@ -29,7 +31,7 @@ if (isset($mode) && $mode == 'change') {
         stderr(_('Error'), "<b>'{$_POST['uname']}'</b> " . _('is invalid') . '');
     }
 
-    $nc_sql = $db->run(');
+    $nc_sql = // TODO(batch43.3): previously broken $db->run(...) removed; supply proper SQL here.
 $breadcrumbs = [
     "<a href='{$site_config['paths']['baseurl']}/staffpanel.php'>" . _('Staff Panel') . '</a>',
     "<a href='{$_SERVER['PHP_SELF']}'>$title</a>",

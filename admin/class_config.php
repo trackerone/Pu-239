@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 require_once __DIR__ . '/../include/runtime_safe.php';
 
 
@@ -22,7 +24,7 @@ $db = $container->get(Database::class);, $CURUSER, $site_config;
 $style = get_stylesheet();
 $session = $container->get(Session::class);
 $fluent = $db; // alias
-// $fluent removed — use $this->db (ExtendedPdo)
+// $fluent removed — use $db (ExtendedPdo)
 $all_classes = $fluent->from('class_config')
                       ->where('template = ?', $style)
                       ->orderBy('value');
@@ -56,7 +58,7 @@ function update_forum_classes(int $value, string $direction)
     global $container;
 $db = $container->get(Database::class);;
 
-    // $fluent removed — use $this->db (ExtendedPdo)
+    // $fluent removed — use $db (ExtendedPdo)
     if ($direction === 'increment') {
         $fluent->update('forums')
                ->set(['min_class_read' => new Literal('min_class_read + 1')])
@@ -104,7 +106,7 @@ $db = $container->get(Database::class);;
     }
 }
 
-// $fluent removed — use $this->db (ExtendedPdo)
+// $fluent removed — use $db (ExtendedPdo)
 $cache = $container->get(Cache::class);
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $data = [];

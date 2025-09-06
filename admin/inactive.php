@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 require_once __DIR__ . '/../include/runtime_safe.php';
 
 require_once __DIR__ . '/../include/bootstrap_pdo.php';
@@ -44,8 +46,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
     if ($action === 'disable' && (!empty($_POST['userid']))) {
-        $db->run(');
-        $session->set('is-success', _('You have successfully disabled the selected accounts!'));
+        // TODO(batch43.3): previously broken $db->run(...) removed; supply proper SQL here.
+$session->set('is-success', _('You have successfully disabled the selected accounts!'));
     }
 
     if ($action === 'mail' && (!empty($_POST['userid']))) {
@@ -76,7 +78,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $date = TIME_NOW;
             $userid = (int) $CURUSER['id'];
             if ($count > 0 && $mail) {
-                $db->run(');
+                // TODO(batch43.3): previously broken $db->run(...) removed; supply proper SQL here.
 $row = mysqli_fetch_array($res);
 $count = (int) $row[0];
 $perpage = 15;

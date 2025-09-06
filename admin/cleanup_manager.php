@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 require_once __DIR__ . '/../include/runtime_safe.php';
 
 
@@ -95,7 +97,7 @@ function manualclean($params)
         stderr(_('Error'), _('Bad you!'));
     }
     $params['cid'] = sqlesc($params['cid']);
-    $sql = $db->run(');
+    $sql = // TODO(batch43.3): previously broken $db->run(...) removed; supply proper SQL here.
 }
 
 /**
@@ -105,10 +107,10 @@ function manualclean($params)
 function cleanup_show_main()
 {
     global $container;
-$db = $container->get(Database::class);, $site_config;
+$db = $container->get(Database::class);
 
     $fluent = $db; // alias
-// $fluent removed — use $this->db (ExtendedPdo)
+// $fluent removed — use $db (ExtendedPdo)
     $count1 = $fluent->from('cleanup')
                      ->select(null)
                      ->select('COUNT(clean_id) AS count')

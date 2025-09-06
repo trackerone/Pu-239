@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 require_once __DIR__ . '/../include/runtime_safe.php';
 
 
@@ -36,15 +38,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
     $cache = $container->get(Cache::class);
     if ($act === 'delete' && has_access($CURUSER['class'], UC_SYSOP, 'coder')) {
-        $res_del = $db->run(');
-            }
+        $res_del = // TODO(batch43.3): previously broken $db->run(...) removed; supply proper SQL here.
+}
         } else {
             stderr(_('Error'), _('Something went wrong2!'));
         }
     }
     if ($act === 'disable') {
-        if ($db->run(');
-        $body = _('Hey, your Leech warning was removed by ') . $CURUSER['username'] . _('Please keep in your best behaviour from now on.');
+        if (// TODO(batch43.3): previously broken $db->run(...) removed; supply proper SQL here.
+$body = _('Hey, your Leech warning was removed by ') . $CURUSER['username'] . _('Please keep in your best behaviour from now on.');
         $pms = [];
         foreach ($_uids as $uid) {
             $cache->update_row('user_' . $uid, [
@@ -53,7 +55,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $pms[] = '(2,' . $uid . ', ' . sqlesc($sub) . ', ' . sqlesc($body) . ', ' . sqlesc(TIME_NOW) . ')';
         }
         if (!empty($pms) && count($pms)) {
-            $g = $db->run(');
+            $g = // TODO(batch43.3): previously broken $db->run(...) removed; supply proper SQL here.
 }
 switch ($do) {
     case 'disabled':

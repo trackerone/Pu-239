@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 $db = $container->get(Database::class);
 
 require_once __DIR__ . '/../include/runtime_safe.php';
@@ -69,7 +71,7 @@ function notify_owner(array $tids)
     if (empty($tids)) {
         return false;
     }
-    // $fluent removed — use $this->db (ExtendedPdo)
+    // $fluent removed — use $db (ExtendedPdo)
     $torrents = $fluent->from('torrents')
                        ->select(null)
                        ->select('id')
@@ -125,7 +127,7 @@ $dy_time = TIME_NOW - $y_time;
 $dz_time = TIME_NOW - $z_time;
 
 $dead = $ids = [];
-// $fluent removed — use $this->db (ExtendedPdo)
+// $fluent removed — use $db (ExtendedPdo)
 $query1 = $fluent->from('torrents AS t')
                  ->select(null)
                  ->select('t.id')

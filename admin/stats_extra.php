@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 $db = $container->get(Database::class);
 
 require_once __DIR__ . '/../include/runtime_safe.php';
@@ -126,7 +128,7 @@ function show_views(array $inbound, array $month_names)
     $human_to_date = getdate($to_time - 86400);
     $human_from_date = getdate($from_time);
     $sort_by = $inbound['sortby'] === 'desc' ? 'DESC' : 'ASC';
-    // $fluent removed — use $this->db (ExtendedPdo)
+    // $fluent removed — use $db (ExtendedPdo)
     $count = $fluent->from('topics AS t')
                     ->select(null)
                     ->select('t.forum_id')
@@ -299,7 +301,7 @@ function result_screen(string $mode, array $inbound, array $month_names)
             break;
     }
     $sort_by = $inbound['sortby'] === 'desc' ? 'DESC' : 'ASC';
-    // $fluent removed — use $this->db (ExtendedPdo)
+    // $fluent removed — use $db (ExtendedPdo)
     $count = $fluent->from($sql_table)
                     ->select(null)
                     ->select("DATE_FORMAT(FROM_UNIXTIME($sql_field), '$sql_date') AS result_time")
@@ -449,7 +451,7 @@ function main_screen($mode)
     $cache = $container->get(Cache::class);
     $oldest = $cache->get('oldest_');
     if ($oldest === false || is_null($oldest)) {
-        // $fluent removed — use $this->db (ExtendedPdo)
+        // $fluent removed — use $db (ExtendedPdo)
         $oldest = $fluent->from('users')
                          ->select(null)
                          ->select('registered')

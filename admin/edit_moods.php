@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 require_once __DIR__ . '/../include/runtime_safe.php';
 
 require_once __DIR__ . '/../include/bootstrap_pdo.php';
@@ -33,8 +35,8 @@ if ($edit_mood['action'] === 'added') {
         write_log('<b>' . _('Mood Added') . '</b> ' . htmlsafechars($CURUSER['username']) . ' - ' . htmlsafechars($edit_mood['name']) . '<img src="' . $site_config['paths']['images_baseurl'] . 'smilies/' . htmlsafechars($edit_mood['image']) . '" alt="">');
     }
 } elseif ($edit_mood['action'] === 'edited') {
-    $db->run(');
-    write_log('<b>' . _('Mood Edited') . '</b> ' . htmlsafechars($CURUSER['username']) . ' - ' . htmlsafechars($edit_mood['name']) . '<img src="' . $site_config['paths']['images_baseurl'] . 'smilies/' . htmlsafechars($edit_mood['image']) . '" alt="">');
+    // TODO(batch43.3): previously broken $db->run(...) removed; supply proper SQL here.
+write_log('<b>' . _('Mood Edited') . '</b> ' . htmlsafechars($CURUSER['username']) . ' - ' . htmlsafechars($edit_mood['name']) . '<img src="' . $site_config['paths']['images_baseurl'] . 'smilies/' . htmlsafechars($edit_mood['image']) . '" alt="">');
 }
 if ($edit_mood['action'] === 'edit' && $edit_mood['id']) {
     $edit_mood['res'] = sql_query('SELECT * FROM moods WHERE id=' . sqlesc($edit_mood['id'])) or sqlerr(__FILE__, __LINE__);

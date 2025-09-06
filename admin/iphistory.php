@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 $db = $container->get(Database::class);
 
 require_once __DIR__ . '/../include/runtime_safe.php';
@@ -22,7 +24,7 @@ $class = get_access(basename($_SERVER['REQUEST_URI']));
 class_check($class);
 global $container, $site_config, $CURUSER;
 
-// $fluent removed — use $this->db (ExtendedPdo)
+// $fluent removed — use $db (ExtendedPdo)
 $bans_class = $container->get(Ban::class);
 $color = '';
 $id = (int) $_GET['id'];

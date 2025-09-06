@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 $db = $container->get(Database::class);
 
 require_once __DIR__ . '/../include/runtime_safe.php';
@@ -244,8 +246,8 @@ function do_update(array $input, string $type)
         $ids = $input['reputation'];
         if (is_array($ids) && count($ids)) {
             foreach ($ids as $k => $v) {
-                $db->run(');
-    }
+                // TODO(batch43.3): previously broken $db->run(...) removed; supply proper SQL here.
+}
     rep_cache();
     redirect('staffpanel.php?tool=reputation_ad&amp;mode=done', $redirect);
 }
@@ -376,7 +378,7 @@ function view_list(array $now_date, array $input, int $time_offset)
             stderr(_('Error'), _('Start date is after the end date.'));
         }
         if (!empty($input['leftby'])) {
-            $left_b = $db->run(');
+            $left_b = // TODO(batch43.3): previously broken $db->run(...) removed; supply proper SQL here.
 }
 
 /**
