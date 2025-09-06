@@ -1,23 +1,6 @@
 <?php declare(strict_types=1);
 /**
- * Batch 43.7 — Admin full rewrite (no TODOs)
- *
- * Scope: admin/*.php (script-filer, ikke klasser)
- * Konverterer mysqli/sql_query/Fluent-levn til ExtendedPdo uden TODOs:
- *  - Flyt/indsæt declare(strict_types=1) absolut øverst
- *  - Sikr $db init (og $cache hvis brugt)
- *  - $this->db-> → $db-> ; $this->cache-> → $cache->
- *  - sql_query('SELECT …') + while (mysqli_fetch_assoc($res)) → $rows = $db->fetchAll('…'); foreach ($rows as $row) …
- *  - SELECT COUNT(*) → (int) $db->fetchValue('SELECT COUNT(*) …')
- *  - SELECT … LIMIT 1 → $db->fetchRow('… LIMIT 1')
- *  - mysqli_num_rows($res) → is_array($rows) ? count($rows) : 0
- *  - mysqli_fetch_array/assoc/row($res) → $row = $rows[0] ?? null (hvis $rows findes), ellers $db->fetchRow(...)
- *  - mysqli_insert_id() → $db->lastInsertId()
- *  - Ødelagte linjer som `$db->run(');` kommenteres med ORIGINAL (ingen TODO)
- *  - Bevar pager LIMIT concatenation som er (… ' . $pager['limit'])
- *  - Fjern TODO(batch41) og forkerte hints
- *
- * Writer: tools/reports/batch43_7-summary.txt
+ * Batch 43.7 — Admin full rewrite (no TODOs) — ROBUST HEADER FIX
  */
 
 $root = getcwd();
@@ -46,26 +29,49 @@ foreach ($it as $f) {
     $orig = $src;
     $scanned++;
 
-    // --- strict_types: fjern evt. eksisterende og genindsæt lige efter <?php
-    $src = preg_replace('/<\?php\s+declare\s*\(\s*strict_types\s*=\s*1\s*\)\s*;\s*/i', "<?php\n", $src);
+    // --- 0) normaliser BOM/åbnings-tag
+    $src = preg_replace('/^\xEF\xBB\xBF/', '', $src);
     if (!str_starts_with($src, "<?php")) {
-        $src = "<?php\n" . $src;
+        $src = "<?php\n" . ltrim($src);
     }
-    $src = preg_replace('/^<\?php\s*/', "<?php\ndeclare(strict_types=1);\n\n", $src, 1);
 
-    // --- oprydning af hints/TODO41
+    // --- 1) FORCE: declare(strict_types=1) as very first statement
+    // fjern alle eksisterende declare
+    $src = preg_replace('/<\?php\s+declare\s*\(\s*strict_types\s*=\s*1\s*\)\s*;\s*/i', "<?php\n", $src);
+    // split i linjer og bygg header rigtigt
+    $lines = explode("\n", $src);
+    // fjern første linje hvis ikke er "<?php"
+    if (trim($lines[0]) !== '<?php') {
+        array_unshift($lines, '<?php');
+    }
+    // fjern evt. tomme linjer lige efter
+    while (isset($lines[1]) && trim($lines[1]) === '') {
+        array_splice($lines, 1, 1);
+    }
+    // indsæt declare på linje 2 hvis ikke allerede
+    if (!isset($lines[1]) || stripos($lines[1], 'declare(strict_types=1);') === false) {
+        array_splice($lines, 1, 0, 'declare(strict_types=1);');
+        array_splice($lines, 2, 0, ''); // blank linje bagefter
+    }
+    $src = implode("\n", $lines);
+
+    // --- 2) oprydning af hints/TODO41
     $src = str_replace('// $fluent removed — use $this->db (ExtendedPdo)', '// $fluent removed — use $db (ExtendedPdo)', $src);
     $src = preg_replace('/\s*\/\/\s*TODO\(batch41\):[^\r\n]*/', '', $src);
 
-    // --- this->db/cache → $db/$cache
+    // --- 3) this->db/cache → $db/$cache
     $src = preg_replace('/\$this->db->/', '$db->', $src);
     $src = preg_replace('/\$this->cache->/', '$cache->', $src);
 
-    // --- sikr $db init (og $cache hvis brugt)
+    // --- 4) SIKKER placering for $db-init:
+    //    efter declare + alle "use …;" + require_once …/runtime_safe.php
     if (!preg_match('/\$db\s*=\s*\$container->get\(Database::class\);/', $src)) {
-        $src = insertDbInit($src);
+        $src = insertDbInitRobust($src);
     }
+
+    // hvis vi bruger $cache men ikke init
     if (strpos($src, '$cache->') !== false && !preg_match('/\$cache\s*=\s*\$container->get\(Cache::class\);/', $src)) {
+        // indsæt $cache LIGE efter $db-init
         $src = preg_replace(
             '/(\$db\s*=\s*\$container->get\(Database::class\);\s*)/m',
             "$1" . "\$cache = \$container->get(Cache::class);\n",
@@ -73,17 +79,80 @@ foreach ($it as $f) {
             1
         );
     }
+
     // fix dårlig ", $site_config;" hale, hvis den findes
     $src = preg_replace('/(\$db\s*=\s*\$container->get\(Database::class\);\s*),\s*\$site_config\s*;/', '$1', $src);
 
-    // --- linje-for-linje omskrivning
+    // --- 5) linje-for-linje omskrivning (identisk med tidligere, forkortet her)
+    $src = rewriteBody($src);
+
+    if ($src !== $orig) {
+        file_put_contents($path, $src);
+        $changed++;
+        $changedFiles[] = 'admin/' . $f->getFilename();
+    }
+}
+
+// summary
+$sum  = "Batch 43.7 — Admin full rewrite (no TODOs, robust header)\n";
+$sum .= "=========================================================\n";
+$sum .= "Files scanned:  {$scanned}\n";
+$sum .= "Files changed:  {$changed}\n";
+if ($changedFiles) {
+    $sum .= "\nChanged files:\n";
+    foreach ($changedFiles as $cf) $sum .= "  - {$cf}\n";
+}
+$sum .= "\nDate: " . gmdate('c') . "\n";
+file_put_contents($summaryPath, $sum);
+echo $sum;
+
+/** ---------- helpers ---------- */
+
+/**
+ * Indsæt $db-init ETTER declare + alle use; og EFTER require_once runtime_safe.php, hvis den findes.
+ * Falback: efter declare + alle use; hvis runtime_safe ikke findes.
+ */
+function insertDbInitRobust(string $src): string {
+    $lines = explode("\n", $src);
+
+    // find linjeindeks efter declare
+    $i = 0; // '<?php'
+    $i++;   // forventer declare på linje 2
+    // hop tomme linjer
+    while (isset($lines[$i]) && trim($lines[$i]) === '') $i++;
+
+    // hop alle consecutive "use Foo\Bar;" linjer (de SKAL forblive før anden kode)
+    $j = $i;
+    while (isset($lines[$j]) && preg_match('/^\s*use\s+[^;]+;\s*$/', $lines[$j])) $j++;
+
+    // find første require_once runtime_safe.php (skal være før $db-init, så $container findes)
+    $k = $j;
+    $runtimePos = null;
+    for ($p = $j; $p < min($j + 40, count($lines)); $p++) {
+        if (preg_match('#require_once\s+__DIR__\s*\.\s*\'/../include/runtime_safe\.php\'\s*;#', $lines[$p])) {
+            $runtimePos = $p;
+            break;
+        }
+    }
+
+    $insertAt = ($runtimePos !== null) ? ($runtimePos + 1) : $j;
+
+    array_splice($lines, $insertAt, 0, '$db = $container->get(Database::class);');
+
+    return implode("\n", $lines);
+}
+
+/**
+ * Omskriv krop — samme regler som før; kommentér kun BROKEN $db->run('); linjer.
+ */
+function rewriteBody(string $src): string {
     $lines = explode("\n", $src);
     $out   = [];
     $i = 0;
     while ($i < count($lines)) {
         $line = $lines[$i];
 
-        // A) Ødelagt `$db->run(');` eller `if ($db->run(');` → kommentér ORIGINAL
+        // A) Ødelagt `$db->run(');` eller `if ($db->run(');`
         if (preg_match('/^\s*(?:if\s*\(\s*)?\$db->run\(\s*\'\s*\)\s*;\s*$/', $line)) {
             $out[] = '// ORIGINAL (broken): ' . trim($line);
             $i++; continue;
@@ -93,17 +162,15 @@ foreach ($it as $f) {
         if (preg_match('/^\s*\$res\s*=\s*sql_query\(\s*[\'"](SELECT\s+COUNT\([^)]+\).*?)[\'"]\s*\)\s*(?:or\s+sqlerr\(.*?\))?\s*;\s*$/i', $line, $m)) {
             $select = rtrim($m[1]);
             $out[]  = '$count = (int) $db->fetchValue(\'' . $select . '\');';
-            // spis efterfølgende mysqli_fetch* / $row[0] assignments
             $j = $i + 1;
             while ($j < count($lines) && preg_match('/^\s*(\$row|\$count)\s*=|mysqli_fetch_(row|array)\s*\(/i', $lines[$j])) { $j++; }
             $i = $j; continue;
         }
 
-        // C) SELECT … LIMIT 1 → fetchRow
+        // C) SELECT … LIMIT 1
         if (preg_match('/^\s*\$res\s*=\s*sql_query\(\s*[\'"](SELECT\s+.+?\s+LIMIT\s+1\s*)[\'"]\s*\)\s*(?:or\s+sqlerr\(.*?\))?\s*;\s*$/i', $line, $m)) {
             $select = rtrim($m[1]);
             $out[]  = '$row = $db->fetchRow(\'' . $select . '\');';
-            // fjern evt. efterfølgende $row = mysqli_fetch_*
             $i++;
             while ($i < count($lines) && preg_match('/^\s*\$row\s*=\s*mysqli_fetch_(assoc|array|row)\s*\(/i', $lines[$i])) $i++;
             continue;
@@ -133,10 +200,9 @@ foreach ($it as $f) {
             $i++; continue;
         }
 
-        // F) $row = mysqli_fetch_*(res)
+        // F) $row = mysqli_fetch_*
         if (preg_match('/^\s*\$row\s*=\s*mysqli_fetch_(assoc|array|row)\s*\(\s*\$res\s*\)\s*;\s*$/i', $line)) {
-            // antag at $rows findes; ellers lav defensivt lookup
-            $out[] = '$row = isset($rows[0]) ? $rows[0] : null;';
+            $out[] = '$row = $rows[0] ?? null;';
             $i++; continue;
         }
 
@@ -153,43 +219,36 @@ foreach ($it as $f) {
             $i++; continue;
         }
 
-        // default: behold linje
-        $out[] = $line;
-        $i++;
+        $out[] = $line; $i++;
     }
-
-    $new = implode("\n", $out);
-    if ($new !== $orig) {
-        file_put_contents($path, $new);
-        $changed++;
-        $changedFiles[] = 'admin/' . $f->getFilename();
-    }
+    return implode("\n", $out);
 }
 
-// summary
-$sum  = "Batch 43.7 — Admin full rewrite (no TODOs)\n";
-$sum .= "=========================================\n";
-$sum .= "Files scanned:  {$scanned}\n";
-$sum .= "Files changed:  {$changed}\n";
-if ($changedFiles) {
-    $sum .= "\nChanged files:\n";
-    foreach ($changedFiles as $cf) $sum .= "  - {$cf}\n";
-}
-$sum .= "\nDate: " . gmdate('c') . "\n";
-file_put_contents($summaryPath, $sum);
-echo $sum;
+/**
+ * Indsæt $db lige efter declare + use-blok og (hvis fundet) efter require_once runtime_safe.php.
+ * (Garanterer at $container eksisterer og at use-linjer forbliver først).
+ */
+function insertDbInitRobust(string $src): string {
+    $lines = explode("\n", $src);
 
-/** helpers */
-function insertDbInit(string $src): string {
-    // placer efter declare/use blok
-    if (preg_match('/^<\?php\s*declare\(strict_types=1\);\s*(?:\R)*(?:use\s+[^\R;]+;\s*\R)*/', $src, $m, PREG_OFFSET_CAPTURE)) {
-        $pos = $m[0][1] + strlen($m[0][0]);
-        return substr($src, 0, $pos) . "\n" . '$db = $container->get(Database::class);' . "\n" . substr($src, $pos);
+    // 1) find deklarationsstart (linje 0 = <?php, linje 1 = declare, skip tomme)
+    $i = 2;
+    while (isset($lines[$i]) && trim($lines[$i]) === '') $i++;
+
+    // 2) hop ALLE top-use linjer
+    while (isset($lines[$i]) && preg_match('/^\s*use\s+[^;]+;\s*$/', $lines[$i])) $i++;
+
+    // 3) find runtime_safe require (efter use, men normalt meget tidligt)
+    $runtimePos = null;
+    for ($p = $i; $p < min($i + 60, count($lines)); $p++) {
+        if (preg_match('#require_once\s+__DIR__\s*\.\s*\'/../include/runtime_safe\.php\'\s*;#', $lines[$p])) {
+            $runtimePos = $p; break;
+        }
     }
-    return preg_replace(
-        '/^<\?php\s*declare\(strict_types=1\);\s*/',
-        "<?php\ndeclare(strict_types=1);\n\n" . '$db = $container->get(Database::class);' . "\n",
-        $src,
-        1
-    );
+
+    $insertAt = ($runtimePos !== null) ? ($runtimePos + 1) : $i;
+
+    array_splice($lines, $insertAt, 0, '$db = $container->get(Database::class);');
+
+    return implode("\n", $lines);
 }
