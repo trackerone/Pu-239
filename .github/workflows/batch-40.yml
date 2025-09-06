@@ -1,4 +1,4 @@
-name: Batch 40 - Full Repo FluentPDO Sweep
+name: Batch 40 - Full Repo FluentPDO Sweep (v2)
 
 on:
   workflow_dispatch:
@@ -8,7 +8,7 @@ on:
         required: false
         default: 'false'
       force_pr:
-        description: 'Force a PR even if no code lines changed (report will still be committed)'
+        description: 'Force a PR even if no changes are detected'
         required: false
         default: 'true'
 
@@ -40,44 +40,64 @@ jobs:
         run: |
           php ./tools/batch-40-sweep.php
 
-      - name: Detect changes
+      - name: Ensure report dir exists and optionally create marker
+        run: |
+          mkdir -p tools/reports
+          if [ "${FORCE_PR}" = "true" ]; then
+            echo "Batch 40 run $(date -u +%FT%TZ)" > tools/reports/.batch40-marker
+          fi
+
+      - name: Stage changes (including untracked)
+        run: |
+          git add -A
+
+      - name: Detect staged changes (includes untracked)
         id: changes
         run: |
           set -e
-          git status --porcelain=v1 > /tmp/status.txt || true
-          git diff --name-only > /tmp/changed.txt || true
-          CHANGED_COUNT=$(wc -l < /tmp/changed.txt | tr -d ' ')
+          git diff --staged --name-only > /tmp/changed_staged.txt || true
+          CHANGED_COUNT=$(wc -l < /tmp/changed_staged.txt | tr -d ' ')
           echo "changed_files=${CHANGED_COUNT}" >> $GITHUB_OUTPUT
           if [ "${CHANGED_COUNT}" -gt 0 ]; then
             echo "has_changes=true" >> $GITHUB_OUTPUT
           else
             echo "has_changes=false" >> $GITHUB_OUTPUT
           fi
-          git diff > batch-40.diff || true
+          git diff --staged > batch-40.diff || true
 
       - name: Create branch, commit and push changes
-        if: steps.changes.outputs.has_changes == 'true' || env.FORCE_PR == 'true'
         run: |
           set -euxo pipefail
           git config user.name "batch-bot"
           git config user.email "batch-bot@users.noreply.github.com"
           git checkout -B "$UNIQUE_BRANCH" "origin/$BASE_BRANCH"
+          # Re-stage after branch switch to ensure index belongs to this branch
           git add -A
-          git commit -m "batch40(sweep): repo-wide FluentPDO report + conservative fixes" || echo "Nothing to commit"
+          if [ "${{ steps.changes.outputs.has_changes }}" = "true" ]; then
+            git commit -m "batch40(sweep): repo-wide FluentPDO report and/or fixes"
+          else
+            # Allow empty commit when forced, to guarantee a PR
+            if [ "${FORCE_PR}" = "true" ]; then
+              git commit --allow-empty -m "batch40(sweep): empty commit to open PR (forced)"
+            else
+              echo "No changes and not forced; skipping commit."
+              exit 0
+            fi
+          fi
           git push --set-upstream origin "$UNIQUE_BRANCH" || echo "Nothing to push"
 
       - name: Create Pull Request
-        if: steps.changes.outputs.has_changes == 'true' || env.FORCE_PR == 'true'
         uses: peter-evans/create-pull-request@v6
         with:
           base: ${{ env.BASE_BRANCH }}
           branch: ${{ env.UNIQUE_BRANCH }}
-          title: "Batch 40: Full repo FluentPDO sweep (report + optional fixes)"
+          title: "Batch 40 (v2): Full repo FluentPDO sweep (report + optional fixes)"
           body: |
-            This PR was created by the Batch 40 action.
+            This PR was created by the Batch 40 (v2) action.
             - Generates a full-repo FluentPDO usage report under `tools/reports/`
-            - Optionally applies conservative automatic fixes (controlled by `apply_conservative_fixes` input)
+            - Optionally applies conservative automatic fixes (`apply_conservative_fixes` input)
             - Uses unique branch names and uploads diff + changed files artifacts
+            - Guarantees a PR even if no code changes (via marker or empty commit when forced)
           labels: batch, automated, sweep
           delete-branch: true
 
@@ -90,7 +110,5 @@ jobs:
       - name: Upload changed-files artifact
         uses: actions/upload-artifact@v4
         with:
-          name: batch-40-changed-files
-          path: |
-            /tmp/changed.txt
-            /tmp/status.txt
+          name: batch-40-changed-staged-files
+          path: /tmp/changed_staged.txt
