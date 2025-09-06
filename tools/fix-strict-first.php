@@ -1,90 +1,51 @@
-<?php
-declare(strict_types=1);
+name: Batch 43.7A - Admin strict_types first
 
-/**
- * tools/fix-strict-first.php
- *
- * Ensure every admin/*.php has:
- *   line 1: <?php
- *   line 2: declare(strict_types=1);
- * If multiple declare(strict_types=1); exist, keep only the one at line 2.
- * Writes a summary report to tools/reports/fix-strict-summary.txt
- */
+on:
+  workflow_dispatch:
 
-$adminDir  = __DIR__ . '/../admin';
-$reportDir = __DIR__ . '/../tools/reports';
-$report    = $reportDir . '/fix-strict-summary.txt';
+jobs:
+  run-batch-43_7A:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+    env:
+      BASE_BRANCH: ${{ github.event.repository.default_branch }}
+      UNIQUE_BRANCH: batch-43_7A-${{ github.run_id }}-${{ github.run_attempt }}
+      GH_REPO: ${{ github.repository }}
+      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with: { fetch-depth: 0 }
 
-if (!is_dir($adminDir)) {
-    fwrite(STDERR, "admin/ directory not found\n");
-    exit(0);
-}
-if (!is_dir($reportDir)) {
-    @mkdir($reportDir, 0777, true);
-}
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.2'
 
-$files   = glob($adminDir . '/*.php') ?: [];
-$scanned = 0;
-$changed = 0;
-$changedFiles = [];
+      - name: Fix strict_types first in admin/*.php
+        run: php ./tools/fix-strict-first.php
 
-foreach ($files as $path) {
-    $lines = file($path, FILE_IGNORE_NEW_LINES);
-    if ($lines === false) {
-        continue;
-    }
-    $scanned++;
+      - name: Commit & push branch
+        run: |
+          set -euxo pipefail
+          git config user.name "batch-bot"
+          git config user.email "batch-bot@users.noreply.github.com"
+          git checkout -B "$UNIQUE_BRANCH" "origin/$BASE_BRANCH"
+          git add admin/*.php tools/reports/fix-strict-summary.txt || true
+          git commit -m "batch43.7A: enforce strict_types at line 2 in admin/" || true
+          git push --set-upstream origin "$UNIQUE_BRANCH"
 
-    // Strip BOM if present in first line
-    if (isset($lines[0])) {
-        $lines[0] = preg_replace('/^\xEF\xBB\xBF/', '', $lines[0]);
-    }
-
-    $original = implode("\n", $lines) . "\n";
-
-    // Ensure first line is "<?php"
-    if (!isset($lines[0]) || trim($lines[0]) !== '<?php') {
-        array_unshift($lines, '<?php');
-    }
-
-    // Ensure second line is exactly declare(strict_types=1);
-    if (!isset($lines[1]) || trim($lines[1]) !== 'declare(strict_types=1);') {
-        array_splice($lines, 1, 0, 'declare(strict_types=1);');
-    }
-
-    // Remove duplicate declare lines (keep only at line index 1)
-    $cleaned = [];
-    foreach ($lines as $i => $line) {
-        if ($i > 1 && preg_match('/^\s*declare\s*\(\s*strict_types\s*=\s*1\s*\)\s*;/', $line)) {
-            // skip duplicate declare
-            continue;
-        }
-        $cleaned[] = $line;
-    }
-
-    $new = implode("\n", $cleaned) . "\n";
-    if ($new !== $original) {
-        if (file_put_contents($path, $new) === false) {
-            fwrite(STDERR, "Failed to write: {$path}\n");
-            continue;
-        }
-        $changed++;
-        $changedFiles[] = str_replace(dirname(__DIR__, 1) . '/', '', $path); // nice relative path
-    }
-}
-
-// Write summary report
-$summary  = "fix-strict-first summary\n";
-$summary .= "========================\n";
-$summary .= "Scanned files: $scanned\n";
-$summary .= "Changed files: $changed\n";
-if (!empty($changedFiles)) {
-    $summary .= "\nFiles modified:\n";
-    foreach ($changedFiles as $f) {
-        $summary .= " - $f\n";
-    }
-}
-$summary .= "\nGenerated at: " . gmdate('c') . "\n";
-
-file_put_contents($report, $summary);
-echo $summary;
+      - name: Create PR via API
+        run: |
+          set -euxo pipefail
+          API="https://api.github.com/repos/${GH_REPO}/pulls"
+          DATA=$(jq -n \
+            --arg title "Batch 43.7A: Admin strict_types first" \
+            --arg head  "$UNIQUE_BRANCH" \
+            --arg base  "$BASE_BRANCH" \
+            --arg body  "Ensure all admin/*.php have <?php on line 1 and declare(strict_types=1); on line 2. Remove any duplicate declare lines. See tools/reports/fix-strict-summary.txt for details." \
+            '{title:$title, head:$head, base:$base, body:$body, maintainer_can_modify:true, draft:false}')
+          curl -sS -X POST -H "Authorization: Bearer ${GH_TOKEN}" -H "Accept: application/vnd.github+json" \
+               "${API}" -d "${DATA}" | jq .
