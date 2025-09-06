@@ -4,61 +4,87 @@ declare(strict_types=1);
 /**
  * tools/fix-strict-first.php
  *
- * Minimal: insert "declare(strict_types=1);" immediately after the FIRST "<?php"
- * in every admin/*.php, if not already present right there. Do NOT touch later blocks/HTML.
+ * Ensure every admin/*.php has:
+ *   line 1: <?php
+ *   line 2: declare(strict_types=1);
+ * If multiple declare(strict_types=1); exist, keep only the one at line 2.
+ * Writes a summary report to tools/reports/fix-strict-summary.txt
  */
 
-$dir = __DIR__ . '/../admin';
-if (!is_dir($dir)) {
+$adminDir  = __DIR__ . '/../admin';
+$reportDir = __DIR__ . '/../tools/reports';
+$report    = $reportDir . '/fix-strict-summary.txt';
+
+if (!is_dir($adminDir)) {
     fwrite(STDERR, "admin/ directory not found\n");
     exit(0);
 }
-
-$files = glob($dir . '/*.php');
-if (!is_array($files)) {
-    $files = [];
+if (!is_dir($reportDir)) {
+    @mkdir($reportDir, 0777, true);
 }
 
+$files   = glob($adminDir . '/*.php') ?: [];
 $scanned = 0;
 $changed = 0;
+$changedFiles = [];
 
 foreach ($files as $path) {
-    $src = file_get_contents($path);
-    if ($src === false) {
+    $lines = file($path, FILE_IGNORE_NEW_LINES);
+    if ($lines === false) {
         continue;
     }
     $scanned++;
 
-    // Strip BOM if present
-    if (strncmp($src, "\xEF\xBB\xBF", 3) === 0) {
-        $src = substr($src, 3);
+    // Strip BOM if present in first line
+    if (isset($lines[0])) {
+        $lines[0] = preg_replace('/^\xEF\xBB\xBF/', '', $lines[0]);
     }
 
-    // Find first "<?php"
-    $openPos = strpos($src, '<?php');
-    if ($openPos === false) {
-        continue; // no PHP block
+    $original = implode("\n", $lines) . "\n";
+
+    // Ensure first line is "<?php"
+    if (!isset($lines[0]) || trim($lines[0]) !== '<?php') {
+        array_unshift($lines, '<?php');
     }
 
-    $afterOpen = $openPos + 5; // length of "<?php"
-    // Look right after opener: if there's already a declare there, skip
-    $tail = substr($src, $afterOpen);
-    if (preg_match('/^\s*declare\s*\(\s*strict_types\s*=\s*1\s*\)\s*;/', $tail)) {
-        continue; // already has declare immediately after opener
+    // Ensure second line is exactly declare(strict_types=1);
+    if (!isset($lines[1]) || trim($lines[1]) !== 'declare(strict_types=1);') {
+        array_splice($lines, 1, 0, 'declare(strict_types=1);');
     }
 
-    // Insert declare right after opener, preserving everything else
-    $before = substr($src, 0, $afterOpen);
-    $after  = $tail;
-    $new    = $before . "\n" . "declare(strict_types=1);\n\n" . $after;
+    // Remove duplicate declare lines (keep only at line index 1)
+    $cleaned = [];
+    foreach ($lines as $i => $line) {
+        if ($i > 1 && preg_match('/^\s*declare\s*\(\s*strict_types\s*=\s*1\s*\)\s*;/', $line)) {
+            // skip duplicate declare
+            continue;
+        }
+        $cleaned[] = $line;
+    }
 
-    if ($new !== $src) {
+    $new = implode("\n", $cleaned) . "\n";
+    if ($new !== $original) {
         if (file_put_contents($path, $new) === false) {
             fwrite(STDERR, "Failed to write: {$path}\n");
             continue;
         }
         $changed++;
+        $changedFiles[] = str_replace(dirname(__DIR__, 1) . '/', '', $path); // nice relative path
     }
 }
 
-echo "fix-strict-first: scanned={$scanned}, changed={$changed}\n";
+// Write summary report
+$summary  = "fix-strict-first summary\n";
+$summary .= "========================\n";
+$summary .= "Scanned files: $scanned\n";
+$summary .= "Changed files: $changed\n";
+if (!empty($changedFiles)) {
+    $summary .= "\nFiles modified:\n";
+    foreach ($changedFiles as $f) {
+        $summary .= " - $f\n";
+    }
+}
+$summary .= "\nGenerated at: " . gmdate('c') . "\n";
+
+file_put_contents($report, $summary);
+echo $summary;
