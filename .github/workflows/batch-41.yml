@@ -1,0 +1,54 @@
+name: Batch 41 - FluentPDO Migration (API PR)
+
+on:
+  workflow_dispatch:
+
+jobs:
+  run-batch-41:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+    env:
+      BASE_BRANCH: ${{ github.event.repository.default_branch }}
+      UNIQUE_BRANCH: batch-41-${{ github.run_id }}-${{ github.run_attempt }}
+      GH_REPO: ${{ github.repository }}
+      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.2'
+          coverage: none
+          tools: none
+
+      - name: Run migration
+        run: php ./tools/batch-41-apply.php
+
+      - name: Commit & push branch
+        run: |
+          set -euxo pipefail
+          git config user.name "batch-bot"
+          git config user.email "batch-bot@users.noreply.github.com"
+          git checkout -B "$UNIQUE_BRANCH" "origin/$BASE_BRANCH"
+          git add -A
+          git commit -m "batch41: migrate FluentPDO calls to ExtendedPdo" || true
+          git push --set-upstream origin "$UNIQUE_BRANCH"
+
+      - name: Create PR via API
+        run: |
+          set -euxo pipefail
+          API="https://api.github.com/repos/${GH_REPO}/pulls"
+          DATA=$(jq -n \
+            --arg title "Batch 41: Replace FluentPDO calls with ExtendedPdo" \
+            --arg head  "$UNIQUE_BRANCH" \
+            --arg base  "$BASE_BRANCH" \
+            --arg body  "This batch migrates actual FluentPDO calls (fetchAll, fetch, fetchRow, perform etc.) to Aura ExtendedPdo." \
+            '{title:$title, head:$head, base:$base, body:$body, maintainer_can_modify:true, draft:false}')
+          curl -sS -X POST -H "Authorization: Bearer ${GH_TOKEN}" -H "Accept: application/vnd.github+json" \
+               "${API}" -d "${DATA}" | jq .
