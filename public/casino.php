@@ -4,7 +4,6 @@ require_once __DIR__ . '/../include/runtime_safe.php';
 
 declare(strict_types = 1);
 
-use Envms\FluentPDO\Literal;
 use Pu239\Cache;
 use Pu239\Casino;
 use Pu239\CasinoBets;
@@ -62,7 +61,7 @@ if ($user['class'] < $site_config['allowed']['play']) {
     stderr('Sorry,', "You must have at least {$min_text} upload credit to play.", 'bottom20');
 }
 
-$fluent = $container->get(Database::class);
+// $fluent removed — use $this->db (ExtendedPdo)
 $users_class = $container->get(User::class);
 $casino = $container->get(Casino::class);
 $casino_bets = $container->get(CasinoBets::class);

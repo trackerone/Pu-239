@@ -77,7 +77,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         stderr(_('Error'), 'Please Type In Some Text');
     }
     $fluent = $db; // alias
-$fluent = $container->get(Database::class);
+// $fluent removed — use $this->db (ExtendedPdo)
     $users = $fluent->from('peers')
                     ->select(null)
                     ->select('DISTINCT userid AS userid')

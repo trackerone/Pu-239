@@ -15,7 +15,7 @@ use Pu239\Database;
  *
  * @throws DependencyException
  * @throws NotFoundException
- * @throws \Envms\FluentPDO\Exception
+ * @throws \PDOException
  */
 function user_update($data)
 {
@@ -23,7 +23,7 @@ function user_update($data)
 
     $time_start = microtime(true);
     $dt = TIME_NOW;
-    $fluent = $container->get(Database::class);
+    // $fluent removed — use $this->db (ExtendedPdo)
     $fluent->update('freeslots')
            ->set(['addedup' => 0])
            ->where('addedup != 0')

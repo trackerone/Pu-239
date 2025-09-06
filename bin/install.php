@@ -222,13 +222,13 @@ function regex($x)
  *
  * @throws DependencyException
  * @throws NotFoundException
- * @throws \Envms\FluentPDO\Exception
+ * @throws \PDOException
  */
 function update_config(array $set, string $parent, string $name)
 {
     global $container;
 
-    $fluent = $container->get(Database::class);
+    // $fluent removed — use $this->db (ExtendedPdo)
     $fluent->update('site_config')
            ->set($set)
            ->where('parent = ?', $parent)
@@ -242,14 +242,14 @@ function update_config(array $set, string $parent, string $name)
  *
  * @throws DependencyException
  * @throws NotFoundException
- * @throws \Envms\FluentPDO\Exception
+ * @throws \PDOException
  * @throws Exception
  */
 function update_user(int $userid, int $class)
 {
     global $container;
 
-    $fluent = $container->get(Database::class);
+    // $fluent removed — use $this->db (ExtendedPdo)
     $dt = TIME_NOW;
     $set = [
         'personal_freeleech' => get_date($dt + 14 * 86400, 'MYSQL'),

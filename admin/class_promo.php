@@ -17,7 +17,7 @@ global $container;
 $db = $container->get(Database::class);, $site_config, $CURUSER;
 
 $fluent = $db; // alias
-$fluent = $container->get(Database::class);
+// $fluent removed — use $this->db (ExtendedPdo)
 $promos = $fluent->from('class_promo')
     ->orderBy('id');
 foreach ($promos as $ac) {

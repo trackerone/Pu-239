@@ -24,7 +24,7 @@ $use_cores = $cores * 2;
 $threads = $use_cores > 20 ? 20 : $use_cores;
 $limit = 50;
 $childs = [];
-$fluent = $container->get(Database::class);
+// $fluent removed — use $this->db (ExtendedPdo)
 $images = $fluent->from('images')
                  ->select(null)
                  ->select('COUNT(url) AS count')

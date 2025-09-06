@@ -20,7 +20,7 @@ foreach ($argv as $arg) {
     $validate = $arg === 'validate' ? true : false;
 }
 if ($purge) {
-    $fluent = $container->get(Database::class);
+    // $fluent removed — use $this->db (ExtendedPdo)
     $images = $fluent->from('images')
                      ->select('null')
                      ->select('url')

@@ -41,7 +41,7 @@ $ajax = isset($_POST['ajax']) && $_POST['ajax'] == 1 ? true : false;
  *
  * @throws DependencyException
  * @throws NotFoundException
- * @throws \Envms\FluentPDO\Exception
+ * @throws \PDOException
  *
  * @return false|string
  */

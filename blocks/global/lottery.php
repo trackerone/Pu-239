@@ -16,7 +16,7 @@ if ($user) {
     $cache = $container->get(Cache::class);
     $lottery_info = $cache->get('lottery_info_');
     if ($lottery_info === false || is_null($lottery_info)) {
-        $fluent = $container->get(Database::class);
+        // $fluent removed — use $this->db (ExtendedPdo)
         $lottery_info = $fluent->from('lottery_config')
                                ->fetchPairs('name', 'value');
 

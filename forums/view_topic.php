@@ -7,7 +7,6 @@ require_once __DIR__ . '/../include/bittorrent.php';
 require_once FORUM_DIR . 'quick_reply.php';
 require_once INCL_DIR . 'function_users.php';
 
-use Envms\FluentPDO\Literal;
 use Pu239\Cache;
 use Pu239\Database;
 use Pu239\Mood;
@@ -30,7 +29,7 @@ $db = $container->get(Database::class);, $site_config, $CURUSER;
 
 $_forum_sort = isset($CURUSER['forum_sort']) ? $CURUSER['forum_sort'] : 'DESC';
 $fluent = $db; // alias
-$fluent = $container->get(Database::class);
+// $fluent removed — use $this->db (ExtendedPdo)
 $arr = $fluent->from('topics AS t')
               ->select(null)
               ->select('t.id AS topic_id')

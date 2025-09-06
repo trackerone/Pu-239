@@ -17,7 +17,7 @@ require_once INCL_DIR . 'function_users.php';
 
 /**
  * @throws NotFoundException
- * @throws \Envms\FluentPDO\Exception
+ * @throws \PDOException
  * @throws DependencyException
  *
  * @return array
@@ -29,7 +29,7 @@ function trivia_table()
     $cache = $container->get(Cache::class);
     $triviaq = $cache->get('triviaq_');
     if ($triviaq === false || is_null($triviaq)) {
-        $fluent = $container->get(Database::class);
+        // $fluent removed — use $this->db (ExtendedPdo)
         $qid = $fluent->from('triviaq')
                       ->select(null)
                       ->select('qid')
@@ -147,7 +147,7 @@ function clean_data($data)
 
 /**
  * @throws NotFoundException
- * @throws \Envms\FluentPDO\Exception
+ * @throws \PDOException
  * @throws DependencyException
  *
  * @return array
@@ -156,7 +156,7 @@ function trivia_time()
 {
     global $container;
 
-    $fluent = $container->get(Database::class);
+    // $fluent removed — use $this->db (ExtendedPdo)
     $round = $game = 0;
     $cleanup = $fluent->from('cleanup')
                       ->select(null)

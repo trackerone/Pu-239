@@ -5,7 +5,7 @@ require_once __DIR__ . '/../include/runtime_safe.php';
 declare(strict_types = 1);
 
 use Delight\Auth\Auth;
-use Envms\FluentPDO\Literal;
+
 use Pu239\Database;
 use Pu239\Message;
 use Pu239\Session;
@@ -18,7 +18,7 @@ global $container, $site_config;
 
 $title = 'Join ' . $site_config['site']['name'];
 $session = $container->get(Session::class);
-$fluent = $container->get(Database::class);
+// $fluent removed — use $this->db (ExtendedPdo)
 $auth = $container->get(Auth::class);
 if ($auth->isLoggedIn()) {
     $auth->logOutEverywhere();

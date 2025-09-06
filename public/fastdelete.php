@@ -28,7 +28,7 @@ if (!isset($_GET['id']) || !is_valid_id((int) $_GET['id'])) {
 
 $id = (int) $_GET['id'];
 $fluent = $db; // alias
-$fluent = $container->get(Database::class);
+// $fluent removed — use $this->db (ExtendedPdo)
 $tid = $fluent->from('torrents AS t')
               ->select(null)
               ->select('t.id')

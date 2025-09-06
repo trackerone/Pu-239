@@ -21,7 +21,7 @@ $db = $container->get(Database::class);, $CURUSER, $site_config;
 $HTMLOUT = $H1_thingie = $count2 = '';
 $count = 0;
 $fluent = $db; // alias
-$fluent = $container->get(Database::class);
+// $fluent removed — use $this->db (ExtendedPdo)
 if (isset($_GET['remove'])) {
     if ($CURUSER['class'] < UC_STAFF) {
         stderr(_('Error'), _('Only the Staff can remove members from the list!'));

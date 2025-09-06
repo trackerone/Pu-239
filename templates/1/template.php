@@ -29,7 +29,7 @@ use Spatie\Image\Exceptions\InvalidManipulation;
  * @throws NotFoundException
  * @throws NotLoggedInException
  * @throws UnbegunTransaction
- * @throws \Envms\FluentPDO\Exception
+ * @throws \PDOException
  * @throws Exception
  *
  * @return string
@@ -193,7 +193,7 @@ function stdhead(string $title, array $stdhead, string $class, array $breadcrumb
  * @param array $stdfoot
  *
  * @throws NotFoundException
- * @throws \Envms\FluentPDO\Exception
+ * @throws \PDOException
  * @throws DependencyException
  * @throws InvalidManipulation
  *
@@ -417,7 +417,7 @@ function stdmsg(string $heading, string $text, ?string $outer_class = null, ?str
 }
 
 /**
- * @throws \Envms\FluentPDO\Exception
+ * @throws \PDOException
  *
  * @return string
  */
@@ -441,7 +441,7 @@ function StatusBar()
 /**
  * @throws InvalidManipulation
  * @throws NotFoundException
- * @throws \Envms\FluentPDO\Exception
+ * @throws \PDOException
  * @throws DependencyException
  *
  * @return string
@@ -454,7 +454,7 @@ function platform_menu()
 
     $templates = $cache->get('templates_' . $CURUSER['class']);
     if ($templates === false || is_null($templates)) {
-        $fluent = $container->get(Database::class);
+        // $fluent removed — use $this->db (ExtendedPdo)
         $templates = $fluent->from('stylesheets')
                             ->orderBy('id')
                             ->where('min_class_to_view <= ?', $CURUSER['class'])

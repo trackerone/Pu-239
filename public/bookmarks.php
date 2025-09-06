@@ -34,7 +34,7 @@ $HTMLOUT = '';
  *
  * @throws DependencyException
  * @throws NotFoundException
- * @throws \Envms\FluentPDO\Exception
+ * @throws \PDOException
  *
  * @return string
  */
@@ -88,7 +88,7 @@ function bookmarktable($res, $userid, $variant = 'index')
             'image' => $value['image'],
         ];
     }
-    $fluent = $container->get(Database::class);
+    // $fluent removed — use $this->db (ExtendedPdo)
     foreach ($res as $row) {
         $row['cat_name'] = htmlsafechars($change[$row['category']]['name']);
         $row['cat_pic'] = htmlsafechars($change[$row['category']]['image']);
@@ -252,7 +252,7 @@ $HTMLOUT .= '
         </div>
     </div>';
 
-$fluent = $container->get(Database::class);
+// $fluent removed — use $this->db (ExtendedPdo)
 $count = $fluent->from('bookmarks')
                 ->select(null)
                 ->select('COUNT(id) AS count')

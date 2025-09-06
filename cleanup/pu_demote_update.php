@@ -21,7 +21,7 @@ use Pu239\User;
  * @throws UnbegunTransaction
  * @throws \Delight\Auth\AuthError
  * @throws \Delight\Auth\NotLoggedInException
- * @throws \Envms\FluentPDO\Exception
+ * @throws \PDOException
  * @throws \PHPMailer\PHPMailer\Exception
  * @throws \Spatie\Image\Exceptions\InvalidManipulation
  */
@@ -30,7 +30,7 @@ function pu_demote_update($data)
     global $container, $site_config;
 
     $time_start = microtime(true);
-    $fluent = $container->get(Database::class);
+    // $fluent removed — use $this->db (ExtendedPdo)
     $user_class = $container->get(User::class);
     $messages_class = $container->get(Message::class);
     $dt = TIME_NOW;

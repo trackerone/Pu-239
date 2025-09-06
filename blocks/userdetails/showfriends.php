@@ -17,7 +17,7 @@ $keys['user_friends'] = 'user_friends_' . $id;
 $cache = $container->get(Cache::class);
 $users_friends = $cache->get($keys['user_friends']);
 if ($users_friends === false || is_null($users_friends)) {
-    $fluent = $container->get(Database::class);
+    // $fluent removed — use $this->db (ExtendedPdo)
     $friends = $fluent->from('friends')
                       ->select(null)
                       ->select('friendid AS uid')

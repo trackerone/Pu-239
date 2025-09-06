@@ -29,7 +29,7 @@ use Spatie\Image\Exceptions\InvalidManipulation;
  * @throws InvalidManipulation
  * @throws NotFoundException
  * @throws UnbegunTransaction
- * @throws \Envms\FluentPDO\Exception
+ * @throws \PDOException
  *
  * @return array|bool
  */
@@ -95,7 +95,7 @@ function get_book_info(?string $isbn, ?string $name, ?int $tid, ?string $poster)
  * @throws DependencyException
  * @throws InvalidManipulation
  * @throws NotFoundException
- * @throws \Envms\FluentPDO\Exception
+ * @throws \PDOException
  *
  * @return array|bool
  */

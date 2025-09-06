@@ -40,7 +40,7 @@ if (!in_array($mode, $possible_modes)) {
 }
 
 $cache = $container->get(Cache::class);
-$fluent = $container->get(Database::class);
+// $fluent removed — use $this->db (ExtendedPdo)
 $session = $container->get(Session::class);
 if ($mode === 'delete') {
     $newsid = (int) $_GET['newsid'];

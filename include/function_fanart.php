@@ -16,7 +16,7 @@ use Pu239\Image;
  * @param string $type
  * @param int    $season
  *
- * @throws \Envms\FluentPDO\Exception
+ * @throws \PDOException
  * @throws DependencyException
  * @throws NotFoundException
  *
@@ -57,7 +57,7 @@ function getTVImagesByTVDb($thetvdb_id, $type = 'showbackground', $season = 0)
     }
     if (!empty($fanart[$type])) {
         $images = [];
-        $fluent = $container->get(Database::class);
+        // $fluent removed — use $this->db (ExtendedPdo)
         foreach ($fanart[$type] as $image) {
             if (!empty($site_config['fanart']['image_lang']) && !empty($image['lang']) && in_array($image['lang'], $site_config['fanart']['image_lang'])) {
                 if ($season != 0) {
@@ -110,7 +110,7 @@ function getTVImagesByTVDb($thetvdb_id, $type = 'showbackground', $season = 0)
  * @param string $type
  *
  * @throws NotFoundException
- * @throws \Envms\FluentPDO\Exception
+ * @throws \PDOException
  * @throws DependencyException
  *
  * @return array|bool|mixed

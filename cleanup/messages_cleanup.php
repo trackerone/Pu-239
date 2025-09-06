@@ -15,7 +15,7 @@ use Pu239\Message;
  *
  * @throws DependencyException
  * @throws NotFoundException
- * @throws \Envms\FluentPDO\Exception
+ * @throws \PDOException
  */
 function pms_cleanup($data)
 {

@@ -95,7 +95,7 @@ function get_snatched_color($st)
 
 global $container;
 
-$fluent = $container->get(Database::class);
+// $fluent removed — use $this->db (ExtendedPdo)
 $count = $fluent->from('snatched')
                 ->select(null)
                 ->select('COUNT(id) AS count')

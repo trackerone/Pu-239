@@ -10,7 +10,7 @@ use Delight\Auth\AuthError;
 use Delight\Auth\NotLoggedInException;
 use DI\DependencyException;
 use DI\NotFoundException;
-use Envms\FluentPDO\Literal;
+
 use MatthiasMullie\Scrapbook\Exception\UnbegunTransaction;
 use Pu239\Database;
 use Pu239\Message;
@@ -53,7 +53,7 @@ function calctime($val)
  * @throws NotFoundException
  * @throws AuthError
  * @throws NotLoggedInException
- * @throws \Envms\FluentPDO\Exception
+ * @throws \PDOException
  * @throws UnbegunTransaction
  * @throws \PHPMailer\PHPMailer\Exception
  * @throws InvalidManipulation
@@ -67,7 +67,7 @@ function notify_owner(array $tids)
     if (empty($tids)) {
         return false;
     }
-    $fluent = $container->get(Database::class);
+    // $fluent removed — use $this->db (ExtendedPdo)
     $torrents = $fluent->from('torrents')
                        ->select(null)
                        ->select('id')
@@ -123,7 +123,7 @@ $dy_time = TIME_NOW - $y_time;
 $dz_time = TIME_NOW - $z_time;
 
 $dead = $ids = [];
-$fluent = $container->get(Database::class);
+// $fluent removed — use $this->db (ExtendedPdo)
 $query1 = $fluent->from('torrents AS t')
                  ->select(null)
                  ->select('t.id')

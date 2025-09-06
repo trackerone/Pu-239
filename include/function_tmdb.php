@@ -16,7 +16,7 @@ use Pu239\Image;
  * @param $dates
  * @param bool $images
  *
- * @throws \Envms\FluentPDO\Exception
+ * @throws \PDOException
  * @throws DependencyException*@throws Exception
  * @throws NotFoundException
  *
@@ -91,7 +91,7 @@ $db = $container->get(Database::class);, $site_config, $BLOCKS;
 /**
  * @param $dates
  *
- * @throws \Envms\FluentPDO\Exception
+ * @throws \PDOException
  * @throws DependencyException
  * @throws NotFoundException
  *
@@ -136,7 +136,7 @@ function get_movies_by_week($dates)
  *
  * @param bool $images
  *
- * @throws \Envms\FluentPDO\Exception
+ * @throws \PDOException
  * @throws DependencyException
  * @throws NotFoundException
  *
@@ -204,7 +204,7 @@ $db = $container->get(Database::class);, $site_config, $BLOCKS;
  * @param $count
  * @param bool $images
  *
- * @throws \Envms\FluentPDO\Exception
+ * @throws \PDOException
  * @throws DependencyException
  * @throws NotFoundException
  *
@@ -291,7 +291,7 @@ $db = $container->get(Database::class);, $site_config, $BLOCKS;
         return false;
     }
     $fluent = $db; // alias
-$fluent = $container->get(Database::class);
+// $fluent removed — use $this->db (ExtendedPdo)
     $id = $fluent->from('images')
         ->select(null)
         ->select($type)
@@ -334,7 +334,7 @@ $fluent = $container->get(Database::class);
  * @param $json
  *
  * @throws NotFoundException
- * @throws \Envms\FluentPDO\Exception
+ * @throws \PDOException
  * @throws DependencyException
  *
  * @return array|bool
@@ -415,7 +415,7 @@ function getStartAndEndDate($year, $week)
 /**
  * @param $tmdbid
  *
- * @throws \Envms\FluentPDO\Exception
+ * @throws \PDOException
  * @throws DependencyException
  * @throws NotFoundException
  *
@@ -451,7 +451,7 @@ function get_imdbid($tmdbid)
  *
  * @throws DependencyException
  * @throws NotFoundException
- * @throws \Envms\FluentPDO\Exception
+ * @throws \PDOException
  */
 function update_tmdb_id($tmdb_id, $imdb_id)
 {
@@ -461,7 +461,7 @@ $db = $container->get(Database::class);;
     $set = [
         'tmdb_id' => $tmdb_id,
     ];
-    $fluent = $container->get(Database::class);
+    // $fluent removed — use $this->db (ExtendedPdo)
     $sql = "UPDATE images SET /* columns */ WHERE imdb_id = :imdb_id";
 $this->db->perform($sql, array_merge($set, ['imdb_id' => $imdb_id]));
 }

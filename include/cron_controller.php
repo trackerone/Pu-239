@@ -41,7 +41,7 @@ if (user_exists($site_config['chatbot']['id']) && ($cleanup_check === false || i
  *
  * @throws DependencyException
  * @throws NotFoundException
- * @throws \Envms\FluentPDO\Exception
+ * @throws \PDOException
  */
 function autoclean(string $run)
 {
@@ -50,7 +50,7 @@ function autoclean(string $run)
     $cache = $container->get(Cache::class);
     $cache->set('cleanup_check_', 'running', 600);
     $now = TIME_NOW;
-    $fluent = $container->get(Database::class);
+    // $fluent removed — use $this->db (ExtendedPdo)
     $query = $fluent->from('cleanup');
     if (!empty($run)) {
         $query = $query->where('function_name = ?', $run);

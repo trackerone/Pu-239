@@ -16,7 +16,7 @@ use DI\NotFoundException;
  *
  * @throws DependencyException
  * @throws NotFoundException
- * @throws \Envms\FluentPDO\Exception
+ * @throws \PDOException
  */
 function processkill_update($data)
 {

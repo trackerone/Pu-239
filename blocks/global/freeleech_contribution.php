@@ -39,7 +39,7 @@ if (!empty($free) && $free['modifier'] != 0) {
     }
 }
 
-$fluent = $container->get(Database::class);
+// $fluent removed — use $this->db (ExtendedPdo)
 $freeleech = $cache->get('freeleech_alerts_');
 if ($freeleech === false || is_null($freeleech)) {
     $freeleech = $fluent->from('bonus')

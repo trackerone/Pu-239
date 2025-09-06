@@ -18,7 +18,7 @@ if (!is_valid_id($post_id) || !is_valid_id($forum_id) || !is_valid_id($topic_id)
 global $container, $site_config, $CURUSER;
 
 $users_class = $container->get(User::class);
-$fluent = $container->get(Database::class);
+// $fluent removed — use $this->db (ExtendedPdo)
 $query = $fluent->from('posts AS p')
                 ->select('t.topic_name AS topic_name')
                 ->select('f.name AS forum_name')

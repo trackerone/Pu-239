@@ -15,7 +15,7 @@ use Pu239\Cache;
  *
  * @throws DependencyException
  * @throws NotFoundException
- * @throws \Envms\FluentPDO\Exception
+ * @throws \PDOException
  */
 function funds_table_update($data)
 {

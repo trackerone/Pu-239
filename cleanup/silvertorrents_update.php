@@ -18,7 +18,7 @@ use Pu239\Database;
  * @throws UnbegunTransaction
  * @throws DependencyException
  * @throws NotFoundException
- * @throws \Envms\FluentPDO\Exception
+ * @throws \PDOException
  */
 function silvertorrents_update($data)
 {
@@ -26,7 +26,7 @@ function silvertorrents_update($data)
 
     $time_start = microtime(true);
     $dt = TIME_NOW;
-    $fluent = $container->get(Database::class);
+    // $fluent removed — use $this->db (ExtendedPdo)
     $torrents = $fluent->from('torrents')
                        ->select(null)
                        ->select('id')

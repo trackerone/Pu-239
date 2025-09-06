@@ -15,7 +15,7 @@ use Pu239\IP;
  *
  * @throws DependencyException
  * @throws NotFoundException
- * @throws \Envms\FluentPDO\Exception
+ * @throws \PDOException
  */
 function ip_update($data)
 {

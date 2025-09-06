@@ -61,7 +61,7 @@ switch ($params['mode']) {
  * @throws InvalidManipulation
  * @throws NotFoundException
  * @throws NotLoggedInException
- * @throws \Envms\FluentPDO\Exception
+ * @throws \PDOException
  * @throws UnbegunTransaction
  */
 function delete_poll($stdfoot)
@@ -93,7 +93,7 @@ function delete_poll($stdfoot)
 }
 
 /**
- * @throws \Envms\FluentPDO\Exception
+ * @throws \PDOException
  * @throws Exception
  */
 function update_poll()
@@ -135,7 +135,7 @@ function update_poll()
 }
 
 /**
- * @throws \Envms\FluentPDO\Exception
+ * @throws \PDOException
  * @throws Exception
  */
 function insert_new_poll()
@@ -177,7 +177,7 @@ function insert_new_poll()
  *
  * @throws DependencyException
  * @throws NotFoundException
- * @throws \Envms\FluentPDO\Exception
+ * @throws \PDOException
  * @throws InvalidManipulation
  * @throws Exception
  */
@@ -200,7 +200,7 @@ function show_poll_form($stdfoot)
  * @throws Exception
  * @throws DependencyException
  * @throws NotFoundException
- * @throws \Envms\FluentPDO\Exception
+ * @throws \PDOException
  * @throws InvalidManipulation
  *
  * @return mixed
@@ -254,7 +254,7 @@ function edit_poll_form($stdfoot)
  * @throws InvalidManipulation
  * @throws NotFoundException
  * @throws NotLoggedInException
- * @throws \Envms\FluentPDO\Exception
+ * @throws \PDOException
  * @throws UnbegunTransaction
  */
 function show_poll_archive($stdfoot)

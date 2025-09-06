@@ -18,7 +18,7 @@ use Spatie\Image\Exceptions\InvalidManipulation;
  * @throws InvalidManipulation
  * @throws DependencyException
  * @throws NotFoundException
- * @throws \Envms\FluentPDO\Exception
+ * @throws \PDOException
  * @throws Exception
  */
 function tvmaze_schedule_update($data)

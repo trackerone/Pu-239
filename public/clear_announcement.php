@@ -19,7 +19,7 @@ $set = [
     'curr_ann_id' => 0,
     'curr_ann_last_check' => 0,
 ];
-$fluent = $container->get(Database::class);
+// $fluent removed — use $this->db (ExtendedPdo)
 $fluent->update('users')
        ->set($set)
        ->where('id = ?', $user['id'])

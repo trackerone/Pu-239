@@ -37,7 +37,7 @@ $links = "
  * @param      $arr
  * @param bool $empty
  *
- * @throws \Envms\FluentPDO\Exception
+ * @throws \PDOException
  * @throws DependencyException
  * @throws NotFoundException
  *
@@ -81,7 +81,7 @@ function do_sort($arr, $empty = false)
 
 global $container;
 
-$fluent = $container->get(Database::class);
+// $fluent removed — use $this->db (ExtendedPdo)
 if (isset($_GET['type']) && in_array($_GET['type'], $modes)) {
     if (isset($_GET['type']) && in_array($_GET['type'], $modes)) {
         $mode = $_GET['type'];

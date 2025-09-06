@@ -321,7 +321,7 @@ function show_form_rep(array $input)
  *
  * @throws DependencyException
  * @throws NotFoundException
- * @throws \Envms\FluentPDO\Exception
+ * @throws \PDOException
  * @throws Exception
  */
 function view_list(array $now_date, array $input, int $time_offset)

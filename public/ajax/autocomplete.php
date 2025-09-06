@@ -26,7 +26,7 @@ $hash = 'suggest_torrents_' . hash('sha256', $keyword);
 
 $results = $cache->get($hash);
 if ($results === false || is_null($results)) {
-    $fluent = $container->get(Database::class);
+    // $fluent removed — use $this->db (ExtendedPdo)
     $results = $fluent->from('torrents')
                       ->select(null)
                       ->select('id')

@@ -9,7 +9,7 @@ declare(strict_types = 1);
 namespace Pu239;
 
 use Envms\FluentPDO\Exception;
-use Envms\FluentPDO\Literal;
+
 use PDOStatement;
 
 /**

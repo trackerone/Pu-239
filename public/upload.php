@@ -83,7 +83,7 @@ foreach ($vars as $var) {
         ${$var} = isset($upload_vars[$var]) ? $upload_vars[$var] : '';
     }
 }
-$fluent = $container->get(Database::class);
+// $fluent removed — use $this->db (ExtendedPdo)
 $res_cooker = $fluent->from('upcoming')
                      ->select(null)
                      ->select('id')

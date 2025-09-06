@@ -103,7 +103,7 @@ app_halt('Exit called');
  *
  * @throws DependencyException
  * @throws NotFoundException
- * @throws \Envms\FluentPDO\Exception
+ * @throws \PDOException
  *
  * @return array|bool
  */
@@ -112,7 +112,7 @@ function get_uploaded(int $userid)
     global $container;
 
     $torrents = [];
-    $fluent = $container->get(Database::class);
+    // $fluent removed — use $this->db (ExtendedPdo)
     $count = $fluent->from('torrents')
                     ->select(null)
                     ->select('COUNT(id) AS count')
@@ -166,7 +166,7 @@ function get_uploaded(int $userid)
  *
  * @throws DependencyException
  * @throws NotFoundException
- * @throws \Envms\FluentPDO\Exception
+ * @throws \PDOException
  *
  * @return array|bool
  */
@@ -174,7 +174,7 @@ function get_seeding(int $userid)
 {
     global $container;
 
-    $fluent = $container->get(Database::class);
+    // $fluent removed — use $this->db (ExtendedPdo)
     $count = $fluent->from('peers')
                     ->select(null)
                     ->select('COUNT(id) AS count')
@@ -219,7 +219,7 @@ function get_seeding(int $userid)
  *
  * @throws DependencyException
  * @throws NotFoundException
- * @throws \Envms\FluentPDO\Exception
+ * @throws \PDOException
  *
  * @return array|bool
  */
@@ -227,7 +227,7 @@ function get_leeching(int $userid)
 {
     global $container;
 
-    $fluent = $container->get(Database::class);
+    // $fluent removed — use $this->db (ExtendedPdo)
     $count = $fluent->from('peers')
                     ->select(null)
                     ->select('COUNT(id) AS count')
@@ -272,7 +272,7 @@ function get_leeching(int $userid)
  *
  * @throws DependencyException
  * @throws NotFoundException
- * @throws \Envms\FluentPDO\Exception
+ * @throws \PDOException
  *
  * @return array|bool
  */
@@ -280,7 +280,7 @@ function get_snatched(int $userid)
 {
     global $container;
 
-    $fluent = $container->get(Database::class);
+    // $fluent removed — use $this->db (ExtendedPdo)
     $count = $fluent->from('snatched')
                     ->select(null)
                     ->select('COUNT(id) AS count')
@@ -313,7 +313,7 @@ function get_snatched(int $userid)
  *
  * @throws DependencyException
  * @throws NotFoundException
- * @throws \Envms\FluentPDO\Exception
+ * @throws \PDOException
  *
  * @return array|bool
  */
@@ -321,7 +321,7 @@ function get_snatched_staff(int $userid)
 {
     global $container;
 
-    $fluent = $container->get(Database::class);
+    // $fluent removed — use $this->db (ExtendedPdo)
     $count = $fluent->from('snatched')
                     ->select(null)
                     ->select('COUNT(id) AS count')
@@ -472,7 +472,7 @@ function snatchtable(array $torrents)
  *
  * @throws DependencyException
  * @throws NotFoundException
- * @throws \Envms\FluentPDO\Exception
+ * @throws \PDOException
  *
  * @return string
  */

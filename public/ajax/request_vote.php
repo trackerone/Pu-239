@@ -21,7 +21,7 @@ if (empty($id) || !isset($voted)) {
     echo json_encode(['voted' => 'invalid']);
     app_halt('Exit called');
 }
-$fluent = $container->get(Database::class);
+// $fluent removed — use $this->db (ExtendedPdo)
 if ($voted === 'yes') {
     $update = [
         'vote' => 'no',

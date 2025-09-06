@@ -80,7 +80,7 @@ if ($action === 'edit' && has_access($user['class'], UC_SYSOP, 'coder')) {
 
 $rows = $db->fetchAll('SELECT * FROM modscredits');
 $fluent = $db; // alias
-$fluent = $container->get(Database::class);
+// $fluent removed — use $this->db (ExtendedPdo)
 $credits = $fluent->from('modscredits')
                   ->orderBy('id')
                   ->fetchAll();

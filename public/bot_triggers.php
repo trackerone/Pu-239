@@ -22,7 +22,7 @@ $user = check_user_status();
 global $container, $site_config;
 
 $cache = $container->get(Cache::class);
-$fluent = $container->get(Database::class);
+// $fluent removed — use $this->db (ExtendedPdo)
 $trigger_class = $container->get(BotTriggers::class);
 $replies_class = $container->get(BotReplies::class);
 $editable = false;

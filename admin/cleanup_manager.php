@@ -57,7 +57,7 @@ switch ($params['mode']) {
 /**
  * @throws DependencyException
  * @throws NotFoundException
- * @throws \Envms\FluentPDO\Exception
+ * @throws \PDOException
  */
 function resettimer()
 {
@@ -77,7 +77,7 @@ $db = $container->get(Database::class);;
  *
  * @throws DependencyException
  * @throws NotFoundException
- * @throws \Envms\FluentPDO\Exception
+ * @throws \PDOException
  * @throws Exception
  */
 function manualclean($params)
@@ -99,7 +99,7 @@ function manualclean($params)
 }
 
 /**
- * @throws \Envms\FluentPDO\Exception
+ * @throws \PDOException
  * @throws Exception
  */
 function cleanup_show_main()
@@ -108,7 +108,7 @@ function cleanup_show_main()
 $db = $container->get(Database::class);, $site_config;
 
     $fluent = $db; // alias
-$fluent = $container->get(Database::class);
+// $fluent removed — use $this->db (ExtendedPdo)
     $count1 = $fluent->from('cleanup')
                      ->select(null)
                      ->select('COUNT(clean_id) AS count')
@@ -207,7 +207,7 @@ $fluent = $container->get(Database::class);
  *
  * @throws DependencyException
  * @throws NotFoundException
- * @throws \Envms\FluentPDO\Exception
+ * @throws \PDOException
  * @throws Exception
  */
 function cleanup_take_edit($params)
@@ -439,7 +439,7 @@ $db = $container->get(Database::class);;
  *
  * @throws DependencyException
  * @throws NotFoundException
- * @throws \Envms\FluentPDO\Exception
+ * @throws \PDOException
  * @throws Exception
  */
 function cleanup_take_unlock($params)

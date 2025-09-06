@@ -6,7 +6,7 @@ declare(strict_types = 1);
 
 use DI\DependencyException;
 use DI\NotFoundException;
-use Envms\FluentPDO\Literal;
+
 use Pu239\Cache;
 use Pu239\Database;
 use Pu239\Session;
@@ -22,7 +22,7 @@ $db = $container->get(Database::class);, $CURUSER, $site_config;
 $style = get_stylesheet();
 $session = $container->get(Session::class);
 $fluent = $db; // alias
-$fluent = $container->get(Database::class);
+// $fluent removed — use $this->db (ExtendedPdo)
 $all_classes = $fluent->from('class_config')
                       ->where('template = ?', $style)
                       ->orderBy('value');
@@ -49,14 +49,14 @@ if (!in_array($mode, $possible_modes)) {
  *
  * @throws DependencyException
  * @throws NotFoundException
- * @throws \Envms\FluentPDO\Exception
+ * @throws \PDOException
  */
 function update_forum_classes(int $value, string $direction)
 {
     global $container;
 $db = $container->get(Database::class);;
 
-    $fluent = $container->get(Database::class);
+    // $fluent removed — use $this->db (ExtendedPdo)
     if ($direction === 'increment') {
         $fluent->update('forums')
                ->set(['min_class_read' => new Literal('min_class_read + 1')])
@@ -104,7 +104,7 @@ $db = $container->get(Database::class);;
     }
 }
 
-$fluent = $container->get(Database::class);
+// $fluent removed — use $this->db (ExtendedPdo)
 $cache = $container->get(Cache::class);
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $data = [];

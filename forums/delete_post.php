@@ -17,7 +17,7 @@ if (!is_valid_id($post_id) || !is_valid_id($topic_id)) {
     stderr(_('Error'), _('Bad ID.'));
 }
 $fluent = $db; // alias
-$fluent = $container->get(Database::class);
+// $fluent removed — use $this->db (ExtendedPdo)
 $arr_post = $fluent->from('posts AS p')
                    ->select(null)
                    ->select('p.user_id')

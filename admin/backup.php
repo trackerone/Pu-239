@@ -29,7 +29,7 @@ if (is_array($required_class)) {
 }
 $mode = (isset($_GET['mode']) ? $_GET['mode'] : (isset($_POST['mode']) ? $_POST['mode'] : ''));
 
-$fluent = $container->get(Database::class);
+// $fluent removed — use $this->db (ExtendedPdo)
 if (empty($mode)) {
     $backups = $fluent->from('dbbackup')
                       ->orderBy('added DESC')

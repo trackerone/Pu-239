@@ -6,7 +6,7 @@ declare(strict_types = 1);
 
 use DI\DependencyException;
 use DI\NotFoundException;
-use Envms\FluentPDO\Literal;
+
 use MatthiasMullie\Scrapbook\Exception\UnbegunTransaction;
 use Pu239\Cache;
 use Pu239\Database;
@@ -20,7 +20,7 @@ use Pu239\User;
  * @throws DependencyException
  * @throws NotFoundException
  * @throws UnbegunTransaction
- * @throws \Envms\FluentPDO\Exception
+ * @throws \PDOException
  */
 function nologip(int $userid, bool $nologip = true)
 {
@@ -43,7 +43,7 @@ function nologip(int $userid, bool $nologip = true)
         ];
         $users_class->update($update, $userid, false);
     }
-    $fluent = $container->get(Database::class);
+    // $fluent removed — use $this->db (ExtendedPdo)
     $sql = "DELETE FROM ips WHERE userid = :userid";
 $this->db->perform($sql, ['userid' => $userid]);
     $cache = $container->get(Cache::class);

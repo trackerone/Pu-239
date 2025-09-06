@@ -37,7 +37,7 @@ if ($user['status'] === 5) {
 }
 
 $fluent = $db; // alias
-$fluent = $container->get(Database::class);
+// $fluent removed — use $this->db (ExtendedPdo)
 $cache = $container->get(Cache::class);
 if ($do === 'view_page') {
     $sql = $fluent->from('users')

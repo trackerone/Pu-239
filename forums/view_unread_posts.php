@@ -11,7 +11,7 @@ $HTMLOUT .= $mini_menu . '<h1 class="has-text-centered">' . _('Unread posts sinc
 $user = check_user_status();
 global $container, $site_config;
 
-$fluent = $container->get(Database::class);
+// $fluent removed — use $this->db (ExtendedPdo)
 $count = $fluent->from('read_posts')
                 ->select(null)
                 ->select('COUNT(id) AS count')

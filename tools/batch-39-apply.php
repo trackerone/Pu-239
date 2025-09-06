@@ -29,10 +29,10 @@ foreach ($files as $file) {
     // 0) Remove use Envms\FluentPDO\Literal;
     $updated = preg_replace('/^\s*use\s+Envms\\\\FluentPDO\\\\Literal;\s*$/m', '', $updated);
 
-    // 1) Replace @throws \Envms\FluentPDO\Exception → @throws \PDOException
+    // 1) Replace @throws \PDOException → @throws \PDOException
     $updated = preg_replace('/@throws\s+\\\\Envms\\\\FluentPDO\\\\Exception/', '@throws \\\\PDOException', $updated);
 
-    // 2) Remove "$fluent = $container->get(Database::class);" hints
+    // 2) Remove "// $fluent removed — use $this->db (ExtendedPdo)" hints
     $updated = preg_replace('/\$fluent\s*=\s*\$container->get\(Database::class\);/', '// $fluent removed, use $this->db (ExtendedPdo)', $updated);
 
     // 3) Peers/Agents aggregation replacement

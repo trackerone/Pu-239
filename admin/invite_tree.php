@@ -20,7 +20,7 @@ $HTMLOUT = '';
 $id = isset($_GET['id']) ? (int) $_GET['id'] : (isset($_POST['id']) ? (int) $_POST['id'] : 0);
 $users_class = $container->get(User::class);
 $fluent = $db; // alias
-$fluent = $container->get(Database::class);
+// $fluent removed — use $this->db (ExtendedPdo)
 if ($id !== 0) {
     $arr_user = $users_class->getUserFromId($id);
     $HTMLOUT .= '

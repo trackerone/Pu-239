@@ -18,7 +18,7 @@ use Pu239\Cache;
  *
  * @throws DependencyException
  * @throws NotFoundException
- * @throws \Envms\FluentPDO\Exception
+ * @throws \PDOException
  * @throws UnbegunTransaction
  */
 function irc_update($data)

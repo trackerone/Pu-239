@@ -48,7 +48,7 @@ $stdfoot = [
 ];
 
 $HTMLOUT = $page_name = $file_name = $navbar = '';
-$fluent = $container->get(Database::class);
+// $fluent removed — use $this->db (ExtendedPdo)
 $cache = $container->get(Cache::class);
 $cache->delete('staff_classes_');
 $staff_classes = $cache->get('staff_classes_');

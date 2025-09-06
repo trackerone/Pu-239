@@ -15,7 +15,7 @@ global $container, $site_config;
 
 $show_pm_avatar = ($user['opt2'] & class_user_options_2::SHOW_PM_AVATAR) === class_user_options_2::SHOW_PM_AVATAR;
 $message_class = $container->get(Message::class);
-$fluent = $container->get(Database::class);
+// $fluent removed — use $this->db (ExtendedPdo)
 if ($mailbox > 1) {
     $arr_box_name = $fluent->from('pmboxes')
                            ->select(null)

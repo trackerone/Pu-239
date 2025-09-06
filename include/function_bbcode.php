@@ -193,7 +193,7 @@ function format_urls($s)
  * @throws DependencyException
  * @throws InvalidManipulation
  * @throws NotFoundException
- * @throws \Envms\FluentPDO\Exception
+ * @throws \PDOException
  *
  * @return mixed|string|string[]|null
  */
@@ -538,7 +538,7 @@ function format_code(string $s)
  * @throws DependencyException
  * @throws InvalidManipulation
  * @throws NotFoundException
- * @throws \Envms\FluentPDO\Exception
+ * @throws \PDOException
  *
  * @return mixed|string|string[]|null
  */

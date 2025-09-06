@@ -14,7 +14,7 @@ $db = $container->get(Database::class);, $site_config, $CURUSER;
 $posts = $lppostid = $topicpoll = $rpic = $body = '';
 $HTMLOUT .= $mini_menu . '<h1 class="has-text-centered">Subscribed Forums for ' . format_username((int) $CURUSER['id']) . '</h1>';
 $fluent = $db; // alias
-$fluent = $container->get(Database::class);
+// $fluent removed — use $this->db (ExtendedPdo)
 $count = $fluent->from('subscriptions')
                 ->select(null)
                 ->select('COUNT(id) AS count')

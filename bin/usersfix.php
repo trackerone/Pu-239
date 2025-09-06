@@ -14,7 +14,7 @@ require_once __DIR__ . '/../include/bittorrent.php';
 
 global $container;
 
-$fluent = $container->get(Database::class);
+// $fluent removed — use $this->db (ExtendedPdo)
 $users = $fluent->from('users')
     ->select(null)
     ->select('id')

@@ -6,7 +6,6 @@ require_once __DIR__ . '/bootstrap_pdo.php';
 
 declare(strict_types = 1);
 
-use Envms\FluentPDO\Literal;
 use MatthiasMullie\Scrapbook\Exception\UnbegunTransaction;
 use Pu239\Cache;
 use Pu239\Database;
@@ -36,7 +35,7 @@ if (user_exists($site_config['chatbot']['id']) && ($cleanup_check === false || i
 }
 
 /**
- * @throws \Envms\FluentPDO\Exception
+ * @throws \PDOException
  * @throws UnbegunTransaction
  * @throws InvalidManipulation
  * @throws Exception`
@@ -58,7 +57,7 @@ function images_update()
     ignore_user_abort(true);
     $cache = $container->get(Cache::class);
     $cache->set('images_update_', time(), 1800);
-    $fluent = $container->get(Database::class);
+    // $fluent removed — use $this->db (ExtendedPdo)
     $images_class = $container->get(Image::class);
     $torrent = $container->get(Torrent::class);
     $fluent->deleteFrom('images')
@@ -511,7 +510,7 @@ $this->db->perform($sql, array_merge($set, ['id' => $link['id']]));
 function fetch_person_info(int $count): void
 {
     global $container;
-    $fluent = $container->get(Database::class);
+    // $fluent removed — use $this->db (ExtendedPdo)
     $persons = $fluent->from('person')
         ->select(null)
         ->select('imdb_id')

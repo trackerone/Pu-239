@@ -10,7 +10,7 @@ use Delight\Auth\AuthError;
 use Delight\Auth\NotLoggedInException;
 use DI\DependencyException;
 use DI\NotFoundException;
-use Envms\FluentPDO\Literal;
+
 use MatthiasMullie\Scrapbook\Exception\UnbegunTransaction;
 use Pu239\Cache;
 use Pu239\Database;
@@ -25,7 +25,7 @@ use Spatie\Image\Exceptions\InvalidManipulation;
  * @throws NotFoundException
  * @throws AuthError
  * @throws NotLoggedInException
- * @throws \Envms\FluentPDO\Exception
+ * @throws \PDOException
  * @throws UnbegunTransaction
  * @throws \PHPMailer\PHPMailer\Exception
  * @throws InvalidManipulation
@@ -36,7 +36,7 @@ function auto_post($subject = 'Error - Subject Missing', $body = 'Error - No Bod
 {
     global $container, $site_config, $CURUSER;
 
-    $fluent = $container->get(Database::class);
+    // $fluent removed — use $this->db (ExtendedPdo)
     if (user_exists($site_config['chatbot']['id'])) {
         $topicid = $fluent->from('topics')
                           ->select(null)

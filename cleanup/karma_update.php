@@ -17,7 +17,7 @@ use Pu239\User;
  *
  * @throws DependencyException
  * @throws NotFoundException
- * @throws \Envms\FluentPDO\Exception
+ * @throws \PDOException
  * @throws UnbegunTransaction
  */
 function karma_update($data)
@@ -25,7 +25,7 @@ function karma_update($data)
     global $container, $site_config;
 
     $time_start = microtime(true);
-    $fluent = $container->get(Database::class);
+    // $fluent removed — use $this->db (ExtendedPdo)
     if ($site_config['bonus']['on']) {
         $bmt = $site_config['bonus']['max_torrents'];
         $last_action = TIME_NOW - floor($site_config['tracker']['announce_interval']);

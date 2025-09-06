@@ -16,7 +16,7 @@ $birthday = $cache->get('birthdayusers_');
 if ($birthday === false || is_null($birthday)) {
     $birthday = $list = [];
     $current_date = getdate();
-    $fluent = $container->get(Database::class);
+    // $fluent removed — use $this->db (ExtendedPdo)
     $query = $fluent->from('users')
                     ->select(null)
                     ->select('id')

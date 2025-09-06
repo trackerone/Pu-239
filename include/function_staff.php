@@ -14,7 +14,7 @@ use Pu239\Database;
  * @param $text
  *
  * @throws NotFoundException
- * @throws \Envms\FluentPDO\Exception
+ * @throws \PDOException
  * @throws DependencyException
  *
  * @return bool|int
@@ -26,7 +26,7 @@ function write_info($text)
         'txt' => $text,
     ];
     global $container;
-    $fluent = $container->get(Database::class);
+    // $fluent removed — use $this->db (ExtendedPdo)
     $sql = "INSERT INTO infolog (/* columns */) VALUES (/* values */)";
 $id = $this->db->perform($sql, $values);
 

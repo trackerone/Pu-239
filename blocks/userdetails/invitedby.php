@@ -19,7 +19,7 @@ if ($invite_by > 0 && $type === 'invite') {
             <td>' . format_username($invite_by) . '</td>
         </tr>';
 } elseif ($invite_by > 0 && $type === 'promo') {
-    $fluent = $container->get(Database::class);
+    // $fluent removed — use $this->db (ExtendedPdo)
     $name = $fluent->from('promo')
                    ->select(null)
                    ->select('name')

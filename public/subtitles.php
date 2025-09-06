@@ -19,7 +19,7 @@ $HTMLOUT = '';
 
 $action = (isset($_GET['action']) ? htmlsafechars($_GET['action']) : (isset($_POST['action']) ? htmlsafechars($_POST['action']) : ''));
 $mode = (isset($_GET['mode']) ? htmlsafechars($_GET['mode']) : '');
-$fluent = $container->get(Database::class);
+// $fluent removed — use $this->db (ExtendedPdo)
 $subs = $container->get('subtitles');
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if ($action === 'upload' || $action === 'edit') {

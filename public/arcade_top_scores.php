@@ -23,7 +23,7 @@ $HTMLOUT = "
             </div>
         </div>';
 
-$fluent = $container->get(Database::class);
+// $fluent removed — use $this->db (ExtendedPdo)
 $scores = $fluent->from('flashscores')
                  ->orderBy('game')
                  ->orderBy('level DESC')

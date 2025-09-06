@@ -17,7 +17,7 @@ class_check($class);
 $HTMLOUT = '';
 global $container, $site_config;
 
-$fluent = $container->get(Database::class);
+// $fluent removed — use $this->db (ExtendedPdo)
 if (isset($_GET['total_donors'])) {
     $total_donors = (int) $_GET['total_donors'];
     if ($total_donors != '1') {

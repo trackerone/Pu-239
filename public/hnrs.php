@@ -35,7 +35,7 @@ if ($user['id'] === $userid || has_access($user['class'], UC_ADMINISTRATOR, 'cod
 } else {
     $bp = 0;
 }
-$fluent = $container->get(Database::class);
+// $fluent removed — use $this->db (ExtendedPdo)
 $ratio_fix = $fluent->from('bonus')
                     ->select(null)
                     ->select('points')

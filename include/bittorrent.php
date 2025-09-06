@@ -90,7 +90,7 @@ function htmlsafechars(string $txt, bool $strip = true)
  *
  * @throws DependencyException
  * @throws NotFoundException
- * @throws \Envms\FluentPDO\Exception
+ * @throws \PDOException
  *
  * @return string
  */
@@ -125,7 +125,7 @@ function getip(int $user_id): string
 /**
  * @throws DependencyException
  * @throws NotFoundException
- * @throws \Envms\FluentPDO\Exception
+ * @throws \PDOException
  *
  * @return mixed
  *
@@ -175,7 +175,7 @@ function get_category_icons()
 /**
  * @throws NotLoggedInException
  * @throws UnbegunTransaction
- * @throws \Envms\FluentPDO\Exception
+ * @throws \PDOException
  * @throws AuthError
  * @throws DependencyException
  * @throws NotFoundException
@@ -237,7 +237,7 @@ function get_template()
  *
  * @throws DependencyException
  * @throws NotFoundException
- * @throws \Envms\FluentPDO\Exception
+ * @throws \PDOException
  *
  * @return array|bool|mixed
  *
@@ -253,7 +253,7 @@ function make_freeslots(int $userid, string $key, bool $clear)
     }
     $slot = $cache->get($key . $userid);
     if ($slot === false || is_null($slot)) {
-        $fluent = $container->get(Database::class);
+        // $fluent removed — use $this->db (ExtendedPdo)
         $slot = $fluent->from('freeslots')
             ->where('userid = ?', $userid)
             ->fetchAll();
@@ -412,7 +412,7 @@ function searchfield($s)
  * @throws NotFoundException
  * @throws NotLoggedInException
  * @throws UnbegunTransaction
- * @throws \Envms\FluentPDO\Exception
+ * @throws \PDOException
  */
 function stderr($heading, $text, ?string $outer_class = null, ?string $inner_class = null, array $breadcrumbs = [])
 {
@@ -437,7 +437,7 @@ function stderr($heading, $text, ?string $outer_class = null, ?string $inner_cla
  *
  * @throws DependencyException
  * @throws NotFoundException
- * @throws \Envms\FluentPDO\Exception
+ * @throws \PDOException
  */
 function write_log($text)
 {
@@ -474,7 +474,7 @@ function get_userid()
 
 /**
  * @throws NotFoundException
- * @throws \Envms\FluentPDO\Exception
+ * @throws \PDOException
  * @throws DependencyException
  *
  * @return float|int
@@ -615,7 +615,7 @@ function get_percent_completed_image($p)
 /**
  * @throws DependencyException
  * @throws NotFoundException
- * @throws \Envms\FluentPDO\Exception
+ * @throws \PDOException
  */
 function referer()
 {
@@ -721,7 +721,7 @@ function suspended($user)
  * @throws DependencyException
  * @throws NotFoundException
  * @throws NotLoggedInException
- * @throws \Envms\FluentPDO\Exception
+ * @throws \PDOException
  */
 function force_logout(int $userid)
 {
@@ -747,7 +747,7 @@ function force_logout(int $userid)
  * @throws NotFoundException
  * @throws NotLoggedInException
  * @throws UnbegunTransaction
- * @throws \Envms\FluentPDO\Exception
+ * @throws \PDOException
  *
  * @return bool|mixed|User
  *
@@ -888,7 +888,7 @@ function random_color($minVal = 0, $maxVal = 255)
  *
  * @throws DependencyException
  * @throws NotFoundException
- * @throws \Envms\FluentPDO\Exception
+ * @throws \PDOException
  *
  * @return bool
  *
@@ -969,7 +969,7 @@ function array_msort(array $array, array $cols)
 /**
  * @throws DependencyException
  * @throws NotFoundException
- * @throws \Envms\FluentPDO\Exception
+ * @throws \PDOException
  *
  * @return array|bool|mixed
  *
@@ -982,7 +982,7 @@ function countries()
     $cache = $container->get(Cache::class);
     $countries = $cache->get('countries_arr_');
     if ($countries === false || is_null($countries)) {
-        $fluent = $container->get(Database::class);
+        // $fluent removed — use $this->db (ExtendedPdo)
         $countries = $fluent->from('countries')
             ->select(null)
             ->select('id')
@@ -1068,7 +1068,7 @@ function plural(int $int)
  * @throws NotFoundException
  * @throws NotLoggedInException
  * @throws UnbegunTransaction
- * @throws \Envms\FluentPDO\Exception
+ * @throws \PDOException
  *
  * @return bool|string
  *
@@ -1188,7 +1188,7 @@ function get_anonymous_name()
  * @throws DependencyException
  * @throws InvalidManipulation
  * @throws NotFoundException
- * @throws \Envms\FluentPDO\Exception
+ * @throws \PDOException
  *
  * @return string
  *
@@ -1251,7 +1251,7 @@ function get_show_name(string $name)
  *
  * @throws DependencyException
  * @throws NotFoundException
- * @throws \Envms\FluentPDO\Exception
+ * @throws \PDOException
  *
  * @return bool|mixed|null
  *
@@ -1269,7 +1269,7 @@ function get_show_id(string $name)
     $hash = hash('sha256', $name);
     $id_array = $cache->get('tvshow_ids_' . $hash);
     if ($id_array === false || is_null($id_array)) {
-        $fluent = $container->get(Database::class);
+        // $fluent removed — use $this->db (ExtendedPdo)
         $items = $fluent->from('tvmaze')
             ->where('MATCH (name) AGAINST (? IN NATURAL LANGUAGE MODE)', $name)
             ->fetchAll();
@@ -1297,7 +1297,7 @@ function get_show_id(string $name)
  *
  * @throws DependencyException
  * @throws NotFoundException
- * @throws \Envms\FluentPDO\Exception
+ * @throws \PDOException
  *
  * @return bool|mixed|null
  *
@@ -1313,7 +1313,7 @@ function get_show_id_by_imdb(string $imdbid)
     }
     $id_array = $cache->get('tvshow_ids_' . $imdbid);
     if ($id_array === false || is_null($id_array)) {
-        $fluent = $container->get(Database::class);
+        // $fluent removed — use $this->db (ExtendedPdo)
         $id_array = $fluent->from('tvmaze')
             ->where('imdb_id = ?', $imdbid)
             ->fetch();
@@ -1334,7 +1334,7 @@ function get_show_id_by_imdb(string $imdbid)
  * @param bool $sec
  *
  * @throws NotFoundException
- * @throws \Envms\FluentPDO\Exception
+ * @throws \PDOException
  * @throws DependencyException
  *
  * @return false|mixed|string
@@ -1406,7 +1406,7 @@ function formatQuery($query)
  * @param string $type
  * @param int    $userid
  *
- * @throws \Envms\FluentPDO\Exception
+ * @throws \PDOException
  * @throws DependencyException
  * @throws NotFoundException
  *
@@ -1429,7 +1429,7 @@ function insert_update_ip(string $type, int $userid)
  * @param bool|null $fresh
  * @param bool|null $async
  *
- * @throws \Envms\FluentPDO\Exception
+ * @throws \PDOException
  * @throws DependencyException
  * @throws NotFoundException
  *
@@ -1530,7 +1530,7 @@ function gzCompressFile($source, $level = 9)
  *
  * @param bool $details
  *
- * @throws \Envms\FluentPDO\Exception
+ * @throws \PDOException
  * @throws DependencyException
  * @throws NotFoundException
  *
@@ -1543,7 +1543,7 @@ function get_body_image(bool $details)
     global $container, $imdb_id;
 
     $cache = $container->get(Cache::class);
-    $fluent = $container->get(Database::class);
+    // $fluent removed — use $this->db (ExtendedPdo)
     $image = '';
     if ($details && !empty($imdb_id)) {
         $images = $cache->get('backgrounds_' . $imdb_id);
@@ -1604,7 +1604,7 @@ function get_body_image(bool $details)
 /**
  * @throws DependencyException
  * @throws NotFoundException
- * @throws \Envms\FluentPDO\Exception
+ * @throws \PDOException
  *
  * @return bool|mixed
  *
@@ -1618,7 +1618,7 @@ function get_random_useragent()
 
     $browsers = $cache->get('browser_user_agents_');
     if ($browsers === false || is_null($browsers)) {
-        $fluent = $container->get(Database::class);
+        // $fluent removed — use $this->db (ExtendedPdo)
         $results = $fluent->from('users')
             ->select(null)
             ->select('DISTINCT browser AS browser')

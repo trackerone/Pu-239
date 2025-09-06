@@ -16,7 +16,7 @@ $active = $cache->get('activeusers_');
 if ($active === false || is_null($active)) {
     $list = [];
     $dt = TIME_NOW - 900;
-    $fluent = $container->get(Database::class);
+    // $fluent removed — use $this->db (ExtendedPdo)
     $query = $fluent->from('users')
                     ->select(null)
                     ->select('id')

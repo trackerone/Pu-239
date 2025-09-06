@@ -15,7 +15,7 @@ global $container, $CURUSER, $site_config;
 flood_limit('messages');
 $messages_class = $container->get(Message::class);
 $message = $messages_class->get_by_id($pm_id);
-$fluent = $container->get(Database::class);
+// $fluent removed — use $this->db (ExtendedPdo)
 if (empty($message)) {
     stderr(_('Error'), _('Message Not Found!'));
 }

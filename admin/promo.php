@@ -21,7 +21,7 @@ $user = check_user_status();
 global $container, $site_config;
 
 $HTMLOUT = '';
-$fluent = $container->get(Database::class);
+// $fluent removed — use $this->db (ExtendedPdo)
 $session = $container->get(Session::class);
 $do = isset($_GET['do']) ? $_GET['do'] : (isset($_POST['do']) ? $_POST['do'] : '');
 $id = isset($_GET['id']) ? (int) $_GET['id'] : (isset($_POST['id']) ? (int) $_POST['id'] : '0');

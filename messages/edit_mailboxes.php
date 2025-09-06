@@ -4,7 +4,6 @@ require_once __DIR__ . '/../include/runtime_safe.php';
 
 declare(strict_types = 1);
 
-use Envms\FluentPDO\Literal;
 use Pu239\Cache;
 use Pu239\Database;
 use Pu239\Message;
@@ -16,7 +15,7 @@ global $container, $CURUSER, $site_config;
 $all_my_boxes = $user_cache = $categories = '';
 $users_class = $container->get(User::class);
 $messages_class = $container->get(Message::class);
-$fluent = $container->get(Database::class);
+// $fluent removed — use $this->db (ExtendedPdo)
 $cache = $container->get(Cache::class);
 if (isset($_POST['action2'])) {
     $good_actions = [

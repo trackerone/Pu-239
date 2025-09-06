@@ -13,7 +13,7 @@ require_once __DIR__ . '/../include/bittorrent.php';
 global $container;
 
 $time_start = microtime(true);
-$fluent = $container->get(Database::class);
+// $fluent removed — use $this->db (ExtendedPdo)
 $torrents = $fluent->from('torrents')
                    ->select(null)
                    ->select('id')

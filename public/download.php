@@ -22,7 +22,7 @@ require_once CLASS_DIR . 'class.bencdec.php';
 global $container, $site_config;
 
 $users_class = $container->get(User::class);
-$fluent = $container->get(Database::class);
+// $fluent removed — use $this->db (ExtendedPdo)
 $torrent_class = $container->get(Torrent::class);
 $session = $container->get(Session::class);
 $cache = $container->get(Cache::class);

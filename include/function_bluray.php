@@ -20,7 +20,7 @@ use Spatie\Image\Exceptions\InvalidManipulation;
  * @throws InvalidManipulation
  * @throws NotFoundException
  * @throws Exception
- * @throws \Envms\FluentPDO\Exception
+ * @throws \PDOException
  *
  * @return array|bool|mixed
  *
@@ -83,7 +83,7 @@ function get_bluray_info(bool $images = false)
                 }
             }
 
-            $fluent = $container->get(Database::class);
+            // $fluent removed — use $this->db (ExtendedPdo)
             $imdb_info = $fluent->from('imdb_info')
                 ->select('null')
                 ->select('imdb_id')

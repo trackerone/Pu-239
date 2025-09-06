@@ -4,7 +4,6 @@ require_once __DIR__ . '/../include/runtime_safe.php';
 
 declare(strict_types = 1);
 
-use Envms\FluentPDO\Literal;
 use Pu239\Database;
 use Pu239\Session;
 
@@ -20,7 +19,7 @@ $id = !empty($_GET['id']) ? (int) $_GET['id'] : (int) $_POST['id'];
 if (!is_valid_id($id)) {
     stderr(_('Error'), _('Invalid ID'), 'bottom20');
 }
-$fluent = $container->get(Database::class);
+// $fluent removed — use $this->db (ExtendedPdo)
 $torrent = $fluent->from('torrents')
                   ->select(null)
                   ->select('id')

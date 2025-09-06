@@ -37,7 +37,7 @@ use Spatie\Image\Exceptions\InvalidManipulation;
  * @throws InvalidManipulation
  * @throws NotFoundException
  * @throws UnbegunTransaction
- * @throws \Envms\FluentPDO\Exception
+ * @throws \PDOException
  *
  * @return array|bool|mixed
  *
@@ -131,7 +131,7 @@ function get_imdb_info(string $imdb_id, bool $title, bool $data_only, ?int $tid,
             }
         }
 
-        $fluent = $container->get(Database::class);
+        // $fluent removed — use $this->db (ExtendedPdo)
         if (!empty($persons)) {
             $fluent->insertInto('person')
                 ->values($persons)
@@ -618,7 +618,7 @@ function get_imdb_info_short($imdb_id)
  *
  * @throws NotFoundException
  * @throws UnbegunTransaction
- * @throws \Envms\FluentPDO\Exception
+ * @throws \PDOException
  * @throws DependencyException
  * @throws InvalidManipulation
  *
@@ -693,7 +693,7 @@ function get_upcoming(bool $images = false)
  * @param string $imdb_id
  *
  * @throws UnbegunTransaction
- * @throws \Envms\FluentPDO\Exception
+ * @throws \PDOException
  * @throws DependencyException
  * @throws InvalidManipulation
  * @throws NotFoundException
@@ -722,7 +722,7 @@ function update_torrent_data(string $imdb_id)
         'year' => $imdb_data['year'],
         'rating' => $imdb_data['rating'],
     ]);
-    $fluent = $container->get(Database::class);
+    // $fluent removed — use $this->db (ExtendedPdo)
     $result = $fluent->update('torrents')
         ->set($set)
         ->where('imdb_id = ?', 'tt' . $imdb_id)
@@ -748,7 +748,7 @@ function update_torrent_data(string $imdb_id)
  *
  * @throws InvalidManipulation
  * @throws NotFoundException
- * @throws \Envms\FluentPDO\Exception
+ * @throws \PDOException
  * @throws DependencyException
  *
  * @return array|bool|mixed
@@ -763,7 +763,7 @@ function get_imdb_person($person_id)
         return false;
     }
     $imdb_person = $cache->get('imdb_person_' . $person_id);
-    $fluent = $container->get(Database::class);
+    // $fluent removed — use $this->db (ExtendedPdo)
     if ($imdb_person === false || is_null($imdb_person)) {
         $imdb_person = $fluent->from('person')
             ->where('imdb_id = ?', $person_id)
@@ -859,7 +859,7 @@ $this->db->perform($sql, array_merge($set, ['imdb_id' => $person_id]));
  *
  * @throws NotFoundException
  * @throws UnbegunTransaction
- * @throws \Envms\FluentPDO\Exception
+ * @throws \PDOException
  * @throws DependencyException
  * @throws InvalidManipulation
  *
@@ -911,7 +911,7 @@ function get_top_movies(int $count, bool $images = false)
  *
  * @param bool $images
  *
- * @throws \Envms\FluentPDO\Exception
+ * @throws \PDOException
  * @throws DependencyException
  * @throws InvalidManipulation
  * @throws NotFoundException
@@ -968,7 +968,7 @@ function get_in_theaters(bool $images = false)
  *
  * @throws NotFoundException
  * @throws UnbegunTransaction
- * @throws \Envms\FluentPDO\Exception
+ * @throws \PDOException
  * @throws DependencyException
  * @throws InvalidManipulation
  *
@@ -1023,7 +1023,7 @@ function movies_by_release_date(int $count, bool $images = false)
  *
  * @throws NotFoundException
  * @throws UnbegunTransaction
- * @throws \Envms\FluentPDO\Exception
+ * @throws \PDOException
  * @throws DependencyException
  * @throws InvalidManipulation
  *
@@ -1078,7 +1078,7 @@ function get_top_tvshows(int $count, bool $images = false)
  * @throws InvalidManipulation
  * @throws NotFoundException
  * @throws UnbegunTransaction
- * @throws \Envms\FluentPDO\Exception
+ * @throws \PDOException
  *
  * @return array|bool|mixed
  */
@@ -1128,7 +1128,7 @@ function get_top_anime(int $count, bool $images = false)
  * @throws InvalidManipulation
  * @throws NotFoundException
  * @throws UnbegunTransaction
- * @throws \Envms\FluentPDO\Exception
+ * @throws \PDOException
  *
  * @return array|bool|mixed
  */

@@ -24,7 +24,7 @@ function tables($no_data = '')
 
     $tables = $temp = [];
     $no_data = explode('|', $no_data);
-    $fluent = $container->get(Database::class);
+    // $fluent removed — use $this->db (ExtendedPdo)
     $query = $fluent->getPdo()
                     ->prepare('SHOW TABLES');
     $query->execute();
@@ -47,7 +47,7 @@ function tables($no_data = '')
  *
  * @throws DependencyException
  * @throws NotFoundException
- * @throws \Envms\FluentPDO\Exception
+ * @throws \PDOException
  */
 function backupdb($data)
 {
@@ -89,7 +89,7 @@ function backupdb($data)
     if ($site_config['backup']['use_gzip']) {
         $filename = $filename . '.gz';
     }
-    $fluent = $container->get(Database::class);
+    // $fluent removed — use $this->db (ExtendedPdo)
     $set = [
         'last_access' => $dt,
     ];

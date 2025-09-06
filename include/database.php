@@ -36,7 +36,7 @@ function debug_pdo()
 $db = $container->get(Database::class);;
 
     $fluent = $db; // alias
-$fluent = $container->get(Database::class);
+// $fluent removed — use $this->db (ExtendedPdo)
     $fluent->debug = function ($BaseQuery) {
         global $container;
 $db = $container->get(Database::class);;
@@ -148,7 +148,7 @@ $db = $container->get(Database::class);;
  *
  * @throws DependencyException
  * @throws NotFoundException
- * @throws \Envms\FluentPDO\Exception
+ * @throws \PDOException
  */
 function sqlerr($file = '', $line = '')
 {

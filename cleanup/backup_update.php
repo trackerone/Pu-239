@@ -15,7 +15,7 @@ use Pu239\Database;
  *
  * @throws DependencyException
  * @throws NotFoundException
- * @throws \Envms\FluentPDO\Exception
+ * @throws \PDOException
  */
 function backup_update($data)
 {
@@ -25,7 +25,7 @@ function backup_update($data)
     $dt = TIME_NOW;
     $days = $dt - (3 * 86400);
     $hours = $dt - (6 * 3600);
-    $fluent = $container->get(Database::class);
+    // $fluent removed — use $this->db (ExtendedPdo)
     $fluent->deleteFrom('dbbackup')
            ->where('added < ?', $days)
            ->execute();

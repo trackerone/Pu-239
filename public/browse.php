@@ -19,7 +19,7 @@ $user = check_user_status();
 global $container, $site_config;
 
 $users_class = $container->get(User::class);
-$fluent = $container->get(Database::class);
+// $fluent removed — use $this->db (ExtendedPdo)
 $hide_simple = '';
 $hide_advanced = "class='hidden'";
 $today = isset($_GET['today']) ? $_GET['today'] : 0;

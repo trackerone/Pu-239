@@ -14,7 +14,7 @@ global $container, $site_config, $user, $CURUSER;
 $cache = $container->get(Cache::class);
 $cache_share_ratio = $cache->get('share_ratio_' . $user['id']);
 if ($cache_share_ratio === false || is_null($cache_share_ratio)) {
-    $fluent = $container->get(Database::class);
+    // $fluent removed — use $this->db (ExtendedPdo)
     $sql = $fluent->from('snatched')
                   ->select(null)
                   ->select('SUM(seedtime) AS seed_time_total')

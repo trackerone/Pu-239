@@ -28,7 +28,7 @@ global $container, $site_config;
  *
  * @throws InvalidManipulation
  * @throws NotFoundException
- * @throws \Envms\FluentPDO\Exception
+ * @throws \PDOException
  * @throws DependencyException
  *
  * @return mixed|string|string[]|null
@@ -46,7 +46,7 @@ function readMore(string $text, int $char, string $link)
  * @param int   $class
  *
  * @throws NotFoundException
- * @throws \Envms\FluentPDO\Exception
+ * @throws \PDOException
  * @throws DependencyException
  * @throws InvalidManipulation
  *
@@ -109,7 +109,7 @@ if (strlen($search) > 4) {
     $p = 'letter=a&amp;';
     $letter = 'a';
 }
-$fluent = $container->get(Database::class);
+// $fluent removed — use $this->db (ExtendedPdo)
 $count = $fluent->from('torrents AS t')
                 ->select(null)
                 ->select('COUNT(t.id) AS count')

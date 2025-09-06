@@ -32,7 +32,7 @@ class ImageProxy
      * @throws DependencyException
      * @throws InvalidManipulation
      * @throws NotFoundException
-     * @throws \Envms\FluentPDO\Exception
+     * @throws \PDOException
      *
      * @return bool|string
      */
@@ -70,7 +70,7 @@ class ImageProxy
      * @param string $path
      *
      * @throws NotFoundException
-     * @throws \Envms\FluentPDO\Exception
+     * @throws \PDOException
      * @throws DependencyException
      *
      * @return bool
@@ -204,7 +204,7 @@ class ImageProxy
      *
      * @throws DependencyException
      * @throws NotFoundException
-     * @throws \Envms\FluentPDO\Exception
+     * @throws \PDOException
      *
      * @return bool|string
      */
@@ -247,7 +247,7 @@ class ImageProxy
      *
      * @throws DependencyException
      * @throws NotFoundException
-     * @throws \Envms\FluentPDO\Exception
+     * @throws \PDOException
      *
      * @return bool
      */

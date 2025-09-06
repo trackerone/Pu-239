@@ -1083,7 +1083,7 @@ if ($game) {
  * @param $cardid
  *
  * @throws NotFoundException
- * @throws \Envms\FluentPDO\Exception
+ * @throws \PDOException
  * @throws DependencyException
  *
  * @return array|bool|mixed|null

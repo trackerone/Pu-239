@@ -14,7 +14,7 @@ global $container, $site_config, $CURUSER;
 $cache = $container->get(Cache::class);
 $forumposts = $cache->get('forum_posts_' . $id);
 if ($forumposts === false || is_null($forumposts)) {
-    $fluent = $container->get(Database::class);
+    // $fluent removed — use $this->db (ExtendedPdo)
     $forumposts = $fluent->from('posts')
                          ->select(null)
                          ->select('COUNT(id) AS count')

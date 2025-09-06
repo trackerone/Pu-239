@@ -14,7 +14,7 @@ global $container, $site_config, $CURUSER;
 $cache = $container->get(Cache::class);
 $usercomments = $cache->get('user_comments_' . $user['id']);
 if ($usercomments === false || is_null($usercomments)) {
-    $fluent = $container->get(Database::class);
+    // $fluent removed — use $this->db (ExtendedPdo)
     $usercomments = $fluent->from('comments')
                            ->select(null)
                            ->select('COUNT(id) AS count')

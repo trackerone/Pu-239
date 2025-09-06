@@ -35,7 +35,7 @@ if (!in_array($action, $possible_actions)) {
     stderr(_('Error'), _('Invalid action.'));
 }
 $dt = TIME_NOW;
-$fluent = $container->get(Database::class);
+// $fluent removed — use $this->db (ExtendedPdo)
 $messages_class = $container->get(Message::class);
 $user_class = $container->get(User::class);
 $cache = $container->get(Cache::class);
@@ -361,7 +361,7 @@ $result = $this->db->perform($sql, $values);
  * @throws NotFoundException
  * @throws AuthError
  * @throws NotLoggedInException
- * @throws \Envms\FluentPDO\Exception
+ * @throws \PDOException
  * @throws UnbegunTransaction
  * @throws \PHPMailer\PHPMailer\Exception
  * @throws InvalidManipulation

@@ -23,7 +23,7 @@ $heading = "
 $body = '';
 global $container, $site_config;
 
-$fluent = $container->get(Database::class);
+// $fluent removed — use $this->db (ExtendedPdo)
 $counts = $fluent->from('torrents')
                  ->select(null)
                  ->select('category')

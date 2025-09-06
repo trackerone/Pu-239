@@ -6,7 +6,7 @@ declare(strict_types = 1);
 
 use DI\DependencyException;
 use DI\NotFoundException;
-use Envms\FluentPDO\Literal;
+
 use MatthiasMullie\Scrapbook\Exception\UnbegunTransaction;
 use Pu239\Session;
 use Pu239\User;
@@ -18,7 +18,7 @@ use Pu239\User;
  * @throws DependencyException
  * @throws NotFoundException
  * @throws UnbegunTransaction
- * @throws \Envms\FluentPDO\Exception
+ * @throws \PDOException
  */
 function invincible(int $userid, bool $invincible = true)
 {

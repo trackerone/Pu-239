@@ -14,7 +14,7 @@ use Pu239\Database;
 /**
  * @param $imdb_id
  *
- * @throws \Envms\FluentPDO\Exception
+ * @throws \PDOException
  * @throws DependencyException
  * @throws NotFoundException
  *
@@ -28,7 +28,7 @@ function get_banner($imdb_id)
     if (!empty($imdb_id)) {
         $images = $cache->get('banners_' . $imdb_id);
         if ($images === false || is_null($images)) {
-            $fluent = $container->get(Database::class);
+            // $fluent removed — use $this->db (ExtendedPdo)
             $images = $fluent->from('images')
                              ->select(null)
                              ->select('url')
@@ -52,7 +52,7 @@ function get_banner($imdb_id)
 /**
  * @param $imdb_id
  *
- * @throws \Envms\FluentPDO\Exception
+ * @throws \PDOException
  * @throws DependencyException
  * @throws NotFoundException
  *
@@ -66,7 +66,7 @@ function get_poster($imdb_id)
     if (!empty($imdb_id)) {
         $images = $cache->get('posters_' . $imdb_id);
         if ($images === false || is_null($images)) {
-            $fluent = $container->get(Database::class);
+            // $fluent removed — use $this->db (ExtendedPdo)
             $images = $fluent->from('images')
                              ->select(null)
                              ->select('url')

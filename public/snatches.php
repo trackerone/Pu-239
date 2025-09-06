@@ -27,7 +27,7 @@ if (!is_valid_id($id)) {
     stderr(_('Error'), _('Invalid ID'));
 }
 
-$fluent = $container->get(Database::class);
+// $fluent removed — use $this->db (ExtendedPdo)
 $count = $fluent->from('snatched AS s')
                 ->select(null)
                 ->select('COUNT(s.id) AS count')

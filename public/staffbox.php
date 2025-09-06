@@ -119,7 +119,7 @@ switch ($do) {
 
     default:
         $fluent = $db; // alias
-$fluent = $container->get(Database::class);
+// $fluent removed — use $this->db (ExtendedPdo)
         $count_msgs = $fluent->from('staffmessages')
                              ->select(null)
                              ->select('COUNT(id) AS count')

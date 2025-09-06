@@ -1,0 +1,7 @@
+Batch 40 (classic) FluentPDO sweep summary
+--------------------------------------------
+Files scanned: 665
+Files with FluentPDO hits: 390
+Total hits (approx): 3867
+Report: tools/reports/batch40-classic-report.ndjson
+Date: 2025-09-06T12:38:53+00:00

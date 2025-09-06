@@ -15,7 +15,7 @@ $cache = $container->get(Cache::class);
 $active24 = $cache->get('last24_users_');
 if ($active24 === false || is_null($active24)) {
     $list = [];
-    $fluent = $container->get(Database::class);
+    // $fluent removed — use $this->db (ExtendedPdo)
     $record = $fluent->from('avps')
                      ->where('arg = ?', 'last24')
                      ->fetch();

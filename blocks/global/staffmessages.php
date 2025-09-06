@@ -16,7 +16,7 @@ $cache = $container->get(Cache::class);
 if ($site_config['alerts']['staffmsg'] && has_access($user['class'], UC_STAFF, 'coder')) {
     $answeredby = $cache->get('staff_mess_');
     if ($answeredby === false || is_null($answeredby)) {
-        $fluent = $container->get(Database::class);
+        // $fluent removed — use $this->db (ExtendedPdo)
         $answeredby = $fluent->from('staffmessages')
                              ->select(null)
                              ->select('COUNT(id) AS count')

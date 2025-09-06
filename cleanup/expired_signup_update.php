@@ -17,7 +17,7 @@ use Pu239\Cache;
  *
  * @throws DependencyException
  * @throws NotFoundException
- * @throws \Envms\FluentPDO\Exception
+ * @throws \PDOException
  */
 function expired_signup_update($data)
 {

@@ -26,7 +26,7 @@ if ($userid != $curuser['id']) {
 }
 $dt = TIME_NOW;
 $fluent = $db; // alias
-$fluent = $container->get(Database::class);
+// $fluent removed — use $this->db (ExtendedPdo)
 $session = $container->get(Session::class);
 $messages_class = $container->get(Message::class);
 $cache = $container->get(Cache::class);

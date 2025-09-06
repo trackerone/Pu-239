@@ -43,7 +43,7 @@ if ((isset($_GET['unedit']) && $_GET['unedit'] == 1) && $user['class'] >= UC_STA
     header("Refresh: 1; url=$returl");
     app_halt('Exit called');
 }
-$fluent = $container->get(Database::class);
+// $fluent removed — use $this->db (ExtendedPdo)
 $row = $fluent->from('torrents')
               ->where('id = ?', $id)
               ->fetch();

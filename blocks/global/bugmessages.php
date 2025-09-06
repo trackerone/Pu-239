@@ -16,7 +16,7 @@ $cache = $container->get(Cache::class);
 if ($site_config['alerts']['bug'] && has_access($user['class'], UC_STAFF, 'coder')) {
     $bug_count = $cache->get('bug_mess_');
     if ($bug_count === false || is_null($bug_count)) {
-        $fluent = $container->get(Database::class);
+        // $fluent removed — use $this->db (ExtendedPdo)
         $bug_count = $fluent->from('bugs')
                             ->select(null)
                             ->select('COUNT(id) AS count')

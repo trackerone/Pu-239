@@ -17,7 +17,7 @@ $user = check_user_status();
 global $container, $site_config;
 
 $HTMLOUT = '';
-$fluent = $container->get(Database::class);
+// $fluent removed — use $this->db (ExtendedPdo)
 $count = $fluent->from('torrents AS t')
                 ->select(null)
                 ->select('COUNT(id) AS count');

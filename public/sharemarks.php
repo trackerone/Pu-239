@@ -34,7 +34,7 @@ $HTMLOUT = '';
  *
  * @throws DependencyException
  * @throws NotFoundException
- * @throws \Envms\FluentPDO\Exception
+ * @throws \PDOException
  *
  * @return string
  */
@@ -129,7 +129,7 @@ function sharetable($res, $userid, $user, $variant = 'index')
                                 <i class='icon-download icon'></i>
                             </a>
                         </td>" : '');
-        $fluent = $container->get(Database::class);
+        // $fluent removed — use $this->db (ExtendedPdo)
         $bms = $fluent->from('bookmarks')
                       ->where('torrentid = ?', $id)
                       ->where('userid = ?', $userid)
@@ -228,7 +228,7 @@ $HTMLOUT .= '
         </div>
     </div>';
 
-$fluent = $container->get(Database::class);
+// $fluent removed — use $this->db (ExtendedPdo)
 $count = $fluent->from('bookmarks')
                 ->select(null)
                 ->select('COUNT(id) AS count')

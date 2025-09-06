@@ -18,7 +18,7 @@ $gamenum = (int) $_POST['gamenum'];
 $qid = (int) $_POST['qid'];
 $answer = $_POST['answer'];
 $userid = $user['id'];
-$fluent = $container->get(Database::class);
+// $fluent removed — use $this->db (ExtendedPdo)
 $correct_answer = $fluent->from('triviaq')
                          ->select('canswer')
                          ->where('qid = ?', $qid)

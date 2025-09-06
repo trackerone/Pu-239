@@ -12,7 +12,7 @@ global $container, $site_config, $CURUSER;
 
 if ($site_config['hnr_config']['hnr_online'] == 1 && $user['paranoia'] < 2 || $CURUSER['id'] == $id || $CURUSER['class'] >= (UC_MIN + 1)) {
     $completed = $count2 = $dlc = '';
-    $fluent = $container->get(Database::class);
+    // $fluent removed — use $this->db (ExtendedPdo)
     $torrents = $fluent->from('snatched AS s')
                        ->select('t.name')
                        ->select('t.added AS torrent_added')

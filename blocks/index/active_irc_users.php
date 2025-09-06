@@ -15,7 +15,7 @@ $cache = $container->get(Cache::class);
 $irc = $cache->get('ircusers_');
 if ($irc === false || is_null($irc)) {
     $irc = $list = [];
-    $fluent = $container->get(Database::class);
+    // $fluent removed — use $this->db (ExtendedPdo)
     $query = $fluent->from('users')
                     ->select(null)
                     ->select('id')

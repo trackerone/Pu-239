@@ -12,7 +12,7 @@ use Pu239\Cache;
 
 /**
  * @throws NotFoundException
- * @throws \Envms\FluentPDO\Exception
+ * @throws \PDOException
  * @throws DependencyException
  *
  * @return mixed|string

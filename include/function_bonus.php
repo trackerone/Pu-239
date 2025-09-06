@@ -11,7 +11,7 @@ use Pu239\Database;
 
 global $container;
 
-$fluent = $container->get(Database::class);
+// $fluent removed — use $this->db (ExtendedPdo)
 $cache = $container->get(CACHE::class);
 $user = check_user_status();
 $ratio = 1;

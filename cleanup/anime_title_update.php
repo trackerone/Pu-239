@@ -8,7 +8,7 @@ declare(strict_types = 1);
 
 use DI\DependencyException;
 use DI\NotFoundException;
-use Envms\FluentPDO\Literal;
+
 use Pu239\Cache;
 use Pu239\Database;
 
@@ -17,7 +17,7 @@ use Pu239\Database;
  *
  * @throws DependencyException
  * @throws NotFoundException
- * @throws \Envms\FluentPDO\Exception
+ * @throws \PDOException
  */
 function anime_titles_update($data)
 {
@@ -91,7 +91,7 @@ function anime_titles_update($data)
                     'anidb_id' => new Literal('VALUES(anidb_id)'),
                     'anilist_id' => new Literal('VALUES(anilist_id)'),
                 ];
-                $fluent = $container->get(Database::class);
+                // $fluent removed — use $this->db (ExtendedPdo)
                 foreach (array_chunk($values, $count) as $t) {
                     $fluent->insertInto('anime_titles', $t)
                            ->onDuplicateKeyUpdate($update)
