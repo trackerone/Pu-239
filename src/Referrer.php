@@ -44,9 +44,8 @@ class Referrer
      */
     public function insert(array $values)
     {
-        $id = $this->fluent->insertInto('referrers')
-                           ->values($values)
-                           ->execute();
+        $sql = "INSERT INTO referrers (/* columns */) VALUES (/* values */)";
+$id = $this->db->perform($sql, $values);;
 
         return $id;
     }

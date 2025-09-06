@@ -82,9 +82,8 @@ function update_database(array $argv, array $sql_updates, bool $all)
                 'id' => $id,
                 'query' => $sql,
             ];
-            $fluent->insertInto('database_updates')
-                ->values($values)
-                ->execute();
+            $sql = "INSERT INTO database_updates (/* columns */) VALUES (/* values */)";
+$this->db->perform($sql, $values);;
 
             if ($flush) {
                 $cache->flushDB();
@@ -133,9 +132,8 @@ function update_database(array $argv, array $sql_updates, bool $all)
             'id' => (int) $id,
             'query' => $sql,
         ];
-        $fluent->insertInto('database_updates')
-            ->values($values)
-            ->execute();
+        $sql = "INSERT INTO database_updates (/* columns */) VALUES (/* values */)";
+$this->db->perform($sql, $values);;
     }
     echo "\n\n======================================================================\n\n";
     get_updates($argv, $sql_updates, false);

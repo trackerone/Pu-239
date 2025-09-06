@@ -197,10 +197,8 @@ class Request
      */
     public function update(array $set, int $requestid)
     {
-        $result = $this->fluent->update('requests')
-                               ->set($set)
-                               ->where('id = ?', $requestid)
-                               ->execute();
+        $sql = "UPDATE requests SET /* columns */ WHERE id = :id";
+$result = $this->db->perform($sql, array_merge($set, ['id' => $requestid]));;
 
         return $result;
     }
@@ -237,9 +235,8 @@ class Request
      */
     public function insert(array $values)
     {
-        $id = $this->fluent->insertInto('requests')
-                           ->values($values)
-                           ->execute();
+        $sql = "INSERT INTO requests (/* columns */) VALUES (/* values */)";
+$id = $this->db->perform($sql, $values);;
 
         return $id;
     }

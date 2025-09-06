@@ -27,9 +27,8 @@ function write_info($text)
     ];
     global $container;
     $fluent = $container->get(Database::class);
-    $id = $fluent->insertInto('infolog')
-                 ->values($values)
-                 ->execute();
+    $sql = "INSERT INTO infolog (/* columns */) VALUES (/* values */)";
+$id = $this->db->perform($sql, $values);;
 
     return $id;
 }

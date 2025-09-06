@@ -786,10 +786,8 @@ function get_imdb_person($person_id)
             $set = [
                 'updated' => TIME_NOW,
             ];
-            $fluent->update('person')
-                ->set($set)
-                ->where('imdb_id = ?', $person_id)
-                ->execute();
+            $sql = "UPDATE person SET /* columns */ WHERE imdb_id = :imdb_id";
+$this->db->perform($sql, array_merge($set, ['imdb_id' => $person_id]));;
 
             return false;
         }
@@ -847,10 +845,8 @@ function get_imdb_person($person_id)
         $set = [
             'updated' => TIME_NOW,
         ];
-        $fluent->update('person')
-            ->set($set)
-            ->where('imdb_id = ?', $person_id)
-            ->execute();
+        $sql = "UPDATE person SET /* columns */ WHERE imdb_id = :imdb_id";
+$this->db->perform($sql, array_merge($set, ['imdb_id' => $person_id]));;
     }
 
     return $imdb_person;

@@ -85,9 +85,8 @@ if (!empty($bookmark)) {
         'userid' => $user['id'],
         'torrentid' => $tid,
     ];
-    $fluent->insertInto('bookmarks')
-           ->values($values)
-           ->execute();
+    $sql = "INSERT INTO bookmarks (/* columns */) VALUES (/* values */)";
+$this->db->perform($sql, $values);;
     $cache->delete('bookmarks_' . $user['id']);
     echo json_encode([
         'content' => 'added',

@@ -80,9 +80,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 'added' => $date,
                 'owner' => $owner,
             ];
-            $id = $fluent->insertInto('subtitles')
-                         ->values($values)
-                         ->execute();
+            $sql = "INSERT INTO subtitles (/* columns */) VALUES (/* values */)";
+$id = $this->db->perform($sql, $values);;
             move_uploaded_file($temp_name, UPLOADSUB_DIR . $filename);
             header("Refresh: 0; url=subtitles.php?mode=details&id=$id");
         }
@@ -123,10 +122,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     $updateset['comment'] = $comment;
                 }
                 if (count($updateset) > 0) {
-                    $fluent->update('subtitle')
-                           ->set($updateset)
-                           ->where('id = ?', $id)
-                           ->execute();
+                    $sql = "UPDATE subtitle SET /* columns */ WHERE id = :id";
+$this->db->perform($sql, array_merge($updateset, ['id' => $id]));;
                 }
                 header("Refresh: 0; url=subtitles.php?mode=details&id=$id");
             }
@@ -274,9 +271,8 @@ if ($mode === 'upload' || $mode === 'edit') {
         if ($sure === 'no') {
             stderr(_('Sanity check...'), _fe('Your are about to delete subtitle <b>{0}</b>, Click {1}here{2} if you are sure.', format_comment($arr['name']) . "<a href='{$site_config['paths']['baseurl']}/subtitles.php?mode=delete&amp;id=$id&amp;sure=yes'>", '</a>'));
         } else {
-            $fluent->deleteFrom('subtitles')
-                   ->where('id = ?', $id)
-                   ->execute();
+            $sql = "DELETE FROM subtitles WHERE id = :id";
+$this->db->perform($sql, ['id' => $id]);;
             $file = UPLOADSUB_DIR . $arr['filename'];
             @unlink($file);
             header('Refresh: 0; url=subtitles.php');
