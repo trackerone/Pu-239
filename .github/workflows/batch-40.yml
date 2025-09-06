@@ -1,4 +1,4 @@
-name: Batch 40 - Full Repo FluentPDO Sweep (v2)
+name: Batch 40 - Full Repo FluentPDO Sweep (v2.1)
 
 on:
   workflow_dispatch:
@@ -48,13 +48,11 @@ jobs:
           fi
 
       - name: Stage changes (including untracked)
-        run: |
-          git add -A
+        run: git add -A
 
-      - name: Detect staged changes (includes untracked)
+      - name: Detect staged changes
         id: changes
         run: |
-          set -e
           git diff --staged --name-only > /tmp/changed_staged.txt || true
           CHANGED_COUNT=$(wc -l < /tmp/changed_staged.txt | tr -d ' ')
           echo "changed_files=${CHANGED_COUNT}" >> $GITHUB_OUTPUT
@@ -63,7 +61,6 @@ jobs:
           else
             echo "has_changes=false" >> $GITHUB_OUTPUT
           fi
-          git diff --staged > batch-40.diff || true
 
       - name: Create branch, commit and push changes
         run: |
@@ -71,12 +68,10 @@ jobs:
           git config user.name "batch-bot"
           git config user.email "batch-bot@users.noreply.github.com"
           git checkout -B "$UNIQUE_BRANCH" "origin/$BASE_BRANCH"
-          # Re-stage after branch switch to ensure index belongs to this branch
           git add -A
           if [ "${{ steps.changes.outputs.has_changes }}" = "true" ]; then
             git commit -m "batch40(sweep): repo-wide FluentPDO report and/or fixes"
           else
-            # Allow empty commit when forced, to guarantee a PR
             if [ "${FORCE_PR}" = "true" ]; then
               git commit --allow-empty -m "batch40(sweep): empty commit to open PR (forced)"
             else
@@ -84,20 +79,25 @@ jobs:
               exit 0
             fi
           fi
-          git push --set-upstream origin "$UNIQUE_BRANCH" || echo "Nothing to push"
+          git push --set-upstream origin "$UNIQUE_BRANCH"
+
+      - name: Generate diff (branch comparison)
+        run: |
+          git fetch origin "$BASE_BRANCH" "$UNIQUE_BRANCH"
+          git diff --binary --patch "origin/$BASE_BRANCH...origin/$UNIQUE_BRANCH" > batch-40.diff || true
 
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v6
         with:
           base: ${{ env.BASE_BRANCH }}
           branch: ${{ env.UNIQUE_BRANCH }}
-          title: "Batch 40 (v2): Full repo FluentPDO sweep (report + optional fixes)"
+          title: "Batch 40 (v2.1): Full repo FluentPDO sweep (report + optional fixes)"
           body: |
-            This PR was created by the Batch 40 (v2) action.
+            This PR was created by the Batch 40 (v2.1) action.
             - Generates a full-repo FluentPDO usage report under `tools/reports/`
             - Optionally applies conservative automatic fixes (`apply_conservative_fixes` input)
             - Uses unique branch names and uploads diff + changed files artifacts
-            - Guarantees a PR even if no code changes (via marker or empty commit when forced)
+            - Diff now generated AFTER push, comparing base branch vs new branch
           labels: batch, automated, sweep
           delete-branch: true
 
