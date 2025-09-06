@@ -19,7 +19,7 @@ foreach ($rii as $file) {
     $contents = file_get_contents($path);
     $orig = $contents;
 
-    // Matcher én kæde af FluentPDO kald
+    // Matcher én kæde
     $pattern = '/(\$this->fluent|\$fluent)->[a-zA-Z0-9_]+\([^)]*\)(?:->[a-zA-Z0-9_]+\([^)]*\))*->(fetchAll|fetch|execute)\(\)/';
 
     if (preg_match_all($pattern, $contents, $matches, PREG_OFFSET_CAPTURE)) {
@@ -28,12 +28,11 @@ foreach ($rii as $file) {
             $log[] = $path . " : " . trim($m[0]);
         }
 
-        // Markér de fundne queries med TODO
         $contents = preg_replace(
             $pattern,
             '// TODO: review query' . "\n" .
             '$sql = "SELECT/INSERT/UPDATE/DELETE ...";' . "\n" .
-            '$this->db->perform($sql, [/* params */])',
+            '$this->db->perform($sql, [/* params */]);',
             $contents
         );
 
@@ -44,7 +43,6 @@ foreach ($rii as $file) {
     }
 }
 
-// Gem log
 file_put_contents("refactor-todo-log.txt", implode("\n", $log) . "\nTotal matches: $totalMatches\n");
 
 echo "Total matches: $totalMatches\n";
