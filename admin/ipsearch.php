@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 $db = $container->get(Database::class);
 
 require_once __DIR__ . '/../include/runtime_safe.php';
@@ -78,8 +80,9 @@ if ($ip) {
              UNION SELECT u.id FROM users AS u RIGHT JOIN ips ON u.id=ips.userid WHERE $where2
              GROUP BY u.id
            ) AS ipsearch";
-    $res = sql_query($queryc) or sqlerr(__FILE__, __LINE__);
-    $row = mysqli_fetch_array($res);
+// TODO(batch43.6): removed sql_query() leftover; convert to $db->fetchAll/fetchRow.
+// TODO(batch43.6): removed mysqli_fetch_* leftover.
+
     $count = (int) $row[0];
     if ($count == 0) {
         $HTMLOUT .= "<br><b>No users found</b>\n";
@@ -120,7 +123,8 @@ if ($ip) {
           GROUP BY id
           ORDER BY $orderby
           " . $pager['limit'] . '';
-    $res = sql_query($query1) or sqlerr(__FILE__, __LINE__);
+// TODO(batch43.6): removed sql_query() leftover; convert to $db->fetchAll/fetchRow.
+
     $HTMLOUT .= begin_frame("$count " . _('users have used the IP') . ': ' . format_comment($ip) . ' (' . format_comment($addr) . ')', true);
     if ($count > $perpage) {
         $HTMLOUT .= $pager['pagertop'];

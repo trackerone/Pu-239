@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 require_once __DIR__ . '/../include/runtime_safe.php';
 
 require_once __DIR__ . '/../include/bootstrap_pdo.php';
@@ -21,7 +23,7 @@ $db = $container->get(Database::class);, $CURUSER, $site_config;
 $HTMLOUT = $H1_thingie = $count2 = '';
 $count = 0;
 $fluent = $db; // alias
-// $fluent removed — use $this->db (ExtendedPdo)
+// $fluent removed — use $db (ExtendedPdo)
 if (isset($_GET['remove'])) {
     if ($CURUSER['class'] < UC_STAFF) {
         stderr(_('Error'), _('Only the Staff can remove members from the list!'));
@@ -49,7 +51,8 @@ if (isset($_GET['remove'])) {
                 $id = (int) $id;
                 if (is_valid_id($id)) {
                     //=== get mod comments for member
-                    $res = $db->run(');
+                    $res = // TODO(batch43.6): broken SQL removed — insert proper $db->perform(...) here.
+
     } else {
         write_log('[b]' . $CURUSER['username'] . '[/b] ' . _('Removed:') . '<br>' . $removed_log . ' <br>' . _('from watched users') . '');
     }

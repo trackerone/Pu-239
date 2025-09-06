@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 $db = $container->get(Database::class);
 
 require_once __DIR__ . '/../include/runtime_safe.php';
@@ -50,7 +52,8 @@ $query = 'SELECT u.id, u.username AS name, MAX(t.added) AS last, COUNT(DISTINCT 
         WHERE u.roles_mask & ' . Roles::UPLOADER . "
         GROUP BY u.id
         ORDER BY $orderby";
-$res = sql_query($query) or sqlerr(__FILE__, __LINE__);
+// TODO(batch43.6): removed sql_query() leftover; convert to $db->fetchAll/fetchRow.
+
 $perpage = 25;
 $count = mysqli_num_rows($res);
 $pager = pager($perpage, $count, "{$site_config['paths']['baseurl']}/staffpanel.php?tool=stats&amp;");
@@ -67,7 +70,8 @@ if ($count > $perpage) {
         GROUP BY u.id
         ORDER BY $orderby
         {$pager['limit']}";
-    $res = sql_query($query) or sqlerr(__FILE__, __LINE__);
+// TODO(batch43.6): removed sql_query() leftover; convert to $db->fetchAll/fetchRow.
+
 }
 if ($count === 0) {
     stdmsg(_('Error'), _('No uploaders.'));

@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 $db = $container->get(Database::class);
 
 require_once __DIR__ . '/../include/runtime_safe.php';
@@ -83,7 +85,7 @@ function do_sort($arr, $empty = false)
 
 global $container;
 
-// $fluent removed — use $this->db (ExtendedPdo)
+// $fluent removed — use $db (ExtendedPdo)
 if (isset($_GET['type']) && in_array($_GET['type'], $modes)) {
     if (isset($_GET['type']) && in_array($_GET['type'], $modes)) {
         $mode = $_GET['type'];

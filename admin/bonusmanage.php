@@ -1,6 +1,9 @@
 <?php
+declare(strict_types=1);
+
 $db = $container->get(Database::class);
 
+$cache = $container->get(Cache::class);
 require_once __DIR__ . '/../include/runtime_safe.php';
 
 

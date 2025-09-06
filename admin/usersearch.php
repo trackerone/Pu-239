@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 require_once __DIR__ . '/../include/runtime_safe.php';
 
 
@@ -21,7 +23,7 @@ $search = array_merge($_POST, $_GET);
 $cache = $container->get(Cache::class);
 $oldest = $cache->get('oldest_');
 $fluent = $db; // alias
-// $fluent removed — use $this->db (ExtendedPdo)
+// $fluent removed — use $db (ExtendedPdo)
 if ($oldest === false || is_null($oldest)) {
     $oldest = $fluent->from('users')
                      ->select(null)
@@ -729,14 +731,16 @@ if (!empty($search)) {
     $announcement_query = "SELECT u.id FROM $from_is " . (empty($where_is) ? ' WHERE 1 = 1' : " WHERE $where_is");
     $select_is = 'u.id, u.username, u.email, u.status, u.registered, u.last_access, u.class, u.uploaded, u.downloaded, u.donor, u.modcomment, u.status, u.warned, INET6_NTOA(i.ip) AS ip, i.type';
     $query1 = 'SELECT ' . $distinct . ' ' . $select_is . ' ' . $querypm;
-    $res = sql_query($queryc) or sqlerr(__FILE__, __LINE__);
+// TODO(batch43.6): removed sql_query() leftover; convert to $db->fetchAll/fetchRow.
+
     $arr = mysqli_fetch_row($res);
     $count = (int) $arr[0];
     $q1 = isset($q1) ? ($q1 . '&amp;') : '';
     $perpage = 30;
     $pager = pager($perpage, $count, "{$site_config['paths']['baseurl']}/staffpanel.php?tool=usersearch&amp;" . $q1);
     $query1 .= $pager['limit'];
-    $res = sql_query($query1) or sqlerr(__FILE__, __LINE__);
+// TODO(batch43.6): removed sql_query() leftover; convert to $db->fetchAll/fetchRow.
+
     if (empty($rows)) {
         stdmsg(_('Warning'), _('No user was found.'));
     } else {

@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 $db = $container->get(Database::class);
 
 require_once __DIR__ . '/../include/runtime_safe.php';
@@ -19,7 +21,7 @@ global $container, $site_config;
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $session = $container->get(Session::class);
-    // $fluent removed — use $this->db (ExtendedPdo)
+    // $fluent removed — use $db (ExtendedPdo)
     $updated = false;
     foreach ($site_config['hnr_config'] as $c_name => $c_value) {
         if (isset($_POST[$c_name]) && $_POST[$c_name] != $c_value) {

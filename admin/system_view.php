@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 $db = $container->get(Database::class);
 
 require_once __DIR__ . '/../include/runtime_safe.php';
@@ -73,7 +75,8 @@ function sql_get_version()
     if (!$row = mysqli_fetch_assoc($query)) {
         unset($row);
         $rows = $db->fetchAll("SHOW VARIABLES LIKE 'version'");
-        $row = mysqli_fetch_row($query);
+// TODO(batch43.6): removed mysqli_fetch_* leftover.
+
         $row['version'] = $row[1];
     }
     $true_version = $row['version'];

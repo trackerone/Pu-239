@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 $db = $container->get(Database::class);
 
 require_once __DIR__ . '/../include/runtime_safe.php';
@@ -76,7 +78,7 @@ function move_cat($params)
     if (!is_valid_id((int) $params['new_cat_id']) || ((int) $params['id'] === (int) $params['new_cat_id'])) {
         stderr(_('Error'), _('You can not move torrents into the same category'));
     }
-    // $fluent removed — use $this->db (ExtendedPdo)
+    // $fluent removed — use $db (ExtendedPdo)
     $count = $fluent->from('categories')
                     ->select(null)
                     ->select('COUNT(id) AS count')
@@ -198,7 +200,7 @@ function add_cat($params)
         'parent_id' => $params['parent_id'],
         'hidden' => $params['cat_hidden'],
     ];
-    // $fluent removed — use $this->db (ExtendedPdo)
+    // $fluent removed — use $db (ExtendedPdo)
     $sql = "INSERT INTO categories (/* columns */) VALUES (/* values */)";
 $insert = $db->perform($sql, $values);
 
@@ -229,7 +231,7 @@ function delete_cat($params)
     if (!isset($params['id']) || !is_valid_id((int) $params['id'])) {
         stderr(_('Error'), _('No category ID selected'));
     }
-    // $fluent removed — use $this->db (ExtendedPdo)
+    // $fluent removed — use $db (ExtendedPdo)
     $cat = $fluent->from('categories')
                   ->where('id = ?', $params['id'])
                   ->fetch();
@@ -279,7 +281,7 @@ function delete_cat_form($params)
     if (!$cat) {
         stderr(_('Error'), _('That category does not exist or has been deleted'));
     }
-    // $fluent removed — use $this->db (ExtendedPdo)
+    // $fluent removed — use $db (ExtendedPdo)
     $count = $fluent->from('torrents')
                     ->select(null)
                     ->select('COUNT(id) AS count')
@@ -351,7 +353,7 @@ function edit_cat($params)
         'parent_id' => $params['parent_id'],
         'hidden' => $params['cat_hidden'],
     ];
-    // $fluent removed — use $this->db (ExtendedPdo)
+    // $fluent removed — use $db (ExtendedPdo)
     $sql = "UPDATE categories SET /* columns */ WHERE id = :id";
 $update = $db->perform($sql, array_merge($set, ['id' => $params['id']]));
 
@@ -558,7 +560,7 @@ function get_parents(array $cat)
 {
     global $container;
 
-    // $fluent removed — use $this->db (ExtendedPdo)
+    // $fluent removed — use $db (ExtendedPdo)
     $parents = $fluent->from('categories')
                       ->select('IF (cat_desc IS NULL, "", cat_desc) AS cat_desc')
                       ->where('parent_id = 0')
@@ -599,7 +601,7 @@ function reorder_cats(bool $redirect = true)
 {
     global $container;
 
-    // $fluent removed — use $this->db (ExtendedPdo)
+    // $fluent removed — use $db (ExtendedPdo)
 
     $i = 0;
     $cats = $fluent->from('categories')
@@ -637,7 +639,7 @@ function set_ordered(array $params)
 {
     global $container;
 
-    // $fluent removed — use $this->db (ExtendedPdo)
+    // $fluent removed — use $db (ExtendedPdo)
     $set = [
         'ordered' => new Literal('ordered + 1'),
     ];
@@ -712,7 +714,7 @@ function get_cat(int $id)
 {
     global $container;
 
-    // $fluent removed — use $this->db (ExtendedPdo)
+    // $fluent removed — use $db (ExtendedPdo)
     $cat = $fluent->from('categories')
                   ->where('id = ?', $id)
                   ->fetch();
@@ -743,7 +745,7 @@ function flush_torrents(int $id)
 {
     global $container, $site_config;
 
-    // $fluent removed — use $this->db (ExtendedPdo)
+    // $fluent removed — use $db (ExtendedPdo)
     $torrents = $fluent->from('torrents')
                        ->select(null)
                        ->select('id');

@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 require_once __DIR__ . '/../include/runtime_safe.php';
 
 
@@ -58,7 +60,8 @@ $count1 = $fluent->from('bannedemails')
                  ->fetch("count");
 $perpage = 15;
 $pager = pager($perpage, $count1, 'staffpanel.php?tool=bannedemails&amp;');
-$res = sql_query('SELECT b.id, b.added, b.addedby, b.comment, b.email, u.username FROM bannedemails AS b LEFT JOIN users AS u ON b.addedby=u.id ORDER BY added DESC ' . $pager['limit']) or sqlerr(__FILE__, __LINE__);
+// TODO(batch43.6): removed sql_query() leftover; convert to $db->fetchAll/fetchRow.
+
 $HTMLOUT .= "<h1 class='has-text-centered'>" . _('Current Banned Emails') . '</h1>';
 if ($count1 > $perpage) {
     $HTMLOUT .= $pager['pagertop'];

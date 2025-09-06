@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 require_once __DIR__ . '/../include/runtime_safe.php';
 
 
@@ -22,6 +24,7 @@ $HTMLOUT = '';
 global $container, $CURUSER, $site_config;
 
 $db = $container->get(Database::class);
+$cache = $container->get(Cache::class);
 $fluent = $db;
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['ids'])) {

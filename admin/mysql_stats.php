@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 $db = $container->get(Database::class);
 
 require_once __DIR__ . '/../include/runtime_safe.php';
@@ -135,7 +137,8 @@ while ($row = mysqli_fetch_row($res)) {
 unset($res, $row);
 
 $rows = $db->fetchAll('SELECT UNIX_TIMESTAMP() - ' . $serverStatus['Uptime']) or sqlerr(__FILE__, __LINE__);
-$row = mysqli_fetch_row($res);
+// TODO(batch43.6): removed mysqli_fetch_* leftover.
+
 $HTMLOUT .= "<p class='has-text-centered'>" . _fe('This MySQL server has been running for {0}. It started up on {1}', timespanFormat($serverStatus['Uptime']), localisedDate((int) $row[0])) . '</p>';
 ((mysqli_free_result($res) || (is_object($res) && (get_class($res) === 'mysqli_result'))) ? true : false);
 unset($res, $row);

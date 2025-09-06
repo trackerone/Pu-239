@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 $db = $container->get(Database::class);
 
 require_once __DIR__ . '/../include/runtime_safe.php';
@@ -18,7 +20,7 @@ class_check($class);
 $search = '';
 global $container, $site_config;
 
-// $fluent removed — use $this->db (ExtendedPdo)
+// $fluent removed — use $db (ExtendedPdo)
 $session = $container->get(Session::class);
 $questions = [];
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
