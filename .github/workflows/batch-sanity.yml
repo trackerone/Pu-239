@@ -1,5 +1,8 @@
-name: Batch SANITY — Create file & open PR
-on: { workflow_dispatch: {} }
+name: Batch SANITY — Create file & open PR (API)
+
+on:
+  workflow_dispatch:
+
 jobs:
   sanity:
     runs-on: ubuntu-latest
@@ -9,37 +12,48 @@ jobs:
     env:
       BASE_BRANCH: ${{ github.event.repository.default_branch }}
       UNIQUE_BRANCH: batch-sanity-${{ github.run_id }}-${{ github.run_attempt }}
+      GH_REPO: ${{ github.repository }}
+      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     steps:
-      - uses: actions/checkout@v4
-        with: { fetch-depth: 0 }
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
-      - name: Debug
-        run: |
-          echo "DEFAULT BRANCH: $BASE_BRANCH"
-          git remote -v
-          git status
-
-      - name: Create a heartbeat file
+      - name: Create heartbeat file
         run: |
           mkdir -p tools/reports
           echo "Sanity $(date -u +%FT%TZ)" > tools/reports/HEARTBEAT.txt
 
-      - name: Commit & push to new branch
+      - name: Commit & push branch
         run: |
           set -euxo pipefail
           git config user.name "batch-bot"
           git config user.email "batch-bot@users.noreply.github.com"
           git checkout -B "$UNIQUE_BRANCH" "origin/$BASE_BRANCH"
           git add -A
-          git commit -m "batch(sanity): add HEARTBEAT.txt" || echo "Nothing to commit"
+          git commit -m "batch(sanity): add HEARTBEAT.txt" || true
           git push --set-upstream origin "$UNIQUE_BRANCH"
 
-      - name: Open Pull Request
-        uses: peter-evans/create-pull-request@v6
-        with:
-          base: ${{ env.BASE_BRANCH }}
-          branch: ${{ env.UNIQUE_BRANCH }}
-          title: "Batch SANITY: Verify PR pipeline"
-          body: "Adds tools/reports/HEARTBEAT.txt to prove Actions can push & open PR."
-          labels: batch, automated, sanity
-          delete-branch: true
+      # 🔧 Opret PR direkte via GitHub REST API
+      - name: Create PR via API
+        run: |
+          set -euxo pipefail
+          API="https://api.github.com/repos/${GH_REPO}/pulls"
+          DATA=$(jq -n \
+            --arg title "Batch SANITY: Verify PR pipeline" \
+            --arg head  "$UNIQUE_BRANCH" \
+            --arg base  "$BASE_BRANCH" \
+            --arg body  "Adds tools/reports/HEARTBEAT.txt to prove Actions can push & open PR." \
+            '{title:$title, head:$head, base:$base, body:$body, maintainer_can_modify:true, draft:false}')
+          # Prøv at oprette PR. Hvis den findes allerede, print link og fortsæt.
+          RESP=$(curl -sS -X POST -H "Authorization: Bearer ${GH_TOKEN}" -H "Accept: application/vnd.github+json" \
+                  "${API}" -d "${DATA}" || true)
+          echo "${RESP}" | jq .
+          URL=$(echo "${RESP}" | jq -r '.html_url // empty')
+          if [ -z "$URL" ]; then
+            # Måske eksisterer PR'en allerede — forsøg at finde den
+            Q="https://api.github.com/repos/${GH_REPO}/pulls?head=${{ github.repository_owner }}:${UNIQUE_BRANCH}&base=${BASE_BRANCH}&state=open"
+            RESP2=$(curl -sS -H "Authorization: Bearer ${GH_TOKEN}" -H "Accept: application/vnd.github+json" "$Q")
+            echo "${RESP2}" | jq .
+          fi
