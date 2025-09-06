@@ -1,0 +1,101 @@
+name: Batch 39 - Admin Leftovers (FluentPDO → ExtendedPdo)
+
+on:
+  workflow_dispatch:
+    inputs:
+      force_pr:
+        description: 'Force a PR even if no changes are detected'
+        required: false
+        default: 'false'
+
+jobs:
+  apply-batch-39:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+    env:
+      BASE_BRANCH: ${{ github.event.repository.default_branch }}
+      UNIQUE_BRANCH: batch-39-admin-leftovers-${{ github.run_id }}-${{ github.run_attempt }}
+      FORCE_PR: ${{ github.event.inputs.force_pr }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.2'
+          coverage: none
+          tools: none
+
+      - name: Run Batch 39 transformer
+        run: |
+          php ./tools/batch-39-apply.php
+
+      - name: Detect changes
+        id: changes
+        run: |
+          set -e
+          git status --porcelain=v1 > /tmp/status.txt || true
+          git diff --name-only > /tmp/changed.txt || true
+          CHANGED_COUNT=$(wc -l < /tmp/changed.txt | tr -d ' ')
+          echo "changed_files=${CHANGED_COUNT}" >> $GITHUB_OUTPUT
+          if [ "${CHANGED_COUNT}" -gt 0 ]; then
+            echo "has_changes=true" >> $GITHUB_OUTPUT
+          else
+            echo "has_changes=false" >> $GITHUB_OUTPUT
+          fi
+          git diff > batch-39.diff || true
+
+      - name: Optionally force a PR
+        if: steps.changes.outputs.has_changes == 'false' && env.FORCE_PR == 'true'
+        run: |
+          set -euxo pipefail
+          echo "Forcing PR by creating a marker file."
+          echo "Batch 39 marker ($(date -u +%FT%TZ))" > tools/.batch39-forcepr
+          git add tools/.batch39-forcepr
+
+      - name: Create branch, commit and push changes
+        if: steps.changes.outputs.has_changes == 'true' || env.FORCE_PR == 'true'
+        run: |
+          set -euxo pipefail
+          git config user.name "batch-bot"
+          git config user.email "batch-bot@users.noreply.github.com"
+          git checkout -B "$UNIQUE_BRANCH" "origin/$BASE_BRANCH"
+          git add -A
+          git commit -m "batch39(admin): migrate admin leftovers from FluentPDO to ExtendedPdo; remove Literal import; add guards (and/or marker)" || echo "Nothing to commit"
+          git push --set-upstream origin "$UNIQUE_BRANCH" || echo "Nothing to push"
+
+      - name: Create Pull Request
+        if: steps.changes.outputs.has_changes == 'true' || env.FORCE_PR == 'true'
+        uses: peter-evans/create-pull-request@v6
+        with:
+          base: ${{ env.BASE_BRANCH }}
+          branch: ${{ env.UNIQUE_BRANCH }}
+          title: "Batch 39: Admin • Leftovers migration (FluentPDO → ExtendedPdo)"
+          body: |
+            This PR was created by the Batch 39 action.
+            - Removes FluentPDO usage in admin leftovers (peers/agents, categories list/children, deletes)
+            - Updates queries to ExtendedPdo
+            - Removes `Envms\FluentPDO\Literal`
+            - Replaces generic updates with TODO marker for explicit columns
+            - Adds unique branch & optional force_pr
+          labels: batch, automated, admin
+          delete-branch: true
+
+      - name: Upload diff artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: batch-39-diff
+          path: batch-39.diff
+
+      - name: Upload changed-files artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: batch-39-changed-files
+          path: |
+            /tmp/changed.txt
+            /tmp/status.txt
