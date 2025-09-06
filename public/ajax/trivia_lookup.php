@@ -1,4 +1,6 @@
 <?php
+$db = $container->get(Database::class);
+
 require_once __DIR__ . '/../../include/runtime_safe.php';
 
 
@@ -34,7 +36,7 @@ $user = $fluent->from('triviausers')
                ->where('user_id = ?', $curuser['id'])
                ->where('qid = ?', $qid)
                ->where('gamenum = ?', $gamenum)
-               ->fetch(); // TODO(batch41): replace with $this->db->fetchRow("SELECT ...", [...])
+               ->fetch();
 
 $cleanup = trivia_time();
 if (!empty($user)) {

@@ -1,4 +1,6 @@
 <?php
+$db = $container->get(Database::class);
+
 require_once __DIR__ . '/../include/runtime_safe.php';
 
 require_once __DIR__ . '/../include/bootstrap_pdo.php';
@@ -20,7 +22,7 @@ global $container, $site_config;
 $count1 = $fluent->from('torrents')
                  ->select(null)
                  ->select('COUNT(id) AS count')
-                 ->fetch("count"); // TODO(batch41): use $this->db->fetchValue("SELECT COUNT(...) ...", [...])
+                 ->fetch("count");
 
 $perpage = 15;
 $pager = pager($perpage, $count1, 'staffpanel.php?tool=uploader_info&amp;');
@@ -36,7 +38,7 @@ $counted = $fluent->from('torrents AS t')
                   ->orderBy('how_many_torrents DESC')
                   ->limit($pager['pdo']['limit'])
                   ->offset($pager['pdo']['offset'])
-                  ->fetchAll(); // TODO(batch41): replace with $this->db->fetchAll("SELECT ...", [...])
+                  ->fetchAll();
 
 if ($count1 > $perpage) {
     $HTMLOUT .= $pager['pagertop'];

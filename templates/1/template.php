@@ -1,4 +1,6 @@
 <?php
+$db = $container->get(Database::class);
+
 require_once __DIR__ . '/../../include/runtime_safe.php';
 
 require_once __DIR__ . '/../../include/bootstrap_pdo.php';
@@ -458,7 +460,7 @@ function platform_menu()
         $templates = $fluent->from('stylesheets')
                             ->orderBy('id')
                             ->where('min_class_to_view <= ?', $CURUSER['class'])
-                            ->fetchAll(); // TODO(batch41): replace with $this->db->fetchAll("SELECT ...", [...])
+                            ->fetchAll();
 
         $cache->set('templates_' . $CURUSER['class'], $templates, 0);
     }

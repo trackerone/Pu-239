@@ -1,4 +1,6 @@
 <?php
+$db = $container->get(Database::class);
+
 require_once __DIR__ . '/../include/runtime_safe.php';
 
 require_once __DIR__ . '/../include/bootstrap_pdo.php';
@@ -75,7 +77,7 @@ function tvmaze_shows_update($data)
             }
             if (!empty($values)) {
                 $sql = "UPDATE tvmaze SET /* columns */ WHERE tvmaze_id = :tvmaze_id";
-$this->db->perform($sql, array_merge($values, ['tvmaze_id' => $tvmaze_id]));
+$db->perform($sql, array_merge($values, ['tvmaze_id' => $tvmaze_id]));
             }
             echo "TVMaze ID #{$tvmaze_id} updated.\n";
             if (++$limit >= 50) {

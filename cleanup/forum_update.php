@@ -1,4 +1,6 @@
 <?php
+$db = $container->get(Database::class);
+
 require_once __DIR__ . '/../include/runtime_safe.php';
 
 require_once __DIR__ . '/../include/bootstrap_pdo.php';
@@ -43,12 +45,12 @@ function forum_update($data)
             'topic_count' => $forum['topics'],
         ];
         $sql = "UPDATE forums SET /* columns */ WHERE id = :id";
-$this->db->perform($sql, array_merge($set, ['id' => $forum['id']]));
+$db->perform($sql, array_merge($set, ['id' => $forum['id']]));
     }
     $topics = $fluent->from('topics')
                      ->select(null)
                      ->select('id')
-                     ->fetchAll(); // TODO(batch41): replace with $this->db->fetchAll("SELECT ...", [...])
+                     ->fetchAll();
 
     foreach ($topics as $topic) {
         $last_post = $fluent->from('posts')
@@ -58,23 +60,23 @@ $this->db->perform($sql, array_merge($set, ['id' => $forum['id']]));
                             ->where('topic_id = ?', $topic['id'])
                             ->orderBy('added DESC')
                             ->limit(1)
-                            ->fetch(); // TODO(batch41): replace with $this->db->fetchRow("SELECT ...", [...])
+                            ->fetch();
 
         if (empty($last_post['id'])) {
             $sql = "DELETE FROM topics WHERE id = :id";
-$this->db->perform($sql, ['id' => $topic['id']]);
+$db->perform($sql, ['id' => $topic['id']]);
         } else {
             $count = $fluent->from('posts')
                             ->select(null)
                             ->select('COUNT(id) AS count')
                             ->where('topic_id = ?', $topic['id'])
-                            ->fetch("count"); // TODO(batch41): use $this->db->fetchValue("SELECT COUNT(...) ...", [...])
+                            ->fetch("count");
             $set = [
                 'last_post' => $last_post['id'],
                 'post_count' => $count,
             ];
             $sql = "UPDATE topics SET /* columns */ WHERE id = :id";
-$this->db->perform($sql, array_merge($set, ['id' => $topic['id']]));
+$db->perform($sql, array_merge($set, ['id' => $topic['id']]));
         }
     }
 

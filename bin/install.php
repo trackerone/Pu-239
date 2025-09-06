@@ -1,4 +1,6 @@
 <?php
+$db = $container->get(Database::class);
+
 require_once __DIR__ . '/../include/runtime_safe.php';
 
 
@@ -265,7 +267,7 @@ function update_user(int $userid, int $class)
         'roles_mask' => 288,
     ];
     $sql = "UPDATE users SET /* columns */ WHERE id = :id";
-$this->db->perform($sql, array_merge($set, ['id' => $userid]));
+$db->perform($sql, array_merge($set, ['id' => $userid]));
     $fluent->insertInto('usersachiev')
            ->values(['userid' => $userid])
            ->execute();

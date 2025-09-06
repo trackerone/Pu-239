@@ -1,4 +1,6 @@
 <?php
+$db = $container->get(Database::class);
+
 require_once __DIR__ . '/../include/runtime_safe.php';
 
 require_once __DIR__ . '/../include/bootstrap_pdo.php';
@@ -59,7 +61,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $do === 'addpromo') {
         'bonus_karma' => $bonus_karma,
     ];
     $sql = "INSERT INTO promo (/* columns */) VALUES (/* values */)";
-$promo_id = $this->db->perform($sql, $values);
+$promo_id = $db->perform($sql, $values);
     if (empty($promo_id)) {
         stderr(_('Error'), 'Something wrong happened, please retry');
     } else {
@@ -77,7 +79,7 @@ $promo_id = $this->db->perform($sql, $values);
         stderr('Sanity check...', 'You are about to delete promo <b>' . htmlsafechars($r) . '</b>, if you are sure click <a href="' . $_SERVER['PHP_SELF'] . '?tool=promo&amp;do=delete&amp;id=' . $id . '&amp;sure=yes"><span class="has-text-danger">here</span></a>');
     } elseif ($sure === 'yes') {
         $sql = "DELETE FROM promo WHERE id = :id";
-$deleted = $this->db->perform($sql, ['id' => $id]);
+$deleted = $db->perform($sql, ['id' => $id]);
         if (!empty($deleted)) {
             $session->set('is-success', 'Promo was deleted!');
         } else {
@@ -151,7 +153,7 @@ $deleted = $this->db->perform($sql, ['id' => $id]);
                    ->select('name')
                    ->select('users')
                    ->where('link = ?', $link)
-                   ->fetch(); // TODO(batch41): replace with $this->db->fetchRow("SELECT ...", [...])
+                   ->fetch();
     $accounts = [];
     if (!empty($name)) {
         $accounts = explode('|', $name['users']);
@@ -195,7 +197,7 @@ if (empty($_POST)) {
         stderr(_('Error'), 'There is nothing for you here! Go play somewhere else');
     }
     $r = $fluent->from('promo')
-                ->fetchAll(); // TODO(batch41): replace with $this->db->fetchAll("SELECT ...", [...])
+                ->fetchAll();
     if (empty($r)) {
         stderr(_('Error'), _fe('There are no promotions. If you want to make one click {0}here{1}', '<a href="' . $_SERVER['PHP_SELF'] . '?tool=promo&amp;do=addpromo">', '</a>'), 'bottom20');
     } else {

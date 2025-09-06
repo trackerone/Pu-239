@@ -1,4 +1,6 @@
 <?php
+$db = $container->get(Database::class);
+
 require_once __DIR__ . '/../../include/runtime_safe.php';
 
 require_once __DIR__ . '/../../include/bootstrap_pdo.php';
@@ -21,7 +23,7 @@ if ($site_config['alerts']['bug'] && has_access($user['class'], UC_STAFF, 'coder
                             ->select(null)
                             ->select('COUNT(id) AS count')
                             ->where('status = ?', 'na')
-                            ->fetch("count"); // TODO(batch41): use $this->db->fetchValue("SELECT COUNT(...) ...", [...])
+                            ->fetch("count");
 
         $cache->set('bug_mess_', $bug_count, $site_config['expires']['alerts']);
     }

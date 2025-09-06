@@ -1,6 +1,8 @@
 <?php
 declare(strict_types=1);
 
+
+$db = $container->get(Database::class);
 require_once __DIR__ . '/runtime_safe.php';
 
 use Pu239\Database;

@@ -1,4 +1,6 @@
 <?php
+$db = $container->get(Database::class);
+
 /**
  * Batch 37.2 – Scan for FluentPDO usages with verbose logging
  * Does NOT modify files – just logs what it finds.

@@ -1,4 +1,6 @@
 <?php
+$db = $container->get(Database::class);
+
 require_once __DIR__ . '/../include/runtime_safe.php';
 
 require_once __DIR__ . '/../include/bootstrap_pdo.php';
@@ -55,7 +57,7 @@ function trivia_points_update($data)
                       ->groupBy('u.modcomment')
                       ->orderBy('correct DESC')
                       ->limit(10)
-                      ->fetchAll(); // TODO(batch41): replace with $this->db->fetchAll("SELECT ...", [...])
+                      ->fetchAll();
 
     if ($results) {
         $users_class = $container->get(User::class);
@@ -135,7 +137,7 @@ function trivia_points_update($data)
         'started' => date('Y-m-d H:i:s', $dt),
     ];
     $sql = "INSERT INTO triviasettings (/* columns */) VALUES (/* values */)";
-$this->db->perform($sql, $values);
+$db->perform($sql, $values);
 
     $time_end = microtime(true);
     $run_time = $time_end - $time_start;

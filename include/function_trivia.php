@@ -1,4 +1,6 @@
 <?php
+$db = $container->get(Database::class);
+
 require_once __DIR__ . '/runtime_safe.php';
 
 require_once __DIR__ . '/bootstrap_pdo.php';
@@ -162,7 +164,7 @@ function trivia_time()
                       ->select(null)
                       ->select('clean_time - UNIX_TIMESTAMP(NOW()) AS clean_time')
                       ->select('clean_file')
-                      ->fetchAll(); // TODO(batch41): replace with $this->db->fetchAll("SELECT ...", [...])
+                      ->fetchAll();
 
     foreach ($cleanup as $item) {
         if ($item['clean_file'] === 'trivia_update.php') {

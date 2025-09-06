@@ -1,12 +1,14 @@
 <?php declare(strict_types=1);
+
+$db = $container->get(Database::class);
 /**
  * Batch 41 — Replace actual FluentPDO calls with ExtendedPdo
  * 
  * Target:
- *  - $fluent->from(...)->fetchAll() → $this->db->fetchAll("SELECT ...")
- *  - ->fetch('count') → $this->db->fetchValue("SELECT COUNT(...) ...")
- *  - ->fetch() → $this->db->fetchRow("SELECT ...")
- *  - ->deleteFrom(...)->where(...) → $this->db->perform("DELETE ...")
+ *  - $fluent->from(...)->fetchAll() → $db->fetchAll("SELECT ...")
+ *  - ->fetch('count') → $db->fetchValue("SELECT COUNT(...) ...")
+ *  - ->fetch() → $db->fetchRow("SELECT ...")
+ *  - ->deleteFrom(...)->where(...) → $db->perform("DELETE ...")
  *  - ->update(...)->set(...)->where(...) → TODO markers (manual mapping needed)
  */
 
@@ -48,27 +50,27 @@ foreach ($rii as $file) {
     // Simple replacements
     $src = preg_replace(
         '#->fetchAll\(\);#',
-        '->fetchAll(); // TODO(batch41): replace with $this->db->fetchAll("SELECT ...", [...]) // TODO(batch41): replace with $this->db->fetchAll("SELECT ...", [...])',
+        '->fetchAll();
         $src
     );
     $src = preg_replace(
         '#->fetch\(\);#',
-        '->fetch(); // TODO(batch41): replace with $this->db->fetchRow("SELECT ...", [...]) // TODO(batch41): replace with $this->db->fetchRow("SELECT ...", [...])',
+        '->fetch();
         $src
     );
     $src = preg_replace(
         "#->fetch\('count'\);#",
-        '->fetch("count"); // TODO(batch41): use $this->db->fetchValue("SELECT COUNT(...) ...", [...])',
+        '->fetch("count");
         $src
     );
     $src = preg_replace(
         '#->deleteFrom\(.*\)->where\(.*\)->execute\(\);#',
-        '// TODO(batch41): replace with $this->db->perform("DELETE ... WHERE ...", [...])',
+        '
         $src
     );
     $src = preg_replace(
         '#->update\(.*\)->set\(.*\)->where\(.*\)->execute\(\);#',
-        '// TODO(batch41): replace with explicit UPDATE query using $this->db->perform(...)',
+        '
         $src
     );
 

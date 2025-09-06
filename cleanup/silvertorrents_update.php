@@ -1,4 +1,6 @@
 <?php
+$db = $container->get(Database::class);
+
 require_once __DIR__ . '/../include/runtime_safe.php';
 
 require_once __DIR__ . '/../include/bootstrap_pdo.php';
@@ -33,7 +35,7 @@ function silvertorrents_update($data)
                        ->select('silver')
                        ->where('silver > 1')
                        ->where('silver < ?', $dt)
-                       ->fetchAll(); // TODO(batch41): replace with $this->db->fetchAll("SELECT ...", [...])
+                       ->fetchAll();
 
     $count = count($torrents);
     if ($count > 0) {

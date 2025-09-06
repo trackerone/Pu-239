@@ -39,7 +39,7 @@ $tid = $fluent->from('torrents AS t')
               ->select('u.seedbonus')
               ->leftJoin('users AS u ON u.id=t.owner')
               ->where('t.id = ?', $id)
-              ->fetch(); // TODO(batch41): replace with $this->db->fetchRow("SELECT ...", [...])
+              ->fetch();
 
 if (!$tid) {
     stderr(_('Error'), _('Something went wrong!'));
@@ -68,7 +68,7 @@ if ($site_config['bonus']['on']) {
             'seedbonus' => $sb,
         ];
         $sql = "UPDATE users SET /* columns */ WHERE id = :id";
-$this->db->perform($sql, array_merge($set, ['id' => $tid['owner']]));
+$db->perform($sql, array_merge($set, ['id' => $tid['owner']]));
 
         $cache->update_row('user_' . $tid['owner'], [
             'seedbonus' => $sb,

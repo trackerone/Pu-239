@@ -1,4 +1,6 @@
 <?php
+$db = $container->get(Database::class);
+
 require_once __DIR__ . '/../include/runtime_safe.php';
 
 
@@ -84,7 +86,7 @@ if (isset($_POST['do_it'])) {
     ];
 
     $sql = "INSERT INTO reports (/* columns */) VALUES (/* values */)";
-$this->db->perform($sql, $values);
+$db->perform($sql, $values);
     $cache = $container->get(Cache::class);
     $cache->delete('new_report_');
     $session = $container->get(Session::class);

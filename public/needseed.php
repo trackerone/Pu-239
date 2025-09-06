@@ -1,4 +1,6 @@
 <?php
+$db = $container->get(Database::class);
+
 require_once __DIR__ . '/../include/runtime_safe.php';
 
 require_once __DIR__ . '/../include/bootstrap_pdo.php';
@@ -70,7 +72,7 @@ if ($needed === 'leechers') {
     if ($user['hidden'] === 0) {
         $res->where('c.hidden = 0');
     }
-    $res = $res->fetchAll(); // TODO(batch41): replace with $this->db->fetchAll("SELECT ...", [...])
+    $res = $res->fetchAll();
     if (!empty($res)) {
         $header = '
                 <tr>
@@ -139,7 +141,7 @@ if ($needed === 'leechers') {
         $res->leftJoin('categories AS c ON t.category = c.id')
             ->where('c.hidden = 0');
     }
-    $res = $res->fetchAll(); // TODO(batch41): replace with $this->db->fetchAll("SELECT ...", [...])
+    $res = $res->fetchAll();
     if (!empty($res)) {
         $header = "
                 <tr>

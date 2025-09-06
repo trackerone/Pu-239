@@ -103,7 +103,7 @@ class Notify
                                   ->select(null)
                                   ->select('COUNT(id) AS count')
                                   ->where('upcomingid = ?', $upcomingid)
-                                  ->fetch("count"); // TODO(batch41): use $this->db->fetchValue("SELECT COUNT(...) ...", [...])
+                                  ->fetch("count");
 
             $this->cache->set('notify_requests_' . $upcomingid, $count, 86400);
         }

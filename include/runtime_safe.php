@@ -1,6 +1,8 @@
 <?php
 declare(strict_types=1);
 
+
+$db = $container->get(Database::class);
 /**
  * runtime_safe.php
  * Minimal, defensiv bootstrap UDEN hårdt krav om mysql_compat.php.

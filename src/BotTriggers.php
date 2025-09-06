@@ -89,7 +89,7 @@ $result = $this->db->perform($sql, array_merge($set, ['id' => $id]));
                                ->groupBy('t.id')
                                ->groupBy('t.phrase')
                                ->orderBy('t.phrase')
-                               ->fetchAll(); // TODO(batch41): replace with $this->db->fetchAll("SELECT ...", [...])
+                               ->fetchAll();
 
         return $result;
     }
@@ -103,7 +103,7 @@ $result = $this->db->perform($sql, array_merge($set, ['id' => $id]));
     {
         $result = $this->fluent->from('bot_triggers AS t')
                                ->orderBy('t.phrase')
-                               ->fetchAll(); // TODO(batch41): replace with $this->db->fetchAll("SELECT ...", [...])
+                               ->fetchAll();
 
         return $result;
     }

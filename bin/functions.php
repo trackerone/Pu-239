@@ -1,4 +1,6 @@
 <?php
+$db = $container->get(Database::class);
+
 require_once __DIR__ . '/../include/runtime_safe.php';
 
 
@@ -62,7 +64,7 @@ function get_classes(array $styles, bool $create)
                           ->select('classpic')
                           ->orderBy('value')
                           ->where('template = ?', $style)
-                          ->fetchAll(); // TODO(batch41): replace with $this->db->fetchAll("SELECT ...", [...])
+                          ->fetchAll();
 
         if (empty($classes)) {
             if (!$create) {
@@ -71,7 +73,7 @@ function get_classes(array $styles, bool $create)
                 foreach ($all_classes[0] as $values) {
                     $values['template'] = $style;
                     $sql = "INSERT INTO class_config (/* columns */) VALUES (/* values */)";
-$this->db->perform($sql, $values);
+$db->perform($sql, $values);
                 }
                 app_halt("Classes added for template {$style}\n");
             }

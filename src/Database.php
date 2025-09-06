@@ -1,6 +1,8 @@
 <?php
 declare(strict_types=1);
 
+
+$db = $container->get(Database::class);
 namespace Pu239;
 
 use PDO;
@@ -45,14 +47,14 @@ final class Database
     public function fetch(string $sql, array $params = []): ?array
     {
         $stmt = $this->run($sql, $params);
-        $row = $stmt->fetch(); // TODO(batch41): replace with $this->db->fetchRow("SELECT ...", [...])
+        $row = $stmt->fetch();
         return $row === false ? null : $row;
     }
 
     /** Return all rows */
     public function fetchAll(string $sql, array $params = []): array
     {
-        return $this->run($sql, $params)->fetchAll(); // TODO(batch41): replace with $this->db->fetchAll("SELECT ...", [...])
+        return $this->run($sql, $params)->fetchAll();
     }
 
     /** Return first column of first row or null */

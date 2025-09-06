@@ -44,7 +44,7 @@ $db = $container->get(Database::class);, $site_config;
                     ->groupBy('s.seedtime')
                     ->groupBy('a.dayseed')
                     ->orderBy('a.dayseed')
-                    ->fetchAll(); // TODO(batch41): replace with $this->db->fetchAll("SELECT ...", [...])
+                    ->fetchAll();
 
     $msgs_buffer = $usersachiev_buffer = $achievements_buffer = $userids = [];
     if (!empty($query)) {

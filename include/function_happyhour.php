@@ -68,7 +68,7 @@ $db = $container->get(Database::class);, $site_config;
             $categories = $fluent->from('categories')
                                  ->select(null)
                                  ->select('id')
-                                 ->fetchAll(); // TODO(batch41): replace with $this->db->fetchAll("SELECT ...", [...])
+                                 ->fetchAll();
 
             shuffle($categories);
             $todo = $categories[0];

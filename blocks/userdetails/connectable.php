@@ -1,4 +1,6 @@
 <?php
+$db = $container->get(Database::class);
+
 require_once __DIR__ . '/../../include/runtime_safe.php';
 
 require_once __DIR__ . '/../../include/bootstrap_pdo.php';
@@ -23,7 +25,7 @@ if ($user['paranoia'] < 1 || $CURUSER['id'] == $id || $CURUSER['class'] >= UC_ST
                             ->select('agent')
                             ->where('userid = ?', $id)
                             ->limit(1)
-                            ->fetch(); // TODO(batch41): replace with $this->db->fetchRow("SELECT ...", [...])
+                            ->fetch();
         $cache->set('port_data_' . $id, $port_data, $site_config['expires']['port_data']);
     }
     if (!empty($port_data) && isset($port_data[2])) {

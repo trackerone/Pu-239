@@ -1,4 +1,6 @@
 <?php
+$db = $container->get(Database::class);
+
 /**
  * Batch 37.8 – TODO FluentPDO refactor
  * Marks leftover FluentPDO queries with TODO and logs them.
@@ -32,7 +34,7 @@ foreach ($rii as $file) {
             $pattern,
             '// TODO: review query' . "\n" .
             '$sql = "SELECT/INSERT/UPDATE/DELETE ...";' . "\n" .
-            '$this->db->perform($sql, [/* params */]);',
+            '$db->perform($sql, [/* params */]);',
             $contents
         );
 

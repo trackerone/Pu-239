@@ -1,4 +1,6 @@
 <?php
+$db = $container->get(Database::class);
+
 require_once __DIR__ . '/../../include/runtime_safe.php';
 
 require_once __DIR__ . '/../../include/bootstrap_pdo.php';
@@ -21,7 +23,7 @@ if ($cache_share_ratio === false || is_null($cache_share_ratio)) {
                   ->select('COUNT(id) AS total_number')
                   ->where('seedtime > 0')
                   ->where('userid = ?', $user['id'])
-                  ->fetch(); // TODO(batch41): replace with $this->db->fetchRow("SELECT ...", [...])
+                  ->fetch();
 
     $cache_share_ratio['total_number'] = (int) $sql['total_number'];
     $cache_share_ratio['seed_time_total'] = (int) $sql['seed_time_total'];

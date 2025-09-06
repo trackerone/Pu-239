@@ -1,4 +1,6 @@
 <?php
+$db = $container->get(Database::class);
+
 require_once __DIR__ . '/../include/runtime_safe.php';
 
 require_once __DIR__ . '/../include/bootstrap_pdo.php';
@@ -70,7 +72,7 @@ if (!$row || !is_file($fn) || !is_readable($fn)) {
         'multiplier' => $multiplier,
     ];
     $sql = "INSERT INTO happyhour (/* columns */) VALUES (/* values */)";
-$this->db->perform($sql, $values);
+$db->perform($sql, $values);
 }
 if ($site_config['bonus']['on'] && $row['owner'] != $user['id']) {
     $downloaded = $cache->get('downloaded_' . $user['id'] . '_' . $id);
@@ -96,7 +98,7 @@ if (isset($_GET['slot'])) {
     $slot = $fluent->from('freeslots')
                    ->where('torrentid = ?', $id)
                    ->where('userid = ?', $user['id'])
-                   ->fetch(); // TODO(batch41): replace with $this->db->fetchRow("SELECT ...", [...])
+                   ->fetch();
     $used_slot = $slot['torrentid'] === $id && $slot['userid'] === $user['id'];
     if ($_GET['slot'] === 'free') {
         if ($used_slot && $slot['free'] === 'yes') {

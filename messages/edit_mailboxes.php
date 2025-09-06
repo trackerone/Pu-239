@@ -1,4 +1,6 @@
 <?php
+$db = $container->get(Database::class);
+
 require_once __DIR__ . '/../include/runtime_safe.php';
 
 
@@ -60,7 +62,7 @@ if (isset($_POST['action2'])) {
                         'boxnumber' => $box,
                     ];
                     $sql = "INSERT INTO pmboxes (/* columns */) VALUES (/* values */)";
-$this->db->perform($sql, $values);
+$db->perform($sql, $values);
                     $cache->delete('get_all_boxes_' . $CURUSER['id']);
                     $cache->delete('insertJumpTo_' . $CURUSER['id']);
                 }
@@ -74,7 +76,7 @@ $this->db->perform($sql, $values);
         case 'edit_boxes':
             $boxes = $fluent->from('pmboxes')
                             ->where('userid = ?', $CURUSER['id'])
-                            ->fetchAll(); // TODO(batch41): replace with $this->db->fetchAll("SELECT ...", [...])
+                            ->fetchAll();
 
             if (empty($boxes)) {
                 stderr(_('Error'), _('No Mailboxes to edit'));
@@ -86,7 +88,7 @@ $this->db->perform($sql, $values);
                         'name' => $name,
                     ];
                     $sql = "UPDATE pmboxes SET /* columns */ WHERE id = :id";
-$this->db->perform($sql, array_merge($set, ['id' => $row['id']]));
+$db->perform($sql, array_merge($set, ['id' => $row['id']]));
                     $cache->delete('get_all_boxes_' . $CURUSER['id']);
                     $cache->delete('insertJumpTo_' . $CURUSER['id']);
                     $worked = '&name=1';
@@ -126,7 +128,7 @@ $this->db->perform($sql, array_merge($set, ['id' => $row['id']]));
             $category_ids = $fluent->from('categories')
                                    ->select(null)
                                    ->select('id')
-                                   ->fetchAll(); // TODO(batch41): replace with $this->db->fetchAll("SELECT ...", [...])
+                                   ->fetchAll();
 
             $rows = count($category_ids);
             for ($i = 0; $i < $rows; ++$i) {
@@ -161,7 +163,7 @@ $this->db->perform($sql, array_merge($set, ['id' => $row['id']]));
 $boxes = $fluent->from('pmboxes')
                 ->where('userid = ?', $CURUSER['id'])
                 ->orderBy('boxnumber')
-                ->fetchAll(); // TODO(batch41): replace with $this->db->fetchAll("SELECT ...", [...])
+                ->fetchAll();
 $count_boxes = !empty($boxes) ? count($boxes) : 0;
 
 if (!empty($boxes)) {

@@ -1,4 +1,6 @@
 <?php
+$db = $container->get(Database::class);
+
 require_once __DIR__ . '/../include/runtime_safe.php';
 
 require_once __DIR__ . '/../include/bootstrap_pdo.php';
@@ -131,7 +133,7 @@ function show_views(array $inbound, array $month_names)
                     ->where('t.registered >= ?', $from_time)
                     ->where('t.registered <= ?', $to_time)
                     ->groupBy('t.forum_id')
-                    ->fetchAll(); // TODO(batch41): replace with $this->db->fetchAll("SELECT ...", [...])
+                    ->fetchAll();
 
     $count = !empty($count) ? count($count) : 0;
     $parsed_url = http_build_query($inbound);
@@ -151,7 +153,7 @@ function show_views(array $inbound, array $month_names)
                     ->orderBy("result_count $sort_by, t.forum_id")
                     ->limit($pager['pdo']['limit'])
                     ->offset($pager['pdo']['offset'])
-                    ->fetchAll(); // TODO(batch41): replace with $this->db->fetchAll("SELECT ...", [...])
+                    ->fetchAll();
 
     $running_total = 0;
     $max_result = 0;
@@ -304,7 +306,7 @@ function result_screen(string $mode, array $inbound, array $month_names)
                     ->where("$sql_field>= $from_time")
                     ->where("$sql_field <= $to_time")
                     ->groupBy('result_time')
-                    ->fetchAll(); // TODO(batch41): replace with $this->db->fetchAll("SELECT ...", [...])
+                    ->fetchAll();
 
     $count = !empty($count) ? count($count) : 0;
     $parsed_url = http_build_query($inbound);
@@ -324,7 +326,7 @@ function result_screen(string $mode, array $inbound, array $month_names)
                     ->orderBy("result_maxdate $sort_by")
                     ->limit($pager['pdo']['limit'])
                     ->offset($pager['pdo']['offset'])
-                    ->fetchAll(); // TODO(batch41): replace with $this->db->fetchAll("SELECT ...", [...])
+                    ->fetchAll();
 
     $running_total = 0;
     $max_result = 0;

@@ -1,4 +1,6 @@
 <?php
+$db = $container->get(Database::class);
+
 require_once __DIR__ . '/../include/runtime_safe.php';
 
 
@@ -50,7 +52,7 @@ if (!empty($search)) {
                       ->select('name')
                       ->select('hex(info_hash) AS info_hash')
                       ->where('name LIKE ?', "%$search%")
-                      ->fetchAll(); // TODO(batch41): replace with $this->db->fetchAll("SELECT ...", [...])
+                      ->fetchAll();
 
     if ($results) {
         echo json_encode($results);

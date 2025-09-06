@@ -1,4 +1,6 @@
 <?php
+$db = $container->get(Database::class);
+
 require_once __DIR__ . '/runtime_safe.php';
 
 require_once __DIR__ . '/bootstrap_pdo.php';
@@ -91,7 +93,7 @@ function get_bluray_info(bool $images = false)
                 ->select('runtime')
                 ->where('title = ?', $movie)
                 ->limit(1)
-                ->fetch(); // TODO(batch41): replace with $this->db->fetchRow("SELECT ...", [...])
+                ->fetch();
 
             if (!empty($imdb_info['imdb_id'])) {
                 get_imdb_info_short($imdb_info['imdb_id']);

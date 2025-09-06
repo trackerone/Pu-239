@@ -1,4 +1,6 @@
 <?php
+$db = $container->get(Database::class);
+
 require_once __DIR__ . '/../include/runtime_safe.php';
 
 require_once __DIR__ . '/../include/bootstrap_pdo.php';
@@ -40,7 +42,7 @@ function funds_update($data)
                   ->where('donor = "yes"')
                   ->where('donoruntil < ?', $dt)
                   ->where('donoruntil != 0')
-                  ->fetchAll(); // TODO(batch41): replace with $this->db->fetchAll("SELECT ...", [...])
+                  ->fetchAll();
     $msgs_buffer = [];
     if (!empty($sql)) {
         $user_class = $container->get(User::class);

@@ -1,4 +1,6 @@
 <?php
+$db = $container->get(Database::class);
+
 require_once __DIR__ . '/../include/runtime_safe.php';
 
 require_once __DIR__ . '/../include/bootstrap_pdo.php';
@@ -32,7 +34,7 @@ function trivia_update($data)
         $count = $fluent->from('triviaq')
                         ->select(null)
                         ->select('COUNT(qid) AS count')
-                        ->fetch("count"); // TODO(batch41): use $this->db->fetchValue("SELECT COUNT(...) ...", [...])
+                        ->fetch("count");
         $cache->set('trivia_questions_count_', $count, 900);
     }
     if ($count > 0) {
@@ -79,7 +81,7 @@ function trivia_update($data)
                 'current' => 1,
             ];
             $sql = "UPDATE triviaq SET /* columns */ WHERE qid = :qid";
-$this->db->perform($sql, array_merge($set, ['qid' => $qid]));
+$db->perform($sql, array_merge($set, ['qid' => $qid]));
 
             $values = $fluent->from('triviaq')
                              ->select('question')
@@ -90,7 +92,7 @@ $this->db->perform($sql, array_merge($set, ['qid' => $qid]));
                              ->select('answer5')
                              ->select('asked')
                              ->where('qid=?', $qid)
-                             ->fetch(); // TODO(batch41): replace with $this->db->fetchRow("SELECT ...", [...])
+                             ->fetch();
             $cache->set('trivia_current_question_', $values, 360);
         }
     }

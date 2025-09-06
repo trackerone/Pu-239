@@ -1,4 +1,6 @@
 <?php
+$db = $container->get(Database::class);
+
 require_once __DIR__ . '/../include/runtime_safe.php';
 
 require_once __DIR__ . '/../include/bootstrap_pdo.php';
@@ -39,7 +41,7 @@ $row = $fluent->from('torrents AS t')
               ->select('u.seedbonus')
               ->leftJoin('users AS u ON u.id=t.owner')
               ->where('t.id = ?', $id)
-              ->fetch(); // TODO(batch41): replace with $this->db->fetchRow("SELECT ...", [...])
+              ->fetch();
 
 if (!$row) {
     stderr(_('Error'), _('Torrent does not exist'));

@@ -1,4 +1,6 @@
 <?php declare(strict_types=1);
+
+$db = $container->get(Database::class);
 /**
  * Batch 40.5 — Full repo FluentPDO sweep (simple & predictable)
  *
@@ -106,7 +108,7 @@ foreach ($rii as $file) {
         $updated = preg_replace(
             '#\$agents\s*=\s*\$fluent->from\(\'peers\'\)\s*->select\(null\)\s*->select\(\'agent\'\)\s*->select\(\'LEFT\(peer_id,\s*8\)\s+AS\s+peer_id\'\)\s*->groupBy\(\'agent\'\)\s*->groupBy\(\'peer_id\'\)\s*->fetchAll\(\);\s*#s',
             '$sql = "SELECT agent, LEFT(peer_id, 8) AS peer_id FROM peers GROUP BY agent, LEFT(peer_id, 8)";' . "\n" .
-            '$agents = $this->db->fetchAll($sql);' . "\n",
+            '$agents = $db->fetchAll($sql);' . "\n",
             $updated
         );
 
@@ -114,13 +116,13 @@ foreach ($rii as $file) {
         $updated = preg_replace(
             '#\$cats\s*=\s*\$fluent->from\(\'categories\'\)\s*->orderBy\(\'ordered\'\)\s*;#s',
             '$sql = "SELECT * FROM categories ORDER BY ordered, id";' . "\n" .
-            '$cats = $this->db->fetchAll($sql);' . "\n",
+            '$cats = $db->fetchAll($sql);' . "\n",
             $updated
         );
         $updated = preg_replace(
             '#\$cats\s*=\s*\$fluent->from\(\'categories\'\)\s*->orderBy\(\'ordered\'\)\s*->fetchAll\(\);\s*#s',
             '$sql = "SELECT * FROM categories ORDER BY ordered, id";' . "\n" .
-            '$cats = $this->db->fetchAll($sql);' . "\n",
+            '$cats = $db->fetchAll($sql);' . "\n",
             $updated
         );
 
@@ -128,14 +130,14 @@ foreach ($rii as $file) {
         $updated = preg_replace(
             '#\$children\s*=\s*\$fluent->from\(\'categories\'\)\s*->where\(\'parent_id\s*=\s*\?\',\s*\$parentId\)\s*->orderBy\(\'ordered\'\)\s*->fetchAll\(\);\s*#s',
             '$sql = "SELECT * FROM categories WHERE parent_id = :pid ORDER BY ordered, id";' . "\n" .
-            '$children = $this->db->fetchAll($sql, [\'pid\' => (int) $parentId]);' . "\n",
+            '$children = $db->fetchAll($sql, [\'pid\' => (int) $parentId]);' . "\n",
             $updated
         );
 
         // G) Delete category by id
         $updated = preg_replace(
             '#\$fluent->deleteFrom\(\'categories\'\)\s*->where\(\'id\s*=\s*\?\',\s*\$params\[\'id\'\]\)\s*->execute\(\);\s*#s',
-            '$this->db->perform("DELETE FROM categories WHERE id = :id", ["id" => (int) $params["id"]]);' . "\n",
+            '$db->perform("DELETE FROM categories WHERE id = :id", ["id" => (int) $params["id"]]);' . "\n",
             $updated
         );
 

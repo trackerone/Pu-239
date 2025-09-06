@@ -1,4 +1,6 @@
 <?php
+$db = $container->get(Database::class);
+
 require_once __DIR__ . '/../include/runtime_safe.php';
 
 
@@ -188,7 +190,7 @@ if (!$enabled) {
                          ->select('COUNT(id) AS count')
                          ->where('userid = ?', $user['id'])
                          ->where('friendid = ?', $viewer['id'])
-                         ->fetch("count"); // TODO(batch41): use $this->db->fetchValue("SELECT COUNT(...) ...", [...])
+                         ->fetch("count");
         $cache->set('Friends_' . $user['id'], $friend, $site_config['expires']['user_friends']);
     }
     $block = $cache->get('Blocks_' . $user['id']);
@@ -198,7 +200,7 @@ if (!$enabled) {
                         ->select('COUNT(id) AS count')
                         ->where('userid = ?', $user['id'])
                         ->where('blockid = ?', $viewer['id'])
-                        ->fetch("count"); // TODO(batch41): use $this->db->fetchValue("SELECT COUNT(...) ...", [...])
+                        ->fetch("count");
         $cache->set('Blocks_' . $user['id'], $block, $site_config['expires']['user_blocks']);
     }
     if ($friend > 0) {
@@ -222,7 +224,7 @@ if (has_access($viewer['class'], UC_STAFF, 'coder')) {
                           ->select('suspect')
                           ->where('userid = ?', $user['id'])
                           ->where('suspect = ?', $viewer['id'])
-                          ->fetchAll(); // TODO(batch41): replace with $this->db->fetchAll("SELECT ...", [...])
+                          ->fetchAll();
         $cache->set('shit_list_' . $user['id'], $shit_list, $site_config['expires']['shit_list']);
     }
     if ($shit_list > 0) {

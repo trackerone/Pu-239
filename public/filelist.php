@@ -1,4 +1,6 @@
 <?php
+$db = $container->get(Database::class);
+
 require_once __DIR__ . '/../include/runtime_safe.php';
 
 require_once __DIR__ . '/../include/bootstrap_pdo.php';
@@ -25,7 +27,7 @@ $count = $fluent->from('files')
                 ->select(null)
                 ->select('COUNT(id) AS count')
                 ->where('torrent = ?', $id)
-                ->fetch("count"); // TODO(batch41): use $this->db->fetchValue("SELECT COUNT(...) ...", [...])
+                ->fetch("count");
 $perpage = 50;
 $pager = pager($perpage, $count, "{$site_config['paths']['baseurl']}/filelist.php?id=$id&amp;");
 $HTMLOUT = '';

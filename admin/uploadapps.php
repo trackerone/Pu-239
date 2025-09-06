@@ -1,4 +1,6 @@
 <?php
+$db = $container->get(Database::class);
+
 require_once __DIR__ . '/../include/runtime_safe.php';
 
 require_once __DIR__ . '/../include/bootstrap_pdo.php';
@@ -68,7 +70,7 @@ if ($action === 'takeappdelete') {
                   ->select('u.username')
                   ->leftJoin('users AS u ON a.userid = u.id')
                   ->where('a.id = ?', $id)
-                  ->fetch(); // TODO(batch41): replace with $this->db->fetchRow("SELECT ...", [...])
+                  ->fetch();
 
     $note = htmlsafechars($_POST['note']);
     $subject = _('Uploader Promotion');
@@ -81,7 +83,7 @@ if ($action === 'takeappdelete') {
         'moderator' => $CURUSER['username'],
     ];
     $sql = "UPDATE uploadapp SET /* columns */ WHERE id = :id";
-$this->db->perform($sql, array_merge($update, ['id' => $id]));
+$db->perform($sql, array_merge($update, ['id' => $id]));
     $user_class = $container->get(User::class);
     $setbits = $clrbits = 0;
     $setbits |= Roles::UPLOADER;
@@ -123,7 +125,7 @@ if ($action === 'rejectapp') {
                   ->select('userid AS uid')
                   ->select('id')
                   ->where('id = ?', $id)
-                  ->fetch(); // TODO(batch41): replace with $this->db->fetchRow("SELECT ...", [...])
+                  ->fetch();
 
     $reason = htmlsafechars($_POST['reason']);
     $subject = _('Uploader Promotion');
@@ -141,7 +143,7 @@ if ($action === 'rejectapp') {
         'moderator' => $CURUSER['username'],
     ];
     $sql = "UPDATE uploadapp SET /* columns */ WHERE id = :id";
-$this->db->perform($sql, array_merge($update, ['id' => $id]));
+$db->perform($sql, array_merge($update, ['id' => $id]));
     $messages_class->insert($msgs_buffer);
     $cache->delete('new_uploadapp_');
     $session->set('is-success', _('The application was successfully rejected. The user has been sent a PM notification.'));
@@ -158,7 +160,7 @@ if ($action === 'app' || $action === 'show') {
                       ->select('u.class')
                       ->leftJoin('users AS u ON a.userid = u.id')
                       ->where('a.status != "pending"')
-                      ->fetchAll(); // TODO(batch41): replace with $this->db->fetchAll("SELECT ...", [...])
+                      ->fetchAll();
     } else {
         $hide = "<a href='{$site_config['paths']['baseurl']}/staffpanel.php?tool=uploadapps&amp;action=show'>" . _('Show accepted/rejected') . '</a>';
         $res = $fluent->from('uploadapp AS a')
@@ -168,7 +170,7 @@ if ($action === 'app' || $action === 'show') {
                       ->select('u.class')
                       ->leftJoin('users AS u ON a.userid = u.id')
                       ->where('a.status = "pending"')
-                      ->fetchAll(); // TODO(batch41): replace with $this->db->fetchAll("SELECT ...", [...])
+                      ->fetchAll();
     }
 
     $count = count($res);
@@ -244,7 +246,7 @@ if ($action === 'app' || $action === 'show') {
                   ->select('u.class')
                   ->leftJoin('users AS u ON a.userid = u.id')
                   ->where('a.id = ?', $id)
-                  ->fetch(); // TODO(batch41): replace with $this->db->fetchRow("SELECT ...", [...])
+                  ->fetch();
 
     $membertime = get_date((int) $arr['registered'], '', 0, 1);
     $elapsed = get_date((int) $arr['applied'], '', 0, 1);

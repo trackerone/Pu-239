@@ -1,4 +1,6 @@
 <?php
+$db = $container->get(Database::class);
+
 require_once __DIR__ . '/../include/runtime_safe.php';
 
 require_once __DIR__ . '/../include/bootstrap_pdo.php';
@@ -133,7 +135,7 @@ function sharetable($res, $userid, $user, $variant = 'index')
         $bms = $fluent->from('bookmarks')
                       ->where('torrentid = ?', $id)
                       ->where('userid = ?', $userid)
-                      ->fetch(); // TODO(batch41): replace with $this->db->fetchRow("SELECT ...", [...])
+                      ->fetch();
 
         $bookmarked = (empty($bms) ? "
                             <span data-tid='{$id}' data-remove='false' data-private='false' class='bookmarks tooltipper' title='" . _('Add Bookmark') . "'>
@@ -234,7 +236,7 @@ $count = $fluent->from('bookmarks')
                 ->select('COUNT(id) AS count')
                 ->where('private = "no"')
                 ->where('userid = ?', $userid)
-                ->fetch("count"); // TODO(batch41): use $this->db->fetchValue("SELECT COUNT(...) ...", [...])
+                ->fetch("count");
 
 $torrentsperpage = $user['torrentsperpage'];
 if (empty($torrentsperpage)) {
@@ -269,7 +271,7 @@ if ($count) {
                          ->orderBy('t.id DESC')
                          ->limit($pager['pdo']['limit'])
                          ->offset($pager['pdo']['offset'])
-                         ->fetchAll(); // TODO(batch41): replace with $this->db->fetchAll("SELECT ...", [...])
+                         ->fetchAll();
 
     $HTMLOUT .= $count > $torrentsperpage ? $pager['pagertop'] : '';
     $HTMLOUT .= sharetable($sharemarks, $userid, $user, 'index');

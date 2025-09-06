@@ -1,4 +1,6 @@
 <?php
+$db = $container->get(Database::class);
+
 require_once __DIR__ . '/../include/runtime_safe.php';
 
 require_once __DIR__ . '/../include/bootstrap_pdo.php';
@@ -68,7 +70,7 @@ if (isset($_GET['sort'], $_GET['type'])) {
 }
 $count = $count->where('owner = ?', $user['id'])
                ->where('banned != "yes"')
-               ->fetch("count"); // TODO(batch41): use $this->db->fetchValue("SELECT COUNT(...) ...", [...])
+               ->fetch("count");
 
 $select = $select->where('owner = ?', $user['id'])
                  ->where('banned != "yes"');
@@ -81,7 +83,7 @@ if (!$count) {
     $pager = pager(20, $count, "{$site_config['paths']['baseurl']}/mytorrents.php?{$pagerlink}");
     $select = $select->limit($pager['pdo']['limit'])
                      ->offset($pager['pdo']['offset'])
-                     ->fetchAll(); // TODO(batch41): replace with $this->db->fetchAll("SELECT ...", [...])
+                     ->fetchAll();
     $HTMLOUT .= $pager['pagertop'];
     $HTMLOUT .= torrenttable($select, $user, 'mytorrents');
     $HTMLOUT .= $pager['pagerbottom'];

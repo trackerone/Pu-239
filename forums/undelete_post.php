@@ -1,4 +1,6 @@
 <?php
+$db = $container->get(Database::class);
+
 require_once __DIR__ . '/../include/runtime_safe.php';
 
 
@@ -29,7 +31,7 @@ $arr_post = $fluent->from('posts AS p')
                    ->leftJoin('topics AS t ON p.topic_id = t.id')
                    ->leftJoin('forums AS f ON t.forum_id = f.id')
                    ->where('p.id = ?', $post_id)
-                   ->fetch(); // TODO(batch41): replace with $this->db->fetchRow("SELECT ...", [...])
+                   ->fetch();
 
 $can_delete = $arr_post['user_id'] === $CURUSER['id'] || has_access($CURUSER['class'], UC_STAFF, 'forum_mod');
 if (!has_access($CURUSER['class'], (int) $arr_post['min_class_read'], '') || !has_access($CURUSER['class'], (int) $arr_post['min_class_write'], '')) {
@@ -61,17 +63,17 @@ $update = [
     'status' => 'ok',
 ];
 $sql = "UPDATE posts SET /* columns */ WHERE id = :id";
-$this->db->perform($sql, array_merge($update, ['id' => $post_id]));
+$db->perform($sql, array_merge($update, ['id' => $post_id]));
 $update = [
     'post_count' => new Literal('post_count + 1'),
 ];
 $sql = "UPDATE forums SET /* columns */ WHERE id = :id";
-$this->db->perform($sql, array_merge($update, ['id' => $arr_post['forum_id']]));
+$db->perform($sql, array_merge($update, ['id' => $arr_post['forum_id']]));
 $update = [
     'forumposts' => new Literal('forumposts + 1'),
 ];
 $sql = "UPDATE usersachiev SET /* columns */ WHERE userid = :userid";
-$this->db->perform($sql, array_merge($update, ['userid' => $arr_post['user_id']]));
+$db->perform($sql, array_merge($update, ['userid' => $arr_post['user_id']]));
 
 clr_forums_cache((int) $post_id);
 $cache = $container->get(Cache::class);

@@ -71,7 +71,7 @@ $this->db->perform($sql, array_merge($set, ['id' => $id]));
                                ->leftJoin('users AS u ON r.userid = u.id')
                                ->leftJoin('categories AS c ON r.category = c.id')
                                ->where('r.id = ?', $upcomingid)
-                               ->fetch(); // TODO(batch41): replace with $this->db->fetchRow("SELECT ...", [...])
+                               ->fetch();
 
         return $result;
     }
@@ -97,7 +97,7 @@ $this->db->perform($sql, array_merge($set, ['id' => $id]));
         if (!$all) {
             $count->where('u.status != ?', 'uploaded');
         }
-        $count = $count->fetch("count"); // TODO(batch41): use $this->db->fetchValue("SELECT COUNT(...) ...", [...])
+        $count = $count->fetch("count");
 
         return $count;
     }

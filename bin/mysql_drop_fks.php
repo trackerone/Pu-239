@@ -1,4 +1,6 @@
 <?php
+$db = $container->get(Database::class);
+
 declare(strict_types = 1);
 
 use Pu239\Database;

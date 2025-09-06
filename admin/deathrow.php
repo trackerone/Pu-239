@@ -1,4 +1,6 @@
 <?php
+$db = $container->get(Database::class);
+
 require_once __DIR__ . '/../include/runtime_safe.php';
 
 require_once __DIR__ . '/../include/bootstrap_pdo.php';
@@ -74,7 +76,7 @@ function notify_owner(array $tids)
                        ->select('owner')
                        ->select('name')
                        ->where('id', $tids)
-                       ->fetch(); // TODO(batch41): replace with $this->db->fetchRow("SELECT ...", [...])
+                       ->fetch();
 
     $dt = TIME_NOW;
     $subject = _('Dead Torrent Notice');
@@ -91,7 +93,7 @@ function notify_owner(array $tids)
             'notified' => $dt,
         ];
         $sql = "UPDATE deathrow SET /* columns */ WHERE tid = :tid";
-$this->db->perform($sql, array_merge($set, ['tid' => $torrent['id']]));
+$db->perform($sql, array_merge($set, ['tid' => $torrent['id']]));
     }
     if (!empty($values)) {
         $messages_class = $container->get(Message::class);
@@ -224,7 +226,7 @@ foreach ($dead as $values) {
 $count = $fluent->from('deathrow')
                 ->select(null)
                 ->select('COUNT(uid) AS count')
-                ->fetch("count"); // TODO(batch41): use $this->db->fetchValue("SELECT COUNT(...) ...", [...])
+                ->fetch("count");
 
 if ($count) {
     $perpage = 25;
@@ -233,7 +235,7 @@ if ($count) {
                        ->orderBy('username')
                        ->limit($pager['pdo']['limit'])
                        ->offset($pager['pdo']['offset'])
-                       ->fetchAll(); // TODO(batch41): replace with $this->db->fetchAll("SELECT ...", [...])
+                       ->fetchAll();
 
     $HTMLOUT .= "
         <h1 class='has-text-centered'>" . _pfe('{0} Torrent On Deathrow', '{0} Torrents On Deathrow', $count) . '</h1>' . ($count > $perpage ? $pager['pagertop'] : '') . "

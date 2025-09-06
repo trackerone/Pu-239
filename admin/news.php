@@ -1,4 +1,6 @@
 <?php
+$db = $container->get(Database::class);
+
 require_once __DIR__ . '/../include/runtime_safe.php';
 
 
@@ -58,7 +60,7 @@ if ($mode === 'delete') {
     }
 
     $sql = "DELETE FROM news WHERE id = :id";
-$this->db->perform($sql, ['id' => $newsid]);
+$db->perform($sql, ['id' => $newsid]);
     $cache->delete('latest_news_');
     $session->set('is-success', _('News entry deleted'));
     header("Location: {$site_config['paths']['baseurl']}/staffpanel.php?tool=news&mode=news");
@@ -87,7 +89,7 @@ $this->db->perform($sql, ['id' => $newsid]);
         'anonymous' => $anonymous,
     ];
     $sql = "INSERT INTO news (/* columns */) VALUES (/* values */)";
-$results = $this->db->perform($sql, $values);
+$results = $db->perform($sql, $values);
     if (!empty($results)) {
         $cache->delete('latest_news_');
         $session->set('is-success', _('News entry was added successfully.'));
@@ -103,7 +105,7 @@ $results = $this->db->perform($sql, $values);
     }
     $arr = $fluent->from('news')
                   ->where('id = ?', $newsid)
-                  ->fetch(); // TODO(batch41): replace with $this->db->fetchRow("SELECT ...", [...])
+                  ->fetch();
     if (empty($arr)) {
         stderr(_('Error'), _('No news item with that ID.'));
     }
@@ -125,7 +127,7 @@ $results = $this->db->perform($sql, $values);
             'title' => $title,
         ];
         $sql = "UPDATE news SET /* columns */ WHERE id = :id";
-$this->db->perform($sql, array_merge($update, ['id' => $newsid]));
+$db->perform($sql, array_merge($update, ['id' => $newsid]));
         $cache->delete('latest_news_');
         $session->set('is-success', _('News item was edited successfully'));
         header("Location: {$site_config['paths']['baseurl']}/staffpanel.php?tool=news&mode=news");
@@ -194,7 +196,7 @@ $this->db->perform($sql, array_merge($update, ['id' => $newsid]));
     $results = $fluent->from('news')
                       ->orderBy('sticky')
                       ->orderBy('added DESC')
-                      ->fetchAll(); // TODO(batch41): replace with $this->db->fetchAll("SELECT ...", [...])
+                      ->fetchAll();
     $HTMLOUT .= "
     <div class='portlet'>
         <h1 class='has-text-centered'>" . _('Submit News Item') . "</h1>

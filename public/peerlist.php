@@ -1,4 +1,6 @@
 <?php
+$db = $container->get(Database::class);
+
 require_once __DIR__ . '/../include/runtime_safe.php';
 
 require_once __DIR__ . '/../include/bootstrap_pdo.php';
@@ -125,7 +127,7 @@ $peers = $fluent->from('peers AS p')
                 ->innerJoin('torrents AS t ON t.id = p.torrent')
                 ->leftJoin('users AS u ON u.id = p.userid')
                 ->where('p.torrent = ?', $id)
-                ->fetchAll(); // TODO(batch41): replace with $this->db->fetchAll("SELECT ...", [...])
+                ->fetchAll();
 
 if (empty($peers)) {
     stderr(_('Error'), _('No downloader/uploader data available!'));

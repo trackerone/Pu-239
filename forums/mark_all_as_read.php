@@ -1,4 +1,6 @@
 <?php
+$db = $container->get(Database::class);
+
 require_once __DIR__ . '/../include/runtime_safe.php';
 
 
@@ -113,7 +115,7 @@ function get_topics()
                     ->select('t.first_post - 1 AS first_post')
                     ->leftJoin('posts AS p ON t.last_post = p.id')
                     ->where('p.added > ?', $dt)
-                    ->fetchAll(); // TODO(batch41): replace with $this->db->fetchAll("SELECT ...", [...])
+                    ->fetchAll();
 
     return $query;
 }

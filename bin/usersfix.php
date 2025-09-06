@@ -1,4 +1,6 @@
 <?php
+$db = $container->get(Database::class);
+
 require_once __DIR__ . '/../include/runtime_safe.php';
 
 require_once __DIR__ . '/../include/bootstrap_pdo.php';
@@ -18,7 +20,7 @@ global $container;
 $users = $fluent->from('users')
     ->select(null)
     ->select('id')
-    ->fetchAll(); // TODO(batch41): replace with $this->db->fetchAll("SELECT ...", [...])
+    ->fetchAll();
 
 $achieve = $container->get(Usersachiev::class);
 $userblock = $container->get(Userblock::class);

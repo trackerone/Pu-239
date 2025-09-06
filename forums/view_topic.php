@@ -59,7 +59,7 @@ if (!has_access($CURUSER['class'], UC_STAFF, 'forum_mod')) {
 if (!has_access($CURUSER['class'], $site_config['forum_config']['min_delete_view_class'], 'forum_mod')) {
     $arr = $arr->where('t.status != "deleted"');
 }
-$arr = $arr->fetch(); // TODO(batch41): replace with $this->db->fetchRow("SELECT ...", [...])
+$arr = $arr->fetch();
 if (empty($arr) || !has_access($CURUSER['class'], $arr['min_class_read'], '') || !is_valid_id($arr['topic_id']) || !has_access($CURUSER['class'], $site_config['forum_config']['min_delete_view_class'], '') && $status === 'deleted' || !has_access($CURUSER['class'], UC_STAFF, '') && $status === 'recycled') {
     stderr(_('Error'), _('Invalid ID.'));
 }
@@ -90,7 +90,7 @@ $topic_desc1 = !empty($arr['topic_desc']) ? format_comment($arr['topic_desc']) :
 if ($arr['poll_id'] > 0) {
     $arr_poll = $fluent->from('forum_poll')
                        ->where('id = ?', $arr['poll_id'])
-                       ->fetch(); // TODO(batch41): replace with $this->db->fetchRow("SELECT ...", [...])
+                       ->fetch();
     if (!empty($arr_poll)) {
         if (has_access($CURUSER['class'], UC_STAFF, '')) {
             $query = $fluent->from('forum_poll_votes')
@@ -107,7 +107,7 @@ if ($arr['poll_id'] > 0) {
                         ->select('options')
                         ->where('poll_id = ?', $arr['poll_id'])
                         ->where('user_id = ?', $CURUSER['id'])
-                        ->fetchAll(); // TODO(batch41): replace with $this->db->fetchAll("SELECT ...", [...])
+                        ->fetchAll();
 
         $voted = 0;
         $members_vote = 1000;
@@ -126,14 +126,14 @@ if ($arr['poll_id'] > 0) {
                               ->select('COUNT(id) AS count')
                               ->where('options < 21')
                               ->where('poll_id = ?', $arr['poll_id'])
-                              ->fetch("count"); // TODO(batch41): use $this->db->fetchValue("SELECT COUNT(...) ...", [...])
+                              ->fetch("count");
 
         $num_non_votes = $fluent->from('forum_poll_votes')
                                 ->select(null)
                                 ->select('COUNT(id) AS count')
                                 ->where('options > 20')
                                 ->where('poll_id = ?', $arr['poll_id'])
-                                ->fetch("count"); // TODO(batch41): use $this->db->fetchValue("SELECT COUNT(...) ...", [...])
+                                ->fetch("count");
 
         $total_non_votes = $num_non_votes > 0 ? ' [ ' . _pfe('{0} member just wanted to see the results', '{0} members just wanted to see the results', number_format($num_non_votes)) . ' ]' : '';
         $topic_poll .= ($voted || $poll_open === 0 ? '' : '
@@ -178,7 +178,7 @@ if ($arr['poll_id'] > 0) {
                                      ->select('COUNT(id) AS count')
                                      ->where('options = ?', $i)
                                      ->where('poll_id = ?', $arr['poll_id'])
-                                     ->fetch("count"); // TODO(batch41): use $this->db->fetchValue("SELECT COUNT(...) ...", [...])
+                                     ->fetch("count");
 
                 $math = $vote_count > 0 ? round(($vote_count / $total_votes) * 100) : 0;
                 $math_text = $math . '% with ' . $vote_count . ' vote' . plural($vote_count);
@@ -253,10 +253,10 @@ $values = [
     'added' => TIME_NOW,
 ];
 $sql = "DELETE FROM now_viewing WHERE user_id = :user_id";
-$this->db->perform($sql, ['user_id' => $CURUSER['id']]);
+$db->perform($sql, ['user_id' => $CURUSER['id']]);
 if (!get_anonymous($CURUSER['id'])) {
     $sql = "INSERT INTO now_viewing (/* columns */) VALUES (/* values */)";
-$this->db->perform($sql, $values);
+$db->perform($sql, $values);
 }
 $cache = $container->get(Cache::class);
 $topic_users_cache = $cache->get('now_viewing_topic_');
@@ -295,7 +295,7 @@ $set = [
     'views' => new Literal('views + 1'),
 ];
 $sql = "UPDATE topics SET /* columns */ WHERE id = :id";
-$this->db->perform($sql, array_merge($set, ['id' => $topic_id]));
+$db->perform($sql, array_merge($set, ['id' => $topic_id]));
 
 $res_count = $db->run(');
     $attachments = '';

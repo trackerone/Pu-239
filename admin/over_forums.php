@@ -1,4 +1,6 @@
 <?php
+$db = $container->get(Database::class);
+
 require_once __DIR__ . '/../include/runtime_safe.php';
 
 
@@ -45,7 +47,7 @@ switch ($action) {
             stderr(_('Error'), _('Invalid ID'));
         }
         $sql = "DELETE FROM over_forums WHERE id = :id";
-$this->db->perform($sql, ['id' => $id]);
+$db->perform($sql, ['id' => $id]);
         header('Location: ' . $_SERVER['PHP_SELF'] . '?tool=over_forums');
         app_halt('Exit called');
         break;
@@ -59,7 +61,7 @@ $this->db->perform($sql, ['id' => $id]);
                         ->select('COUNT(id) AS count')
                         ->where('name != ?', $name)
                         ->where('sort = ?', $sort)
-                        ->fetch("count"); // TODO(batch41): use $this->db->fetchValue("SELECT COUNT(...) ...", [...])
+                        ->fetch("count");
         if ($count > 0) {
             stderr(_('Error'), _('Over Forum Sort number in use. Please select another Over Forum Sort number!'));
         }
@@ -70,7 +72,7 @@ $this->db->perform($sql, ['id' => $id]);
             'min_class_view' => $min_class_view,
         ];
         $sql = "UPDATE over_forums SET /* columns */ WHERE id = :id";
-$this->db->perform($sql, array_merge($set, ['id' => $id]));
+$db->perform($sql, array_merge($set, ['id' => $id]));
         header('Location: ' . $_SERVER['PHP_SELF'] . '?tool=over_forums');
         app_halt('Exit called');
         break;
@@ -83,7 +85,7 @@ $this->db->perform($sql, array_merge($set, ['id' => $id]));
                         ->select(null)
                         ->select('COUNT(id) AS count')
                         ->where('sort = ?', $sort)
-                        ->fetch("count"); // TODO(batch41): use $this->db->fetchValue("SELECT COUNT(...) ...", [...])
+                        ->fetch("count");
         if ($count > 0) {
             stderr(_('Error'), _('Over Forum Sort number in use. Please select another Over Forum Sort number!'));
         }
@@ -94,7 +96,7 @@ $this->db->perform($sql, array_merge($set, ['id' => $id]));
             'min_class_view' => $min_class_view,
         ];
         $sql = "INSERT INTO over_forums (/* columns */) VALUES (/* values */)";
-$this->db->perform($sql, $values);
+$db->perform($sql, $values);
 
         header('Location: ' . $_SERVER['PHP_SELF'] . '?tool=over_forums');
         app_halt('Exit called');
@@ -103,7 +105,7 @@ $this->db->perform($sql, $values);
     case 'edit_forum_page':
         $row = $fluent->from('over_forums')
                       ->where('id = ?', $id)
-                      ->fetch(); // TODO(batch41): replace with $this->db->fetchRow("SELECT ...", [...])
+                      ->fetch();
         if (!empty($row)) {
             $HTMLOUT .= $main_links . '
             <form method="post" action="staffpanel.php?tool=over_forums&amp;action=over_forums" accept-charset="utf-8">
@@ -134,7 +136,7 @@ $this->db->perform($sql, $values);
             $count = $fluent->from('over_forums')
                             ->select(null)
                             ->select('COUNT(id) AS count')
-                            ->fetch("count"); // TODO(batch41): use $this->db->fetchValue("SELECT COUNT(...) ...", [...])
+                            ->fetch("count");
 
             $maxclass = $count + 1;
             for ($i = 0; $i <= $maxclass; ++$i) {
@@ -161,7 +163,7 @@ $this->db->perform($sql, $values);
             </tr>';
         $query = $fluent->from('over_forums')
                         ->orderBy('sort')
-                        ->fetchAll(); // TODO(batch41): replace with $this->db->fetchAll("SELECT ...", [...])
+                        ->fetchAll();
         if (!empty($query)) {
             $body = '';
             foreach ($query as $row) {
@@ -225,7 +227,7 @@ $this->db->perform($sql, $values);
         $count = $fluent->from('over_forums')
                         ->select(null)
                         ->select('COUNT(id) AS count')
-                        ->fetch("count"); // TODO(batch41): use $this->db->fetchValue("SELECT COUNT(...) ...", [...])
+                        ->fetch("count");
 
         $maxclass = $count + 1;
         for ($i = 0; $i <= $maxclass; ++$i) {

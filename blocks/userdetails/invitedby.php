@@ -1,4 +1,6 @@
 <?php
+$db = $container->get(Database::class);
+
 require_once __DIR__ . '/../../include/runtime_safe.php';
 
 require_once __DIR__ . '/../../include/bootstrap_pdo.php';
@@ -49,7 +51,7 @@ $invited = $fluent->from('users AS u')
                   ->where('u.invitedby = ?', $viewer['id'])
                   ->where('u.join_type = "invite"')
                   ->orderBy('u.registered')
-                  ->fetchAll(); // TODO(batch41): replace with $this->db->fetchAll("SELECT ...", [...])
+                  ->fetchAll();
 
 $inviteted_by_this_member = '';
 if (empty($invited)) {

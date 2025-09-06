@@ -1,4 +1,6 @@
 <?php
+$db = $container->get(Database::class);
+
 /**
  * Scan composer.lock for packages that block PHP 8.3.
  * Soft exit (0) so PRs are never blocked.

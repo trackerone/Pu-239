@@ -1,4 +1,6 @@
 <?php declare(strict_types=1);
+
+$db = $container->get(Database::class);
 /**
  * Batch 40 (classic, API PR) — Full repo FluentPDO sweep
  * - Always writes reports so there's something to commit.

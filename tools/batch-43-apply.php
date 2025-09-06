@@ -1,4 +1,6 @@
 <?php declare(strict_types=1);
+
+$db = $container->get(Database::class);
 /**
  * Batch 43 — Report-driven FluentPDO → ExtendedPdo conversions (SAFE SET)
  *
@@ -7,11 +9,11 @@
  *
  *  A) by-id single row:
  *     $fluent->from('X')->where('id = ?', $id)->fetch();
- *        → $this->db->fetchRow("SELECT * FROM X WHERE id = :id", ['id' => (int)$id]);
+ *        → $db->fetchRow("SELECT * FROM X WHERE id = :id", ['id' => (int)$id]);
  *
  *  B) ordered list:
  *     $fluent->from('X')->orderBy('ordered')->fetchAll();
- *        → $this->db->fetchAll("SELECT * FROM X ORDER BY ordered, id");
+ *        → $db->fetchAll("SELECT * FROM X ORDER BY ordered, id");
  *
  *  C) categories parents (with IF/COALESCE):
  *     → SELECT id,name,image,COALESCE(cat_desc,'') AS cat_desc, ordered
@@ -24,14 +26,14 @@
  *     → SELECT agent, LEFT(peer_id,8) AS peer_id FROM peers GROUP BY agent, LEFT(peer_id,8)
  *
  *  F) COUNT IN (two ids) on categories:
- *     → $this->db->fetchValue("SELECT COUNT(id) FROM categories WHERE id IN (:id1,:id2)", [...])
+ *     → $db->fetchValue("SELECT COUNT(id) FROM categories WHERE id IN (:id1,:id2)", [...])
  *
  *  G) COUNT by FK (torrents.category):
- *     → $this->db->fetchValue("SELECT COUNT(id) FROM torrents WHERE category = :id", [...])
+ *     → $db->fetchValue("SELECT COUNT(id) FROM torrents WHERE category = :id", [...])
  *     + follow-up "if ($count)" → "if ($refCount > 0)"
  *
  *  H) delete category by id:
- *     → $this->db->perform("DELETE FROM categories WHERE id = :id", [...])
+ *     → $db->perform("DELETE FROM categories WHERE id = :id", [...])
  *
  *  I) cleanup from Batch 40 retained:
  *     - remove `use Envms\FluentPDO\Literal;`
@@ -108,28 +110,28 @@ foreach (array_keys($candidateFiles) as $rel) {
     // --- A) by-id single row ---
     $src = preg_replace(
         '#\$fluent->from\([\'"](?P<table>\w+)[\'"]\)\s*->where\([\'"]id\s*=\s*\?[\'"]\s*,\s*(?P<id>\$[A-Za-z0-9_\[\]\'">$]+)\s*\)\s*->fetch\(\);#',
-        '$row = $this->db->fetchRow("SELECT * FROM ${1} WHERE id = :id", ["id" => (int) ${2}]);',
+        '$row = $db->fetchRow("SELECT * FROM ${1} WHERE id = :id", ["id" => (int) ${2}]);',
         $src
     );
 
     // --- B) ordered list ---
     $src = preg_replace(
         '#\$fluent->from\([\'"](?P<table>\w+)[\'"]\)\s*->orderBy\([\'"]ordered[\'"]\)\s*->fetchAll\(\);#',
-        '$rows = $this->db->fetchAll("SELECT * FROM ${1} ORDER BY ordered, id");',
+        '$rows = $db->fetchAll("SELECT * FROM ${1} ORDER BY ordered, id");',
         $src
     );
 
     // --- C) categories parents ---
     $src = preg_replace(
         '#\$fluent->from\([\'"]categories[\'"]\)\s*->select\([\'"]IF\s*\(cat_desc\s*IS\s*NULL\s*,\s*""\s*,\s*cat_desc\)\s*AS\s*cat_desc[\'"]\)\s*->where\([\'"]parent_id\s*=\s*0[\'"]\)\s*->orderBy\([\'"]ordered[\'"]\)\s*->fetchAll\(\);#',
-        '$parents = $this->db->fetchAll("SELECT id, name, image, COALESCE(cat_desc, \'\') AS cat_desc, ordered FROM categories WHERE parent_id = 0 ORDER BY ordered, id");',
+        '$parents = $db->fetchAll("SELECT id, name, image, COALESCE(cat_desc, \'\') AS cat_desc, ordered FROM categories WHERE parent_id = 0 ORDER BY ordered, id");',
         $src
     );
 
     // --- D) categories children by parent ---
     $src = preg_replace(
         '#\$fluent->from\([\'"]categories[\'"]\)\s*->where\([\'"]parent_id\s*=\s*\?[\'"]\s*,\s*(?P<pid>\$[A-Za-z0-9_]+)\)\s*->orderBy\([\'"]ordered[\'"]\)\s*->fetchAll\(\);#',
-        '$children = $this->db->fetchAll("SELECT * FROM categories WHERE parent_id = :pid ORDER BY ordered, id", ["pid" => (int) ${1}]);',
+        '$children = $db->fetchAll("SELECT * FROM categories WHERE parent_id = :pid ORDER BY ordered, id", ["pid" => (int) ${1}]);',
         $src
     );
 
@@ -137,21 +139,21 @@ foreach (array_keys($candidateFiles) as $rel) {
     $src = preg_replace(
         '#\$agents\s*=\s*\$fluent->from\([\'"]peers[\'"]\)\s*->select\(null\)\s*->select\([\'"]agent[\'"]\)\s*->select\([\'"]LEFT\(peer_id\s*,\s*8\)\s+AS\s+peer_id[\'"]\)\s*->groupBy\([\'"]agent[\'"]\)\s*->groupBy\([\'"]peer_id[\'"]\)\s*->fetchAll\(\);#s',
         '$sql = "SELECT agent, LEFT(peer_id, 8) AS peer_id FROM peers GROUP BY agent, LEFT(peer_id, 8)";' . "\n" .
-        '$agents = $this->db->fetchAll($sql);',
+        '$agents = $db->fetchAll($sql);',
         $src
     );
 
     // --- F) COUNT IN (two ids) on categories ---
     $src = preg_replace(
         '#\$count\s*=\s*\$fluent->from\([\'"]categories[\'"]\)\s*->select\(null\)\s*->select\([\'"]COUNT\(id\)\s+AS\s+count[\'"]\)\s*->where\([\'"]id[\'"]\s*,\s*\[\s*(?P<a>\$[A-Za-z0-9_\[\]\'">$]+)\s*,\s*(?P<b>\$[A-Za-z0-9_\[\]\'">$]+)\s*\]\s*\)\s*->fetch\([\'"]count[\'"]\);#s',
-        '$count = (int) $this->db->fetchValue("SELECT COUNT(id) FROM categories WHERE id IN (:id1, :id2)", ["id1" => (int) ${1}, "id2" => (int) ${2}]);',
+        '$count = (int) $db->fetchValue("SELECT COUNT(id) FROM categories WHERE id IN (:id1, :id2)", ["id1" => (int) ${1}, "id2" => (int) ${2}]);',
         $src
     );
 
     // --- G) COUNT by FK (torrents.category) ---
     $src = preg_replace(
         '#\$count\s*=\s*\$fluent->from\([\'"]torrents[\'"]\)\s*->select\(null\)\s*->select\([\'"]COUNT\(id\)\s+AS\s+count[\'"]\)\s*->where\([\'"]category\s*=\s*\?[\'"]\s*,\s*(?P<cid>\$[A-Za-z0-9_]+)\)\s*->fetch\([\'"]count[\'"]\);#',
-        '$refCount = (int) $this->db->fetchValue("SELECT COUNT(id) FROM torrents WHERE category = :id", ["id" => (int) ${1}]);',
+        '$refCount = (int) $db->fetchValue("SELECT COUNT(id) FROM torrents WHERE category = :id", ["id" => (int) ${1}]);',
         $src
     );
     $src = preg_replace('#if\s*\(\s*\$count\s*\)\s*\{#', 'if ($refCount > 0) {', $src);
@@ -159,7 +161,7 @@ foreach (array_keys($candidateFiles) as $rel) {
     // --- H) delete category by id ---
     $src = preg_replace(
         '#\$fluent->deleteFrom\([\'"]categories[\'"]\)\s*->where\([\'"]id\s*=\s*\?[\'"]\s*,\s*(?P<did>\$[A-Za-z0-9_]+)\)\s*->execute\(\);#',
-        '$this->db->perform("DELETE FROM categories WHERE id = :id", ["id" => (int) ${1}]);',
+        '$db->perform("DELETE FROM categories WHERE id = :id", ["id" => (int) ${1}]);',
         $src
     );
 

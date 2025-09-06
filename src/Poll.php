@@ -96,7 +96,7 @@ $poll_id = $this->db->perform($sql, $values);
         if ($poll === false || is_null($poll)) {
             $poll = $this->fluent->from('polls')
                                  ->where('pid = ?', $poll_id)
-                                 ->fetch(); // TODO(batch41): replace with $this->db->fetchRow("SELECT ...", [...])
+                                 ->fetch();
             $this->cache->set('polls_' . $poll_id, $poll, 86400);
         }
 
@@ -117,7 +117,7 @@ $poll_id = $this->db->perform($sql, $values);
         if ($polls === false || is_null($polls)) {
             $polls = $this->fluent->from('polls')
                                   ->orderBy('start_date DESC')
-                                  ->fetchAll(); // TODO(batch41): replace with $this->db->fetchAll("SELECT ...", [...])
+                                  ->fetchAll();
 
             if (!empty($polls)) {
                 $this->cache->set('polls_', $polls, 86400);

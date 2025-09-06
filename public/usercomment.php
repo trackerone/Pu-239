@@ -1,4 +1,6 @@
 <?php
+$db = $container->get(Database::class);
+
 require_once __DIR__ . '/../include/runtime_safe.php';
 
 
@@ -54,12 +56,12 @@ if ($action === 'add') {
             'ori_text' => $body,
         ];
         $sql = "INSERT INTO usercomments (/* columns */) VALUES (/* values */)";
-$newid = $this->db->perform($sql, $values);
+$newid = $db->perform($sql, $values);
         $count = $fluent->from('usercomments')
                         ->select(null)
                         ->select('COUNT(id) AS count')
                         ->where('userid = ?', $userid)
-                        ->fetch("count"); // TODO(batch41): use $this->db->fetchValue("SELECT COUNT(...) ...", [...])
+                        ->fetch("count");
         $set = [
             'comments' => $count,
         ];
@@ -90,7 +92,7 @@ $newid = $this->db->perform($sql, $values);
                       ->where('user = ?', $userid)
                       ->orderBy('id DESC')
                       ->limit(5)
-                      ->fetchAll(); // TODO(batch41): replace with $this->db->fetchAll("SELECT ...", [...])
+                      ->fetchAll();
 
     if ($allrows) {
         $HTMLOUT .= '
@@ -115,7 +117,7 @@ $newid = $this->db->perform($sql, $values);
                   ->select('u.id')
                   ->leftJoin('users AS u ON c.userid = u.id')
                   ->where('c.id = ?', $commentid)
-                  ->fetch(); // TODO(batch41): replace with $this->db->fetchRow("SELECT ...", [...])
+                  ->fetch();
     if (!$arr) {
         stderr(_('Error'), _('Invalid ID'));
     }
@@ -134,7 +136,7 @@ $newid = $this->db->perform($sql, $values);
             'editedby' => $user['id'],
         ];
         $sql = "UPDATE usercomments SET /* columns */ WHERE id = :id";
-$this->db->perform($sql, array_merge($set, ['id' => $commentid]));
+$db->perform($sql, array_merge($set, ['id' => $commentid]));
         if ($returnto) {
             header("Location: $returnto");
         } else {
@@ -169,7 +171,7 @@ $this->db->perform($sql, array_merge($set, ['id' => $commentid]));
     }
     $arr = $fluent->from('usercomments')
                   ->where('id = ?', $commentid)
-                  ->fetch(); // TODO(batch41): replace with $this->db->fetchRow("SELECT ...", [...])
+                  ->fetch();
 
     if ($arr) {
         $userid = (int) $arr['userid'];
@@ -178,14 +180,14 @@ $this->db->perform($sql, array_merge($set, ['id' => $commentid]));
         stderr(_('Error'), 'Permission denied.');
     }
     $sql = "DELETE FROM usercomments WHERE id = :id";
-$deleted = $this->db->perform($sql, ['id' => $commentid]);
+$deleted = $db->perform($sql, ['id' => $commentid]);
 
     if ($userid && $deleted) {
         $count = $fluent->from('usercomments')
                         ->select(null)
                         ->select('COUNT(id) AS count')
                         ->where('userid = ?', $userid)
-                        ->fetch("count"); // TODO(batch41): use $this->db->fetchValue("SELECT COUNT(...) ...", [...])
+                        ->fetch("count");
         $set = [
             'comments' => $count,
         ];
@@ -209,7 +211,7 @@ $deleted = $this->db->perform($sql, ['id' => $commentid]);
     }
     $arr = $fluent->from('usercomments')
                   ->where('id = ?', $commentid)
-                  ->fetch(); // TODO(batch41): replace with $this->db->fetchRow("SELECT ...", [...])
+                  ->fetch();
 
     if (!$arr) {
         stderr(_('Error'), _('Invalid ID'));

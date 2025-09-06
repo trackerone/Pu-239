@@ -1,4 +1,6 @@
 <?php
+$db = $container->get(Database::class);
+
 require_once __DIR__ . '/../../include/runtime_safe.php';
 
 
@@ -28,7 +30,7 @@ $user = $fluent->from('triviausers')
                ->where('user_id = ?', $userid)
                ->where('qid = ?', $qid)
                ->where('gamenum = ?', $gamenum)
-               ->fetch(); // TODO(batch41): replace with $this->db->fetchRow("SELECT ...", [...])
+               ->fetch();
 
 $cleanup = trivia_time();
 
@@ -53,7 +55,7 @@ if (!empty($user)) {
         $values['correct'] = 0;
     }
     $sql = "INSERT INTO triviausers (/* columns */) VALUES (/* values */)";
-$this->db->perform($sql, $values);
+$db->perform($sql, $values);
 }
 $cache = $container->get(Cache::class);
 $cache->delete('triviaq_');

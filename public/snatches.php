@@ -1,4 +1,6 @@
 <?php
+$db = $container->get(Database::class);
+
 require_once __DIR__ . '/../include/runtime_safe.php';
 
 
@@ -35,7 +37,7 @@ $count = $fluent->from('snatched AS s')
                 ->where('s.torrentid = ?', $id)
                 ->where('t.owner != s.userid')
                 ->where('s.to_go = 0')
-                ->fetch("count"); // TODO(batch41): use $this->db->fetchValue("SELECT COUNT(...) ...", [...])
+                ->fetch("count");
 
 $perpage = 25;
 $pager = pager($perpage, $count, $site_config['paths']['baseurl'] . "/snatches.php?id=$id&amp;");
@@ -79,7 +81,7 @@ $snatches = $fluent->from('snatched AS s')
                    ->where('s.to_go = 0')
                    ->limit($pager['pdo']['limit'])
                    ->offset($pager['pdo']['offset'])
-                   ->fetchAll(); // TODO(batch41): replace with $this->db->fetchAll("SELECT ...", [...])
+                   ->fetchAll();
 
 $body = '';
 foreach ($snatches as $arr) {

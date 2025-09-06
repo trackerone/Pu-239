@@ -1,4 +1,6 @@
 <?php
+$db = $container->get(Database::class);
+
 require_once __DIR__ . '/../include/runtime_safe.php';
 
 
@@ -26,7 +28,7 @@ $torrent = $fluent->from('torrents')
                   ->select('thanks')
                   ->select('comments')
                   ->where('id = ?', $id)
-                  ->fetch(); // TODO(batch41): replace with $this->db->fetchRow("SELECT ...", [...])
+                  ->fetch();
 
 if (empty($torrent)) {
     stderr(_('Error'), _('Torrent not found'), 'bottom20');
@@ -48,7 +50,7 @@ $values = [
     'thank_date' => TIME_NOW,
 ];
 $sql = "INSERT INTO thankyou (/* columns */) VALUES (/* values */)";
-$this->db->perform($sql, $values);
+$db->perform($sql, $values);
 $values = [
     'user' => $user['id'],
     'torrent' => $id,
@@ -57,14 +59,14 @@ $values = [
     'ori_text' => $text,
 ];
 $sql = "INSERT INTO comments (/* columns */) VALUES (/* values */)";
-$this->db->perform($sql, $values);
+$db->perform($sql, $values);
 
 $set = [
     'thanks' => new Literal('thanks + 1'),
     'comments' => new Literal('comments + 1'),
 ];
 $sql = "UPDATE torrents SET /* columns */ WHERE id = :id";
-$this->db->perform($sql, array_merge($set, ['id' => $id]));
+$db->perform($sql, array_merge($set, ['id' => $id]));
 
 $cache->deleteMulti([
     'latest_comments_',
@@ -75,7 +77,7 @@ if ($site_config['bonus']['on']) {
         'seedbonus' => new Literal('seedbonus + ' . $site_config['bonus']['per_comment']),
     ];
     $sql = "UPDATE users SET /* columns */ WHERE id = :id";
-$this->db->perform($sql, array_merge($set, ['id' => $user['id']]));
+$db->perform($sql, array_merge($set, ['id' => $user['id']]));
 }
 $session = $container->get(Session::class);
 $session->set('is-success', "Your 'Thank you' has been registered!");

@@ -1,4 +1,6 @@
 <?php
+$db = $container->get(Database::class);
+
 require_once __DIR__ . '/../include/runtime_safe.php';
 
 
@@ -337,7 +339,7 @@ if (!empty($title)) {
 } else {
     $title = _('Browse Torrents');
 }
-$count = $count->fetch("count"); // TODO(batch41): use $this->db->fetchValue("SELECT COUNT(...) ...", [...])
+$count = $count->fetch("count");
 $torrentsperpage = !empty($user['torrentsperpage']) ? $user['torrentsperpage'] : 25;
 if ($count > 0) {
     if ($addparam != '') {
@@ -354,7 +356,7 @@ if ($count > 0) {
     $pager = pager($torrentsperpage, $count, "{$site_config['paths']['baseurl']}/browse.php?" . $addparam);
     $query = $query->limit($pager['pdo']['limit'])
                    ->offset($pager['pdo']['offset'])
-                   ->fetchAll(); // TODO(batch41): replace with $this->db->fetchAll("SELECT ...", [...])
+                   ->fetchAll();
 }
 if ($user['opt1'] & class_user_options::VIEWSCLOUD) {
     $HTMLOUT .= main_div("<div class='cloud has-text-centered round10 padding20'>" . cloud() . '</div>', 'bottom20');

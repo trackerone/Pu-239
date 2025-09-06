@@ -1,4 +1,6 @@
 <?php
+$db = $container->get(Database::class);
+
 require_once __DIR__ . '/../include/runtime_safe.php';
 
 require_once __DIR__ . '/../include/bootstrap_pdo.php';
@@ -84,7 +86,7 @@ $res = $fluent->from('users')
               ->where('bjwins + bjlosses > ?', $mingames)
               ->orderBy('games')
               ->limit(10)
-              ->fetchAll(); // TODO(batch41): replace with $this->db->fetchAll("SELECT ...", [...])
+              ->fetchAll();
 $HTMLOUT = bjtable($res, _('Most Games Played'));
 
 $res = $fluent->from('users')
@@ -97,7 +99,7 @@ $res = $fluent->from('users')
               ->where('bjwins + bjlosses > ?', $mingames)
               ->orderBy('winperc')
               ->limit(10)
-              ->fetchAll(); // TODO(batch41): replace with $this->db->fetchAll("SELECT ...", [...])
+              ->fetchAll();
 $HTMLOUT .= bjtable($res, _('Highest Win Percentage'));
 
 $res = $fluent->from('users')
@@ -109,7 +111,7 @@ $res = $fluent->from('users')
               ->where('bjwins + bjlosses > ?', $mingames)
               ->orderBy('winnings')
               ->limit(10)
-              ->fetchAll(); // TODO(batch41): replace with $this->db->fetchAll("SELECT ...", [...])
+              ->fetchAll();
 $HTMLOUT .= bjtable($res, _('Most Credit Won'));
 
 $res = $fluent->from('users')
@@ -122,7 +124,7 @@ $res = $fluent->from('users')
               ->where('bjwins + bjlosses > ?', $mingames)
               ->orderBy('losings')
               ->limit(10)
-              ->fetchAll(); // TODO(batch41): replace with $this->db->fetchAll("SELECT ...", [...])
+              ->fetchAll();
 $HTMLOUT .= bjtable($res, _('Most Credit Lost'));
 $title = _('Blackjack Stats');
 $breadcrumbs = [

@@ -1,4 +1,6 @@
 <?php
+$db = $container->get(Database::class);
+
 require_once __DIR__ . '/runtime_safe.php';
 
 require_once __DIR__ . '/bootstrap_pdo.php';
@@ -51,13 +53,13 @@ function auto_post($subject = 'Error - Subject Missing', $body = 'Error - No Bod
                 'topic_name' => $subject,
             ];
             $sql = "INSERT INTO topics (/* columns */) VALUES (/* values */)";
-$topicid = $this->db->perform($sql, $values);
+$topicid = $db->perform($sql, $values);
 
             $set = [
                 'topic_count' => new Literal('topic_count + 1'),
             ];
             $sql = "UPDATE forums SET /* columns */ WHERE id = :id";
-$this->db->perform($sql, array_merge($set, ['id' => $site_config['staff_forums'][0]]));
+$db->perform($sql, array_merge($set, ['id' => $site_config['staff_forums'][0]]));
         }
 
         $values = [
@@ -67,19 +69,19 @@ $this->db->perform($sql, array_merge($set, ['id' => $site_config['staff_forums']
             'body' => $body,
         ];
         $sql = "INSERT INTO posts (/* columns */) VALUES (/* values */)";
-$postid = $this->db->perform($sql, $values);
+$postid = $db->perform($sql, $values);
 
         $set = [
             'last_post' => $postid,
         ];
         $sql = "UPDATE topics SET /* columns */ WHERE id = :id";
-$this->db->perform($sql, array_merge($set, ['id' => $topicid]));
+$db->perform($sql, array_merge($set, ['id' => $topicid]));
 
         $set = [
             'post_count' => new Literal('post_count + 1'),
         ];
         $sql = "UPDATE forums SET /* columns */ WHERE id = :id";
-$this->db->perform($sql, array_merge($set, ['id' => $site_config['staff_forums'][0]]));
+$db->perform($sql, array_merge($set, ['id' => $site_config['staff_forums'][0]]));
 
         $cache = $container->get(Cache::class);
         $cache->delete('last_posts_' . $CURUSER['class']);

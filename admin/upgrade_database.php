@@ -1,4 +1,6 @@
 <?php
+$db = $container->get(Database::class);
+
 require_once __DIR__ . '/../include/runtime_safe.php';
 
 require_once __DIR__ . '/../include/bootstrap_pdo.php';
@@ -40,7 +42,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     'query' => $sql,
                 ];
                 $sql = "INSERT INTO database_updates (/* columns */) VALUES (/* values */)";
-$this->db->perform($sql, $values);
+$db->perform($sql, $values);
 
                 if ($flush) {
                     $cache->flushDB();
@@ -70,7 +72,7 @@ $this->db->perform($sql, $values);
                 'query' => $sql,
             ];
             $sql = "INSERT INTO database_updates (/* columns */) VALUES (/* values */)";
-$this->db->perform($sql, $values);
+$db->perform($sql, $values);
             $session->set('is-success', "Query #$id has been ignored");
         }
     }

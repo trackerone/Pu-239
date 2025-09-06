@@ -1,4 +1,6 @@
 <?php
+$db = $container->get(Database::class);
+
 require_once __DIR__ . '/../include/runtime_safe.php';
 
 require_once __DIR__ . '/../include/bootstrap_pdo.php';
@@ -34,18 +36,18 @@ function torrents_update($data)
                        ->select('comments')
                        ->select('times_completed')
                        ->orderBy('id')
-                       ->fetchAll(); // TODO(batch41): replace with $this->db->fetchAll("SELECT ...", [...])
+                       ->fetchAll();
 
     $peers = $fluent->from('peers')
                     ->select(null)
                     ->select('seeder')
                     ->select('torrent')
-                    ->fetchAll(); // TODO(batch41): replace with $this->db->fetchAll("SELECT ...", [...])
+                    ->fetchAll();
 
     $comments = $fluent->from('comments')
                        ->select(null)
                        ->select('torrent')
-                       ->fetchAll(); // TODO(batch41): replace with $this->db->fetchAll("SELECT ...", [...])
+                       ->fetchAll();
 
     $snatches = $fluent->from('snatched AS s')
                        ->select(null)
@@ -55,7 +57,7 @@ function torrents_update($data)
                        ->where('t.owner != s.userid')
                        ->where('s.to_go = 0')
                        ->groupBy('s.torrentid')
-                       ->fetchAll(); // TODO(batch41): replace with $this->db->fetchAll("SELECT ...", [...])
+                       ->fetchAll();
 
     $torrents_class = $container->get(Torrent::class);
     foreach ($torrents as $torrent) {

@@ -1,4 +1,6 @@
 <?php
+$db = $container->get(Database::class);
+
 require_once __DIR__ . '/../include/runtime_safe.php';
 
 
@@ -32,7 +34,7 @@ function gift_update($data)
                     ->select(null)
                     ->select('id')
                     ->where('gotgift = "yes"')
-                    ->fetchAll(); // TODO(batch41): replace with $this->db->fetchAll("SELECT ...", [...])
+                    ->fetchAll();
 
     $set = [
         'gotgift' => 'no',

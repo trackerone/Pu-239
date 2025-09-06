@@ -44,7 +44,7 @@ $db = $container->get(Database::class);, $CURUSER;
                       ->select('IFNULL(SUM(rating), 0) AS sum')
                       ->select('IFNULL(COUNT(id), 0) AS count')
                       ->where("$what = ?", $id)
-                      ->fetch(); // TODO(batch41): replace with $this->db->fetchRow("SELECT ...", [...])
+                      ->fetch();
 
         $qy2 = $fluent->from('rating')
                       ->select(null)
@@ -52,7 +52,7 @@ $db = $container->get(Database::class);, $CURUSER;
                       ->select('rating')
                       ->where("$what = ?", $id)
                       ->where('user = ?', $CURUSER['id'])
-                      ->fetch(); // TODO(batch41): replace with $this->db->fetchRow("SELECT ...", [...])
+                      ->fetch();
 
         if (!empty($qy2)) {
             $rating_cache = array_merge($qy1, $qy2);

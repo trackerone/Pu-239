@@ -48,7 +48,7 @@ if ($id !== 0) {
                     ->where('u.invitedby = ?', $id)
                     ->where("u.join_type = 'invite'")
                     ->orderBy('u.registered')
-                    ->fetchAll(); // TODO(batch41): replace with $this->db->fetchAll("SELECT ...", [...])
+                    ->fetchAll();
     if (empty($query)) {
         $HTMLOUT .= stdmsg(_('Error'), _('No invitees yet.'));
     } else {
@@ -77,7 +77,7 @@ if ($id !== 0) {
                                  ->where('u.invitedby = ?', $arr_invited['id'])
                                  ->where("u.join_type = 'invite'")
                                  ->orderBy('u.registered')
-                                 ->fetchAll(); // TODO(batch41): replace with $this->db->fetchAll("SELECT ...", [...])
+                                 ->fetchAll();
 
                 if (!empty($query2)) {
                     $deeper .= '
@@ -107,7 +107,7 @@ if ($id !== 0) {
                                              ->where('u.invitedby = ?', $arr_invited_deeper['id'])
                                              ->where("u.join_type = 'invite'")
                                              ->orderBy('u.registered')
-                                             ->fetchAll(); // TODO(batch41): replace with $this->db->fetchAll("SELECT ...", [...])
+                                             ->fetchAll();
 
                             if (!empty($query3)) {
                                 $deeper .= '

@@ -1,4 +1,6 @@
 <?php
+$db = $container->get(Database::class);
+
 require_once __DIR__ . '/../include/runtime_safe.php';
 
 
@@ -38,12 +40,12 @@ $torrent_ids = $fluent->from('torrents')
                       ->select(null)
                       ->select('MIN(id) AS min')
                       ->select('MAX(id) AS max')
-                      ->fetch(); // TODO(batch41): replace with $this->db->fetchRow("SELECT ...", [...])
+                      ->fetch();
 
 $options = $fluent->from('bonus')
                   ->where('enabled = "yes"')
                   ->orderBy('orderid')
-                  ->fetchAll(); // TODO(batch41): replace with $this->db->fetchAll("SELECT ...", [...])
+                  ->fetchAll();
 $option = [
     'id' => 0,
 ];
@@ -127,7 +129,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         ];
                     }
                     $sql = "UPDATE bonus SET /* columns */ WHERE id = :id";
-$this->db->perform($sql, array_merge($update, ['id' => $post['option']]));
+$db->perform($sql, array_merge($update, ['id' => $post['option']]));
                     $bonuslog->insert($values);
                     $session->set('is-success', _fe('{0} You donated {1} Karma {2} to the {3} fund.', ':woot:', "[b]{$options[$option]['bonusname']}[/b]", number_format($donate), number_format($options[$option]['points'])));
                 } else {
@@ -240,7 +242,7 @@ $this->db->perform($sql, array_merge($update, ['id' => $post['option']]));
                                 ->where('reputation > ?', $rep_to_steal)
                                 ->orderBy('RAND()')
                                 ->limit($user_limit)
-                                ->fetchAll(); // TODO(batch41): replace with $this->db->fetchAll("SELECT ...", [...])
+                                ->fetchAll();
                 $update_users = $pms = $robbed_user = [];
                 foreach ($query as $ar) {
                     $new_rep = $ar['reputation'] - $rep_to_steal;
@@ -740,7 +742,7 @@ if ($site_config['tracker']['connectable_check']) {
 }
 $at = $at->where('connectable = ?', 'yes')
          ->where('userid=?', $user['id'])
-         ->fetch("count"); // TODO(batch41): use $this->db->fetchValue("SELECT COUNT(...) ...", [...])
+         ->fetch("count");
 
 $at = $at >= $bmt ? $bmt : $at;
 

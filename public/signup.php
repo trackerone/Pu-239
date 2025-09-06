@@ -1,4 +1,6 @@
 <?php
+$db = $container->get(Database::class);
+
 require_once __DIR__ . '/../include/runtime_safe.php';
 
 
@@ -102,7 +104,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     'users' => empty($valid['users']) ? $userid : $valid['users'] . '|' . $userid,
                 ];
                 $sql = "UPDATE promo SET /* columns */ WHERE link = :link";
-$this->db->perform($sql, array_merge($set, ['link' => $valid['link']]));
+$db->perform($sql, array_merge($set, ['link' => $valid['link']]));
 
                 $set = [
                     'join_type' => 'promo',

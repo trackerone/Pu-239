@@ -1,4 +1,6 @@
 <?php
+$db = $container->get(Database::class);
+
 require_once __DIR__ . '/../../include/runtime_safe.php';
 
 require_once __DIR__ . '/../../include/bootstrap_pdo.php';
@@ -21,7 +23,7 @@ if ($news === false || is_null($news)) {
                    ->orderBy('sticky')
                    ->orderBy('added DESC')
                    ->limit(10)
-                   ->fetchAll(); // TODO(batch41): replace with $this->db->fetchAll("SELECT ...", [...])
+                   ->fetchAll();
 
     $cache->set('latest_news_', $news, $site_config['expires']['latest_news']);
 }

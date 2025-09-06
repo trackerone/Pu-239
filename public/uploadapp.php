@@ -1,4 +1,6 @@
 <?php
+$db = $container->get(Database::class);
+
 require_once __DIR__ . '/../include/runtime_safe.php';
 
 require_once __DIR__ . '/../include/bootstrap_pdo.php';
@@ -33,7 +35,7 @@ function check_status(Database $fluent, int $userid)
 {
     $applicant = $fluent->from('uploadapp')
         ->where('userid = ?', $userid)
-        ->fetch(); // TODO(batch41): replace with $this->db->fetchRow("SELECT ...", [...])
+        ->fetch();
     if (!empty($applicant)) {
         if ($applicant['status'] === 'pending') {
             stderr(
@@ -100,7 +102,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         'seeding' => htmlsafechars($_POST['seeding']),
     ];
     $sql = "INSERT INTO uploadapp (/* columns */) VALUES (/* values */)";
-$res = $this->db->perform($sql, $values);
+$res = $db->perform($sql, $values);
     $cache->delete('new_uploadapp_');
     if (!$res) {
         stderr(_('Error'), _fe('It appears something went wrong while sending your application. Please {0}try again{1}', "<a href='{$site_config['paths']['baseurl']}/uploadapp.php'>", '</a>'));
@@ -112,7 +114,7 @@ $res = $this->db->perform($sql, $values);
             ->select(null)
             ->select('id')
             ->where('class >= ?', UC_STAFF)
-            ->fetchAll(); // TODO(batch41): replace with $this->db->fetchAll("SELECT ...", [...])
+            ->fetchAll();
 
         foreach ($subres as $arr) {
             $msgs_buffer[] = [
@@ -134,7 +136,7 @@ $connect = $fluent->from('peers')
     ->select(null)
     ->select('connectable')
     ->where('userid = ?', $user['id'])
-    ->fetch(); // TODO(batch41): replace with $this->db->fetchRow("SELECT ...", [...])
+    ->fetch();
 if (!empty($connect)) {
     $Conn_Y = 'yes';
     if ($connect == $Conn_Y) {

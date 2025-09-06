@@ -1,4 +1,6 @@
 <?php
+$db = $container->get(Database::class);
+
 require_once __DIR__ . '/../../include/runtime_safe.php';
 
 
@@ -40,7 +42,7 @@ if ($notified) {
     ];
     try {
         $sql = "INSERT INTO upcoming_notify (/* columns */) VALUES (/* values */)";
-$notify_id = $this->db->perform($sql, $values);
+$notify_id = $db->perform($sql, $values);
 
         echo json_encode(['notify' => $notify_id]);
         app_halt('Exit called');

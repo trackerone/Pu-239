@@ -1,4 +1,6 @@
 <?php
+$db = $container->get(Database::class);
+
 require_once __DIR__ . '/../include/runtime_safe.php';
 
 require_once __DIR__ . '/../include/bootstrap_pdo.php';
@@ -28,10 +30,10 @@ $scores = $fluent->from('flashscores')
                  ->orderBy('game')
                  ->orderBy('level DESC')
                  ->orderBy('score DESC')
-                 ->fetchAll(); // TODO(batch41): replace with $this->db->fetchAll("SELECT ...", [...])
+                 ->fetchAll();
 $highscores = $fluent->from('highscores')
                      ->orderBy('game')
-                     ->fetchAll(); // TODO(batch41): replace with $this->db->fetchAll("SELECT ...", [...])
+                     ->fetchAll();
 
 /**
  * @param string $game

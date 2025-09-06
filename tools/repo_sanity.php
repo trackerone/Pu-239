@@ -1,4 +1,6 @@
 <?php
+$db = $container->get(Database::class);
+
 /**
  * Repo sanity (v2): only ensures mysql_compat.php file is removed.
  * Ignores third-party adminer and deprecated mysql_* presence.

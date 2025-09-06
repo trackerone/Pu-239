@@ -1,4 +1,6 @@
 <?php
+$db = $container->get(Database::class);
+
 require_once __DIR__ . '/../include/runtime_safe.php';
 
 
@@ -83,7 +85,7 @@ function update_database(array $argv, array $sql_updates, bool $all)
                 'query' => $sql,
             ];
             $sql = "INSERT INTO database_updates (/* columns */) VALUES (/* values */)";
-$this->db->perform($sql, $values);
+$db->perform($sql, $values);
 
             if ($flush) {
                 $cache->flushDB();
@@ -133,7 +135,7 @@ $this->db->perform($sql, $values);
             'query' => $sql,
         ];
         $sql = "INSERT INTO database_updates (/* columns */) VALUES (/* values */)";
-$this->db->perform($sql, $values);
+$db->perform($sql, $values);
     }
     echo "\n\n======================================================================\n\n";
     get_updates($argv, $sql_updates, false);

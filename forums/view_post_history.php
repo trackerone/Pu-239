@@ -1,4 +1,6 @@
 <?php
+$db = $container->get(Database::class);
+
 require_once __DIR__ . '/bootstrap_pdo.php';
 
 
@@ -32,7 +34,7 @@ if ($CURUSER['class'] < UC_STAFF) {
     $query = $query->where("p.status != 'deleted'")
                    ->where("t.status != 'deleted'");
 }
-$query = $query->fetch(); // TODO(batch41): replace with $this->db->fetchRow("SELECT ...", [...])
+$query = $query->fetch();
 $arr_edited = $users_class->getUserFromId($query['edited_by']);
 $icon = htmlsafechars($query['icon']);
 $post_title = htmlsafechars($query['post_title']);
