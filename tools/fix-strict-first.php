@@ -35,6 +35,7 @@ $changed = 0;
 
 try {
     $it = new DirectoryIterator($dir);
+
     foreach ($it as $entry) {
         if ($entry->isDot() || !$entry->isFile()) {
             continue;
@@ -46,9 +47,10 @@ try {
         $path = $entry->getPathname();
         $src  = file_get_contents($path);
         if ($src === false) {
-            // Unable to read, skip
+            // Unable to read this file; skip
             continue;
         }
+
         $orig = $src;
         $scanned++;
 
@@ -81,11 +83,11 @@ try {
             '',
             $blockBody
         );
-        // Trim leading newlines/whitespace (keep comments if they exist—but PHP allows comments before declare;
-        // we keep it deterministic and clean)
+
+        // 5) Trim leading newlines/whitespace in the first block
         $blockBodyNoDeclare = ltrim($blockBodyNoDeclare, "\r\n");
 
-        // 5) Rebuild: opener + declare + blank line + rest of block + suffix
+        // 6) Rebuild: opener + declare + blank line + rest of block + suffix
         $rebuilt =
             $prefix .
             $phpOpen . "\n" .
@@ -94,7 +96,10 @@ try {
             $suffix;
 
         if ($rebuilt !== $orig) {
-            file_put_contents($path, $rebuilt);
+            if (file_put_contents($path, $rebuilt) === false) {
+                fwrite(STDERR, "Failed to write: {$path}\n");
+                continue;
+            }
             $changed++;
         }
     }
