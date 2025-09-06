@@ -140,7 +140,7 @@ if ($search || $author_id) {
         $count = $count->where('p.added>= ?' . (TIME_NOW - $search_when));
         $results = $results->where('p.added>= ?' . (TIME_NOW - $search_when));
     }
-    $count = $count->fetch('count');
+    $count = $count->fetch("count"); // TODO(batch41): use $this->db->fetchValue("SELECT COUNT(...) ...", [...])
     $page = isset($_GET['page']) ? (int) $_GET['page'] : 0;
     $perpage = 15;
     $link = $site_config['paths']['baseurl'] . '/forums.php?action=search' . $pager_links . (isset($_GET['perpage']) ? "&amp;perpage={$perpage}&amp;" : '');

@@ -38,7 +38,7 @@ class Ach_bonus
             return $this->fluent->from('ach_bonus')
                                 ->orderBy('RAND()')
                                 ->limit(1)
-                                ->fetch();
+                                ->fetch(); // TODO(batch41): replace with $this->db->fetchRow("SELECT ...", [...])
         } catch (\Exception $e) {
             return $e->getMessage();
         }

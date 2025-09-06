@@ -27,7 +27,7 @@ if ($remove > 0) {
                   ->select('INET6_NTOA(first) AS first')
                   ->select('INET6_NTOA(last) AS last')
                   ->where('id = ?', $remove)
-                  ->fetch();
+                  ->fetch(); // TODO(batch41): replace with $this->db->fetchRow("SELECT ...", [...])
 
     if (!$res) {
         stderr(_('Error'), _('A Ban with that ID could not be found'));

@@ -96,7 +96,7 @@ if (isset($_GET['slot'])) {
     $slot = $fluent->from('freeslots')
                    ->where('torrentid = ?', $id)
                    ->where('userid = ?', $user['id'])
-                   ->fetch();
+                   ->fetch(); // TODO(batch41): replace with $this->db->fetchRow("SELECT ...", [...])
     $used_slot = $slot['torrentid'] === $id && $slot['userid'] === $user['id'];
     if ($_GET['slot'] === 'free') {
         if ($used_slot && $slot['free'] === 'yes') {

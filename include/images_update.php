@@ -127,7 +127,7 @@ function images_update()
         ->select('DISTINCT imdb_id')
         ->where('imdb_id IS NOT NULL')
         ->where('poster = ""')
-        ->fetchAll();
+        ->fetchAll(); // TODO(batch41): replace with $this->db->fetchAll("SELECT ...", [...])
 
     fetch_person_info(50);
     $fanart_images = $temp = [];
@@ -163,7 +163,7 @@ function images_update()
         ->where('checked + 604800 < ?', TIME_NOW)
         ->orderBy('added DESC')
         ->limit(50)
-        ->fetchAll();
+        ->fetchAll(); // TODO(batch41): replace with $this->db->fetchAll("SELECT ...", [...])
 
     $values = [];
     foreach ($images as $imdb_id) {
@@ -192,7 +192,7 @@ function images_update()
         ->where('checked + 604800 < ?', TIME_NOW)
         ->orderBy('added DESC')
         ->limit(50)
-        ->fetchAll();
+        ->fetchAll(); // TODO(batch41): replace with $this->db->fetchAll("SELECT ...", [...])
 
     $values1 = $values = [];
     foreach ($images as $image) {
@@ -236,7 +236,7 @@ function images_update()
         ->where('updated + 604800 < ?', TIME_NOW)
         ->orderBy('added DESC')
         ->limit(50)
-        ->fetchAll();
+        ->fetchAll(); // TODO(batch41): replace with $this->db->fetchAll("SELECT ...", [...])
 
     foreach ($imdb_ids as $id) {
         $temp = getMovieImagesByID($id['imdb_id'], false, 'moviebackground');
@@ -269,7 +269,7 @@ function images_update()
         ->where('updated + 604800 < ?', TIME_NOW)
         ->orderBy('added DESC')
         ->limit(50)
-        ->fetchAll();
+        ->fetchAll(); // TODO(batch41): replace with $this->db->fetchAll("SELECT ...", [...])
 
     foreach ($tmdb_ids as $id) {
         $temp = getMovieImagesByID((string) $id['tmdb_id'], false, 'moviebackground');
@@ -311,7 +311,7 @@ function images_update()
         ->where('fetched = "no"')
         ->orderBy('added DESC')
         ->limit(50)
-        ->fetchAll();
+        ->fetchAll(); // TODO(batch41): replace with $this->db->fetchAll("SELECT ...", [...])
 
     $values = [];
     echo _f('Fetching, resizing and optimizing %d images', count($images)) . "\n";
@@ -351,7 +351,7 @@ function images_update()
         ->where("isbn != ''")
         ->orderBy('id DESC')
         ->limit(50)
-        ->fetchAll();
+        ->fetchAll(); // TODO(batch41): replace with $this->db->fetchAll("SELECT ...", [...])
 
     echo _f('Fetching book data for %d books', count($books)) . "\n";
     foreach ($books as $book) {
@@ -377,7 +377,7 @@ $this->db->perform($sql, array_merge($set, ['id' => $book['id']]));
         ->where('info_updated + 604800 < ?', TIME_NOW)
         ->orderBy('id DESC')
         ->limit(50)
-        ->fetchAll();
+        ->fetchAll(); // TODO(batch41): replace with $this->db->fetchAll("SELECT ...", [...])
     echo _f('Fetching IMDb data and finding images for %d torrents with imdb_id set', count($imdbids)) . "\n";
     foreach ($imdbids as $imdbid) {
         get_imdb_info($imdbid['imdb_id'], true, false, $imdbid['id'], null);
@@ -444,7 +444,7 @@ $this->db->perform($sql, array_merge($set, ['imdb_id' => $imdbid['imdb_id']]));
         ->where('updated + 604800 < ?', TIME_NOW)
         ->orderBy('id DESC')
         ->limit(50)
-        ->fetchAll();
+        ->fetchAll(); // TODO(batch41): replace with $this->db->fetchAll("SELECT ...", [...])
     foreach ($offer_links as $link) {
         preg_match('/^https?\:\/\/(.*?)imdb\.com\/title\/(tt[\d]{7,8})/i', $link['url'], $imdb);
         $imdb = !empty($imdb[2]) ? $imdb[2] : '';
@@ -473,7 +473,7 @@ $this->db->perform($sql, array_merge($set, ['id' => $link['id']]));
         ->where('updated + 604800 < ?', TIME_NOW)
         ->orderBy('id DESC')
         ->limit(50)
-        ->fetchAll();
+        ->fetchAll(); // TODO(batch41): replace with $this->db->fetchAll("SELECT ...", [...])
 
     foreach ($request_links as $link) {
         preg_match('/^https?\:\/\/(.*?)imdb\.com\/title\/(tt[\d]{7,8})/i', $link['url'], $imdb);
@@ -518,7 +518,7 @@ function fetch_person_info(int $count): void
         ->where('updated < UNIX_TIMESTAMP() - 604800')
         ->orderBy('updated DESC')
         ->limit($count)
-        ->fetchAll();
+        ->fetchAll(); // TODO(batch41): replace with $this->db->fetchAll("SELECT ...", [...])
 
     echo _f('Fetching imdb_info for %d persons', count($persons)) . "\n";
     foreach ($persons as $person) {

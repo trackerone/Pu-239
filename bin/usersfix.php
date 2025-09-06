@@ -18,7 +18,7 @@ global $container;
 $users = $fluent->from('users')
     ->select(null)
     ->select('id')
-    ->fetchAll();
+    ->fetchAll(); // TODO(batch41): replace with $this->db->fetchAll("SELECT ...", [...])
 
 $achieve = $container->get(Usersachiev::class);
 $userblock = $container->get(Userblock::class);

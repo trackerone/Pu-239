@@ -103,7 +103,7 @@ $results = $this->db->perform($sql, $values);
     }
     $arr = $fluent->from('news')
                   ->where('id = ?', $newsid)
-                  ->fetch();
+                  ->fetch(); // TODO(batch41): replace with $this->db->fetchRow("SELECT ...", [...])
     if (empty($arr)) {
         stderr(_('Error'), _('No news item with that ID.'));
     }
@@ -194,7 +194,7 @@ $this->db->perform($sql, array_merge($update, ['id' => $newsid]));
     $results = $fluent->from('news')
                       ->orderBy('sticky')
                       ->orderBy('added DESC')
-                      ->fetchAll();
+                      ->fetchAll(); // TODO(batch41): replace with $this->db->fetchAll("SELECT ...", [...])
     $HTMLOUT .= "
     <div class='portlet'>
         <h1 class='has-text-centered'>" . _('Submit News Item') . "</h1>

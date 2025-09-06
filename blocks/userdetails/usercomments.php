@@ -22,7 +22,7 @@ $count = $fluent->from('usercomments')
                 ->select(null)
                 ->select('COUNT(id) AS count')
                 ->where('userid = ?', $id)
-                ->fetch('count');
+                ->fetch("count"); // TODO(batch41): use $this->db->fetchValue("SELECT COUNT(...) ...", [...])
 
 if (!$count) {
     $text .= "<div class='has-text-centered padding20 size_6'>" . _('No comments yet') . '</div>';

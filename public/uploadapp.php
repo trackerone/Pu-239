@@ -33,7 +33,7 @@ function check_status(Database $fluent, int $userid)
 {
     $applicant = $fluent->from('uploadapp')
         ->where('userid = ?', $userid)
-        ->fetch();
+        ->fetch(); // TODO(batch41): replace with $this->db->fetchRow("SELECT ...", [...])
     if (!empty($applicant)) {
         if ($applicant['status'] === 'pending') {
             stderr(
@@ -112,7 +112,7 @@ $res = $this->db->perform($sql, $values);
             ->select(null)
             ->select('id')
             ->where('class >= ?', UC_STAFF)
-            ->fetchAll();
+            ->fetchAll(); // TODO(batch41): replace with $this->db->fetchAll("SELECT ...", [...])
 
         foreach ($subres as $arr) {
             $msgs_buffer[] = [
@@ -134,7 +134,7 @@ $connect = $fluent->from('peers')
     ->select(null)
     ->select('connectable')
     ->where('userid = ?', $user['id'])
-    ->fetch();
+    ->fetch(); // TODO(batch41): replace with $this->db->fetchRow("SELECT ...", [...])
 if (!empty($connect)) {
     $Conn_Y = 'yes';
     if ($connect == $Conn_Y) {

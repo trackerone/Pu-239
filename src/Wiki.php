@@ -86,7 +86,7 @@ $this->db->perform($sql, array_merge($update, ['id' => $id]));
             return $this->fluent->from('wiki')
                                 ->where('name LIKE ?', "%{$name}%")
                                 ->orderBy('GREATEST(time, lastedit) DESC')
-                                ->fetchAll();
+                                ->fetchAll(); // TODO(batch41): replace with $this->db->fetchAll("SELECT ...", [...])
         } catch (\Exception $e) {
             return $e->getMessage();
         }
@@ -102,7 +102,7 @@ $this->db->perform($sql, array_merge($update, ['id' => $id]));
         try {
             return $this->fluent->from('wiki')
                                 ->where('id = ?', $id)
-                                ->fetch();
+                                ->fetch(); // TODO(batch41): replace with $this->db->fetchRow("SELECT ...", [...])
         } catch (\Exception $e) {
             return $e->getMessage();
         }
@@ -117,7 +117,7 @@ $this->db->perform($sql, array_merge($update, ['id' => $id]));
             return $this->fluent->from('wiki')
                                 ->orderBy('GREATEST(time, lastedit) DESC')
                                 ->limit(25)
-                                ->fetchAll();
+                                ->fetchAll(); // TODO(batch41): replace with $this->db->fetchAll("SELECT ...", [...])
         } catch (\Exception $e) {
             return $e->getMessage();
         }

@@ -21,7 +21,7 @@ if ($site_config['alerts']['report'] && has_access($user['class'], UC_STAFF, 'co
                             ->select(null)
                             ->select('COUNT(id) AS count')
                             ->where('delt_with = 0')
-                            ->fetch('count');
+                            ->fetch("count"); // TODO(batch41): use $this->db->fetchValue("SELECT COUNT(...) ...", [...])
 
         $cache->set('new_report_', $delt_with, $site_config['expires']['alerts']);
     }

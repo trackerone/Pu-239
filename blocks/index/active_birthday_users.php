@@ -25,7 +25,7 @@ if ($birthday === false || is_null($birthday)) {
                     ->where('perms < ?', PERMS_STEALTH)
                     ->where('anonymous_until < ?', TIME_NOW)
                     ->orderBy('username')
-                    ->fetchAll();
+                    ->fetchAll(); // TODO(batch41): replace with $this->db->fetchAll("SELECT ...", [...])
 
     $count = count($query);
     $i = 0;

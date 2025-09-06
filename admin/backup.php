@@ -33,7 +33,7 @@ $mode = (isset($_GET['mode']) ? $_GET['mode'] : (isset($_POST['mode']) ? $_POST[
 if (empty($mode)) {
     $backups = $fluent->from('dbbackup')
                       ->orderBy('added DESC')
-                      ->fetchAll();
+                      ->fetchAll(); // TODO(batch41): replace with $this->db->fetchAll("SELECT ...", [...])
 
     if ($backups) {
         $HTMLOUT .= "
@@ -186,7 +186,7 @@ $this->db->perform($sql, $values);
                         ->select(null)
                         ->select('name')
                         ->where('id', $ids)
-                        ->fetchAll();
+                        ->fetchAll(); // TODO(batch41): replace with $this->db->fetchAll("SELECT ...", [...])
 
         if ($files) {
             $count = count($files);

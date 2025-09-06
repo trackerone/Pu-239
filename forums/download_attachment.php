@@ -17,7 +17,7 @@ if (!is_valid_id($id)) {
 }
 $what = $fluent->from('attachments')
                ->where('id = ?', $id)
-               ->fetch();
+               ->fetch(); // TODO(batch41): replace with $this->db->fetchRow("SELECT ...", [...])
 
 $update = [
     'times_downloaded' => $what['times_downloaded'] + 1,

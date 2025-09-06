@@ -84,7 +84,7 @@ $res = $fluent->from('users')
               ->where('bjwins + bjlosses > ?', $mingames)
               ->orderBy('games')
               ->limit(10)
-              ->fetchAll();
+              ->fetchAll(); // TODO(batch41): replace with $this->db->fetchAll("SELECT ...", [...])
 $HTMLOUT = bjtable($res, _('Most Games Played'));
 
 $res = $fluent->from('users')
@@ -97,7 +97,7 @@ $res = $fluent->from('users')
               ->where('bjwins + bjlosses > ?', $mingames)
               ->orderBy('winperc')
               ->limit(10)
-              ->fetchAll();
+              ->fetchAll(); // TODO(batch41): replace with $this->db->fetchAll("SELECT ...", [...])
 $HTMLOUT .= bjtable($res, _('Highest Win Percentage'));
 
 $res = $fluent->from('users')
@@ -109,7 +109,7 @@ $res = $fluent->from('users')
               ->where('bjwins + bjlosses > ?', $mingames)
               ->orderBy('winnings')
               ->limit(10)
-              ->fetchAll();
+              ->fetchAll(); // TODO(batch41): replace with $this->db->fetchAll("SELECT ...", [...])
 $HTMLOUT .= bjtable($res, _('Most Credit Won'));
 
 $res = $fluent->from('users')
@@ -122,7 +122,7 @@ $res = $fluent->from('users')
               ->where('bjwins + bjlosses > ?', $mingames)
               ->orderBy('losings')
               ->limit(10)
-              ->fetchAll();
+              ->fetchAll(); // TODO(batch41): replace with $this->db->fetchAll("SELECT ...", [...])
 $HTMLOUT .= bjtable($res, _('Most Credit Lost'));
 $title = _('Blackjack Stats');
 $breadcrumbs = [

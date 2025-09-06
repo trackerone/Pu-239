@@ -27,7 +27,7 @@ if ($action === 'download') {
                            ->select('name')
                            ->select('filename')
                            ->where('id = ?', $id)
-                           ->fetch();
+                           ->fetch(); // TODO(batch41): replace with $this->db->fetchRow("SELECT ...", [...])
         $ext = pathinfo($subtitle['filename'], PATHINFO_EXTENSION);
         $file_name = str_replace([
             ' ',

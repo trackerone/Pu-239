@@ -61,7 +61,7 @@ class Offer
         if (!$all) {
             $count->where('o.torrentid = 0');
         }
-        $count = $count->fetch('count');
+        $count = $count->fetch("count"); // TODO(batch41): use $this->db->fetchValue("SELECT COUNT(...) ...", [...])
 
         return $count;
     }
@@ -139,7 +139,7 @@ class Offer
                                ->leftJoin('categories AS c ON r.category = c.id')
                                ->leftJoin('categories AS p ON c.parent_id = p.id')
                                ->where('r.id = ?', $offerid)
-                               ->fetch();
+                               ->fetch(); // TODO(batch41): replace with $this->db->fetchRow("SELECT ...", [...])
         if (!empty($result['parent_name'])) {
             $result['fullcat'] = $result['parent_name'] . '::' . $result['cat'];
         }
@@ -149,13 +149,13 @@ class Offer
                                      ->select('COUNT(id) AS count')
                                      ->where('vote = "yes"')
                                      ->where('offer_id = ?', $result['id'])
-                                     ->fetch('count');
+                                     ->fetch("count"); // TODO(batch41): use $this->db->fetchValue("SELECT COUNT(...) ...", [...])
             $vote_no = $this->fluent->from('offer_votes')
                                     ->select(null)
                                     ->select('COUNT(id) AS count')
                                     ->where('vote = "no"')
                                     ->where('offer_id = ?', $result['id'])
-                                    ->fetch('count');
+                                    ->fetch("count"); // TODO(batch41): use $this->db->fetchValue("SELECT COUNT(...) ...", [...])
             $result['vote_yes'] = (int) $vote_yes;
             $result['vote_no'] = (int) $vote_no;
         }

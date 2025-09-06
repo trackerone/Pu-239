@@ -162,7 +162,7 @@ function trivia_time()
                       ->select(null)
                       ->select('clean_time - UNIX_TIMESTAMP(NOW()) AS clean_time')
                       ->select('clean_file')
-                      ->fetchAll();
+                      ->fetchAll(); // TODO(batch41): replace with $this->db->fetchAll("SELECT ...", [...])
 
     foreach ($cleanup as $item) {
         if ($item['clean_file'] === 'trivia_update.php') {

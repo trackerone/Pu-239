@@ -61,7 +61,7 @@ class Request
         if (!$all) {
             $count->where('r.torrentid = 0');
         }
-        $count = $count->fetch('count');
+        $count = $count->fetch("count"); // TODO(batch41): use $this->db->fetchValue("SELECT COUNT(...) ...", [...])
 
         return $count;
     }
@@ -159,7 +159,7 @@ class Request
                                ->groupBy('r.id')
                                ->groupBy('b.amount')
                                ->groupBy('b.paid')
-                               ->fetch();
+                               ->fetch(); // TODO(batch41): replace with $this->db->fetchRow("SELECT ...", [...])
         if (!empty($result['parent_name'])) {
             $result['fullcat'] = $result['parent_name'] . '::' . $result['cat'];
         }
@@ -172,13 +172,13 @@ class Request
                                      ->select('COUNT(id) AS count')
                                      ->where('vote = "yes"')
                                      ->where('request_id = ?', $result['id'])
-                                     ->fetch('count');
+                                     ->fetch("count"); // TODO(batch41): use $this->db->fetchValue("SELECT COUNT(...) ...", [...])
             $vote_no = $this->fluent->from('request_votes')
                                     ->select(null)
                                     ->select('COUNT(id) AS count')
                                     ->where('vote = "no"')
                                     ->where('request_id = ?', $result['id'])
-                                    ->fetch('count');
+                                    ->fetch("count"); // TODO(batch41): use $this->db->fetchValue("SELECT COUNT(...) ...", [...])
             $result['vote_yes'] = (int) $vote_yes;
             $result['vote_no'] = (int) $vote_no;
         }

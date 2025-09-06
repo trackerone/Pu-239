@@ -22,7 +22,7 @@ $agents = $fluent->from('peers')
                  ->select('LEFT(peer_id, 8) AS peer_id')
                  ->groupBy('agent')
                  ->groupBy('peer_id')
-                 ->fetchAll();
+                 ->fetchAll(); // TODO(batch41): replace with $this->db->fetchAll("SELECT ...", [...])
 
 if (!empty($agents)) {
     $heading = '

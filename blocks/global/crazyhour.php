@@ -40,7 +40,7 @@ function crazyhour()
                                          ->select('var')
                                          ->select('amount')
                                          ->where("type = 'crazyhour'")
-                                         ->fetch();
+                                         ->fetch(); // TODO(batch41): replace with $this->db->fetchRow("SELECT ...", [...])
         if (empty($crazyhour['crazyhour'])) {
             $crazyhour['crazyhour']['var'] = random_int(TIME_NOW, (TIME_NOW + 86400));
             $crazyhour['crazyhour']['amount'] = 0;

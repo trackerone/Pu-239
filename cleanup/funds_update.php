@@ -40,7 +40,7 @@ function funds_update($data)
                   ->where('donor = "yes"')
                   ->where('donoruntil < ?', $dt)
                   ->where('donoruntil != 0')
-                  ->fetchAll();
+                  ->fetchAll(); // TODO(batch41): replace with $this->db->fetchAll("SELECT ...", [...])
     $msgs_buffer = [];
     if (!empty($sql)) {
         $user_class = $container->get(User::class);

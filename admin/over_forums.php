@@ -59,7 +59,7 @@ $this->db->perform($sql, ['id' => $id]);
                         ->select('COUNT(id) AS count')
                         ->where('name != ?', $name)
                         ->where('sort = ?', $sort)
-                        ->fetch('count');
+                        ->fetch("count"); // TODO(batch41): use $this->db->fetchValue("SELECT COUNT(...) ...", [...])
         if ($count > 0) {
             stderr(_('Error'), _('Over Forum Sort number in use. Please select another Over Forum Sort number!'));
         }
@@ -83,7 +83,7 @@ $this->db->perform($sql, array_merge($set, ['id' => $id]));
                         ->select(null)
                         ->select('COUNT(id) AS count')
                         ->where('sort = ?', $sort)
-                        ->fetch('count');
+                        ->fetch("count"); // TODO(batch41): use $this->db->fetchValue("SELECT COUNT(...) ...", [...])
         if ($count > 0) {
             stderr(_('Error'), _('Over Forum Sort number in use. Please select another Over Forum Sort number!'));
         }
@@ -103,7 +103,7 @@ $this->db->perform($sql, $values);
     case 'edit_forum_page':
         $row = $fluent->from('over_forums')
                       ->where('id = ?', $id)
-                      ->fetch();
+                      ->fetch(); // TODO(batch41): replace with $this->db->fetchRow("SELECT ...", [...])
         if (!empty($row)) {
             $HTMLOUT .= $main_links . '
             <form method="post" action="staffpanel.php?tool=over_forums&amp;action=over_forums" accept-charset="utf-8">
@@ -134,7 +134,7 @@ $this->db->perform($sql, $values);
             $count = $fluent->from('over_forums')
                             ->select(null)
                             ->select('COUNT(id) AS count')
-                            ->fetch('count');
+                            ->fetch("count"); // TODO(batch41): use $this->db->fetchValue("SELECT COUNT(...) ...", [...])
 
             $maxclass = $count + 1;
             for ($i = 0; $i <= $maxclass; ++$i) {
@@ -161,7 +161,7 @@ $this->db->perform($sql, $values);
             </tr>';
         $query = $fluent->from('over_forums')
                         ->orderBy('sort')
-                        ->fetchAll();
+                        ->fetchAll(); // TODO(batch41): replace with $this->db->fetchAll("SELECT ...", [...])
         if (!empty($query)) {
             $body = '';
             foreach ($query as $row) {
@@ -225,7 +225,7 @@ $this->db->perform($sql, $values);
         $count = $fluent->from('over_forums')
                         ->select(null)
                         ->select('COUNT(id) AS count')
-                        ->fetch('count');
+                        ->fetch("count"); // TODO(batch41): use $this->db->fetchValue("SELECT COUNT(...) ...", [...])
 
         $maxclass = $count + 1;
         for ($i = 0; $i <= $maxclass; ++$i) {

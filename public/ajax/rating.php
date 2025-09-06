@@ -53,14 +53,14 @@ $completeres = $db->run(');
                       ->select('SUM(rating) AS sum')
                       ->select('COUNT(id) AS count')
                       ->where("$what = ?", $id)
-                      ->fetchAll();
+                      ->fetchAll(); // TODO(batch41): replace with $this->db->fetchAll("SELECT ...", [...])
         $qy2 = $fluent->from('rating')
                       ->select(null)
                       ->select('id AS rated')
                       ->select('rating')
                       ->where("$what = ?", $id)
                       ->where('user = ?', $user['id'])
-                      ->fetchAll();
+                      ->fetchAll(); // TODO(batch41): replace with $this->db->fetchAll("SELECT ...", [...])
 
         $rating_cache = array_merge($qy1[0], $qy2[0]);
         $ratings = $cache->get('ratings_' . $id);

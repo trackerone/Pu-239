@@ -54,7 +54,7 @@ class Userblock
                                            ->select('global_stdhead')
                                            ->select('userdetails_page')
                                            ->where('userid = ?', $userid)
-                                           ->fetch();
+                                           ->fetch(); // TODO(batch41): replace with $this->db->fetchRow("SELECT ...", [...])
                     if (!$blocks) {
                         $this->add(['userid' => $userid]);
                     }

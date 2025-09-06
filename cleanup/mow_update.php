@@ -32,7 +32,7 @@ function mow_update($data)
                   ->where('category', $site_config['categories']['movie'])
                   ->orderBy('RAND()')
                   ->limit(1)
-                  ->fetch();
+                  ->fetch(); // TODO(batch41): replace with $this->db->fetchRow("SELECT ...", [...])
 
     if (!empty($mow)) {
         $set = [

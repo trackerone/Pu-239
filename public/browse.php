@@ -337,7 +337,7 @@ if (!empty($title)) {
 } else {
     $title = _('Browse Torrents');
 }
-$count = $count->fetch('count');
+$count = $count->fetch("count"); // TODO(batch41): use $this->db->fetchValue("SELECT COUNT(...) ...", [...])
 $torrentsperpage = !empty($user['torrentsperpage']) ? $user['torrentsperpage'] : 25;
 if ($count > 0) {
     if ($addparam != '') {
@@ -354,7 +354,7 @@ if ($count > 0) {
     $pager = pager($torrentsperpage, $count, "{$site_config['paths']['baseurl']}/browse.php?" . $addparam);
     $query = $query->limit($pager['pdo']['limit'])
                    ->offset($pager['pdo']['offset'])
-                   ->fetchAll();
+                   ->fetchAll(); // TODO(batch41): replace with $this->db->fetchAll("SELECT ...", [...])
 }
 if ($user['opt1'] & class_user_options::VIEWSCLOUD) {
     $HTMLOUT .= main_div("<div class='cloud has-text-centered round10 padding20'>" . cloud() . '</div>', 'bottom20');

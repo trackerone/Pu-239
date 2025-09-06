@@ -28,7 +28,7 @@ function tables($no_data = '')
     $query = $fluent->getPdo()
                     ->prepare('SHOW TABLES');
     $query->execute();
-    $all_tables = $query->fetchAll();
+    $all_tables = $query->fetchAll(); // TODO(batch41): replace with $this->db->fetchAll("SELECT ...", [...])
 
     foreach ($all_tables as $values) {
         foreach ($values as $key => $value) {

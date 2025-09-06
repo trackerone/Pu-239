@@ -96,7 +96,7 @@ $id = $this->db->perform($sql, $values);
     {
         $forum = $this->fluent->from('forums')
                               ->where('id = ?', $forum_id)
-                              ->fetch();
+                              ->fetch(); // TODO(batch41): replace with $this->db->fetchRow("SELECT ...", [...])
 
         return $forum;
     }
@@ -111,7 +111,7 @@ $id = $this->db->perform($sql, $values);
         $count = $this->fluent->from('forums')
                               ->select(null)
                               ->select('COUNT(id) AS count')
-                              ->fetch('count');
+                              ->fetch("count"); // TODO(batch41): use $this->db->fetchValue("SELECT COUNT(...) ...", [...])
 
         return $count;
     }

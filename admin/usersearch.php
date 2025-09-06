@@ -766,7 +766,7 @@ if (!empty($search)) {
                                 ->select('COUNT(id) AS count')
                                 ->where('INET6_NTOA(first) <= ?', $user['ip'])
                                 ->where('INET6_NTOA(last) >= ?', $user['ip'])
-                                ->fetch('count');
+                                ->fetch("count"); // TODO(batch41): use $this->db->fetchValue("SELECT COUNT(...) ...", [...])
                 if ($count === 0) {
                     $ipstr = $user['ip'] . ' ' . $user['type'];
                 } else {

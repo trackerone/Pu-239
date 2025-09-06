@@ -25,7 +25,7 @@ global $container, $site_config;
 $poll_data = $fluent->from('polls')
                     ->where('polls.pid = ?', $poll_id)
                     ->leftJoin('poll_voters ON polls.pid = poll_voters.poll_id AND poll_voters.user_id = ?', $user['id'])
-                    ->fetch();
+                    ->fetch(); // TODO(batch41): replace with $this->db->fetchRow("SELECT ...", [...])
 
 if (empty($poll_data)) {
     stderr(_('Error'), _('Invalid ID'));

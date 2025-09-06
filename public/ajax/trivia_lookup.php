@@ -34,7 +34,7 @@ $user = $fluent->from('triviausers')
                ->where('user_id = ?', $curuser['id'])
                ->where('qid = ?', $qid)
                ->where('gamenum = ?', $gamenum)
-               ->fetch();
+               ->fetch(); // TODO(batch41): replace with $this->db->fetchRow("SELECT ...", [...])
 
 $cleanup = trivia_time();
 if (!empty($user)) {

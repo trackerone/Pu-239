@@ -70,7 +70,7 @@ if ($needed === 'leechers') {
     if ($user['hidden'] === 0) {
         $res->where('c.hidden = 0');
     }
-    $res = $res->fetchAll();
+    $res = $res->fetchAll(); // TODO(batch41): replace with $this->db->fetchAll("SELECT ...", [...])
     if (!empty($res)) {
         $header = '
                 <tr>
@@ -139,7 +139,7 @@ if ($needed === 'leechers') {
         $res->leftJoin('categories AS c ON t.category = c.id')
             ->where('c.hidden = 0');
     }
-    $res = $res->fetchAll();
+    $res = $res->fetchAll(); // TODO(batch41): replace with $this->db->fetchAll("SELECT ...", [...])
     if (!empty($res)) {
         $header = "
                 <tr>

@@ -100,7 +100,7 @@ $watched_users = $fluent->from('users')
                         ->select(null)
                         ->select('COUNT(id) AS count')
                         ->where('watched_user != 0')
-                        ->fetch('count');
+                        ->fetch("count"); // TODO(batch41): use $this->db->fetchValue("SELECT COUNT(...) ...", [...])
 $watched_users = number_format($watched_users);
 
 //=== get sort / asc desc, and be sure it's safe

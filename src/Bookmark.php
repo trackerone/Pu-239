@@ -44,7 +44,7 @@ class Bookmark
         if ($bookmarks === false || is_null($bookmarks)) {
             $books = $this->fluent->from('bookmarks')
                                   ->where('userid = ?', $userid)
-                                  ->fetchAll();
+                                  ->fetchAll(); // TODO(batch41): replace with $this->db->fetchAll("SELECT ...", [...])
 
             $bookmarks = [];
             foreach ($books as $rowbook) {

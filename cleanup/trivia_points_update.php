@@ -55,7 +55,7 @@ function trivia_points_update($data)
                       ->groupBy('u.modcomment')
                       ->orderBy('correct DESC')
                       ->limit(10)
-                      ->fetchAll();
+                      ->fetchAll(); // TODO(batch41): replace with $this->db->fetchAll("SELECT ...", [...])
 
     if ($results) {
         $users_class = $container->get(User::class);

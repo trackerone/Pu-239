@@ -74,7 +74,7 @@ $this->db->perform($sql, $values);
         case 'edit_boxes':
             $boxes = $fluent->from('pmboxes')
                             ->where('userid = ?', $CURUSER['id'])
-                            ->fetchAll();
+                            ->fetchAll(); // TODO(batch41): replace with $this->db->fetchAll("SELECT ...", [...])
 
             if (empty($boxes)) {
                 stderr(_('Error'), _('No Mailboxes to edit'));
@@ -126,7 +126,7 @@ $this->db->perform($sql, array_merge($set, ['id' => $row['id']]));
             $category_ids = $fluent->from('categories')
                                    ->select(null)
                                    ->select('id')
-                                   ->fetchAll();
+                                   ->fetchAll(); // TODO(batch41): replace with $this->db->fetchAll("SELECT ...", [...])
 
             $rows = count($category_ids);
             for ($i = 0; $i < $rows; ++$i) {
@@ -161,7 +161,7 @@ $this->db->perform($sql, array_merge($set, ['id' => $row['id']]));
 $boxes = $fluent->from('pmboxes')
                 ->where('userid = ?', $CURUSER['id'])
                 ->orderBy('boxnumber')
-                ->fetchAll();
+                ->fetchAll(); // TODO(batch41): replace with $this->db->fetchAll("SELECT ...", [...])
 $count_boxes = !empty($boxes) ? count($boxes) : 0;
 
 if (!empty($boxes)) {

@@ -21,7 +21,7 @@ if ($site_config['alerts']['uploadapp'] && has_access($user['class'], UC_STAFF, 
                          ->select(null)
                          ->select('COUNT(id) AS count')
                          ->where('status = ?', 'pending')
-                         ->fetch('count');
+                         ->fetch("count"); // TODO(batch41): use $this->db->fetchValue("SELECT COUNT(...) ...", [...])
 
         $cache->set('new_uploadapp_', $newapp, $site_config['expires']['alerts']);
     }

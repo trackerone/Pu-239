@@ -91,7 +91,7 @@ function get_bluray_info(bool $images = false)
                 ->select('runtime')
                 ->where('title = ?', $movie)
                 ->limit(1)
-                ->fetch();
+                ->fetch(); // TODO(batch41): replace with $this->db->fetchRow("SELECT ...", [...])
 
             if (!empty($imdb_info['imdb_id'])) {
                 get_imdb_info_short($imdb_info['imdb_id']);

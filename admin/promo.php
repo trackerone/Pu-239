@@ -151,7 +151,7 @@ $deleted = $this->db->perform($sql, ['id' => $id]);
                    ->select('name')
                    ->select('users')
                    ->where('link = ?', $link)
-                   ->fetch();
+                   ->fetch(); // TODO(batch41): replace with $this->db->fetchRow("SELECT ...", [...])
     $accounts = [];
     if (!empty($name)) {
         $accounts = explode('|', $name['users']);
@@ -195,7 +195,7 @@ if (empty($_POST)) {
         stderr(_('Error'), 'There is nothing for you here! Go play somewhere else');
     }
     $r = $fluent->from('promo')
-                ->fetchAll();
+                ->fetchAll(); // TODO(batch41): replace with $this->db->fetchAll("SELECT ...", [...])
     if (empty($r)) {
         stderr(_('Error'), _fe('There are no promotions. If you want to make one click {0}here{1}', '<a href="' . $_SERVER['PHP_SELF'] . '?tool=promo&amp;do=addpromo">', '</a>'), 'bottom20');
     } else {

@@ -34,18 +34,18 @@ function torrents_update($data)
                        ->select('comments')
                        ->select('times_completed')
                        ->orderBy('id')
-                       ->fetchAll();
+                       ->fetchAll(); // TODO(batch41): replace with $this->db->fetchAll("SELECT ...", [...])
 
     $peers = $fluent->from('peers')
                     ->select(null)
                     ->select('seeder')
                     ->select('torrent')
-                    ->fetchAll();
+                    ->fetchAll(); // TODO(batch41): replace with $this->db->fetchAll("SELECT ...", [...])
 
     $comments = $fluent->from('comments')
                        ->select(null)
                        ->select('torrent')
-                       ->fetchAll();
+                       ->fetchAll(); // TODO(batch41): replace with $this->db->fetchAll("SELECT ...", [...])
 
     $snatches = $fluent->from('snatched AS s')
                        ->select(null)
@@ -55,7 +55,7 @@ function torrents_update($data)
                        ->where('t.owner != s.userid')
                        ->where('s.to_go = 0')
                        ->groupBy('s.torrentid')
-                       ->fetchAll();
+                       ->fetchAll(); // TODO(batch41): replace with $this->db->fetchAll("SELECT ...", [...])
 
     $torrents_class = $container->get(Torrent::class);
     foreach ($torrents as $torrent) {

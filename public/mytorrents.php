@@ -68,7 +68,7 @@ if (isset($_GET['sort'], $_GET['type'])) {
 }
 $count = $count->where('owner = ?', $user['id'])
                ->where('banned != "yes"')
-               ->fetch('count');
+               ->fetch("count"); // TODO(batch41): use $this->db->fetchValue("SELECT COUNT(...) ...", [...])
 
 $select = $select->where('owner = ?', $user['id'])
                  ->where('banned != "yes"');
@@ -81,7 +81,7 @@ if (!$count) {
     $pager = pager(20, $count, "{$site_config['paths']['baseurl']}/mytorrents.php?{$pagerlink}");
     $select = $select->limit($pager['pdo']['limit'])
                      ->offset($pager['pdo']['offset'])
-                     ->fetchAll();
+                     ->fetchAll(); // TODO(batch41): replace with $this->db->fetchAll("SELECT ...", [...])
     $HTMLOUT .= $pager['pagertop'];
     $HTMLOUT .= torrenttable($select, $user, 'mytorrents');
     $HTMLOUT .= $pager['pagerbottom'];

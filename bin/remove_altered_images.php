@@ -18,13 +18,13 @@ $path = IMAGES_DIR . 'proxy/';
 // $fluent removed — use $this->db (ExtendedPdo)
 $urls = $fluent->from('images')
                ->select('url')
-               ->fetchAll();
+               ->fetchAll(); // TODO(batch41): replace with $this->db->fetchAll("SELECT ...", [...])
 
 $photos = $fluent->from('person')
                  ->select(null)
                  ->select('photo AS url')
                  ->where('photo IS NOT NULL')
-                 ->fetchAll();
+                 ->fetchAll(); // TODO(batch41): replace with $this->db->fetchAll("SELECT ...", [...])
 
 $urls = array_merge($urls, $photos);
 

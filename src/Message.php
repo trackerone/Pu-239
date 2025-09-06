@@ -156,7 +156,7 @@ $result = $this->db->perform($sql, $t);
     {
         $message = $this->fluent->from('messages')
                                 ->where('id = ?', $id)
-                                ->fetch();
+                                ->fetch(); // TODO(batch41): replace with $this->db->fetchRow("SELECT ...", [...])
 
         return $message;
     }
@@ -225,7 +225,7 @@ $result = $this->db->perform($sql, array_merge($set, ['id' => $id]));
                 $pmCount = $pmCount->where('unread = "yes"');
             }
             $pmCount = $pmCount->where('draft = "no"')
-                               ->fetch('count');
+                               ->fetch("count"); // TODO(batch41): use $this->db->fetchValue("SELECT COUNT(...) ...", [...])
             if ($location === $this->site_config['pm']['inbox'] && $unread) {
                 $this->cache->set('inbox_' . $userid, $pmCount, $this->site_config['expires']['unread']);
             }
@@ -250,7 +250,7 @@ $result = $this->db->perform($sql, array_merge($set, ['id' => $id]));
                                     ->select(null)
                                     ->select('COUNT(id) AS count')
                                     ->where('receiver = ?', $userid)
-                                    ->fetch('count');
+                                    ->fetch("count"); // TODO(batch41): use $this->db->fetchValue("SELECT COUNT(...) ...", [...])
 
             $this->cache->set('message_count_' . $userid, $pmCount, $this->site_config['expires']['unread']);
         }
@@ -347,7 +347,7 @@ $result = $this->db->perform($sql, array_merge($set, ['id' => $id]));
                              ->limit($limit)
                              ->offset($offset)
                              ->orderBy($orderby)
-                             ->fetchAll();
+                             ->fetchAll(); // TODO(batch41): replace with $this->db->fetchAll("SELECT ...", [...])
 
         return $messages;
     }

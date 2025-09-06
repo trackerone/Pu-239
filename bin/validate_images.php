@@ -25,12 +25,12 @@ if ($purge) {
                      ->select('null')
                      ->select('url')
                      ->select('type')
-                     ->fetchAll();
+                     ->fetchAll(); // TODO(batch41): replace with $this->db->fetchAll("SELECT ...", [...])
     $photos = $fluent->from('person')
                      ->select('null')
                      ->select('photo AS url')
                      ->where('photo IS NOT null')
-                     ->fetchAll();
+                     ->fetchAll(); // TODO(batch41): replace with $this->db->fetchAll("SELECT ...", [...])
     $hashes = [];
     $urls = array_merge($images, $photos);
     foreach ($urls as $url) {

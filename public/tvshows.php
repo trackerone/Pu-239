@@ -81,7 +81,7 @@ if (!empty($_GET['sre'])) {
     $select->where('t.rating <= ?', (float) $_GET['sre'])
            ->orderBy('t.rating DESC');
 }
-$count = $count->fetch('count');
+$count = $count->fetch("count"); // TODO(batch41): use $this->db->fetchValue("SELECT COUNT(...) ...", [...])
 $perpage = 25;
 $addparam = !empty($addparam) ? '?' . implode('&amp;', $addparam) . '&amp;' : '?';
 $pager = pager($perpage, $count, "{$site_config['paths']['baseurl']}/tmovies.php{$addparam}");
@@ -105,7 +105,7 @@ foreach ($select as $torrent) {
                        ->where('i.type = "cast"')
                        ->orderBy('p.name')
                        ->limit(7)
-                       ->fetchAll();
+                       ->fetchAll(); // TODO(batch41): replace with $this->db->fetchAll("SELECT ...", [...])
         $cache->set('cast_' . $torrent['imdb_id'], $cast, 604800);
     }
 

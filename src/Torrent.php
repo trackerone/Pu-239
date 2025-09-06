@@ -159,7 +159,7 @@ $this->db->perform($sql, ['tid' => $tid]);
                 ->select('LENGTH(nfo) AS nfosz')
                 ->select("IF(num_ratings < {$this->site_config['site']['minvotes']}, NULL, ROUND(rating_sum / num_ratings, 1)) AS rating")
                 ->where('id = ?', $tid)
-                ->fetch();
+                ->fetch(); // TODO(batch41): replace with $this->db->fetchRow("SELECT ...", [...])
             if (empty($torrent)) {
                 return $torrent;
             }
@@ -171,7 +171,7 @@ $this->db->perform($sql, ['tid' => $tid]);
                 ->where('id < ?', $tid)
                 ->orderBy('id DESC')
                 ->limit(1)
-                ->fetch();
+                ->fetch(); // TODO(batch41): replace with $this->db->fetchRow("SELECT ...", [...])
 
             $torrent['next'] = $this->fluent->from('torrents')
                 ->select(null)
@@ -180,7 +180,7 @@ $this->db->perform($sql, ['tid' => $tid]);
                 ->where('id > ?', $tid)
                 ->orderBy('id')
                 ->limit(1)
-                ->fetch();
+                ->fetch(); // TODO(batch41): replace with $this->db->fetchRow("SELECT ...", [...])
 
             $this->cache->set('torrent_details_' . $tid, $torrent, $this->site_config['expires']['torrent_details']);
         }
@@ -469,7 +469,7 @@ $id = $this->db->perform($sql, $values);
             $count = $this->fluent->from('torrents')
                 ->select(null)
                 ->select('COUNT(id) AS count')
-                ->fetch('count');
+                ->fetch("count"); // TODO(batch41): use $this->db->fetchValue("SELECT COUNT(...) ...", [...])
 
             $this->cache->set('get_torrent_count_', $count, 86400);
         }
@@ -534,7 +534,7 @@ $id = $this->db->perform($sql, $values);
                             ->where('type = "poster"')
                             ->where('imdb_id = ?', $torrent['imdb_id'])
                             ->where('fetched = "yes"')
-                            ->fetchAll();
+                            ->fetchAll(); // TODO(batch41): replace with $this->db->fetchAll("SELECT ...", [...])
 
                         if (!empty($images)) {
                             $this->cache->set('posters_' . $torrent['imdb_id'], $images, 86400);
@@ -604,7 +604,7 @@ $id = $this->db->perform($sql, $values);
                         ->where('type = "banner"')
                         ->where('fetched = "yes"')
                         ->where('imdb_id = ?', $torrent['imdb_id'])
-                        ->fetchAll();
+                        ->fetchAll(); // TODO(batch41): replace with $this->db->fetchAll("SELECT ...", [...])
                     if (!empty($banners)) {
                         $this->cache->set('banners_' . $torrent['imdb_id'], $banners, 86400);
                     } else {
@@ -922,7 +922,7 @@ $id = $this->db->perform($sql, $values);
                 ->select(null)
                 ->select('imdb_id')
                 ->where('imdb_id != ""')
-                ->fetchAll();
+                ->fetchAll(); // TODO(batch41): replace with $this->db->fetchAll("SELECT ...", [...])
 
             $this->cache->set('imdbs_', $imdbs, 3600);
         }

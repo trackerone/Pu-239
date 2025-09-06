@@ -66,7 +66,7 @@ class Achievement
                                 ->select(null)
                                 ->select('COUNT(id) AS count')
                                 ->where('userid = ?', $userid)
-                                ->fetch('count');
+                                ->fetch("count"); // TODO(batch41): use $this->db->fetchValue("SELECT COUNT(...) ...", [...])
         } catch (\Exception $e) {
             return $e->getMessage();
         }

@@ -431,7 +431,7 @@ $this->db->perform($sql, array_merge($removeset, ['userid' => $id]));
                          ->select('global_stdhead')
                          ->select('userdetails_page')
                          ->where('userid = ?', $id)
-                         ->fetch();
+                         ->fetch(); // TODO(batch41): replace with $this->db->fetchRow("SELECT ...", [...])
 
         $update['blocks'] = $blocks;
         $cache->update_row('user_' . $id, $update);

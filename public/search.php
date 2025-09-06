@@ -50,7 +50,7 @@ if (!empty($search)) {
                       ->select('name')
                       ->select('hex(info_hash) AS info_hash')
                       ->where('name LIKE ?', "%$search%")
-                      ->fetchAll();
+                      ->fetchAll(); // TODO(batch41): replace with $this->db->fetchAll("SELECT ...", [...])
 
     if ($results) {
         echo json_encode($results);

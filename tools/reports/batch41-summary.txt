@@ -1,0 +1,6 @@
+Batch 41 migration summary
+-------------------------
+Files scanned: 666
+Files changed: 180
+Report: tools/reports/batch41-migration-report.ndjson
+Date: 2025-09-06T12:47:36+00:00

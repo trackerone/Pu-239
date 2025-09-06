@@ -125,7 +125,7 @@ $this->db->perform($sql, array_merge($set, ['userid' => $userid]));
                                 ->select('achpoints')
                                 ->select('spentpoints')
                                 ->where('userid = ?', $userid)
-                                ->fetch();
+                                ->fetch(); // TODO(batch41): replace with $this->db->fetchRow("SELECT ...", [...])
         } catch (\Exception $e) {
             return $e->getMessage();
         }

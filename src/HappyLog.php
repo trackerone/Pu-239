@@ -48,7 +48,7 @@ class HappyLog
                               ->select(null)
                               ->select('COUNT(id) AS count')
                               ->where('userid = ?', $userid)
-                              ->fetch('count');
+                              ->fetch("count"); // TODO(batch41): use $this->db->fetchValue("SELECT COUNT(...) ...", [...])
 
         return $count;
     }
@@ -76,7 +76,7 @@ class HappyLog
                               ->orderBy('h.date DESC')
                               ->limit($limit['limit'])
                               ->offset($limit['offset'])
-                              ->fetchAll();
+                              ->fetchAll(); // TODO(batch41): replace with $this->db->fetchAll("SELECT ...", [...])
 
         return $happy;
     }

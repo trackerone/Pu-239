@@ -78,7 +78,7 @@ $total_fl = $fluent->from('bonus')
                    ->select('points')
                    ->select('enabled')
                    ->where('id = 11')
-                   ->fetch();
+                   ->fetch(); // TODO(batch41): replace with $this->db->fetchRow("SELECT ...", [...])
 $font_color_fl = $font_color_du = $font_color_hd = '';
 $percent_fl = $total_fl['pointspool'] / $total_fl['points'] * 100;
 if ($total_fl['enabled'] === 'yes') {
@@ -115,7 +115,7 @@ $total_du = $fluent->from('bonus')
                    ->select('points')
                    ->select('enabled')
                    ->where('id = 12')
-                   ->fetch();
+                   ->fetch(); // TODO(batch41): replace with $this->db->fetchRow("SELECT ...", [...])
 $percent_du = $total_du['pointspool'] / $total_du['points'] * 100;
 if ($total_du['enabled'] === 'yes') {
     switch ($percent_du) {
@@ -152,7 +152,7 @@ $total_hd = $fluent->from('bonus')
                    ->select('points')
                    ->select('enabled')
                    ->where('id=13')
-                   ->fetch();
+                   ->fetch(); // TODO(batch41): replace with $this->db->fetchRow("SELECT ...", [...])
 $percent_hd = $total_hd['pointspool'] / $total_hd['points'] * 100;
 if ($total_hd['enabled'] === 'yes') {
     switch ($percent_hd) {
@@ -212,7 +212,7 @@ if ($top_donators === false || is_null($top_donators)) {
                            ->orderBy('total DESC')
                            ->order('added')
                            ->limit(10)
-                           ->fetchAll();
+                           ->fetchAll(); // TODO(batch41): replace with $this->db->fetchAll("SELECT ...", [...])
 
     $cache->set('top_donators1_', $top_donators, 0);
 }
@@ -230,7 +230,7 @@ if ($top_donators2 === false || is_null($top_donators2)) {
                             ->orderBy('total DESC')
                             ->order('added')
                             ->limit(10)
-                            ->fetchAll();
+                            ->fetchAll(); // TODO(batch41): replace with $this->db->fetchAll("SELECT ...", [...])
     $cache->set('top_donators2_', $top_donators2, 0);
 }
 
@@ -247,7 +247,7 @@ if ($top_donators3 === false || is_null($top_donators3)) {
                             ->orderBy('total DESC')
                             ->order('added')
                             ->limit(10)
-                            ->fetchAll();
+                            ->fetchAll(); // TODO(batch41): replace with $this->db->fetchAll("SELECT ...", [...])
     $cache->set('top_donators3_', $top_donators3, 0);
 }
 
@@ -332,7 +332,7 @@ $at = $fluent->from('peers')
              ->where('seeder = ?', 'yes')
              ->where('connectable = ?', 'yes')
              ->where('userid = ?', $user['id'])
-             ->fetch('count');
+             ->fetch("count"); // TODO(batch41): use $this->db->fetchValue("SELECT COUNT(...) ...", [...])
 
 $at = $at >= $bmt ? $bmt : $at;
 

@@ -68,7 +68,7 @@ if ($action === 'takeappdelete') {
                   ->select('u.username')
                   ->leftJoin('users AS u ON a.userid = u.id')
                   ->where('a.id = ?', $id)
-                  ->fetch();
+                  ->fetch(); // TODO(batch41): replace with $this->db->fetchRow("SELECT ...", [...])
 
     $note = htmlsafechars($_POST['note']);
     $subject = _('Uploader Promotion');
@@ -123,7 +123,7 @@ if ($action === 'rejectapp') {
                   ->select('userid AS uid')
                   ->select('id')
                   ->where('id = ?', $id)
-                  ->fetch();
+                  ->fetch(); // TODO(batch41): replace with $this->db->fetchRow("SELECT ...", [...])
 
     $reason = htmlsafechars($_POST['reason']);
     $subject = _('Uploader Promotion');
@@ -158,7 +158,7 @@ if ($action === 'app' || $action === 'show') {
                       ->select('u.class')
                       ->leftJoin('users AS u ON a.userid = u.id')
                       ->where('a.status != "pending"')
-                      ->fetchAll();
+                      ->fetchAll(); // TODO(batch41): replace with $this->db->fetchAll("SELECT ...", [...])
     } else {
         $hide = "<a href='{$site_config['paths']['baseurl']}/staffpanel.php?tool=uploadapps&amp;action=show'>" . _('Show accepted/rejected') . '</a>';
         $res = $fluent->from('uploadapp AS a')
@@ -168,7 +168,7 @@ if ($action === 'app' || $action === 'show') {
                       ->select('u.class')
                       ->leftJoin('users AS u ON a.userid = u.id')
                       ->where('a.status = "pending"')
-                      ->fetchAll();
+                      ->fetchAll(); // TODO(batch41): replace with $this->db->fetchAll("SELECT ...", [...])
     }
 
     $count = count($res);
@@ -244,7 +244,7 @@ if ($action === 'app' || $action === 'show') {
                   ->select('u.class')
                   ->leftJoin('users AS u ON a.userid = u.id')
                   ->where('a.id = ?', $id)
-                  ->fetch();
+                  ->fetch(); // TODO(batch41): replace with $this->db->fetchRow("SELECT ...", [...])
 
     $membertime = get_date((int) $arr['registered'], '', 0, 1);
     $elapsed = get_date((int) $arr['applied'], '', 0, 1);

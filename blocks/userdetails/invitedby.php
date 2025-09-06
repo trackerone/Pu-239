@@ -49,7 +49,7 @@ $invited = $fluent->from('users AS u')
                   ->where('u.invitedby = ?', $viewer['id'])
                   ->where('u.join_type = "invite"')
                   ->orderBy('u.registered')
-                  ->fetchAll();
+                  ->fetchAll(); // TODO(batch41): replace with $this->db->fetchAll("SELECT ...", [...])
 
 $inviteted_by_this_member = '';
 if (empty($invited)) {

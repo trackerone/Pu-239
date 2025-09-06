@@ -25,7 +25,7 @@ if ($active === false || is_null($active)) {
                     ->where('anonymous_until < ?', TIME_NOW)
                     ->where('id != 2')
                     ->orderBy('username')
-                    ->fetchAll();
+                    ->fetchAll(); // TODO(batch41): replace with $this->db->fetchAll("SELECT ...", [...])
 
     $count = count($query);
     $i = 0;

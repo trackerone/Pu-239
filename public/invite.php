@@ -105,7 +105,7 @@ if ($do === 'view_page') {
                     ->select(null)
                     ->select('COUNT(id) AS count')
                     ->where('status = "Pending"')
-                    ->fetch('count');
+                    ->fetch("count"); // TODO(batch41): use $this->db->fetchValue("SELECT COUNT(...) ...", [...])
     if ($count >= $site_config['site']['invites']) {
         stderr(_('Error'), _('Sorry, user limit reached. Please try again later.'));
     }
@@ -134,7 +134,7 @@ $this->db->perform($sql, array_merge($set, ['id' => $user['id']]));
     $code = $fluent->from('invite_codes')
                    ->where('id = ?', $_GET['id'])
                    ->where('sender = ?', $_GET['sender'])
-                   ->fetch();
+                   ->fetch(); // TODO(batch41): replace with $this->db->fetchRow("SELECT ...", [...])
     if (!empty($code)) {
         $email = htmlsafechars($code['email']);
         $invite = htmlsafechars($code['code']);
@@ -159,7 +159,7 @@ $this->db->perform($sql, array_merge($set, ['id' => $user['id']]));
                         ->select(null)
                         ->select('COUNT(id) AS count')
                         ->where('email = ?', $email)
-                        ->fetch('count');
+                        ->fetch("count"); // TODO(batch41): use $this->db->fetchValue("SELECT COUNT(...) ...", [...])
         if ($check != 0) {
             stderr(_('Error'), _('This email address is already in use!'));
         }
@@ -189,7 +189,7 @@ $this->db->perform($sql, array_merge($set, ['id' => $user['id']]));
                     ->where('id = ?', $id)
                     ->where('sender = ?', $user['id'])
                     ->where('status = "Pending"')
-                    ->fetch();
+                    ->fetch(); // TODO(batch41): replace with $this->db->fetchRow("SELECT ...", [...])
 
     if (!$fetch) {
         stderr(_('Error'), _('This invite code does not exist.'));

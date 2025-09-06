@@ -33,7 +33,7 @@ function silvertorrents_update($data)
                        ->select('silver')
                        ->where('silver > 1')
                        ->where('silver < ?', $dt)
-                       ->fetchAll();
+                       ->fetchAll(); // TODO(batch41): replace with $this->db->fetchAll("SELECT ...", [...])
 
     $count = count($torrents);
     if ($count > 0) {

@@ -38,12 +38,12 @@ $torrent_ids = $fluent->from('torrents')
                       ->select(null)
                       ->select('MIN(id) AS min')
                       ->select('MAX(id) AS max')
-                      ->fetch();
+                      ->fetch(); // TODO(batch41): replace with $this->db->fetchRow("SELECT ...", [...])
 
 $options = $fluent->from('bonus')
                   ->where('enabled = "yes"')
                   ->orderBy('orderid')
-                  ->fetchAll();
+                  ->fetchAll(); // TODO(batch41): replace with $this->db->fetchAll("SELECT ...", [...])
 $option = [
     'id' => 0,
 ];
@@ -240,7 +240,7 @@ $this->db->perform($sql, array_merge($update, ['id' => $post['option']]));
                                 ->where('reputation > ?', $rep_to_steal)
                                 ->orderBy('RAND()')
                                 ->limit($user_limit)
-                                ->fetchAll();
+                                ->fetchAll(); // TODO(batch41): replace with $this->db->fetchAll("SELECT ...", [...])
                 $update_users = $pms = $robbed_user = [];
                 foreach ($query as $ar) {
                     $new_rep = $ar['reputation'] - $rep_to_steal;
@@ -740,7 +740,7 @@ if ($site_config['tracker']['connectable_check']) {
 }
 $at = $at->where('connectable = ?', 'yes')
          ->where('userid=?', $user['id'])
-         ->fetch('count');
+         ->fetch("count"); // TODO(batch41): use $this->db->fetchValue("SELECT COUNT(...) ...", [...])
 
 $at = $at >= $bmt ? $bmt : $at;
 

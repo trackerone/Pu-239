@@ -26,7 +26,7 @@ $torrent = $fluent->from('torrents')
                   ->select('thanks')
                   ->select('comments')
                   ->where('id = ?', $id)
-                  ->fetch();
+                  ->fetch(); // TODO(batch41): replace with $this->db->fetchRow("SELECT ...", [...])
 
 if (empty($torrent)) {
     stderr(_('Error'), _('Torrent not found'), 'bottom20');

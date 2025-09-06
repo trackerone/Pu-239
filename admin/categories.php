@@ -82,7 +82,7 @@ function move_cat($params)
                         $params['id'],
                         $params['new_cat_id'],
                     ])
-                    ->fetch('count');
+                    ->fetch("count"); // TODO(batch41): use $this->db->fetchValue("SELECT COUNT(...) ...", [...])
 
     if ($count != 2) {
         stderr(_('Error'), _('That category does not exist or has been deleted'));
@@ -230,7 +230,7 @@ function delete_cat($params)
     // $fluent removed — use $this->db (ExtendedPdo)
     $cat = $fluent->from('categories')
                   ->where('id = ?', $params['id'])
-                  ->fetch();
+                  ->fetch(); // TODO(batch41): replace with $this->db->fetchRow("SELECT ...", [...])
 
     if (!$cat) {
         stderr(_('Error'), _('That category does not exist or has been deleted'));
@@ -239,7 +239,7 @@ function delete_cat($params)
                     ->select(null)
                     ->select('COUNT(id) AS count')
                     ->where('category = ?', $params['id'])
-                    ->fetch('count');
+                    ->fetch("count"); // TODO(batch41): use $this->db->fetchValue("SELECT COUNT(...) ...", [...])
 
     if ($count) {
         stderr(_('Error'), _('There are still torrents assigned to this category'));
@@ -282,7 +282,7 @@ function delete_cat_form($params)
                     ->select(null)
                     ->select('COUNT(id) AS count')
                     ->where('category = ?', $params['id'])
-                    ->fetch('count');
+                    ->fetch("count"); // TODO(batch41): use $this->db->fetchValue("SELECT COUNT(...) ...", [...])
 
     if ($count) {
         stderr(_('Error'), _('There are still torrents assigned to this category'));
@@ -561,7 +561,7 @@ function get_parents(array $cat)
                       ->select('IF (cat_desc IS NULL, "", cat_desc) AS cat_desc')
                       ->where('parent_id = 0')
                       ->orderBy('ordered')
-                      ->fetchAll();
+                      ->fetchAll(); // TODO(batch41): replace with $this->db->fetchAll("SELECT ...", [...])
 
     foreach ($parents as $parent) {
         $parent['name'] = format_comment($parent['name']);
@@ -713,7 +713,7 @@ function get_cat(int $id)
     // $fluent removed — use $this->db (ExtendedPdo)
     $cat = $fluent->from('categories')
                   ->where('id = ?', $id)
-                  ->fetch();
+                  ->fetch(); // TODO(batch41): replace with $this->db->fetchRow("SELECT ...", [...])
 
     $current_cat['parent_name'] = $fluent->from('categories')
                                          ->select(null)

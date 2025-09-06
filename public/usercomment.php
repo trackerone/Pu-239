@@ -59,7 +59,7 @@ $newid = $this->db->perform($sql, $values);
                         ->select(null)
                         ->select('COUNT(id) AS count')
                         ->where('userid = ?', $userid)
-                        ->fetch('count');
+                        ->fetch("count"); // TODO(batch41): use $this->db->fetchValue("SELECT COUNT(...) ...", [...])
         $set = [
             'comments' => $count,
         ];
@@ -90,7 +90,7 @@ $newid = $this->db->perform($sql, $values);
                       ->where('user = ?', $userid)
                       ->orderBy('id DESC')
                       ->limit(5)
-                      ->fetchAll();
+                      ->fetchAll(); // TODO(batch41): replace with $this->db->fetchAll("SELECT ...", [...])
 
     if ($allrows) {
         $HTMLOUT .= '
@@ -115,7 +115,7 @@ $newid = $this->db->perform($sql, $values);
                   ->select('u.id')
                   ->leftJoin('users AS u ON c.userid = u.id')
                   ->where('c.id = ?', $commentid)
-                  ->fetch();
+                  ->fetch(); // TODO(batch41): replace with $this->db->fetchRow("SELECT ...", [...])
     if (!$arr) {
         stderr(_('Error'), _('Invalid ID'));
     }
@@ -169,7 +169,7 @@ $this->db->perform($sql, array_merge($set, ['id' => $commentid]));
     }
     $arr = $fluent->from('usercomments')
                   ->where('id = ?', $commentid)
-                  ->fetch();
+                  ->fetch(); // TODO(batch41): replace with $this->db->fetchRow("SELECT ...", [...])
 
     if ($arr) {
         $userid = (int) $arr['userid'];
@@ -185,7 +185,7 @@ $deleted = $this->db->perform($sql, ['id' => $commentid]);
                         ->select(null)
                         ->select('COUNT(id) AS count')
                         ->where('userid = ?', $userid)
-                        ->fetch('count');
+                        ->fetch("count"); // TODO(batch41): use $this->db->fetchValue("SELECT COUNT(...) ...", [...])
         $set = [
             'comments' => $count,
         ];
@@ -209,7 +209,7 @@ $deleted = $this->db->perform($sql, ['id' => $commentid]);
     }
     $arr = $fluent->from('usercomments')
                   ->where('id = ?', $commentid)
-                  ->fetch();
+                  ->fetch(); // TODO(batch41): replace with $this->db->fetchRow("SELECT ...", [...])
 
     if (!$arr) {
         stderr(_('Error'), _('Invalid ID'));

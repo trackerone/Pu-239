@@ -44,7 +44,7 @@ if ($site_config['hnr_config']['hnr_online'] == 1 && $user['paranoia'] < 2 || $C
                        ->where('userid = ?', $id)
                        ->where('t.owner != ?', $id)
                        ->orderBy('s.id DESC')
-                       ->fetchAll();
+                       ->fetchAll(); // TODO(batch41): replace with $this->db->fetchAll("SELECT ...", [...])
 
     if (count($torrents) > 0) {
         $heading = '

@@ -35,7 +35,7 @@ if ($results === false || is_null($results)) {
                       ->select('leechers')
                       ->select('visible')
                       ->where('name LIKE ?', "%$keyword%")
-                      ->fetchAll();
+                      ->fetchAll(); // TODO(batch41): replace with $this->db->fetchAll("SELECT ...", [...])
     $cache = $container->get(Cache::class);
     $cache->set($hash, $results, 0);
     $hashes = $cache->get('suggest_torrents_hashes_');

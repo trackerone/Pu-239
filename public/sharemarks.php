@@ -133,7 +133,7 @@ function sharetable($res, $userid, $user, $variant = 'index')
         $bms = $fluent->from('bookmarks')
                       ->where('torrentid = ?', $id)
                       ->where('userid = ?', $userid)
-                      ->fetch();
+                      ->fetch(); // TODO(batch41): replace with $this->db->fetchRow("SELECT ...", [...])
 
         $bookmarked = (empty($bms) ? "
                             <span data-tid='{$id}' data-remove='false' data-private='false' class='bookmarks tooltipper' title='" . _('Add Bookmark') . "'>
@@ -234,7 +234,7 @@ $count = $fluent->from('bookmarks')
                 ->select('COUNT(id) AS count')
                 ->where('private = "no"')
                 ->where('userid = ?', $userid)
-                ->fetch('count');
+                ->fetch("count"); // TODO(batch41): use $this->db->fetchValue("SELECT COUNT(...) ...", [...])
 
 $torrentsperpage = $user['torrentsperpage'];
 if (empty($torrentsperpage)) {
@@ -269,7 +269,7 @@ if ($count) {
                          ->orderBy('t.id DESC')
                          ->limit($pager['pdo']['limit'])
                          ->offset($pager['pdo']['offset'])
-                         ->fetchAll();
+                         ->fetchAll(); // TODO(batch41): replace with $this->db->fetchAll("SELECT ...", [...])
 
     $HTMLOUT .= $count > $torrentsperpage ? $pager['pagertop'] : '';
     $HTMLOUT .= sharetable($sharemarks, $userid, $user, 'index');

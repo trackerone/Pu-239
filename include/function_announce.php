@@ -28,7 +28,7 @@ function crazyhour_announce()
                                   ->select('var')
                                   ->select('amount')
                                   ->where('type = ?', 'crazyhour')
-                                  ->fetch();
+                                  ->fetch(); // TODO(batch41): replace with $this->db->fetchRow("SELECT ...", [...])
 
         if ($cz['crazyhour'] === false) {
             $cz['crazyhour']['var'] = random_int(TIME_NOW, (TIME_NOW + 86400));
@@ -128,7 +128,7 @@ function get_happy(int $torrentid, int $userid)
     if ($happy === false || is_null($happy)) {
         $res = $fluent->from('happyhour')
                       ->where('userid = ?', $userid)
-                      ->fetchAll();
+                      ->fetchAll(); // TODO(batch41): replace with $this->db->fetchAll("SELECT ...", [...])
 
         $happy = [];
         foreach ($res as $row) {
@@ -166,7 +166,7 @@ function get_slots(int $torrentid, int $userid)
     if ($slot === false || is_null($slot)) {
         $slot = $fluent->from('freeslots')
                        ->where('userid=?', $userid)
-                       ->fetchAll();
+                       ->fetchAll(); // TODO(batch41): replace with $this->db->fetchAll("SELECT ...", [...])
         $cache->set('fllslot_' . $userid, $slot, $ttl_slot);
     }
     if (!empty($slot)) {

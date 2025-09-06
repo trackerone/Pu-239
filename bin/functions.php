@@ -62,7 +62,7 @@ function get_classes(array $styles, bool $create)
                           ->select('classpic')
                           ->orderBy('value')
                           ->where('template = ?', $style)
-                          ->fetchAll();
+                          ->fetchAll(); // TODO(batch41): replace with $this->db->fetchAll("SELECT ...", [...])
 
         if (empty($classes)) {
             if (!$create) {

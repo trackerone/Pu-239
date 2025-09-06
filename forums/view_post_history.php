@@ -32,7 +32,7 @@ if ($CURUSER['class'] < UC_STAFF) {
     $query = $query->where("p.status != 'deleted'")
                    ->where("t.status != 'deleted'");
 }
-$query = $query->fetch();
+$query = $query->fetch(); // TODO(batch41): replace with $this->db->fetchRow("SELECT ...", [...])
 $arr_edited = $users_class->getUserFromId($query['edited_by']);
 $icon = htmlsafechars($query['icon']);
 $post_title = htmlsafechars($query['post_title']);

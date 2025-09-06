@@ -192,7 +192,7 @@ function staff_panel()
                                   ->where('navbar = 1')
                                   ->where('av_class <= ?', $user_class)
                                   ->orderBy('page_name')
-                                  ->fetchAll();
+                                  ->fetchAll(); // TODO(batch41): replace with $this->db->fetchAll("SELECT ...", [...])
 
             $cache->set('staff_panels_' . $user_class, $staff_panel, 0);
         }
