@@ -28,7 +28,7 @@ foreach ($files as $path) {
         // unreadable file; skip
         continue;
     }
-
+}
     $orig = $src;
     $scanned++;
 
