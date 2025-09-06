@@ -1,6 +1,5 @@
 name: Batch SANITY — Create file & open PR
 on: { workflow_dispatch: {} }
-
 jobs:
   sanity:
     runs-on: ubuntu-latest
@@ -13,10 +12,18 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with: { fetch-depth: 0 }
+
+      - name: Debug
+        run: |
+          echo "DEFAULT BRANCH: $BASE_BRANCH"
+          git remote -v
+          git status
+
       - name: Create a heartbeat file
         run: |
           mkdir -p tools/reports
           echo "Sanity $(date -u +%FT%TZ)" > tools/reports/HEARTBEAT.txt
+
       - name: Commit & push to new branch
         run: |
           set -euxo pipefail
@@ -25,7 +32,8 @@ jobs:
           git checkout -B "$UNIQUE_BRANCH" "origin/$BASE_BRANCH"
           git add -A
           git commit -m "batch(sanity): add HEARTBEAT.txt" || echo "Nothing to commit"
-          git push --set-upstream origin "$UNIQUE_BRANCH" || echo "Nothing to push"
+          git push --set-upstream origin "$UNIQUE_BRANCH"
+
       - name: Open Pull Request
         uses: peter-evans/create-pull-request@v6
         with:
