@@ -1,23 +1,25 @@
 <?php declare(strict_types=1);
 /**
- * Batch 43.7 — Admin full rewrite (no TODOs) — ROBUST HEADER FIX (deduped)
+ * Batch 43.7 — Admin full rewrite (no TODOs) — Robust header and DB init placement.
  *
- * Scope: admin/*.php (script-filer, ikke klasser)
- * Konverterer mysqli/sql_query/Fluent-levn til ExtendedPdo uden TODOs:
- *  - Flyt/indsæt declare(strict_types=1) absolut øverst
- *  - Sikr $db init (og $cache hvis brugt), placeret EFTER use-linjer og EFTER runtime_safe.php
- *  - $this->db-> → $db-> ; $this->cache-> → $cache->
- *  - sql_query('SELECT …') + while (mysqli_fetch_assoc($res)) → $rows = $db->fetchAll('…'); foreach ($rows as $row) …
- *  - SELECT COUNT(*) → (int) $db->fetchValue('SELECT COUNT(*) …')
- *  - SELECT … LIMIT 1 → $db->fetchRow('… LIMIT 1')
- *  - mysqli_num_rows($res) → is_array($rows) ? count($rows) : 0
- *  - mysqli_fetch_array/assoc/row($res) → $row = $rows[0] ?? null (hvis $rows findes)
- *  - mysqli_insert_id() → $db->lastInsertId()
- *  - Ødelagte linjer som `$db->run(');` kommenteres med ORIGINAL (ingen TODO)
- *  - Bevar pager LIMIT concatenation som er (… ' . $pager['limit'])
- *  - Fjern TODO(batch41) og forkerte hints
+ * What this does in admin/*.php (script files):
+ *  - Assumes strict_types has already been made first by fix-strict-first.php.
+ *  - Cleans leftover comments/hints.
+ *  - Replaces $this->db/$this->cache -> $db/$cache (script context).
+ *  - Inserts $db init AFTER declare, AFTER all "use ...;" lines, and AFTER
+ *    require_once __DIR__.'/../include/runtime_safe.php'; so that $container exists.
+ *  - If $cache is used, inserts $cache init right after $db init.
+ *  - Converts common mysqli/sql_query patterns to ExtendedPdo:
+ *      * SELECT COUNT(*) -> (int) $db->fetchValue(...)
+ *      * SELECT ... LIMIT 1 -> $db->fetchRow(...)
+ *      * SELECT + while(mysqli_fetch_assoc($res)) -> $rows = $db->fetchAll(...); foreach ($rows as $row) { ... }
+ *      * mysqli_num_rows($res) -> is_array($rows) ? count($rows) : 0
+ *      * mysqli_fetch_*($res) -> $row = $rows[0] ?? null;
+ *      * INSERT/UPDATE/DELETE via sql_query -> $db->perform(...)
+ *  - Broken lines like "$db->run(');" are commented as ORIGINAL (no TODOs).
+ *  - Keeps pager LIMIT concatenation intact (e.g. ... ' . $pager['limit']).
  *
- * Writer: tools/reports/batch43_7-summary.txt
+ * Writes summary to tools/reports/batch43_7-summary.txt
  */
 
 $root = getcwd();
@@ -38,7 +40,7 @@ $changedFiles = [];
 $it = new DirectoryIterator($admin);
 foreach ($it as $f) {
     if ($f->isDot() || !$f->isFile()) continue;
-    if (pathinfo($f->getFilename(), PATHINFO_EXTENSION) !== 'php') continue;
+    if (strtolower($f->getExtension()) !== 'php') continue;
 
     $path = $f->getPathname();
     $src  = file_get_contents($path);
@@ -46,43 +48,26 @@ foreach ($it as $f) {
     $orig = $src;
     $scanned++;
 
-    // --- 0) normaliser BOM/åbnings-tag
+    // Normalize BOM and ensure opener; strict_types is already handled by fix-strict-first.php
     $src = preg_replace('/^\xEF\xBB\xBF/', '', $src);
     if (!str_starts_with($src, "<?php")) {
         $src = "<?php\n" . ltrim($src);
     }
 
-    // --- 1) FORCE: declare(strict_types=1) som første statement
-    // fjern alle eksisterende declare
-    $src = preg_replace('/<\?php\s+declare\s*\(\s*strict_types\s*=\s*1\s*\)\s*;\s*/i', "<?php\n", $src);
-    // ensure linje 1 = <?php, linje 2 = declare, linje 3 = blank
-    $lines = explode("\n", $src);
-    if (trim($lines[0]) !== '<?php') {
-        array_unshift($lines, '<?php');
-    }
-    while (isset($lines[1]) && trim($lines[1]) === '') {
-        array_splice($lines, 1, 1);
-    }
-    if (!isset($lines[1]) || stripos($lines[1], 'declare(strict_types=1);') === false) {
-        array_splice($lines, 1, 0, 'declare(strict_types=1);');
-        array_splice($lines, 2, 0, '');
-    }
-    $src = implode("\n", $lines);
-
-    // --- 2) oprydning af hints/TODO41
+    // 1) Clean up hints / TODO(batch41)
     $src = str_replace('// $fluent removed — use $this->db (ExtendedPdo)', '// $fluent removed — use $db (ExtendedPdo)', $src);
     $src = preg_replace('/\s*\/\/\s*TODO\(batch41\):[^\r\n]*/', '', $src);
 
-    // --- 3) this->db/cache → $db/$cache
+    // 2) Replace $this->db/$this->cache in script context
     $src = preg_replace('/\$this->db->/', '$db->', $src);
     $src = preg_replace('/\$this->cache->/', '$cache->', $src);
 
-    // --- 4) SIKKER placering for $db-init: EFTER use-linjer og EFTER runtime_safe.php
+    // 3) Insert $db init AFTER declare, AFTER "use", and AFTER runtime_safe.php
     if (!preg_match('/\$db\s*=\s*\$container->get\(Database::class\);/', $src)) {
         $src = insertDbInitRobust($src);
     }
 
-    // init cache hvis refereret
+    // 4) Insert $cache init if referenced
     if (strpos($src, '$cache->') !== false && !preg_match('/\$cache\s*=\s*\$container->get\(Cache::class\);/', $src)) {
         $src = preg_replace(
             '/(\$db\s*=\s*\$container->get\(Database::class\);\s*)/m',
@@ -92,10 +77,10 @@ foreach ($it as $f) {
         );
     }
 
-    // fix dårlig ", $site_config;" hale, hvis den findes
+    // 5) Remove any bad trailing ", $site_config;" after $db init
     $src = preg_replace('/(\$db\s*=\s*\$container->get\(Database::class\);\s*),\s*\$site_config\s*;/', '$1', $src);
 
-    // --- 5) linje-for-linje omskrivning
+    // 6) Rewrite body patterns
     $src = rewriteBody($src);
 
     if ($src !== $orig) {
@@ -105,7 +90,7 @@ foreach ($it as $f) {
     }
 }
 
-// summary
+// Summary
 $sum  = "Batch 43.7 — Admin full rewrite (no TODOs, robust header)\n";
 $sum .= "=========================================================\n";
 $sum .= "Files scanned:  {$scanned}\n";
@@ -118,72 +103,82 @@ $sum .= "\nDate: " . gmdate('c') . "\n";
 file_put_contents($summaryPath, $sum);
 echo $sum;
 
-/** ---------- helpers (single definitions) ---------- */
+/** ---------------- Helpers ---------------- */
 
 /**
- * Indsæt $db-init EFTER declare + alle use; og EFTER require_once runtime_safe.php, hvis den findes.
- * Falback: efter declare + alle use; hvis runtime_safe ikke findes.
+ * Insert `$db = $container->get(Database::class);` after:
+ *   - declare(strict_types=1);
+ *   - all top-level `use ...;` lines
+ *   - the first `require_once __DIR__.'/../include/runtime_safe.php';` (if present)
+ * This guarantees that $container exists and `use` statements remain before code.
  */
 function insertDbInitRobust(string $src): string {
     $lines = explode("\n", $src);
 
-    // 1) start efter declare (linje 0 = <?php, 1 = declare)
+    // 1) Find "start" after declare (line 0 = <?php, line 1 = declare)
     $i = 2;
+    // Skip blank lines
     while (isset($lines[$i]) && trim($lines[$i]) === '') $i++;
 
-    // 2) hop ALLE top-use linjer
+    // 2) Skip top `use Foo\Bar;` lines
     while (isset($lines[$i]) && preg_match('/^\s*use\s+[^;]+;\s*$/', $lines[$i])) $i++;
 
-    // 3) find runtime_safe require (efter use)
+    // 3) Find runtime_safe require to place $db after it, if present
     $runtimePos = null;
-    for ($p = $i; $p < min($i + 100, count($lines)); $p++) {
+    for ($p = $i; $p < min($i + 120, count($lines)); $p++) {
         if (preg_match('#require_once\s+__DIR__\s*\.\s*\'/../include/runtime_safe\.php\'\s*;#', $lines[$p])) {
             $runtimePos = $p; break;
         }
     }
-
     $insertAt = ($runtimePos !== null) ? ($runtimePos + 1) : $i;
 
-    array_splice($lines, $insertAt, 0, '$db = $container->get(Database::class);');
+    // Avoid inserting twice (just in case)
+    if (!preg_grep('/^\s*\$db\s*=\s*\$container->get\(Database::class\);\s*$/', $lines)) {
+        array_splice($lines, $insertAt, 0, '$db = $container->get(Database::class);');
+    }
 
     return implode("\n", $lines);
 }
 
 /**
- * Omskriv krop — kommentér BROKEN $db->run('); linjer; konverter mysqli/sql_query til $db-API.
+ * Rewrite common mysqli/sql_query patterns into ExtendedPdo calls.
+ * Also comments broken `$db->run(');` lines (keeps ORIGINAL line, no TODOs).
  */
 function rewriteBody(string $src): string {
     $lines = explode("\n", $src);
-    $out   = [];
+    $out = [];
     $i = 0;
+
     while ($i < count($lines)) {
         $line = $lines[$i];
 
-        // A) Ødelagt `$db->run(');` eller `if ($db->run(');`
+        // Broken `$db->run(');` (or wrapped in if)
         if (preg_match('/^\s*(?:if\s*\(\s*)?\$db->run\(\s*\'\s*\)\s*;\s*$/', $line)) {
             $out[] = '// ORIGINAL (broken): ' . trim($line);
             $i++; continue;
         }
 
-        // B) SELECT COUNT(*)
+        // SELECT COUNT(*)
         if (preg_match('/^\s*\$res\s*=\s*sql_query\(\s*[\'"](SELECT\s+COUNT\([^)]+\).*?)[\'"]\s*\)\s*(?:or\s+sqlerr\(.*?\))?\s*;\s*$/i', $line, $m)) {
             $select = rtrim($m[1]);
             $out[]  = '$count = (int) $db->fetchValue(\'' . $select . '\');';
+            // eat following $row=.../mysqli_fetch_row/array lines related to the count
             $j = $i + 1;
             while ($j < count($lines) && preg_match('/^\s*(\$row|\$count)\s*=|mysqli_fetch_(row|array)\s*\(/i', $lines[$j])) { $j++; }
             $i = $j; continue;
         }
 
-        // C) SELECT … LIMIT 1 → fetchRow
+        // SELECT ... LIMIT 1
         if (preg_match('/^\s*\$res\s*=\s*sql_query\(\s*[\'"](SELECT\s+.+?\s+LIMIT\s+1\s*)[\'"]\s*\)\s*(?:or\s+sqlerr\(.*?\))?\s*;\s*$/i', $line, $m)) {
             $select = rtrim($m[1]);
             $out[]  = '$row = $db->fetchRow(\'' . $select . '\');';
             $i++;
+            // drop a following mysqli_fetch_* row assignment
             while ($i < count($lines) && preg_match('/^\s*\$row\s*=\s*mysqli_fetch_(assoc|array|row)\s*\(/i', $lines[$i])) $i++;
             continue;
         }
 
-        // D) SELECT … + while (mysqli_fetch_assoc($res))
+        // SELECT + while(mysqli_fetch_assoc($res))
         if (preg_match('/^\s*\$res\s*=\s*sql_query\(\s*[\'"](SELECT\s+.+)[\'"]\s*\)\s*(?:or\s+sqlerr\(.*?\))?\s*;\s*$/i', $line, $m)) {
             $select = rtrim($m[1]);
             $j = $i + 1;
@@ -201,32 +196,34 @@ function rewriteBody(string $src): string {
             }
         }
 
-        // E) mysqli_num_rows($res)
+        // mysqli_num_rows($res)
         if (preg_match('/mysqli_num_rows\s*\(\s*\$res\s*\)/i', $line)) {
             $out[] = preg_replace('/mysqli_num_rows\s*\(\s*\$res\s*\)/i', 'is_array($rows) ? count($rows) : 0', $line);
             $i++; continue;
         }
 
-        // F) $row = mysqli_fetch_*
+        // $row = mysqli_fetch_*
         if (preg_match('/^\s*\$row\s*=\s*mysqli_fetch_(assoc|array|row)\s*\(\s*\$res\s*\)\s*;\s*$/i', $line)) {
             $out[] = '$row = $rows[0] ?? null;';
             $i++; continue;
         }
 
-        // G) mysqli_insert_id()
+        // mysqli_insert_id()
         if (preg_match('/mysqli_insert_id\s*\(\s*\)/i', $line)) {
             $out[] = preg_replace('/mysqli_insert_id\s*\(\s*\)/i', '$db->lastInsertId()', $line);
             $i++; continue;
         }
 
-        // H) INSERT/UPDATE/DELETE via sql_query
+        // INSERT/UPDATE/DELETE via sql_query
         if (preg_match('/^\s*\$res\s*=\s*sql_query\(\s*[\'"](INSERT|UPDATE|DELETE)\b(.+)[\'"]\s*\)\s*(?:or\s+sqlerr\(.*?\))?\s*;\s*$/i', $line, $m)) {
             $sql = rtrim($m[1] . $m[2]);
             $out[] = '$db->perform(\'' . $sql . '\');';
             $i++; continue;
         }
 
+        // default: passthrough
         $out[] = $line; $i++;
     }
+
     return implode("\n", $out);
 }
