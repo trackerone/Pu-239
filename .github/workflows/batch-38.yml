@@ -1,0 +1,65 @@
+name: Batch 38 - Admin Categories (FluentPDO → ExtendedPdo)
+
+on:
+  workflow_dispatch:
+
+jobs:
+  apply-batch-38:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.2'
+          coverage: none
+          tools: none
+
+      - name: Run Batch 38 transformer
+        run: |
+          php ./tools/batch-38-apply.php
+
+      - name: Show diff
+        run: |
+          git status
+          git diff --name-only | tee /tmp/changed.txt
+          git diff > batch-38.diff || true
+
+      - name: Create branch, commit and push changes
+        if: always()
+        run: |
+          set -euxo pipefail
+          BRANCH="batch-38-admin-categories"
+          git config user.name "batch-bot"
+          git config user.email "batch-bot@users.noreply.github.com"
+          git checkout -b "$BRANCH"
+          # Only commit if there are changes
+          if [ -s /tmp/changed.txt ]; then
+            git add -A
+            git commit -m "batch38(admin): migrate admin categories & peers snippets from FluentPDO to ExtendedPdo; remove Literal import"
+            git push --set-upstream origin "$BRANCH"
+          else
+            echo "No changes detected by batch script."
+          fi
+
+      - name: Create Pull Request
+        if: always()
+        uses: peter-evans/create-pull-request@v6
+        with:
+          branch: batch-38-admin-categories
+          title: "Batch 38: Admin • Categories migration (FluentPDO → ExtendedPdo)"
+          body: |
+            This PR was created by the Batch 38 action. It removes FluentPDO usage in admin category flows,
+            updates queries to ExtendedPdo, removes `Envms\FluentPDO\Literal`, and hardens guards.
+          labels: batch, automated, admin
+
+      - name: Upload diff artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: batch-38-diff
+          path: batch-38.diff
