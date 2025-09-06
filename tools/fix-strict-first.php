@@ -2,9 +2,22 @@
 declare(strict_types=1);
 
 /**
- * Force declare(strict_types=1) to be the very first statement (right after <?php)
- * for all files in admin/*.php. Whitespace and comments may appear before declare,
- * but no code (e.g., require_once, use, namespace, etc).
+ * Force declare(strict_types=1) to be the very first statement in every admin/*.php,
+ * robustly handling files that:
+ *   - start with BOM,
+ *   - contain multiple PHP open/close tags,
+ *   - have any code before declare.
+ *
+ * Strategy:
+ *   - Strip BOM.
+ *   - Replace ALL "?>" with a newline (flatten to a single PHP block).
+ *   - Remove ALL additional "<?php" occurrences except the very first one.
+ *   - Remove ALL existing declare(strict_types=1) occurrences.
+ *   - Rebuild the file to start with:
+ *       <?php
+ *       declare(strict_types=1);
+ *       <blank line>
+ *       <rest of content (without leading <?php or declare)>
  */
 $root = getcwd();
 $dir  = $root . '/admin';
@@ -28,37 +41,38 @@ foreach ($it as $f) {
     $orig = $src;
     $scanned++;
 
-    // Normalize BOM and ensure opening tag
+    // 0) Strip BOM
     $src = preg_replace('/^\xEF\xBB\xBF/', '', $src);
-    if (!str_starts_with($src, "<?php")) {
+
+    // 1) If file has any text before the first "<?php", prepend opener
+    if (!preg_match('/^\s*<\?php/i', $src)) {
         $src = "<?php\n" . ltrim($src);
     }
 
-    // Remove any existing declare(strict_types=1); near top
-    $src = preg_replace('/<\?php\s+declare\s*\(\s*strict_types\s*=\s*1\s*\)\s*;\s*/i', "<?php\n", $src);
+    // 2) Remove ALL closing tags "?>" (we keep a single PHP block)
+    $src = str_replace("?>", "\n", $src);
 
-    // Build new header: <?php, declare, blank, then the rest
-    $lines = explode("\n", $src);
+    // 3) Remove ALL additional open tags beyond the first
+    //    Keep the first "<?php" only
+    $src = preg_replace('/^\s*<\?php/i', "<?php", $src, 1); // normalize first
+    $src = preg_replace('/<\?php/i', '', $src);             // strip any subsequent ones
 
-    // Guarantee first line is exactly "<?php"
-    if (trim($lines[0]) !== '<?php') {
-        array_unshift($lines, '<?php');
+    // 4) Remove ALL existing declare(strict_types=1);
+    $src = preg_replace('/declare\s*\(\s*strict_types\s*=\s*1\s*\)\s*;\s*/i', '', $src);
+
+    // 5) Remove any accidental blank lines right at the start (after we cleaned up)
+    $src = preg_replace('/^<\?php\s*\R+/i', "<?php\n", $src, 1);
+
+    // 6) Rebuild with declare strictly first
+    $src = "<?php\n" . "declare(strict_types=1);\n\n" . ltrim(substr($src, strlen("<?php\n")));
+
+    // 7) Sanity: ensure we still start correctly
+    if (!str_starts_with($src, "<?php\ndeclare(strict_types=1);\n")) {
+        $src = "<?php\ndeclare(strict_types=1);\n\n" . ltrim($src);
     }
 
-    // Remove empty lines right after opener
-    while (isset($lines[1]) && trim($lines[1]) === '') {
-        array_splice($lines, 1, 1);
-    }
-
-    // Insert declare(strict_types=1); as line 2 (if not already there)
-    if (!isset($lines[1]) || stripos($lines[1], 'declare(strict_types=1);') === false) {
-        array_splice($lines, 1, 0, 'declare(strict_types=1);');
-        array_splice($lines, 2, 0, ''); // blank line for readability
-    }
-
-    $new = implode("\n", $lines);
-    if ($new !== $orig) {
-        file_put_contents($path, $new);
+    if ($src !== $orig) {
+        file_put_contents($path, $src);
         $changed++;
     }
 }
