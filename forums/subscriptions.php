@@ -19,7 +19,7 @@ $count = $fluent->from('subscriptions')
                 ->select(null)
                 ->select('COUNT(id) AS count')
                 ->where('user_id = ?', $CURUSER['id'])
-                ->fetch("count"); // TODO(batch41): use $this->db->fetchValue("SELECT COUNT(...) ...", [...])
+                ->fetch("count");
 $breadcrumbs = [
     "<a href='{$site_config['paths']['baseurl']}/forums.php'>" . _('Forums') . '</a>',
     "<a href='{$site_config['paths']['baseurl']}/forums.php?action=subscriptions'>" . _('Subscriptions') . '</a>',

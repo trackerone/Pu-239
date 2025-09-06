@@ -1,4 +1,6 @@
 <?php
+$db = $container->get(Database::class);
+
 require_once __DIR__ . '/runtime_safe.php';
 
 require_once __DIR__ . '/bootstrap_pdo.php';
@@ -61,7 +63,7 @@ function autoclean(string $run)
                        ->orderBy('clean_time ASC')
                        ->orderBy('clean_increment ASC');
     }
-    $query = $query->fetchAll(); // TODO(batch41): replace with $this->db->fetchAll("SELECT ...", [...])
+    $query = $query->fetchAll();
     if (!$query) {
         echo "Nothing to process, all caught up.\n";
     } else {
@@ -72,7 +74,7 @@ function autoclean(string $run)
                     'clean_time' => $next_clean,
                 ];
                 $sql = "UPDATE cleanup SET /* columns */ WHERE clean_id = :clean_id";
-$this->db->perform($sql, array_merge($set, ['clean_id' => $row['clean_id']]));
+$db->perform($sql, array_merge($set, ['clean_id' => $row['clean_id']]));
 
                 if (file_exists(CLEAN_DIR . $row['clean_file'])) {
                     require_once CLEAN_DIR . $row['clean_file'];

@@ -18,20 +18,20 @@ if (!is_valid_id($forum_id)) {
 $fluent = $db; // alias
 // $fluent removed — use $this->db (ExtendedPdo)
 $sql = "DELETE FROM now_viewing WHERE user_id = :user_id";
-$this->db->perform($sql, ['user_id' => $CURUSER['id']]);
+$db->perform($sql, ['user_id' => $CURUSER['id']]);
 $values = [
     'user_id' => $CURUSER['id'],
     'forum_id' => $forum_id,
     'added' => TIME_NOW,
 ];
 $sql = "INSERT INTO now_viewing (/* columns */) VALUES (/* values */)";
-$this->db->perform($sql, $values);
+$db->perform($sql, $values);
 
 $arr = $fluent->from('forums')
               ->where('min_class_read <= ?', $CURUSER['class'])
               ->where('id = ?', $forum_id)
               ->limit(1)
-              ->fetch(); // TODO(batch41): replace with $this->db->fetchRow("SELECT ...", [...])
+              ->fetch();
 
 $forum_name = !empty($arr['name']) ? format_comment($arr['name']) : '';
 
@@ -52,7 +52,7 @@ $query = $fluent->from('forums')
                 ->where('min_class_read <= ?', $CURUSER['class'])
                 ->where('parent_forum = ?', $forum_id)
                 ->orderBy('sort')
-                ->fetchAll(); // TODO(batch41): replace with $this->db->fetchAll("SELECT ...", [...])
+                ->fetchAll();
 
 $sub_forums_stuff = '';
 
@@ -81,7 +81,7 @@ foreach ($query as $sub_forums_arr) {
                        ->where('topics.forum_id = ?', $sub_forums_arr['sub_forum_id'])
                        ->orderBy('posts.id DESC')
                        ->limit(1)
-                       ->fetch(); // TODO(batch41): replace with $this->db->fetchRow("SELECT ...", [...])
+                       ->fetch();
 
     if ($post_arr['last_post_id'] > 0) {
         $last_topic_id = (int) $post_arr['topic_id'];

@@ -1,4 +1,6 @@
 <?php declare(strict_types=1);
+
+$db = $container->get(Database::class);
 /**
  * Batch 38 transformer (v4)
  * - Scope: admin/ PHP files
@@ -36,7 +38,7 @@ foreach ($files as $file) {
 
     // 3) Categories: COUNT two IDs using IN (:id1,:id2)
     $replacement3 = '$sql = "SELECT COUNT(id) FROM categories WHERE id IN (:id1, :id2)";' . "\n" .
-                    '$count = (int) $this->db->fetchValue($sql, [' . "\n" .
+                    '$count = (int) $db->fetchValue($sql, [' . "\n" .
                     "    'id1' => (int) \$params['id']," . "\n" .
                     "    'id2' => (int) \$params['new_cat_id']," . "\n" .
                     ']);' . "\n";
@@ -47,7 +49,7 @@ foreach ($files as $file) {
     );
 
     // 4) Categories: fetch single by id
-    $replacement4 = '$cat = $this->db->fetchRow("SELECT * FROM categories WHERE id = :id", [\'id\' => (int) $params[\'id\']]);' . "\n";
+    $replacement4 = '$cat = $db->fetchRow("SELECT * FROM categories WHERE id = :id", [\'id\' => (int) $params[\'id\']]);' . "\n";
     $updated = preg_replace(
         '#\$cat\s*=\s*\$fluent->from\(\'categories\'\)\s*->where\(\'id\s*=\s*\?\',\s*\$params\[\'id\'\]\)\s*->fetch\(\);\s*#s',
         $replacement4,
@@ -55,7 +57,7 @@ foreach ($files as $file) {
     );
 
     // 5) Torrents: COUNT by category guard
-    $replacement5 = '$refCount = (int) $this->db->fetchValue("SELECT COUNT(id) FROM torrents WHERE category = :id", [\'id\' => (int) $params[\'id\']]);' . "\n";
+    $replacement5 = '$refCount = (int) $db->fetchValue("SELECT COUNT(id) FROM torrents WHERE category = :id", [\'id\' => (int) $params[\'id\']]);' . "\n";
     $updated = preg_replace(
         '#\$count\s*=\s*\$fluent->from\(\'torrents\'\)\s*->select\(null\)\s*->select\(\'COUNT\(id\)\s+AS\s+count\'\)\s*->where\(\'category\s*=\s*\?\',\s*\$params\[\'id\'\]\)\s*->fetch\(\'count\'\);\s*#s',
         $replacement5,
@@ -69,7 +71,7 @@ foreach ($files as $file) {
 
     // 6) Parents list (top level)
     $replacement6 = '$sql = "SELECT id, name, image, COALESCE(cat_desc, \'\') AS cat_desc, ordered FROM categories WHERE parent_id = 0 ORDER BY ordered";' . "\n" .
-                    '$parents = $this->db->fetchAll($sql);' . "\n";
+                    '$parents = $db->fetchAll($sql);' . "\n";
     $updated = preg_replace(
         '#\$parents\s*=\s*\$fluent->from\(\'categories\'\)\s*->select\(\'IF\s*\(cat_desc\s+IS\s+NULL,\s*"",\s*cat_desc\)\s+AS\s+cat_desc\'\)\s*->where\(\'parent_id\s*=\s*0\'\)\s*->orderBy\(\'ordered\'\)\s*->fetchAll\(\);\s*#s',
         $replacement6,
@@ -77,9 +79,9 @@ foreach ($files as $file) {
     );
 
     // 7) Reorder categories - iterator → explicit loop
-    $replacement7 = '$rows = $this->db->fetchAll("SELECT id FROM categories ORDER BY ordered, id");' . "\n" .
+    $replacement7 = '$rows = $db->fetchAll("SELECT id FROM categories ORDER BY ordered, id");' . "\n" .
                     'foreach ($rows as $cat) {' . "\n" .
-                    '    $this->db->perform("UPDATE categories SET ordered = :ord WHERE id = :id", ["ord" => ++$i, "id" => (int) $cat["id"]]);';
+                    '    $db->perform("UPDATE categories SET ordered = :ord WHERE id = :id", ["ord" => ++$i, "id" => (int) $cat["id"]]);';
     $updated = preg_replace(
         '#\$cats\s*=\s*\$fluent->from\(\'categories\'\)\s*->orderBy\(\'ordered\'\);\s*foreach\s*\(\s*\$cats\s+as\s+\$cat\s*\)\s*\{\s*\$set\s*=\s*\[\s*\'ordered\'\s*=>\s*\+\+\$i,\s*\];#s',
         $replacement7,
@@ -88,7 +90,7 @@ foreach ($files as $file) {
 
     // 8) Admin peers → agents aggregation
     $replacement8 = '$sql = "SELECT agent, LEFT(peer_id, 8) AS peer_id FROM peers GROUP BY agent, LEFT(peer_id, 8)";' . "\n" .
-                    '$agents = $this->db->fetchAll($sql);' . "\n";
+                    '$agents = $db->fetchAll($sql);' . "\n";
     $updated = preg_replace(
         '#\$agents\s*=\s*\$fluent->from\(\'peers\'\)\s*->select\(null\)\s*->select\(\'agent\'\)\s*->select\(\'LEFT\(peer_id,\s*8\)\s+AS\s+peer_id\'\)\s*->groupBy\(\'agent\'\)\s*->groupBy\(\'peer_id\'\)\s*->fetchAll\(\);\s*#s',
         $replacement8,
@@ -96,7 +98,7 @@ foreach ($files as $file) {
     );
 
     // 9) Generic deleteFrom('categories') → DELETE
-    $replacement9 = '$this->db->perform("DELETE FROM categories WHERE id = :id", ["id" => (int) $params["id"]]);' . "\n";
+    $replacement9 = '$db->perform("DELETE FROM categories WHERE id = :id", ["id" => (int) $params["id"]]);' . "\n";
     $updated = preg_replace(
         '#\$fluent->deleteFrom\(\'categories\'\)\s*->where\(\'id\s*=\s*\?\',\s*\$params\[\'id\'\]\)\s*->execute\(\);\s*#s',
         $replacement9,
@@ -109,7 +111,7 @@ foreach ($files as $file) {
         '// TODO(batch38): Replace FluentPDO update with explicit UPDATE statement using known columns.' . "\n" .
         '// Example:' . "\n" .
         '// $sql = "UPDATE categories SET name = :name, image = :image, cat_desc = :desc, parent_id = :parent, ordered = :ordered WHERE id = :id";' . "\n" .
-        '// $this->db->perform($sql, [...]);' . "\n",
+        '// $db->perform($sql, [...]);' . "\n",
         $updated
     );
 

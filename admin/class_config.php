@@ -230,7 +230,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     'template' => $stylesheet['id'],
                 ];
                 $sql = "INSERT INTO class_config (/* columns */) VALUES (/* values */)";
-$class_id = $this->db->perform($sql, $values);
+$class_id = $db->perform($sql, $values);
 
                 write_class_files($stylesheet['id']);
             }

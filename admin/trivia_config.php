@@ -1,4 +1,6 @@
 <?php
+$db = $container->get(Database::class);
+
 require_once __DIR__ . '/../include/runtime_safe.php';
 
 require_once __DIR__ . '/../include/bootstrap_pdo.php';
@@ -50,11 +52,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     $session->set('is-warning', _('No answer was set as the correct answer!'));
                 } else {
                     $sql = "UPDATE triviaq SET /* columns */ WHERE qid = :qid";
-$this->db->perform($sql, array_merge($set, ['qid' => $id]));
+$db->perform($sql, array_merge($set, ['qid' => $id]));
                 }
             } elseif ($type === 'delete' && isset($_POST['id']) && is_numeric($_POST['id'])) {
                 $sql = "DELETE FROM triviaq WHERE qid = :qid";
-$this->db->perform($sql, ['qid' => $_POST['id']]);
+$db->perform($sql, ['qid' => $_POST['id']]);
                 $session->set('is-success', _fe('Trivia Question #{0} was deleted.', $_POST['id']));
             } elseif ($type === 'insert') {
                 $values = $_POST;
@@ -69,7 +71,7 @@ $this->db->perform($sql, ['qid' => $_POST['id']]);
                     $session->set('is-warning', _('No answer was set as the correct answer!'));
                 } else {
                     $sql = "INSERT INTO triviaq (/* columns */) VALUES (/* values */)";
-$newid = $this->db->perform($sql, $values);
+$newid = $db->perform($sql, $values);
                     if (!empty($newid)) {
                         $session->set('is-success', _fe('Trivia Questions #{0} inserted correctly.', $newid));
                     }
@@ -80,7 +82,7 @@ $newid = $this->db->perform($sql, $values);
                                 ->select(null)
                                 ->select('COUNT(qid) AS count')
                                 ->where('MATCH (question, answer1, answer2, answer3, answer4, answer5) AGAINST (? IN NATURAL LANGUAGE MODE)', $search)
-                                ->fetch("count"); // TODO(batch41): use $this->db->fetchValue("SELECT COUNT(...) ...", [...])
+                                ->fetch("count");
 
                 $pager = pager(15, $count, "{$site_config['paths']['baseurl']}/staffpanel.php?tool=trivia_config&");
                 $questions = $fluent->from('triviaq')
@@ -88,7 +90,7 @@ $newid = $this->db->perform($sql, $values);
                                     ->orderBy('qid')
                                     ->limit($pager['pdo']['limit'])
                                     ->offset($pager['pdo']['offset'])
-                                    ->fetchAll(); // TODO(batch41): replace with $this->db->fetchAll("SELECT ...", [...])
+                                    ->fetchAll();
             }
         }
     }
@@ -98,14 +100,14 @@ if (empty($search)) {
     $count = $fluent->from('triviaq')
                     ->select(null)
                     ->select('COUNT(qid) AS count')
-                    ->fetch("count"); // TODO(batch41): use $this->db->fetchValue("SELECT COUNT(...) ...", [...])
+                    ->fetch("count");
 
     $pager = pager(15, $count, "{$site_config['paths']['baseurl']}/staffpanel.php?tool=trivia_config&");
     $questions = $fluent->from('triviaq')
                         ->orderBy('qid')
                         ->limit($pager['pdo']['limit'])
                         ->offset($pager['pdo']['offset'])
-                        ->fetchAll(); // TODO(batch41): replace with $this->db->fetchAll("SELECT ...", [...])
+                        ->fetchAll();
 }
 
 $HTMLOUT = "

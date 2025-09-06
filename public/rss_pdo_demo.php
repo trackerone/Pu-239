@@ -1,6 +1,8 @@
 <?php
 declare(strict_types=1);
 
+
+$db = $container->get(Database::class);
 header('Content-Type: application/rss+xml; charset=UTF-8');
 
 // Konstruer XML-deklaration uden short open tag

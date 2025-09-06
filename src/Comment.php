@@ -67,7 +67,7 @@ class Comment
                                  ->orderBy('id DESC')
                                  ->limit($pager['pdo']['limit'])
                                  ->offset($pager['pdo']['offset'])
-                                 ->fetchAll(); // TODO(batch41): replace with $this->db->fetchAll("SELECT ...", [...])
+                                 ->fetchAll();
 
         return [
             $comments,
@@ -212,7 +212,7 @@ $id = $this->db->perform($sql, $values);
             $comments = $comments->where('recipe = ?', $id);
         }
         $comments = $comments->orderBy('id DESC')
-                             ->fetchAll(); // TODO(batch41): replace with $this->db->fetchAll("SELECT ...", [...])
+                             ->fetchAll();
 
         return $comments;
     }
@@ -229,7 +229,7 @@ $id = $this->db->perform($sql, $values);
     {
         $comment = $this->fluent->from('comments')
                                 ->where('id = ?', $commentid)
-                                ->fetch(); // TODO(batch41): replace with $this->db->fetchRow("SELECT ...", [...])
+                                ->fetch();
 
         return $comment;
     }

@@ -1,4 +1,6 @@
 <?php declare(strict_types=1);
+
+$db = $container->get(Database::class);
 /**
  * Batch 42 — FluentPDO mapping (NO code changes)
  *

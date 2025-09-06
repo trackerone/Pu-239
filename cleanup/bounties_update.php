@@ -1,4 +1,6 @@
 <?php
+$db = $container->get(Database::class);
+
 require_once __DIR__ . '/../include/runtime_safe.php';
 
 require_once __DIR__ . '/../include/bootstrap_pdo.php';
@@ -47,7 +49,7 @@ function bounties_update($data)
                        ->where('FROM_UNIXTIME(t.added + 86400 * 2) < NOW()')
                        ->groupBy('r.id')
                        ->groupBy('r.filled_by_user_id')
-                       ->fetchAll(); // TODO(batch41): replace with $this->db->fetchAll("SELECT ...", [...])
+                       ->fetchAll();
     $msgs_buffer = [];
     if (!empty($bounties)) {
         $bounty_class = $container->get(Bounty::class);

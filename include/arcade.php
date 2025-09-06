@@ -1,4 +1,6 @@
 <?php
+$db = $container->get(Database::class);
+
 require_once __DIR__ . '/runtime_safe.php';
 
 
@@ -47,7 +49,7 @@ if ($score === 0) {
     app_halt('Exit called');
 }
 $sql = "INSERT INTO flashscores (/* columns */) VALUES (/* values */)";
-$this->db->perform($sql, $values);
+$db->perform($sql, $values);
 
 $game_id = array_search($gname, $site_config['arcade']['games']);
 $game = $site_config['arcade']['game_names'][$game_id];
@@ -92,7 +94,7 @@ if (!empty($high) && $score > $high) {
         'user_id' => $user['id'],
     ];
     $sql = "UPDATE highscores SET /* columns */ WHERE game = :game";
-$this->db->perform($sql, array_merge($update, ['game' => $gname]));
+$db->perform($sql, array_merge($update, ['game' => $gname]));
 } elseif (empty($high)) {
     $set = [
         'game' => $gname,
@@ -101,6 +103,6 @@ $this->db->perform($sql, array_merge($update, ['game' => $gname]));
         'user_id' => $user['id'],
     ];
     $sql = "INSERT INTO highscores (/* columns */) VALUES (/* values */)";
-$this->db->perform($sql, $values);
+$db->perform($sql, $values);
 }
 header('Location: ' . $site_config['paths']['baseurl'] . "/arcade_top_scores.php#{$gname}");

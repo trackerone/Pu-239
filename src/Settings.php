@@ -98,7 +98,7 @@ class Settings
                                 ->select('id')
                                 ->where('min_class_read >= ?', UC_STAFF)
                                 ->orderBy('id')
-                                ->fetchAll(); // TODO(batch41): replace with $this->db->fetchAll("SELECT ...", [...])
+                                ->fetchAll();
 
             if (empty($sql)) {
                 $staff_forums['staff_forums'] = 0;
@@ -257,7 +257,7 @@ class Settings
                 $class_config = $this->fluent->from('class_config')
                                              ->orderBy('value')
                                              ->where('template = ?', $style)
-                                             ->fetchAll(); // TODO(batch41): replace with $this->db->fetchAll("SELECT ...", [...])
+                                             ->fetchAll();
                 $this->cache->set('class_config_' . $style, $class_config, 86400);
             }
         }

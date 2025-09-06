@@ -1,4 +1,6 @@
 <?php
+$db = $container->get(Database::class);
+
 require_once __DIR__ . '/../../include/runtime_safe.php';
 
 
@@ -29,7 +31,7 @@ $set = [
 ];
 // $fluent removed — use $this->db (ExtendedPdo)
 $sql = "UPDATE torrents SET /* columns */ WHERE id = :id";
-$result = $this->db->perform($sql, array_merge($set, ['id' => $id]));
+$result = $db->perform($sql, array_merge($set, ['id' => $id]));
 
 if ($result) {
     $cache = $container->get(Cache::class);

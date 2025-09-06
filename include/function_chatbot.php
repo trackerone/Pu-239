@@ -1,4 +1,6 @@
 <?php
+$db = $container->get(Database::class);
+
 require_once __DIR__ . '/runtime_safe.php';
 
 require_once __DIR__ . '/bootstrap_pdo.php';
@@ -131,7 +133,7 @@ function bot_respond($user)
                 'text' => $msg,
             ];
             $sql = "INSERT INTO ajax_chat_messages (/* columns */) VALUES (/* values */)";
-$this->db->perform($sql, $values);
+$db->perform($sql, $values);
 
             return true;
         }
@@ -257,6 +259,6 @@ function random_gifts($user)
         ];
         // $fluent removed — use $this->db (ExtendedPdo)
         $sql = "INSERT INTO ajax_chat_messages (/* columns */) VALUES (/* values */)";
-$this->db->perform($sql, $values);
+$db->perform($sql, $values);
     }
 }

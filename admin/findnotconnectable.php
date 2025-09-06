@@ -100,7 +100,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             'date' => $dt,
         ];
         $sql = "INSERT INTO notconnectablepmlog (/* columns */) VALUES (/* values */)";
-$this->db->perform($sql, $values);
+$db->perform($sql, $values);
         $session->set('is-success', _('PM Sent to all non connectable peers'));
     } else {
         $session->set('is-warning', _('No non-connectable peers'));

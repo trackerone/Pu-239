@@ -1,4 +1,6 @@
 <?php
+$db = $container->get(Database::class);
+
 require_once __DIR__ . '/../include/runtime_safe.php';
 
 require_once __DIR__ . '/../include/bootstrap_pdo.php';
@@ -17,13 +19,13 @@ if (!is_valid_id($id)) {
 }
 $what = $fluent->from('attachments')
                ->where('id = ?', $id)
-               ->fetch(); // TODO(batch41): replace with $this->db->fetchRow("SELECT ...", [...])
+               ->fetch();
 
 $update = [
     'times_downloaded' => $what['times_downloaded'] + 1,
 ];
 $sql = "UPDATE attachments SET /* columns */ WHERE id = :id";
-$this->db->perform($sql, array_merge($update, ['id' => $id]));
+$db->perform($sql, array_merge($update, ['id' => $id]));
 $download_as = "{$what['file_name']}.{$what['extension']}";
 $stored_file = ATTACHMENT_DIR . $what['file'];
 header('Content-type: application/' . $what['extension']);

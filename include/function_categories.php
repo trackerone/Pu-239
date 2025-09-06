@@ -1,4 +1,6 @@
 <?php
+$db = $container->get(Database::class);
+
 require_once __DIR__ . '/runtime_safe.php';
 
 require_once __DIR__ . '/bootstrap_pdo.php';
@@ -38,7 +40,7 @@ function genrelist(bool $grouped)
                 $children = $fluent->from('categories')
                                    ->where('parent_id = ?', $parent['id'])
                                    ->orderBy('ordered')
-                                   ->fetchAll(); // TODO(batch41): replace with $this->db->fetchAll("SELECT ...", [...])
+                                   ->fetchAll();
                 $parent['children'] = $children;
                 $ret[] = $parent;
             }

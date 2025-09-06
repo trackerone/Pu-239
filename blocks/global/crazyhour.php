@@ -1,4 +1,6 @@
 <?php
+$db = $container->get(Database::class);
+
 require_once __DIR__ . '/../../include/runtime_safe.php';
 
 require_once __DIR__ . '/../../include/bootstrap_pdo.php';
@@ -40,7 +42,7 @@ function crazyhour()
                                          ->select('var')
                                          ->select('amount')
                                          ->where("type = 'crazyhour'")
-                                         ->fetch(); // TODO(batch41): replace with $this->db->fetchRow("SELECT ...", [...])
+                                         ->fetch();
         if (empty($crazyhour['crazyhour'])) {
             $crazyhour['crazyhour']['var'] = random_int(TIME_NOW, (TIME_NOW + 86400));
             $crazyhour['crazyhour']['amount'] = 0;

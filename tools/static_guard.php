@@ -1,4 +1,6 @@
 <?php
+$db = $container->get(Database::class);
+
 /**
  * Static Guard v2 — configurable via env:
  *   GUARD_MODE: 'fail' (default) or 'warn'

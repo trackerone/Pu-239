@@ -1,4 +1,6 @@
 <?php
+$db = $container->get(Database::class);
+
 require_once __DIR__ . '/runtime_safe.php';
 
 require_once __DIR__ . '/bootstrap_pdo.php';
@@ -733,7 +735,7 @@ function update_torrent_data(string $imdb_id)
             ->select(null)
             ->select('id')
             ->where('imdb_id = ?', 'tt' . $imdb_id)
-            ->fetchAll(); // TODO(batch41): replace with $this->db->fetchAll("SELECT ...", [...])
+            ->fetchAll();
 
         foreach ($torrents as $torrent) {
             $cache->update_row('torrent_details_' . $torrent['id'], $set, $site_config['expires']['torrent_details']);
@@ -768,7 +770,7 @@ function get_imdb_person($person_id)
         $imdb_person = $fluent->from('person')
             ->where('imdb_id = ?', $person_id)
             ->where('updated + 2592000 > ?', TIME_NOW)
-            ->fetch(); // TODO(batch41): replace with $this->db->fetchRow("SELECT ...", [...])
+            ->fetch();
 
         if (!empty($imdb_person)) {
             $cache->set('imdb_person_' . $person_id, $imdb_person, 604800);
@@ -787,7 +789,7 @@ function get_imdb_person($person_id)
                 'updated' => TIME_NOW,
             ];
             $sql = "UPDATE person SET /* columns */ WHERE imdb_id = :imdb_id";
-$this->db->perform($sql, array_merge($set, ['imdb_id' => $person_id]));
+$db->perform($sql, array_merge($set, ['imdb_id' => $person_id]));
 
             return false;
         }
@@ -846,7 +848,7 @@ $this->db->perform($sql, array_merge($set, ['imdb_id' => $person_id]));
             'updated' => TIME_NOW,
         ];
         $sql = "UPDATE person SET /* columns */ WHERE imdb_id = :imdb_id";
-$this->db->perform($sql, array_merge($set, ['imdb_id' => $person_id]));
+$db->perform($sql, array_merge($set, ['imdb_id' => $person_id]));
     }
 
     return $imdb_person;

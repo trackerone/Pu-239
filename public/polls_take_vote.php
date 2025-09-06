@@ -1,4 +1,6 @@
 <?php
+$db = $container->get(Database::class);
+
 require_once __DIR__ . '/../include/runtime_safe.php';
 
 require_once __DIR__ . '/../include/bootstrap_pdo.php';
@@ -25,7 +27,7 @@ global $container, $site_config;
 $poll_data = $fluent->from('polls')
                     ->where('polls.pid = ?', $poll_id)
                     ->leftJoin('poll_voters ON polls.pid = poll_voters.poll_id AND poll_voters.user_id = ?', $user['id'])
-                    ->fetch(); // TODO(batch41): replace with $this->db->fetchRow("SELECT ...", [...])
+                    ->fetch();
 
 if (empty($poll_data)) {
     stderr(_('Error'), _('Invalid ID'));
@@ -91,7 +93,7 @@ if (!$_POST['nullvote']) {
         'choices' => $choices,
     ];
     $sql = "UPDATE polls SET /* columns */ WHERE pid = :pid";
-$result = $this->db->perform($sql, array_merge($set, ['pid' => $poll_data['pid']]));
+$result = $db->perform($sql, array_merge($set, ['pid' => $poll_data['pid']]));
 
     if (!$result) {
         stderr(_('Error'), _('Could not update records'));

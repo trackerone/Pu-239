@@ -1,4 +1,6 @@
 <?php
+$db = $container->get(Database::class);
+
 require_once __DIR__ . '/runtime_safe.php';
 
 require_once __DIR__ . '/bootstrap_pdo.php';
@@ -536,7 +538,7 @@ function validate_promo(string $code, bool $full)
         ->where('link = ?', htmlsafechars($code))
         ->where('UNIX_TIMESTAMP(NOW()) < added + (days_valid * 86400)')
         ->where('accounts_made < max_users')
-        ->fetch(); // TODO(batch41): replace with $this->db->fetchRow("SELECT ...", [...])
+        ->fetch();
 
     if (!empty($valid)) {
         if ($full) {

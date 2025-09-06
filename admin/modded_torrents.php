@@ -1,4 +1,6 @@
 <?php
+$db = $container->get(Database::class);
+
 require_once __DIR__ . '/../include/runtime_safe.php';
 
 require_once __DIR__ . '/../include/bootstrap_pdo.php';
@@ -94,7 +96,7 @@ if (isset($_GET['type']) && in_array($_GET['type'], $modes)) {
                         ->select('COUNT(id) AS count')
                         ->where('checked_when < UNIX_TIMESTAMP(CURDATE())')
                         ->where('checked_when>= UNIX_TIMESTAMP(CURDATE() - INTERVAL 1 DAY)')
-                        ->fetch("count"); // TODO(batch41): use $this->db->fetchValue("SELECT COUNT(...) ...", [...])
+                        ->fetch("count");
 
         if (!$count) {
             $HTMLOUT = $links . stdmsg(_('Error'), _('No Torrents have been modded'), 'top20');
@@ -113,7 +115,7 @@ if (isset($_GET['type']) && in_array($_GET['type'], $modes)) {
                            ->orderBy('checked_when DESC')
                            ->limit($pager['pdo']['limit'])
                            ->offset($pager['pdo']['offset'])
-                           ->fetchAll(); // TODO(batch41): replace with $this->db->fetchAll("SELECT ...", [...])
+                           ->fetchAll();
 
             if ($data) {
                 $data = do_sort($data);
@@ -138,7 +140,7 @@ if (isset($_GET['type']) && in_array($_GET['type'], $modes)) {
                         ->select('COUNT(id) AS count')
                         ->where('checked_when>= UNIX_TIMESTAMP(CURDATE())')
                         ->where('checked_when < UNIX_TIMESTAMP(CURDATE() + INTERVAL 1 DAY)')
-                        ->fetch("count"); // TODO(batch41): use $this->db->fetchValue("SELECT COUNT(...) ...", [...])
+                        ->fetch("count");
 
         if (!$count) {
             $HTMLOUT = $links . stdmsg(_('Error'), _('No Torrents have been modded'), 'top20');
@@ -157,7 +159,7 @@ if (isset($_GET['type']) && in_array($_GET['type'], $modes)) {
                            ->orderBy('checked_when DESC')
                            ->limit($pager['pdo']['limit'])
                            ->offset($pager['pdo']['offset'])
-                           ->fetchAll(); // TODO(batch41): replace with $this->db->fetchAll("SELECT ...", [...])
+                           ->fetchAll();
 
             if ($data) {
                 $data = do_sort($data);
@@ -181,7 +183,7 @@ if (isset($_GET['type']) && in_array($_GET['type'], $modes)) {
                         ->select(null)
                         ->select('COUNT(id) AS count')
                         ->where('checked_when = 0')
-                        ->fetch("count"); // TODO(batch41): use $this->db->fetchValue("SELECT COUNT(...) ...", [...])
+                        ->fetch("count");
 
         if (!$count) {
             $HTMLOUT = $links . stdmsg(_('Sorry'), _('No Un-modded Torrents Detected. Good Staff We Have'), 'top20');
@@ -210,7 +212,7 @@ if (isset($_GET['type']) && in_array($_GET['type'], $modes)) {
                            ->where('checked_when = 0')
                            ->limit($pager['pdo']['limit'])
                            ->offset($pager['pdo']['offset'])
-                           ->fetchAll(); // TODO(batch41): replace with $this->db->fetchAll("SELECT ...", [...])
+                           ->fetchAll();
 
             $HTMLOUT .= main_table(do_sort($data), $heading);
             $HTMLOUT .= $count > $perpage ? $pager['pagerbottom'] : '';
@@ -252,7 +254,7 @@ if (isset($_GET['type']) && in_array($_GET['type'], $modes)) {
                            ->where('t.checked_when < ?', $endOfDay)
                            ->innerJoin('users AS u ON t.checked_by = u.username = ?', $whom)
                            ->orderBy('checked_when DESC')
-                           ->fetchAll(); // TODO(batch41): replace with $this->db->fetchAll("SELECT ...", [...])
+                           ->fetchAll();
 
             $text = _fe('by {0} on {1}', $_POST['username'], $date);
             $title = _fe('{0}: Modded Torrents on {1}', $_POST['username'], $date);
@@ -268,7 +270,7 @@ if (isset($_GET['type']) && in_array($_GET['type'], $modes)) {
                            ->where('checked_when>= ?', $beginOfDay)
                            ->where('checked_when < ?', $endOfDay)
                            ->orderBy('checked_when DESC')
-                           ->fetchAll(); // TODO(batch41): replace with $this->db->fetchAll("SELECT ...", [...])
+                           ->fetchAll();
 
             $text = _fe('on {0}', $date);
             $title = _fe('Modded Torrents on {0}', $date);
@@ -283,7 +285,7 @@ if (isset($_GET['type']) && in_array($_GET['type'], $modes)) {
                            ->where('t.checked_when>= ?', $when)
                            ->innerJoin('users AS u ON t.checked_by = u.username = ?', $whom)
                            ->orderBy('checked_when DESC')
-                           ->fetchAll(); // TODO(batch41): replace with $this->db->fetchAll("SELECT ...", [...])
+                           ->fetchAll();
 
             $text = _pfe('by {1} within the last {0} day', 'by {1} within the last {0} days', $_POST['time'], $_POST['username']);
             $title = _pfe('{1}: Modded Torrents from {0} day ago', '{1}: Modded Torrents from {0} days ago', $_POST['time'], $_POST['username']);
@@ -296,7 +298,7 @@ if (isset($_GET['type']) && in_array($_GET['type'], $modes)) {
                            ->select('checked_when')
                            ->where('checked_when>= ?', $when)
                            ->orderBy('checked_when DESC')
-                           ->fetchAll(); // TODO(batch41): replace with $this->db->fetchAll("SELECT ...", [...])
+                           ->fetchAll();
 
             $text = _pf('from the past {0} day.', 'from the past {0} days.', $_POST['time']);
             $title = _pfe('{1}: Modded Torrents from {0}, number day ago', '{1}: Modded Torrents from {0}, number days ago', $_POST['time'], $_POST['username']);
@@ -310,7 +312,7 @@ if (isset($_GET['type']) && in_array($_GET['type'], $modes)) {
                            ->where('LOWER(u.username) = ?', $whom)
                            ->innerJoin('users AS u ON t.checked_by = u.username = ?', $whom)
                            ->orderBy('checked_when DESC')
-                           ->fetchAll(); // TODO(batch41): replace with $this->db->fetchAll("SELECT ...", [...])
+                           ->fetchAll();
 
             $text = _fe('by {0}', $_POST['username']);
             $title = _fe('{0}: Modded Torrents', $_POST['username']);

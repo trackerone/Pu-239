@@ -1,4 +1,6 @@
 <?php
+$db = $container->get(Database::class);
+
 require_once __DIR__ . '/../include/runtime_safe.php';
 
 
@@ -53,7 +55,7 @@ if ($action === 'viewbug') {
         }
         $bug = $fluent->from('bugs')
                       ->where('id = ?', $id)
-                      ->fetch(); // TODO(batch41): replace with $this->db->fetchRow("SELECT ...", [...])
+                      ->fetch();
         $user = $user_class->getUserFromId($bug['sender']);
         $precomment = "\n[precode]{$comment}[/precode]";
         switch ($status) {
@@ -86,7 +88,7 @@ if ($action === 'viewbug') {
             'comment' => !empty($_POST['comment']) ? htmlsafechars($_POST['comment']) : '',
         ];
         $sql = "UPDATE bugs SET /* columns */ WHERE id = :id";
-$this->db->perform($sql, array_merge($update, ['id' => $id]));
+$db->perform($sql, array_merge($update, ['id' => $id]));
         $cache->delete('bug_mess_');
         header("location: {$_SERVER['PHP_SELF']}?action=bugs");
     }
@@ -105,7 +107,7 @@ $this->db->perform($sql, array_merge($update, ['id' => $id]));
                   ->leftJoin('users AS u ON b.sender = u.id')
                   ->leftJoin('users AS s ON b.staff = u.id')
                   ->where('b.id = ?', $id)
-                  ->fetch(); // TODO(batch41): replace with $this->db->fetchRow("SELECT ...", [...])
+                  ->fetch();
     if (empty($bug)) {
         stderr(_('Error'), _('Invalid ID'));
     }
@@ -201,7 +203,7 @@ $this->db->perform($sql, array_merge($update, ['id' => $id]));
     $count = $fluent->from('bugs')
                     ->select(null)
                     ->select('COUNT(id) AS count')
-                    ->fetch("count"); // TODO(batch41): use $this->db->fetchValue("SELECT COUNT(...) ...", [...])
+                    ->fetch("count");
     $perpage = 25;
     $pager = pager($perpage, $count, $site_config['paths']['baseurl'] . '/bugs.php?action=bugs&amp;');
     $bugs = $fluent->from('bugs AS b')
@@ -224,13 +226,13 @@ $this->db->perform($sql, array_merge($update, ['id' => $id]));
                    ->orderBy('b.added DESC')
                    ->limit($pager['pdo']['limit'])
                    ->offset($pager['pdo']['offset'])
-                   ->fetchAll(); // TODO(batch41): replace with $this->db->fetchAll("SELECT ...", [...])
+                   ->fetchAll();
 
     $na_count = $fluent->from('bugs')
                        ->select(null)
                        ->select('COUNT(id) AS count')
                        ->where('status = "na"')
-                       ->fetch("count"); // TODO(batch41): use $this->db->fetchValue("SELECT COUNT(...) ...", [...])
+                       ->fetch("count");
 
     if ($count > 0) {
         $HTMLOUT .= $count > $perpage ? $pager['pagertop'] : '';
@@ -313,7 +315,7 @@ $this->db->perform($sql, array_merge($update, ['id' => $id]));
             'added' => $dt,
         ];
         $sql = "INSERT INTO bugs (/* columns */) VALUES (/* values */)";
-$result = $this->db->perform($sql, $values);
+$result = $db->perform($sql, $values);
         $cache->delete('bug_mess_');
 
         if ($result) {

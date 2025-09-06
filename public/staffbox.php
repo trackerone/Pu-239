@@ -123,7 +123,7 @@ switch ($do) {
         $count_msgs = $fluent->from('staffmessages')
                              ->select(null)
                              ->select('COUNT(id) AS count')
-                             ->fetch("count"); // TODO(batch41): use $this->db->fetchValue("SELECT COUNT(...) ...", [...])
+                             ->fetch("count");
 
         $perpage = 15;
         $pager = pager($perpage, $count_msgs, 'staffbox.php?');

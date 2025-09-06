@@ -106,7 +106,7 @@ if ($action === 'add') {
         $fluent = $db; // alias
 // $fluent removed — use $this->db (ExtendedPdo)
         $sql = "INSERT INTO comments (/* columns */) VALUES (/* values */)";
-$newid = $this->db->perform($sql, $values);
+$newid = $db->perform($sql, $values);
 
         $db->run(");
         app_halt('Exit called');

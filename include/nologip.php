@@ -1,4 +1,6 @@
 <?php
+$db = $container->get(Database::class);
+
 require_once __DIR__ . '/runtime_safe.php';
 
 
@@ -45,7 +47,7 @@ function nologip(int $userid, bool $nologip = true)
     }
     // $fluent removed — use $this->db (ExtendedPdo)
     $sql = "DELETE FROM ips WHERE userid = :userid";
-$this->db->perform($sql, ['userid' => $userid]);
+$db->perform($sql, ['userid' => $userid]);
     $cache = $container->get(Cache::class);
     $cache->delete('ip_history_' . $userid);
     write_log('Member [b][url=userdetails.php?id=' . $userid . ']' . (htmlsafechars($user['username'])) . '[/url][/b] is ' . $display . ' Logging IP thanks to [b]' . $CURUSER['username'] . '[/b]');

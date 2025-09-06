@@ -112,7 +112,7 @@ $db = $container->get(Database::class);, $site_config;
     $count1 = $fluent->from('cleanup')
                      ->select(null)
                      ->select('COUNT(clean_id) AS count')
-                     ->fetch("count"); // TODO(batch41): use $this->db->fetchValue("SELECT COUNT(...) ...", [...])
+                     ->fetch("count");
 
     $perpage = 15;
     $pager = pager($perpage, $count1, $site_config['paths']['baseurl'] . '/staffpanel.php?tool=cleanup_manager&amp;');

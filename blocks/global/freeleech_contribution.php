@@ -1,4 +1,6 @@
 <?php
+$db = $container->get(Database::class);
+
 require_once __DIR__ . '/../../include/runtime_safe.php';
 
 require_once __DIR__ . '/../../include/bootstrap_pdo.php';
@@ -47,7 +49,7 @@ if ($freeleech === false || is_null($freeleech)) {
                         ->select('pointspool / points * 100 AS percent')
                         ->select('enabled')
                         ->where('id=11')
-                        ->fetch(); // TODO(batch41): replace with $this->db->fetchRow("SELECT ...", [...])
+                        ->fetch();
 
     $cache->set('freeleech_alerts_', $freeleech, 0);
 }
@@ -89,7 +91,7 @@ if ($doubleupload === false || is_null($doubleupload)) {
                            ->select('pointspool / points * 100 AS percent')
                            ->select('enabled')
                            ->where('id=12')
-                           ->fetch(); // TODO(batch41): replace with $this->db->fetchRow("SELECT ...", [...])
+                           ->fetch();
 
     $cache->set('doubleupload_alerts_', $doubleupload, 0);
 }
@@ -131,7 +133,7 @@ if ($halfdownload === false || is_null($halfdownload)) {
                            ->select('pointspool / points * 100 AS percent')
                            ->select('enabled')
                            ->where('id=13')
-                           ->fetch(); // TODO(batch41): replace with $this->db->fetchRow("SELECT ...", [...])
+                           ->fetch();
 
     $cache->set('halfdownload_alerts_', $halfdownload, 0);
 }

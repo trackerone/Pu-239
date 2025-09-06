@@ -1,4 +1,6 @@
 <?php
+$db = $container->get(Database::class);
+
 require_once __DIR__ . '/../include/runtime_safe.php';
 
 require_once __DIR__ . '/../include/bootstrap_pdo.php';
@@ -41,7 +43,7 @@ function peer_update($data)
     foreach ($dead_peers as $dead_peer) {
         $torrentid = $dead_peer['torrent'];
         $sql = "DELETE FROM peers WHERE id = :id";
-$this->db->perform($sql, ['id' => $dead_peer['id']]);
+$db->perform($sql, ['id' => $dead_peer['id']]);
         if (!isset($torrent_seeds[$torrentid])) {
             $torrent_seeds[$torrentid] = $torrent_leeches[$torrentid] = 0;
         }

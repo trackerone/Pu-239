@@ -1,4 +1,6 @@
 <?php
+$db = $container->get(Database::class);
+
 require_once __DIR__ . '/../include/runtime_safe.php';
 
 
@@ -46,7 +48,7 @@ if (isset($_GET['act'])) {
     if ($act === 1) {
         $template = $fluent->from('stylesheets')
                            ->where('id = ?', $id)
-                           ->fetch(); // TODO(batch41): replace with $this->db->fetchRow("SELECT ...", [...])
+                           ->fetch();
 
         $HTML .= "
         <form action='{$_SERVER['PHP_SELF']}?tool=themes&amp;action=themes&amp;act=4' method='post' enctype='multipart/form-data' accept-charset='utf-8'>
@@ -185,7 +187,7 @@ if (isset($_GET['act'])) {
 
         $cur = $fluent->from('stylesheets')
                       ->where('id = ?', $tid)
-                      ->fetch(); // TODO(batch41): replace with $this->db->fetchRow("SELECT ...", [...])
+                      ->fetch();
 
         if ($id != $cur['id']) {
             $set['id'] = $id;
@@ -200,7 +202,7 @@ if (isset($_GET['act'])) {
             $set['min_class_to_view'] = $min_class;
         }
         $sql = "UPDATE stylesheets SET /* columns */ WHERE id = :id";
-$update = $this->db->perform($sql, array_merge($set, ['id' => $tid]));
+$update = $db->perform($sql, array_merge($set, ['id' => $tid]));
         if (!$update) {
             $session->set('is-danger', _('Something Went Wrong'));
         } else {
@@ -228,13 +230,13 @@ $update = $this->db->perform($sql, array_merge($set, ['id' => $tid]));
         }
 
         $sql = "DELETE FROM stylesheets WHERE id = :id";
-$this->db->perform($sql, ['id' => $id]);
+$db->perform($sql, ['id' => $id]);
 
         $set = [
             'stylesheet' => $site_config['site']['stylesheet'],
         ];
         $sql = "UPDATE users SET /* columns */ WHERE stylesheet = :stylesheet";
-$this->db->perform($sql, array_merge($set, ['stylesheet' => $id]));
+$db->perform($sql, array_merge($set, ['stylesheet' => $id]));
 
         clear_template_cache();
         $session->set('is-success', _('Successfully Deleted'));
@@ -265,7 +267,7 @@ $this->db->perform($sql, array_merge($set, ['stylesheet' => $id]));
             'min_class_to_view' => $_POST['class'],
         ];
         $sql = "INSERT INTO stylesheets (/* columns */) VALUES (/* values */)";
-$this->db->perform($sql, $values);
+$db->perform($sql, $values);
 
         clear_template_cache();
         $session->set('is-success', _('Successfully Edited'));
@@ -289,7 +291,7 @@ $this->db->perform($sql, $values);
             'name' => htmlsafechars($_GET['name']),
         ];
         $sql = "INSERT INTO stylesheets (/* columns */) VALUES (/* values */)";
-$this->db->perform($sql, $values);
+$db->perform($sql, $values);
 
         clear_template_cache();
         $session->set('is-success', _('Successfully Added'));

@@ -1,4 +1,6 @@
 <?php
+$db = $container->get(Database::class);
+
 require_once __DIR__ . '/../../include/runtime_safe.php';
 
 require_once __DIR__ . '/../../include/bootstrap_pdo.php';
@@ -35,7 +37,7 @@ if ($results === false || is_null($results)) {
                       ->select('leechers')
                       ->select('visible')
                       ->where('name LIKE ?', "%$keyword%")
-                      ->fetchAll(); // TODO(batch41): replace with $this->db->fetchAll("SELECT ...", [...])
+                      ->fetchAll();
     $cache = $container->get(Cache::class);
     $cache->set($hash, $results, 0);
     $hashes = $cache->get('suggest_torrents_hashes_');

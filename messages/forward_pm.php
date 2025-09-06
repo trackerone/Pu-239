@@ -1,4 +1,6 @@
 <?php
+$db = $container->get(Database::class);
+
 require_once __DIR__ . '/../include/runtime_safe.php';
 
 
@@ -48,7 +50,7 @@ if (!has_access($CURUSER['class'], UC_STAFF, '')) {
                       ->select('id')
                       ->where('userid = ?', $to_user['id'])
                       ->where('blockid = ?', $CURUSER['id'])
-                      ->fetch(); // TODO(batch41): replace with $this->db->fetchRow("SELECT ...", [...])
+                      ->fetch();
     if (!$blocked) {
         stderr(_('Refused'), _('This member has blocked PMs from you.'));
     }
@@ -58,7 +60,7 @@ if (!has_access($CURUSER['class'], UC_STAFF, '')) {
                          ->select('id')
                          ->where('userid = ?', $to_user['id'])
                          ->where('friendid = ?', $CURUSER['id'])
-                         ->fetch(); // TODO(batch41): replace with $this->db->fetchRow("SELECT ...", [...])
+                         ->fetch();
         if (!$friend) {
             stderr(_('Refused'), _('This member only accepts PMs from members on their friends list.'));
         }

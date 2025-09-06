@@ -1,4 +1,6 @@
 <?php
+$db = $container->get(Database::class);
+
 require_once __DIR__ . '/../include/runtime_safe.php';
 
 
@@ -229,7 +231,7 @@ $forums = $fluent->from('forums AS f')
                  ->leftJoin('over_forums AS o ON f.forum_id = o.id')
                  ->leftJoin('forums AS s ON f.parent_forum = s.id')
                  ->orderBy('f.forum_id')
-                 ->fetchAll(); // TODO(batch41): replace with $this->db->fetchAll("SELECT ...", [...])
+                 ->fetchAll();
 $body = '';
 
 foreach ($forums as $row) {
@@ -350,7 +352,7 @@ $body .= '
 $count = $fluent->from('forums')
                 ->select(null)
                 ->select('COUNT(id) AS count')
-                ->fetch("count"); // TODO(batch41): use $this->db->fetchValue("SELECT COUNT(...) ...", [...])
+                ->fetch("count");
 $maxclass = $count + 1;
 for ($i = 0; $i <= $maxclass; ++$i) {
     $body .= '

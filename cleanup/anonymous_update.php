@@ -1,4 +1,6 @@
 <?php
+$db = $container->get(Database::class);
+
 require_once __DIR__ . '/../include/runtime_safe.php';
 
 require_once __DIR__ . '/../include/bootstrap_pdo.php';
@@ -57,7 +59,7 @@ function anonymous_update($data)
             'modcomment' => $modcomment,
         ];
         $sql = "UPDATE users SET /* columns */ WHERE id = :id";
-$this->db->perform($sql, array_merge($set, ['id' => $arr['id']]));
+$db->perform($sql, array_merge($set, ['id' => $arr['id']]));
 
         $cache->update_row('user_' . $arr['id'], $set, $site_config['expires']['user_cache']);
     }

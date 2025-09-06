@@ -463,7 +463,7 @@ $db = $container->get(Database::class);;
     ];
     // $fluent removed — use $this->db (ExtendedPdo)
     $sql = "UPDATE images SET /* columns */ WHERE imdb_id = :imdb_id";
-$this->db->perform($sql, array_merge($set, ['imdb_id' => $imdb_id]));
+$db->perform($sql, array_merge($set, ['imdb_id' => $imdb_id]));
 }
 
 /**

@@ -33,7 +33,7 @@ $mode = (isset($_GET['mode']) ? $_GET['mode'] : (isset($_POST['mode']) ? $_POST[
 if (empty($mode)) {
     $backups = $fluent->from('dbbackup')
                       ->orderBy('added DESC')
-                      ->fetchAll(); // TODO(batch41): replace with $this->db->fetchAll("SELECT ...", [...])
+                      ->fetchAll();
 
     if ($backups) {
         $HTMLOUT .= "
@@ -165,7 +165,7 @@ if (empty($mode)) {
         'userid' => $CURUSER['id'],
     ];
     $sql = "INSERT INTO dbbackup (/* columns */) VALUES (/* values */)";
-$this->db->perform($sql, $values);
+$db->perform($sql, $values);
 
     if ($site_config['backup']['write_to_log']) {
         write_log($CURUSER['username'] . '(' . get_user_class_name((int) $CURUSER['class']) . ') ' . _('successfully backed-up the database.'));
@@ -186,7 +186,7 @@ $this->db->perform($sql, $values);
                         ->select(null)
                         ->select('name')
                         ->where('id', $ids)
-                        ->fetchAll(); // TODO(batch41): replace with $this->db->fetchAll("SELECT ...", [...])
+                        ->fetchAll();
 
         if ($files) {
             $count = count($files);

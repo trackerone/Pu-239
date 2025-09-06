@@ -1,4 +1,6 @@
 <?php
+$db = $container->get(Database::class);
+
 require_once __DIR__ . '/runtime_safe.php';
 
 require_once __DIR__ . '/bootstrap_pdo.php';
@@ -36,7 +38,7 @@ function set_event(int $modifier, int $begin, int $expires, int $setby, string $
         'title' => $title,
     ];
     $sql = "INSERT INTO events (/* columns */) VALUES (/* values */)";
-$this->db->perform($sql, $values);
+$db->perform($sql, $values);
 
     $cache->set('site_events_', $values, $expires);
 }
@@ -60,7 +62,7 @@ function update_event(int $expires, int $new_expires)
         'expires' => $new_expires,
     ];
     $sql = "UPDATE events SET /* columns */ WHERE expires = :expires";
-$this->db->perform($sql, array_merge($set, ['expires' => $expires]));
+$db->perform($sql, array_merge($set, ['expires' => $expires]));
 
     $free = [
         'modifier' => 0,
@@ -93,7 +95,7 @@ function get_event(bool $all)
                            ->where('expires>?', TIME_NOW)
                            ->orderBy('id DESC')
                            ->limit(1)
-                           ->fetch(); // TODO(batch41): replace with $this->db->fetchRow("SELECT ...", [...])
+                           ->fetch();
 
             if (empty($free)) {
                 $free = [
@@ -107,7 +109,7 @@ function get_event(bool $all)
         $free = $fluent->from('events')
                        ->orderBy('id DESC')
                        ->limit(20)
-                       ->fetchAll(); // TODO(batch41): replace with $this->db->fetchAll("SELECT ...", [...])
+                       ->fetchAll();
 
         $free = array_reverse($free);
     }

@@ -1,4 +1,6 @@
 <?php
+$db = $container->get(Database::class);
+
 require_once __DIR__ . '/../include/runtime_safe.php';
 
 
@@ -419,11 +421,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         // $fluent removed — use $this->db (ExtendedPdo)
         if (!empty($addset)) {
             $sql = "UPDATE user_blocks SET /* columns */ WHERE userid = :userid";
-$query = $this->db->perform($sql, array_merge($addset, ['userid' => $id]));
+$query = $db->perform($sql, array_merge($addset, ['userid' => $id]));
         }
         if (!empty($removeset)) {
             $sql = "UPDATE user_blocks SET /* columns */ WHERE userid = :userid";
-$this->db->perform($sql, array_merge($removeset, ['userid' => $id]));
+$db->perform($sql, array_merge($removeset, ['userid' => $id]));
         }
         $blocks = $fluent->from('user_blocks')
                          ->select(null)
@@ -431,7 +433,7 @@ $this->db->perform($sql, array_merge($removeset, ['userid' => $id]));
                          ->select('global_stdhead')
                          ->select('userdetails_page')
                          ->where('userid = ?', $id)
-                         ->fetch(); // TODO(batch41): replace with $this->db->fetchRow("SELECT ...", [...])
+                         ->fetch();
 
         $update['blocks'] = $blocks;
         $cache->update_row('user_' . $id, $update);

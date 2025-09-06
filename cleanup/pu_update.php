@@ -1,4 +1,6 @@
 <?php
+$db = $container->get(Database::class);
+
 require_once __DIR__ . '/../include/runtime_safe.php';
 
 require_once __DIR__ . '/../include/bootstrap_pdo.php';
@@ -42,7 +44,7 @@ function pu_update($data)
                      ->where('c.name != ?', 'UC_STAFF')
                      ->leftJoin('class_config AS c ON p.name = c.name')
                      ->orderBy('p.id')
-                     ->fetchAll(); // TODO(batch41): replace with $this->db->fetchAll("SELECT ...", [...])
+                     ->fetchAll();
 
     foreach ($promos as $ac) {
         $class_config = [

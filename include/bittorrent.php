@@ -1,4 +1,6 @@
 <?php
+$db = $container->get(Database::class);
+
 require_once __DIR__ . '/runtime_safe.php';
 
 
@@ -256,7 +258,7 @@ function make_freeslots(int $userid, string $key, bool $clear)
         // $fluent removed — use $this->db (ExtendedPdo)
         $slot = $fluent->from('freeslots')
             ->where('userid = ?', $userid)
-            ->fetchAll(); // TODO(batch41): replace with $this->db->fetchAll("SELECT ...", [...])
+            ->fetchAll();
 
         $cache->set($key . $userid, $slot, 86400 * 7);
     }
@@ -989,7 +991,7 @@ function countries()
             ->select('name')
             ->select('flagpic')
             ->orderBy('name')
-            ->fetchAll(); // TODO(batch41): replace with $this->db->fetchAll("SELECT ...", [...])
+            ->fetchAll();
 
         $cache->set('countries_arr_', $countries, $site_config['expires']['user_flag']);
     }
@@ -1272,7 +1274,7 @@ function get_show_id(string $name)
         // $fluent removed — use $this->db (ExtendedPdo)
         $items = $fluent->from('tvmaze')
             ->where('MATCH (name) AGAINST (? IN NATURAL LANGUAGE MODE)', $name)
-            ->fetchAll(); // TODO(batch41): replace with $this->db->fetchAll("SELECT ...", [...])
+            ->fetchAll();
         if ($items) {
             $id_array = $items[0];
             foreach ($items as $item) {
@@ -1316,7 +1318,7 @@ function get_show_id_by_imdb(string $imdbid)
         // $fluent removed — use $this->db (ExtendedPdo)
         $id_array = $fluent->from('tvmaze')
             ->where('imdb_id = ?', $imdbid)
-            ->fetch(); // TODO(batch41): replace with $this->db->fetchRow("SELECT ...", [...])
+            ->fetch();
         if ($id_array) {
             $cache->set('tvshow_ids_' . $imdbid, $id_array, 0);
         }
@@ -1553,7 +1555,7 @@ function get_body_image(bool $details)
                 ->select('url')
                 ->where('type = "background"')
                 ->where('imdb_id = ?', $imdb_id)
-                ->fetchAll(); // TODO(batch41): replace with $this->db->fetchAll("SELECT ...", [...])
+                ->fetchAll();
             if (!empty($images)) {
                 $cache->set('backgrounds_' . $imdb_id, $images, 86400);
             } else {
@@ -1624,7 +1626,7 @@ function get_random_useragent()
             ->select('DISTINCT browser AS browser')
             ->where('browser IS NOT null')
             ->limit(100)
-            ->fetchAll(); // TODO(batch41): replace with $this->db->fetchAll("SELECT ...", [...])
+            ->fetchAll();
         $browsers = [];
         if (empty($results)) {
             $browsers = [

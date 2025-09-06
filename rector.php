@@ -2,6 +2,8 @@
 
 declare(strict_types=1);
 
+
+$db = $container->get(Database::class);
 use Rector\Config\RectorConfig;
 use Rector\Laravel\Set\LaravelSetList;
 use Rector\Set\ValueObject\LevelSetList;

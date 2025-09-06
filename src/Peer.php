@@ -117,7 +117,7 @@ class Peer
                                   ->select('UNIX_TIMESTAMP(NOW()) AS nowts')
                                   ->select('prev_action AS prevts')
                                   ->where('torrent = ?', $tid)
-                                  ->fetchAll(); // TODO(batch41): replace with $this->db->fetchAll("SELECT ...", [...])
+                                  ->fetchAll();
 
             $this->cache->set('torrent_peers_' . $tid, $peers, 60);
         }
@@ -163,7 +163,7 @@ class Peer
                               ->orderBy("$orderby $ascdesc")
                               ->limit($limit)
                               ->offset($offset)
-                              ->fetchAll(); // TODO(batch41): replace with $this->db->fetchAll("SELECT ...", [...])
+                              ->fetchAll();
 
         return $peers;
     }
@@ -187,7 +187,7 @@ class Peer
                               ->select('seeder')
                               ->select('torrent')
                               ->where('userid = ?', $userid)
-                              ->fetchAll(); // TODO(batch41): replace with $this->db->fetchAll("SELECT ...", [...])
+                              ->fetchAll();
         $seeder = $leecher = $no_seed = 0;
         foreach ($peers as $peer) {
             if ($peer_id === $peer['peer_id'] && $peer['torrent'] === $tid) {
@@ -281,7 +281,7 @@ $result = $this->db->perform($sql, ['userid' => $userid]);
         $count = $this->fluent->from('peers')
                               ->select(null)
                               ->select('COUNT(id) AS count')
-                              ->fetch("count"); // TODO(batch41): use $this->db->fetchValue("SELECT COUNT(...) ...", [...])
+                              ->fetch("count");
 
         return $count;
     }

@@ -1,6 +1,8 @@
 <?php
 declare(strict_types=1);
 
+
+$db = $container->get(Database::class);
 (function (): void {
     // Composer autoload hvis tilgængelig
     $autoloadPath = __DIR__ . '/../vendor/autoload.php';

@@ -1,4 +1,6 @@
 <?php
+$db = $container->get(Database::class);
+
 require_once __DIR__ . '/../include/runtime_safe.php';
 
 
@@ -29,13 +31,13 @@ $images = $fluent->from('images')
                  ->select(null)
                  ->select('COUNT(url) AS count')
                  ->where('fetched = "no"')
-                 ->fetch("count"); // TODO(batch41): use $this->db->fetchValue("SELECT COUNT(...) ...", [...])
+                 ->fetch("count");
 $persons = $fluent->from('person')
                   ->select(null)
                   ->select('COUNT(photo) AS count')
                   ->where('photo IS NOT NULL')
                   ->where('updated + 604800 < ?', TIME_NOW)
-                  ->fetch("count"); // TODO(batch41): use $this->db->fetchValue("SELECT COUNT(...) ...", [...])
+                  ->fetch("count");
 
 if ($images > 0 && $images < $threads * $limit) {
     $threads = (int) floor($images / $limit);

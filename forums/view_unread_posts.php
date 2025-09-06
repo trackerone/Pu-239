@@ -1,4 +1,6 @@
 <?php
+$db = $container->get(Database::class);
+
 require_once __DIR__ . '/bootstrap_pdo.php';
 
 
@@ -16,7 +18,7 @@ $count = $fluent->from('read_posts')
                 ->select(null)
                 ->select('COUNT(id) AS count')
                 ->where('user_id = ?', $user['id'])
-                ->fetch("count"); // TODO(batch41): use $this->db->fetchValue("SELECT COUNT(...) ...", [...])
+                ->fetch("count");
 if ($count === 0) {
     require_once FORUM_DIR . 'mark_all_as_read.php';
     mark_as_unread($user);
@@ -42,7 +44,7 @@ $query = $query->where('f.min_class_read <= ?', $user['class'])
                ->where('p.added > ?', $time)
                ->where('(r.last_post_read IS NULL OR r.last_post_read < t.last_post)')
                ->where('r.user_id = ?', $user['id'])
-               ->fetchAll(); // TODO(batch41): replace with $this->db->fetchAll("SELECT ...", [...])
+               ->fetchAll();
 $count = !empty($query) ? count($query) : 0;
 if ($count === 0) {
     $heading = '
@@ -93,7 +95,7 @@ if ($count === 0) {
                      ->orderBy('t.last_post DESC')
                      ->limit($pager['pdo']['limit'])
                      ->offset($pager['pdo']['offset'])
-                     ->fetchAll(); // TODO(batch41): replace with $this->db->fetchAll("SELECT ...", [...])
+                     ->fetchAll();
     $HTMLOUT .= $menu_top;
     $heading = '
         <tr>
@@ -139,14 +141,14 @@ if ($count === 0) {
                          ->select('COUNT(id) AS count')
                          ->where('user_id = ?', $user['id'])
                          ->where('topic_id = ?', $arr_unread['topic_id'])
-                         ->fetch("count"); // TODO(batch41): use $this->db->fetchValue("SELECT COUNT(...) ...", [...])
+                         ->fetch("count");
 
         $subscriptions = $fluent->from('subscriptions')
                                 ->select(null)
                                 ->select('COUNT(id) AS count')
                                 ->where('user_id = ?', $user['id'])
                                 ->where('topic_id = ?', $arr_unread['topic_id'])
-                                ->fetch("count"); // TODO(batch41): use $this->db->fetchValue("SELECT COUNT(...) ...", [...])
+                                ->fetch("count");
 
         $icon = empty($arr_unread['icon']) ? '
             <img src="' . $site_config['paths']['images_baseurl'] . 'forums/topic_normal.gif" class="icon tooltipper left5" alt="' . _('Topic') . '" title="' . _('Topic') . '">' : '

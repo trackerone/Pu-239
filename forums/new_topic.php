@@ -1,4 +1,6 @@
 <?php
+$db = $container->get(Database::class);
+
 require_once __DIR__ . '/../include/runtime_safe.php';
 
 
@@ -64,7 +66,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $_POST['button'] === 'Post') {
             'multi_options' => $multi_options,
         ];
         $sql = "INSERT INTO forum_poll (/* columns */) VALUES (/* values */)";
-$poll_id = $this->db->perform($sql, $values);
+$poll_id = $db->perform($sql, $values);
     }
     $values = [
         'user_id' => $CURUSER['id'],
@@ -77,7 +79,7 @@ $poll_id = $this->db->perform($sql, $values);
         'added' => TIME_NOW,
     ];
     $sql = "INSERT INTO topics (/* columns */) VALUES (/* values */)";
-$topic_id = $this->db->perform($sql, $values);
+$topic_id = $db->perform($sql, $values);
 
     $values = [
         'topic_id' => $topic_id,
@@ -91,13 +93,13 @@ $topic_id = $this->db->perform($sql, $values);
     ];
 
     $sql = "INSERT INTO posts (/* columns */) VALUES (/* values */)";
-$post_id = $this->db->perform($sql, $values);
+$post_id = $db->perform($sql, $values);
     $post_id = (int) $post_id;
     $set = [
         'forumtopics' => new Literal('forumtopics + 1'),
     ];
     $sql = "UPDATE usersachiev SET /* columns */ WHERE userid = :userid";
-$this->db->perform($sql, array_merge($set, ['userid' => $CURUSER['id']]));
+$db->perform($sql, array_merge($set, ['userid' => $CURUSER['id']]));
 
     clr_forums_cache($post_id);
     clr_forums_cache($forum_id);
@@ -110,14 +112,14 @@ $this->db->perform($sql, array_merge($set, ['userid' => $CURUSER['id']]));
         'post_count' => 1,
     ];
     $sql = "UPDATE topics SET /* columns */ WHERE id = :id";
-$this->db->perform($sql, array_merge($set, ['id' => $topic_id]));
+$db->perform($sql, array_merge($set, ['id' => $topic_id]));
 
     $set = [
         'post_count' => new Literal('post_count + 1'),
         'topic_count' => new Literal('topic_count + 1'),
     ];
     $sql = "UPDATE forums SET /* columns */ WHERE id = :id";
-$this->db->perform($sql, array_merge($set, ['id' => $forum_id]));
+$db->perform($sql, array_merge($set, ['id' => $forum_id]));
 
     if ($site_config['site']['autoshout_chat'] || $site_config['site']['autoshout_irc']) {
         $message = htmlsafechars($CURUSER['username']) . ' ' . _('Created a new topic') . " [quote][url={$site_config['paths']['baseurl']}/forums.php?action=view_topic&topic_id=$topic_id&page=last]" . $topic_name . '[/url][/quote]';
@@ -130,7 +132,7 @@ $this->db->perform($sql, array_merge($set, ['id' => $forum_id]));
             'seedbonus' => $CURUSER['seedbonus'] + $site_config['bonus']['per_topic'],
         ];
         $sql = "UPDATE users SET /* columns */ WHERE id = :id";
-$this->db->perform($sql, array_merge($set, ['id' => $CURUSER['id']]));
+$db->perform($sql, array_merge($set, ['id' => $CURUSER['id']]));
         $cache->update_row('user_' . $CURUSER['id'], [
             'seedbonus' => $CURUSER['seedbonus'] + $site_config['bonus']['per_topic'],
         ]);
@@ -142,7 +144,7 @@ $this->db->perform($sql, array_merge($set, ['id' => $CURUSER['id']]));
             'topic_id' => $topic_id,
         ];
         $sql = "INSERT INTO subscriptions (/* columns */) VALUES (/* values */)";
-$this->db->perform($sql, $values);
+$db->perform($sql, $values);
     }
 
     $extension_error = $size_error = 0;

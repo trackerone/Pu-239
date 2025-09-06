@@ -1,4 +1,6 @@
 <?php
+$db = $container->get(Database::class);
+
 require_once __DIR__ . '/../include/runtime_safe.php';
 
 require_once __DIR__ . '/../include/bootstrap_pdo.php';
@@ -119,7 +121,7 @@ if ($user['hidden'] === 0) {
     $count->where('c.hidden = 0')
           ->leftJoin('categories AS c ON t.category = c.id');
 }
-$count = $count->fetch("count"); // TODO(batch41): use $this->db->fetchValue("SELECT COUNT(...) ...", [...])
+$count = $count->fetch("count");
 $perpage = 10;
 $pager = pager($perpage, $count, $_SERVER['PHP_SELF'] . '?' . $p);
 $top = $bottom = '';

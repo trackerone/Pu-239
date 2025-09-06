@@ -1,4 +1,6 @@
 <?php
+$db = $container->get(Database::class);
+
 require_once __DIR__ . '/../include/runtime_safe.php';
 
 require_once __DIR__ . '/../include/bootstrap_pdo.php';
@@ -199,7 +201,7 @@ if (!empty($_POST) && $_POST['action'] === 'edituser') {
         ];
         $cache->delete('totalfunds_');
         $sql = "INSERT INTO funds (/* columns */) VALUES (/* values */)";
-$this->db->perform($sql, $values);
+$db->perform($sql, $values);
         $update = [
             'donated' => $donated,
             'total_donated' => $user['total_donated'] + $donated,
@@ -838,7 +840,7 @@ $this->db->perform($sql, $values);
             $modcomment = get_date($dt, 'DATE', 1) . ' ' . _('- Disabled by ') . ' ' . $CURUSER['username'] . ".\n" . $modcomment;
             $useredit[] = _('Enabled = ') . 'no';
             $sql = "DELETE FROM ajax_chat_online WHERE userID = :userID";
-$this->db->perform($sql, ['userID' => $userid]);
+$db->perform($sql, ['userID' => $userid]);
             $cache->set('forced_logout_' . $userid, $dt);
         } elseif ($status === 5) {
             $update['status'] = 5;

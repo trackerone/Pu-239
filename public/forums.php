@@ -419,7 +419,7 @@ switch ($action) {
                         ->where('ovf.min_class_view <= ?', $user['class'])
                         ->where('f.min_class_read <= ?', $user['class'])
                         ->orderBy('ovf.sort, f.sort')
-                        ->fetchAll(); // TODO(batch41): replace with $this->db->fetchAll("SELECT ...", [...])
+                        ->fetchAll();
         $children = [];
         foreach ($query as $forum) {
             if ($forum['parent_forum'] === 0) {
@@ -482,7 +482,7 @@ switch ($action) {
                     $last_post_arr = $query->where('t.forum_id', $arr_forums['children_ids'])
                                            ->orderBy('p.id DESC')
                                            ->limit(1)
-                                           ->fetch(); // TODO(batch41): replace with $this->db->fetchRow("SELECT ...", [...])
+                                           ->fetch();
 
                     $cache->set('forum_last_post_' . $forum_id . '_' . $user['class'], $last_post_arr, $site_config['expires']['last_post']);
                 }
@@ -676,7 +676,7 @@ $db = $container->get(Database::class);, $site_config, $user;
                           ->orderBy('over_forums.sort ASC')
                           ->orderBy('forums.parent_forum ASC')
                           ->orderBy('forums.sort ASC')
-                          ->fetchAll(); // TODO(batch41): replace with $this->db->fetchAll("SELECT ...", [...])
+                          ->fetchAll();
         $cache->set($cachename, $qjcache, $site_config['expires']['forum_insertJumpTo']);
     }
 

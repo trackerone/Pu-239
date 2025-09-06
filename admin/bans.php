@@ -27,7 +27,7 @@ if ($remove > 0) {
                   ->select('INET6_NTOA(first) AS first')
                   ->select('INET6_NTOA(last) AS last')
                   ->where('id = ?', $remove)
-                  ->fetch(); // TODO(batch41): replace with $this->db->fetchRow("SELECT ...", [...])
+                  ->fetch();
 
     if (!$res) {
         stderr(_('Error'), _('A Ban with that ID could not be found'));
@@ -37,7 +37,7 @@ if ($remove > 0) {
     }
     if (is_valid_id($remove)) {
         $sql = "DELETE FROM bans WHERE id = :id";
-$this->db->perform($sql, ['id' => $remove]);
+$db->perform($sql, ['id' => $remove]);
         write_log(_fe('Ban {0} was removed by {1}', $remove, $CURUSER['username']));
         $session->set('is-success', _fe('IPS: {0} to {1} were removed', $res['first'], $res['last']));
         unset($_GET);
@@ -67,7 +67,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $CURUSER['class'] >= UC_MAX) {
     ];
 
     $sql = "INSERT INTO bans (/* columns */) VALUES (/* values */)";
-$this->db->perform($sql, $values);
+$db->perform($sql, $values);
 
     $key = 'bans_' . $ip;
     $session->set('is-success', "IPs: $first to $last added to Bans");

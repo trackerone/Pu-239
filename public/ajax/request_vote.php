@@ -1,4 +1,6 @@
 <?php
+$db = $container->get(Database::class);
+
 require_once __DIR__ . '/../../include/runtime_safe.php';
 
 
@@ -56,7 +58,7 @@ if ($voted === 'yes') {
     ];
     try {
         $sql = "INSERT INTO request_votes (/* columns */) VALUES (/* values */)";
-$this->db->perform($sql, $values);
+$db->perform($sql, $values);
         echo json_encode(['voted' => 'yes']);
         app_halt('Exit called');
     } catch (Exception $e) {

@@ -1,4 +1,6 @@
 <?php
+$db = $container->get(Database::class);
+
 require_once __DIR__ . '/../../include/runtime_safe.php';
 
 
@@ -57,7 +59,7 @@ switch ($action) {
         }
         // $fluent removed — use $this->db (ExtendedPdo)
         $sql = "INSERT INTO sitelog (/* columns */) VALUES (/* values */)";
-$this->db->perform($sql, $values);
+$db->perform($sql, $values);
         break;
 
     case 'staff_notes':

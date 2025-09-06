@@ -1,4 +1,6 @@
 <?php
+$db = $container->get(Database::class);
+
 require_once __DIR__ . '/../../include/runtime_safe.php';
 
 require_once __DIR__ . '/../../include/bootstrap_pdo.php';
@@ -19,7 +21,7 @@ if ($usercomments === false || is_null($usercomments)) {
                            ->select(null)
                            ->select('COUNT(id) AS count')
                            ->where('user = ?', $user['id'])
-                           ->fetch("count"); // TODO(batch41): use $this->db->fetchValue("SELECT COUNT(...) ...", [...])
+                           ->fetch("count");
     $cache->set('user_comments_' . $user['id'], $usercomments, $site_config['expires']['torrent_comments']);
 }
 

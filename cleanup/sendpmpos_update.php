@@ -1,4 +1,6 @@
 <?php
+$db = $container->get(Database::class);
+
 require_once __DIR__ . '/../include/runtime_safe.php';
 
 require_once __DIR__ . '/../include/bootstrap_pdo.php';
@@ -39,7 +41,7 @@ function sendpmpos_update($data)
                     ->select('modcomment')
                     ->where('sendpmpos > 1')
                     ->where('sendpmpos < ?', $dt)
-                    ->fetchAll(); // TODO(batch41): replace with $this->db->fetchAll("SELECT ...", [...])
+                    ->fetchAll();
 
     $msgs_buffer = $users_buffer = [];
     $count = count($users);

@@ -1,4 +1,6 @@
 <?php
+$db = $container->get(Database::class);
+
 require_once __DIR__ . '/../../include/runtime_safe.php';
 
 require_once __DIR__ . '/../../include/bootstrap_pdo.php';
@@ -18,7 +20,7 @@ if ($active24 === false || is_null($active24)) {
     // $fluent removed — use $this->db (ExtendedPdo)
     $record = $fluent->from('avps')
                      ->where('arg = ?', 'last24')
-                     ->fetch(); // TODO(batch41): replace with $this->db->fetchRow("SELECT ...", [...])
+                     ->fetch();
 
     $dt = TIME_NOW - 86400;
     $query = $fluent->from('users')
@@ -29,7 +31,7 @@ if ($active24 === false || is_null($active24)) {
                     ->where('perms < ?', PERMS_STEALTH)
                     ->where('id != 2')
                     ->orderBy('username')
-                    ->fetchAll(); // TODO(batch41): replace with $this->db->fetchAll("SELECT ...", [...])
+                    ->fetchAll();
 
     $count = count($query);
     $i = 0;

@@ -108,7 +108,7 @@ class Image
                                    ->where('type = ?', $type)
                                    ->where('imdb_id = ?', $imdb)
                                    ->where('fetched = "yes"')
-                                   ->fetchAll(); // TODO(batch41): replace with $this->db->fetchAll("SELECT ...", [...])
+                                   ->fetchAll();
 
             if (!empty($images)) {
                 $this->cache->set($type . '_' . $imdb, $images, 86400);
@@ -141,7 +141,7 @@ class Image
         return $this->fluent->from('images')
                             ->limit($limit)
                             ->offset($offset)
-                            ->fetchAll(); // TODO(batch41): replace with $this->db->fetchAll("SELECT ...", [...])
+                            ->fetchAll();
     }
 
     /**
@@ -156,7 +156,7 @@ class Image
     {
         return $this->fluent->from('images')
                             ->where('url = ?', $url)
-                            ->fetch(); // TODO(batch41): replace with $this->db->fetchRow("SELECT ...", [...])
+                            ->fetch();
     }
 
     /**
@@ -169,7 +169,7 @@ class Image
         return $this->fluent->from('images')
                             ->select(null)
                             ->select('COUNT(added) AS count')
-                            ->fetch("count"); // TODO(batch41): use $this->db->fetchValue("SELECT COUNT(...) ...", [...])
+                            ->fetch("count");
     }
 
     /**
@@ -220,7 +220,7 @@ $this->db->perform($sql, ['url' => $url]);
                 }
             }
         }
-        $count = $count->fetch("count"); // TODO(batch41): use $this->db->fetchValue("SELECT COUNT(...) ...", [...])
+        $count = $count->fetch("count");
 
         return $count;
     }
@@ -264,7 +264,7 @@ $this->db->perform($sql, ['url' => $url]);
         }
         $query = $query->limit($limit)
                        ->offset($offset)
-                       ->fetchAll(); // TODO(batch41): replace with $this->db->fetchAll("SELECT ...", [...])
+                       ->fetchAll();
 
         return $query;
     }

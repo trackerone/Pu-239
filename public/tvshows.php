@@ -1,4 +1,6 @@
 <?php
+$db = $container->get(Database::class);
+
 require_once __DIR__ . '/../include/runtime_safe.php';
 
 require_once __DIR__ . '/../include/bootstrap_pdo.php';
@@ -81,7 +83,7 @@ if (!empty($_GET['sre'])) {
     $select->where('t.rating <= ?', (float) $_GET['sre'])
            ->orderBy('t.rating DESC');
 }
-$count = $count->fetch("count"); // TODO(batch41): use $this->db->fetchValue("SELECT COUNT(...) ...", [...])
+$count = $count->fetch("count");
 $perpage = 25;
 $addparam = !empty($addparam) ? '?' . implode('&amp;', $addparam) . '&amp;' : '?';
 $pager = pager($perpage, $count, "{$site_config['paths']['baseurl']}/tmovies.php{$addparam}");
@@ -105,7 +107,7 @@ foreach ($select as $torrent) {
                        ->where('i.type = "cast"')
                        ->orderBy('p.name')
                        ->limit(7)
-                       ->fetchAll(); // TODO(batch41): replace with $this->db->fetchAll("SELECT ...", [...])
+                       ->fetchAll();
         $cache->set('cast_' . $torrent['imdb_id'], $cast, 604800);
     }
 

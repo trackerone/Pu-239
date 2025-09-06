@@ -1,4 +1,6 @@
 <?php
+$db = $container->get(Database::class);
+
 require_once __DIR__ . '/runtime_safe.php';
 
 
@@ -44,7 +46,7 @@ function autoshout(string $msg, int $channel = 0, int $ttl = 3600)
 
         // $fluent removed — use $this->db (ExtendedPdo)
         $sql = "INSERT INTO ajax_chat_messages (/* columns */) VALUES (/* values */)";
-$this->db->perform($sql, $values);
+$db->perform($sql, $values);
     }
 }
 

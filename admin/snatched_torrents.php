@@ -1,4 +1,6 @@
 <?php
+$db = $container->get(Database::class);
+
 require_once __DIR__ . '/../include/runtime_safe.php';
 
 require_once __DIR__ . '/../include/bootstrap_pdo.php';
@@ -99,7 +101,7 @@ global $container;
 $count = $fluent->from('snatched')
                 ->select(null)
                 ->select('COUNT(id) AS count')
-                ->fetch("count"); // TODO(batch41): use $this->db->fetchValue("SELECT COUNT(...) ...", [...])
+                ->fetch("count");
 
 $valid_sort = [
     'id',

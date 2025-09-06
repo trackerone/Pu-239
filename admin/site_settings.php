@@ -1,4 +1,6 @@
 <?php
+$db = $container->get(Database::class);
+
 require_once __DIR__ . '/../include/runtime_safe.php';
 
 require_once __DIR__ . '/../include/bootstrap_pdo.php';
@@ -70,7 +72,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if (!isset($set['name'])) {
             if ($id != 0) {
                 $sql = "DELETE FROM site_config WHERE id = :id";
-$this->db->perform($sql, ['id' => $id]);
+$db->perform($sql, ['id' => $id]);
                 $session->set('is-success', "$parentname " . _('Deleted'));
             }
         } elseif ($id === 'Add') {
@@ -85,13 +87,13 @@ $this->db->perform($sql, ['id' => $id]);
             } else {
                 if (!isset($item)) {
                     $sql = "INSERT INTO site_config (/* columns */) VALUES (/* values */)";
-$this->db->perform($sql, $set);
+$db->perform($sql, $set);
                     $session->set('is-success', "$parentname " . _('Added'));
                 }
             }
         } else {
             $sql = "UPDATE site_config SET /* columns */ WHERE id = :id";
-$results = $this->db->perform($sql, array_merge($set, ['id' => $id]));
+$results = $db->perform($sql, array_merge($set, ['id' => $id]));
             if ($results) {
                 $session->set('is-success', "$parentname " . _('Updated'));
             }

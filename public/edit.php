@@ -1,4 +1,6 @@
 <?php
+$db = $container->get(Database::class);
+
 require_once __DIR__ . '/../include/runtime_safe.php';
 
 
@@ -46,7 +48,7 @@ if ((isset($_GET['unedit']) && $_GET['unedit'] == 1) && $user['class'] >= UC_STA
 // $fluent removed — use $this->db (ExtendedPdo)
 $row = $fluent->from('torrents')
               ->where('id = ?', $id)
-              ->fetch(); // TODO(batch41): replace with $this->db->fetchRow("SELECT ...", [...])
+              ->fetch();
 if (!$row) {
     stderr(_('Error'), _('No torrent found'));
 }

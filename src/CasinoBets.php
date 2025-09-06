@@ -41,7 +41,7 @@ class CasinoBets
                              ->select(null)
                              ->select('COUNT(challenged) AS count')
                              ->where('proposed = ?', $username)
-                             ->fetch("count"); // TODO(batch41): use $this->db->fetchValue("SELECT COUNT(...) ...", [...])
+                             ->fetch("count");
 
         $bets = empty($bets) ? 1 : $bets;
 
@@ -60,7 +60,7 @@ class CasinoBets
     {
         $bet = $this->fluent->from('casino_bets')
                             ->where('id = ?', $id)
-                            ->fetch(); // TODO(batch41): replace with $this->db->fetchRow("SELECT ...", [...])
+                            ->fetch();
 
         return $bet;
     }
@@ -78,7 +78,7 @@ class CasinoBets
         $bets = $this->fluent->from('casino_bets')
                              ->where('userid = ?', $userid)
                              ->orderBy('time')
-                             ->fetchAll(); // TODO(batch41): replace with $this->db->fetchAll("SELECT ...", [...])
+                             ->fetchAll();
 
         return $bets;
     }
@@ -115,7 +115,7 @@ $this->db->perform($sql, ['id' => $id]);
     {
         $bets = $this->fluent->from('casino_bets')
                              ->where('challenged = "empty"')
-                             ->fetchAll(); // TODO(batch41): replace with $this->db->fetchAll("SELECT ...", [...])
+                             ->fetchAll();
 
         return $bets;
     }

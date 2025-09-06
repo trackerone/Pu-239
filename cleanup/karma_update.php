@@ -1,4 +1,6 @@
 <?php
+$db = $container->get(Database::class);
+
 require_once __DIR__ . '/../include/runtime_safe.php';
 
 require_once __DIR__ . '/../include/bootstrap_pdo.php';
@@ -42,7 +44,7 @@ function karma_update($data)
         }
         $sql = $sql->groupBy('userid')
                    ->groupBy('seedbonus')
-                   ->fetchAll(); // TODO(batch41): replace with $this->db->fetchAll("SELECT ...", [...])
+                   ->fetchAll();
         if (!empty($sql)) {
             $total = 0;
             $count = count($sql);

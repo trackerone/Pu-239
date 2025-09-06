@@ -1,4 +1,6 @@
 <?php
+$db = $container->get(Database::class);
+
 require_once __DIR__ . '/../include/runtime_safe.php';
 
 
@@ -25,12 +27,12 @@ if ($purge) {
                      ->select('null')
                      ->select('url')
                      ->select('type')
-                     ->fetchAll(); // TODO(batch41): replace with $this->db->fetchAll("SELECT ...", [...])
+                     ->fetchAll();
     $photos = $fluent->from('person')
                      ->select('null')
                      ->select('photo AS url')
                      ->where('photo IS NOT null')
-                     ->fetchAll(); // TODO(batch41): replace with $this->db->fetchAll("SELECT ...", [...])
+                     ->fetchAll();
     $hashes = [];
     $urls = array_merge($images, $photos);
     foreach ($urls as $url) {

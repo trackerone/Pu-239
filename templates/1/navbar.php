@@ -1,4 +1,6 @@
 <?php
+$db = $container->get(Database::class);
+
 require_once __DIR__ . '/../../include/runtime_safe.php';
 
 require_once __DIR__ . '/../../include/bootstrap_pdo.php';
@@ -192,7 +194,7 @@ function staff_panel()
                                   ->where('navbar = 1')
                                   ->where('av_class <= ?', $user_class)
                                   ->orderBy('page_name')
-                                  ->fetchAll(); // TODO(batch41): replace with $this->db->fetchAll("SELECT ...", [...])
+                                  ->fetchAll();
 
             $cache->set('staff_panels_' . $user_class, $staff_panel, 0);
         }

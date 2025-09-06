@@ -1,4 +1,6 @@
 <?php
+$db = $container->get(Database::class);
+
 /**
  * tools/check_platform.php
  * Soft validator for PHP 8.3 platform alignment.

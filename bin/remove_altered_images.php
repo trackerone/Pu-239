@@ -1,4 +1,6 @@
 <?php
+$db = $container->get(Database::class);
+
 require_once __DIR__ . '/../include/runtime_safe.php';
 
 require_once __DIR__ . '/../include/bootstrap_pdo.php';
@@ -18,13 +20,13 @@ $path = IMAGES_DIR . 'proxy/';
 // $fluent removed — use $this->db (ExtendedPdo)
 $urls = $fluent->from('images')
                ->select('url')
-               ->fetchAll(); // TODO(batch41): replace with $this->db->fetchAll("SELECT ...", [...])
+               ->fetchAll();
 
 $photos = $fluent->from('person')
                  ->select(null)
                  ->select('photo AS url')
                  ->where('photo IS NOT NULL')
-                 ->fetchAll(); // TODO(batch41): replace with $this->db->fetchAll("SELECT ...", [...])
+                 ->fetchAll();
 
 $urls = array_merge($urls, $photos);
 

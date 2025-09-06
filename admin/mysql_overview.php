@@ -1,4 +1,6 @@
 <?php
+$db = $container->get(Database::class);
+
 require_once __DIR__ . '/../include/runtime_safe.php';
 
 
@@ -37,7 +39,7 @@ $count = 0;
 $tables = $fluent->getPdo()
                  ->prepare('SHOW TABLE STATUS');
 $tables->execute();
-$query = $tables->fetchAll(); // TODO(batch41): replace with $this->db->fetchAll("SELECT ...", [...])
+$query = $tables->fetchAll();
 $innodb = true;
 foreach ($query as $row) {
     if ($row['Engine'] !== 'InnoDB') {

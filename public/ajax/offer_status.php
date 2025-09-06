@@ -1,4 +1,6 @@
 <?php
+$db = $container->get(Database::class);
+
 require_once __DIR__ . '/../../include/runtime_safe.php';
 
 
@@ -33,7 +35,7 @@ $update = [
 ];
 try {
     $sql = "UPDATE offers SET /* columns */ WHERE id = :id";
-$this->db->perform($sql, array_merge($update, ['id' => $id]));
+$db->perform($sql, array_merge($update, ['id' => $id]));
     echo json_encode(['status' => $to_status]);
     app_halt('Exit called');
 } catch (Exception $e) {

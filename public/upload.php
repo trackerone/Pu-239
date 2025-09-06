@@ -1,4 +1,6 @@
 <?php
+$db = $container->get(Database::class);
+
 require_once __DIR__ . '/../include/runtime_safe.php';
 
 require_once __DIR__ . '/../include/bootstrap_pdo.php';
@@ -90,7 +92,7 @@ $res_cooker = $fluent->from('upcoming')
                      ->select('name')
                      ->where('torrentid = 0')
                      ->orderBy('name')
-                     ->fetchAll(); // TODO(batch41): replace with $this->db->fetchAll("SELECT ...", [...])
+                     ->fetchAll();
 
 if ($res_cooker) {
     $has_recipes = '
@@ -114,7 +116,7 @@ $res_requests = $fluent->from('requests')
                        ->select('name')
                        ->where('filled_by_user_id = 0')
                        ->orderBy('name')
-                       ->fetchAll(); // TODO(batch41): replace with $this->db->fetchAll("SELECT ...", [...])
+                       ->fetchAll();
 
 if ($res_requests) {
     $has_requests = '
@@ -140,7 +142,7 @@ $res_offers = $fluent->from('offers')
                      ->where('userid = ?', $user['id'])
                      ->where('status = "approved"')
                      ->orderBy('name')
-                     ->fetchAll(); // TODO(batch41): replace with $this->db->fetchAll("SELECT ...", [...])
+                     ->fetchAll();
 
 if ($res_offers) {
     $has_offers = '

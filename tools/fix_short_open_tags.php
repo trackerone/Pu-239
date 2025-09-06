@@ -1,4 +1,6 @@
 <?php
+$db = $container->get(Database::class);
+
 /**
  * tools/fix_short_open_tags.php
  * Converts short open tags to full form in target files.

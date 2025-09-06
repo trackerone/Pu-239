@@ -4,9 +4,9 @@
  *
  * Goals:
  *  - In non-class PHP files (no "class " present):
- *      * Replace "$this->db->…" with "$db->…"
+ *      * Replace "$db->…" with "$db->…"
  *      * Ensure "$db = $container->get(Database::class);" exists (insert after header if missing)
- *  - Remove " // TODO(batch41): ..." comments
+ *  - Remove "
  *  - Collapse "$x = $y = <expr>;" into "$x = <expr>;" when <expr> starts with "$db->"
  */
 
@@ -38,8 +38,8 @@ foreach ($rii as $file) {
     $src = preg_replace('/\s*\/\/\s*TODO\(batch41\):[^\r\n]*/', '', $src);
 
     if (!$isClassFile) {
-        // 2) Replace $this->db-> with $db-> in non-class scripts
-        $src = preg_replace('/\$this->db->/', '$db->', $src);
+        // 2) Replace $db-> with $db-> in non-class scripts
+        $src = preg_replace('/\$db->/', '$db->', $src);
 
         // 3) Ensure $db is defined; if not, insert after header / declare / use block
         if (!preg_match('/\$db\s*=\s*\$container->get\(Database::class\);/', $src)) {
@@ -59,7 +59,7 @@ foreach ($rii as $file) {
         }
 
         // 4) Simplify "$x = $y = EXPR;" where EXPR starts with $db->
-        //    Example seen: $cat = $row = $this->db->fetchRow(...)  →  $cat = $db->fetchRow(...)
+        //    Example seen: $cat = $db->fetchRow(...)  →  $cat = $db->fetchRow(...)
         $src = preg_replace(
             '/\$(\w+)\s*=\s*\$(\w+)\s*=\s*(\$db->[^\;]+);/',
             '\$$1 = $3;',

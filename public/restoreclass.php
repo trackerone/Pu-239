@@ -1,4 +1,6 @@
 <?php
+$db = $container->get(Database::class);
+
 require_once __DIR__ . '/../include/runtime_safe.php';
 
 require_once __DIR__ . '/../include/bootstrap_pdo.php';
@@ -22,7 +24,7 @@ $users_class = $container->get(User::class);
 $users_class->update($set, $user['id']);
 // $fluent removed — use $this->db (ExtendedPdo)
 $sql = "DELETE FROM ajax_chat_online WHERE userID = :userID";
-$this->db->perform($sql, ['userID' => $user['id']]);
+$db->perform($sql, ['userID' => $user['id']]);
 $cache = $container->get(Cache::class);
 $cache->delete('chat_users_list_');
 header("Location: {$site_config['paths']['baseurl']}");

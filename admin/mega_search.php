@@ -1,4 +1,6 @@
 <?php
+$db = $container->get(Database::class);
+
 require_once __DIR__ . '/../include/runtime_safe.php';
 
 require_once __DIR__ . '/../include/bootstrap_pdo.php';
@@ -363,7 +365,7 @@ if (isset($_POST['invite_code'])) {
                    ->leftJoin('ips AS i ON u.id = i.userid')
                    ->leftJoin('invite_codes AS c ON u.id = c.sender')
                    ->where('c.code = ?', $invite_code)
-                   ->fetch(); // TODO(batch41): replace with $this->db->fetchRow("SELECT ...", [...])
+                   ->fetch();
 
     if ($user['id'] == '') {
         $HTMLOUT .= stdmsg(_('Error'), _('No user was found! Whoever made this invite is no longer with us.'), 'top20');
@@ -412,7 +414,7 @@ if (isset($_POST['invite_code'])) {
                            ->leftJoin('ips AS i ON u.id = i.userid')
                            ->leftJoin('invite_codes AS c ON u.id = c.receiver')
                            ->where('c.code = ?', $invite_code)
-                           ->fetch(); // TODO(batch41): replace with $this->db->fetchRow("SELECT ...", [...])
+                           ->fetch();
 
     if ($user_invited['id'] == '') {
         $HTMLOUT .= stdmsg(_('Error'), _('This invite code was either not used, or the member who used it is not longer with us.'), 'top20');

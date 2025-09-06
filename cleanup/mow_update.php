@@ -1,4 +1,6 @@
 <?php
+$db = $container->get(Database::class);
+
 require_once __DIR__ . '/../include/runtime_safe.php';
 
 require_once __DIR__ . '/../include/bootstrap_pdo.php';
@@ -32,7 +34,7 @@ function mow_update($data)
                   ->where('category', $site_config['categories']['movie'])
                   ->orderBy('RAND()')
                   ->limit(1)
-                  ->fetch(); // TODO(batch41): replace with $this->db->fetchRow("SELECT ...", [...])
+                  ->fetch();
 
     if (!empty($mow)) {
         $set = [

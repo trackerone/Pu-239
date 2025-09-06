@@ -1,4 +1,6 @@
 <?php
+$db = $container->get(Database::class);
+
 require_once __DIR__ . '/../include/runtime_safe.php';
 
 
@@ -18,13 +20,13 @@ $urls = $fluent->from('images')
                ->select('null')
                ->select('url')
                ->select('type')
-               ->fetchAll(); // TODO(batch41): replace with $this->db->fetchAll("SELECT ...", [...])
+               ->fetchAll();
 
 $photos = $fluent->from('person')
                  ->select(null)
                  ->select('photo AS url')
                  ->where('photo IS NOT NULL')
-                 ->fetchAll(); // TODO(batch41): replace with $this->db->fetchAll("SELECT ...", [...])
+                 ->fetchAll();
 
 $urls = array_merge($urls, $photos);
 $i = 0;

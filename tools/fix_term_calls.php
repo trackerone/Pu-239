@@ -1,4 +1,6 @@
 <?php
+$db = $container->get(Database::class);
+
 /**
  * tools/fix_term_calls.php
  * Rewrites abrupt halts to app_halt(...) in target files.

@@ -1,4 +1,6 @@
 <?php
+$db = $container->get(Database::class);
+
 require_once __DIR__ . '/../include/runtime_safe.php';
 
 require_once __DIR__ . '/../include/bootstrap_pdo.php';
@@ -37,7 +39,7 @@ function freetorrents_update($data)
         ];
 
         $sql = "UPDATE torrents SET /* columns */ WHERE id = :id";
-$this->db->perform($sql, array_merge($set, ['id' => $arr['id']]));
+$db->perform($sql, array_merge($set, ['id' => $arr['id']]));
 
         $cache->update_row('torrent_details_' . $arr['id'], [
             'free' => 0,

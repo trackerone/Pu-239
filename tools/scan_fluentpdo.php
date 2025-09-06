@@ -1,4 +1,6 @@
 <?php
+$db = $container->get(Database::class);
+
 /**
  * Scan project files for FluentPDO references.
  * Outputs findings to stdout (can be saved to artifact in CI).

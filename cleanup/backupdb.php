@@ -1,4 +1,6 @@
 <?php
+$db = $container->get(Database::class);
+
 require_once __DIR__ . '/../include/runtime_safe.php';
 
 require_once __DIR__ . '/../include/bootstrap_pdo.php';
@@ -28,7 +30,7 @@ function tables($no_data = '')
     $query = $fluent->getPdo()
                     ->prepare('SHOW TABLES');
     $query->execute();
-    $all_tables = $query->fetchAll(); // TODO(batch41): replace with $this->db->fetchAll("SELECT ...", [...])
+    $all_tables = $query->fetchAll();
 
     foreach ($all_tables as $values) {
         foreach ($values as $key => $value) {
@@ -94,14 +96,14 @@ function backupdb($data)
         'last_access' => $dt,
     ];
     $sql = "UPDATE users SET /* columns */ WHERE id = :id";
-$this->db->perform($sql, array_merge($set, ['id' => $site_config['chatbot']['id']]));
+$db->perform($sql, array_merge($set, ['id' => $site_config['chatbot']['id']]));
     $values = [
         'name' => $filename,
         'added' => $dt,
         'userid' => $site_config['site']['owner'],
     ];
     $sql = "INSERT INTO dbbackup (/* columns */) VALUES (/* values */)";
-$this->db->perform($sql, $values);
+$db->perform($sql, $values);
 
     $time_end = microtime(true);
     $run_time = $time_end - $time_start;

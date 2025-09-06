@@ -1,4 +1,6 @@
 <?php
+$db = $container->get(Database::class);
+
 require_once __DIR__ . '/runtime_safe.php';
 
 require_once __DIR__ . '/bootstrap_pdo.php';
@@ -34,7 +36,7 @@ function get_banner($imdb_id)
                              ->select('url')
                              ->where('type = "banner"')
                              ->where('imdb_id = ?', $imdb_id)
-                             ->fetchAll(); // TODO(batch41): replace with $this->db->fetchAll("SELECT ...", [...])
+                             ->fetchAll();
 
             $cache->set('banners_' . $imdb_id, $images, 86400);
         }
@@ -72,7 +74,7 @@ function get_poster($imdb_id)
                              ->select('url')
                              ->where('type = "poster"')
                              ->where('imdb_id = ?', $imdb_id)
-                             ->fetchAll(); // TODO(batch41): replace with $this->db->fetchAll("SELECT ...", [...])
+                             ->fetchAll();
             $cache->set('posters_' . $imdb_id, $images, 86400);
         }
 

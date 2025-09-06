@@ -1,4 +1,6 @@
 <?php
+$db = $container->get(Database::class);
+
 require_once __DIR__ . '/../include/runtime_safe.php';
 
 
@@ -62,7 +64,7 @@ if ($staff_classes === false || is_null($staff_classes)) {
                                 ->where('value >= ?', UC_STAFF)
                                 ->groupBy('value')
                                 ->orderBy('value')
-                                ->fetchAll(); // TODO(batch41): replace with $this->db->fetchAll("SELECT ...", [...])
+                                ->fetchAll();
     foreach ($available_classes as $class) {
         $staff_classes[] = $class['value'];
     }
@@ -107,7 +109,7 @@ if (in_array($tool, $staff_tools) && file_exists(ADMIN_DIR . $staff_tools[$tool]
                       ->select('av_class')
                       ->select('page_name')
                       ->where('id = ?', $id)
-                      ->fetch(); // TODO(batch41): replace with $this->db->fetchRow("SELECT ...", [...])
+                      ->fetch();
         if ($user['class'] < $arr['av_class']) {
             stderr(_('Error'), _('You are not allowed to delete this page.'));
         }
@@ -116,7 +118,7 @@ if (in_array($tool, $staff_tools) && file_exists(ADMIN_DIR . $staff_tools[$tool]
         }
         $cache->delete('staff_classes_');
         $sql = "DELETE FROM staffpanel WHERE id = :id";
-$result = $this->db->perform($sql, ['id' => $id]);
+$result = $db->perform($sql, ['id' => $id]);
         $cache->delete('av_class_');
         $cache->delete('staff_panels_6');
         $cache->delete('staff_panels_5');
@@ -200,7 +202,7 @@ $result = $this->db->perform($sql, ['id' => $id]);
                           ->select('av_class')
                           ->select('navbar')
                           ->where('id = ?', $id)
-                          ->fetch(); // TODO(batch41): replace with $this->db->fetchRow("SELECT ...", [...])
+                          ->fetch();
         }
         foreach ($names as $name) {
             ${$name} = (isset($_POST[$name]) ? $_POST[$name] : ($action === 'edit' ? $arr[$name] : ''));
@@ -257,7 +259,7 @@ $result = $this->db->perform($sql, ['id' => $id]);
                     ];
                     try {
                         $sql = "INSERT INTO staffpanel (/* columns */) VALUES (/* values */)";
-$new_id = $this->db->perform($sql, $values);
+$new_id = $db->perform($sql, $values);
                     } catch (Exception $e) {
                         $errors[] = $e->getMessage();
                     }
@@ -280,7 +282,7 @@ $new_id = $this->db->perform($sql, $values);
                         'av_class' => (int) $_POST['av_class'],
                     ];
                     $sql = "UPDATE staffpanel SET /* columns */ WHERE id = :id";
-$res = $this->db->perform($sql, array_merge($set, ['id' => $id]));
+$res = $db->perform($sql, array_merge($set, ['id' => $id]));
                     $cache->delete('av_class_');
                     $classes = $fluent->from('class_config')
                                       ->select(null)
@@ -444,7 +446,7 @@ $res = $this->db->perform($sql, array_merge($set, ['id' => $id]));
                        ->where('s.av_class <= ?', $user_class)
                        ->orderBy('s.av_class DESC')
                        ->orderBy('s.page_name')
-                       ->fetchAll(); // TODO(batch41): replace with $this->db->fetchAll("SELECT ...", [...])
+                       ->fetchAll();
         if (!empty($data)) {
             $db_classes = $unique_classes = [];
             foreach ($data as $key => $value) {

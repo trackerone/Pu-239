@@ -1,4 +1,6 @@
 <?php
+$db = $container->get(Database::class);
+
 require_once __DIR__ . '/../../include/runtime_safe.php';
 
 
@@ -86,7 +88,7 @@ if (!empty($bookmark)) {
         'torrentid' => $tid,
     ];
     $sql = "INSERT INTO bookmarks (/* columns */) VALUES (/* values */)";
-$this->db->perform($sql, $values);
+$db->perform($sql, $values);
     $cache->delete('bookmarks_' . $user['id']);
     echo json_encode([
         'content' => 'added',

@@ -44,7 +44,7 @@ class Person
         try {
             return $this->fluent->from('person')
                                 ->where('name = ?', $name)
-                                ->fetch(); // TODO(batch41): replace with $this->db->fetchRow("SELECT ...", [...])
+                                ->fetch();
         } catch (\Exception $e) {
             return $e->getMessage();
         }

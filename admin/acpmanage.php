@@ -62,17 +62,17 @@ $disabled = $fluent->from('users')
                    ->select(null)
                    ->select('COUNT(id) AS count')
                    ->where('status = 2')
-                   ->fetch("count"); // TODO(batch41): use $this->db->fetchValue("SELECT COUNT(...) ...", [...])
+                   ->fetch("count");
 $pending = $fluent->from('users')
                   ->select(null)
                   ->select('COUNT(id) AS count')
                   ->where('verified = 0')
-                  ->fetch("count"); // TODO(batch41): use $this->db->fetchValue("SELECT COUNT(...) ...", [...])
+                  ->fetch("count");
 $count = $fluent->from('users')
                 ->select(null)
                 ->select('COUNT(id) AS count')
                 ->where('status = 2 OR verified = 0')
-                ->fetch("count"); // TODO(batch41): use $this->db->fetchValue("SELECT COUNT(...) ...", [...])
+                ->fetch("count");
 $disabled = number_format($disabled);
 $pending = number_format($pending);
 $perpage = 25;

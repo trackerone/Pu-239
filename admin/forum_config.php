@@ -31,7 +31,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['do_it'])) {
         'max_file_size' => isset($_POST['max_file_size']) ? (int) $_POST['max_file_size'] : 0,
     ];
     $sql = "UPDATE forum_config SET /* columns */ WHERE id = :id";
-$this->db->perform($sql, array_merge($update, ['id' => $config_id]));
+$db->perform($sql, array_merge($update, ['id' => $config_id]));
     $cache->delete('forum_config_');
     header('Location: ' . $_SERVER['PHP_SELF'] . '?tool=forum_config');
     app_halt('Exit called');

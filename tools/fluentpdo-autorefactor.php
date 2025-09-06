@@ -1,4 +1,6 @@
 <?php
+$db = $container->get(Database::class);
+
 /**
  * Batch 37.3 – Auto-refactor FluentPDO to Aura.Sql
  * Converts common patterns into Aura.Sql skeletons.
@@ -28,7 +30,7 @@ foreach ($rii as $file) {
         '/(\$this->fluent|\$fluent)->from\([^)]+\).*?->fetchAll\(\)/s',
         '// TODO: review query' . "\n" .
         '$sql = "SELECT * FROM table WHERE ...";' . "\n" .
-        '$this->db->fetchAll($sql, [/* params */]);',
+        '$db->fetchAll($sql, [/* params */]);',
         $contents
     );
 
@@ -37,7 +39,7 @@ foreach ($rii as $file) {
         '/(\$this->fluent|\$fluent)->from\([^)]+\).*?->fetch\(\)/s',
         '// TODO: review query' . "\n" .
         '$sql = "SELECT * FROM table WHERE ...";' . "\n" .
-        '$this->db->fetchOne($sql, [/* params */]);',
+        '$db->fetchOne($sql, [/* params */]);',
         $contents
     );
 
@@ -46,7 +48,7 @@ foreach ($rii as $file) {
         '/(\$this->fluent|\$fluent)->insertInto\([^)]+\).*?->execute\(\)/s',
         '// TODO: review insert' . "\n" .
         '$sql = "INSERT INTO table (...) VALUES (...)";' . "\n" .
-        '$this->db->perform($sql, [/* params */]);',
+        '$db->perform($sql, [/* params */]);',
         $contents
     );
 
@@ -55,7 +57,7 @@ foreach ($rii as $file) {
         '/(\$this->fluent|\$fluent)->update\([^)]+\).*?->execute\(\)/s',
         '// TODO: review update' . "\n" .
         '$sql = "UPDATE table SET ... WHERE ...";' . "\n" .
-        '$this->db->perform($sql, [/* params */]);',
+        '$db->perform($sql, [/* params */]);',
         $contents
     );
 
@@ -64,7 +66,7 @@ foreach ($rii as $file) {
         '/(\$this->fluent|\$fluent)->deleteFrom\([^)]+\).*?->execute\(\)/s',
         '// TODO: review delete' . "\n" .
         '$sql = "DELETE FROM table WHERE ...";' . "\n" .
-        '$this->db->perform($sql, [/* params */]);',
+        '$db->perform($sql, [/* params */]);',
         $contents
     );
 

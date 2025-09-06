@@ -1,4 +1,6 @@
 <?php
+$db = $container->get(Database::class);
+
 require_once __DIR__ . '/runtime_safe.php';
 
 
@@ -28,7 +30,7 @@ function crazyhour_announce()
                                   ->select('var')
                                   ->select('amount')
                                   ->where('type = ?', 'crazyhour')
-                                  ->fetch(); // TODO(batch41): replace with $this->db->fetchRow("SELECT ...", [...])
+                                  ->fetch();
 
         if ($cz['crazyhour'] === false) {
             $cz['crazyhour']['var'] = random_int(TIME_NOW, (TIME_NOW + 86400));
@@ -71,7 +73,7 @@ function crazyhour_announce()
                 'txt' => $text,
             ];
             $sql = "INSERT INTO sitelog (/* columns */) VALUES (/* values */)";
-$this->db->perform($sql, $values);
+$db->perform($sql, $values);
         }
 
         return false;
@@ -96,7 +98,7 @@ $this->db->perform($sql, $values);
                     'txt' => $text,
                 ];
                 $sql = "INSERT INTO sitelog (/* columns */) VALUES (/* values */)";
-$this->db->perform($sql, $values);
+$db->perform($sql, $values);
             }
         }
 
@@ -128,7 +130,7 @@ function get_happy(int $torrentid, int $userid)
     if ($happy === false || is_null($happy)) {
         $res = $fluent->from('happyhour')
                       ->where('userid = ?', $userid)
-                      ->fetchAll(); // TODO(batch41): replace with $this->db->fetchAll("SELECT ...", [...])
+                      ->fetchAll();
 
         $happy = [];
         foreach ($res as $row) {
@@ -166,7 +168,7 @@ function get_slots(int $torrentid, int $userid)
     if ($slot === false || is_null($slot)) {
         $slot = $fluent->from('freeslots')
                        ->where('userid=?', $userid)
-                       ->fetchAll(); // TODO(batch41): replace with $this->db->fetchAll("SELECT ...", [...])
+                       ->fetchAll();
         $cache->set('fllslot_' . $userid, $slot, $ttl_slot);
     }
     if (!empty($slot)) {
