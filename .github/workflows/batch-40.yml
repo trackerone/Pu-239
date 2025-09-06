@@ -1,4 +1,4 @@
-name: Batch 40 - FluentPDO Sweep (classic)
+name: Batch 40 - FluentPDO Sweep (classic, API PR)
 
 on:
   workflow_dispatch:
@@ -11,7 +11,9 @@ jobs:
       pull-requests: write
     env:
       BASE_BRANCH: ${{ github.event.repository.default_branch }}
-      UNIQUE_BRANCH: batch-40-fluentpdo-classic-${{ github.run_id }}-${{ github.run_attempt }}
+      UNIQUE_BRANCH: batch-40-classic-${{ github.run_id }}-${{ github.run_attempt }}
+      GH_REPO: ${{ github.repository }}
+      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -22,29 +24,32 @@ jobs:
         uses: shivammathur/setup-php@v2
         with:
           php-version: '8.2'
+          coverage: none
+          tools: none
 
-      - name: Apply Batch 40 (classic)
+      - name: Run sweep (writes reports + conservative fixes)
         run: php ./tools/batch-40-apply.php
 
-      - name: Commit and push
+      - name: Commit & push branch
         run: |
           set -euxo pipefail
           git config user.name "batch-bot"
           git config user.email "batch-bot@users.noreply.github.com"
           git checkout -B "$UNIQUE_BRANCH" "origin/$BASE_BRANCH"
           git add -A
-          git commit -m "batch40(classic): repo-wide FluentPDO report + conservative fixes" || echo "Nothing to commit"
-          git push --set-upstream origin "$UNIQUE_BRANCH" || echo "Nothing to push"
+          git commit -m "batch40(classic): repo-wide FluentPDO sweep (reports + conservative fixes)" || true
+          git push --set-upstream origin "$UNIQUE_BRANCH"
 
-      - name: Open Pull Request
-        uses: peter-evans/create-pull-request@v6
-        with:
-          base: ${{ env.BASE_BRANCH }}
-          branch: ${{ env.UNIQUE_BRANCH }}
-          title: "Batch 40 (classic): Full repo FluentPDO sweep"
-          body: |
-            Classic-style batch: minimal steps, no artifacts.
-            - Writes reports to tools/reports/
-            - Applies conservative fixes where safe
-          labels: batch, automated, sweep
-          delete-branch: true
+      - name: Create PR via API
+        run: |
+          set -euxo pipefail
+          API="https://api.github.com/repos/${GH_REPO}/pulls"
+          DATA=$(jq -n \
+            --arg title "Batch 40 (classic): Full repo FluentPDO sweep" \
+            --arg head  "$UNIQUE_BRANCH" \
+            --arg base  "$BASE_BRANCH" \
+            --arg body  "Writes reports to tools/reports/ and applies conservative fixes. Review and merge." \
+            '{title:$title, head:$head, base:$base, body:$body, maintainer_can_modify:true, draft:false}')
+          RESP=$(curl -sS -X POST -H "Authorization: Bearer ${GH_TOKEN}" -H "Accept: application/vnd.github+json" \
+                  "${API}" -d "${DATA}" || true)
+          echo "${RESP}" | jq .
