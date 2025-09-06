@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 $db = $container->get(Database::class);
 
 require_once __DIR__ . '/../include/runtime_safe.php';
@@ -48,7 +50,7 @@ $valid_actions = [
     'edit_forum_page',
 ];
 $action = in_array($posted_action, $valid_actions) ? $posted_action : 'no_action';
-// $fluent removed — use $this->db (ExtendedPdo)
+// $fluent removed — use $db (ExtendedPdo)
 $forum_class = $container->get(Forum::class);
 switch ($action) {
     case 'delete':

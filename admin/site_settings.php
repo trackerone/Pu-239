@@ -1,6 +1,9 @@
 <?php
+declare(strict_types=1);
+
 $db = $container->get(Database::class);
 
+$cache = $container->get(Cache::class);
 require_once __DIR__ . '/../include/runtime_safe.php';
 
 require_once __DIR__ . '/../include/bootstrap_pdo.php';
@@ -23,7 +26,7 @@ $stdfoot = [
 
 global $container;
 
-// $fluent removed — use $this->db (ExtendedPdo)
+// $fluent removed — use $db (ExtendedPdo)
 $session = $container->get(Session::class);
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $values = $keys = [];

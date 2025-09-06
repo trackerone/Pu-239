@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 require_once __DIR__ . '/../include/runtime_safe.php';
 
 
@@ -26,7 +28,7 @@ $stdfoot = [
     ],
 ];
 global $container;
-$db = $container->get(Database::class);, $site_config;
+$db = $container->get(Database::class);
 
 $users_class = $container->get(User::class);
 $messages_class = $container->get(Message::class);
@@ -55,7 +57,8 @@ switch ($action) {
             stderr(_('Error'), _('You forgot to select an amount!'));
         }
         $bonus_added = $GB / 1073741824;
-        $res_GB = $db->run(');
+        $res_GB = // TODO(batch43.6): broken SQL removed — insert proper $db->perform(...) here.
+
         app_halt('Exit called');
         break;
 
@@ -64,7 +67,8 @@ switch ($action) {
         if ($karma < 100 || $karma > 5000) {
             stderr(_('Error'), _('You forgot to select an amount!'));
         }
-        $res_karma = $db->run(');
+        $res_karma = // TODO(batch43.6): broken SQL removed — insert proper $db->perform(...) here.
+
         app_halt('Exit called');
         break;
 
@@ -73,7 +77,8 @@ switch ($action) {
         if ($freeslots < 1 || $freeslots > 50) {
             stderr(_('Error'), _('You forgot to select an amount!'));
         }
-        $res_freeslots = $db->run(');
+        $res_freeslots = // TODO(batch43.6): broken SQL removed — insert proper $db->perform(...) here.
+
         app_halt('Exit called');
         break;
 
@@ -97,7 +102,8 @@ switch ($action) {
         if (!isset($_POST['body'])) {
             stderr(_('Error'), _('No body text... Please enter something to send!'));
         }
-        $res_pms = $db->run(');
+        $res_pms = // TODO(batch43.6): broken SQL removed — insert proper $db->perform(...) here.
+
         app_halt('Exit called');
         break;
 }

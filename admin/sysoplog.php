@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 $db = $container->get(Database::class);
 
 require_once __DIR__ . '/../include/runtime_safe.php';
@@ -28,7 +30,8 @@ if (!empty($search)) {
 }
 //== Delete items older than 1 month
 $secs = 30 * 86400;
-$db->run(');
+// TODO(batch43.6): broken SQL removed — insert proper $db->perform(...) here.
+
 $HTMLOUT = '';
 $rows = $db->fetchAll("SELECT added, txt FROM infolog $where ORDER BY added DESC {$pager['limit']}");
 $HTMLOUT .= "

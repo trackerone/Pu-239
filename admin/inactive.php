@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 require_once __DIR__ . '/../include/runtime_safe.php';
 
 require_once __DIR__ . '/../include/bootstrap_pdo.php';
@@ -44,7 +46,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
     if ($action === 'disable' && (!empty($_POST['userid']))) {
-        $db->run(');
+        // TODO(batch43.6): broken SQL removed — insert proper $db->perform(...) here.
+
         $session->set('is-success', _('You have successfully disabled the selected accounts!'));
     }
 
@@ -76,8 +79,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $date = TIME_NOW;
             $userid = (int) $CURUSER['id'];
             if ($count > 0 && $mail) {
-                $db->run(');
-$row = mysqli_fetch_array($res);
+                // TODO(batch43.6): broken SQL removed — insert proper $db->perform(...) here.
+// TODO(batch43.6): removed mysqli_fetch_* leftover.
+
 $count = (int) $row[0];
 $perpage = 15;
 $pager = pager($perpage, $count, 'staffpanel.php?tool=inactive&amp;');

@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 require_once __DIR__ . '/../include/runtime_safe.php';
 
 
@@ -19,7 +21,7 @@ $dt = TIME_NOW;
 $this_url = $_SERVER['SCRIPT_NAME'];
 $do = isset($_GET['do']) && $_GET['do'] === 'disabled' ? 'disabled' : 'warned';
 global $container;
-$db = $container->get(Database::class);, $site_config;
+$db = $container->get(Database::class);
 
 $mysqli = $container->get(mysqli::class);
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -40,7 +42,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     global $CURUSER;
 
     if ($act === 'delete' && has_access($CURUSER['class'], UC_SYSOP, 'coder')) {
-        $res_del = $db->run(');
+        $res_del = // TODO(batch43.6): broken SQL removed — insert proper $db->perform(...) here.
+
             }
         } else {
             stderr(_('Error'), _('Something went wrong!'));
@@ -51,7 +54,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 $db = $container->get(Database::class);;
 
         $cache = $container->get(Cache::class);
-        if ($db->run(');
+        if (// TODO(batch43.6): broken SQL removed — insert proper $db->perform(...) here.
+
         $msg = _fe('Hey, your warning was removed by {0}. Please keep in your best behaviour from now on.', $CURUSER['username']);
         global $container;
 $db = $container->get(Database::class);;
