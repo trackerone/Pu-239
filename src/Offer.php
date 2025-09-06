@@ -174,10 +174,8 @@ class Offer
      */
     public function update(array $set, int $offerid)
     {
-        $result = $this->fluent->update('offers')
-                               ->set($set)
-                               ->where('id = ?', $offerid)
-                               ->execute();
+        $sql = "UPDATE offers SET /* columns */ WHERE id = :id";
+$result = $this->db->perform($sql, array_merge($set, ['id' => $offerid]));
 
         return $result;
     }
@@ -214,9 +212,8 @@ class Offer
      */
     public function insert(array $values)
     {
-        $id = $this->fluent->insertInto('offers')
-                           ->values($values)
-                           ->execute();
+        $sql = "INSERT INTO offers (/* columns */) VALUES (/* values */)";
+$id = $this->db->perform($sql, $values);
 
         return $id;
     }

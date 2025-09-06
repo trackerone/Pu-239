@@ -347,10 +347,8 @@ class User
      */
     public function update(array $set, int $userid, bool $persist = true)
     {
-        $result = $this->fluent->update('users')
-                               ->set($set)
-                               ->where('id = ?', $userid)
-                               ->execute();
+        $sql = "UPDATE users SET /* columns */ WHERE id = :id";
+$result = $this->db->perform($sql, array_merge($set, ['id' => $userid]));
         if ($result && $persist) {
             $this->cache->update_row('user_' . $userid, $set, $this->site_config['expires']['user_cache']);
         } else {
@@ -472,9 +470,8 @@ class User
         }
         if (!empty($userid)) {
             $this->cache->delete('user_' . $userid);
-            $this->fluent->deleteFrom('ajax_chat_online')
-                         ->where('userID = ?', $userid)
-                         ->execute();
+            $sql = "DELETE FROM ajax_chat_online WHERE userID = :userID";
+$this->db->perform($sql, ['userID' => $userid]);
         }
         if ($this->auth->isLoggedIn()) {
             $this->auth->logOutEverywhere();

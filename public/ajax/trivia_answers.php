@@ -52,9 +52,8 @@ if (!empty($user)) {
         $answered = "<h3 class='has-text-danger top20'>" . _('Sorry, that was not the correct answer') . '</h3>';
         $values['correct'] = 0;
     }
-    $fluent->insertInto('triviausers')
-           ->values($values)
-           ->execute();
+    $sql = "INSERT INTO triviausers (/* columns */) VALUES (/* values */)";
+$this->db->perform($sql, $values);
 }
 $cache = $container->get(Cache::class);
 $cache->delete('triviaq_');

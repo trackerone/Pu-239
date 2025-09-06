@@ -58,9 +58,8 @@ class Casino
             'userid' => $userid,
             'date' => TIME_NOW,
         ];
-        $this->fluent->insertInto('casino')
-                     ->values($values)
-                     ->execute();
+        $sql = "INSERT INTO casino (/* columns */) VALUES (/* values */)";
+$this->db->perform($sql, $values);
 
         return $this->get_user($userid);
     }
@@ -108,9 +107,7 @@ class Casino
      */
     public function update_user(array $set, int $userid)
     {
-        $this->fluent->update('casino')
-                     ->set($set)
-                     ->where('userid = ?', $userid)
-                     ->execute();
+        $sql = "UPDATE casino SET /* columns */ WHERE userid = :userid";
+$this->db->perform($sql, array_merge($set, ['userid' => $userid]));
     }
 }

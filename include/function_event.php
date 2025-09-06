@@ -35,9 +35,8 @@ function set_event(int $modifier, int $begin, int $expires, int $setby, string $
         'setby' => $setby,
         'title' => $title,
     ];
-    $fluent->insertInto('events')
-           ->values($values)
-           ->execute();
+    $sql = "INSERT INTO events (/* columns */) VALUES (/* values */)";
+$this->db->perform($sql, $values);
 
     $cache->set('site_events_', $values, $expires);
 }
@@ -60,10 +59,8 @@ function update_event(int $expires, int $new_expires)
     $set = [
         'expires' => $new_expires,
     ];
-    $fluent->update('events')
-           ->set($set)
-           ->where('expires = ?', $expires)
-           ->execute();
+    $sql = "UPDATE events SET /* columns */ WHERE expires = :expires";
+$this->db->perform($sql, array_merge($set, ['expires' => $expires]));
 
     $free = [
         'modifier' => 0,

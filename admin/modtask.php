@@ -199,9 +199,8 @@ if (!empty($_POST) && $_POST['action'] === 'edituser') {
             'added' => $dt,
         ];
         $cache->delete('totalfunds_');
-        $fluent->insertInto('funds')
-               ->values($values)
-               ->execute();
+        $sql = "INSERT INTO funds (/* columns */) VALUES (/* values */)";
+$this->db->perform($sql, $values);
         $update = [
             'donated' => $donated,
             'total_donated' => $user['total_donated'] + $donated,
@@ -839,9 +838,8 @@ if (!empty($_POST) && $_POST['action'] === 'edituser') {
             $update['status'] = 2;
             $modcomment = get_date($dt, 'DATE', 1) . ' ' . _('- Disabled by ') . ' ' . $CURUSER['username'] . ".\n" . $modcomment;
             $useredit[] = _('Enabled = ') . 'no';
-            $fluent->deleteFrom('ajax_chat_online')
-                   ->where('userID = ?', $userid)
-                   ->execute();
+            $sql = "DELETE FROM ajax_chat_online WHERE userID = :userID";
+$this->db->perform($sql, ['userID' => $userid]);
             $cache->set('forced_logout_' . $userid, $dt);
         } elseif ($status === 5) {
             $update['status'] = 5;

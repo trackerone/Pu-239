@@ -61,24 +61,18 @@ if ($arr_post['post_status'] !== 'deleted') {
 $update = [
     'status' => 'ok',
 ];
-$fluent->update('posts')
-       ->set($update)
-       ->where('id =?', $post_id)
-       ->execute();
+$sql = "UPDATE posts SET /* columns */ WHERE id = :id";
+$this->db->perform($sql, array_merge($update, ['id' => $post_id]));
 $update = [
     'post_count' => new Literal('post_count + 1'),
 ];
-$fluent->update('forums')
-       ->set($update)
-       ->where('id = ?', $arr_post['forum_id'])
-       ->execute();
+$sql = "UPDATE forums SET /* columns */ WHERE id = :id";
+$this->db->perform($sql, array_merge($update, ['id' => $arr_post['forum_id']]));
 $update = [
     'forumposts' => new Literal('forumposts + 1'),
 ];
-$fluent->update('usersachiev')
-       ->set($update)
-       ->where('userid = ?', $arr_post['user_id'])
-       ->execute();
+$sql = "UPDATE usersachiev SET /* columns */ WHERE userid = :userid";
+$this->db->perform($sql, array_merge($update, ['userid' => $arr_post['user_id']]));
 
 clr_forums_cache((int) $post_id);
 $cache = $container->get(Cache::class);

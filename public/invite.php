@@ -116,17 +116,14 @@ if ($do === 'view_page') {
         'code' => $token,
         'added' => TIME_NOW,
     ];
-    $fluent->insertInto('invite_codes')
-           ->values($values)
-           ->execute();
+    $sql = "INSERT INTO invite_codes (/* columns */) VALUES (/* values */)";
+$this->db->perform($sql, $values);
 
     $set = [
         'invites' => $user['invites'] - 1,
     ];
-    $fluent->update('users')
-           ->set($set)
-           ->where('id = ?', $user['id'])
-           ->execute();
+    $sql = "UPDATE users SET /* columns */ WHERE id = :id";
+$this->db->perform($sql, array_merge($set, ['id' => $user['id']]));
 
     $update['invites'] = ($user['invites'] - 1);
     $cache->update_row('user_' . $user['id'], [
@@ -245,10 +242,8 @@ if ($do === 'view_page') {
         'invites' => $user['invites'] + 1,
     ];
 
-    $fluent->update('users')
-           ->set($set)
-           ->where('id = ?', $user['id'])
-           ->execute();
+    $sql = "UPDATE users SET /* columns */ WHERE id = :id";
+$this->db->perform($sql, array_merge($set, ['id' => $user['id']]));
     $update['invites'] = ($user['invites'] + 1);
 
     $cache->update_row('user_' . $user['id'], [

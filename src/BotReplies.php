@@ -65,10 +65,8 @@ class BotReplies
      */
     public function update(array $set, int $id)
     {
-        $result = $this->fluent->update('bot_replies')
-                               ->set($set)
-                               ->where('id = ?', $id)
-                               ->execute();
+        $sql = "UPDATE bot_replies SET /* columns */ WHERE id = :id";
+$result = $this->db->perform($sql, array_merge($set, ['id' => $id]));
 
         if (!$result) {
             return false;
@@ -104,9 +102,8 @@ class BotReplies
      */
     public function delete(int $id)
     {
-        $result = $this->fluent->deleteFrom('bot_replies')
-                               ->where('id = ?', $id)
-                               ->execute();
+        $sql = "DELETE FROM bot_replies WHERE id = :id";
+$result = $this->db->perform($sql, ['id' => $id]);
         $this->cache->delete('bot_replies_');
 
         return $result;

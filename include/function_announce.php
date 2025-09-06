@@ -70,9 +70,8 @@ function crazyhour_announce()
                 'added' => TIME_NOW,
                 'txt' => $text,
             ];
-            $fluent->insertInto('sitelog')
-                   ->values($values)
-                   ->execute();
+            $sql = "INSERT INTO sitelog (/* columns */) VALUES (/* values */)";
+$this->db->perform($sql, $values);
         }
 
         return false;
@@ -96,9 +95,8 @@ function crazyhour_announce()
                     'added' => TIME_NOW,
                     'txt' => $text,
                 ];
-                $fluent->insertInto('sitelog')
-                       ->values($values)
-                       ->execute();
+                $sql = "INSERT INTO sitelog (/* columns */) VALUES (/* values */)";
+$this->db->perform($sql, $values);
             }
         }
 
