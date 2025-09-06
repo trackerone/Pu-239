@@ -35,13 +35,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         stderr(_('Error'), _('Something went wrong!'));
     }
     $cache = $container->get(Cache::class);
-    if ($act === 'delete' && has_access($CURUSER['class'], UC_SYSOP, 'coder')) {
-        $res_del = $db->run(');
-            }
-        } else {
-            stderr(_('Error'), _('Something went wrong2!'));
-        }
+ if ($act === 'delete' && has_access($CURUSER['class'], UC_SYSOP, 'coder')) {
+    // TODO: skriv korrekt DELETE query
+    $res_del = $db->perform('/* TODO: delete query */', []);
+
+    if ($res_del) {
+        // success-branch
+    } else {
+        stderr('Error', 'Something went wrong2!');
     }
+}
     if ($act === 'disable') {
         if ($db->run(');
         $body = _('Hey, your Leech warning was removed by ') . $CURUSER['username'] . _('Please keep in your best behaviour from now on.');

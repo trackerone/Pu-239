@@ -47,12 +47,17 @@ if (isset($_GET['remove'])) {
         } else {
             foreach ($remove_me_Ive_been_good as $id) {
                 $id = (int) $id;
-                if (is_valid_id($id)) {
-                    //=== get mod comments for member
-                    $res = $db->run(');
-    } else {
-        write_log('[b]' . $CURUSER['username'] . '[/b] ' . _('Removed:') . '<br>' . $removed_log . ' <br>' . _('from watched users') . '');
-    }
+ if (is_valid_id($id)) {
+    // TODO: indsæt den rigtige SELECT/DELETE
+    $res = $db->perform('/* TODO: query for watched_users */', []);
+} else {
+    write_log(
+        '[b]' . $CURUSER['username'] . '[/b] '
+        . _('Removed:') . '<br>'
+        . $removed_log . ' <br>'
+        . _('from watched users')
+    );
+}
     $H1_thingie = '<h1 class="has-text-centered">' . _pfe('{0} Member removed from the list', '{0} Members removed from the list', $count) . '</h1>';
 }
 //=== to add members to the watched user list... all staff!

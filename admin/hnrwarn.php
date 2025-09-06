@@ -5,11 +5,12 @@ use Pu239\Database;
 use Pu239\Cache;
 
 require_once __DIR__ . '/../include/runtime_safe.php';
+require_once __DIR__ . '/../include/bootstrap_pdo.php';
 require_once INCL_DIR . 'function_users.php';
 require_once INCL_DIR . 'function_html.php';
 require_once CLASS_DIR . 'class_check.php';
 
-global $container, $site_config;
+global $container, $site_config, $CURUSER;
 
 $db = $container->get(Database::class);
 
@@ -18,10 +19,7 @@ class_check($class);
 
 $HTMLOUT = '';
 $this_url = $_SERVER['SCRIPT_NAME'];
-$do = isset($_GET['do']) && $_GET['do'] === 'disabled' ? 'disabled' : 'hnrwarn';
-global $container;
-$db = $container->get(Database::class);, $CURUSER;
-
+$do = (isset($_GET['do']) && $_GET['do'] === 'disabled') ? 'disabled' : 'hnrwarn';
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $cache = $container->get(Cache::class);
     $r = isset($_POST['ref']) ? $_POST['ref'] : $this_url;

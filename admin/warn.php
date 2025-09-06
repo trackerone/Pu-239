@@ -39,13 +39,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
     global $CURUSER;
 
-    if ($act === 'delete' && has_access($CURUSER['class'], UC_SYSOP, 'coder')) {
-        $res_del = $db->run(');
-            }
-        } else {
-            stderr(_('Error'), _('Something went wrong!'));
-        }
+if ($act === 'delete' && has_access($CURUSER['class'], UC_SYSOP, 'coder')) {
+    // TODO: put den rigtige DELETE/UPDATE her
+    $res_del = $db->perform('/* TODO: delete warn */', []);
+
+    if ($res_del) {
+        // fx success-branch / redirect / besked
+    } else {
+        stderr('Error', 'Something went wrong!');
     }
+}
     if ($act === 'disable') {
         global $container;
 $db = $container->get(Database::class);;

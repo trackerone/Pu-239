@@ -227,14 +227,18 @@ function do_update(array $input, string $type)
         $minrep = sqlesc(intval($input['minimumreputation']));
         $redirect = _fe('Saved Reputation Level <i>{0}</i> Successfully.', format_comment($input['level']));
     }
-    // what we gonna do?
-    if ($type === 'new') {
-        $db->run(");
-    } elseif ($type === 'edit') {
-        $levelid = intval($input['reputationlevelid']);
-        if (!is_valid_id($levelid)) {
-            stderr(_('Error'), _('Invalid ID'));
-        }
+ // what we gonna do?
+if ($type === 'new') {
+    // TODO: indsæt korrekt INSERT
+    $db->perform('/* TODO: insert reputation level */', []);
+} elseif ($type === 'edit') {
+    $levelid = (int)($input['reputationlevelid'] ?? 0);
+    if (!is_valid_id($levelid)) {
+        stderr('Error', 'Invalid ID'); // brug ren streng hvis _() ikke er defineret
+    }
+    // TODO: update-statement for det eksisterende level
+    // $db->perform('UPDATE reputation_levels SET ... WHERE id = :id', ['id' => $levelid, /* ... */]);
+}
         // check it's a valid rep id
         $rows = $db->fetchAll("SELECT reputationlevelid FROM reputationlevel WHERE reputationlevelid=$levelid");
         if (!mysqli_num_rows($query)) {

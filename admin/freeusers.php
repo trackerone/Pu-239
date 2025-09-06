@@ -31,16 +31,24 @@ if ($remove) {
         $msg = _fe('Freeleech On All Torrents have been removed by {0}', $CURUSER['username']);
         $messages_class = $container->get(Message::class);
         $cache = $container->get(Cache::class);
-        foreach ($rows as $arr) {
-            $modcomment = sqlesc(get_date((int) $dt, 'DATE', 1) . ' - ' . _fe('Freeleech On All Torrents removed by {0}', $CURUSER['username']) . " \n");
-            $msgs_buffer[] = [
-                'receiver' => $arr['id'],
-                'added' => $dt,
-                'msg' => $msg,
-                'subject' => _('Freeleech Notice!'),
-            ];
-            $messages_class->insert($msgs_buffer);
-            $db->run(');
+foreach ($rows as $arr) {
+    $modcomment = sqlesc(
+        get_date((int) $dt, 'DATE', 1)
+        . ' - '
+        . _fe('Freeleech On All Torrents removed by {0}', $CURUSER['username'])
+        . " \n"
+    );
+
+    $msgs_buffer[] = [
+        'receiver' => (int) $arr['id'],
+        'added'    => $dt,
+        'msg'      => $msg,
+        'subject'  => _('Freeleech Notice!'),
+    ];
+
+    // erstatter den brudte linje:
+    $db->perform('/* TODO: write query */', []);
+}
 $count = mysqli_num_rows($res2);
 $perpage = 25;
 $pager = pager($perpage, $count, "{$site_config['paths']['baseurl']}/staffpanel.php?tool=freeusers&amp;");
@@ -84,3 +92,4 @@ $breadcrumbs = [
     "<a href='{$_SERVER['PHP_SELF']}'>$title</a>",
 ];
 echo stdhead($title, [], 'page-wrapper', $breadcrumbs) . wrapper($HTMLOUT) . stdfoot();
+	}

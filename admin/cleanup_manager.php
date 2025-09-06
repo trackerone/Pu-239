@@ -97,7 +97,7 @@ function manualclean($params)
     ];
     $params['cid'] = filter_var($params['cid'], FILTER_VALIDATE_INT, $opts);
     if (!is_numeric($params['cid'])) {
-        stderr(_('Error'), _('Bad you!'));
+        stderr('Error'), _('Bad you!');
     }
     $params['cid'] = sqlesc($params['cid']);
     $sql = $db->run(');

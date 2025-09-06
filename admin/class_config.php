@@ -205,16 +205,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 --$i;
             }
 
-            if ($value > UC_MAX) {
-                $db->run(");
-            } else {
-                $i = $old_max;
-                while ($i >= $value) {
-                    $db->run(");
-                    $db->run(");
-                    --$i;
-                }
-            }
+      if ($value > UC_MAX) {
+    $db->perform('/* TODO: write query */', []);
+} else {
+    for ($i = $old_max; $i >= $value; --$i) {
+        $db->perform('/* TODO: write query A */', []);
+        $db->perform('/* TODO: write query B */', []);
+    }
+}
             $stylesheets = $fluent->from('stylesheets')
                                   ->select(null)
                                   ->select('id');
