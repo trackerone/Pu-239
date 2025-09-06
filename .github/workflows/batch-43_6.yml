@@ -1,4 +1,4 @@
-name: Batch 43.6 - Admin auto-fix (from report)
+name: Batch 43.6 - Admin auto-fix (from report, conservative)
 
 on:
   workflow_dispatch:
@@ -15,13 +15,17 @@ jobs:
       GH_REPO: ${{ github.repository }}
       GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     steps:
-      - uses: actions/checkout@v4
-        with: { fetch-depth: 0 }
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
-      - uses: shivammathur/setup-php@v2
-        with: { php-version: '8.2' }
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.2'
 
-      - name: Apply admin fixes from report
+      - name: Apply admin fixes from report (conservative)
         run: php ./tools/batch-43_6-admin-fix-from-report.php
 
       - name: Commit & push branch
@@ -31,7 +35,7 @@ jobs:
           git config user.email "batch-bot@users.noreply.github.com"
           git checkout -B "$UNIQUE_BRANCH" "origin/$BASE_BRANCH"
           git add -A
-          git commit -m 'batch43.6: admin/ auto-fix from batch43_5 report (db init, no $this->db, strict_types, broken fragments, mysqli cleanup)' || true
+          git commit -m 'batch43.6: admin/ auto-fix from batch43_5 (conservative: comment broken lines, add $db init, swap $this->db→$db, strict_types)' || true
           git push --set-upstream origin "$UNIQUE_BRANCH"
 
       - name: Create PR via API
@@ -39,9 +43,10 @@ jobs:
           set -euxo pipefail
           API="https://api.github.com/repos/${GH_REPO}/pulls"
           DATA=$(jq -n \
-            --arg title 'Batch 43.6: Admin auto-fix (from batch43_5 report)' \
+            --arg title 'Batch 43.6: Admin auto-fix (from batch43_5 report, conservative)' \
             --arg head  "$UNIQUE_BRANCH" \
             --arg base  "$BASE_BRANCH" \
-            --arg body  'Parses tools/reports/batch43_5-admin-audit.ndjson and applies deterministic fixes in admin/*.php: replace $this->db/$this->cache with $db/$cache, add $db init, move declare(strict_types=1) to top, remove broken $db->run fragments (replace with correct SQL where obvious), clean mysqli/sql_query leftovers, fix bad ", $site_config" tail, drop TODO(batch41) and wrong hints. Writes tools/reports/batch43_6-summary.txt.' \
+            --arg body  'Parses tools/reports/batch43_5-admin-audit.ndjson and applies deterministic, conservative fixes in admin/*.php: replace \$this->db/\$this->cache with \$db/\$cache, ensure \$db init, move declare(strict_types=1) to top, COMMENT broken \$db->run(''); lines (no control-flow changes), clean mysqli/sql_query leftovers, fix bad ", \$site_config" tail, drop TODO(batch41) and wrong hints. Writes tools/reports/batch43_6-summary.txt.' \
             '{title:$title, head:$head, base:$base, body:$body, maintainer_can_modify:true, draft:false}')
           curl -sS -X POST -H "Authorization: Bearer ${GH_TOKEN}" -H "Accept: application/vnd.github+json" "${API}" -d "${DATA}" | jq .
+```0
