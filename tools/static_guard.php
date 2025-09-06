@@ -1,92 +1,98 @@
 <?php
-$db = $container->get(Database::class);
+declare(strict_types=1);
 
 /**
- * Static Guard v2 — configurable via env:
- *   GUARD_MODE: 'fail' (default) or 'warn'
- *   GUARD_EXCLUDE: comma-separated substrings to skip (e.g. "vendor,tools/static_guard.php")
- *   GUARD_FAIL_ON: comma-separated category names to fail on (lowercase)
- *   GUARD_MAX_ERRORS: integer threshold to allow (optional)
+ * tools/static_guard.php
+ *
+ * Purpose:
+ *  - Run static analysis / consistency checks for the Pu-239 codebase.
+ *  - Can be extended with custom guards (e.g., scanning for banned functions).
  */
-$root = __DIR__ . '/../';
 
-$rii = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($root));
+require_once __DIR__ . '/../include/runtime_safe.php';
 
-$env_exclude = getenv('GUARD_EXCLUDE') ?: '';
-$exclude = array_filter(array_map('trim', explode(',', $env_exclude)));
+use Pu239\Database;
 
-$env_fail_on = getenv('GUARD_FAIL_ON') ?: '';
-$fail_on = array_filter(array_map('trim', explode(',', strtolower($env_fail_on))));
+global $container;
+/** @var \DI\Container|null $container */
+if (!isset($container)) {
+    fwrite(STDERR, "Container not initialized — check include/runtime_safe.php path.\n");
+    exit(1);
+}
 
-$mode = strtolower(getenv('GUARD_MODE') ?: 'fail');
-$maxErrors = getenv('GUARD_MAX_ERRORS');
-$maxErrors = ($maxErrors !== false && $maxErrors !== '') ? intval($maxErrors) : null;
+/** @var Database $db */
+$db = $container->get(Database::class);
 
-$patterns = [
-    'merge_conflict_marker' => '/^(<<<<<<<|=======|>>>>>>>)/m',
-    'short_open_tag'        => '/<\\?(?!php|=)/',
-    'eval_usage'            => '/\\beval\\s*\\(/i',
-    'terminate_calls'       => '/\\b(die|exit)\\s*\\(/i',
-    'debug_calls'           => '/\\b(var_dump|print_r|dd)\\s*\\(/i',
-    'deprecated_mysql'      => '/\\bmysql_(query|connect|pconnect|select_db|fetch_(assoc|array|row)|num_rows|real_escape_string|insert_id|error|errno)\\b/i',
+// -----------------------------------------------------------------------------
+// Example static checks
+// -----------------------------------------------------------------------------
+
+echo "Static Guard: starting checks...\n";
+
+// 1) Verify DB connectivity
+try {
+    $val = $db->fetchValue('SELECT 1');
+    echo "DB connectivity OK (SELECT 1 returned {$val})\n";
+} catch (Throwable $e) {
+    fwrite(STDERR, "DB connectivity check failed: " . $e->getMessage() . "\n");
+    exit(1);
+}
+
+// 2) Simple repo scan for forbidden patterns
+$root = dirname(__DIR__);
+$forbidden = [
+    'var_dump(',
+    'print_r(',
+    'dd(',
+    'dump(',
+    'eval(',
+    'shell_exec(',
+    'exec(',
+    'passthru(',
+    'system(',
+    '`', // backticks
 ];
-
-$issues = [];
+$hits = [];
+$rii = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($root, FilesystemIterator::SKIP_DOTS));
 foreach ($rii as $file) {
-    if ($file->isDir()) continue;
-    $path = $file->getPathname();
-    if (!preg_match('/\\.php$/i', $path)) continue;
-
-    $rel = substr($path, strlen($root));
-
-    // Exclusions
-    $skip = false;
-    foreach ($exclude as $x) {
-        if ($x !== '' && strpos($rel, $x) !== false) { $skip = true; break; }
+    if (!$file->isFile()) {
+        continue;
     }
-    if ($skip) continue;
-
-    $content = @file_get_contents($path);
-    if ($content === false) continue;
-
-    foreach ($patterns as $name => $regex) {
-        if (preg_match($regex, $content)) {
-            $issues[] = [$name, $rel];
-        }
+    $ext = strtolower(pathinfo($file->getFilename(), PATHINFO_EXTENSION));
+    if (!in_array($ext, ['php', 'phtml', 'inc'], true)) {
+        continue;
     }
-}
-
-$lines = [];
-if (!empty($issues)) {
-    $lines[] = "Static guard found issues:";
-    foreach ($issues as $e) {
-        $lines[] = "- {$e[0]} : {$e[1]}";
+    $rel = substr($file->getPathname(), strlen($root) + 1);
+    $lines = @file($file->getPathname(), FILE_IGNORE_NEW_LINES);
+    if ($lines === false) {
+        continue;
     }
-} else {
-    $lines[] = "Static guard: OK";
-}
-$reportPath = __DIR__ . '/guard_report.txt';
-@file_put_contents($reportPath, implode(PHP_EOL, $lines) . PHP_EOL);
-
-$shouldFail = false;
-if (!empty($issues)) {
-    if ($mode === 'warn') {
-        $shouldFail = false;
-    } else {
-        if (!empty($fail_on)) {
-            foreach ($issues as $e) {
-                if (in_array(strtolower($e[0]), $fail_on, true)) {
-                    $shouldFail = true; break;
-                }
+    foreach ($lines as $ln => $line) {
+        foreach ($forbidden as $pat) {
+            if (strpos($line, $pat) !== false) {
+                $hits[] = [
+                    'file' => $rel,
+                    'line' => $ln + 1,
+                    'pattern' => $pat,
+                    'code' => trim($line),
+                ];
             }
-        } else {
-            $shouldFail = true;
-        }
-        if ($maxErrors !== null && count($issues) <= $maxErrors) {
-            $shouldFail = false;
         }
     }
 }
 
-echo implode(PHP_EOL, $lines) . PHP_EOL;
-/* exit($shouldFail ? 1 : 0) removed */ return;
+if ($hits) {
+    echo "Static Guard: forbidden patterns found!\n";
+    foreach ($hits as $h) {
+        echo sprintf(
+            "  %s:%d contains %s → %s\n",
+            $h['file'],
+            $h['line'],
+            $h['pattern'],
+            $h['code']
+        );
+    }
+    exit(1);
+}
+
+echo "Static Guard: all checks passed ✅\n";
