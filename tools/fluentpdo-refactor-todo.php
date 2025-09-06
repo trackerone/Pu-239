@@ -1,12 +1,14 @@
 <?php
 /**
- * Batch 37.6 – TODO FluentPDO refactor
- * Marks only the queries we can't auto-convert safely.
- * Stram regex, ingen dobbelte semikolon.
+ * Batch 37.7 – TODO FluentPDO refactor
+ * Marks leftover FluentPDO queries with TODO AND logs all findings.
  */
 
 $root = dirname(__DIR__);
 $rii = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($root));
+
+$totalMatches = 0;
+$log = [];
 
 foreach ($rii as $file) {
     if ($file->isDir()) continue;
@@ -17,17 +19,32 @@ foreach ($rii as $file) {
     $contents = file_get_contents($path);
     $orig = $contents;
 
-    // Matcher én kæde: fx $fluent->from(...)->...->fetchAll()
-    $contents = preg_replace(
-        '/(\$this->fluent|\$fluent)->[a-zA-Z0-9_]+\([^)]*\)(?:->[a-zA-Z0-9_]+\([^)]*\))*->(fetchAll|fetch|execute)\(\)/',
-        '// TODO: review query' . "\n" .
-        '$sql = "SELECT/INSERT/UPDATE/DELETE ..."' . "\n" .
-        '$this->db->perform($sql, [/* params */])',
-        $contents
-    );
+    // Matcher én kæde af FluentPDO kald
+    $pattern = '/(\$this->fluent|\$fluent)->[a-zA-Z0-9_]+\([^)]*\)(?:->[a-zA-Z0-9_]+\([^)]*\))*->(fetchAll|fetch|execute)\(\)/';
 
-    if ($contents !== $orig) {
-        file_put_contents($path, $contents);
-        echo "Marked TODO: $path\n";
+    if (preg_match_all($pattern, $contents, $matches, PREG_OFFSET_CAPTURE)) {
+        foreach ($matches[0] as $m) {
+            $totalMatches++;
+            $log[] = $path . " : " . trim($m[0]);
+        }
+
+        // Markér de fundne queries med TODO
+        $contents = preg_replace(
+            $pattern,
+            '// TODO: review query' . "\n" .
+            '$sql = "SELECT/INSERT/UPDATE/DELETE ...";' . "\n" .
+            '$this->db->perform($sql, [/* params */])',
+            $contents
+        );
+
+        if ($contents !== $orig) {
+            file_put_contents($path, $contents);
+            echo "Marked TODO in: $path\n";
+        }
     }
 }
+
+// Gem log
+file_put_contents("refactor-todo-log.txt", implode("\n", $log) . "\nTotal matches: $totalMatches\n");
+
+echo "Total matches: $totalMatches\n";
