@@ -95,13 +95,16 @@ function manualclean($params)
             'min_range' => 1,
         ],
     ];
-    $params['cid'] = filter_var($params['cid'], FILTER_VALIDATE_INT, $opts);
-    if (!is_numeric($params['cid'])) {
-        stderr('Error'), _('Bad you!');
-    }
-    $params['cid'] = sqlesc($params['cid']);
-    $sql = $db->run(');
+$cid = filter_var($params['cid'] ?? null, FILTER_VALIDATE_INT, $opts);
+if ($cid === false) {
+    stderr('Error', 'Bad you!');
 }
+
+// Brug bind-parametre – ikke sqlesc
+$stmt = $db->perform(
+    '/* TODO: write real query using :cid */',
+    ['cid' => $cid]
+);
 
 /**
  * @throws \PDOException

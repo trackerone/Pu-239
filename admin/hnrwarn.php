@@ -36,13 +36,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (!$act) {
         stderr(_('Error'), _('Something went wrong!'));
     }
-    if ($act === 'delete' && has_access($CURUSER['class'], UC_SYSOP, 'coder')) {
-        $res_del = $db->run(');
-            }
-        } else {
-            stderr(_('Error'), _('Something went wrong!'));
-        }
+if ($act === 'delete' && has_access($CURUSER['class'], UC_SYSOP, 'coder')) {
+    // TODO: skriv den rigtige DELETE/UPDATE-query
+    $res_del = $db->perform('/* TODO: delete something by id */', [
+        // 'id' => (int)$id,
+    ]);
+
+    if ($res_del && $res_del->rowCount() > 0) {
+        // evt. success-håndtering
+    } else {
+        stderr('Error', 'Something went wrong!');
     }
+}
+
     if ($act === 'disable') {
         if ($db->run(');
         $body = _fe('Hey, your Hit and Run warning was removed by {0}. Please keep in your best behaviour from now on.', $CURUSER['username']);

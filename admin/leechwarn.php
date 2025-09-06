@@ -45,32 +45,81 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         stderr('Error', 'Something went wrong2!');
     }
 }
-    if ($act === 'disable') {
-        if ($db->run(');
-        $body = _('Hey, your Leech warning was removed by ') . $CURUSER['username'] . _('Please keep in your best behaviour from now on.');
-        $pms = [];
-        foreach ($_uids as $uid) {
-            $cache->update_row('user_' . $uid, [
-                'leechwarn' => 0,
-            ], $site_config['expires']['user_cache']);
-            $pms[] = '(2,' . $uid . ', ' . sqlesc($sub) . ', ' . sqlesc($body) . ', ' . sqlesc(TIME_NOW) . ')';
-        }
-        if (!empty($pms) && count($pms)) {
-            $g = $db->run(');
+// antag: $db = $container->get(Database::class);
+// antag: $cache, $site_config, $CURUSER, $_uids, $sub er defineret
+
+if ($act === 'disable') {
+    // Sørg for rene int-UIDs
+    $_uids = array_values(array_unique(array_map('intval', (array) ($_uids ?? []))));
+    if (!$_uids) {
+        stderr('Error', 'No users selected.');
+    }
+
+    // Sæt leechwarn = 0 for valgte brugere
+    $ph   = [];
+    $bind = [];
+    foreach ($_uids as $k => $uid) {
+        $ph[] = ":id$k";
+        $bind["id$k"] = $uid;
+    }
+
+    $db->perform(
+        'UPDATE users SET leechwarn = 0 WHERE id IN (' . implode(',', $ph) . ')',
+        $bind
+    );
+
+    // PM-tekst
+    $body = _('Hey, your Leech warning was removed by ') . $CURUSER['username'] . '. '
+          . _('Please keep in your best behaviour from now on.');
+    $now  = (int) TIME_NOW;
+
+    // Send PM til hver bruger + opdatér cache
+    foreach ($_uids as $uid) {
+        $cache->update_row('user_' . $uid, ['leechwarn' => 0], $site_config['expires']['user_cache']);
+
+        $db->perform(
+            'INSERT INTO messages (sender, receiver, subject, msg, added)
+             VALUES (:sender, :receiver, :subject, :msg, :added)',
+            [
+                'sender'   => 2,         // system/bruger-id for afsender
+                'receiver' => $uid,
+                'subject'  => (string) $sub,
+                'msg'      => $body,
+                'added'    => $now,
+            ]
+        );
+    }
 }
+
+// Rens linkbygning og undgå “&amp;?do=…”
+$base = $site_config['paths']['baseurl'];
+
 switch ($do) {
     case 'disabled':
-        $query = "SELECT id,username, class, downloaded, uploaded, IF(downloaded>0, round((uploaded/downloaded),2), '---') AS ratio, disable_reason, registered, last_access FROM users WHERE status = 2 ORDER BY last_access DESC ";
+        $query = "SELECT id, username, class, downloaded, uploaded,
+                         IF(downloaded>0, ROUND((uploaded/downloaded),2), '---') AS ratio,
+                         disable_reason, registered, last_access
+                  FROM users
+                  WHERE status = 2
+                  ORDER BY last_access DESC";
         $title = _('Disabled users');
-        $link = "<a href='{$site_config['paths']['baseurl']}/staffpanel.php?tool=leechwarn&amp;action=leechwarn&amp;?do=warned'>" . _('Leech warned users') . '</a>';
+        $link  = '<a href="' . $base . '/staffpanel.php?tool=leechwarn&amp;action=leechwarn&amp;do=warned">'
+               . _('Leech warned users') . '</a>';
         break;
 
     case 'leechwarn':
-        $query = "SELECT id, username, class, downloaded, uploaded, IF(downloaded>0, round((uploaded/downloaded),2), '---') AS ratio, warn_reason, leechwarn, registered, last_access FROM users WHERE leechwarn>='1' ORDER BY last_access DESC, leechwarn DESC ";
+        $query = "SELECT id, username, class, downloaded, uploaded,
+                         IF(downloaded>0, ROUND((uploaded/downloaded),2), '---') AS ratio,
+                         warn_reason, leechwarn, registered, last_access
+                  FROM users
+                  WHERE leechwarn >= 1
+                  ORDER BY last_access DESC, leechwarn DESC";
         $title = _('Leech Warned users');
-        $link = "<a href='{$site_config['paths']['baseurl']}/staffpanel.php?tool=leechwarn&amp;action=leechwarn&amp;do=disabled'>" . _('disabled users') . '</a>';
+        $link  = '<a href="' . $base . '/staffpanel.php?tool=leechwarn&amp;action=leechwarn&amp;do=disabled">'
+               . _('Disabled users') . '</a>';
         break;
 }
+
 $g = sql_query($query) or print (is_object($mysqli)) ? mysqli_error($mysqli) : (($___mysqli_res = mysqli_connect_error()) ? $___mysqli_res : false);
 $count = mysqli_num_rows($g);
 $HTMLOUT .= "

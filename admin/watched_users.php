@@ -30,23 +30,53 @@ if (isset($_GET['remove'])) {
     $removed_log = '';
     //=== if single delete use
     if (!empty($remove_me_Ive_been_good)) {
-        if (!is_array($remove_me_Ive_been_good)) {
-            if (is_valid_id($remove_me_Ive_been_good)) {
-                $rows = $db->fetchAll('SELECT username, modcomment FROM users WHERE id = ' . sqlesc($remove_me_Ive_been_good)) or sqlerr(__FILE__, __LINE__);
-                $user = mysqli_fetch_assoc($res);
-                $modcomment = get_date((int) TIME_NOW, 'DATE', 1) . ' - ' . _('Removed from watched users by') . " $CURUSER[username].\n" . $user['modcomment'];
-                $db->run('UPDATE users SET watched_user = \'0\', modcomment = ' . sqlesc($modcomment) . ' WHERE id = :id', [':id' => $remove_me_Ive_been_good]) or sqlerr(__FILE__, __LINE__);
-                $cache = $container->get(Cache::class);
-                $cache->update_row('user_' . $remove_me_Ive_been_good, [
-                    'watched_user' => 0,
-                    'modcomment' => $modcomment,
-                ], $site_config['expires']['user_cache']);
-                $count = 1;
-                $removed_log = format_username((int) $remove_me_Ive_been_good);
-            }
-        } else {
-            foreach ($remove_me_Ive_been_good as $id) {
-                $id = (int) $id;
+// $remove_me_Ive_been_good kan være et id eller et array af ids
+$ids = $remove_me_Ive_been_good ?? [];
+if (!is_array($ids)) {
+    $ids = [$ids];
+}
+
+// normaliser ids
+$ids = array_values(array_unique(array_map('intval', $ids)));
+
+$count = 0;
+$removed_log = '';
+
+// hent cache én gang
+$cache = $container->get(Cache::class);
+
+foreach ($ids as $id) {
+    if (!is_valid_id($id)) {
+        continue;
+    }
+
+    // hent eksisterende modcomment/username
+    $user = $db->fetchOne('SELECT username, modcomment FROM users WHERE id = :id', ['id' => $id]);
+    if (!$user) {
+        continue;
+    }
+
+    $modcomment = get_date((int) TIME_NOW, 'DATE', 1)
+        . ' - ' . _('Removed from watched users by') . ' '
+        . $CURUSER['username'] . ".\n"
+        . (string) ($user['modcomment'] ?? '');
+
+    // opdatér bruger
+    $db->perform(
+        'UPDATE users SET watched_user = 0, modcomment = :mc WHERE id = :id',
+        ['mc' => $modcomment, 'id' => $id]
+    );
+
+    // opdatér cache
+    $cache->update_row('user_' . $id, [
+        'watched_user' => 0,
+        'modcomment'   => $modcomment,
+    ], $site_config['expires']['user_cache']);
+
+    $count++;
+    $removed_log .= ($removed_log ? ', ' : '') . format_username($id);
+}
+
  if (is_valid_id($id)) {
     // TODO: indsæt den rigtige SELECT/DELETE
     $res = $db->perform('/* TODO: query for watched_users */', []);

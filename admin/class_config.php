@@ -213,33 +213,47 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $db->perform('/* TODO: write query B */', []);
     }
 }
-            $stylesheets = $fluent->from('stylesheets')
-                                  ->select(null)
-                                  ->select('id');
+// Hent alle stylesheet-id'er (FluentPDO er ok)
+$stylesheets = $fluent->from('stylesheets')
+                      ->select(null)
+                      ->select('id');
 
-            $class_id = false;
-            foreach ($stylesheets as $stylesheet) {
-                $values = [
-                    'name' => $name,
-                    'value' => $value,
-                    'classname' => $r_name,
-                    'classcolor' => $color,
-                    'classpic' => $pic,
-                    'template' => $stylesheet['id'],
-                ];
-                $sql = "INSERT INTO class_config (/* columns */) VALUES (/* values */)";
-$class_id = $db->perform($sql, $values);
+$affected = 0;
 
-                write_class_files($stylesheet['id']);
-            }
-            if ($class_id) {
-                $session->set('is-success', _('Success! User Class Configuration was updated!'));
-            } else {
-                $session->set('is-warning', _('There was an error while executing the update query or nothing was updated.'));
-            }
-            update_forum_classes($value, 'increment');
-            unset($_POST);
-        }
+foreach ($stylesheets as $stylesheet) {
+    $values = [
+        'name'       => $name,
+        'value'      => $value,
+        'classname'  => $r_name,
+        'classcolor' => $color,
+        'classpic'   => $pic,
+        'template'   => (int) $stylesheet['id'],
+    ];
+
+    // Brug navngivne placeholders og backticks (value er en “tricky” kolonne)
+    $stmt = $db->perform(
+        'INSERT INTO `class_config`
+           (`name`, `value`, `classname`, `classcolor`, `classpic`, `template`)
+         VALUES
+           (:name, :value, :classname, :classcolor, :classpic, :template)',
+        $values
+    );
+
+    $affected += (int) $stmt->rowCount();
+
+    write_class_files((int) $stylesheet['id']);
+}
+
+// Sæt session-besked på basis af affected rows
+if ($affected > 0) {
+    $session->set('is-success', _('Success! User Class Configuration was updated!'));
+} else {
+    $session->set('is-warning', _('There was an error while executing the update query or nothing was updated.'));
+}
+
+update_forum_classes($value, 'increment');
+unset($_POST);
+
     } elseif ($mode === 'remove') {
         $value = (int) $_POST['class'];
         $deleted = $fluent->deleteFrom('class_config')

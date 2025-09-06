@@ -23,7 +23,7 @@ $HTMLOUT = '';
 $remove = (isset($_GET['remove']) ? (int) $_GET['remove'] : 0);
 if ($remove) {
     if (empty($remove)) {
-        stderr(_('Error'), _('Invalid data'));
+        stderr('Error', 'Invalid data');
     }
     $rows = $db->fetchAll('SELECT id, username, class FROM users WHERE personal_doubleseed > NOW() AND id = ' . sqlesc($remove)) or sqlerr(__FILE__, __LINE__);
     $msgs_buffer = [];
@@ -91,5 +91,6 @@ $breadcrumbs = [
     "<a href='{$site_config['paths']['baseurl']}/staffpanel.php'>" . _('Staff Panel') . '</a>',
     "<a href='{$_SERVER['PHP_SELF']}'>$title</a>",
 ];
+}
 echo stdhead($title, [], 'page-wrapper', $breadcrumbs) . wrapper($HTMLOUT) . stdfoot();
-	}
+	

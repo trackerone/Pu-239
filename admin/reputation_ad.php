@@ -239,21 +239,42 @@ if ($type === 'new') {
     // TODO: update-statement for det eksisterende level
     // $db->perform('UPDATE reputation_levels SET ... WHERE id = :id', ['id' => $levelid, /* ... */]);
 }
-        // check it's a valid rep id
-        $rows = $db->fetchAll("SELECT reputationlevelid FROM reputationlevel WHERE reputationlevelid=$levelid");
-        if (!mysqli_num_rows($query)) {
-            stderr(_('Error'), _('Invalid ID.'));
-        }
-        $db->run(");
-    } else {
-        $ids = $input['reputation'];
-        if (is_array($ids) && count($ids)) {
-            foreach ($ids as $k => $v) {
-                $db->run(');
-    }
-    rep_cache();
-    redirect('staffpanel.php?tool=reputation_ad&amp;mode=done', $redirect);
+// check it's a valid rep id
+$levelid = (int) ($levelid ?? 0); // eller hent fra $input
+$exists = (int) $db->fetchValue(
+    'SELECT COUNT(*) FROM reputationlevel WHERE reputationlevelid = :id',
+    ['id' => $levelid]
+);
+
+if ($exists === 0) {
+    stderr('Error', 'Invalid ID.');
 }
+
+// TODO: gør det der skulle ske her (fx UPDATE/DELETE på reputationlevel)
+$db->perform('/* TODO: write action for single reputation level */', ['id' => $levelid]);
+
+} else {
+    $ids = $input['reputation'] ?? [];
+    if (is_array($ids) && count($ids)) {
+        // sikker IN(...) placeholders
+        $ph = [];
+        $bind = [];
+        foreach (array_values($ids) as $k => $v) {
+            $ph[] = ":id$k";
+            $bind["id$k"] = (int) $v;
+        }
+
+        // TODO: batch-handling for flere levels (tilpas SQL’en)
+        $db->perform(
+            '/* TODO: batch action for reputation levels */ -- e.g.
+             /* UPDATE reputationlevel SET ... WHERE reputationlevelid IN (' . implode(',', $ph) . ') */',
+            $bind
+        );
+    }
+}
+
+rep_cache();
+redirect('staffpanel.php?tool=reputation_ad&amp;mode=done', $redirect);
 
 /**
  * @param array $input
