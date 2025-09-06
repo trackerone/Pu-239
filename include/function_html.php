@@ -314,13 +314,13 @@ ajaxChat.getRoleClass = function(roleID) {
  *
  * @throws DependencyException
  * @throws NotFoundException
- * @throws \Envms\FluentPDO\Exception
+ * @throws \PDOException
  */
 function write_class_files($template)
 {
     global $container;
 
-    $fluent = $container->get(Database::class);
+    // $fluent removed — use $this->db (ExtendedPdo)
     $classes = $js_classes = $config_classes = $data = [];
     $t = 'define(';
     $configfile = "<?php\n\ndeclare(strict_types = 1);\n\n";
@@ -494,7 +494,7 @@ function send_mail($email, $subject, $html, $plain)
  * @param int    $id
  * @param string $code
  *
- * @throws \Envms\FluentPDO\Exception
+ * @throws \PDOException
  * @throws DependencyException
  * @throws NotFoundException
  *
@@ -505,7 +505,7 @@ function validate_invite(int $id, string $code)
 {
     global $container;
 
-    $fluent = $container->get(Database::class);
+    // $fluent removed — use $this->db (ExtendedPdo)
     return $fluent->from('invite_codes')
         ->select(null)
         ->select('email')
@@ -521,7 +521,7 @@ function validate_invite(int $id, string $code)
  * @param bool   $full
  *
  * @throws NotFoundException
- * @throws \Envms\FluentPDO\Exception
+ * @throws \PDOException
  * @throws DependencyException
  *
  * @return mixed
@@ -531,7 +531,7 @@ function validate_promo(string $code, bool $full)
 {
     global $container;
 
-    $fluent = $container->get(Database::class);
+    // $fluent removed — use $this->db (ExtendedPdo)
     $valid = $fluent->from('promo')
         ->where('link = ?', htmlsafechars($code))
         ->where('UNIX_TIMESTAMP(NOW()) < added + (days_valid * 86400)')
@@ -553,7 +553,7 @@ function validate_promo(string $code, bool $full)
  *
  * @param array $classes
  *
- * @throws \Envms\FluentPDO\Exception
+ * @throws \PDOException
  * @throws DependencyException
  * @throws NotFoundException
  *

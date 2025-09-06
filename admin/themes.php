@@ -16,7 +16,7 @@ require_once INCL_DIR . 'function_html.php';
 class_check(UC_MAX);
 global $container, $site_config;
 
-$fluent = $container->get(Database::class);
+// $fluent removed — use $this->db (ExtendedPdo)
 $HTML = '';
 
 /**

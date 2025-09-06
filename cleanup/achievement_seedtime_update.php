@@ -32,7 +32,7 @@ $db = $container->get(Database::class);, $site_config;
     $seedtime9 = 12960000; // 200days
     $seedtime10 = 31536000; //1year
     $fluent = $db; // alias
-$fluent = $container->get(Database::class);
+// $fluent removed — use $this->db (ExtendedPdo)
     $query = $fluent->from('snatched AS s')
                     ->select(null)
                     ->select('DISTINCT s.userid')

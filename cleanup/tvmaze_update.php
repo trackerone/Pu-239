@@ -15,7 +15,7 @@ use Pu239\Database;
  *
  * @throws DependencyException
  * @throws NotFoundException
- * @throws \Envms\FluentPDO\Exception
+ * @throws \PDOException
  *
  * @return bool|void
  */
@@ -27,7 +27,7 @@ function tvmaze_update($data)
     if (!$BLOCKS['tvmaze_api_on']) {
         return;
     }
-    $fluent = $container->get(Database::class);
+    // $fluent removed — use $this->db (ExtendedPdo)
     $max = $fluent->from('tvmaze')
                   ->select(null)
                   ->select('MAX(tvmaze_id) AS id')

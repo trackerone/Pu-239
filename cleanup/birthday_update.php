@@ -8,7 +8,7 @@ declare(strict_types = 1);
 
 use DI\DependencyException;
 use DI\NotFoundException;
-use Envms\FluentPDO\Literal;
+
 use MatthiasMullie\Scrapbook\Exception\UnbegunTransaction;
 use Pu239\Cache;
 use Pu239\Database;
@@ -22,7 +22,7 @@ use Pu239\Message;
  * @throws UnbegunTransaction
  * @throws \Delight\Auth\AuthError
  * @throws \Delight\Auth\NotLoggedInException
- * @throws \Envms\FluentPDO\Exception
+ * @throws \PDOException
  * @throws \PHPMailer\PHPMailer\Exception
  * @throws \Spatie\Image\Exceptions\InvalidManipulation
  */
@@ -34,7 +34,7 @@ function birthday_update($data)
     require_once INCL_DIR . 'function_users.php';
     $dt = TIME_NOW;
     $date = getdate();
-    $fluent = $container->get(Database::class);
+    // $fluent removed — use $this->db (ExtendedPdo)
     $users = $fluent->from('users')
                     ->select(null)
                     ->select('id')

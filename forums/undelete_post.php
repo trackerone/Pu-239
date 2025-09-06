@@ -4,7 +4,6 @@ require_once __DIR__ . '/../include/runtime_safe.php';
 
 declare(strict_types = 1);
 
-use Envms\FluentPDO\Literal;
 use Pu239\Cache;
 use Pu239\Database;
 
@@ -12,7 +11,7 @@ global $container, $site_config, $CURUSER;
 
 $post_id = isset($_GET['post_id']) ? (int) $_GET['post_id'] : (isset($_POST['post_id']) ? (int) $_POST['post_id'] : 0);
 $topic_id = isset($_GET['topic_id']) ? (int) $_GET['topic_id'] : (isset($_POST['topic_id']) ? (int) $_POST['topic_id'] : 0);
-$fluent = $container->get(Database::class);
+// $fluent removed — use $this->db (ExtendedPdo)
 $arr_post = $fluent->from('posts AS p')
                    ->select(null)
                    ->select('p.user_id')

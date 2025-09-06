@@ -27,7 +27,7 @@ $staff_picks = $pick === 0 ? TIME_NOW : 0;
 $set = [
     'staff_picks' => $staff_picks,
 ];
-$fluent = $container->get(Database::class);
+// $fluent removed — use $this->db (ExtendedPdo)
 $sql = "UPDATE torrents SET /* columns */ WHERE id = :id";
 $result = $this->db->perform($sql, array_merge($set, ['id' => $id]));
 

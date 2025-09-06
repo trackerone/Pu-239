@@ -16,7 +16,7 @@ use Pu239\User;
  * @throws UnbegunTransaction
  * @throws DependencyException
  * @throws NotFoundException
- * @throws \Envms\FluentPDO\Exception
+ * @throws \PDOException
  * @throws Exception
  */
 function gift_update($data)
@@ -27,7 +27,7 @@ function gift_update($data)
     if (Christmas()) {
         app_halt('Exit called');
     }
-    $fluent = $container->get(Database::class);
+    // $fluent removed — use $this->db (ExtendedPdo)
     $query = $fluent->from('users')
                     ->select(null)
                     ->select('id')

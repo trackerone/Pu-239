@@ -23,7 +23,7 @@ $count = 0;
 set_time_limit(18000);
 $image_proxy = $container->get(ImageProxy::class);
 $path = IMAGES_DIR . 'proxy/';
-$fluent = $container->get(Database::class);
+// $fluent removed — use $this->db (ExtendedPdo)
 $images = $fluent->from('images')
                  ->select(null)
                  ->select('url')
@@ -53,7 +53,7 @@ $count += process_images($photos, 'person');
  *
  * @throws DependencyException
  * @throws NotFoundException
- * @throws \Envms\FluentPDO\Exception
+ * @throws \PDOException
  * @throws InvalidManipulation
  *
  * @return int

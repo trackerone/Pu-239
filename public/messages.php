@@ -95,7 +95,7 @@ $db = $container->get(Database::class);;
 
 $cache = $container->get(Cache::class);
 $fluent = $db; // alias
-$fluent = $container->get(Database::class);
+// $fluent removed — use $this->db (ExtendedPdo)
 if (isset($_GET['change_pm_number'])) {
     $change_pm_number = (isset($_GET['change_pm_number']) ? (int) $_GET['change_pm_number'] : 20);
     $db->run(');
@@ -199,7 +199,7 @@ switch ($action) {
  *
  * @throws DependencyException
  * @throws NotFoundException
- * @throws \Envms\FluentPDO\Exception
+ * @throws \PDOException
  *
  * @return string
  */
@@ -211,7 +211,7 @@ $db = $container->get(Database::class);, $site_config;
     $cache = $container->get(Cache::class);
     $get_all_boxes = $cache->get('get_all_boxes_' . $userid);
     if ($get_all_boxes === false || is_null($get_all_boxes)) {
-        $fluent = $container->get(Database::class);
+        // $fluent removed — use $this->db (ExtendedPdo)
         $get_all_boxes = $fluent->from('pmboxes')
                                 ->select(null)
                                 ->select('boxnumber')
@@ -248,7 +248,7 @@ $db = $container->get(Database::class);, $site_config;
  * @param int $userid
  *
  * @throws NotFoundException
- * @throws \Envms\FluentPDO\Exception
+ * @throws \PDOException
  * @throws DependencyException
  *
  * @return bool|mixed|string

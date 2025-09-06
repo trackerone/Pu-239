@@ -21,7 +21,7 @@ function crazyhour_announce()
     $cache = $container->get(Cache::class);
     $crazy_hour = (TIME_NOW + 3600);
     $cz['crazyhour'] = $cache->get('crazyhour_');
-    $fluent = $container->get(Database::class);
+    // $fluent removed — use $this->db (ExtendedPdo)
     if ($cz['crazyhour'] === false || is_null($cz['crazyhour'])) {
         $cz['crazyhour'] = $fluent->from('freeleech')
                                   ->select(null)
@@ -111,7 +111,7 @@ $this->db->perform($sql, $values);
  * @param int $torrentid
  * @param int $userid
  *
- * @throws \Envms\FluentPDO\Exception
+ * @throws \PDOException
  * @throws DependencyException
  * @throws NotFoundException
  *
@@ -122,7 +122,7 @@ function get_happy(int $torrentid, int $userid)
     global $container;
 
     $cache = $container->get(Cache::class);
-    $fluent = $container->get(Database::class);
+    // $fluent removed — use $this->db (ExtendedPdo)
     $keys['happyhour'] = $userid . '_happy';
     $happy = $cache->get($keys['happyhour']);
     if ($happy === false || is_null($happy)) {
@@ -148,7 +148,7 @@ function get_happy(int $torrentid, int $userid)
  * @param int $torrentid
  * @param int $userid
  *
- * @throws \Envms\FluentPDO\Exception
+ * @throws \PDOException
  * @throws DependencyException
  * @throws NotFoundException
  *
@@ -159,7 +159,7 @@ function get_slots(int $torrentid, int $userid)
     global $container;
 
     $cache = $container->get(Cache::class);
-    $fluent = $container->get(Database::class);
+    // $fluent removed — use $this->db (ExtendedPdo)
     $ttl_slot = 86400;
     $torrent['freeslot'] = $torrent['doubleslot'] = 0;
     $slot = $cache->get('fllslot_' . $userid);

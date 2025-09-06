@@ -15,13 +15,13 @@ use Pu239\Database;
  *
  * @throws DependencyException
  * @throws NotFoundException
- * @throws \Envms\FluentPDO\Exception
+ * @throws \PDOException
  */
 function visible_update($data)
 {
     global $container, $site_config;
 
-    $fluent = $container->get(Database::class);
+    // $fluent removed — use $this->db (ExtendedPdo)
 
     $time_start = microtime(true);
     $deadtime_tor = get_date(TIME_NOW - $site_config['site']['max_dead_torrent_time'], 'MYSQL', 1, 0);

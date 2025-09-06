@@ -38,7 +38,7 @@ $stdfoot = [
  * @throws InvalidManipulation
  * @throws DependencyException
  * @throws NotFoundException
- * @throws \Envms\FluentPDO\Exception
+ * @throws \PDOException
  *
  * @return string
  */

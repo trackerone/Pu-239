@@ -12,7 +12,7 @@ global $container;
 $db = $container->get(Database::class);, $site_config, $CURUSER;
 
 $fluent = $db; // alias
-$fluent = $container->get(Database::class);
+// $fluent removed — use $this->db (ExtendedPdo)
 $count = $fluent->from('posts AS p')
                 ->select(null)
                 ->select('COUNT(p.id) AS count')

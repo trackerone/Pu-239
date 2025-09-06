@@ -33,7 +33,7 @@ function validip($ip)
  *
  * @throws DependencyException
  * @throws NotFoundException
- * @throws \Envms\FluentPDO\Exception
+ * @throws \PDOException
  *
  * @return false|mixed|string
  */

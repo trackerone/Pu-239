@@ -27,7 +27,7 @@ $show = $_POST['show'] == 0 ? 1 : 0;
 $set = [
     'navbar' => $show,
 ];
-$fluent = $container->get(Database::class);
+// $fluent removed — use $this->db (ExtendedPdo)
 $sql = "UPDATE staffpanel SET /* columns */ WHERE id = :id";
 $result = $this->db->perform($sql, array_merge($set, ['id' => $_POST['id']]));
 

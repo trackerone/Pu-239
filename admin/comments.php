@@ -47,7 +47,7 @@ $heading = '
  * @param $comment
  *
  * @throws NotFoundException
- * @throws \Envms\FluentPDO\Exception
+ * @throws \PDOException
  * @throws InvalidManipulation
  * @throws DependencyException
  *

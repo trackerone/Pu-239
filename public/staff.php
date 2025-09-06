@@ -19,7 +19,7 @@ global $container, $site_config;
 
 $support = $mods = $admin = $sysop = [];
 $htmlout = $firstline = '';
-$fluent = $container->get(Database::class);
+// $fluent removed — use $this->db (ExtendedPdo)
 $query = $fluent->from('users')
                 ->select(null)
                 ->select('users.id')
@@ -51,7 +51,7 @@ foreach ($query as $arr2) {
  *
  * @throws DependencyException
  * @throws NotFoundException
- * @throws \Envms\FluentPDO\Exception
+ * @throws \PDOException
  *
  * @return string|null
  */

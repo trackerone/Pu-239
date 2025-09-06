@@ -8,7 +8,7 @@ declare(strict_types = 1);
 
 use DI\DependencyException;
 use DI\NotFoundException;
-use Envms\FluentPDO\Literal;
+
 use Pu239\Cache;
 use Pu239\Database;
 use Pu239\Searchcloud;
@@ -17,8 +17,8 @@ use Pu239\Searchcloud;
  * @param int $limit
  *
  * @throws DependencyException
- * @throws NotFoundException          *@throws \Envms\FluentPDO\Exception
- * @throws \Envms\FluentPDO\Exception
+ * @throws NotFoundException          *@throws \PDOException
+ * @throws \PDOException
  *
  * @return array|bool
  */
@@ -29,7 +29,7 @@ function searchcloud($limit = 100)
     $cache = $container->get(Cache::class);
     $searchcloud = $cache->get('searchcloud_');
     if ($searchcloud === false || is_null($searchcloud)) {
-        $fluent = $container->get(Database::class);
+        // $fluent removed — use $this->db (ExtendedPdo)
         $search = $fluent->from('searchcloud')
                          ->select('searchedfor')
                          ->select('howmuch')
@@ -73,7 +73,7 @@ function searchcloud($limit = 100)
  *
  * @throws DependencyException
  * @throws NotFoundException
- * @throws \Envms\FluentPDO\Exception
+ * @throws \PDOException
  */
 function searchcloud_insert(string $word, string $column)
 {
@@ -117,7 +117,7 @@ function searchcloud_insert(string $word, string $column)
 /**
  * @throws DependencyException
  * @throws NotFoundException
- * @throws \Envms\FluentPDO\Exception
+ * @throws \PDOException
  *
  * @return string
  */

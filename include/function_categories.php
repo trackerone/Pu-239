@@ -17,7 +17,7 @@ use Pu239\Database;
  *
  * @throws DependencyException
  * @throws NotFoundException
- * @throws \Envms\FluentPDO\Exception
+ * @throws \PDOException
  *
  * @return array|bool|mixed
  */
@@ -26,7 +26,7 @@ function genrelist(bool $grouped)
     global $container, $site_config;
 
     $cache = $container->get(Cache::class);
-    $fluent = $container->get(Database::class);
+    // $fluent removed — use $this->db (ExtendedPdo)
     if ($grouped) {
         $ret = $cache->get('genrelist_grouped_');
         if ($ret === false || is_null($ret)) {
@@ -73,7 +73,7 @@ function genrelist(bool $grouped)
  *
  * @param int $catid
  *
- * @throws \Envms\FluentPDO\Exception
+ * @throws \PDOException
  * @throws DependencyException
  * @throws NotFoundException
  *

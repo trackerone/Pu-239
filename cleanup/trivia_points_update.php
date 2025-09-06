@@ -21,7 +21,7 @@ use Pu239\User;
  * @throws UnbegunTransaction
  * @throws \Delight\Auth\AuthError
  * @throws \Delight\Auth\NotLoggedInException
- * @throws \Envms\FluentPDO\Exception
+ * @throws \PDOException
  * @throws \PHPMailer\PHPMailer\Exception
  * @throws \Spatie\Image\Exceptions\InvalidManipulation
  */
@@ -34,7 +34,7 @@ function trivia_points_update($data)
     $count = 0;
     $msgs = [];
     $i = 1;
-    $fluent = $container->get(Database::class);
+    // $fluent removed — use $this->db (ExtendedPdo)
     $gamenum = $fluent->from('triviasettings')
                       ->select(null)
                       ->select('gamenum')

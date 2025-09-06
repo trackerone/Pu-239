@@ -37,7 +37,7 @@ use Spatie\Image\Exceptions\InvalidManipulation;
  *
  * @throws DependencyException
  * @throws NotFoundException
- * @throws \Envms\FluentPDO\Exception
+ * @throws \PDOException
  *
  * @return string
  */
@@ -209,7 +209,7 @@ function torrent_tooltip($text, $id, $block_id, $name, $poster, $uploader, $adde
  * @throws InvalidManipulation
  * @throws DependencyException
  * @throws NotFoundException
- * @throws \Envms\FluentPDO\Exception
+ * @throws \PDOException
  *
  * @return bool|mixed|string
  */
@@ -275,7 +275,7 @@ function torrent_tooltip_wrapper(array $data)
  * @throws DependencyException
  * @throws InvalidManipulation
  * @throws NotFoundException
- * @throws \Envms\FluentPDO\Exception
+ * @throws \PDOException
  *
  * @return string
  */

@@ -13,7 +13,7 @@ use Pu239\Database;
 /**
  * @param $action
  *
- * @throws \Envms\FluentPDO\Exception
+ * @throws \PDOException
  * @throws DependencyException
  * @throws NotFoundException
  *
@@ -64,7 +64,7 @@ $db = $container->get(Database::class);, $site_config;
             $todo = 255;
         } else {
             $fluent = $db; // alias
-$fluent = $container->get(Database::class);
+// $fluent removed — use $this->db (ExtendedPdo)
             $categories = $fluent->from('categories')
                                  ->select(null)
                                  ->select('id')
@@ -110,7 +110,7 @@ function happyCheck($action, $id = null)
  *
  * @throws DependencyException
  * @throws NotFoundException
- * @throws \Envms\FluentPDO\Exception
+ * @throws \PDOException
  */
 function happyFile($act)
 {
@@ -148,7 +148,7 @@ function happyFile($act)
  *
  * @throws DependencyException
  * @throws NotFoundException
- * @throws \Envms\FluentPDO\Exception
+ * @throws \PDOException
  */
 function happyLog($userid, $torrentid, $multi)
 {

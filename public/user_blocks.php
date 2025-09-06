@@ -5,7 +5,7 @@ require_once __DIR__ . '/../include/runtime_safe.php';
 declare(strict_types = 1);
 
 use Delight\Auth\Auth;
-use Envms\FluentPDO\Literal;
+
 use Pu239\Cache;
 use Pu239\Database;
 use Pu239\Session;
@@ -416,7 +416,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $removeset['userdetails_page'] = new Literal('userdetails_page & ~' . $clrbits_userdetails_page);
     }
     if (!empty($addset) || !empty($removeset)) {
-        $fluent = $container->get(Database::class);
+        // $fluent removed — use $this->db (ExtendedPdo)
         if (!empty($addset)) {
             $sql = "UPDATE user_blocks SET /* columns */ WHERE userid = :userid";
 $query = $this->db->perform($sql, array_merge($addset, ['userid' => $id]));

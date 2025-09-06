@@ -18,7 +18,7 @@ $HTMLOUT = $time_drop_down = $accepted_file_extension = $accepted_file_types = $
 $settings_saved = false;
 $config_id = 1;
 $fluent = $db; // alias
-$fluent = $container->get(Database::class);
+// $fluent removed — use $this->db (ExtendedPdo)
 $cache = $container->get(Cache::class);
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['do_it'])) {
     $update = [

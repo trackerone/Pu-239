@@ -29,7 +29,7 @@ if (empty($data)) {
     echo json_encode(['fail' => 'invalid']);
     app_halt('Exit called');
 }
-$fluent = $container->get(Database::class);
+// $fluent removed — use $this->db (ExtendedPdo)
 $user = $fluent->from('triviausers')
                ->where('user_id = ?', $curuser['id'])
                ->where('qid = ?', $qid)

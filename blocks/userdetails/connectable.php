@@ -15,7 +15,7 @@ if ($user['paranoia'] < 1 || $CURUSER['id'] == $id || $CURUSER['class'] >= UC_ST
     $Ident_Client = '';
     $port_data = $cache->get($What_Cache . $id);
     if ($port_data === false || is_null($port_data)) {
-        $fluent = $container->get(Database::class);
+        // $fluent removed — use $this->db (ExtendedPdo)
         $port_data = $fluent->from('peers')
                             ->select(null)
                             ->select('connectable')

@@ -20,7 +20,7 @@ $class = get_access(basename($_SERVER['REQUEST_URI']));
 class_check($class);
 global $container, $site_config, $CURUSER;
 
-$fluent = $container->get(Database::class);
+// $fluent removed — use $this->db (ExtendedPdo)
 $bans_class = $container->get(Ban::class);
 $color = '';
 $id = (int) $_GET['id'];

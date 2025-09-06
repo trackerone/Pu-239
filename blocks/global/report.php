@@ -16,7 +16,7 @@ $cache = $container->get(Cache::class);
 if ($site_config['alerts']['report'] && has_access($user['class'], UC_STAFF, 'coder')) {
     $delt_with = $cache->get('new_report_');
     if ($delt_with === false || is_null($delt_with)) {
-        $fluent = $container->get(Database::class);
+        // $fluent removed — use $this->db (ExtendedPdo)
         $delt_with = $fluent->from('reports')
                             ->select(null)
                             ->select('COUNT(id) AS count')

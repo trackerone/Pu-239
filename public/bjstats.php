@@ -23,7 +23,7 @@ if (!has_access($user['class'], $site_config['allowed']['play'], '')) {
  * @param $res
  * @param $frame_caption
  *
- * @throws \Envms\FluentPDO\Exception
+ * @throws \PDOException
  *
  * @return string
  */
@@ -74,7 +74,7 @@ function bjtable($res, $frame_caption)
 }
 
 $mingames = 10;
-$fluent = $container->get(Database::class);
+// $fluent removed — use $this->db (ExtendedPdo)
 $res = $fluent->from('users')
               ->select('id')
               ->select('username')

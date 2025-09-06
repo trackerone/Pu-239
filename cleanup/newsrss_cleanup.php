@@ -15,14 +15,14 @@ use Pu239\Database;
  *
  * @throws DependencyException
  * @throws NotFoundException
- * @throws \Envms\FluentPDO\Exception
+ * @throws \PDOException
  */
 function newsrss_cleanup($data)
 {
     global $container;
 
     $time_start = microtime(true);
-    $fluent = $container->get(Database::class);
+    // $fluent removed — use $this->db (ExtendedPdo)
     $fluent->deleteFrom('newsrss')
            ->where('added < NOW() - INTERVAL 30 DAY')
            ->execute();

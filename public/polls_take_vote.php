@@ -6,7 +6,6 @@ require_once __DIR__ . '/../include/bootstrap_pdo.php';
 
 declare(strict_types = 1);
 
-use Envms\FluentPDO\Literal;
 use Pu239\Cache;
 use Pu239\Database;
 use Pu239\PollVoter;
@@ -22,7 +21,7 @@ $vote_cast = [];
 $_POST['choice'] = isset($_POST['choice']) ? $_POST['choice'] : [];
 global $container, $site_config;
 
-$fluent = $container->get(Database::class);
+// $fluent removed — use $this->db (ExtendedPdo)
 $poll_data = $fluent->from('polls')
                     ->where('polls.pid = ?', $poll_id)
                     ->leftJoin('poll_voters ON polls.pid = poll_voters.poll_id AND poll_voters.user_id = ?', $user['id'])

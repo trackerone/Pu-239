@@ -17,7 +17,7 @@ use Pu239\Torrent;
  *
  * @throws DependencyException
  * @throws NotFoundException
- * @throws \Envms\FluentPDO\Exception
+ * @throws \PDOException
  * @throws UnbegunTransaction
  */
 function torrents_update($data)
@@ -25,7 +25,7 @@ function torrents_update($data)
     global $container;
 
     $time_start = microtime(true);
-    $fluent = $container->get(Database::class);
+    // $fluent removed — use $this->db (ExtendedPdo)
     $torrents = $fluent->from('torrents')
                        ->select(null)
                        ->select('id')

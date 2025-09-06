@@ -172,7 +172,7 @@ function make_link(array $value)
 /**
  * @throws DependencyException
  * @throws NotFoundException
- * @throws \Envms\FluentPDO\Exception
+ * @throws \PDOException
  *
  * @return string
  */
@@ -187,7 +187,7 @@ function staff_panel()
         $user_class = $CURUSER['class'] >= UC_STAFF ? $CURUSER['class'] : UC_MAX;
         $staff_panel = $cache->get('staff_panels_' . $user_class);
         if ($staff_panel === false || is_null($staff_panel)) {
-            $fluent = $container->get(Database::class);
+            // $fluent removed — use $this->db (ExtendedPdo)
             $staff_panel = $fluent->from('staffpanel')
                                   ->where('navbar = 1')
                                   ->where('av_class <= ?', $user_class)

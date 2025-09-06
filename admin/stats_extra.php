@@ -110,7 +110,7 @@ switch ($inbound['mode']) {
  *
  * @throws DependencyException
  * @throws NotFoundException
- * @throws \Envms\FluentPDO\Exception
+ * @throws \PDOException
  * @throws InvalidManipulation
  * @throws Exception
  */
@@ -124,7 +124,7 @@ function show_views(array $inbound, array $month_names)
     $human_to_date = getdate($to_time - 86400);
     $human_from_date = getdate($from_time);
     $sort_by = $inbound['sortby'] === 'desc' ? 'DESC' : 'ASC';
-    $fluent = $container->get(Database::class);
+    // $fluent removed — use $this->db (ExtendedPdo)
     $count = $fluent->from('topics AS t')
                     ->select(null)
                     ->select('t.forum_id')
@@ -231,7 +231,7 @@ function show_views(array $inbound, array $month_names)
  * @throws DependencyException
  * @throws InvalidManipulation
  * @throws NotFoundException
- * @throws \Envms\FluentPDO\Exception
+ * @throws \PDOException
  * @throws Exception
  */
 function result_screen(string $mode, array $inbound, array $month_names)
@@ -297,7 +297,7 @@ function result_screen(string $mode, array $inbound, array $month_names)
             break;
     }
     $sort_by = $inbound['sortby'] === 'desc' ? 'DESC' : 'ASC';
-    $fluent = $container->get(Database::class);
+    // $fluent removed — use $this->db (ExtendedPdo)
     $count = $fluent->from($sql_table)
                     ->select(null)
                     ->select("DATE_FORMAT(FROM_UNIXTIME($sql_field), '$sql_date') AS result_time")
@@ -409,7 +409,7 @@ function result_screen(string $mode, array $inbound, array $month_names)
  * @throws DependencyException
  * @throws InvalidManipulation
  * @throws NotFoundException
- * @throws \Envms\FluentPDO\Exception
+ * @throws \PDOException
  * @throws Exception
  */
 function main_screen($mode)
@@ -447,7 +447,7 @@ function main_screen($mode)
     $cache = $container->get(Cache::class);
     $oldest = $cache->get('oldest_');
     if ($oldest === false || is_null($oldest)) {
-        $fluent = $container->get(Database::class);
+        // $fluent removed — use $this->db (ExtendedPdo)
         $oldest = $fluent->from('users')
                          ->select(null)
                          ->select('registered')

@@ -18,7 +18,7 @@ class_check($class);
 global $container, $site_config;
 
 require_once DATABASE_DIR . 'sql_updates.php';
-$fluent = $container->get(Database::class);
+// $fluent removed — use $this->db (ExtendedPdo)
 $cache = $container->get(Cache::class);
 $session = $container->get(Session::class);
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {

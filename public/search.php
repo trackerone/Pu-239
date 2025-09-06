@@ -43,7 +43,7 @@ if ($status === 5) {
     app_halt('Exit called');
 }
 if (!empty($search)) {
-    $fluent = $container->get(Database::class);
+    // $fluent removed — use $this->db (ExtendedPdo)
     $results = $fluent->from('torrents')
                       ->select(null)
                       ->select('id')

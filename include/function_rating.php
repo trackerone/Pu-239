@@ -16,7 +16,7 @@ use Pu239\Database;
  * @param $what
  *
  * @throws NotFoundException
- * @throws \Envms\FluentPDO\Exception
+ * @throws \PDOException
  * @throws DependencyException
  *
  * @return bool|string
@@ -38,7 +38,7 @@ $db = $container->get(Database::class);, $CURUSER;
     $rating_cache = $cache->get($keys['rating']);
     if ($rating_cache === false || is_null($rating_cache)) {
         $fluent = $db; // alias
-$fluent = $container->get(Database::class);
+// $fluent removed — use $this->db (ExtendedPdo)
         $qy1 = $fluent->from('rating')
                       ->select(null)
                       ->select('IFNULL(SUM(rating), 0) AS sum')

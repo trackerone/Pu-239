@@ -18,7 +18,7 @@ use Pu239\User;
  * @param int $userid
  *
  * @throws NotFoundException
- * @throws \Envms\FluentPDO\Exception
+ * @throws \PDOException
  * @throws DependencyException
  *
  * @return string:bool

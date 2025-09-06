@@ -15,7 +15,7 @@ global $container;
 set_time_limit(18000);
 $image_proxy = $container->get(ImageProxy::class);
 $path = IMAGES_DIR . 'proxy/';
-$fluent = $container->get(Database::class);
+// $fluent removed — use $this->db (ExtendedPdo)
 $urls = $fluent->from('images')
                ->select('url')
                ->fetchAll();

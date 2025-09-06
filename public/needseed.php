@@ -21,7 +21,7 @@ $possible_actions = [
     'seeders',
 ];
 
-$fluent = $container->get(Database::class);
+// $fluent removed — use $this->db (ExtendedPdo)
 $needed = isset($_GET['needed']) && !is_array($_GET['needed']) ? htmlsafechars($_GET['needed']) : 'seeders';
 if (!in_array($needed, $possible_actions)) {
     stderr(_('Error'), _('Invalid action'));

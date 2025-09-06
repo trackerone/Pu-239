@@ -21,7 +21,7 @@ $stdfoot = [
 
 global $container;
 
-$fluent = $container->get(Database::class);
+// $fluent removed — use $this->db (ExtendedPdo)
 $session = $container->get(Session::class);
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $values = $keys = [];

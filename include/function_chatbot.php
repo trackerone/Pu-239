@@ -39,7 +39,7 @@ if (!$run && $user['channel'] === 0 && $user['random'] === 1 && !empty($user['te
  * @param $user
  *
  * @throws NotFoundException
- * @throws \Envms\FluentPDO\Exception
+ * @throws \PDOException
  * @throws DependencyException
  *
  * @return bool
@@ -120,7 +120,7 @@ function bot_respond($user)
             global $site_config;
 
             usleep(mt_rand(1000000, 3000000));
-            $fluent = $container->get(Database::class);
+            // $fluent removed — use $this->db (ExtendedPdo)
             $values = [
                 'userID' => $site_config['chatbot']['id'],
                 'userName' => $site_config['chatbot']['name'],
@@ -145,7 +145,7 @@ $this->db->perform($sql, $values);
  *
  * @throws DependencyException
  * @throws NotFoundException
- * @throws \Envms\FluentPDO\Exception
+ * @throws \PDOException
  * @throws UnbegunTransaction
  */
 function random_gifts($user)
@@ -255,7 +255,7 @@ function random_gifts($user)
             'ttl' => 3600,
             'text' => $msg,
         ];
-        $fluent = $container->get(Database::class);
+        // $fluent removed — use $this->db (ExtendedPdo)
         $sql = "INSERT INTO ajax_chat_messages (/* columns */) VALUES (/* values */)";
 $this->db->perform($sql, $values);
     }

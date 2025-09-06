@@ -41,7 +41,7 @@ if ($author) {
     $author_id = $users_class->getUserIdFromName($author);
     $author_error = empty($author_id) ? _('Sorry no member found with that username.') . ' ' . _('Please check the spelling.') : '';
 }
-$fluent = $container->get(Database::class);
+// $fluent removed — use $this->db (ExtendedPdo)
 if ($search || $author_id) {
     $count = $fluent->from('posts AS p')
                     ->select(null)

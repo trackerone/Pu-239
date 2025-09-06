@@ -31,7 +31,7 @@ if (isset($_POST['levelName'])) {
         return false;
     }
 }
-$fluent = $container->get(Database::class);
+// $fluent removed — use $this->db (ExtendedPdo)
 $score = isset($_POST['score']) ? (int) $_POST['score'] : (isset($_POST['gscore']) ? (int) $_POST['gscore'] : 0);
 $level = isset($_POST['level']) ? (int) $_POST['level'] : 1;
 $values = [

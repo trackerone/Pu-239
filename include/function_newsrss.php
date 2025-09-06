@@ -16,7 +16,7 @@ use Pu239\Database;
  *
  * @throws DependencyException
  * @throws NotFoundException
- * @throws \Envms\FluentPDO\Exception
+ * @throws \PDOException
  */
 function foxnews_shout($links = [])
 {
@@ -36,7 +36,7 @@ function foxnews_shout($links = [])
     if ($site_config['site']['autoshout_chat'] || $site_config['site']['autoshout_irc']) {
         include_once INCL_DIR . 'function_users.php';
         $cache = $container->get(Cache::class);
-        $fluent = $container->get(Database::class);
+        // $fluent removed — use $this->db (ExtendedPdo)
         foreach ($feeds as $key => $feed) {
             $hash = md5($feed);
             $xml = $cache->get('foxnewsrss_' . $hash);
@@ -103,7 +103,7 @@ function foxnews_shout($links = [])
  *
  * @throws DependencyException
  * @throws NotFoundException
- * @throws \Envms\FluentPDO\Exception
+ * @throws \PDOException
  */
 function tfreak_shout($links = [])
 {
@@ -116,7 +116,7 @@ function tfreak_shout($links = [])
     if ($site_config['site']['autoshout_chat'] || $site_config['site']['autoshout_irc']) {
         include_once INCL_DIR . 'function_users.php';
         $cache = $container->get(Cache::class);
-        $fluent = $container->get(Database::class);
+        // $fluent removed — use $this->db (ExtendedPdo)
         $xml = $cache->get('tfreaknewsrss_');
         if ($xml === false || is_null($xml)) {
             $xml = fetch('https://feeds.feedburner.com/Torrentfreak');
@@ -180,7 +180,7 @@ function tfreak_shout($links = [])
  *
  * @throws DependencyException
  * @throws NotFoundException
- * @throws \Envms\FluentPDO\Exception
+ * @throws \PDOException
  */
 function github_shout($links = [])
 {
@@ -197,7 +197,7 @@ function github_shout($links = [])
     if ($site_config['site']['autoshout_chat'] || $site_config['site']['autoshout_irc']) {
         include_once INCL_DIR . 'function_users.php';
         $cache = $container->get(Cache::class);
-        $fluent = $container->get(Database::class);
+        // $fluent removed — use $this->db (ExtendedPdo)
         foreach ($feeds as $key => $feed) {
             $hash = md5($feed);
             $rss = $cache->get('githubcommitrss_' . $hash);

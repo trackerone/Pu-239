@@ -22,7 +22,7 @@ global $container, $site_config;
 
 $HTMLOUT = '';
 
-$fluent = $container->get(Database::class);
+// $fluent removed — use $this->db (ExtendedPdo)
 $cache = $container->get(Cache::class);
 $messages_class = $container->get(Message::class);
 $auth = $container->get(Auth::class);

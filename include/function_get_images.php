@@ -21,7 +21,7 @@ require_once INCL_DIR . 'function_fanart.php';
  *
  * @throws DependencyException
  * @throws NotFoundException
- * @throws \Envms\FluentPDO\Exception
+ * @throws \PDOException
  *
  * @return array|bool|mixed
  */

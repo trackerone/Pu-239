@@ -10,7 +10,7 @@ use Pu239\Database;
 
 global $container;
 
-$fluent = $container->get(Database::class);
+// $fluent removed — use $this->db (ExtendedPdo)
 $id = isset($_GET['id']) ? (int) $_GET['id'] : (isset($_POST['id']) ? (int) $_POST['id'] : 0);
 if (!is_valid_id($id)) {
     stderr(_('Error'), _('Invalid ID.'));

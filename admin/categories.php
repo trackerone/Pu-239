@@ -6,7 +6,7 @@ declare(strict_types = 1);
 
 use DI\DependencyException;
 use DI\NotFoundException;
-use Envms\FluentPDO\Literal;
+
 use MatthiasMullie\Scrapbook\Exception\UnbegunTransaction;
 use Pu239\Cache;
 use Pu239\Database;
@@ -61,7 +61,7 @@ switch ($params['mode']) {
  * @param $params
  *
  * @throws UnbegunTransaction
- * @throws \Envms\FluentPDO\Exception
+ * @throws \PDOException
  * @throws Exception
  */
 function move_cat($params)
@@ -74,7 +74,7 @@ function move_cat($params)
     if (!is_valid_id((int) $params['new_cat_id']) || ((int) $params['id'] === (int) $params['new_cat_id'])) {
         stderr(_('Error'), _('You can not move torrents into the same category'));
     }
-    $fluent = $container->get(Database::class);
+    // $fluent removed — use $this->db (ExtendedPdo)
     $count = $fluent->from('categories')
                     ->select(null)
                     ->select('COUNT(id) AS count')
@@ -113,7 +113,7 @@ $results = $this->db->perform($sql, array_merge($set, ['category' => $params['id
  *
  * @throws DependencyException
  * @throws NotFoundException
- * @throws \Envms\FluentPDO\Exception
+ * @throws \PDOException
  * @throws InvalidManipulation
  * @throws Exception
  */
@@ -196,7 +196,7 @@ function add_cat($params)
         'parent_id' => $params['parent_id'],
         'hidden' => $params['cat_hidden'],
     ];
-    $fluent = $container->get(Database::class);
+    // $fluent removed — use $this->db (ExtendedPdo)
     $sql = "INSERT INTO categories (/* columns */) VALUES (/* values */)";
 $insert = $this->db->perform($sql, $values);
 
@@ -227,7 +227,7 @@ function delete_cat($params)
     if (!isset($params['id']) || !is_valid_id((int) $params['id'])) {
         stderr(_('Error'), _('No category ID selected'));
     }
-    $fluent = $container->get(Database::class);
+    // $fluent removed — use $this->db (ExtendedPdo)
     $cat = $fluent->from('categories')
                   ->where('id = ?', $params['id'])
                   ->fetch();
@@ -262,7 +262,7 @@ $results = $this->db->perform($sql, ['id' => $params['id']]);
 /**
  * @param mixed $params
  *
- * @throws \Envms\FluentPDO\Exception
+ * @throws \PDOException
  * @throws Exception
  */
 function delete_cat_form($params)
@@ -277,7 +277,7 @@ function delete_cat_form($params)
     if (!$cat) {
         stderr(_('Error'), _('That category does not exist or has been deleted'));
     }
-    $fluent = $container->get(Database::class);
+    // $fluent removed — use $this->db (ExtendedPdo)
     $count = $fluent->from('torrents')
                     ->select(null)
                     ->select('COUNT(id) AS count')
@@ -316,7 +316,7 @@ function delete_cat_form($params)
 /**
  * @param mixed $params
  *
- * @throws \Envms\FluentPDO\Exception
+ * @throws \PDOException
  * @throws Exception
  */
 function edit_cat($params)
@@ -349,7 +349,7 @@ function edit_cat($params)
         'parent_id' => $params['parent_id'],
         'hidden' => $params['cat_hidden'],
     ];
-    $fluent = $container->get(Database::class);
+    // $fluent removed — use $this->db (ExtendedPdo)
     $sql = "UPDATE categories SET /* columns */ WHERE id = :id";
 $update = $this->db->perform($sql, array_merge($set, ['id' => $params['id']]));
 
@@ -374,7 +374,7 @@ $update = $this->db->perform($sql, array_merge($set, ['id' => $params['id']]));
  * @throws DependencyException
  * @throws InvalidManipulation
  * @throws NotFoundException
- * @throws \Envms\FluentPDO\Exception
+ * @throws \PDOException
  * @throws Exception
  */
 function edit_cat_form($params)
@@ -428,7 +428,7 @@ function edit_cat_form($params)
 }
 
 /**
- * @throws \Envms\FluentPDO\Exception
+ * @throws \PDOException
  * @throws Exception
  */
 function show_categories()
@@ -546,7 +546,7 @@ function build_table(array $data, string $parent_name)
  * @param array $cat
  *
  * @throws NotFoundException
- * @throws \Envms\FluentPDO\Exception
+ * @throws \PDOException
  * @throws DependencyException
  * @throws InvalidManipulation
  *
@@ -556,7 +556,7 @@ function get_parents(array $cat)
 {
     global $container;
 
-    $fluent = $container->get(Database::class);
+    // $fluent removed — use $this->db (ExtendedPdo)
     $parents = $fluent->from('categories')
                       ->select('IF (cat_desc IS NULL, "", cat_desc) AS cat_desc')
                       ->where('parent_id = 0')
@@ -591,13 +591,13 @@ function get_parents(array $cat)
  * @throws DependencyException
  * @throws NotFoundException
  * @throws UnbegunTransaction
- * @throws \Envms\FluentPDO\Exception
+ * @throws \PDOException
  */
 function reorder_cats(bool $redirect = true)
 {
     global $container;
 
-    $fluent = $container->get(Database::class);
+    // $fluent removed — use $this->db (ExtendedPdo)
 
     $i = 0;
     $cats = $fluent->from('categories')
@@ -629,13 +629,13 @@ $this->db->perform($sql, array_merge($set, ['id' => $cat['id']]));
  *
  * @throws DependencyException
  * @throws NotFoundException
- * @throws \Envms\FluentPDO\Exception
+ * @throws \PDOException
  */
 function set_ordered(array $params)
 {
     global $container;
 
-    $fluent = $container->get(Database::class);
+    // $fluent removed — use $this->db (ExtendedPdo)
     $set = [
         'ordered' => new Literal('ordered + 1'),
     ];
@@ -651,7 +651,7 @@ function set_ordered(array $params)
  * @param array $cat
  *
  * @throws NotFoundException
- * @throws \Envms\FluentPDO\Exception
+ * @throws \PDOException
  * @throws DependencyException
  * @throws InvalidManipulation
  *
@@ -700,7 +700,7 @@ function get_images(array $cat)
  * @param int $id
  *
  * @throws NotFoundException
- * @throws \Envms\FluentPDO\Exception
+ * @throws \PDOException
  * @throws DependencyException
  * @throws InvalidManipulation
  *
@@ -710,7 +710,7 @@ function get_cat(int $id)
 {
     global $container;
 
-    $fluent = $container->get(Database::class);
+    // $fluent removed — use $this->db (ExtendedPdo)
     $cat = $fluent->from('categories')
                   ->where('id = ?', $id)
                   ->fetch();
@@ -734,14 +734,14 @@ function get_cat(int $id)
  *
  * @throws DependencyException
  * @throws NotFoundException
- * @throws \Envms\FluentPDO\Exception
+ * @throws \PDOException
  * @throws UnbegunTransaction
  */
 function flush_torrents(int $id)
 {
     global $container, $site_config;
 
-    $fluent = $container->get(Database::class);
+    // $fluent removed — use $this->db (ExtendedPdo)
     $torrents = $fluent->from('torrents')
                        ->select(null)
                        ->select('id');

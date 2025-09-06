@@ -18,7 +18,7 @@ use Pu239\Torrent;
  *
  * @throws DependencyException
  * @throws NotFoundException
- * @throws \Envms\FluentPDO\Exception
+ * @throws \PDOException
  * @throws UnbegunTransaction
  */
 function peer_update($data)
@@ -26,7 +26,7 @@ function peer_update($data)
     global $container, $site_config;
 
     $time_start = microtime(true);
-    $fluent = $container->get(Database::class);
+    // $fluent removed — use $this->db (ExtendedPdo)
     $cache = $container->get(Cache::class);
     require_once INCL_DIR . 'function_announce.php';
     $torrent_seeds = $torrent_leeches = [];

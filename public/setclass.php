@@ -26,7 +26,7 @@ if (isset($_GET['action']) && htmlsafechars($_GET['action']) === 'editclass') {
     ];
     $users_class = $container->get(User::class);
     $users_class->update($set, $user['id']);
-    $fluent = $container->get(Database::class);
+    // $fluent removed — use $this->db (ExtendedPdo)
     $sql = "DELETE FROM ajax_chat_online WHERE userID = :userID";
 $this->db->perform($sql, ['userID' => $user['id']]);
     $cache = $container->get(Cache::class);

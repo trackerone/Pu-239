@@ -15,13 +15,13 @@ use Pu239\Database;
  *
  * @throws DependencyException
  * @throws NotFoundException
- * @throws \Envms\FluentPDO\Exception
+ * @throws \PDOException
  */
 function referrer_update($data)
 {
     global $container;
 
-    $fluent = $container->get(Database::class);
+    // $fluent removed — use $this->db (ExtendedPdo)
     $time_start = microtime(true);
     $days = 180 * 86400;
     $dt = TIME_NOW - $days;

@@ -19,7 +19,7 @@ if ($site_config['bonus']['crazy_hour']) {
 
 /**
  * @throws NotFoundException
- * @throws \Envms\FluentPDO\Exception
+ * @throws \PDOException
  * @throws DependencyException
  * @throws Exception
  *
@@ -30,7 +30,7 @@ function crazyhour()
     global $CURUSER, $container;
 
     $cache = $container->get(Cache::class);
-    $fluent = $container->get(Database::class);
+    // $fluent removed — use $this->db (ExtendedPdo)
     $htmlout = $cz = '';
     $crazy_hour = (TIME_NOW + 3600);
     $crazyhour['crazyhour'] = $cache->get('crazyhour_');

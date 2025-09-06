@@ -20,7 +20,7 @@ use Pu239\User;
  * @throws DependencyException
  * @throws NotFoundException
  * @throws UnbegunTransaction
- * @throws \Envms\FluentPDO\Exception
+ * @throws \PDOException
  */
 function stealth(int $userid, bool $stealth = true)
 {

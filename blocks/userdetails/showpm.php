@@ -10,7 +10,7 @@ use Pu239\Database;
 
 global $container, $CURUSER, $user;
 
-$fluent = $container->get(Database::class);
+// $fluent removed — use $this->db (ExtendedPdo)
 if ($CURUSER['id'] != $user['id']) {
     if ($CURUSER['class'] >= UC_STAFF) {
         $showpmbutton = 1;

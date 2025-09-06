@@ -14,7 +14,7 @@ use Pu239\Database;
 /**
  * @param $data
  *
- * @throws \Envms\FluentPDO\Exception
+ * @throws \PDOException
  * @throws DependencyException
  * @throws NotFoundException
  *
@@ -25,7 +25,7 @@ function trivia_update($data)
     global $container;
 
     $time_start = microtime(true);
-    $fluent = $container->get(Database::class);
+    // $fluent removed — use $this->db (ExtendedPdo)
     $cache = $container->get(Cache::class);
     $count = $cache->get('trivia_questions_count_');
     if ($count === false || is_null($count)) {
@@ -107,7 +107,7 @@ $this->db->perform($sql, array_merge($set, ['qid' => $qid]));
 }
 
 /**
- * @throws \Envms\FluentPDO\Exception
+ * @throws \PDOException
  * @throws DependencyException
  * @throws NotFoundException
  *
@@ -120,7 +120,7 @@ function get_qids()
     $cache = $container->get(Cache::class);
     $qids = $cache->get('triviaquestions_');
     if ($qids === false || is_null($qids)) {
-        $fluent = $container->get(Database::class);
+        // $fluent removed — use $this->db (ExtendedPdo)
         $result = $fluent->from('triviaq')
                          ->select(null)
                          ->select('qid')

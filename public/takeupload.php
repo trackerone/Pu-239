@@ -4,7 +4,6 @@ require_once __DIR__ . '/../include/runtime_safe.php';
 
 declare(strict_types = 1);
 
-use Envms\FluentPDO\Literal;
 use Pu239\Cache;
 use Pu239\Database;
 use Pu239\Files;
@@ -240,7 +239,7 @@ if (empty($dict['info'])) {
 }
 $info = &$dict['info'];
 $infohash = pack('H*', sha1(bencdec::encode($info)));
-$fluent = $container->get(Database::class);
+// $fluent removed — use $this->db (ExtendedPdo)
 $count = $fluent->from('torrents')
                 ->select(null)
                 ->select('COUNT(id) AS count')

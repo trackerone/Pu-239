@@ -24,7 +24,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (empty($username) || empty($userid)) {
         stderr(_('Error'), _('Please fill out the form correctly.'));
     }
-    $fluent = $container->get(Database::class);
+    // $fluent removed — use $this->db (ExtendedPdo)
     $id = $fluent->from('users')
                  ->select(null)
                  ->select('id')

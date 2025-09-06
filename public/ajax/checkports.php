@@ -16,7 +16,7 @@ if (empty($_POST['uid'])) {
 global $container;
 
 $uid = has_access($user['class'], UC_STAFF, '') ? (int) $_POST['uid'] : $user['id'];
-$fluent = $container->get(Database::class);
+// $fluent removed — use $this->db (ExtendedPdo)
 $ips = $fluent->from('peers')
     ->select(null)
     ->select('INET6_NTOA(ip) AS ip')

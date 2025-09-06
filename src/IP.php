@@ -191,7 +191,7 @@ class IP
     /**
      * @param string $ip
      *
-     * @throws \Envms\FluentPDO\Exception
+     * @throws \PDOException
      *
      * @return array
      */

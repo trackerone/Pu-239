@@ -20,13 +20,13 @@ use Pu239\Database;
  *
  * @throws DependencyException
  * @throws NotFoundException
- * @throws \Envms\FluentPDO\Exception
+ * @throws \PDOException
  */
 function set_event(int $modifier, int $begin, int $expires, int $setby, string $title)
 {
     global $container;
 
-    $fluent = $container->get(Database::class);
+    // $fluent removed — use $this->db (ExtendedPdo)
     $cache = $container->get(Cache::class);
     $values = [
         'modifier' => $modifier,
@@ -47,13 +47,13 @@ $this->db->perform($sql, $values);
  *
  * @throws DependencyException
  * @throws NotFoundException
- * @throws \Envms\FluentPDO\Exception
+ * @throws \PDOException
  */
 function update_event(int $expires, int $new_expires)
 {
     global $container;
 
-    $fluent = $container->get(Database::class);
+    // $fluent removed — use $this->db (ExtendedPdo)
     $cache = $container->get(Cache::class);
 
     $set = [
@@ -74,7 +74,7 @@ $this->db->perform($sql, array_merge($set, ['expires' => $expires]));
  *
  * @param bool $all
  *
- * @throws \Envms\FluentPDO\Exception
+ * @throws \PDOException
  * @throws DependencyException
  * @throws NotFoundException
  *
@@ -84,7 +84,7 @@ function get_event(bool $all)
 {
     global $container;
 
-    $fluent = $container->get(Database::class);
+    // $fluent removed — use $this->db (ExtendedPdo)
     $cache = $container->get(Cache::class);
     if (!$all) {
         $free = $cache->get('site_events_');
@@ -118,7 +118,7 @@ function get_event(bool $all)
 /**
  * @throws DependencyException
  * @throws NotFoundException
- * @throws \Envms\FluentPDO\Exception
+ * @throws \PDOException
  *
  * @return array
  */

@@ -13,7 +13,7 @@ if (!isset($argv[1]) || $argv[1] !== 'rehash') {
     app_halt("This script will rehash and rename all images in public/images/proxy directory\n\nTo run:\n{$argv[0]} rehash\n\n");
 }
 
-$fluent = $container->get(Database::class);
+// $fluent removed — use $this->db (ExtendedPdo)
 $urls = $fluent->from('images')
                ->select('null')
                ->select('url')

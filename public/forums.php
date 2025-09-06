@@ -41,7 +41,7 @@ if (!$site_config['forum_config']['online'] && !has_access($user['class'], UC_ST
 }
 $HTMLOUT = '';
 $fluent = $db; // alias
-$fluent = $container->get(Database::class);
+// $fluent removed — use $this->db (ExtendedPdo)
 $fluent->update('users')
        ->set(['forum_access' => TIME_NOW])
        ->where('id = ?', $user['id'])
@@ -650,7 +650,7 @@ function ratingpic_forums($num)
  * @throws InvalidManipulation
  * @throws DependencyException
  * @throws NotFoundException
- * @throws \Envms\FluentPDO\Exception
+ * @throws \PDOException
  *
  * @return string
  */
@@ -663,7 +663,7 @@ $db = $container->get(Database::class);, $site_config, $user;
     $cachename = 'f_insertJumpTo_' . $user['id'] . ($staff ? '' : '_staff' === false);
     $qjcache = $cache->get($cachename);
     if ($qjcache === false || is_null($qjcache)) {
-        $fluent = $container->get(Database::class);
+        // $fluent removed — use $this->db (ExtendedPdo)
         $qjcache = $fluent->from('forums')
                           ->select(null)
                           ->select('forums.id')

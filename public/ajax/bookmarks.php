@@ -23,7 +23,7 @@ if (empty($user)) {
     echo json_encode(['fail' => 'csrf']);
     app_halt('Exit called');
 }
-$fluent = $container->get(Database::class);
+// $fluent removed — use $this->db (ExtendedPdo)
 $cache = $container->get(Cache::class);
 if ($private === 'true') {
     $bookmark = $fluent->from('bookmarks')

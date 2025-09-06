@@ -16,7 +16,7 @@ if ($site_config['alerts']['uploadapp'] && has_access($user['class'], UC_STAFF, 
     $cache = $container->get(Cache::class);
     $newapp = $cache->get('new_uploadapp_');
     if ($newapp === false || is_null($newapp)) {
-        $fluent = $container->get(Database::class);
+        // $fluent removed — use $this->db (ExtendedPdo)
         $newapp = $fluent->from('uploadapp')
                          ->select(null)
                          ->select('COUNT(id) AS count')

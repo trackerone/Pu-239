@@ -104,7 +104,7 @@ if ($action === 'add') {
             'anonymous' => $anon,
         ];
         $fluent = $db; // alias
-$fluent = $container->get(Database::class);
+// $fluent removed — use $this->db (ExtendedPdo)
         $sql = "INSERT INTO comments (/* columns */) VALUES (/* values */)";
 $newid = $this->db->perform($sql, $values);
 

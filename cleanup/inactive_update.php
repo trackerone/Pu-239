@@ -15,7 +15,7 @@ use Pu239\User;
  *
  * @throws DependencyException
  * @throws NotFoundException
- * @throws \Envms\FluentPDO\Exception
+ * @throws \PDOException
  */
 function inactive_update($data)
 {

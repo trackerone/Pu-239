@@ -16,14 +16,14 @@ use Pu239\Database;
  *
  * @throws DependencyException
  * @throws NotFoundException
- * @throws \Envms\FluentPDO\Exception
+ * @throws \PDOException
  */
 function mow_update($data)
 {
     global $container, $site_config;
 
     $time_start = microtime(true);
-    $fluent = $container->get(Database::class);
+    // $fluent removed — use $this->db (ExtendedPdo)
     $mow = $fluent->from('torrents')
                   ->select(null)
                   ->select('id')

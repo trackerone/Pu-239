@@ -22,7 +22,7 @@ use Pu239\Torrent;
  * @throws UnbegunTransaction
  * @throws \Delight\Auth\AuthError
  * @throws \Delight\Auth\NotLoggedInException
- * @throws \Envms\FluentPDO\Exception
+ * @throws \PDOException
  * @throws \PHPMailer\PHPMailer\Exception
  * @throws \Spatie\Image\Exceptions\InvalidManipulation
  */
@@ -33,7 +33,7 @@ function delete_torrents_update($data)
     $time_start = microtime(true);
     $hours = 2;
     $dt = get_date(TIME_NOW - ($hours * 3600), 'MYSQL', 1, 0);
-    $fluent = $container->get(Database::class);
+    // $fluent removed — use $this->db (ExtendedPdo)
     $never_seeded = $fluent->from('torrents')
                            ->select(null)
                            ->select('id')

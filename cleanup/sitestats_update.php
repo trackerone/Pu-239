@@ -17,7 +17,7 @@ use Pu239\Roles;
  *
  * @throws DependencyException
  * @throws NotFoundException
- * @throws \Envms\FluentPDO\Exception
+ * @throws \PDOException
  */
 function sitestats_update($data)
 {
@@ -25,7 +25,7 @@ function sitestats_update($data)
 
     $time_start = microtime(true);
     $dt = TIME_NOW - 300;
-    $fluent = $container->get(Database::class);
+    // $fluent removed — use $this->db (ExtendedPdo)
     $users = $fluent->from('users')
                     ->select(null)
                     ->select('status')

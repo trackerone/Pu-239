@@ -21,7 +21,7 @@ use Pu239\Message;
  * @throws UnbegunTransaction
  * @throws \Delight\Auth\AuthError
  * @throws \Delight\Auth\NotLoggedInException
- * @throws \Envms\FluentPDO\Exception
+ * @throws \PDOException
  * @throws \PHPMailer\PHPMailer\Exception
  * @throws \Spatie\Image\Exceptions\InvalidManipulation
  */
@@ -35,7 +35,7 @@ function leechwarn_update($data)
     $minratio = 0.3;
     $base_ratio = 0.0;
     $downloaded = 10 * 1024 * 1024 * 1024;
-    $fluent = $container->get(Database::class);
+    // $fluent removed — use $this->db (ExtendedPdo)
     $res = $fluent->from('users')
                   ->select(null)
                   ->select('id')

@@ -33,7 +33,7 @@ if (!empty($user) && is_array($user)) {
  *
  * @throws DependencyException
  * @throws NotFoundException
- * @throws \Envms\FluentPDO\Exception
+ * @throws \PDOException
  */
 function comment_like_unlike(array $fields, array $user)
 {
@@ -66,7 +66,7 @@ $db = $container->get(Database::class);;
     }
     $cache = $container->get(Cache::class);
     $fluent = $db; // alias
-$fluent = $container->get(Database::class);
+// $fluent removed — use $this->db (ExtendedPdo)
     if ($data['count'] == 0 && $current === 'Like') {
         $sql = "INSERT INTO likes ({$type}_id, user_id) VALUES (" . sqlesc($id) . ', ' . sqlesc($user['id']) . ')';
         $res = sql_query($sql) or sqlerr(__FILE__, __LINE__);

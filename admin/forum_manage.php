@@ -46,7 +46,7 @@ $valid_actions = [
     'edit_forum_page',
 ];
 $action = in_array($posted_action, $valid_actions) ? $posted_action : 'no_action';
-$fluent = $container->get(Database::class);
+// $fluent removed — use $this->db (ExtendedPdo)
 $forum_class = $container->get(Forum::class);
 switch ($action) {
     case 'delete':

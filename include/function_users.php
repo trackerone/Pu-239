@@ -25,7 +25,7 @@ require_once INCL_DIR . 'function_bbcode.php';
  *
  * @throws DependencyException
  * @throws NotFoundException
- * @throws \Envms\FluentPDO\Exception
+ * @throws \PDOException
  */
 function autoshout(string $msg, int $channel = 0, int $ttl = 3600)
 {
@@ -42,7 +42,7 @@ function autoshout(string $msg, int $channel = 0, int $ttl = 3600)
             'ttl' => $ttl,
         ];
 
-        $fluent = $container->get(Database::class);
+        // $fluent removed — use $this->db (ExtendedPdo)
         $sql = "INSERT INTO ajax_chat_messages (/* columns */) VALUES (/* values */)";
 $this->db->perform($sql, $values);
     }
@@ -59,7 +59,7 @@ $this->db->perform($sql, $values);
  * @throws DependencyException
  * @throws InvalidManipulation
  * @throws NotFoundException
- * @throws \Envms\FluentPDO\Exception
+ * @throws \PDOException
  *
  * @return string
  */
@@ -417,7 +417,7 @@ function min_class(int $minclass = UC_MIN, int $maxclass = UC_MAX)
  * @param int  $user_id
  *
  * @throws Exception
- * @throws \Envms\FluentPDO\Exception
+ * @throws \PDOException
  *
  * @return string
  */
@@ -612,7 +612,7 @@ function get_user_ratio_image(?float $up, ?float $down)
  *
  * @throws DependencyException
  * @throws NotFoundException
- * @throws \Envms\FluentPDO\Exception
+ * @throws \PDOException
  * @throws InvalidManipulation
  *
  * @return bool|mixed|string|null
@@ -696,7 +696,7 @@ function make_dir(string $dir, int $octal)
  * @param int $userid
  *
  * @throws NotFoundException
- * @throws \Envms\FluentPDO\Exception
+ * @throws \PDOException
  * @throws DependencyException
  *
  * @return bool
@@ -722,7 +722,7 @@ function get_anonymous(int $userid)
  * @throws NotFoundException
  * @throws AuthError
  * @throws NotLoggedInException
- * @throws \Envms\FluentPDO\Exception
+ * @throws \PDOException
  * @throws UnbegunTransaction
  * @throws InvalidManipulation
  */

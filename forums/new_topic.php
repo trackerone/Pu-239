@@ -4,7 +4,6 @@ require_once __DIR__ . '/../include/runtime_safe.php';
 
 declare(strict_types = 1);
 
-use Envms\FluentPDO\Literal;
 use Pu239\Cache;
 use Pu239\Database;
 
@@ -32,7 +31,7 @@ $poll_starts = isset($_POST['poll_starts']) ? (($_POST['poll_starts'] === 0) ? T
 $poll_starts = $poll_starts > ((int) $poll_ends + 1) ? TIME_NOW : $poll_starts;
 $change_vote = isset($_POST['change_vote']) && $_POST['change_vote'] === 'yes' ? 'yes' : 'no';
 $subscribe = isset($_POST['subscribe']) && $_POST['subscribe'] === 'yes' ? 'yes' : 'no';
-$fluent = $container->get(Database::class);
+// $fluent removed — use $this->db (ExtendedPdo)
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && $_POST['button'] === 'Post') {
     if (empty($body)) {
         stderr(_('Error'), _('No body text.'));

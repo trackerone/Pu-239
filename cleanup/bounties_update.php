@@ -23,7 +23,7 @@ use Pu239\User;
  * @throws UnbegunTransaction
  * @throws \Delight\Auth\AuthError
  * @throws \Delight\Auth\NotLoggedInException
- * @throws \Envms\FluentPDO\Exception
+ * @throws \PDOException
  * @throws \PHPMailer\PHPMailer\Exception
  * @throws \Spatie\Image\Exceptions\InvalidManipulation
  */
@@ -33,7 +33,7 @@ function bounties_update($data)
 
     $time_start = microtime(true);
     $dt = TIME_NOW;
-    $fluent = $container->get(Database::class);
+    // $fluent removed — use $this->db (ExtendedPdo)
     $bounties = $fluent->from('bounties AS b')
                        ->select(null)
                        ->select('SUM(b.amount) AS amount')

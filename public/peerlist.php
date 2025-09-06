@@ -25,7 +25,7 @@ $HTMLOUT = '';
  * @param       $torrent
  * @param mixed $user
  *
- * @throws \Envms\FluentPDO\Exception
+ * @throws \PDOException
  *
  * @return string
  */
@@ -100,7 +100,7 @@ if (empty($torrent)) {
 }
 $downloaders = [];
 $seeders = [];
-$fluent = $container->get(Database::class);
+// $fluent removed — use $this->db (ExtendedPdo)
 $peers = $fluent->from('peers AS p')
                 ->select('t.anonymous AS tanonymous')
                 ->select('t.owner')

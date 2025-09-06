@@ -21,7 +21,7 @@ function freetorrents_update($data)
     global $container, $site_config;
 
     $time_start = microtime(true);
-    $fluent = $container->get(Database::class);
+    // $fluent removed — use $this->db (ExtendedPdo)
     $query = $fluent->from('torrents')
                     ->select(null)
                     ->select('id')

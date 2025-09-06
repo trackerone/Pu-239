@@ -27,7 +27,7 @@ if (!is_valid_id($id)) {
     stderr(_('Error'), _('missing form data'));
 }
 $dt = TIME_NOW;
-$fluent = $container->get(Database::class);
+// $fluent removed — use $this->db (ExtendedPdo)
 $row = $fluent->from('torrents AS t')
               ->select(null)
               ->select('t.id')

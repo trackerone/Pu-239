@@ -21,7 +21,7 @@ use Spatie\Image\Exceptions\InvalidManipulation;
  * @throws Exception
  * @throws DependencyException
  * @throws NotFoundException
- * @throws \Envms\FluentPDO\Exception
+ * @throws \PDOException
  * @throws InvalidManipulation
  *
  * @return string|null
@@ -70,7 +70,7 @@ function commenttable($rows, $variant = 'torrent')
             $cache = $container->get(Cache::class);
             $user_likes = $cache->get("{$type}_user_likes_" . $cid);
             if ($user_likes === false || is_null($user_likes)) {
-                $fluent = $container->get(Database::class);
+                // $fluent removed — use $this->db (ExtendedPdo)
                 $likes = $fluent->from('likes')
                                 ->select(null)
                                 ->select('user_id')
@@ -163,7 +163,7 @@ function commenttable($rows, $variant = 'torrent')
  * @throws DependencyException
  * @throws InvalidManipulation
  * @throws NotFoundException
- * @throws \Envms\FluentPDO\Exception
+ * @throws \PDOException
  *
  * @return string|void
  */
@@ -204,7 +204,7 @@ function format_table_border($row, $image, $this_text, $avatar, $CURUSER, $users
  * @throws DependencyException
  * @throws InvalidManipulation
  * @throws NotFoundException
- * @throws \Envms\FluentPDO\Exception
+ * @throws \PDOException
  *
  * @return string
  */

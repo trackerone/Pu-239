@@ -35,7 +35,7 @@ global $container, $site_config;
 
 $snatched = $container->get(Snatched::class);
 $cache = $container->get(Cache::class);
-$fluent = $container->get(Database::class);
+// $fluent removed — use $this->db (ExtendedPdo)
 $id = !empty($_GET['id']) ? (int) $_GET['id'] : $viewer['id'];
 if (!is_valid_id($id)) {
     stderr(_('Error'), _('Bad ID.'));

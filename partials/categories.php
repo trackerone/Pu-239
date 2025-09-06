@@ -85,7 +85,7 @@ $HTMLOUT .= main_div($main_div, 'bottom20');
  *
  * @throws DependencyException
  * @throws NotFoundException
- * @throws \Envms\FluentPDO\Exception
+ * @throws \PDOException
  * @throws InvalidManipulation
  *
  * @return string
@@ -134,7 +134,7 @@ function format_row(array $cat, string $parent, string $cat_name, array $grouped
  *
  * @throws DependencyException
  * @throws NotFoundException
- * @throws \Envms\FluentPDO\Exception
+ * @throws \PDOException
  *
  * @return bool
  */

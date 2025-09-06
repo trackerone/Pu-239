@@ -20,7 +20,7 @@ if ($action === 'download') {
         stderr(_('Error'), _('Invalid ID'));
     } else {
         $fluent = $db; // alias
-$fluent = $container->get(Database::class);
+// $fluent removed — use $this->db (ExtendedPdo)
         $subtitle = $fluent->from('subtitles')
                            ->select(null)
                            ->select('id')

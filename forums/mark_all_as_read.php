@@ -35,13 +35,13 @@ function redirect()
  *
  * @throws DependencyException
  * @throws NotFoundException
- * @throws \Envms\FluentPDO\Exception
+ * @throws \PDOException
  */
 function mark_as_read(array $user)
 {
     global $container;
 
-    $fluent = $container->get(Database::class);
+    // $fluent removed — use $this->db (ExtendedPdo)
     $cache = $container->get(Cache::class);
     $query = get_topics();
     foreach ($query as $topic) {
@@ -66,13 +66,13 @@ function mark_as_read(array $user)
  *
  * @throws DependencyException
  * @throws NotFoundException
- * @throws \Envms\FluentPDO\Exception
+ * @throws \PDOException
  */
 function mark_as_unread(array $user)
 {
     global $container;
 
-    $fluent = $container->get(Database::class);
+    // $fluent removed — use $this->db (ExtendedPdo)
     $cache = $container->get(Cache::class);
     $query = get_topics();
     foreach ($query as $topic) {
@@ -96,7 +96,7 @@ function mark_as_unread(array $user)
 /**
  * @throws DependencyException
  * @throws NotFoundException
- * @throws \Envms\FluentPDO\Exception
+ * @throws \PDOException
  *
  * @return mixed
  */
@@ -105,7 +105,7 @@ function get_topics()
     global $container, $site_config;
 
     $dt = TIME_NOW - ($site_config['forum_config']['readpost_expiry'] * 86400);
-    $fluent = $container->get(Database::class);
+    // $fluent removed — use $this->db (ExtendedPdo)
     $query = $fluent->from('topics AS t')
                     ->select(null)
                     ->select('t.id')

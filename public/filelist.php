@@ -20,7 +20,7 @@ if (!is_valid_id($id)) {
     stderr(_('Error'), _('Invalid ID'));
 }
 
-$fluent = $container->get(Database::class);
+// $fluent removed — use $this->db (ExtendedPdo)
 $count = $fluent->from('files')
                 ->select(null)
                 ->select('COUNT(id) AS count')

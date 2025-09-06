@@ -10,7 +10,7 @@ use Pu239\Database;
 
 global $container, $CURUSER, $user, $id, $site_config;
 
-$fluent = $container->get(Database::class);
+// $fluent removed — use $this->db (ExtendedPdo)
 $text = "
     <a id='startcomments'></a>
     <div>

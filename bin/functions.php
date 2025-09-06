@@ -12,7 +12,7 @@ use Pu239\Session;
 
 /**
  * @throws NotFoundException
- * @throws \Envms\FluentPDO\Exception
+ * @throws \PDOException
  * @throws DependencyException
  *
  * @return array
@@ -21,7 +21,7 @@ function get_styles()
 {
     global $container;
 
-    $fluent = $container->get(Database::class);
+    // $fluent removed — use $this->db (ExtendedPdo)
     $query = $fluent->from('stylesheets')
                     ->select(null)
                     ->select('id')
@@ -41,7 +41,7 @@ function get_styles()
  * @param bool  $create
  *
  * @throws NotFoundException
- * @throws \Envms\FluentPDO\Exception
+ * @throws \PDOException
  * @throws DependencyException
  *
  * @return array
@@ -50,7 +50,7 @@ function get_classes(array $styles, bool $create)
 {
     global $container;
 
-    $fluent = $container->get(Database::class);
+    // $fluent removed — use $this->db (ExtendedPdo)
     $all_classes = [];
     foreach ($styles as $style) {
         $classes = $fluent->from('class_config')
@@ -161,7 +161,7 @@ function cleanup(string $group)
  * @param bool $before
  *
  * @throws NotFoundException
- * @throws \Envms\FluentPDO\Exception
+ * @throws \PDOException
  * @throws DependencyException
  *
  * @return int
@@ -170,7 +170,7 @@ function toggle_site_status(bool $before)
 {
     global $container;
 
-    $fluent = $container->get(Database::class);
+    // $fluent removed — use $this->db (ExtendedPdo)
     $cache = $container->get(Cache::class);
     $online = $fluent->from('site_config')
                      ->select(null)

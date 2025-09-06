@@ -28,7 +28,7 @@ if (php_sapi_name() === 'cli') {
  * @throws InvalidManipulation
  * @throws NotFoundException
  * @throws NotLoggedInException
- * @throws \Envms\FluentPDO\Exception
+ * @throws \PDOException
  * @throws UnbegunTransaction
  * @throws AuthError
  * @throws DependencyException
@@ -572,7 +572,7 @@ function get_file_name($file)
  * @throws NotFoundException
  * @throws NotLoggedInException
  * @throws UnbegunTransaction
- * @throws \Envms\FluentPDO\Exception
+ * @throws \PDOException
  */
 function get_default_border($folder)
 {
@@ -618,7 +618,7 @@ function get_default_border($folder)
  * @throws InvalidManipulation
  * @throws NotFoundException
  * @throws NotLoggedInException
- * @throws \Envms\FluentPDO\Exception
+ * @throws \PDOException
  * @throws UnbegunTransaction
  *
  * @return bool

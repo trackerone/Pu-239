@@ -9,7 +9,7 @@ declare(strict_types = 1);
 namespace Pu239;
 
 use Envms\FluentPDO\Exception;
-use Envms\FluentPDO\Literal;
+
 use Envms\FluentPDO\Queries\Select;
 use Psr\Container\ContainerInterface;
 

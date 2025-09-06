@@ -8,8 +8,8 @@
  *      tools/reports/batch40_5-summary.txt
  *  - Applies conservative fixes:
  *      - remove `use Envms\FluentPDO\Literal;`
- *      - replace `@throws \Envms\FluentPDO\Exception` -> `@throws \PDOException`
- *      - comment out `$fluent = $container->get(Database::class);` (note to use $this->db)
+ *      - replace `@throws \PDOException` -> `@throws \PDOException`
+ *      - comment out `// $fluent removed — use $this->db (ExtendedPdo)` (note to use $this->db)
  *      - known admin patterns (peers/agents, categories list/children/delete)
  */
 

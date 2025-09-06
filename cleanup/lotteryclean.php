@@ -8,7 +8,7 @@ declare(strict_types = 1);
 
 use DI\DependencyException;
 use DI\NotFoundException;
-use Envms\FluentPDO\Literal;
+
 use Pu239\Cache;
 use Pu239\Database;
 use Pu239\Message;
@@ -20,7 +20,7 @@ use Pu239\Message;
  * @throws NotFoundException
  * @throws \Delight\Auth\AuthError
  * @throws \Delight\Auth\NotLoggedInException
- * @throws \Envms\FluentPDO\Exception
+ * @throws \PDOException
  * @throws \MatthiasMullie\Scrapbook\Exception\UnbegunTransaction
  * @throws \PHPMailer\PHPMailer\Exception
  * @throws \Spatie\Image\Exceptions\InvalidManipulation
@@ -38,7 +38,7 @@ $db = $container->get(Database::class);, $site_config;
         if (!empty($site_config['auto_lotto']) && $site_config['auto_lotto']['enable']) {
             $values = [];
             $fluent = $db; // alias
-$fluent = $container->get(Database::class);
+// $fluent removed — use $this->db (ExtendedPdo)
             foreach ($site_config['auto_lotto'] as $key => $value) {
                 if ($key === 'duration') {
                     $values[] = [

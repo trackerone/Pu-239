@@ -6,7 +6,6 @@ require_once __DIR__ . '/../include/bootstrap_pdo.php';
 
 declare(strict_types = 1);
 
-use Envms\FluentPDO\Literal;
 use Pu239\Cache;
 use Pu239\Database;
 use Pu239\Message;
@@ -22,7 +21,7 @@ class_check($class);
 global $container, $site_config, $CURUSER;
 
 $session = $container->get(Session::class);
-$fluent = $container->get(Database::class);
+// $fluent removed — use $this->db (ExtendedPdo)
 $cache = $container->get(Cache::class);
 $messages_class = $container->get(Message::class);
 $possible_actions = [

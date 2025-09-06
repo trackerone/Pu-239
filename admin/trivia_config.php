@@ -16,7 +16,7 @@ class_check($class);
 $search = '';
 global $container, $site_config;
 
-$fluent = $container->get(Database::class);
+// $fluent removed — use $this->db (ExtendedPdo)
 $session = $container->get(Session::class);
 $questions = [];
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {

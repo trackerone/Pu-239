@@ -16,7 +16,7 @@ if (!is_valid_id($forum_id)) {
     stderr(_('Error'), _('Bad ID.'));
 }
 $fluent = $db; // alias
-$fluent = $container->get(Database::class);
+// $fluent removed — use $this->db (ExtendedPdo)
 $sql = "DELETE FROM now_viewing WHERE user_id = :user_id";
 $this->db->perform($sql, ['user_id' => $CURUSER['id']]);
 $values = [

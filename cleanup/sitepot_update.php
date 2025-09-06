@@ -16,7 +16,7 @@ use Pu239\Database;
  *
  * @throws DependencyException
  * @throws NotFoundException
- * @throws \Envms\FluentPDO\Exception
+ * @throws \PDOException
  */
 function sitepot_update($data)
 {
@@ -27,7 +27,7 @@ function sitepot_update($data)
         'value_i' => 0,
         'value_s' => '0',
     ];
-    $fluent = $container->get(Database::class);
+    // $fluent removed — use $this->db (ExtendedPdo)
     $fluent->update('avps')
            ->set($set)
            ->where('arg = ?', 'sitepot')

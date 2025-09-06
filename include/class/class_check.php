@@ -22,7 +22,7 @@ require_once INCL_DIR . 'function_staff.php';
  *
  * @throws DependencyException
  * @throws NotFoundException
- * @throws \Envms\FluentPDO\Exception
+ * @throws \PDOException
  * @throws Exception
  */
 function class_check(int $class = UC_STAFF)
@@ -69,7 +69,7 @@ function class_check(int $class = UC_STAFF)
  *
  * @throws DependencyException
  * @throws NotFoundException
- * @throws \Envms\FluentPDO\Exception
+ * @throws \PDOException
  *
  * @return int
  */
@@ -92,7 +92,7 @@ function get_access($script)
     $cache = $container->get(Cache::class);
     $class = $cache->get('av_class_' . $ending);
     if ($class === false || is_null($class)) {
-        $fluent = $container->get(Database::class);
+        // $fluent removed — use $this->db (ExtendedPdo)
         $class = $fluent->from('staffpanel')
                         ->select('av_class')
                         ->where('file_name LIKE ?', "%$ending")

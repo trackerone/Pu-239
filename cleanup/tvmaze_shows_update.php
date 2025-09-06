@@ -17,7 +17,7 @@ use Pu239\Image;
  * @param $data
  *
  * @throws NotFoundException
- * @throws \Envms\FluentPDO\Exception
+ * @throws \PDOException
  * @throws DependencyException
  *
  * @return bool|void
@@ -46,7 +46,7 @@ function tvmaze_shows_update($data)
         }
     }
     $images_class = $container->get(Image::class);
-    $fluent = $container->get(Database::class);
+    // $fluent removed — use $this->db (ExtendedPdo)
     $shows = $fluent->from('tvmaze')
                     ->select(null)
                     ->select('tvmaze_id')

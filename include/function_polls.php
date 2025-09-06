@@ -13,7 +13,7 @@ use Spatie\Image\Exceptions\InvalidManipulation;
 
 /**
  * @throws NotFoundException
- * @throws \Envms\FluentPDO\Exception
+ * @throws \PDOException
  * @throws InvalidManipulation
  * @throws DependencyException
  *

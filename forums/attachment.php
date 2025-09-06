@@ -16,7 +16,7 @@ use Pu239\Database;
  *
  * @throws DependencyException
  * @throws NotFoundException
- * @throws \Envms\FluentPDO\Exception
+ * @throws \PDOException
  *
  * @return array
  */
@@ -61,7 +61,7 @@ function upload_attachments(int $post_id)
                             'extension' => $file_extension,
                             'size' => $size,
                         ];
-                        $fluent = $container->get(Database::class);
+                        // $fluent removed — use $this->db (ExtendedPdo)
                         $sql = "INSERT INTO attachments (/* columns */) VALUES (/* values */)";
 $this->db->perform($sql, $values);
                         copy($_FILES['attachment']['tmp_name'][$key], $upload_to);

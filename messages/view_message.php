@@ -14,7 +14,7 @@ $image = placeholder_image();
 global $container, $site_config;
 
 $subject = $friends = '';
-$fluent = $container->get(Database::class);
+// $fluent removed — use $this->db (ExtendedPdo)
 $message = $fluent->from('messages AS m')
                   ->select('f.id AS friend')
                   ->select('b.id AS blocked')

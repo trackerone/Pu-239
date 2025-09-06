@@ -15,7 +15,7 @@ use Pu239\Snatched;
  *
  * @throws DependencyException
  * @throws NotFoundException
- * @throws \Envms\FluentPDO\Exception
+ * @throws \PDOException
  */
 function snatchclean_update($data)
 {

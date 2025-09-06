@@ -34,7 +34,7 @@ while ($count = mysqli_fetch_array($res)) {
 
 // Casino
 $fluent = $db; // alias
-$fluent = $container->get(Database::class);
+// $fluent removed — use $this->db (ExtendedPdo)
 $casino_count = $fluent->from('casino')
                        ->select(null)
                        ->select('COUNT(userid) AS count')

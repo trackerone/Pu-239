@@ -21,7 +21,7 @@ $search = array_merge($_POST, $_GET);
 $cache = $container->get(Cache::class);
 $oldest = $cache->get('oldest_');
 $fluent = $db; // alias
-$fluent = $container->get(Database::class);
+// $fluent removed — use $this->db (ExtendedPdo)
 if ($oldest === false || is_null($oldest)) {
     $oldest = $fluent->from('users')
                      ->select(null)

@@ -32,7 +32,7 @@ if (!empty($argv[1]) && $argv[1] === 'complete') {
  *
  * @throws DependencyException
  * @throws NotFoundException
- * @throws \Envms\FluentPDO\Exception
+ * @throws \PDOException
  */
 function update_all(array $argv, array $sql_updates)
 {
@@ -57,14 +57,14 @@ function update_all(array $argv, array $sql_updates)
  *
  * @throws DependencyException
  * @throws NotFoundException
- * @throws \Envms\FluentPDO\Exception
+ * @throws \PDOException
  */
 function update_database(array $argv, array $sql_updates, bool $all)
 {
     global $container, $site_config;
 
     $cache = $container->get(Cache::class);
-    $fluent = $container->get(Database::class);
+    // $fluent removed — use $this->db (ExtendedPdo)
     $qid = array_search($argv[2], array_column($sql_updates, 'id'));
     if (empty($qid)) {
         app_halt("{$argv[2]} is an invalid ID\n");
@@ -147,7 +147,7 @@ $this->db->perform($sql, $values);
  *
  * @throws DependencyException
  * @throws NotFoundException
- * @throws \Envms\FluentPDO\Exception
+ * @throws \PDOException
  *
  * @return array
  */
@@ -155,7 +155,7 @@ function get_updates(array $argv, array $sql_updates, bool $all)
 {
     global $container;
 
-    $fluent = $container->get(Database::class);
+    // $fluent removed — use $this->db (ExtendedPdo)
 
     $results = $fluent->from('database_updates')
         ->select(null)

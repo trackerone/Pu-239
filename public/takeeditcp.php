@@ -35,7 +35,7 @@ $db = $container->get(Database::class);, $site_config;
 
 $auth = $container->get(Auth::class);
 $fluent = $db; // alias
-$fluent = $container->get(Database::class);
+// $fluent removed — use $this->db (ExtendedPdo)
 $cache = $container->get(Cache::class);
 $session = $container->get(Session::class);
 

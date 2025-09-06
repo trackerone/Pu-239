@@ -33,7 +33,7 @@ $HTMLOUT = "
     <h1 class='has-text-centered is-wrapped'>" . _('MySQL Server Table Status') . '</h1>';
 
 $count = 0;
-$fluent = $container->get(Database::class);
+// $fluent removed — use $this->db (ExtendedPdo)
 $tables = $fluent->getPdo()
                  ->prepare('SHOW TABLE STATUS');
 $tables->execute();

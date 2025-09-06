@@ -22,7 +22,7 @@ $valid_search = [
 ];
 global $container, $site_config;
 
-$fluent = $container->get(Database::class);
+// $fluent removed — use $this->db (ExtendedPdo)
 $count = $fluent->from('torrents AS t')
                 ->select(null)
                 ->select('COUNT(t.id) AS count')

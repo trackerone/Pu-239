@@ -30,7 +30,7 @@ $stdfoot = [
 $HTMLOUT = '';
 $action = isset($_GET['action']) ? htmlsafechars($_GET['action']) : '';
 
-$fluent = $container->get(Database::class);
+// $fluent removed — use $this->db (ExtendedPdo)
 $users_class = $container->get(User::class);
 if ($action === 'add') {
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {

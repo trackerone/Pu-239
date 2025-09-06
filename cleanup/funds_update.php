@@ -21,7 +21,7 @@ use Pu239\User;
  * @throws UnbegunTransaction
  * @throws \Delight\Auth\AuthError
  * @throws \Delight\Auth\NotLoggedInException
- * @throws \Envms\FluentPDO\Exception
+ * @throws \PDOException
  * @throws \PHPMailer\PHPMailer\Exception
  * @throws \Spatie\Image\Exceptions\InvalidManipulation
  */
@@ -31,7 +31,7 @@ function funds_update($data)
 
     $time_start = microtime(true);
     $dt = TIME_NOW;
-    $fluent = $container->get(Database::class);
+    // $fluent removed — use $this->db (ExtendedPdo)
     $sql = $fluent->from('users')
                   ->select(null)
                   ->select('id')

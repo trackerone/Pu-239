@@ -15,7 +15,7 @@ use Pu239\Database;
  *
  * @throws DependencyException
  * @throws NotFoundException
- * @throws \Envms\FluentPDO\Exception
+ * @throws \PDOException
  */
 function bugs_update($data)
 {
@@ -24,7 +24,7 @@ function bugs_update($data)
     $dt = TIME_NOW - ($days * 86400);
     global $container;
 
-    $fluent = $container->get(Database::class);
+    // $fluent removed — use $this->db (ExtendedPdo)
     $fluent->deleteFrom('bugs')
            ->where('status != "na"')
            ->where('added < ?', $dt)

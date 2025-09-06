@@ -16,7 +16,7 @@ class_check($class);
 $HTMLOUT = $count = '';
 global $container, $site_config;
 
-$fluent = $container->get(Database::class);
+// $fluent removed — use $this->db (ExtendedPdo)
 $count1 = $fluent->from('torrents')
                  ->select(null)
                  ->select('COUNT(id) AS count')

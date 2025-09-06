@@ -5,7 +5,7 @@ require_once __DIR__ . '/../include/runtime_safe.php';
 declare(strict_types = 1);
 
 use Delight\Auth\Auth;
-use Envms\FluentPDO\Literal;
+
 use Pu239\Bonuslog;
 use Pu239\Database;
 use Pu239\Message;
@@ -33,7 +33,7 @@ if (!$site_config['bonus']['on']) {
 $dt = TIME_NOW;
 $max_donation = 100000;
 $bonuses = [];
-$fluent = $container->get(Database::class);
+// $fluent removed — use $this->db (ExtendedPdo)
 $torrent_ids = $fluent->from('torrents')
                       ->select(null)
                       ->select('MIN(id) AS min')

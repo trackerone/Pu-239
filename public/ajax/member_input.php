@@ -55,7 +55,7 @@ switch ($action) {
                 'txt' => _pfe('Staff Flush: {0} flushed {1} torrent for {2}', 'Staff Flush: {0} flushed {1} torrents for {2}', "[url={$site_config['paths']['baseurl']}/userdetails.php?id={$curuser['id']}]{$curuser['username']}[/url]", $count, "[url={$site_config['paths']['baseurl']}/userdetails.php?id={$id}]{$user['username']}[/url]"),
             ];
         }
-        $fluent = $container->get(Database::class);
+        // $fluent removed — use $this->db (ExtendedPdo)
         $sql = "INSERT INTO sitelog (/* columns */) VALUES (/* values */)";
 $this->db->perform($sql, $values);
         break;

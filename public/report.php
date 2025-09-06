@@ -61,7 +61,7 @@ if (isset($_POST['do_it'])) {
     if (empty($reason)) {
         stderr(_('Error'), _('You MUST enter a reason for this report! Use your back button and fill in the reason'));
     }
-    $fluent = $container->get(Database::class);
+    // $fluent removed — use $this->db (ExtendedPdo)
     $previous = $fluent->from('reports')
                        ->select(null)
                        ->select('id')
