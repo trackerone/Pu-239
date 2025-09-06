@@ -125,7 +125,7 @@ $peers = $fluent->from('peers AS p')
                 ->innerJoin('torrents AS t ON t.id = p.torrent')
                 ->leftJoin('users AS u ON u.id = p.userid')
                 ->where('p.torrent = ?', $id)
-                ->fetchAll();
+                ->fetchAll(); // TODO(batch41): replace with $this->db->fetchAll("SELECT ...", [...])
 
 if (empty($peers)) {
     stderr(_('Error'), _('No downloader/uploader data available!'));

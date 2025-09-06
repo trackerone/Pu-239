@@ -18,7 +18,7 @@ if ($active24 === false || is_null($active24)) {
     // $fluent removed — use $this->db (ExtendedPdo)
     $record = $fluent->from('avps')
                      ->where('arg = ?', 'last24')
-                     ->fetch();
+                     ->fetch(); // TODO(batch41): replace with $this->db->fetchRow("SELECT ...", [...])
 
     $dt = TIME_NOW - 86400;
     $query = $fluent->from('users')
@@ -29,7 +29,7 @@ if ($active24 === false || is_null($active24)) {
                     ->where('perms < ?', PERMS_STEALTH)
                     ->where('id != 2')
                     ->orderBy('username')
-                    ->fetchAll();
+                    ->fetchAll(); // TODO(batch41): replace with $this->db->fetchAll("SELECT ...", [...])
 
     $count = count($query);
     $i = 0;

@@ -48,7 +48,7 @@ if (!has_access($CURUSER['class'], UC_STAFF, '')) {
                       ->select('id')
                       ->where('userid = ?', $to_user['id'])
                       ->where('blockid = ?', $CURUSER['id'])
-                      ->fetch();
+                      ->fetch(); // TODO(batch41): replace with $this->db->fetchRow("SELECT ...", [...])
     if (!$blocked) {
         stderr(_('Refused'), _('This member has blocked PMs from you.'));
     }
@@ -58,7 +58,7 @@ if (!has_access($CURUSER['class'], UC_STAFF, '')) {
                          ->select('id')
                          ->where('userid = ?', $to_user['id'])
                          ->where('friendid = ?', $CURUSER['id'])
-                         ->fetch();
+                         ->fetch(); // TODO(batch41): replace with $this->db->fetchRow("SELECT ...", [...])
         if (!$friend) {
             stderr(_('Refused'), _('This member only accepts PMs from members on their friends list.'));
         }

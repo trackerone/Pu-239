@@ -146,7 +146,7 @@ $hnrs = $fluent->from('snatched AS s')
                ->where('s.userid=?', $userid)
                ->where('t.owner != ?', $userid)
                ->orderBy('s.id DESC')
-               ->fetchAll();
+               ->fetchAll(); // TODO(batch41): replace with $this->db->fetchAll("SELECT ...", [...])
 
 $completed .= '
 <h1>Hit and Runs for: ' . format_username($userid) . '</h1>';

@@ -47,7 +47,7 @@ function bounties_update($data)
                        ->where('FROM_UNIXTIME(t.added + 86400 * 2) < NOW()')
                        ->groupBy('r.id')
                        ->groupBy('r.filled_by_user_id')
-                       ->fetchAll();
+                       ->fetchAll(); // TODO(batch41): replace with $this->db->fetchAll("SELECT ...", [...])
     $msgs_buffer = [];
     if (!empty($bounties)) {
         $bounty_class = $container->get(Bounty::class);

@@ -76,7 +76,7 @@ $this->db->perform($sql, $values);
     {
         $user = $this->fluent->from('casino')
                              ->where('userid = ?', $userid)
-                             ->fetch();
+                             ->fetch(); // TODO(batch41): replace with $this->db->fetchRow("SELECT ...", [...])
 
         return $user;
     }
@@ -94,7 +94,7 @@ $this->db->perform($sql, $values);
                                ->select('SUM(deposit) AS globaldeposit')
                                ->select('SUM(win) AS win')
                                ->select('SUM(lost) AS lost')
-                               ->fetch();
+                               ->fetch(); // TODO(batch41): replace with $this->db->fetchRow("SELECT ...", [...])
 
         return $result;
     }

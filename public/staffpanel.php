@@ -62,7 +62,7 @@ if ($staff_classes === false || is_null($staff_classes)) {
                                 ->where('value >= ?', UC_STAFF)
                                 ->groupBy('value')
                                 ->orderBy('value')
-                                ->fetchAll();
+                                ->fetchAll(); // TODO(batch41): replace with $this->db->fetchAll("SELECT ...", [...])
     foreach ($available_classes as $class) {
         $staff_classes[] = $class['value'];
     }
@@ -107,7 +107,7 @@ if (in_array($tool, $staff_tools) && file_exists(ADMIN_DIR . $staff_tools[$tool]
                       ->select('av_class')
                       ->select('page_name')
                       ->where('id = ?', $id)
-                      ->fetch();
+                      ->fetch(); // TODO(batch41): replace with $this->db->fetchRow("SELECT ...", [...])
         if ($user['class'] < $arr['av_class']) {
             stderr(_('Error'), _('You are not allowed to delete this page.'));
         }
@@ -200,7 +200,7 @@ $result = $this->db->perform($sql, ['id' => $id]);
                           ->select('av_class')
                           ->select('navbar')
                           ->where('id = ?', $id)
-                          ->fetch();
+                          ->fetch(); // TODO(batch41): replace with $this->db->fetchRow("SELECT ...", [...])
         }
         foreach ($names as $name) {
             ${$name} = (isset($_POST[$name]) ? $_POST[$name] : ($action === 'edit' ? $arr[$name] : ''));
@@ -444,7 +444,7 @@ $res = $this->db->perform($sql, array_merge($set, ['id' => $id]));
                        ->where('s.av_class <= ?', $user_class)
                        ->orderBy('s.av_class DESC')
                        ->orderBy('s.page_name')
-                       ->fetchAll();
+                       ->fetchAll(); // TODO(batch41): replace with $this->db->fetchAll("SELECT ...", [...])
         if (!empty($data)) {
             $db_classes = $unique_classes = [];
             foreach ($data as $key => $value) {

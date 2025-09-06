@@ -30,7 +30,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                        ->select(null)
                        ->select('COUNT(id) AS count')
                        ->where('id = ?', $tid)
-                       ->fetch('count');
+                       ->fetch("count"); // TODO(batch41): use $this->db->fetchValue("SELECT COUNT(...) ...", [...])
 
     if (empty($torrents)) {
         stderr(_('Error'), _('Invalid ID.'));

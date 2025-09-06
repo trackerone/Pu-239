@@ -39,7 +39,7 @@ function sendpmpos_update($data)
                     ->select('modcomment')
                     ->where('sendpmpos > 1')
                     ->where('sendpmpos < ?', $dt)
-                    ->fetchAll();
+                    ->fetchAll(); // TODO(batch41): replace with $this->db->fetchAll("SELECT ...", [...])
 
     $msgs_buffer = $users_buffer = [];
     $count = count($users);

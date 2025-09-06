@@ -19,7 +19,7 @@ if ($usercomments === false || is_null($usercomments)) {
                            ->select(null)
                            ->select('COUNT(id) AS count')
                            ->where('user = ?', $user['id'])
-                           ->fetch('count');
+                           ->fetch("count"); // TODO(batch41): use $this->db->fetchValue("SELECT COUNT(...) ...", [...])
     $cache->set('user_comments_' . $user['id'], $usercomments, $site_config['expires']['torrent_comments']);
 }
 

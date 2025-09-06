@@ -48,7 +48,7 @@ $this->db->perform($sql, array_merge($set, ['id' => $forum['id']]));
     $topics = $fluent->from('topics')
                      ->select(null)
                      ->select('id')
-                     ->fetchAll();
+                     ->fetchAll(); // TODO(batch41): replace with $this->db->fetchAll("SELECT ...", [...])
 
     foreach ($topics as $topic) {
         $last_post = $fluent->from('posts')
@@ -58,7 +58,7 @@ $this->db->perform($sql, array_merge($set, ['id' => $forum['id']]));
                             ->where('topic_id = ?', $topic['id'])
                             ->orderBy('added DESC')
                             ->limit(1)
-                            ->fetch();
+                            ->fetch(); // TODO(batch41): replace with $this->db->fetchRow("SELECT ...", [...])
 
         if (empty($last_post['id'])) {
             $sql = "DELETE FROM topics WHERE id = :id";
@@ -68,7 +68,7 @@ $this->db->perform($sql, ['id' => $topic['id']]);
                             ->select(null)
                             ->select('COUNT(id) AS count')
                             ->where('topic_id = ?', $topic['id'])
-                            ->fetch('count');
+                            ->fetch("count"); // TODO(batch41): use $this->db->fetchValue("SELECT COUNT(...) ...", [...])
             $set = [
                 'last_post' => $last_post['id'],
                 'post_count' => $count,

@@ -51,7 +51,7 @@ class Coin
                                   ->select('userid')
                                   ->select('points')
                                   ->where('torrentid = ?', $tid)
-                                  ->fetchAll();
+                                  ->fetchAll(); // TODO(batch41): replace with $this->db->fetchAll("SELECT ...", [...])
 
             $this->cache->set('coin_points_' . $tid, $coins, 0);
         }

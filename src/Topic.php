@@ -66,7 +66,7 @@ class Topic
                                 ->select(null)
                                 ->select('COUNT(id) AS count')
                                 ->where('user_id = ?', $userid)
-                                ->fetch('count');
+                                ->fetch("count"); // TODO(batch41): use $this->db->fetchValue("SELECT COUNT(...) ...", [...])
         } catch (\Exception $e) {
             return $e->getMessage();
         }

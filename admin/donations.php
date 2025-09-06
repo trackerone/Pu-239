@@ -28,7 +28,7 @@ if (isset($_GET['total_donors'])) {
                     ->select('COUNT(id) AS count')
                     ->where('total_donated > 0')
                     ->where('status = 0')
-                    ->fetch('count');
+                    ->fetch("count"); // TODO(batch41): use $this->db->fetchValue("SELECT COUNT(...) ...", [...])
     $perpage = 15;
     $pager = pager($perpage, $count, $site_config['paths']['baseurl'] . '/staffpanel.php?tool=donations&amp;action=donations&amp;');
     $sql = $fluent->from('users')
@@ -45,14 +45,14 @@ if (isset($_GET['total_donors'])) {
                   ->orderBy('id')
                   ->limit($pager['pdo']['limit'])
                   ->offset($pager['pdo']['offset'])
-                  ->fetchAll();
+                  ->fetchAll(); // TODO(batch41): replace with $this->db->fetchAll("SELECT ...", [...])
 } else {
     $count = $fluent->from('users')
                     ->select(null)
                     ->select('COUNT(id) AS count')
                     ->where("donor = 'yes'")
                     ->where('status = 0')
-                    ->fetch('count');
+                    ->fetch("count"); // TODO(batch41): use $this->db->fetchValue("SELECT COUNT(...) ...", [...])
     $perpage = 15;
     $pager = pager($perpage, $count, $site_config['paths']['baseurl'] . '/staffpanel.php?tool=donations&amp;action=donations&amp;');
     $sql = $fluent->from('users')
@@ -69,7 +69,7 @@ if (isset($_GET['total_donors'])) {
                   ->orderBy('id')
                   ->limit($pager['pdo']['limit'])
                   ->offset($pager['pdo']['offset'])
-                  ->fetchAll();
+                  ->fetchAll(); // TODO(batch41): replace with $this->db->fetchAll("SELECT ...", [...])
 }
 if ($count > $perpage) {
     $HTMLOUT .= $pager['pagertop'];

@@ -19,14 +19,14 @@ if ($CURUSER['id'] != $user['id']) {
                           ->select('id')
                           ->where('userid = ?', $user['id'])
                           ->where('blockid = ?', $CURUSER['id'])
-                          ->fetch();
+                          ->fetch(); // TODO(batch41): replace with $this->db->fetchRow("SELECT ...", [...])
         $showpmbutton = !empty($blocked) ? false : true;
     } elseif ($user['acceptpms'] === 'friends') {
         $friend = $fluent->from('friends')
                          ->select('id')
                          ->where('userid = ?', $user['id'])
                          ->where('friendid = ?', $CURUSER['id'])
-                         ->fetch();
+                         ->fetch(); // TODO(batch41): replace with $this->db->fetchRow("SELECT ...", [...])
         $showpmbutton = !empty($friend) ? true : false;
     }
 }

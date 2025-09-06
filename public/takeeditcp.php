@@ -138,7 +138,7 @@ if ($action === 'avatar') {
                           ->select(null)
                           ->select('id')
                           ->where('class >= ?', UC_ADMINISTRATOR)
-                          ->fetchAll();
+                          ->fetchAll(); // TODO(batch41): replace with $this->db->fetchAll("SELECT ...", [...])
         foreach ($pmstaff as $arr) {
             $msgs_buffer[] = [
                 'receiver' => $arr['id'],
@@ -278,7 +278,7 @@ $opt = $fluent->from('users')
               ->select('opt1')
               ->select('opt2')
               ->where('id = ?', $user['id'])
-              ->fetch();
+              ->fetch(); // TODO(batch41): replace with $this->db->fetchRow("SELECT ...", [...])
 
 $cache->update_row('user_' . $user['id'], [
     'opt1' => $opt['opt1'],

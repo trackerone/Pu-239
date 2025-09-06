@@ -137,7 +137,7 @@ function bookmarktable($res, $userid, $variant = 'index')
         $bms = $fluent->from('bookmarks')
                       ->where('torrentid = ?', $id)
                       ->where('userid = ?', $userid)
-                      ->fetch();
+                      ->fetch(); // TODO(batch41): replace with $this->db->fetchRow("SELECT ...", [...])
         if ($bms['private'] === 'yes') {
             $body .= ($variant === 'index' ? "
                         <td class='has-text-centered'>
@@ -257,7 +257,7 @@ $count = $fluent->from('bookmarks')
                 ->select(null)
                 ->select('COUNT(id) AS count')
                 ->where('userid = ?', $userid)
-                ->fetch('count');
+                ->fetch("count"); // TODO(batch41): use $this->db->fetchValue("SELECT COUNT(...) ...", [...])
 $torrentsperpage = $user['torrentsperpage'];
 if (empty($torrentsperpage)) {
     $torrentsperpage = 25;
@@ -289,7 +289,7 @@ if ($count) {
                         ->orderBy('t.id DESC')
                         ->limit($pager['pdo']['limit'])
                         ->offset($pager['pdo']['offset'])
-                        ->fetchAll();
+                        ->fetchAll(); // TODO(batch41): replace with $this->db->fetchAll("SELECT ...", [...])
 
     $HTMLOUT .= $count > $torrentsperpage ? $pager['pagertop'] : '';
     $HTMLOUT .= bookmarktable($bookmarks, $userid, 'index');

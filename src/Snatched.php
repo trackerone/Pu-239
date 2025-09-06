@@ -72,7 +72,7 @@ class Snatched
                                  ->leftJoin('torrents AS t ON a.torrentid = t.id')
                                  ->where('a.torrentid = ?', $tid)
                                  ->where('a.userid = ?', $userid)
-                                 ->fetch();
+                                 ->fetch(); // TODO(batch41): replace with $this->db->fetchRow("SELECT ...", [...])
 
         return $snatches;
     }
@@ -182,7 +182,7 @@ $result = $this->db->perform($sql, array_merge($set, ['id' => $id]));
                                  ->where('u.immunity = 0')
                                  ->leftJoin('torrents AS t ON s.torrentid = t.id')
                                  ->leftJoin('users AS u ON s.userid = u.id')
-                                 ->fetchAll();
+                                 ->fetchAll(); // TODO(batch41): replace with $this->db->fetchAll("SELECT ...", [...])
 
             $snatches = array_merge($snatches, $snatched);
             $this->remove_cain($hnr[$type]);
@@ -247,7 +247,7 @@ $result = $this->db->perform($sql, array_merge($set, ['id' => $id]));
                               ->groupBy('modcomment')
                               ->groupBy('username')
                               ->having('count <= ?', $this->site_config['hnr_config']['cainallowed'])
-                              ->fetchAll();
+                              ->fetchAll(); // TODO(batch41): replace with $this->db->fetchAll("SELECT ...", [...])
 
         return $users;
     }
@@ -273,7 +273,7 @@ $result = $this->db->perform($sql, array_merge($set, ['id' => $id]));
                               ->groupBy('username')
                               ->groupBy('hit_and_run_total')
                               ->having('count > ?', $this->site_config['hnr_config']['cainallowed'])
-                              ->fetchAll();
+                              ->fetchAll(); // TODO(batch41): replace with $this->db->fetchAll("SELECT ...", [...])
 
         return $users;
     }

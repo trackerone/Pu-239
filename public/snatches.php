@@ -35,7 +35,7 @@ $count = $fluent->from('snatched AS s')
                 ->where('s.torrentid = ?', $id)
                 ->where('t.owner != s.userid')
                 ->where('s.to_go = 0')
-                ->fetch('count');
+                ->fetch("count"); // TODO(batch41): use $this->db->fetchValue("SELECT COUNT(...) ...", [...])
 
 $perpage = 25;
 $pager = pager($perpage, $count, $site_config['paths']['baseurl'] . "/snatches.php?id=$id&amp;");
@@ -79,7 +79,7 @@ $snatches = $fluent->from('snatched AS s')
                    ->where('s.to_go = 0')
                    ->limit($pager['pdo']['limit'])
                    ->offset($pager['pdo']['offset'])
-                   ->fetchAll();
+                   ->fetchAll(); // TODO(batch41): replace with $this->db->fetchAll("SELECT ...", [...])
 
 $body = '';
 foreach ($snatches as $arr) {

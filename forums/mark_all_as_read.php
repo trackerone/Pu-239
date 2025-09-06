@@ -113,7 +113,7 @@ function get_topics()
                     ->select('t.first_post - 1 AS first_post')
                     ->leftJoin('posts AS p ON t.last_post = p.id')
                     ->where('p.added > ?', $dt)
-                    ->fetchAll();
+                    ->fetchAll(); // TODO(batch41): replace with $this->db->fetchAll("SELECT ...", [...])
 
     return $query;
 }

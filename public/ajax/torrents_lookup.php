@@ -117,7 +117,7 @@ function get_uploaded(int $userid)
                     ->select(null)
                     ->select('COUNT(id) AS count')
                     ->where('owner = ?', $userid)
-                    ->fetch('count');
+                    ->fetch("count"); // TODO(batch41): use $this->db->fetchValue("SELECT COUNT(...) ...", [...])
 
     if ($count === 0) {
         return false;
@@ -147,7 +147,7 @@ function get_uploaded(int $userid)
                            ->select('SUM(downloaded) AS downloaded')
                            ->where('userid = ?', $userid)
                            ->where('torrentid = ?', $results['torrentid'])
-                           ->fetch();
+                           ->fetch(); // TODO(batch41): replace with $this->db->fetchRow("SELECT ...", [...])
 
             $results['uploaded'] = $sums['uploaded'];
             $results['downloaded'] = $sums['downloaded'];
@@ -180,7 +180,7 @@ function get_seeding(int $userid)
                     ->select('COUNT(id) AS count')
                     ->where('userid = ?', $userid)
                     ->where('seeder = "yes"')
-                    ->fetch('count');
+                    ->fetch("count"); // TODO(batch41): use $this->db->fetchValue("SELECT COUNT(...) ...", [...])
 
     if ($count === 0) {
         return false;
@@ -208,7 +208,7 @@ function get_seeding(int $userid)
                        ->where('z.userid = ?', $userid)
                        ->where('z.seeder = "yes"')
                        ->orderBy('z.last_action DESC')
-                       ->fetchAll();
+                       ->fetchAll(); // TODO(batch41): replace with $this->db->fetchAll("SELECT ...", [...])
 
     return $torrents;
 }
@@ -233,7 +233,7 @@ function get_leeching(int $userid)
                     ->select('COUNT(id) AS count')
                     ->where('userid = ?', $userid)
                     ->where('seeder = "no"')
-                    ->fetch('count');
+                    ->fetch("count"); // TODO(batch41): use $this->db->fetchValue("SELECT COUNT(...) ...", [...])
 
     if ($count === 0) {
         return false;
@@ -261,7 +261,7 @@ function get_leeching(int $userid)
                        ->where('z.userid = ?', $userid)
                        ->where('z.seeder = "no"')
                        ->orderBy('z.last_action DESC')
-                       ->fetchAll();
+                       ->fetchAll(); // TODO(batch41): replace with $this->db->fetchAll("SELECT ...", [...])
 
     return $torrents;
 }
@@ -285,7 +285,7 @@ function get_snatched(int $userid)
                     ->select(null)
                     ->select('COUNT(id) AS count')
                     ->where('userid = ?', $userid)
-                    ->fetch('count');
+                    ->fetch("count"); // TODO(batch41): use $this->db->fetchValue("SELECT COUNT(...) ...", [...])
 
     if ($count === 0) {
         return false;
@@ -302,7 +302,7 @@ function get_snatched(int $userid)
                        ->leftJoin('categories AS p ON c.parent_id = p.id')
                        ->where('s.userid = ?', $userid)
                        ->orderBy('s.last_action DESC')
-                       ->fetchAll();
+                       ->fetchAll(); // TODO(batch41): replace with $this->db->fetchAll("SELECT ...", [...])
 
     return $torrents;
 }
@@ -326,7 +326,7 @@ function get_snatched_staff(int $userid)
                     ->select(null)
                     ->select('COUNT(id) AS count')
                     ->where('userid = ?', $userid)
-                    ->fetch('count');
+                    ->fetch("count"); // TODO(batch41): use $this->db->fetchValue("SELECT COUNT(...) ...", [...])
 
     if ($count === 0) {
         return false;
@@ -351,7 +351,7 @@ function get_snatched_staff(int $userid)
                        ->leftJoin('peers AS z ON t.id = z.torrent AND z.userid = s.userid')
                        ->where('s.userid = ?', $userid)
                        ->orderBy('s.last_action DESC')
-                       ->fetchAll();
+                       ->fetchAll(); // TODO(batch41): replace with $this->db->fetchAll("SELECT ...", [...])
 
     return $torrents;
 }

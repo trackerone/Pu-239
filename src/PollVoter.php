@@ -52,7 +52,7 @@ class PollVoter
     {
         $search = $this->fluent->from('poll_voters')
                                ->select('COUNT(vid) AS count')
-                               ->fetch('count');
+                               ->fetch("count"); // TODO(batch41): use $this->db->fetchValue("SELECT COUNT(...) ...", [...])
 
         return $search;
     }
@@ -131,7 +131,7 @@ $id = $this->db->perform($sql, $values);
                                           ->where('user_id = ?', $userid)
                                           ->where('poll_id = ?', $poll_data['pid'])
                                           ->limit(1)
-                                          ->fetch();
+                                          ->fetch(); // TODO(batch41): replace with $this->db->fetchRow("SELECT ...", [...])
 
                 $poll_data['user_id'] = $vote_data['user_id'];
                 $poll_data['vote_date'] = $vote_data['vote_date'];

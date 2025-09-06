@@ -43,7 +43,7 @@ function pu_demote_update($data)
                      ->where('c.name != ?', 'UC_STAFF')
                      ->leftJoin('class_config AS c ON p.name = c.name')
                      ->orderBy('p.id')
-                     ->fetchAll();
+                     ->fetchAll(); // TODO(batch41): replace with $this->db->fetchAll("SELECT ...", [...])
 
     foreach ($promos as $ac) {
         $class_config = [

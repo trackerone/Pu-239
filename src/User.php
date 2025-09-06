@@ -121,7 +121,7 @@ class User
                                   ->where('u.username LIKE ?', "$username%")
                                   ->where('c.classname != ""')
                                   ->orderBy('LOWER(u.username)')
-                                  ->fetchAll();
+                                  ->fetchAll(); // TODO(batch41): replace with $this->db->fetchAll("SELECT ...", [...])
             $this->cache->set('search_users_' . $username, $users, 86400);
         }
 
@@ -166,7 +166,7 @@ class User
                                  ->leftJoin('usersachiev AS a ON u.id = a.userid')
                                  ->where('u.id = ?', $userid)
                                  ->orderBy('u.last_access DESC')
-                                 ->fetch();
+                                 ->fetch(); // TODO(batch41): replace with $this->db->fetchRow("SELECT ...", [...])
 
             if ($user) {
                 unset($user['hintanswer'], $user['passhash']);
@@ -211,7 +211,7 @@ class User
         foreach ($where as $key => $value) {
             $users = $users->where($key . ' ?', $value);
         }
-        $users = $users->fetchAll();
+        $users = $users->fetchAll(); // TODO(batch41): replace with $this->db->fetchAll("SELECT ...", [...])
 
         return $users;
     }
@@ -369,7 +369,7 @@ $result = $this->db->perform($sql, array_merge($set, ['id' => $userid]));
                             ->select(null)
                             ->select('id')
                             ->where('status = 0')
-                            ->fetchAll();
+                            ->fetchAll(); // TODO(batch41): replace with $this->db->fetchAll("SELECT ...", [...])
 
         return $ids;
     }
@@ -424,7 +424,7 @@ $result = $this->db->perform($sql, array_merge($set, ['id' => $userid]));
                               ->select('notifs')
                               ->where('MATCH (notifs) AGAINST (? IN NATURAL LANGUAGE MODE)', $cat)
                               ->where('MATCH (notifs) AGAINST (? IN NATURAL LANGUAGE MODE)', '[email] [pmail]')
-                              ->fetchAll();
+                              ->fetchAll(); // TODO(batch41): replace with $this->db->fetchAll("SELECT ...", [...])
 
         return $users;
     }
@@ -680,7 +680,7 @@ $this->db->perform($sql, ['userID' => $userid]);
                                ->where('class < ?', $class)
                                ->where('registered < ?', $registered)
                                ->where('id != ?', $botid)
-                               ->fetchAll();
+                               ->fetchAll(); // TODO(batch41): replace with $this->db->fetchAll("SELECT ...", [...])
         $group1 = !empty($group1) ? $group1 : [];
         $group2 = $this->fluent->from('users')
                                ->select(null)
@@ -690,7 +690,7 @@ $this->db->perform($sql, ['userID' => $userid]);
                                ->where('class < ?', $class)
                                ->where('last_access < ?', $last_access)
                                ->where('id != ?', $botid)
-                               ->fetchAll();
+                               ->fetchAll(); // TODO(batch41): replace with $this->db->fetchAll("SELECT ...", [...])
         $group2 = !empty($group2) ? $group2 : [];
         $group3 = $this->fluent->from('users')
                                ->select(null)
@@ -700,7 +700,7 @@ $this->db->perform($sql, ['userID' => $userid]);
                                ->where('class < ?', $class)
                                ->where('last_access < ?', $parked)
                                ->where('id != ?', $botid)
-                               ->fetchAll();
+                               ->fetchAll(); // TODO(batch41): replace with $this->db->fetchAll("SELECT ...", [...])
 
         $group3 = !empty($group3) ? $group3 : [];
 
@@ -771,7 +771,7 @@ $this->db->perform($sql, ['userID' => $userid]);
                                 ->select(null)
                                 ->select('COUNT(id) AS count')
                                 ->where('email = ?', $email)
-                                ->fetch('count');
+                                ->fetch("count"); // TODO(batch41): use $this->db->fetchValue("SELECT COUNT(...) ...", [...])
         } catch (\Exception $e) {
             return $e->getMessage();
         }
@@ -789,7 +789,7 @@ $this->db->perform($sql, ['userID' => $userid]);
                                 ->select(null)
                                 ->select('COUNT(id) AS count')
                                 ->where('username = ?', $username)
-                                ->fetch('count');
+                                ->fetch("count"); // TODO(batch41): use $this->db->fetchValue("SELECT COUNT(...) ...", [...])
         } catch (\Exception $e) {
             return $e->getMessage();
         }
@@ -815,7 +815,7 @@ $this->db->perform($sql, ['userID' => $userid]);
                                 ->select('COUNT(id) AS count')
                                 ->where('status = 0')
                                 ->where($where . ' = ?', $by)
-                                ->fetch('count');
+                                ->fetch("count"); // TODO(batch41): use $this->db->fetchValue("SELECT COUNT(...) ...", [...])
         } catch (\Exception $e) {
             return $e->getMessage();
         }

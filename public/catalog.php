@@ -119,7 +119,7 @@ if ($user['hidden'] === 0) {
     $count->where('c.hidden = 0')
           ->leftJoin('categories AS c ON t.category = c.id');
 }
-$count = $count->fetch('count');
+$count = $count->fetch("count"); // TODO(batch41): use $this->db->fetchValue("SELECT COUNT(...) ...", [...])
 $perpage = 10;
 $pager = pager($perpage, $count, $_SERVER['PHP_SELF'] . '?' . $p);
 $top = $bottom = '';

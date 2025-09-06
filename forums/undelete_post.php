@@ -29,7 +29,7 @@ $arr_post = $fluent->from('posts AS p')
                    ->leftJoin('topics AS t ON p.topic_id = t.id')
                    ->leftJoin('forums AS f ON t.forum_id = f.id')
                    ->where('p.id = ?', $post_id)
-                   ->fetch();
+                   ->fetch(); // TODO(batch41): replace with $this->db->fetchRow("SELECT ...", [...])
 
 $can_delete = $arr_post['user_id'] === $CURUSER['id'] || has_access($CURUSER['class'], UC_STAFF, 'forum_mod');
 if (!has_access($CURUSER['class'], (int) $arr_post['min_class_read'], '') || !has_access($CURUSER['class'], (int) $arr_post['min_class_write'], '')) {

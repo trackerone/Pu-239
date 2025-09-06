@@ -32,7 +32,7 @@ $images = $fluent->from('images')
                  ->orderBy('added DESC')
                  ->limit($limit)
                  ->offset($offset)
-                 ->fetchAll();
+                 ->fetchAll(); // TODO(batch41): replace with $this->db->fetchAll("SELECT ...", [...])
 $count += process_images($images, 'images');
 
 $photos = $fluent->from('person')
@@ -42,7 +42,7 @@ $photos = $fluent->from('person')
                  ->where('updated + 604800 < ?', TIME_NOW)
                  ->limit($limit)
                  ->offset($offset)
-                 ->fetchAll();
+                 ->fetchAll(); // TODO(batch41): replace with $this->db->fetchAll("SELECT ...", [...])
 
 $count += process_images($photos, 'person');
 

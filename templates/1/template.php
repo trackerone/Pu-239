@@ -458,7 +458,7 @@ function platform_menu()
         $templates = $fluent->from('stylesheets')
                             ->orderBy('id')
                             ->where('min_class_to_view <= ?', $CURUSER['class'])
-                            ->fetchAll();
+                            ->fetchAll(); // TODO(batch41): replace with $this->db->fetchAll("SELECT ...", [...])
 
         $cache->set('templates_' . $CURUSER['class'], $templates, 0);
     }

@@ -29,13 +29,13 @@ $images = $fluent->from('images')
                  ->select(null)
                  ->select('COUNT(url) AS count')
                  ->where('fetched = "no"')
-                 ->fetch('count');
+                 ->fetch("count"); // TODO(batch41): use $this->db->fetchValue("SELECT COUNT(...) ...", [...])
 $persons = $fluent->from('person')
                   ->select(null)
                   ->select('COUNT(photo) AS count')
                   ->where('photo IS NOT NULL')
                   ->where('updated + 604800 < ?', TIME_NOW)
-                  ->fetch('count');
+                  ->fetch("count"); // TODO(batch41): use $this->db->fetchValue("SELECT COUNT(...) ...", [...])
 
 if ($images > 0 && $images < $threads * $limit) {
     $threads = (int) floor($images / $limit);

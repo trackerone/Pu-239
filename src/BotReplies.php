@@ -84,7 +84,7 @@ $result = $this->db->perform($sql, array_merge($set, ['id' => $id]));
     public function get_replies()
     {
         $result = $this->fluent->from('bot_replies')
-                               ->fetchAll();
+                               ->fetchAll(); // TODO(batch41): replace with $this->db->fetchAll("SELECT ...", [...])
         if (is_array($result)) {
             return $result;
         }

@@ -18,13 +18,13 @@ $urls = $fluent->from('images')
                ->select('null')
                ->select('url')
                ->select('type')
-               ->fetchAll();
+               ->fetchAll(); // TODO(batch41): replace with $this->db->fetchAll("SELECT ...", [...])
 
 $photos = $fluent->from('person')
                  ->select(null)
                  ->select('photo AS url')
                  ->where('photo IS NOT NULL')
-                 ->fetchAll();
+                 ->fetchAll(); // TODO(batch41): replace with $this->db->fetchAll("SELECT ...", [...])
 
 $urls = array_merge($urls, $photos);
 $i = 0;

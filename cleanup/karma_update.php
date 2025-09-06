@@ -42,7 +42,7 @@ function karma_update($data)
         }
         $sql = $sql->groupBy('userid')
                    ->groupBy('seedbonus')
-                   ->fetchAll();
+                   ->fetchAll(); // TODO(batch41): replace with $this->db->fetchAll("SELECT ...", [...])
         if (!empty($sql)) {
             $total = 0;
             $count = count($sql);

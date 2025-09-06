@@ -20,7 +20,7 @@ global $container, $site_config;
 $count1 = $fluent->from('torrents')
                  ->select(null)
                  ->select('COUNT(id) AS count')
-                 ->fetch('count');
+                 ->fetch("count"); // TODO(batch41): use $this->db->fetchValue("SELECT COUNT(...) ...", [...])
 
 $perpage = 15;
 $pager = pager($perpage, $count1, 'staffpanel.php?tool=uploader_info&amp;');
@@ -36,7 +36,7 @@ $counted = $fluent->from('torrents AS t')
                   ->orderBy('how_many_torrents DESC')
                   ->limit($pager['pdo']['limit'])
                   ->offset($pager['pdo']['offset'])
-                  ->fetchAll();
+                  ->fetchAll(); // TODO(batch41): replace with $this->db->fetchAll("SELECT ...", [...])
 
 if ($count1 > $perpage) {
     $HTMLOUT .= $pager['pagertop'];

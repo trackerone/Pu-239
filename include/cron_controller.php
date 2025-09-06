@@ -61,7 +61,7 @@ function autoclean(string $run)
                        ->orderBy('clean_time ASC')
                        ->orderBy('clean_increment ASC');
     }
-    $query = $query->fetchAll();
+    $query = $query->fetchAll(); // TODO(batch41): replace with $this->db->fetchAll("SELECT ...", [...])
     if (!$query) {
         echo "Nothing to process, all caught up.\n";
     } else {

@@ -30,7 +30,7 @@ $message = $fluent->from('messages AS m')
                   ->leftJoin('blocks AS b ON b.userid = ? AND b.blockid = m.sender', $user['id'])
                   ->leftJoin('attachments AS a ON m.added = a.post_id')
                   ->leftJoin('users AS u ON m.sender = u.id')
-                  ->fetch();
+                  ->fetch(); // TODO(batch41): replace with $this->db->fetchRow("SELECT ...", [...])
 if (empty($message) || ($message['receiver'] != $user['id'] && $message['sender'] != $user['id'])) {
     stderr(_('Error'), _('You do not have permission to view this message.'));
 }
@@ -38,7 +38,7 @@ $attachment = '';
 if (!empty($message['attachment'])) {
     $attachments = $fluent->from('attachments')
                           ->where('post_id = ?', $message['added'])
-                          ->fetchAll();
+                          ->fetchAll(); // TODO(batch41): replace with $this->db->fetchAll("SELECT ...", [...])
     $i = 0;
     foreach ($attachments as $file) {
         ++$i;

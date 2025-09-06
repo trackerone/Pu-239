@@ -99,7 +99,7 @@ global $container;
 $count = $fluent->from('snatched')
                 ->select(null)
                 ->select('COUNT(id) AS count')
-                ->fetch('count');
+                ->fetch("count"); // TODO(batch41): use $this->db->fetchValue("SELECT COUNT(...) ...", [...])
 
 $valid_sort = [
     'id',

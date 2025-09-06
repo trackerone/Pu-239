@@ -23,7 +23,7 @@ $ips = $fluent->from('peers')
     ->select('port')
     ->select('agent')
     ->where('userid = ?', $uid)
-    ->fetchAll();
+    ->fetchAll(); // TODO(batch41): replace with $this->db->fetchAll("SELECT ...", [...])
 $out = '';
 $used_ips = [];
 foreach ($ips as $curip) {

@@ -93,7 +93,7 @@ function get_event(bool $all)
                            ->where('expires>?', TIME_NOW)
                            ->orderBy('id DESC')
                            ->limit(1)
-                           ->fetch();
+                           ->fetch(); // TODO(batch41): replace with $this->db->fetchRow("SELECT ...", [...])
 
             if (empty($free)) {
                 $free = [
@@ -107,7 +107,7 @@ function get_event(bool $all)
         $free = $fluent->from('events')
                        ->orderBy('id DESC')
                        ->limit(20)
-                       ->fetchAll();
+                       ->fetchAll(); // TODO(batch41): replace with $this->db->fetchAll("SELECT ...", [...])
 
         $free = array_reverse($free);
     }

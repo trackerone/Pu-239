@@ -37,7 +37,7 @@ $count = 0;
 $tables = $fluent->getPdo()
                  ->prepare('SHOW TABLE STATUS');
 $tables->execute();
-$query = $tables->fetchAll();
+$query = $tables->fetchAll(); // TODO(batch41): replace with $this->db->fetchAll("SELECT ...", [...])
 $innodb = true;
 foreach ($query as $row) {
     if ($row['Engine'] !== 'InnoDB') {

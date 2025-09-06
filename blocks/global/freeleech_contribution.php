@@ -47,7 +47,7 @@ if ($freeleech === false || is_null($freeleech)) {
                         ->select('pointspool / points * 100 AS percent')
                         ->select('enabled')
                         ->where('id=11')
-                        ->fetch();
+                        ->fetch(); // TODO(batch41): replace with $this->db->fetchRow("SELECT ...", [...])
 
     $cache->set('freeleech_alerts_', $freeleech, 0);
 }
@@ -89,7 +89,7 @@ if ($doubleupload === false || is_null($doubleupload)) {
                            ->select('pointspool / points * 100 AS percent')
                            ->select('enabled')
                            ->where('id=12')
-                           ->fetch();
+                           ->fetch(); // TODO(batch41): replace with $this->db->fetchRow("SELECT ...", [...])
 
     $cache->set('doubleupload_alerts_', $doubleupload, 0);
 }
@@ -131,7 +131,7 @@ if ($halfdownload === false || is_null($halfdownload)) {
                            ->select('pointspool / points * 100 AS percent')
                            ->select('enabled')
                            ->where('id=13')
-                           ->fetch();
+                           ->fetch(); // TODO(batch41): replace with $this->db->fetchRow("SELECT ...", [...])
 
     $cache->set('halfdownload_alerts_', $halfdownload, 0);
 }

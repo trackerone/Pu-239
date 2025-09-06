@@ -25,7 +25,7 @@ $count = $fluent->from('files')
                 ->select(null)
                 ->select('COUNT(id) AS count')
                 ->where('torrent = ?', $id)
-                ->fetch('count');
+                ->fetch("count"); // TODO(batch41): use $this->db->fetchValue("SELECT COUNT(...) ...", [...])
 $perpage = 50;
 $pager = pager($perpage, $count, "{$site_config['paths']['baseurl']}/filelist.php?id=$id&amp;");
 $HTMLOUT = '';

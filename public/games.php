@@ -40,7 +40,7 @@ $casino_count = $fluent->from('casino')
                        ->select('COUNT(userid) AS count')
                        ->where('deposit > 0')
                        ->where('userid != ?', $user['id'])
-                       ->fetch('count');
+                       ->fetch("count"); // TODO(batch41): use $this->db->fetchValue("SELECT COUNT(...) ...", [...])
 if ($casino_count > 0) {
     $color9 = 'green';
 }

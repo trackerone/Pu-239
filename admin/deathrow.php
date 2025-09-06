@@ -74,7 +74,7 @@ function notify_owner(array $tids)
                        ->select('owner')
                        ->select('name')
                        ->where('id', $tids)
-                       ->fetch();
+                       ->fetch(); // TODO(batch41): replace with $this->db->fetchRow("SELECT ...", [...])
 
     $dt = TIME_NOW;
     $subject = _('Dead Torrent Notice');
@@ -224,7 +224,7 @@ foreach ($dead as $values) {
 $count = $fluent->from('deathrow')
                 ->select(null)
                 ->select('COUNT(uid) AS count')
-                ->fetch('count');
+                ->fetch("count"); // TODO(batch41): use $this->db->fetchValue("SELECT COUNT(...) ...", [...])
 
 if ($count) {
     $perpage = 25;
@@ -233,7 +233,7 @@ if ($count) {
                        ->orderBy('username')
                        ->limit($pager['pdo']['limit'])
                        ->offset($pager['pdo']['offset'])
-                       ->fetchAll();
+                       ->fetchAll(); // TODO(batch41): replace with $this->db->fetchAll("SELECT ...", [...])
 
     $HTMLOUT .= "
         <h1 class='has-text-centered'>" . _pfe('{0} Torrent On Deathrow', '{0} Torrents On Deathrow', $count) . '</h1>' . ($count > $perpage ? $pager['pagertop'] : '') . "

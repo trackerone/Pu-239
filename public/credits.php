@@ -83,7 +83,7 @@ $fluent = $db; // alias
 // $fluent removed — use $this->db (ExtendedPdo)
 $credits = $fluent->from('modscredits')
                   ->orderBy('id')
-                  ->fetchAll();
+                  ->fetchAll(); // TODO(batch41): replace with $this->db->fetchAll("SELECT ...", [...])
 $heading = '
     <tr>
         <th>' . _('Name') . '</th>

@@ -27,7 +27,7 @@ if ($CURUSER['class'] < UC_STAFF) {
 }
 $count = $count->where('p.user_id = ?', $CURUSER['id'])
                ->where('f.min_class_read <= ?', $CURUSER['class'])
-               ->fetch('count');
+               ->fetch("count"); // TODO(batch41): use $this->db->fetchValue("SELECT COUNT(...) ...", [...])
 
 $page = isset($_GET['page']) ? (int) $_GET['page'] : 0;
 $perpage = isset($_GET['perpage']) ? (int) $_GET['perpage'] : 20;

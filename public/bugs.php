@@ -53,7 +53,7 @@ if ($action === 'viewbug') {
         }
         $bug = $fluent->from('bugs')
                       ->where('id = ?', $id)
-                      ->fetch();
+                      ->fetch(); // TODO(batch41): replace with $this->db->fetchRow("SELECT ...", [...])
         $user = $user_class->getUserFromId($bug['sender']);
         $precomment = "\n[precode]{$comment}[/precode]";
         switch ($status) {
@@ -105,7 +105,7 @@ $this->db->perform($sql, array_merge($update, ['id' => $id]));
                   ->leftJoin('users AS u ON b.sender = u.id')
                   ->leftJoin('users AS s ON b.staff = u.id')
                   ->where('b.id = ?', $id)
-                  ->fetch();
+                  ->fetch(); // TODO(batch41): replace with $this->db->fetchRow("SELECT ...", [...])
     if (empty($bug)) {
         stderr(_('Error'), _('Invalid ID'));
     }
@@ -201,7 +201,7 @@ $this->db->perform($sql, array_merge($update, ['id' => $id]));
     $count = $fluent->from('bugs')
                     ->select(null)
                     ->select('COUNT(id) AS count')
-                    ->fetch('count');
+                    ->fetch("count"); // TODO(batch41): use $this->db->fetchValue("SELECT COUNT(...) ...", [...])
     $perpage = 25;
     $pager = pager($perpage, $count, $site_config['paths']['baseurl'] . '/bugs.php?action=bugs&amp;');
     $bugs = $fluent->from('bugs AS b')
@@ -224,13 +224,13 @@ $this->db->perform($sql, array_merge($update, ['id' => $id]));
                    ->orderBy('b.added DESC')
                    ->limit($pager['pdo']['limit'])
                    ->offset($pager['pdo']['offset'])
-                   ->fetchAll();
+                   ->fetchAll(); // TODO(batch41): replace with $this->db->fetchAll("SELECT ...", [...])
 
     $na_count = $fluent->from('bugs')
                        ->select(null)
                        ->select('COUNT(id) AS count')
                        ->where('status = "na"')
-                       ->fetch('count');
+                       ->fetch("count"); // TODO(batch41): use $this->db->fetchValue("SELECT COUNT(...) ...", [...])
 
     if ($count > 0) {
         $HTMLOUT .= $count > $perpage ? $pager['pagertop'] : '';

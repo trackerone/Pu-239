@@ -51,7 +51,7 @@ class Ban
             ->select('INET6_NTOA(last) AS last')
             ->where('? >= first', inet_pton($ip))
             ->where('? <= last', inet_pton($ip))
-            ->fetchAll();
+            ->fetchAll(); // TODO(batch41): replace with $this->db->fetchAll("SELECT ...", [...])
 
         return $bans;
     }
@@ -72,7 +72,7 @@ class Ban
             ->select('COUNT(id) AS count')
             ->where('? >= first', inet_pton($ip))
             ->where('? <= last', inet_pton($ip))
-            ->fetch('count');
+            ->fetch("count"); // TODO(batch41): use $this->db->fetchValue("SELECT COUNT(...) ...", [...])
 
         return $count;
     }

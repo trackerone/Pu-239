@@ -32,7 +32,7 @@ function gift_update($data)
                     ->select(null)
                     ->select('id')
                     ->where('gotgift = "yes"')
-                    ->fetchAll();
+                    ->fetchAll(); // TODO(batch41): replace with $this->db->fetchAll("SELECT ...", [...])
 
     $set = [
         'gotgift' => 'no',

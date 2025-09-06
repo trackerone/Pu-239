@@ -80,7 +80,7 @@ $newid = $this->db->perform($sql, $values);
                                 ->select(null)
                                 ->select('COUNT(qid) AS count')
                                 ->where('MATCH (question, answer1, answer2, answer3, answer4, answer5) AGAINST (? IN NATURAL LANGUAGE MODE)', $search)
-                                ->fetch('count');
+                                ->fetch("count"); // TODO(batch41): use $this->db->fetchValue("SELECT COUNT(...) ...", [...])
 
                 $pager = pager(15, $count, "{$site_config['paths']['baseurl']}/staffpanel.php?tool=trivia_config&");
                 $questions = $fluent->from('triviaq')
@@ -88,7 +88,7 @@ $newid = $this->db->perform($sql, $values);
                                     ->orderBy('qid')
                                     ->limit($pager['pdo']['limit'])
                                     ->offset($pager['pdo']['offset'])
-                                    ->fetchAll();
+                                    ->fetchAll(); // TODO(batch41): replace with $this->db->fetchAll("SELECT ...", [...])
             }
         }
     }
@@ -98,14 +98,14 @@ if (empty($search)) {
     $count = $fluent->from('triviaq')
                     ->select(null)
                     ->select('COUNT(qid) AS count')
-                    ->fetch('count');
+                    ->fetch("count"); // TODO(batch41): use $this->db->fetchValue("SELECT COUNT(...) ...", [...])
 
     $pager = pager(15, $count, "{$site_config['paths']['baseurl']}/staffpanel.php?tool=trivia_config&");
     $questions = $fluent->from('triviaq')
                         ->orderBy('qid')
                         ->limit($pager['pdo']['limit'])
                         ->offset($pager['pdo']['offset'])
-                        ->fetchAll();
+                        ->fetchAll(); // TODO(batch41): replace with $this->db->fetchAll("SELECT ...", [...])
 }
 
 $HTMLOUT = "

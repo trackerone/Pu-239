@@ -218,7 +218,7 @@ $db = $container->get(Database::class);, $site_config;
                                 ->select('name')
                                 ->where('userid=?', $userid)
                                 ->orderBy('boxnumber')
-                                ->fetchAll();
+                                ->fetchAll(); // TODO(batch41): replace with $this->db->fetchAll("SELECT ...", [...])
 
         $cache->set('get_all_boxes_' . $userid, $get_all_boxes, $site_config['expires']['get_all_boxes']);
     }

@@ -139,7 +139,7 @@ if ($ip) {
                             ->select('COUNT(id) AS count')
                             ->where('INET6_NTOA(first) <= ?', $user['last_ip'])
                             ->where('INET6_NTOA(last)>= ?', $user['last_ip'])
-                            ->fetch('count');
+                            ->fetch("count"); // TODO(batch41): use $this->db->fetchValue("SELECT COUNT(...) ...", [...])
 
             if ($count == 0) {
                 $ipstr = $user['last_ip'];

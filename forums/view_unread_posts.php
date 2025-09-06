@@ -16,7 +16,7 @@ $count = $fluent->from('read_posts')
                 ->select(null)
                 ->select('COUNT(id) AS count')
                 ->where('user_id = ?', $user['id'])
-                ->fetch('count');
+                ->fetch("count"); // TODO(batch41): use $this->db->fetchValue("SELECT COUNT(...) ...", [...])
 if ($count === 0) {
     require_once FORUM_DIR . 'mark_all_as_read.php';
     mark_as_unread($user);
@@ -42,7 +42,7 @@ $query = $query->where('f.min_class_read <= ?', $user['class'])
                ->where('p.added > ?', $time)
                ->where('(r.last_post_read IS NULL OR r.last_post_read < t.last_post)')
                ->where('r.user_id = ?', $user['id'])
-               ->fetchAll();
+               ->fetchAll(); // TODO(batch41): replace with $this->db->fetchAll("SELECT ...", [...])
 $count = !empty($query) ? count($query) : 0;
 if ($count === 0) {
     $heading = '
@@ -93,7 +93,7 @@ if ($count === 0) {
                      ->orderBy('t.last_post DESC')
                      ->limit($pager['pdo']['limit'])
                      ->offset($pager['pdo']['offset'])
-                     ->fetchAll();
+                     ->fetchAll(); // TODO(batch41): replace with $this->db->fetchAll("SELECT ...", [...])
     $HTMLOUT .= $menu_top;
     $heading = '
         <tr>
@@ -139,14 +139,14 @@ if ($count === 0) {
                          ->select('COUNT(id) AS count')
                          ->where('user_id = ?', $user['id'])
                          ->where('topic_id = ?', $arr_unread['topic_id'])
-                         ->fetch('count');
+                         ->fetch("count"); // TODO(batch41): use $this->db->fetchValue("SELECT COUNT(...) ...", [...])
 
         $subscriptions = $fluent->from('subscriptions')
                                 ->select(null)
                                 ->select('COUNT(id) AS count')
                                 ->where('user_id = ?', $user['id'])
                                 ->where('topic_id = ?', $arr_unread['topic_id'])
-                                ->fetch('count');
+                                ->fetch("count"); // TODO(batch41): use $this->db->fetchValue("SELECT COUNT(...) ...", [...])
 
         $icon = empty($arr_unread['icon']) ? '
             <img src="' . $site_config['paths']['images_baseurl'] . 'forums/topic_normal.gif" class="icon tooltipper left5" alt="' . _('Topic') . '" title="' . _('Topic') . '">' : '

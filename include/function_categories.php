@@ -38,7 +38,7 @@ function genrelist(bool $grouped)
                 $children = $fluent->from('categories')
                                    ->where('parent_id = ?', $parent['id'])
                                    ->orderBy('ordered')
-                                   ->fetchAll();
+                                   ->fetchAll(); // TODO(batch41): replace with $this->db->fetchAll("SELECT ...", [...])
                 $parent['children'] = $children;
                 $ret[] = $parent;
             }

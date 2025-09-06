@@ -28,10 +28,10 @@ $scores = $fluent->from('flashscores')
                  ->orderBy('game')
                  ->orderBy('level DESC')
                  ->orderBy('score DESC')
-                 ->fetchAll();
+                 ->fetchAll(); // TODO(batch41): replace with $this->db->fetchAll("SELECT ...", [...])
 $highscores = $fluent->from('highscores')
                      ->orderBy('game')
-                     ->fetchAll();
+                     ->fetchAll(); // TODO(batch41): replace with $this->db->fetchAll("SELECT ...", [...])
 
 /**
  * @param string $game

@@ -141,7 +141,7 @@ $id = $this->db->perform($sql, array_merge($update, ['requestid' => $requestid])
                                  ->where('requestid = ?', $requestid)
                                  ->orderBy('amount DESC')
                                  ->groupBy('userid')
-                                 ->fetchAll();
+                                 ->fetchAll(); // TODO(batch41): replace with $this->db->fetchAll("SELECT ...", [...])
 
         return $bounties;
     }

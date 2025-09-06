@@ -39,7 +39,7 @@ $row = $fluent->from('torrents AS t')
               ->select('u.seedbonus')
               ->leftJoin('users AS u ON u.id=t.owner')
               ->where('t.id = ?', $id)
-              ->fetch();
+              ->fetch(); // TODO(batch41): replace with $this->db->fetchRow("SELECT ...", [...])
 
 if (!$row) {
     stderr(_('Error'), _('Torrent does not exist'));

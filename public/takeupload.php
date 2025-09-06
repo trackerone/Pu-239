@@ -244,7 +244,7 @@ $count = $fluent->from('torrents')
                 ->select(null)
                 ->select('COUNT(id) AS count')
                 ->where('info_hash = ?', $infohash)
-                ->fetch('count');
+                ->fetch("count"); // TODO(batch41): use $this->db->fetchValue("SELECT COUNT(...) ...", [...])
 
 if ($count > 0) {
     $session->set('is-warning', _('This torrent has already been uploaded! Please use the search function before uploading.'));
@@ -486,7 +486,7 @@ if ($recipe > 0) {
                           ->select(null)
                           ->select('userid')
                           ->where('upcomingid = ?', $recipe)
-                          ->fetchAll();
+                          ->fetchAll(); // TODO(batch41): replace with $this->db->fetchAll("SELECT ...", [...])
         $subject = _('A Recipe has just come out of the oven');
         $msg = "Hi, \n An reciper you were interested in has been uploaded!!! \n\n Click  [url=" . $site_config['paths']['baseurl'] . '/details.php?id=' . $id . '&hit=1]' . htmlsafechars($torrent) . '[/url] to see the torrent details page!';
         foreach ($recipes as $arr_recipe) {
@@ -511,7 +511,7 @@ if ($offer > 0) {
                      ->where('vote = "yes"')
                      ->where('user_id != ?', $owner_id)
                      ->where('offer_id = ?', $offer)
-                     ->fetchAll();
+                     ->fetchAll(); // TODO(batch41): replace with $this->db->fetchAll("SELECT ...", [...])
     $subject = _('An offer you voted for has been uploaded!');
     $msg = "Hi, \n An recipe you were interested in has been uploaded!!! \n\n Click  [url=" . $site_config['paths']['baseurl'] . '/details.php?id=' . $id . '&hit=1]' . htmlsafechars($torrent) . '[/url] to see the torrent details page!';
     foreach ($offers as $arr_offer) {
@@ -542,7 +542,7 @@ if ($request > 0) {
                        ->where('vote = "yes"')
                        ->where('user_id != ?', $owner_id)
                        ->where('request_id = ?', $request)
-                       ->fetchAll();
+                       ->fetchAll(); // TODO(batch41): replace with $this->db->fetchAll("SELECT ...", [...])
 
     $subject = _('A request you were interested in has been uploaded!');
     $msg = "Hi :D \n A request you were interested in has been uploaded!!! \n\n Click  [url=" . $site_config['paths']['baseurl'] . '/details.php?id=' . $id . '&hit=1]' . htmlsafechars($torrent) . '[/url] to see the torrent details page!';

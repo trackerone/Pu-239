@@ -32,7 +32,7 @@ function trivia_update($data)
         $count = $fluent->from('triviaq')
                         ->select(null)
                         ->select('COUNT(qid) AS count')
-                        ->fetch('count');
+                        ->fetch("count"); // TODO(batch41): use $this->db->fetchValue("SELECT COUNT(...) ...", [...])
         $cache->set('trivia_questions_count_', $count, 900);
     }
     if ($count > 0) {
@@ -90,7 +90,7 @@ $this->db->perform($sql, array_merge($set, ['qid' => $qid]));
                              ->select('answer5')
                              ->select('asked')
                              ->where('qid=?', $qid)
-                             ->fetch();
+                             ->fetch(); // TODO(batch41): replace with $this->db->fetchRow("SELECT ...", [...])
             $cache->set('trivia_current_question_', $values, 360);
         }
     }

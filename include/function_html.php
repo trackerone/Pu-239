@@ -536,7 +536,7 @@ function validate_promo(string $code, bool $full)
         ->where('link = ?', htmlsafechars($code))
         ->where('UNIX_TIMESTAMP(NOW()) < added + (days_valid * 86400)')
         ->where('accounts_made < max_users')
-        ->fetch();
+        ->fetch(); // TODO(batch41): replace with $this->db->fetchRow("SELECT ...", [...])
 
     if (!empty($valid)) {
         if ($full) {

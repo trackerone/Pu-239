@@ -48,12 +48,12 @@ foreach ($rii as $file) {
     // Simple replacements
     $src = preg_replace(
         '#->fetchAll\(\);#',
-        '->fetchAll(); // TODO(batch41): replace with $this->db->fetchAll("SELECT ...", [...])',
+        '->fetchAll(); // TODO(batch41): replace with $this->db->fetchAll("SELECT ...", [...]) // TODO(batch41): replace with $this->db->fetchAll("SELECT ...", [...])',
         $src
     );
     $src = preg_replace(
         '#->fetch\(\);#',
-        '->fetch(); // TODO(batch41): replace with $this->db->fetchRow("SELECT ...", [...])',
+        '->fetch(); // TODO(batch41): replace with $this->db->fetchRow("SELECT ...", [...]) // TODO(batch41): replace with $this->db->fetchRow("SELECT ...", [...])',
         $src
     );
     $src = preg_replace(

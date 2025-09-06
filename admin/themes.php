@@ -46,7 +46,7 @@ if (isset($_GET['act'])) {
     if ($act === 1) {
         $template = $fluent->from('stylesheets')
                            ->where('id = ?', $id)
-                           ->fetch();
+                           ->fetch(); // TODO(batch41): replace with $this->db->fetchRow("SELECT ...", [...])
 
         $HTML .= "
         <form action='{$_SERVER['PHP_SELF']}?tool=themes&amp;action=themes&amp;act=4' method='post' enctype='multipart/form-data' accept-charset='utf-8'>
@@ -185,7 +185,7 @@ if (isset($_GET['act'])) {
 
         $cur = $fluent->from('stylesheets')
                       ->where('id = ?', $tid)
-                      ->fetch();
+                      ->fetch(); // TODO(batch41): replace with $this->db->fetchRow("SELECT ...", [...])
 
         if ($id != $cur['id']) {
             $set['id'] = $id;

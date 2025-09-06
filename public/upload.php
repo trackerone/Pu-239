@@ -90,7 +90,7 @@ $res_cooker = $fluent->from('upcoming')
                      ->select('name')
                      ->where('torrentid = 0')
                      ->orderBy('name')
-                     ->fetchAll();
+                     ->fetchAll(); // TODO(batch41): replace with $this->db->fetchAll("SELECT ...", [...])
 
 if ($res_cooker) {
     $has_recipes = '
@@ -114,7 +114,7 @@ $res_requests = $fluent->from('requests')
                        ->select('name')
                        ->where('filled_by_user_id = 0')
                        ->orderBy('name')
-                       ->fetchAll();
+                       ->fetchAll(); // TODO(batch41): replace with $this->db->fetchAll("SELECT ...", [...])
 
 if ($res_requests) {
     $has_requests = '
@@ -140,7 +140,7 @@ $res_offers = $fluent->from('offers')
                      ->where('userid = ?', $user['id'])
                      ->where('status = "approved"')
                      ->orderBy('name')
-                     ->fetchAll();
+                     ->fetchAll(); // TODO(batch41): replace with $this->db->fetchAll("SELECT ...", [...])
 
 if ($res_offers) {
     $has_offers = '
