@@ -1,0 +1,18 @@
+Batch 43.5 — Admin audit (reports only)
+======================================
+Files scanned: 83
+
+Findings (totals):
+  this_db     : 0
+  this_cache  : 0
+  missing_db  : 0
+  bad_strict  : 82
+  broken_run  : 29
+  mysqli_mix  : 131
+  bare_exit   : 0
+  todo41      : 0
+  bad_tail    : 5
+  bad_hint    : 44
+
+Report: tools/reports/batch43_5-admin-audit.ndjson
+Date:   2025-09-06T14:23:14+00:00
