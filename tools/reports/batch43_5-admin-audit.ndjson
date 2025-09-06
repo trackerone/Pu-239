@@ -1,0 +1,291 @@
+{"file":"admin/op.php","line":1,"issue":"bad_strict","message":"declare(strict_types=1) missing or not first statement"}
+{"file":"admin/reset.php","line":1,"issue":"bad_strict","message":"declare(strict_types=1) missing or not first statement"}
+{"file":"admin/grouppm.php","line":1,"issue":"bad_strict","message":"declare(strict_types=1) missing or not first statement"}
+{"file":"admin/grouppm.php","line":90,"issue":"broken_run","message":"Broken $db->run('); fragment"}
+{"file":"admin/trivia_config.php","line":1,"issue":"bad_strict","message":"declare(strict_types=1) missing or not first statement"}
+{"file":"admin/trivia_config.php","line":21,"issue":"bad_hint","message":"Fluent hint still points to $this->db (should be $db)"}
+{"file":"admin/invite_tree.php","line":1,"issue":"bad_strict","message":"declare(strict_types=1) missing or not first statement"}
+{"file":"admin/invite_tree.php","line":261,"issue":"mysqli_mix","message":"mysqli/sql_query present (prefer $db methods)"}
+{"file":"admin/invite_tree.php","line":262,"issue":"mysqli_mix","message":"mysqli/sql_query present (prefer $db methods)"}
+{"file":"admin/invite_tree.php","line":283,"issue":"mysqli_mix","message":"mysqli/sql_query present (prefer $db methods)"}
+{"file":"admin/invite_tree.php","line":17,"issue":"bad_tail","message":"Bad tail after $db init: \", $site_config;\""}
+{"file":"admin/invite_tree.php","line":23,"issue":"bad_hint","message":"Fluent hint still points to $this->db (should be $db)"}
+{"file":"admin/mass_bonus_for_members.php","line":1,"issue":"bad_strict","message":"declare(strict_types=1) missing or not first statement"}
+{"file":"admin/mass_bonus_for_members.php","line":58,"issue":"broken_run","message":"Broken $db->run('); fragment"}
+{"file":"admin/mass_bonus_for_members.php","line":67,"issue":"broken_run","message":"Broken $db->run('); fragment"}
+{"file":"admin/mass_bonus_for_members.php","line":76,"issue":"broken_run","message":"Broken $db->run('); fragment"}
+{"file":"admin/mass_bonus_for_members.php","line":100,"issue":"broken_run","message":"Broken $db->run('); fragment"}
+{"file":"admin/mass_bonus_for_members.php","line":29,"issue":"bad_tail","message":"Bad tail after $db init: \", $site_config;\""}
+{"file":"admin/stats.php","line":1,"issue":"bad_strict","message":"declare(strict_types=1) missing or not first statement"}
+{"file":"admin/stats.php","line":26,"issue":"mysqli_mix","message":"mysqli/sql_query present (prefer $db methods)"}
+{"file":"admin/stats.php","line":29,"issue":"mysqli_mix","message":"mysqli/sql_query present (prefer $db methods)"}
+{"file":"admin/stats.php","line":53,"issue":"mysqli_mix","message":"mysqli/sql_query present (prefer $db methods)"}
+{"file":"admin/stats.php","line":55,"issue":"mysqli_mix","message":"mysqli/sql_query present (prefer $db methods)"}
+{"file":"admin/stats.php","line":70,"issue":"mysqli_mix","message":"mysqli/sql_query present (prefer $db methods)"}
+{"file":"admin/stats.php","line":88,"issue":"mysqli_mix","message":"mysqli/sql_query present (prefer $db methods)"}
+{"file":"admin/stats.php","line":129,"issue":"mysqli_mix","message":"mysqli/sql_query present (prefer $db methods)"}
+{"file":"admin/reports.php","line":1,"issue":"bad_strict","message":"declare(strict_types=1) missing or not first statement"}
+{"file":"admin/reports.php","line":137,"issue":"broken_run","message":"Broken $db->run('); fragment"}
+{"file":"admin/reports.php","line":115,"issue":"mysqli_mix","message":"mysqli/sql_query present (prefer $db methods)"}
+{"file":"admin/reports.php","line":117,"issue":"mysqli_mix","message":"mysqli/sql_query present (prefer $db methods)"}
+{"file":"admin/datareset.php","line":1,"issue":"bad_strict","message":"declare(strict_types=1) missing or not first statement"}
+{"file":"admin/datareset.php","line":30,"issue":"bad_hint","message":"Fluent hint still points to $this->db (should be $db)"}
+{"file":"admin/edit_moods.php","line":1,"issue":"bad_strict","message":"declare(strict_types=1) missing or not first statement"}
+{"file":"admin/edit_moods.php","line":36,"issue":"broken_run","message":"Broken $db->run('); fragment"}
+{"file":"admin/edit_moods.php","line":40,"issue":"mysqli_mix","message":"mysqli/sql_query present (prefer $db methods)"}
+{"file":"admin/edit_moods.php","line":41,"issue":"mysqli_mix","message":"mysqli/sql_query present (prefer $db methods)"}
+{"file":"admin/edit_moods.php","line":42,"issue":"mysqli_mix","message":"mysqli/sql_query present (prefer $db methods)"}
+{"file":"admin/edit_moods.php","line":82,"issue":"mysqli_mix","message":"mysqli/sql_query present (prefer $db methods)"}
+{"file":"admin/reputation_settings.php","line":1,"issue":"bad_strict","message":"declare(strict_types=1) missing or not first statement"}
+{"file":"admin/goaccess.php","line":1,"issue":"bad_strict","message":"declare(strict_types=1) missing or not first statement"}
+{"file":"admin/banclient.php","line":1,"issue":"bad_strict","message":"declare(strict_types=1) missing or not first statement"}
+{"file":"admin/categories.php","line":1,"issue":"bad_strict","message":"declare(strict_types=1) missing or not first statement"}
+{"file":"admin/categories.php","line":79,"issue":"bad_hint","message":"Fluent hint still points to $this->db (should be $db)"}
+{"file":"admin/categories.php","line":201,"issue":"bad_hint","message":"Fluent hint still points to $this->db (should be $db)"}
+{"file":"admin/categories.php","line":232,"issue":"bad_hint","message":"Fluent hint still points to $this->db (should be $db)"}
+{"file":"admin/categories.php","line":282,"issue":"bad_hint","message":"Fluent hint still points to $this->db (should be $db)"}
+{"file":"admin/categories.php","line":354,"issue":"bad_hint","message":"Fluent hint still points to $this->db (should be $db)"}
+{"file":"admin/categories.php","line":561,"issue":"bad_hint","message":"Fluent hint still points to $this->db (should be $db)"}
+{"file":"admin/categories.php","line":602,"issue":"bad_hint","message":"Fluent hint still points to $this->db (should be $db)"}
+{"file":"admin/categories.php","line":640,"issue":"bad_hint","message":"Fluent hint still points to $this->db (should be $db)"}
+{"file":"admin/categories.php","line":715,"issue":"bad_hint","message":"Fluent hint still points to $this->db (should be $db)"}
+{"file":"admin/categories.php","line":746,"issue":"bad_hint","message":"Fluent hint still points to $this->db (should be $db)"}
+{"file":"admin/sitelog.php","line":1,"issue":"bad_strict","message":"declare(strict_types=1) missing or not first statement"}
+{"file":"admin/sitelog.php","line":30,"issue":"mysqli_mix","message":"mysqli/sql_query present (prefer $db methods)"}
+{"file":"admin/sitelog.php","line":31,"issue":"mysqli_mix","message":"mysqli/sql_query present (prefer $db methods)"}
+{"file":"admin/hit_and_run_settings.php","line":1,"issue":"bad_strict","message":"declare(strict_types=1) missing or not first statement"}
+{"file":"admin/hit_and_run_settings.php","line":22,"issue":"bad_hint","message":"Fluent hint still points to $this->db (should be $db)"}
+{"file":"admin/uploader_info.php","line":1,"issue":"bad_strict","message":"declare(strict_types=1) missing or not first statement"}
+{"file":"admin/uploader_info.php","line":21,"issue":"bad_hint","message":"Fluent hint still points to $this->db (should be $db)"}
+{"file":"admin/snatched_torrents.php","line":1,"issue":"bad_strict","message":"declare(strict_types=1) missing or not first statement"}
+{"file":"admin/snatched_torrents.php","line":100,"issue":"bad_hint","message":"Fluent hint still points to $this->db (should be $db)"}
+{"file":"admin/doubleusers.php","line":1,"issue":"bad_strict","message":"declare(strict_types=1) missing or not first statement"}
+{"file":"admin/doubleusers.php","line":44,"issue":"broken_run","message":"Broken $db->run('); fragment"}
+{"file":"admin/doubleusers.php","line":31,"issue":"mysqli_mix","message":"mysqli/sql_query present (prefer $db methods)"}
+{"file":"admin/doubleusers.php","line":45,"issue":"mysqli_mix","message":"mysqli/sql_query present (prefer $db methods)"}
+{"file":"admin/doubleusers.php","line":48,"issue":"mysqli_mix","message":"mysqli/sql_query present (prefer $db methods)"}
+{"file":"admin/doubleusers.php","line":62,"issue":"mysqli_mix","message":"mysqli/sql_query present (prefer $db methods)"}
+{"file":"admin/reputation_ad.php","line":1,"issue":"bad_strict","message":"declare(strict_types=1) missing or not first statement"}
+{"file":"admin/reputation_ad.php","line":247,"issue":"broken_run","message":"Broken $db->run('); fragment"}
+{"file":"admin/reputation_ad.php","line":379,"issue":"broken_run","message":"Broken $db->run('); fragment"}
+{"file":"admin/reputation_ad.php","line":99,"issue":"mysqli_mix","message":"mysqli/sql_query present (prefer $db methods)"}
+{"file":"admin/reputation_ad.php","line":124,"issue":"mysqli_mix","message":"mysqli/sql_query present (prefer $db methods)"}
+{"file":"admin/reputation_ad.php","line":172,"issue":"mysqli_mix","message":"mysqli/sql_query present (prefer $db methods)"}
+{"file":"admin/reputation_ad.php","line":239,"issue":"mysqli_mix","message":"mysqli/sql_query present (prefer $db methods)"}
+{"file":"admin/reputation_ad.php","line":268,"issue":"mysqli_mix","message":"mysqli/sql_query present (prefer $db methods)"}
+{"file":"admin/reputation_ad.php","line":300,"issue":"mysqli_mix","message":"mysqli/sql_query present (prefer $db methods)"}
+{"file":"admin/reputation_ad.php","line":421,"issue":"mysqli_mix","message":"mysqli/sql_query present (prefer $db methods)"}
+{"file":"admin/reputation_ad.php","line":425,"issue":"mysqli_mix","message":"mysqli/sql_query present (prefer $db methods)"}
+{"file":"admin/changelog.php","line":1,"issue":"bad_strict","message":"declare(strict_types=1) missing or not first statement"}
+{"file":"admin/mysql_overview.php","line":1,"issue":"bad_strict","message":"declare(strict_types=1) missing or not first statement"}
+{"file":"admin/mysql_overview.php","line":38,"issue":"bad_hint","message":"Fluent hint still points to $this->db (should be $db)"}
+{"file":"admin/manage_images.php","line":1,"issue":"bad_strict","message":"declare(strict_types=1) missing or not first statement"}
+{"file":"admin/ipcheck.php","line":1,"issue":"bad_strict","message":"declare(strict_types=1) missing or not first statement"}
+{"file":"admin/polls_manager.php","line":1,"issue":"bad_strict","message":"declare(strict_types=1) missing or not first statement"}
+{"file":"admin/news.php","line":1,"issue":"bad_strict","message":"declare(strict_types=1) missing or not first statement"}
+{"file":"admin/news.php","line":45,"issue":"bad_hint","message":"Fluent hint still points to $this->db (should be $db)"}
+{"file":"admin/deathrow.php","line":1,"issue":"bad_strict","message":"declare(strict_types=1) missing or not first statement"}
+{"file":"admin/deathrow.php","line":72,"issue":"bad_hint","message":"Fluent hint still points to $this->db (should be $db)"}
+{"file":"admin/deathrow.php","line":128,"issue":"bad_hint","message":"Fluent hint still points to $this->db (should be $db)"}
+{"file":"admin/flush.php","line":1,"issue":"bad_strict","message":"declare(strict_types=1) missing or not first statement"}
+{"file":"admin/flush.php","line":29,"issue":"broken_run","message":"Broken $db->run('); fragment"}
+{"file":"admin/flush.php","line":27,"issue":"mysqli_mix","message":"mysqli/sql_query present (prefer $db methods)"}
+{"file":"admin/namechanger.php","line":1,"issue":"bad_strict","message":"declare(strict_types=1) missing or not first statement"}
+{"file":"admin/namechanger.php","line":32,"issue":"broken_run","message":"Broken $db->run('); fragment"}
+{"file":"admin/cloudview.php","line":1,"issue":"bad_strict","message":"declare(strict_types=1) missing or not first statement"}
+{"file":"admin/iphistory.php","line":1,"issue":"bad_strict","message":"declare(strict_types=1) missing or not first statement"}
+{"file":"admin/iphistory.php","line":25,"issue":"bad_hint","message":"Fluent hint still points to $this->db (should be $db)"}
+{"file":"admin/findnotconnectable.php","line":1,"issue":"bad_strict","message":"declare(strict_types=1) missing or not first statement"}
+{"file":"admin/findnotconnectable.php","line":26,"issue":"mysqli_mix","message":"mysqli/sql_query present (prefer $db methods)"}
+{"file":"admin/findnotconnectable.php","line":38,"issue":"mysqli_mix","message":"mysqli/sql_query present (prefer $db methods)"}
+{"file":"admin/findnotconnectable.php","line":39,"issue":"mysqli_mix","message":"mysqli/sql_query present (prefer $db methods)"}
+{"file":"admin/findnotconnectable.php","line":40,"issue":"mysqli_mix","message":"mysqli/sql_query present (prefer $db methods)"}
+{"file":"admin/findnotconnectable.php","line":41,"issue":"mysqli_mix","message":"mysqli/sql_query present (prefer $db methods)"}
+{"file":"admin/findnotconnectable.php","line":57,"issue":"mysqli_mix","message":"mysqli/sql_query present (prefer $db methods)"}
+{"file":"admin/findnotconnectable.php","line":143,"issue":"mysqli_mix","message":"mysqli/sql_query present (prefer $db methods)"}
+{"file":"admin/findnotconnectable.php","line":154,"issue":"mysqli_mix","message":"mysqli/sql_query present (prefer $db methods)"}
+{"file":"admin/findnotconnectable.php","line":164,"issue":"mysqli_mix","message":"mysqli/sql_query present (prefer $db methods)"}
+{"file":"admin/findnotconnectable.php","line":80,"issue":"bad_hint","message":"Fluent hint still points to $this->db (should be $db)"}
+{"file":"admin/adduser.php","line":1,"issue":"bad_strict","message":"declare(strict_types=1) missing or not first statement"}
+{"file":"admin/backup.php","line":1,"issue":"bad_strict","message":"declare(strict_types=1) missing or not first statement"}
+{"file":"admin/backup.php","line":32,"issue":"bad_hint","message":"Fluent hint still points to $this->db (should be $db)"}
+{"file":"admin/uploadapps.php","line":1,"issue":"bad_strict","message":"declare(strict_types=1) missing or not first statement"}
+{"file":"admin/uploadapps.php","line":26,"issue":"bad_hint","message":"Fluent hint still points to $this->db (should be $db)"}
+{"file":"admin/cleanup_manager.php","line":1,"issue":"bad_strict","message":"declare(strict_types=1) missing or not first statement"}
+{"file":"admin/cleanup_manager.php","line":98,"issue":"broken_run","message":"Broken $db->run('); fragment"}
+{"file":"admin/cleanup_manager.php","line":139,"issue":"mysqli_mix","message":"mysqli/sql_query present (prefer $db methods)"}
+{"file":"admin/cleanup_manager.php","line":142,"issue":"mysqli_mix","message":"mysqli/sql_query present (prefer $db methods)"}
+{"file":"admin/cleanup_manager.php","line":397,"issue":"mysqli_mix","message":"mysqli/sql_query present (prefer $db methods)"}
+{"file":"admin/cleanup_manager.php","line":429,"issue":"mysqli_mix","message":"mysqli/sql_query present (prefer $db methods)"}
+{"file":"admin/cleanup_manager.php","line":479,"issue":"mysqli_mix","message":"mysqli/sql_query present (prefer $db methods)"}
+{"file":"admin/cleanup_manager.php","line":108,"issue":"bad_tail","message":"Bad tail after $db init: \", $site_config;\""}
+{"file":"admin/cleanup_manager.php","line":111,"issue":"bad_hint","message":"Fluent hint still points to $this->db (should be $db)"}
+{"file":"admin/forum_manage.php","line":1,"issue":"bad_strict","message":"declare(strict_types=1) missing or not first statement"}
+{"file":"admin/forum_manage.php","line":51,"issue":"bad_hint","message":"Fluent hint still points to $this->db (should be $db)"}
+{"file":"admin/usersearch.php","line":1,"issue":"bad_strict","message":"declare(strict_types=1) missing or not first statement"}
+{"file":"admin/usersearch.php","line":732,"issue":"mysqli_mix","message":"mysqli/sql_query present (prefer $db methods)"}
+{"file":"admin/usersearch.php","line":733,"issue":"mysqli_mix","message":"mysqli/sql_query present (prefer $db methods)"}
+{"file":"admin/usersearch.php","line":739,"issue":"mysqli_mix","message":"mysqli/sql_query present (prefer $db methods)"}
+{"file":"admin/usersearch.php","line":762,"issue":"mysqli_mix","message":"mysqli/sql_query present (prefer $db methods)"}
+{"file":"admin/usersearch.php","line":778,"issue":"mysqli_mix","message":"mysqli/sql_query present (prefer $db methods)"}
+{"file":"admin/usersearch.php","line":779,"issue":"mysqli_mix","message":"mysqli/sql_query present (prefer $db methods)"}
+{"file":"admin/usersearch.php","line":789,"issue":"mysqli_mix","message":"mysqli/sql_query present (prefer $db methods)"}
+{"file":"admin/usersearch.php","line":793,"issue":"mysqli_mix","message":"mysqli/sql_query present (prefer $db methods)"}
+{"file":"admin/usersearch.php","line":795,"issue":"mysqli_mix","message":"mysqli/sql_query present (prefer $db methods)"}
+{"file":"admin/usersearch.php","line":796,"issue":"mysqli_mix","message":"mysqli/sql_query present (prefer $db methods)"}
+{"file":"admin/usersearch.php","line":24,"issue":"bad_hint","message":"Fluent hint still points to $this->db (should be $db)"}
+{"file":"admin/watched_users.php","line":1,"issue":"bad_strict","message":"declare(strict_types=1) missing or not first statement"}
+{"file":"admin/watched_users.php","line":52,"issue":"broken_run","message":"Broken $db->run('); fragment"}
+{"file":"admin/watched_users.php","line":36,"issue":"mysqli_mix","message":"mysqli/sql_query present (prefer $db methods)"}
+{"file":"admin/watched_users.php","line":64,"issue":"mysqli_mix","message":"mysqli/sql_query present (prefer $db methods)"}
+{"file":"admin/watched_users.php","line":94,"issue":"mysqli_mix","message":"mysqli/sql_query present (prefer $db methods)"}
+{"file":"admin/watched_users.php","line":118,"issue":"mysqli_mix","message":"mysqli/sql_query present (prefer $db methods)"}
+{"file":"admin/watched_users.php","line":136,"issue":"mysqli_mix","message":"mysqli/sql_query present (prefer $db methods)"}
+{"file":"admin/watched_users.php","line":139,"issue":"mysqli_mix","message":"mysqli/sql_query present (prefer $db methods)"}
+{"file":"admin/watched_users.php","line":140,"issue":"mysqli_mix","message":"mysqli/sql_query present (prefer $db methods)"}
+{"file":"admin/watched_users.php","line":24,"issue":"bad_hint","message":"Fluent hint still points to $this->db (should be $db)"}
+{"file":"admin/system_view.php","line":1,"issue":"bad_strict","message":"declare(strict_types=1) missing or not first statement"}
+{"file":"admin/system_view.php","line":73,"issue":"mysqli_mix","message":"mysqli/sql_query present (prefer $db methods)"}
+{"file":"admin/system_view.php","line":76,"issue":"mysqli_mix","message":"mysqli/sql_query present (prefer $db methods)"}
+{"file":"admin/referrers.php","line":1,"issue":"bad_strict","message":"declare(strict_types=1) missing or not first statement"}
+{"file":"admin/referrers.php","line":23,"issue":"mysqli_mix","message":"mysqli/sql_query present (prefer $db methods)"}
+{"file":"admin/referrers.php","line":41,"issue":"mysqli_mix","message":"mysqli/sql_query present (prefer $db methods)"}
+{"file":"admin/referrers.php","line":43,"issue":"mysqli_mix","message":"mysqli/sql_query present (prefer $db methods)"}
+{"file":"admin/warn.php","line":1,"issue":"bad_strict","message":"declare(strict_types=1) missing or not first statement"}
+{"file":"admin/warn.php","line":43,"issue":"broken_run","message":"Broken $db->run('); fragment"}
+{"file":"admin/warn.php","line":54,"issue":"broken_run","message":"Broken $db->run('); fragment"}
+{"file":"admin/warn.php","line":77,"issue":"mysqli_mix","message":"mysqli/sql_query present (prefer $db methods)"}
+{"file":"admin/warn.php","line":101,"issue":"mysqli_mix","message":"mysqli/sql_query present (prefer $db methods)"}
+{"file":"admin/warn.php","line":102,"issue":"mysqli_mix","message":"mysqli/sql_query present (prefer $db methods)"}
+{"file":"admin/warn.php","line":126,"issue":"mysqli_mix","message":"mysqli/sql_query present (prefer $db methods)"}
+{"file":"admin/warn.php","line":22,"issue":"bad_tail","message":"Bad tail after $db init: \", $site_config;\""}
+{"file":"admin/upgrade_database.php","line":1,"issue":"bad_strict","message":"declare(strict_types=1) missing or not first statement"}
+{"file":"admin/upgrade_database.php","line":23,"issue":"bad_hint","message":"Fluent hint still points to $this->db (should be $db)"}
+{"file":"admin/site_settings.php","line":1,"issue":"bad_strict","message":"declare(strict_types=1) missing or not first statement"}
+{"file":"admin/site_settings.php","line":26,"issue":"bad_hint","message":"Fluent hint still points to $this->db (should be $db)"}
+{"file":"admin/memcache.php","line":1,"issue":"bad_strict","message":"declare(strict_types=1) missing or not first statement"}
+{"file":"admin/forum_config.php","line":1,"issue":"bad_strict","message":"declare(strict_types=1) missing or not first statement"}
+{"file":"admin/forum_config.php","line":54,"issue":"mysqli_mix","message":"mysqli/sql_query present (prefer $db methods)"}
+{"file":"admin/forum_config.php","line":15,"issue":"bad_tail","message":"Bad tail after $db init: \", $site_config;\""}
+{"file":"admin/forum_config.php","line":21,"issue":"bad_hint","message":"Fluent hint still points to $this->db (should be $db)"}
+{"file":"admin/bonusmanage.php","line":1,"issue":"bad_strict","message":"declare(strict_types=1) missing or not first statement"}
+{"file":"admin/bonusmanage.php","line":37,"issue":"mysqli_mix","message":"mysqli/sql_query present (prefer $db methods)"}
+{"file":"admin/bonusmanage.php","line":38,"issue":"mysqli_mix","message":"mysqli/sql_query present (prefer $db methods)"}
+{"file":"admin/bonusmanage.php","line":43,"issue":"mysqli_mix","message":"mysqli/sql_query present (prefer $db methods)"}
+{"file":"admin/hnrwarn.php","line":1,"issue":"bad_strict","message":"declare(strict_types=1) missing or not first statement"}
+{"file":"admin/hnrwarn.php","line":41,"issue":"broken_run","message":"Broken $db->run('); fragment"}
+{"file":"admin/hnrwarn.php","line":48,"issue":"broken_run","message":"Broken $db->run('); fragment"}
+{"file":"admin/hnrwarn.php","line":58,"issue":"broken_run","message":"Broken $db->run('); fragment"}
+{"file":"admin/hnrwarn.php","line":82,"issue":"mysqli_mix","message":"mysqli/sql_query present (prefer $db methods)"}
+{"file":"admin/hnrwarn.php","line":83,"issue":"mysqli_mix","message":"mysqli/sql_query present (prefer $db methods)"}
+{"file":"admin/hnrwarn.php","line":97,"issue":"mysqli_mix","message":"mysqli/sql_query present (prefer $db methods)"}
+{"file":"admin/freeusers.php","line":1,"issue":"bad_strict","message":"declare(strict_types=1) missing or not first statement"}
+{"file":"admin/freeusers.php","line":44,"issue":"broken_run","message":"Broken $db->run('); fragment"}
+{"file":"admin/freeusers.php","line":31,"issue":"mysqli_mix","message":"mysqli/sql_query present (prefer $db methods)"}
+{"file":"admin/freeusers.php","line":45,"issue":"mysqli_mix","message":"mysqli/sql_query present (prefer $db methods)"}
+{"file":"admin/freeusers.php","line":48,"issue":"mysqli_mix","message":"mysqli/sql_query present (prefer $db methods)"}
+{"file":"admin/freeusers.php","line":62,"issue":"mysqli_mix","message":"mysqli/sql_query present (prefer $db methods)"}
+{"file":"admin/bannedemails.php","line":1,"issue":"bad_strict","message":"declare(strict_types=1) missing or not first statement"}
+{"file":"admin/bannedemails.php","line":29,"issue":"mysqli_mix","message":"mysqli/sql_query present (prefer $db methods)"}
+{"file":"admin/bannedemails.php","line":61,"issue":"mysqli_mix","message":"mysqli/sql_query present (prefer $db methods)"}
+{"file":"admin/over_forums.php","line":1,"issue":"bad_strict","message":"declare(strict_types=1) missing or not first statement"}
+{"file":"admin/delacct.php","line":1,"issue":"bad_strict","message":"declare(strict_types=1) missing or not first statement"}
+{"file":"admin/delacct.php","line":29,"issue":"bad_hint","message":"Fluent hint still points to $this->db (should be $db)"}
+{"file":"admin/user_hits.php","line":1,"issue":"bad_strict","message":"declare(strict_types=1) missing or not first statement"}
+{"file":"admin/user_hits.php","line":27,"issue":"mysqli_mix","message":"mysqli/sql_query present (prefer $db methods)"}
+{"file":"admin/user_hits.php","line":36,"issue":"mysqli_mix","message":"mysqli/sql_query present (prefer $db methods)"}
+{"file":"admin/user_hits.php","line":37,"issue":"mysqli_mix","message":"mysqli/sql_query present (prefer $db methods)"}
+{"file":"admin/user_hits.php","line":50,"issue":"mysqli_mix","message":"mysqli/sql_query present (prefer $db methods)"}
+{"file":"admin/traceroute.php","line":1,"issue":"bad_strict","message":"declare(strict_types=1) missing or not first statement"}
+{"file":"admin/modded_torrents.php","line":1,"issue":"bad_strict","message":"declare(strict_types=1) missing or not first statement"}
+{"file":"admin/modded_torrents.php","line":86,"issue":"bad_hint","message":"Fluent hint still points to $this->db (should be $db)"}
+{"file":"admin/mysql_stats.php","line":1,"issue":"bad_strict","message":"declare(strict_types=1) missing or not first statement"}
+{"file":"admin/mysql_stats.php","line":131,"issue":"mysqli_mix","message":"mysqli/sql_query present (prefer $db methods)"}
+{"file":"admin/mysql_stats.php","line":134,"issue":"mysqli_mix","message":"mysqli/sql_query present (prefer $db methods)"}
+{"file":"admin/mysql_stats.php","line":138,"issue":"mysqli_mix","message":"mysqli/sql_query present (prefer $db methods)"}
+{"file":"admin/mysql_stats.php","line":140,"issue":"mysqli_mix","message":"mysqli/sql_query present (prefer $db methods)"}
+{"file":"admin/bans.php","line":1,"issue":"bad_strict","message":"declare(strict_types=1) missing or not first statement"}
+{"file":"admin/ipsearch.php","line":1,"issue":"bad_strict","message":"declare(strict_types=1) missing or not first statement"}
+{"file":"admin/ipsearch.php","line":81,"issue":"mysqli_mix","message":"mysqli/sql_query present (prefer $db methods)"}
+{"file":"admin/ipsearch.php","line":82,"issue":"mysqli_mix","message":"mysqli/sql_query present (prefer $db methods)"}
+{"file":"admin/ipsearch.php","line":123,"issue":"mysqli_mix","message":"mysqli/sql_query present (prefer $db methods)"}
+{"file":"admin/ipsearch.php","line":131,"issue":"mysqli_mix","message":"mysqli/sql_query present (prefer $db methods)"}
+{"file":"admin/ipsearch.php","line":154,"issue":"mysqli_mix","message":"mysqli/sql_query present (prefer $db methods)"}
+{"file":"admin/ipsearch.php","line":155,"issue":"mysqli_mix","message":"mysqli/sql_query present (prefer $db methods)"}
+{"file":"admin/ipsearch.php","line":157,"issue":"mysqli_mix","message":"mysqli/sql_query present (prefer $db methods)"}
+{"file":"admin/ipsearch.php","line":158,"issue":"mysqli_mix","message":"mysqli/sql_query present (prefer $db methods)"}
+{"file":"admin/todo.php","line":1,"issue":"bad_strict","message":"declare(strict_types=1) missing or not first statement"}
+{"file":"admin/block.settings.php","line":1,"issue":"bad_strict","message":"declare(strict_types=1) missing or not first statement"}
+{"file":"admin/mega_search.php","line":1,"issue":"bad_strict","message":"declare(strict_types=1) missing or not first statement"}
+{"file":"admin/mega_search.php","line":312,"issue":"mysqli_mix","message":"mysqli/sql_query present (prefer $db methods)"}
+{"file":"admin/mega_search.php","line":313,"issue":"mysqli_mix","message":"mysqli/sql_query present (prefer $db methods)"}
+{"file":"admin/load.php","line":1,"issue":"bad_strict","message":"declare(strict_types=1) missing or not first statement"}
+{"file":"admin/allagents.php","line":1,"issue":"bad_strict","message":"declare(strict_types=1) missing or not first statement"}
+{"file":"admin/inactive.php","line":1,"issue":"bad_strict","message":"declare(strict_types=1) missing or not first statement"}
+{"file":"admin/inactive.php","line":47,"issue":"broken_run","message":"Broken $db->run('); fragment"}
+{"file":"admin/inactive.php","line":79,"issue":"broken_run","message":"Broken $db->run('); fragment"}
+{"file":"admin/inactive.php","line":35,"issue":"mysqli_mix","message":"mysqli/sql_query present (prefer $db methods)"}
+{"file":"admin/inactive.php","line":36,"issue":"mysqli_mix","message":"mysqli/sql_query present (prefer $db methods)"}
+{"file":"admin/inactive.php","line":53,"issue":"mysqli_mix","message":"mysqli/sql_query present (prefer $db methods)"}
+{"file":"admin/inactive.php","line":54,"issue":"mysqli_mix","message":"mysqli/sql_query present (prefer $db methods)"}
+{"file":"admin/inactive.php","line":80,"issue":"mysqli_mix","message":"mysqli/sql_query present (prefer $db methods)"}
+{"file":"admin/inactive.php","line":85,"issue":"mysqli_mix","message":"mysqli/sql_query present (prefer $db methods)"}
+{"file":"admin/inactive.php","line":140,"issue":"mysqli_mix","message":"mysqli/sql_query present (prefer $db methods)"}
+{"file":"admin/inactive.php","line":141,"issue":"mysqli_mix","message":"mysqli/sql_query present (prefer $db methods)"}
+{"file":"admin/floodlimit.php","line":1,"issue":"bad_strict","message":"declare(strict_types=1) missing or not first statement"}
+{"file":"admin/editlog.php","line":1,"issue":"bad_strict","message":"declare(strict_types=1) missing or not first statement"}
+{"file":"admin/stats_extra.php","line":1,"issue":"bad_strict","message":"declare(strict_types=1) missing or not first statement"}
+{"file":"admin/stats_extra.php","line":129,"issue":"bad_hint","message":"Fluent hint still points to $this->db (should be $db)"}
+{"file":"admin/stats_extra.php","line":302,"issue":"bad_hint","message":"Fluent hint still points to $this->db (should be $db)"}
+{"file":"admin/stats_extra.php","line":452,"issue":"bad_hint","message":"Fluent hint still points to $this->db (should be $db)"}
+{"file":"admin/acpmanage.php","line":1,"issue":"bad_strict","message":"declare(strict_types=1) missing or not first statement"}
+{"file":"admin/acpmanage.php","line":37,"issue":"mysqli_mix","message":"mysqli/sql_query present (prefer $db methods)"}
+{"file":"admin/acpmanage.php","line":42,"issue":"mysqli_mix","message":"mysqli/sql_query present (prefer $db methods)"}
+{"file":"admin/comments.php","line":1,"issue":"bad_strict","message":"declare(strict_types=1) missing or not first statement"}
+{"file":"admin/comments.php","line":90,"issue":"mysqli_mix","message":"mysqli/sql_query present (prefer $db methods)"}
+{"file":"admin/comments.php","line":91,"issue":"mysqli_mix","message":"mysqli/sql_query present (prefer $db methods)"}
+{"file":"admin/comments.php","line":97,"issue":"mysqli_mix","message":"mysqli/sql_query present (prefer $db methods)"}
+{"file":"admin/comments.php","line":146,"issue":"mysqli_mix","message":"mysqli/sql_query present (prefer $db methods)"}
+{"file":"admin/comments.php","line":147,"issue":"mysqli_mix","message":"mysqli/sql_query present (prefer $db methods)"}
+{"file":"admin/comments.php","line":153,"issue":"mysqli_mix","message":"mysqli/sql_query present (prefer $db methods)"}
+{"file":"admin/comments.php","line":176,"issue":"mysqli_mix","message":"mysqli/sql_query present (prefer $db methods)"}
+{"file":"admin/comments.php","line":177,"issue":"mysqli_mix","message":"mysqli/sql_query present (prefer $db methods)"}
+{"file":"admin/comments.php","line":183,"issue":"mysqli_mix","message":"mysqli/sql_query present (prefer $db methods)"}
+{"file":"admin/donations.php","line":1,"issue":"bad_strict","message":"declare(strict_types=1) missing or not first statement"}
+{"file":"admin/donations.php","line":22,"issue":"bad_hint","message":"Fluent hint still points to $this->db (should be $db)"}
+{"file":"admin/class_promo.php","line":1,"issue":"bad_strict","message":"declare(strict_types=1) missing or not first statement"}
+{"file":"admin/class_promo.php","line":103,"issue":"broken_run","message":"Broken $db->run('); fragment"}
+{"file":"admin/class_promo.php","line":109,"issue":"mysqli_mix","message":"mysqli/sql_query present (prefer $db methods)"}
+{"file":"admin/class_promo.php","line":20,"issue":"bad_hint","message":"Fluent hint still points to $this->db (should be $db)"}
+{"file":"admin/freeleech.php","line":1,"issue":"bad_strict","message":"declare(strict_types=1) missing or not first statement"}
+{"file":"admin/themes.php","line":1,"issue":"bad_strict","message":"declare(strict_types=1) missing or not first statement"}
+{"file":"admin/themes.php","line":21,"issue":"bad_hint","message":"Fluent hint still points to $this->db (should be $db)"}
+{"file":"admin/hit_and_run.php","line":1,"issue":"bad_strict","message":"declare(strict_types=1) missing or not first statement"}
+{"file":"admin/hit_and_run.php","line":26,"issue":"mysqli_mix","message":"mysqli/sql_query present (prefer $db methods)"}
+{"file":"admin/hit_and_run.php","line":27,"issue":"mysqli_mix","message":"mysqli/sql_query present (prefer $db methods)"}
+{"file":"admin/hit_and_run.php","line":36,"issue":"mysqli_mix","message":"mysqli/sql_query present (prefer $db methods)"}
+{"file":"admin/hit_and_run.php","line":47,"issue":"mysqli_mix","message":"mysqli/sql_query present (prefer $db methods)"}
+{"file":"admin/hit_and_run.php","line":53,"issue":"mysqli_mix","message":"mysqli/sql_query present (prefer $db methods)"}
+{"file":"admin/log_viewer.php","line":1,"issue":"bad_strict","message":"declare(strict_types=1) missing or not first statement"}
+{"file":"admin/class_config.php","line":1,"issue":"bad_strict","message":"declare(strict_types=1) missing or not first statement"}
+{"file":"admin/class_config.php","line":25,"issue":"bad_hint","message":"Fluent hint still points to $this->db (should be $db)"}
+{"file":"admin/class_config.php","line":59,"issue":"bad_hint","message":"Fluent hint still points to $this->db (should be $db)"}
+{"file":"admin/class_config.php","line":107,"issue":"bad_hint","message":"Fluent hint still points to $this->db (should be $db)"}
+{"file":"admin/sysoplog.php","line":1,"issue":"bad_strict","message":"declare(strict_types=1) missing or not first statement"}
+{"file":"admin/sysoplog.php","line":31,"issue":"broken_run","message":"Broken $db->run('); fragment"}
+{"file":"admin/shit_list.php","line":1,"issue":"bad_strict","message":"declare(strict_types=1) missing or not first statement"}
+{"file":"admin/shit_list.php","line":46,"issue":"broken_run","message":"Broken $db->run('); fragment"}
+{"file":"admin/shit_list.php","line":58,"issue":"broken_run","message":"Broken $db->run('); fragment"}
+{"file":"admin/shit_list.php","line":75,"issue":"mysqli_mix","message":"mysqli/sql_query present (prefer $db methods)"}
+{"file":"admin/leechwarn.php","line":1,"issue":"bad_strict","message":"declare(strict_types=1) missing or not first statement"}
+{"file":"admin/leechwarn.php","line":39,"issue":"broken_run","message":"Broken $db->run('); fragment"}
+{"file":"admin/leechwarn.php","line":46,"issue":"broken_run","message":"Broken $db->run('); fragment"}
+{"file":"admin/leechwarn.php","line":56,"issue":"broken_run","message":"Broken $db->run('); fragment"}
+{"file":"admin/leechwarn.php","line":71,"issue":"mysqli_mix","message":"mysqli/sql_query present (prefer $db methods)"}
+{"file":"admin/leechwarn.php","line":72,"issue":"mysqli_mix","message":"mysqli/sql_query present (prefer $db methods)"}
+{"file":"admin/leechwarn.php","line":95,"issue":"mysqli_mix","message":"mysqli/sql_query present (prefer $db methods)"}
+{"file":"admin/modtask.php","line":1,"issue":"bad_strict","message":"declare(strict_types=1) missing or not first statement"}
+{"file":"admin/modtask.php","line":59,"issue":"bad_hint","message":"Fluent hint still points to $this->db (should be $db)"}
+{"file":"admin/promo.php","line":1,"issue":"bad_strict","message":"declare(strict_types=1) missing or not first statement"}
+{"file":"admin/promo.php","line":26,"issue":"bad_hint","message":"Fluent hint still points to $this->db (should be $db)"}
+{"file":"admin/view_peers.php","line":1,"issue":"bad_strict","message":"declare(strict_types=1) missing or not first statement"}
