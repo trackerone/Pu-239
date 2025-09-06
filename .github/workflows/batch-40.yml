@@ -1,0 +1,96 @@
+name: Batch 40 - Full Repo FluentPDO Sweep
+
+on:
+  workflow_dispatch:
+    inputs:
+      apply_conservative_fixes:
+        description: 'Apply conservative automatic fixes (imports, docblocks, obvious patterns)'
+        required: false
+        default: 'false'
+      force_pr:
+        description: 'Force a PR even if no code lines changed (report will still be committed)'
+        required: false
+        default: 'true'
+
+jobs:
+  batch-40-sweep:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+    env:
+      BASE_BRANCH: ${{ github.event.repository.default_branch }}
+      UNIQUE_BRANCH: batch-40-fluentpdo-sweep-${{ github.run_id }}-${{ github.run_attempt }}
+      APPLY_FIXES: ${{ github.event.inputs.apply_conservative_fixes }}
+      FORCE_PR: ${{ github.event.inputs.force_pr }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.2'
+          coverage: none
+          tools: none
+
+      - name: Run Batch 40 sweep
+        run: |
+          php ./tools/batch-40-sweep.php
+
+      - name: Detect changes
+        id: changes
+        run: |
+          set -e
+          git status --porcelain=v1 > /tmp/status.txt || true
+          git diff --name-only > /tmp/changed.txt || true
+          CHANGED_COUNT=$(wc -l < /tmp/changed.txt | tr -d ' ')
+          echo "changed_files=${CHANGED_COUNT}" >> $GITHUB_OUTPUT
+          if [ "${CHANGED_COUNT}" -gt 0 ]; then
+            echo "has_changes=true" >> $GITHUB_OUTPUT
+          else
+            echo "has_changes=false" >> $GITHUB_OUTPUT
+          fi
+          git diff > batch-40.diff || true
+
+      - name: Create branch, commit and push changes
+        if: steps.changes.outputs.has_changes == 'true' || env.FORCE_PR == 'true'
+        run: |
+          set -euxo pipefail
+          git config user.name "batch-bot"
+          git config user.email "batch-bot@users.noreply.github.com"
+          git checkout -B "$UNIQUE_BRANCH" "origin/$BASE_BRANCH"
+          git add -A
+          git commit -m "batch40(sweep): repo-wide FluentPDO report + conservative fixes" || echo "Nothing to commit"
+          git push --set-upstream origin "$UNIQUE_BRANCH" || echo "Nothing to push"
+
+      - name: Create Pull Request
+        if: steps.changes.outputs.has_changes == 'true' || env.FORCE_PR == 'true'
+        uses: peter-evans/create-pull-request@v6
+        with:
+          base: ${{ env.BASE_BRANCH }}
+          branch: ${{ env.UNIQUE_BRANCH }}
+          title: "Batch 40: Full repo FluentPDO sweep (report + optional fixes)"
+          body: |
+            This PR was created by the Batch 40 action.
+            - Generates a full-repo FluentPDO usage report under `tools/reports/`
+            - Optionally applies conservative automatic fixes (controlled by `apply_conservative_fixes` input)
+            - Uses unique branch names and uploads diff + changed files artifacts
+          labels: batch, automated, sweep
+          delete-branch: true
+
+      - name: Upload diff artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: batch-40-diff
+          path: batch-40.diff
+
+      - name: Upload changed-files artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: batch-40-changed-files
+          path: |
+            /tmp/changed.txt
+            /tmp/status.txt
