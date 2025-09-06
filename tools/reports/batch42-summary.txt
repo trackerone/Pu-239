@@ -1,0 +1,49 @@
+Batch 42 — FluentPDO mapping
+================================
+Files scanned: 667
+Total hits:    4617
+
+Hits by pattern:
+  select      : 1847
+  where       : 1067
+  from        : 570
+  fetchAll    : 303
+  update      : 226
+  orderBy     : 197
+  fetch       : 107
+  fetchCount  : 103
+  namespace   : 52
+  groupBy     : 47
+  insertInto  : 44
+  deleteFrom  : 32
+  values      : 22
+
+Top files (up to 25):
+   222  src/Torrent.php
+   111  src/User.php
+   111  public/ajax/torrents_lookup.php
+   110  include/images_update.php
+    93  admin/modded_torrents.php
+    77  src/Snatched.php
+    73  public/browse.php
+    72  forums/view_topic.php
+    69  forums/search.php
+    68  admin/class_config.php
+    63  src/Message.php
+    62  admin/mega_search.php
+    60  src/Peer.php
+    59  public/forums.php
+    55  src/Request.php
+    55  include/function_bonus.php
+    54  public/mybonus.php
+    53  forums/view_unread_posts.php
+    52  admin/deathrow.php
+    47  src/Comment.php
+    47  public/staffpanel.php
+    44  src/Offer.php
+    42  public/hnrs.php
+    41  public/catalog.php
+    41  public/tvshows.php
+
+NDJSON: tools/reports/batch42-fluentpdo-usage.ndjson
+Date:   2025-09-06T12:58:59+00:00
