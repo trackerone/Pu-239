@@ -49,4 +49,3 @@ jobs:
             --arg body  'Parses tools/reports/batch43_5-admin-audit.ndjson and applies deterministic, conservative fixes in admin/*.php: replace \$this->db/\$this->cache with \$db/\$cache, ensure \$db init, move declare(strict_types=1) to top, COMMENT broken \$db->run(''); lines (no control-flow changes), clean mysqli/sql_query leftovers, fix bad ", \$site_config" tail, drop TODO(batch41) and wrong hints. Writes tools/reports/batch43_6-summary.txt.' \
             '{title:$title, head:$head, base:$base, body:$body, maintainer_can_modify:true, draft:false}')
           curl -sS -X POST -H "Authorization: Bearer ${GH_TOKEN}" -H "Accept: application/vnd.github+json" "${API}" -d "${DATA}" | jq .
-```0
