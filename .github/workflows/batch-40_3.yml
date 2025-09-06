@@ -1,0 +1,77 @@
+name: Batch 40.3 - Full Repo FluentPDO Sweep (Always PR & Reports)
+
+on:
+  workflow_dispatch:
+    inputs:
+      apply_conservative_fixes:
+        description: 'Apply conservative automatic fixes (imports, docblocks, obvious patterns)'
+        required: false
+        default: 'false'
+
+jobs:
+  batch-40-3-sweep:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+    env:
+      BASE_BRANCH: ${{ github.event.repository.default_branch }}
+      UNIQUE_BRANCH: batch-40-3-fluentpdo-sweep-${{ github.run_id }}-${{ github.run_attempt }}
+      APPLY_FIXES: ${{ github.event.inputs.apply_conservative_fixes }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.2'
+          coverage: none
+          tools: none
+
+      - name: Run Batch 40.3 sweep
+        run: |
+          php ./tools/batch-40_3-sweep.php
+
+      - name: Stage and commit reports (always)
+        run: |
+          set -euxo pipefail
+          git config user.name "batch-bot"
+          git config user.email "batch-bot@users.noreply.github.com"
+          git add -A
+          git commit --allow-empty -m "batch40.3(sweep): add FluentPDO reports and optional fixes"
+          git checkout -B "$UNIQUE_BRANCH" "origin/$BASE_BRANCH"
+          git cherry-pick -x HEAD@{1} || true
+          git push --set-upstream origin "$UNIQUE_BRANCH" || echo "Nothing to push"
+
+      - name: Create Pull Request (always)
+        uses: peter-evans/create-pull-request@v6
+        with:
+          base: ${{ env.BASE_BRANCH }}
+          branch: ${{ env.UNIQUE_BRANCH }}
+          title: "Batch 40.3: Full repo FluentPDO sweep (reports + optional fixes)"
+          body: |
+            This PR was created by the Batch 40.3 action.
+            - Always writes/commits sweep reports under `tools/reports/`
+            - Optionally applies conservative fixes (set input `apply_conservative_fixes=true`)
+            - Uses unique branches to avoid base/branch conflicts
+          labels: batch, automated, sweep
+          delete-branch: true
+
+      - name: Upload reports as artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: batch-40_3-reports
+          path: |
+            tools/reports/batch40_3-fluentpdo-report.ndjson
+            tools/reports/batch40_3-summary.txt
+
+      - name: Upload diff
+        run: git diff > batch-40_3.diff || true
+      - name: Upload diff artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: batch-40_3-diff
+          path: batch-40_3.diff
