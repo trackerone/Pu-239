@@ -1,7 +1,5 @@
 name: Batch SANITY — Create file & open PR
-
-on:
-  workflow_dispatch:
+on: { workflow_dispatch: {} }
 
 jobs:
   sanity:
@@ -13,17 +11,12 @@ jobs:
       BASE_BRANCH: ${{ github.event.repository.default_branch }}
       UNIQUE_BRANCH: batch-sanity-${{ github.run_id }}-${{ github.run_attempt }}
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-
+      - uses: actions/checkout@v4
+        with: { fetch-depth: 0 }
       - name: Create a heartbeat file
         run: |
           mkdir -p tools/reports
-          echo "Batch sanity check $(date -u +%FT%TZ)" > tools/reports/HEARTBEAT.txt
-          echo "If you see this file in the PR, pushing & committing works." >> tools/reports/HEARTBEAT.txt
-
+          echo "Sanity $(date -u +%FT%TZ)" > tools/reports/HEARTBEAT.txt
       - name: Commit & push to new branch
         run: |
           set -euxo pipefail
@@ -31,18 +24,14 @@ jobs:
           git config user.email "batch-bot@users.noreply.github.com"
           git checkout -B "$UNIQUE_BRANCH" "origin/$BASE_BRANCH"
           git add -A
-          git commit -m "batch(sanity): add HEARTBEAT.txt to verify PR pipeline" || echo "Nothing to commit"
+          git commit -m "batch(sanity): add HEARTBEAT.txt" || echo "Nothing to commit"
           git push --set-upstream origin "$UNIQUE_BRANCH" || echo "Nothing to push"
-
       - name: Open Pull Request
         uses: peter-evans/create-pull-request@v6
         with:
           base: ${{ env.BASE_BRANCH }}
           branch: ${{ env.UNIQUE_BRANCH }}
-          title: "Batch SANITY: Verify PR pipeline (adds HEARTBEAT.txt)"
-          body: |
-            This PR was created by the SANITY workflow.
-            It adds `tools/reports/HEARTBEAT.txt` to confirm that the GitHub Actions workflow
-            can commit to a new branch and open a PR with write permissions.
+          title: "Batch SANITY: Verify PR pipeline"
+          body: "Adds tools/reports/HEARTBEAT.txt to prove Actions can push & open PR."
           labels: batch, automated, sanity
           delete-branch: true
