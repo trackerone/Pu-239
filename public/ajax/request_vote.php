@@ -55,9 +55,8 @@ if ($voted === 'yes') {
         'request_id' => $id,
     ];
     try {
-        $fluent->insertInto('request_votes')
-               ->values($values)
-               ->execute();
+        $sql = "INSERT INTO request_votes (/* columns */) VALUES (/* values */)";
+$this->db->perform($sql, $values);
         echo json_encode(['voted' => 'yes']);
         app_halt('Exit called');
     } catch (Exception $e) {

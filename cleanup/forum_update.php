@@ -42,10 +42,8 @@ function forum_update($data)
             'post_count' => $forum['posts'],
             'topic_count' => $forum['topics'],
         ];
-        $fluent->update('forums')
-               ->set($set)
-               ->where('id = ?', $forum['id'])
-               ->execute();
+        $sql = "UPDATE forums SET /* columns */ WHERE id = :id";
+$this->db->perform($sql, array_merge($set, ['id' => $forum['id']]));
     }
     $topics = $fluent->from('topics')
                      ->select(null)
@@ -63,9 +61,8 @@ function forum_update($data)
                             ->fetch();
 
         if (empty($last_post['id'])) {
-            $fluent->deleteFrom('topics')
-                   ->where('id = ?', $topic['id'])
-                   ->execute();
+            $sql = "DELETE FROM topics WHERE id = :id";
+$this->db->perform($sql, ['id' => $topic['id']]);
         } else {
             $count = $fluent->from('posts')
                             ->select(null)
@@ -76,10 +73,8 @@ function forum_update($data)
                 'last_post' => $last_post['id'],
                 'post_count' => $count,
             ];
-            $fluent->update('topics')
-                   ->set($set)
-                   ->where('id = ?', $topic['id'])
-                   ->execute();
+            $sql = "UPDATE topics SET /* columns */ WHERE id = :id";
+$this->db->perform($sql, array_merge($set, ['id' => $topic['id']]));
         }
     }
 

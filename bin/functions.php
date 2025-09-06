@@ -70,9 +70,8 @@ function get_classes(array $styles, bool $create)
             } else {
                 foreach ($all_classes[0] as $values) {
                     $values['template'] = $style;
-                    $fluent->insertInto('class_config')
-                           ->values($values)
-                           ->execute();
+                    $sql = "INSERT INTO class_config (/* columns */) VALUES (/* values */)";
+$this->db->perform($sql, $values);
                 }
                 app_halt("Classes added for template {$style}\n");
             }

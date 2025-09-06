@@ -136,8 +136,7 @@ class Ban
             'comment' => $comment,
             'added' => TIME_NOW,
         ];
-        $this->fluent->insertInto('bans')
-            ->values($values)
-            ->execute();
+        $sql = "INSERT INTO bans (/* columns */) VALUES (/* values */)";
+$this->db->perform($sql, $values);
     }
 }

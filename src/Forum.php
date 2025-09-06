@@ -45,9 +45,8 @@ class Forum
      */
     public function delete(int $forum_id)
     {
-        $result = $this->fluent->deleteFrom('forums')
-                               ->where('id = ?', $forum_id)
-                               ->execute();
+        $sql = "DELETE FROM forums WHERE id = :id";
+$result = $this->db->perform($sql, ['id' => $forum_id]);
 
         return $result;
     }
@@ -63,10 +62,8 @@ class Forum
      */
     public function update(array $set, int $forum_id)
     {
-        $result = $this->fluent->update('forums')
-                               ->set($set)
-                               ->where('id = ?', $forum_id)
-                               ->execute();
+        $sql = "UPDATE forums SET /* columns */ WHERE id = :id";
+$result = $this->db->perform($sql, array_merge($set, ['id' => $forum_id]));
 
         return $result;
     }
@@ -81,9 +78,8 @@ class Forum
      */
     public function add(array $values)
     {
-        $id = $this->fluent->insertInto('forums')
-                           ->values($values)
-                           ->execute();
+        $sql = "INSERT INTO forums (/* columns */) VALUES (/* values */)";
+$id = $this->db->perform($sql, $values);
 
         return $id;
     }

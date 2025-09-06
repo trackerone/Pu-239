@@ -361,10 +361,8 @@ function images_update()
                 $set = [
                     'info_updated' => TIME_NOW,
                 ];
-                $fluent->update('torrents')
-                    ->set($set)
-                    ->where('id = ?', $book['id'])
-                    ->execute();
+                $sql = "UPDATE torrents SET /* columns */ WHERE id = :id";
+$this->db->perform($sql, array_merge($set, ['id' => $book['id']]));
             }
         }
     }
@@ -391,10 +389,8 @@ function images_update()
         $set = [
             'info_updated' => TIME_NOW,
         ];
-        $fluent->update('torrents')
-            ->set($set)
-            ->where('imdb_id = ?', $imdbid['imdb_id'])
-            ->execute();
+        $sql = "UPDATE torrents SET /* columns */ WHERE imdb_id = :imdb_id";
+$this->db->perform($sql, array_merge($set, ['imdb_id' => $imdbid['imdb_id']]));
     }
     echo _f('%d torrents imdb info cached', count($imdbids)) . "\n";
 
@@ -462,10 +458,8 @@ function images_update()
             $set = [
                 'updated' => TIME_NOW,
             ];
-            $fluent->update('offers')
-                ->set($set)
-                ->where('id = ?', $link['id'])
-                ->execute();
+            $sql = "UPDATE offers SET /* columns */ WHERE id = :id";
+$this->db->perform($sql, array_merge($set, ['id' => $link['id']]));
         }
     }
     if (!empty($offer_links)) {
@@ -494,10 +488,8 @@ function images_update()
             $set = [
                 'updated' => TIME_NOW,
             ];
-            $fluent->update('requests')
-                ->set($set)
-                ->where('id = ?', $link['id'])
-                ->execute();
+            $sql = "UPDATE requests SET /* columns */ WHERE id = :id";
+$this->db->perform($sql, array_merge($set, ['id' => $link['id']]));
         }
     }
     if (!empty($request_links)) {

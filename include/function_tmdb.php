@@ -462,10 +462,8 @@ $db = $container->get(Database::class);;
         'tmdb_id' => $tmdb_id,
     ];
     $fluent = $container->get(Database::class);
-    $fluent->update('images')
-        ->set($set)
-        ->where('imdb_id = ?', $imdb_id)
-        ->execute();
+    $sql = "UPDATE images SET /* columns */ WHERE imdb_id = :imdb_id";
+$this->db->perform($sql, array_merge($set, ['imdb_id' => $imdb_id]));
 }
 
 /**

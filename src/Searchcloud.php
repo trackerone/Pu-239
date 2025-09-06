@@ -76,9 +76,8 @@ class Searchcloud
     public function delete(array $terms)
     {
         foreach ($terms as $term) {
-            $this->fluent->deleteFrom('searchcloud')
-                         ->where('id = ?', $term)
-                         ->execute();
+            $sql = "DELETE FROM searchcloud WHERE id = :id";
+$this->db->perform($sql, ['id' => $term]);
         }
         $this->cache->delete('searchcloud_');
     }

@@ -199,10 +199,8 @@ if (isset($_GET['act'])) {
         if ($min_class != $cur['min_class_to_view']) {
             $set['min_class_to_view'] = $min_class;
         }
-        $update = $fluent->update('stylesheets')
-                         ->set($set)
-                         ->where('id = ?', $tid)
-                         ->execute();
+        $sql = "UPDATE stylesheets SET /* columns */ WHERE id = :id";
+$update = $this->db->perform($sql, array_merge($set, ['id' => $tid]));
         if (!$update) {
             $session->set('is-danger', _('Something Went Wrong'));
         } else {
@@ -229,17 +227,14 @@ if (isset($_GET['act'])) {
             app_halt('Exit called');
         }
 
-        $fluent->deleteFrom('stylesheets')
-               ->where('id = ?', $id)
-               ->execute();
+        $sql = "DELETE FROM stylesheets WHERE id = :id";
+$this->db->perform($sql, ['id' => $id]);
 
         $set = [
             'stylesheet' => $site_config['site']['stylesheet'],
         ];
-        $fluent->update('users')
-               ->set($set)
-               ->where('stylesheet = ?', $id)
-               ->execute();
+        $sql = "UPDATE users SET /* columns */ WHERE stylesheet = :stylesheet";
+$this->db->perform($sql, array_merge($set, ['stylesheet' => $id]));
 
         clear_template_cache();
         $session->set('is-success', _('Successfully Deleted'));
@@ -269,9 +264,8 @@ if (isset($_GET['act'])) {
             'name' => htmlsafechars($_POST['name']),
             'min_class_to_view' => $_POST['class'],
         ];
-        $fluent->insertInto('stylesheets')
-               ->values($values)
-               ->execute();
+        $sql = "INSERT INTO stylesheets (/* columns */) VALUES (/* values */)";
+$this->db->perform($sql, $values);
 
         clear_template_cache();
         $session->set('is-success', _('Successfully Edited'));
@@ -294,9 +288,8 @@ if (isset($_GET['act'])) {
             'uri' => $_GET['uri'],
             'name' => htmlsafechars($_GET['name']),
         ];
-        $fluent->insertInto('stylesheets')
-               ->values($values)
-               ->execute();
+        $sql = "INSERT INTO stylesheets (/* columns */) VALUES (/* values */)";
+$this->db->perform($sql, $values);
 
         clear_template_cache();
         $session->set('is-success', _('Successfully Added'));
