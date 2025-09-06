@@ -1,39 +1,24 @@
 <?php
-$db = $container->get(Database::class);
-
-require_once __DIR__ . '/../include/runtime_safe.php';
-
-
-declare(strict_types = 1);
-
-/*
-  +----------------------------------------------------------------------+
-  | PHP Version 5                                                        |
-  +----------------------------------------------------------------------+
-  | Copyright (c) 1997-2004 The PHP Group                                |
-  +----------------------------------------------------------------------+
-  | This source file is subject to version 3.0 of the PHP license,       |
-  | that is bundled with this package in the file LICENSE, and is        |
-  | available through the world-wide-web at the following url:           |
-  | http://www.php.net/license/3_0.txt.                                  |
-  | If you did not receive a copy of the PHP license and are unable to   |
-  | obtain it through the world-wide-web, please send a note to          |
-  | license@php.net so we can mail you a copy immediately.               |
-  +----------------------------------------------------------------------+
-  | Author:  Harun Yayli <harunyayli at gmail.com>                       |
-  +----------------------------------------------------------------------+
- */
+declare(strict_types=1);
 
 use Pu239\Session;
 
+require_once __DIR__ . '/../include/runtime_safe.php';
 require_once INCL_DIR . 'function_users.php';
 require_once CLASS_DIR . 'class_check.php';
+
+global $container, $site_config, $CURUSER;
+
+$db = $container->get(Database::class);
+
 $class = get_access(basename($_SERVER['REQUEST_URI']));
 class_check($class);
+
 $VERSION = '$Id: memcache.php,v 1.1.2.3 2008/08/28 18:07:54 mikl Exp $';
 define('DATE_FORMAT', 'Y/m/d H:i:s');
 define('GRAPH_SIZE', 200);
 define('MAX_ITEM_DUMP', 50);
+
 
 if (extension_loaded('memcached')) {
     global $site_config;

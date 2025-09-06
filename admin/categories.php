@@ -1,30 +1,32 @@
 <?php
-$db = $container->get(Database::class);
-
-require_once __DIR__ . '/../include/runtime_safe.php';
-
-
-declare(strict_types = 1);
+declare(strict_types=1);
 
 use DI\DependencyException;
 use DI\NotFoundException;
-
 use MatthiasMullie\Scrapbook\Exception\UnbegunTransaction;
 use Pu239\Cache;
 use Pu239\Database;
 use Spatie\Image\Exceptions\InvalidManipulation;
 
+require_once __DIR__ . '/../include/runtime_safe.php';
 require_once INCL_DIR . 'function_users.php';
-require_once CLASS_DIR . 'class_check.php';
 require_once INCL_DIR . 'function_categories.php';
+require_once CLASS_DIR . 'class_check.php';
+
+global $container;
+
+$db = $container->get(Database::class);
+
 $class = get_access(basename($_SERVER['REQUEST_URI']));
 class_check($class);
-$params = array_merge($_GET, $_POST);
-$params['mode'] = isset($params['mode']) ? $params['mode'] : '';
+
+$params              = array_merge($_GET, $_POST);
+$params['mode']      = isset($params['mode']) ? $params['mode'] : '';
 $params['parent_id'] = !empty($params['parent_id']) ? (int) $params['parent_id'] : 0;
-$params['id'] = !empty($params['id']) ? (int) $params['id'] : 0;
+$params['id']        = !empty($params['id']) ? (int) $params['id'] : 0;
 $params['cat_hidden'] = !empty($params['cat_hidden']) ? (int) $params['cat_hidden'] : 0;
 $params['new_cat_id'] = !empty($params['new_cat_id']) ? (int) $params['new_cat_id'] : 0;
+
 switch ($params['mode']) {
     case 'takemove_cat':
         move_cat($params);

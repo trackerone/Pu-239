@@ -1,18 +1,19 @@
 <?php
-require_once __DIR__ . '/../include/runtime_safe.php';
-
-
-declare(strict_types = 1);
+declare(strict_types=1);
 
 use Pu239\Cache;
 use Pu239\Database;
 
+require_once __DIR__ . '/../include/runtime_safe.php';
 require_once INCL_DIR . 'function_html.php';
 require_once CLASS_DIR . 'class_check.php';
+
+global $container, $site_config;
+
+$db = $container->get(Database::class);
+
 $class = get_access(basename($_SERVER['REQUEST_URI']));
 class_check($class);
-global $container;
-$db = $container->get(Database::class);, $site_config;
 
 $HTMLOUT = $time_drop_down = $accepted_file_extension = $accepted_file_types = $member_class_drop_down = '';
 $settings_saved = false;

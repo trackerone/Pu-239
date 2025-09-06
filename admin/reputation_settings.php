@@ -1,17 +1,19 @@
 <?php
-$db = $container->get(Database::class);
+declare(strict_types=1);
+
+use Pu239\Database;
 
 require_once __DIR__ . '/../include/runtime_safe.php';
-
-
-declare(strict_types = 1);
-
 require_once INCL_DIR . 'function_users.php';
 require_once INCL_DIR . 'function_html.php';
 require_once CLASS_DIR . 'class_check.php';
+
+global $container, $site_config;
+
+$db = $container->get(Database::class);
+
 $class = get_access(basename($_SERVER['REQUEST_URI']));
 class_check($class);
-global $site_config;
 
 $rep_set_cache = CACHE_DIR . 'rep_settings_cache.php';
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {

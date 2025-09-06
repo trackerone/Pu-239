@@ -1,14 +1,16 @@
 <?php
-$db = $container->get(Database::class);
+declare(strict_types=1);
 
-require_once __DIR__ . '/../include/runtime_safe.php';
-
-
-declare(strict_types = 1);
-
+use Pu239\Database;
 use Pu239\Session;
 
+require_once __DIR__ . '/../include/runtime_safe.php';
 require_once CLASS_DIR . 'class_check.php';
+
+global $container;
+
+$db = $container->get(Database::class);
+
 $class = get_access(basename($_SERVER['REQUEST_URI']));
 class_check($class);
 $list = [

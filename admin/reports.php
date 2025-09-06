@@ -1,25 +1,24 @@
 <?php
-require_once __DIR__ . '/../include/runtime_safe.php';
-
-require_once __DIR__ . '/../include/bootstrap_pdo.php';
-
-
-declare(strict_types = 1);
+declare(strict_types=1);
 
 use Pu239\Database;
-
 use Pu239\Cache;
 use Pu239\Session;
 
+require_once __DIR__ . '/../include/runtime_safe.php';
+require_once __DIR__ . '/../include/bootstrap_pdo.php';
 require_once INCL_DIR . 'function_users.php';
 require_once INCL_DIR . 'function_pager.php';
 require_once INCL_DIR . 'function_html.php';
 require_once INCL_DIR . 'function_bbcode.php';
 require_once CLASS_DIR . 'class_check.php';
+
+global $container, $site_config, $CURUSER;
+
+$db = $container->get(Database::class);
+
 $class = get_access(basename($_SERVER['REQUEST_URI']));
 class_check($class);
-global $container;
-$db = $container->get(Database::class);, $site_config, $CURUSER;
 
 $stdhead = [
     'css' => [

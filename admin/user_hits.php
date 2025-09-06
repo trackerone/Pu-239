@@ -1,23 +1,24 @@
 <?php
-require_once __DIR__ . '/../include/runtime_safe.php';
-
-require_once __DIR__ . '/../include/bootstrap_pdo.php';
-
-
-declare(strict_types = 1);
+declare(strict_types=1);
 
 use Pu239\Database;
-
 use Pu239\User;
 
+require_once __DIR__ . '/../include/runtime_safe.php';
+require_once __DIR__ . '/../include/bootstrap_pdo.php';
 require_once INCL_DIR . 'function_users.php';
 require_once INCL_DIR . 'function_pager.php';
 require_once CLASS_DIR . 'class_check.php';
+
+global $container, $site_config, $CURUSER;
+
+$db = $container->get(Database::class);
+
 $class = get_access(basename($_SERVER['REQUEST_URI']));
 class_check($class);
-global $container;
-$db = $container->get(Database::class);, $site_config, $CURUSER;
+
 stderr(_('Error'), 'This page is not in use atm');
+
 $HTMLOUT = '';
 $id = (int) $_GET['id'];
 if (!is_valid_id($id) || $CURUSER['id'] != $id && $CURUSER['class'] < UC_STAFF) {

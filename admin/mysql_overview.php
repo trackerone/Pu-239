@@ -1,18 +1,18 @@
 <?php
-$db = $container->get(Database::class);
-
-require_once __DIR__ . '/../include/runtime_safe.php';
-
-
-declare(strict_types = 1);
+declare(strict_types=1);
 
 use Pu239\Database;
 
+require_once __DIR__ . '/../include/runtime_safe.php';
 require_once INCL_DIR . 'function_users.php';
-require_once CLASS_DIR . 'class_check.php';
 require_once INCL_DIR . 'function_html.php';
+require_once CLASS_DIR . 'class_check.php';
+
+global $container, $site_config;
+
+$db = $container->get(Database::class);
+
 class_check(UC_MAX);
-global $site_config;
 
 if (isset($_GET['Do']) && $_GET['Do'] === 'optimize' && isset($_GET['table'])) {
     $table = htmlsafechars(strip_tags($_GET['table']));

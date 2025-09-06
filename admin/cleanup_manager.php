@@ -1,21 +1,26 @@
 <?php
-require_once __DIR__ . '/../include/runtime_safe.php';
-
-
-declare(strict_types = 1);
+declare(strict_types=1);
 
 use DI\DependencyException;
 use DI\NotFoundException;
 use Pu239\Database;
 use Pu239\Session;
 
+require_once __DIR__ . '/../include/runtime_safe.php';
 require_once INCL_DIR . 'function_users.php';
 require_once INCL_DIR . 'function_pager.php';
 require_once CLASS_DIR . 'class_check.php';
+
+global $container;
+
+$db = $container->get(Database::class);
+
 $class = get_access(basename($_SERVER['REQUEST_URI']));
 class_check($class);
-$params = array_merge($_GET, $_POST);
+
+$params         = array_merge($_GET, $_POST);
 $params['mode'] = isset($params['mode']) ? $params['mode'] : '';
+
 switch ($params['mode']) {
     case 'unlock':
         cleanup_take_unlock($params);

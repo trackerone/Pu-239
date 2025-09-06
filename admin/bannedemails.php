@@ -1,18 +1,20 @@
 <?php
-require_once __DIR__ . '/../include/runtime_safe.php';
-
-
-declare(strict_types = 1);
+declare(strict_types=1);
 
 use Pu239\Database;
 
+require_once __DIR__ . '/../include/runtime_safe.php';
 require_once INCL_DIR . 'function_users.php';
 require_once INCL_DIR . 'function_html.php';
 require_once INCL_DIR . 'function_pager.php';
 require_once CLASS_DIR . 'class_check.php';
+
+global $container, $CURUSER, $site_config;
+
+$db = $container->get(Database::class);
+
 $class = get_access(basename($_SERVER['REQUEST_URI']));
 class_check($class);
-global $ontainer, $CURUSER, $site_config;
 
 $HTMLOUT = '';
 $remove = isset($_GET['remove']) ? (int) $_GET['remove'] : 0;

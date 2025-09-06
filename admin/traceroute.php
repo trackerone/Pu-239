@@ -1,20 +1,23 @@
 <?php
-$db = $container->get(Database::class);
+declare(strict_types=1);
+
+use Pu239\Database;
 
 require_once __DIR__ . '/../include/runtime_safe.php';
-
 require_once __DIR__ . '/../include/bootstrap_pdo.php';
-
-
-declare(strict_types = 1);
-
 require_once INCL_DIR . 'function_users.php';
 require_once INCL_DIR . 'function_html.php';
 require_once CLASS_DIR . 'class_check.php';
+
+global $container, $site_config;
+
+$db = $container->get(Database::class);
+
 $class = get_access(basename($_SERVER['REQUEST_URI']));
 class_check($class);
+
 $user = check_user_status();
-global $site_config;
+
 $HTMLOUT = '';
 if (strtoupper(substr(PHP_OS, 0, 3) === 'WIN')) {
     $windows = 1;

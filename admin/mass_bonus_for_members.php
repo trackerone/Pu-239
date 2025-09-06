@@ -1,35 +1,37 @@
 <?php
-require_once __DIR__ . '/../include/runtime_safe.php';
-
-
-declare(strict_types = 1);
+declare(strict_types=1);
 
 use Pu239\Database;
-
 use Pu239\Message;
 use Pu239\User;
 
+require_once __DIR__ . '/../include/runtime_safe.php';
 require_once INCL_DIR . 'function_users.php';
 require_once INCL_DIR . 'function_bbcode.php';
 require_once CLASS_DIR . 'class_check.php';
+
+global $container, $site_config, $CURUSER;
+
+$db = $container->get(Database::class);
+$users_class = $container->get(User::class);
+$messages_class = $container->get(Message::class);
+
 $class = get_access(basename($_SERVER['REQUEST_URI']));
 class_check($class);
+
 $stdhead = [
     'css' => [
         get_file_name('sceditor_css'),
     ],
 ];
+
 $stdfoot = [
     'js' => [
         get_file_name('mass_bonus_js'),
         get_file_name('sceditor_js'),
     ],
 ];
-global $container;
-$db = $container->get(Database::class);, $site_config;
 
-$users_class = $container->get(User::class);
-$messages_class = $container->get(Message::class);
 $dt = TIME_NOW;
 $h1_thingie = $HTMLOUT = '';
 $good_stuff = [
@@ -46,7 +48,7 @@ if (empty($free_for)) {
     $action = '';
     unset($_POST);
 }
-global $CURUSER;
+
 
 switch ($action) {
     case 'upload_credit':

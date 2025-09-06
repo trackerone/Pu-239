@@ -1,31 +1,31 @@
 <?php
-require_once __DIR__ . '/../include/runtime_safe.php';
-
-
-declare(strict_types = 1);
+declare(strict_types=1);
 
 use DI\DependencyException;
 use DI\NotFoundException;
-
 use Pu239\Cache;
 use Pu239\Database;
 use Pu239\Session;
 
+require_once __DIR__ . '/../include/runtime_safe.php';
 require_once CLASS_DIR . 'class_check.php';
 require_once INCL_DIR . 'function_html.php';
 require_once BIN_DIR . 'uglify.php';
+
+global $container, $CURUSER, $site_config;
+
+$db      = $container->get(Database::class);
+$session = $container->get(Session::class);
+$fluent  = $db; // alias
+
 $class = get_access(basename($_SERVER['REQUEST_URI']));
 class_check($class);
-global $container;
-$db = $container->get(Database::class);, $CURUSER, $site_config;
 
-$style = get_stylesheet();
-$session = $container->get(Session::class);
-$fluent = $db; // alias
-// $fluent removed — use $this->db (ExtendedPdo)
+$style       = get_stylesheet();
 $all_classes = $fluent->from('class_config')
-                      ->where('template = ?', $style)
-                      ->orderBy('value');
+    ->where('template = ?', $style)
+    ->orderBy('value');
+
 foreach ($all_classes as $ac) {
     $class_config[$ac['name']]['value'] = $ac['value'];
     $class_config[$ac['name']]['classname'] = $ac['classname'];

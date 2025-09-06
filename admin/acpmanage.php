@@ -1,29 +1,30 @@
 <?php
-require_once __DIR__ . '/../include/runtime_safe.php';
-
-
-declare(strict_types = 1);
+declare(strict_types=1);
 
 use Pu239\Database;
 
+require_once __DIR__ . '/../include/runtime_safe.php';
 require_once INCL_DIR . 'function_users.php';
 require_once INCL_DIR . 'function_html.php';
 require_once INCL_DIR . 'function_pager.php';
-require_once CLASS_DIR . 'class_check.php';
 require_once INCL_DIR . 'function_account_delete.php';
+require_once CLASS_DIR . 'class_check.php';
+
+global $container, $CURUSER, $site_config;
+
+$db     = $container->get(Database::class);
+$fluent = $db;
+
 $class = get_access(basename($_SERVER['REQUEST_URI']));
 class_check($class);
+
 $stdfoot = [
     'js' => [
         get_file_name('acp_js'),
     ],
 ];
+
 $HTMLOUT = '';
-global $container, $CURUSER, $site_config;
-
-$db = $container->get(Database::class);
-$fluent = $db;
-
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['ids'])) {
     $ids = $_POST['ids'];
     foreach ($ids as $id) {

@@ -1,49 +1,49 @@
 <?php
-$db = $container->get(Database::class);
-
-require_once __DIR__ . '/../include/runtime_safe.php';
-
-require_once __DIR__ . '/../include/bootstrap_pdo.php';
-
-
-declare(strict_types = 1);
+declare(strict_types=1);
 
 use Pu239\Database;
-
 use DI\DependencyException;
 use DI\NotFoundException;
 use Spatie\Image\Exceptions\InvalidManipulation;
 
+require_once __DIR__ . '/../include/runtime_safe.php';
+require_once __DIR__ . '/../include/bootstrap_pdo.php';
 require_once INCL_DIR . 'function_users.php';
 require_once CLASS_DIR . 'class_check.php';
+
+global $container, $site_config;
+
+$db = $container->get(Database::class);
+
 $class = get_access(basename($_SERVER['REQUEST_URI']));
 class_check($class);
-global $site_config;
 
 $view = isset($_GET['view']) ? htmlsafechars($_GET['view']) : '';
+
 $queryString = explode('=', $_SERVER['QUERY_STRING']);
 $queryString = array_reverse($queryString);
+
 $nav = "
-                <div class='bottom10'>
-                    <ul class='tabs'>
-                        <li><a" . ($queryString[0] === 'comments' ? " class='active'" : '') . " href='{$site_config['paths']['baseurl']}/staffpanel.php?tool=comments'>" . _('Comment Overview') . '</a></li>
-                        <li><a' . ($queryString[0] === 'allComments' ? " class='active'" : '') . " href='{$site_config['paths']['baseurl']}/staffpanel.php?tool=comments&amp;view=allComments'>" . _('View All') . '</a></li>
-                        <li><a' . ($queryString[0] === 'search' || $queryString[0] === 'results' ? " class='active'" : '') . " href='{$site_config['paths']['baseurl']}/staffpanel.php?tool=comments&amp;view=search'>" . _('Search Comments') . '</a></li>
-                    </ul>
-                </div>';
+    <div class='bottom10'>
+        <ul class='tabs'>
+            <li><a" . ($queryString[0] === 'comments' ? " class='active'" : '') . " href='{$site_config['paths']['baseurl']}/staffpanel.php?tool=comments'>" . _('Comment Overview') . '</a></li>
+            <li><a" . ($queryString[0] === 'allComments' ? " class='active'" : '') . " href='{$site_config['paths']['baseurl']}/staffpanel.php?tool=comments&amp;view=allComments'>" . _('View All') . '</a></li>
+            <li><a" . ($queryString[0] === 'search' || $queryString[0] === 'results' ? " class='active'" : '') . " href='{$site_config['paths']['baseurl']}/staffpanel.php?tool=comments&amp;view=search'>" . _('Search Comments') . '</a></li>
+        </ul>
+    </div>';
 
 $heading = '
-                <tr>
-                    <th>' . _('Comment ID') . '</th>
-                    <th>' . _('User ID') . '</th>
-                    <th>' . _('Torrent ID') . '</th>
-                    <th>' . _('Comment Text') . '</th>
-                    <th>' . _('Original Comment Text') . '</th>
-                    <th>' . _('Author') . '</th>
-                    <th>' . _('Torrent') . '</th>
-                    <th>' . _('Added') . '</th>
-                    <th>' . _('Actions') . '</th>
-                </tr>';
+    <tr>
+        <th>' . _('Comment ID') . '</th>
+        <th>' . _('User ID') . '</th>
+        <th>' . _('Torrent ID') . '</th>
+        <th>' . _('Comment Text') . '</th>
+        <th>' . _('Original Comment Text') . '</th>
+        <th>' . _('Author') . '</th>
+        <th>' . _('Torrent') . '</th>
+        <th>' . _('Added') . '</th>
+        <th>' . _('Actions') . '</th>
+    </tr>';
 
 /**
  * @param $comment

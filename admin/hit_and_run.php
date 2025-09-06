@@ -1,23 +1,22 @@
 <?php
-$db = $container->get(Database::class);
-
-require_once __DIR__ . '/../include/runtime_safe.php';
-
-require_once __DIR__ . '/../include/bootstrap_pdo.php';
-
-
-declare(strict_types = 1);
+declare(strict_types=1);
 
 use Pu239\Database;
 
+require_once __DIR__ . '/../include/runtime_safe.php';
+require_once __DIR__ . '/../include/bootstrap_pdo.php';
 require_once INCL_DIR . 'function_users.php';
 require_once INCL_DIR . 'function_bbcode.php';
 require_once INCL_DIR . 'function_pager.php';
 require_once INCL_DIR . 'function_html.php';
 require_once CLASS_DIR . 'class_check.php';
+
+global $container, $site_config;
+
+$db = $container->get(Database::class);
+
 $class = get_access(basename($_SERVER['REQUEST_URI']));
 class_check($class);
-global $site_config;
 
 $query = (isset($_GET['really_bad']) ? 'SELECT COUNT(id) FROM snatched LEFT JOIN users ON users.id=snatched.userid WHERE snatched.finished = \'yes\' AND snatched.hit_and_run>0 AND users.hit_and_run_total>2' : 'SELECT COUNT(id) FROM `snatched` WHERE `finished` = \'yes\' AND `hit_and_run`>0');
 $HTMLOUT = '';

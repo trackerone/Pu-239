@@ -1,25 +1,25 @@
 <?php
-require_once __DIR__ . '/../include/runtime_safe.php';
-
-require_once __DIR__ . '/../include/bootstrap_pdo.php';
-
-
-declare(strict_types = 1);
+declare(strict_types=1);
 
 use Pu239\Database;
 use Pu239\Session;
 
+require_once __DIR__ . '/../include/runtime_safe.php';
+require_once __DIR__ . '/../include/bootstrap_pdo.php';
 require_once CLASS_DIR . 'class_check.php';
 require_once INCL_DIR . 'function_html.php';
+
+global $container, $site_config, $CURUSER;
+
+$db     = $container->get(Database::class);
+$fluent = $db; // alias
+
 $class = get_access(basename($_SERVER['REQUEST_URI']));
 class_check($class);
-global $container;
-$db = $container->get(Database::class);, $site_config, $CURUSER;
 
-$fluent = $db; // alias
-// $fluent removed — use $this->db (ExtendedPdo)
 $promos = $fluent->from('class_promo')
     ->orderBy('id');
+
 foreach ($promos as $ac) {
     $class_config[$ac['name']]['id'] = $ac['id'];
     $class_config[$ac['name']]['name'] = $ac['name'];

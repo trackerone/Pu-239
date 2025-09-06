@@ -1,26 +1,26 @@
 <?php
-require_once __DIR__ . '/../include/runtime_safe.php';
-
-
-declare(strict_types = 1);
+declare(strict_types=1);
 
 use Pu239\Cache;
 use Pu239\Database;
 
+require_once __DIR__ . '/../include/runtime_safe.php';
 require_once INCL_DIR . 'function_users.php';
 require_once INCL_DIR . 'function_pager.php';
-require_once CLASS_DIR . 'class_check.php';
 require_once INCL_DIR . 'function_html.php';
+require_once CLASS_DIR . 'class_check.php';
 
+global $container, $site_config, $CURUSER;
+
+$db    = $container->get(Database::class);
 $class = get_access(basename($_SERVER['REQUEST_URI']));
 class_check($class);
-global $container;
-$db = $container->get(Database::class);, $site_config, $CURUSER;
 
 $search = array_merge($_POST, $_GET);
-$cache = $container->get(Cache::class);
+$cache  = $container->get(Cache::class);
 $oldest = $cache->get('oldest_');
 $fluent = $db; // alias
+
 // $fluent removed — use $this->db (ExtendedPdo)
 if ($oldest === false || is_null($oldest)) {
     $oldest = $fluent->from('users')

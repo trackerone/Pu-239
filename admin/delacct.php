@@ -1,24 +1,23 @@
 <?php
-$db = $container->get(Database::class);
-
-require_once __DIR__ . '/../include/runtime_safe.php';
-
-require_once __DIR__ . '/../include/bootstrap_pdo.php';
-
-
-declare(strict_types = 1);
+declare(strict_types=1);
 
 use Pu239\Database;
 use Pu239\Session;
 
+require_once __DIR__ . '/../include/runtime_safe.php';
+require_once __DIR__ . '/../include/bootstrap_pdo.php';
 require_once INCL_DIR . 'function_users.php';
-require_once CLASS_DIR . 'class_check.php';
 require_once INCL_DIR . 'function_password.php';
 require_once INCL_DIR . 'function_account_delete.php';
 require_once INCL_DIR . 'function_html.php';
+require_once CLASS_DIR . 'class_check.php';
+
+global $container, $CURUSER, $site_config;
+
+$db = $container->get(Database::class);
+
 $class = get_access(basename($_SERVER['REQUEST_URI']));
 class_check($class);
-global $container, $CURUSER, $site_config;
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $userid = (int) trim($_POST['userid']);

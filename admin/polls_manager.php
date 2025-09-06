@@ -1,25 +1,28 @@
 <?php
-$db = $container->get(Database::class);
-
-require_once __DIR__ . '/../include/runtime_safe.php';
-
-
-declare(strict_types = 1);
+declare(strict_types=1);
 
 use Delight\Auth\AuthError;
 use Delight\Auth\NotLoggedInException;
 use DI\DependencyException;
 use DI\NotFoundException;
 use MatthiasMullie\Scrapbook\Exception\UnbegunTransaction;
+use Pu239\Database;
 use Pu239\Poll;
 use Pu239\PollVoter;
 use Pu239\Session;
 use Spatie\Image\Exceptions\InvalidManipulation;
 
+require_once __DIR__ . '/../include/runtime_safe.php';
 require_once INCL_DIR . 'function_users.php';
 require_once CLASS_DIR . 'class_check.php';
+
+global $container;
+
+$db = $container->get(Database::class);
+
 $class = get_access(basename($_SERVER['REQUEST_URI']));
 class_check($class);
+
 $stdfoot = [
     'js' => [
         get_file_name('pollsmanager_js'),

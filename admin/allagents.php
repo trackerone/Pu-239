@@ -1,28 +1,29 @@
 <?php
-require_once __DIR__ . '/../include/runtime_safe.php';
-
-require_once __DIR__ . '/../include/bootstrap_pdo.php';
-
-
-declare(strict_types = 1);
+declare(strict_types=1);
 
 use Pu239\Database;
 
+require_once __DIR__ . '/../include/runtime_safe.php';
+require_once __DIR__ . '/../include/bootstrap_pdo.php';
 require_once INCL_DIR . 'function_users.php';
 require_once CLASS_DIR . 'class_check.php';
-$class = get_access(basename($_SERVER['REQUEST_URI']));
-class_check($class);
+
 global $container;
 
-$db = $container->get(Database::class);
+$db     = $container->get(Database::class);
 $fluent = $db;
+
+$class = get_access(basename($_SERVER['REQUEST_URI']));
+class_check($class);
+
 $agents = $fluent->from('peers')
-                 ->select(null)
-                 ->select('agent')
-                 ->select('LEFT(peer_id, 8) AS peer_id')
-                 ->groupBy('agent')
-                 ->groupBy('peer_id')
-                 ->fetchAll();
+    ->select(null)
+    ->select('agent')
+    ->select('LEFT(peer_id, 8) AS peer_id')
+    ->groupBy('agent')
+    ->groupBy('peer_id')
+    ->fetchAll();
+
 
 if (!empty($agents)) {
     $heading = '
