@@ -1,12 +1,18 @@
 <?php
+
+declare(strict_types=1);
+
 require_once __DIR__ . '/../../include/runtime_safe.php';
 
 require_once __DIR__ . '/../../include/bootstrap_pdo.php';
 
-
-declare(strict_types = 1);
-
+use Pu239\Cache;
 use Pu239\Database;
+
+global $container, $CURUSER, $site_config;
+
+$db = $container->get(Database::class);
+$cache = $container->get(Cache::class);
 
 $forum_posts .= "
     <a id='latestforum-hash'></a>
@@ -15,27 +21,23 @@ $forum_posts .= "
         <div class='table-wrapper has-text-centered'>";
 $page = 1;
 $num = 0;
-
-use Pu239\Cache;
-
-global $container;
-$db = $container->get(Database::class);, $site_config, $CURUSER;
-
-$cache = $container->get(Cache::class);
 $topics = $cache->get('last_posts_' . $CURUSER['class']);
 if ($topics === false || is_null($topics)) {
-    $topicres = sql_query('SELECT t.id, t.user_id AS tuser_id, t.topic_name, t.locked, t.forum_id, t.last_post, t.sticky, t.views, t.anonymous AS tan,
-                            f.min_class_read, f.name,
-                            (SELECT COUNT(id) FROM posts WHERE topic_id = t.id) AS p_count, p.user_id AS puser_id, p.added, p.anonymous AS pan
-                            FROM topics AS t
-                            INNER JOIN forums AS f ON f.id = t.forum_id
-                            INNER JOIN posts AS p ON p.id = (SELECT MAX(id) FROM posts WHERE topic_id = t.id)
-                            WHERE f.min_class_read <= ' . $CURUSER['class'] . "
-                            ORDER BY t.last_post DESC
-                            LIMIT {$site_config['latest']['posts_limit']}") or sqlerr(__FILE__, __LINE__);
-    while ($topic = mysqli_fetch_assoc($topicres)) {
-        $topics[] = $topic;
-    }
+    $topics = $db->fetchAll(
+        'SELECT t.id, t.user_id AS tuser_id, t.topic_name, t.locked, t.forum_id, t.last_post, t.sticky, t.views, t.anonymous AS tan,
+                f.min_class_read, f.name,
+                (SELECT COUNT(id) FROM posts WHERE topic_id = t.id) AS p_count, p.user_id AS puser_id, p.added, p.anonymous AS pan
+            FROM topics AS t
+            INNER JOIN forums AS f ON f.id = t.forum_id
+            INNER JOIN posts AS p ON p.id = (SELECT MAX(id) FROM posts WHERE topic_id = t.id)
+            WHERE f.min_class_read <= :class
+            ORDER BY t.last_post DESC
+            LIMIT :limit',
+        [
+            ':class' => $CURUSER['class'],
+            ':limit' => $site_config['latest']['posts_limit'],
+        ]
+    );
     if (!empty($topics)) {
         $cache->set('last_posts_' . $CURUSER['class'], $topics, $site_config['expires']['latestposts']);
     } else {
