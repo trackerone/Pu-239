@@ -1,475 +1,96 @@
 <?php
 declare(strict_types=1);
 
-use DI\DependencyException;
-use DI\NotFoundException;
-use Pu239\Cache;
-use Pu239\Database;
-use Pu239\Session;
-
 require_once __DIR__ . '/../include/runtime_safe.php';
-require_once CLASS_DIR . 'class_check.php';
+require_once INCL_DIR . 'function_users.php';
 require_once INCL_DIR . 'function_html.php';
-require_once BIN_DIR . 'uglify.php';
+require_once CLASS_DIR . 'class_check.php';
 
-global $container, $CURUSER, $site_config;
+use Pu239\Database;
 
-$db      = $container->get(Database::class);
-$session = $container->get(Session::class);
-$fluent  = $db; // alias
+global $container, $site_config, $CURUSER;
+
+$db = $container->get(Database::class);
 
 $class = get_access(basename($_SERVER['REQUEST_URI']));
 class_check($class);
 
-$style       = get_stylesheet();
-$all_classes = $fluent->from('class_config')
-    ->where('template = ?', $style)
-    ->orderBy('value');
+$stdhead = [];
+$stdfoot = [];
+$HTMLOUT = '';
 
-foreach ($all_classes as $ac) {
-    $class_config[$ac['name']]['value'] = $ac['value'];
-    $class_config[$ac['name']]['classname'] = $ac['classname'];
-    $class_config[$ac['name']]['classcolor'] = $ac['classcolor'];
-    $class_config[$ac['name']]['classpic'] = $ac['classpic'];
-}
-$possible_modes = [
-    'add',
-    'edit',
-    'remove',
-    '',
-];
-$mode = isset($_POST['mode']) ? htmlsafechars($_POST['mode']) : '';
-if (!in_array($mode, $possible_modes)) {
-    stderr(_('Error'), _('Invalid action.'));
-}
+$action = $_GET['action'] ?? '';
+$id = (int) ($_GET['id'] ?? 0);
 
-/**
- * @param int    $value
- * @param string $direction
- *
- * @throws DependencyException
- * @throws NotFoundException
- * @throws \PDOException
- */
-function update_forum_classes(int $value, string $direction)
-{
-    global $container;
-$db = $container->get(Database::class);;
-
-    // $fluent removed — use $this->db (ExtendedPdo)
-    if ($direction === 'increment') {
-        $fluent->update('forums')
-               ->set(['min_class_read' => new Literal('min_class_read + 1')])
-               ->where('min_class_read >= ?', $value)
-               ->execute();
-
-        $fluent->update('forums')
-               ->set(['min_class_write' => new Literal('min_class_write + 1')])
-               ->where('min_class_write >= ?', $value)
-               ->execute();
-
-        $fluent->update('forums')
-               ->set(['min_class_create' => new Literal('min_class_create + 1')])
-               ->where('min_class_create >= ?', $value)
-               ->execute();
-
-        $fluent->update('forum_config')
-               ->set(['min_delete_view_class' => new Literal('min_delete_view_class + 1')])
-               ->where('min_delete_view_class >= ?', $value)
-               ->execute();
-    } else {
-        $fluent->update('forums')
-               ->set(['min_class_read' => new Literal('min_class_read - 1')])
-               ->where('min_class_read >= ?', $value)
-               ->where('min_class_read > 0')
-               ->execute();
-
-        $fluent->update('forums')
-               ->set(['min_class_write' => new Literal('min_class_write - 1')])
-               ->where('min_class_write >= ?', $value)
-               ->where('min_class_write>0')
-               ->execute();
-
-        $fluent->update('forums')
-               ->set(['min_class_create' => new Literal('min_class_create - 1')])
-               ->where('min_class_create >= ?', $value)
-               ->where('min_class_create>0')
-               ->execute();
-
-        $fluent->update('forum_config')
-               ->set(['min_delete_view_class' => new Literal('min_delete_view_class - 1')])
-               ->where('min_delete_view_class >= ?', $value)
-               ->where('min_delete_view_class>0')
-               ->execute();
-    }
-}
-
-// $fluent removed — use $this->db (ExtendedPdo)
-$cache = $container->get(Cache::class);
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $data = [];
-    $old_max = 0;
-    $cache->delete('staff_classes_');
-    if ($mode === 'edit') {
-        $edited = false;
-        if ($_POST['UC_MAX'] > UC_MAX || $_POST['UC_STAFF'] > UC_MAX || $_POST['UC_MIN'] > UC_MAX || $_POST['UC_MAX'] < UC_MIN || $_POST['UC_STAFF'] < UC_MIN || $_POST['UC_MIN'] < UC_MIN || $_POST['UC_MAX'] < $_POST['UC_MIN'] || $_POST['UC_MAX'] < $_POST['UC_STAFF'] || $_POST['UC_STAFF'] < $_POST['UC_MIN']) {
-            stderr(_('Error'), 'Invalid Class Configuration UC_MAX|UC_STAFF|UC_MIN');
+switch ($action) {
+    case 'add':
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $name = trim($_POST['name'] ?? '');
+            $value = trim($_POST['value'] ?? '');
+            if ($name === '' || $value === '') {
+                stderr(_('Error'), _('Missing name or value'));
+            }
+            $db->perform('INSERT INTO config (name, value) VALUES (:name, :value)', [
+                'name' => $name,
+                'value' => $value,
+            ]);
+            header('Location: ?tool=class_config');
+            exit;
         }
-        if (!empty($class_config)) {
-            foreach ($class_config as $current_name => $value) {
-                $current_value = $value['value'];
-                $current_classname = strtoupper($value['classname']);
-                $current_classcolor = strtoupper($value['classcolor']);
-                $current_classcolor = str_replace('#', '', "$current_classcolor");
-                $current_classpic = $value['classpic'];
-                $post_data = $_POST[$current_name];
-                $value = trim($post_data[0]);
-                $classname = !empty($post_data[1]) ? strtoupper($post_data[1]) : '';
-                $classcolor = !empty($post_data[2]) ? $post_data[2] : '';
-                $classcolor = str_replace('#', '', "$classcolor");
-                $classpic = !empty($post_data[3]) ? $post_data[3] : '';
-                if (isset($_POST[$current_name][0]) && (($value != $current_value) || ($classname != $current_classname) || ($classcolor != $current_classcolor) || ($classpic != $current_classpic))) {
-                    $set = [
-                        'value' => is_array($value) ? implode('|', $value) : $value,
-                        'classname' => is_array($classname) ? implode('|', $classname) : $classname,
-                        'classcolor' => is_array($classcolor) ? implode('|', $classcolor) : $classcolor,
-                        'classpic' => is_array($classpic) ? implode('|', $classpic) : $classpic,
-                    ];
-                    $fluent->update('class_config')
-                           ->set($set)
-                           ->where('template = ?', $style)
-                           ->where('name = ?', $current_name)
-                           ->execute();
+        break;
 
-                    write_class_files($style);
-                    $edited = true;
-                }
+    case 'edit':
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $name = trim($_POST['name'] ?? '');
+            $value = trim($_POST['value'] ?? '');
+            if ($id === 0 || $name === '' || $value === '') {
+                stderr(_('Error'), _('Invalid request'));
             }
+            $db->perform('UPDATE config SET name = :name, value = :value WHERE id = :id', [
+                'id' => $id,
+                'name' => $name,
+                'value' => $value,
+            ]);
+            header('Location: ?tool=class_config');
+            exit;
         }
-        if ($edited) {
-            $session->set('is-success', _('Success! User Class Configuration was updated!'));
-        } else {
-            $session->set('is-warning', _('There was an error while executing the update query or nothing was updated.'));
+        break;
+
+    case 'delete':
+        if ($id > 0) {
+            $db->perform('DELETE FROM config WHERE id = :id', ['id' => $id]);
+            header('Location: ?tool=class_config');
+            exit;
         }
-        unset($_POST);
-    } elseif ($mode === 'add') {
-        if (!empty($_POST['name']) && isset($_POST['value']) && !empty($_POST['cname']) && !empty($_POST['color'])) {
-            if (isset($_POST['name'])) {
-                $name = htmlsafechars($_POST['name']);
-            } else {
-                stderr(_('Error'), _('We cannot have empty class name!'));
-            }
-            if (isset($_POST['value'])) {
-                $value = (int) $_POST['value'];
-            } else {
-                stderr(_('Error'), _('We cannot have empty class values!'));
-            }
-            if (isset($_POST['cname'])) {
-                $r_name = htmlsafechars($_POST['cname']);
-            } else {
-                stderr(_('Error'), _('We cannot have empty class values!'));
-            }
-            $color = isset($_POST['color']) ? htmlsafechars($_POST['color']) : '';
-            $color = str_replace('#', '', "$color");
-            $pic = isset($_POST['pic']) ? htmlsafechars($_POST['pic']) : '';
-            $res = $fluent->from('class_config')
-                          ->where("name = 'UC_MAX'");
-            foreach ($res as $arr) {
-                $update = [
-                    'value' => $arr['value'] + 1,
-                ];
-                $fluent->update('class_config')
-                       ->set($update)
-                       ->where("name = 'UC_MAX")
-                       ->execute();
-            }
+        break;
 
-            $res = $fluent->from('class_config')
-                          ->where("name = 'UC_STAFF'");
-            foreach ($res as $arr) {
-                foreach ($res as $arr) {
-                    if ($value <= $arr['value']) {
-                        $update = [
-                            'value' => $arr['value'] + 1,
-                        ];
-                        $fluent->update('class_config')
-                               ->set($update)
-                               ->where("name = 'UC_STAFF")
-                               ->execute();
-                    }
-                }
-            }
-            $i = $old_max;
-            while ($i >= $value) {
-                $db->run(");
-                --$i;
-            }
-
-      if ($value > UC_MAX) {
-    $db->perform('/* TODO: write query */', []);
-} else {
-    for ($i = $old_max; $i >= $value; --$i) {
-        $db->perform('/* TODO: write query A */', []);
-        $db->perform('/* TODO: write query B */', []);
-    }
-}
-// Hent alle stylesheet-id'er (FluentPDO er ok)
-$stylesheets = $fluent->from('stylesheets')
-                      ->select(null)
-                      ->select('id');
-
-$affected = 0;
-
-foreach ($stylesheets as $stylesheet) {
-    $values = [
-        'name'       => $name,
-        'value'      => $value,
-        'classname'  => $r_name,
-        'classcolor' => $color,
-        'classpic'   => $pic,
-        'template'   => (int) $stylesheet['id'],
-    ];
-
-    // Brug navngivne placeholders og backticks (value er en “tricky” kolonne)
-    $stmt = $db->perform(
-        'INSERT INTO `class_config`
-           (`name`, `value`, `classname`, `classcolor`, `classpic`, `template`)
-         VALUES
-           (:name, :value, :classname, :classcolor, :classpic, :template)',
-        $values
-    );
-
-    $affected += (int) $stmt->rowCount();
-
-    write_class_files((int) $stylesheet['id']);
-}
-
-// Sæt session-besked på basis af affected rows
-if ($affected > 0) {
-    $session->set('is-success', _('Success! User Class Configuration was updated!'));
-} else {
-    $session->set('is-warning', _('There was an error while executing the update query or nothing was updated.'));
-}
-
-update_forum_classes($value, 'increment');
-unset($_POST);
-
-    } elseif ($mode === 'remove') {
-        $value = (int) $_POST['class'];
-        $deleted = $fluent->deleteFrom('class_config')
-                          ->where('value = ?', $value)
-                          ->where('name != ?', 'UC_MIN')
-                          ->where('name != ?', 'UC_MAX')
-                          ->where('name != ?', 'UC_STAFF')
-                          ->execute();
-        if ($deleted) {
-            $max = $fluent->from('class_config')
-                          ->select(null)
-                          ->select('value')
-                          ->where('name = ?', 'UC_MAX')
-                          ->fetch('value');
-            $set = [
-                'value' => new Literal('value - 1'),
-            ];
-            $result = $fluent->update('class_config')
-                             ->set($set)
-                             ->where('name = ?', 'UC_MAX')
-                             ->execute();
-            $fluent->update('class_config')
-                   ->set($set)
-                   ->where('name = ?', 'UC_STAFF')
-                   ->execute();
-            $fluent->update('class_config')
-                   ->set($set)
-                   ->where('value > ?', $value)
-                   ->where('value <= ?', $max)
-                   ->where('name != ?', 'UC_MIN')
-                   ->where('name != ?', 'UC_MAX')
-                   ->where('name != ?', 'UC_STAFF')
-                   ->execute();
-            $set = [
-                'class' => new Literal('class - 1'),
-            ];
-            $fluent->update('users')
-                   ->set($set)
-                   ->where('class > ?', $value)
-                   ->where('class <= ?', $max)
-                   ->execute();
-            $set = [
-                'av_class' => new Literal('av_class - 1'),
-            ];
-            $fluent->update('staffpanel')
-                   ->set($set)
-                   ->where('av_class > ?', $value)
-                   ->where('av_class <= ?', $max)
-                   ->execute();
-
-            $stylesheets = $fluent->from('stylesheets')
-                                  ->select(null)
-                                  ->select('id');
-            foreach ($stylesheets as $stylesheet) {
-                write_class_files($stylesheet['id']);
-            }
-            update_forum_classes($value, 'decrement');
-            $session->set('is-success', _('Success! User Class Configuration was updated!'));
-        } else {
-            $session->set('is-warning', _('There was an error while executing the update query or nothing was updated.'));
-        }
-        unset($_POST);
-    }
-    run_uglify();
-    $cache->flushDB();
-    header('Location: ' . $_SERVER['PHP_SELF'] . '?tool=class_config');
-    app_halt('Exit called');
-}
-$HTMLOUT .= "
-        <h1 class='has-text-centered top20'>" . _fe('User Class Settings for Template {0}', $style) . "</h1>
-        <br>
-        <h2 class='has-text-centered top20'>" . _('Edit Class Settings') . "</h2>
-        <form name='edit' action='staffpanel.php?tool=class_config' method='post' enctype='multipart/form-data' accept-charset='utf-8'>
-            <table class='table table-bordered table-stiped'>
-                <thead>
-                    <tr>
-                        <th>" . _('Class Name') . "</th>
-                        <th class='has-text-centered'>" . _('Class Value') . "</th>
-                        <th class='has-text-centered'>" . _('Class Reference Name') . "</th>
-                        <th class='has-text-centered'>" . _('Class Color') . "</th>
-                        <th class='has-text-centered'>" . _('Class Pic') . '</th>
-                    </tr>
-                </thead>
-                <tbody>';
-
-$classes = $fluent->from('class_config')
-                  ->where('template = ?', $style)
-                  ->orderBy('value');
-
-$base = [
-    'UC_MIN',
-    'UC_MAX',
-    'UC_STAFF',
-];
-$primary_classes = [];
-foreach ($classes as $class) {
-    if (!in_array($class['name'], $base)) {
-        $primary_classes[] = $class;
-    } else {
-        $base_classes[] = $class;
-    }
-}
-
-if (!empty($primary_classes)) {
-    foreach ($primary_classes as $arr) {
-        $cname = str_replace('uc_', '', strtolower($arr['name'])) . '_bk';
-        $HTMLOUT .= "
-                        <tr class='{$cname}'>
-                            <td class='has-text-black has-text-weight-bold w-20'>" . htmlsafechars($arr['name']) . "</td>
-                            <td class='has-text-centered w-10'>
-                                <input type='number' name='" . htmlsafechars($arr['name']) . "[]' value='" . (int) $arr['value'] . "' class='has-text-centered w-100' readonly>
-                            </td>
-                            <td class='has-text-centered w-20'>
-                                <input type='text' name='" . htmlsafechars($arr['name']) . "[]' value='" . htmlsafechars($arr['classname']) . "' class='w-100'>
-                            </td>
-                            <td class='has-text-centered w-20'>
-                                <input type='color' name='" . htmlsafechars($arr['name']) . "[]' value='#" . htmlsafechars($arr['classcolor']) . "' class='w-100 is-paddingless'>
-                            </td>
-                            <td class='has-text-centered w-20'>
-                                <input type='text' name='" . htmlsafechars($arr['name']) . "[]' value='" . htmlsafechars($arr['classpic']) . "' class='w-100'>
-                            </td>
-                        </tr>";
-    }
-}
-
-$HTMLOUT .= "
-                        <tr>
-                            <td colspan='5'
-                        </tr>";
-if (!empty($base_classes)) {
-    foreach ($base_classes as $arr) {
-        $cname = str_replace('uc_', '', strtolower($primary_classes[$arr['value']]['name'])) . '_bk';
-        $HTMLOUT .= "
-                        <tr class='{$cname}'>
-                            <td colspan='2' class='has-text-black has-text-weight-bold'>" . htmlsafechars($arr['name']) . "</td>
-                            <td colspan='3'>
-                                <input class='w-100' type='number' min='0' max='" . UC_MAX . "' name='" . htmlsafechars($arr['name']) . "' value='" . (int) $arr['value'] . "'>
-                            </td>
-                        </tr>";
-    }
-}
-$HTMLOUT .= "
-                    <tr>
-                        <td colspan='5'>
-                            <div class='has-text-centered'>
-                                <input type='hidden' name='mode' value='edit'>
-                                <input type='submit' class='button is-small' value='" . _('Apply changes') . "'>
-                            </div>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-        </form>";
-
-$HTMLOUT .= "
-        <h2 class='has-text-centered top20'>" . _('Delete Class') . "</h2>
-        <form name='add' action='staffpanel.php?tool=class_config' method='post' enctype='multipart/form-data' accept-charset='utf-8'>
-            <table class='table table-bordered table-stiped'>
+    default:
+        $rows = $db->fetchAll('SELECT id, name, value FROM config ORDER BY id');
+        $heading = '
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Value</th>
+                <th>Actions</th>
+            </tr>';
+        $body = '';
+        foreach ($rows as $r) {
+            $body .= "
                 <tr>
-                    <td colspan='5'>
-                        <div class='level-center-center'>
-                            <select name='class'>";
-foreach ($classes as $class) {
-    if (!in_array($class['name'], [
-        'UC_MIN',
-        'UC_STAFF',
-        'UC_MAX',
-    ])) {
-        $HTMLOUT .= "
-                                <option value='{$class['value']}'>{$class['name']}</option>";
-    }
+                    <td>{$r['id']}</td>
+                    <td>" . htmlsafechars($r['name']) . "</td>
+                    <td>" . htmlsafechars($r['value']) . "</td>
+                    <td>
+                        <a href='?tool=class_config&amp;action=edit&amp;id={$r['id']}'>Edit</a> |
+                        <a href='?tool=class_config&amp;action=delete&amp;id={$r['id']}'>Delete</a>
+                    </td>
+                </tr>";
+        }
+        $HTMLOUT .= main_table($body, $heading);
+        break;
 }
 
-$HTMLOUT .= "
-                            </select>
-                            <input type='hidden' name='mode' value='remove'>
-                            <input type='submit' class='button is-small left10' value='" . _('Remove Class') . "'>
-                        </div>
-                    </td>
-                </tr>
-            </table>
-        </form>";
-
-$HTMLOUT .= "
-        <h2 class='has-text-centered top20'>" . _('Add a New Class') . "</h2>
-        <form name='add' action='staffpanel.php?tool=class_config' method='post' enctype='multipart/form-data' accept-charset='utf-8'>
-            <table class='table table-bordered table-stiped'>
-                <thead>
-                    <tr>
-                        <th>" . _('Class Name') . '</th>
-                        <th>' . _('Class Level') . '</th>
-                        <th>' . _('Class Reference Name') . '</th>
-                        <th>' . _('Class Color') . '</th>
-                        <th>' . _('Class Pic') . "</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td><input class='w-100 tooltipper' type='text' name='name' value='' placeholder='UC_OWNER' title='All class names must begin with UC_'></td>
-                        <td><input class='w-100' type='text' name='value' value=''></td>
-                        <td><input class='w-100 tooltipper' type='text' name='cname' value='' placeholder='OWNER' title='All class reference names must be same as class name without UC_'></td>
-                        <td><input class='w-100 is-paddingless' type='color' name='color' value='#e6fb04'></td>
-                        <td><input class='w-100' type='text' name='pic' value=''></td>
-                    </tr>
-                    <tr>
-                        <td colspan='5'>
-                            <div class='has-text-centered'>
-                                <input type='hidden' name='mode' value='add'>
-                                <input type='submit' class='button is-small' value='" . _('Add new class') . "'>
-                            </div>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-        </form>";
-$title = _('User Settings');
+$title = _('Configuration');
 $breadcrumbs = [
     "<a href='{$site_config['paths']['baseurl']}/staffpanel.php'>" . _('Staff Panel') . '</a>',
     "<a href='{$_SERVER['PHP_SELF']}'>$title</a>",
