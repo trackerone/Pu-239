@@ -1,17 +1,11 @@
 <?php
-$db = $container->get(Database::class);
+declare(strict_types=1);
 
-require_once __DIR__ . '/../include/runtime_safe.php';
-
-require_once __DIR__ . '/../include/bootstrap_pdo.php';
-
-
-declare(strict_types = 1);
-
-use Pu239\Database;
 use Pu239\ImageProxy;
 
-require_once __DIR__ . '/../include/bittorrent.php';
+require_once __DIR__ . '/../include/runtime_safe.php';
+require_once __DIR__ . '/../include/bootstrap_pdo.php';
+
 global $container;
 
 set_time_limit(18000);

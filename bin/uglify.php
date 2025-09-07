@@ -1,10 +1,5 @@
 <?php
-$db = $container->get(Database::class);
-
-require_once __DIR__ . '/../include/runtime_safe.php';
-
-
-declare(strict_types = 1);
+declare(strict_types=1);
 
 use Delight\Auth\AuthError;
 use Delight\Auth\NotLoggedInException;
@@ -13,7 +8,8 @@ use DI\NotFoundException;
 use MatthiasMullie\Scrapbook\Exception\UnbegunTransaction;
 use Spatie\Image\Exceptions\InvalidManipulation;
 
-require_once __DIR__ . '/../include/bittorrent.php';
+require_once __DIR__ . '/../include/runtime_safe.php';
+require_once __DIR__ . '/../include/bootstrap_pdo.php';
 require_once INCL_DIR . 'function_users.php';
 require_once INCL_DIR . 'function_html.php';
 require_once BIN_DIR . 'functions.php';
