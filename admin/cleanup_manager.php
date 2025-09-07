@@ -11,7 +11,7 @@ require_once INCL_DIR . 'function_users.php';
 require_once INCL_DIR . 'function_pager.php';
 require_once CLASS_DIR . 'class_check.php';
 
-global $container;
+global $container, $site_config;
 
 $db = $container->get(Database::class);
 
@@ -114,7 +114,7 @@ $stmt = $db->perform('SELECT :cid AS cid', ['cid' => $cid]);    ['cid' => $cid]
 function cleanup_show_main()
 {
     global $container;
-$db = $container->get(Database::class);, $site_config;
+$db = $container->get(Database::class);
 
     $fluent = $db; // alias
 // $fluent removed — use $this->db (ExtendedPdo)
