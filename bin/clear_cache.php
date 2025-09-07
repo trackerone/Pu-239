@@ -1,15 +1,11 @@
 <?php
-$db = $container->get(Database::class);
+declare(strict_types=1);
 
 require_once __DIR__ . '/../include/runtime_safe.php';
-
-
-declare(strict_types = 1);
+require_once __DIR__ . '/../include/bootstrap_pdo.php';
+require_once BIN_DIR . 'functions.php';
 
 global $site_config;
-
-require_once __DIR__ . '/../include/bittorrent.php';
-require_once BIN_DIR . 'functions.php';
 $database = '';
 clear_di_cache();
 cleanup(get_webserver_user());

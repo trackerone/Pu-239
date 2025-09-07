@@ -1,16 +1,11 @@
 <?php
-$db = $container->get(Database::class);
-
-require_once __DIR__ . '/../include/runtime_safe.php';
-
-require_once __DIR__ . '/../include/bootstrap_pdo.php';
-
-
-declare(strict_types = 1);
+declare(strict_types=1);
 
 use Jobby\Jobby;
 
-require_once __DIR__ . '/../include/bittorrent.php';
+require_once __DIR__ . '/../include/runtime_safe.php';
+require_once __DIR__ . '/../include/bootstrap_pdo.php';
+
 global $container, $site_config;
 
 $jobby = $container->get(Jobby::class);

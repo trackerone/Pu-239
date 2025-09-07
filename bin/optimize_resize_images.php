@@ -1,12 +1,5 @@
 <?php
-$db = $container->get(Database::class);
-
-require_once __DIR__ . '/../include/runtime_safe.php';
-
-require_once __DIR__ . '/../include/bootstrap_pdo.php';
-
-
-declare(strict_types = 1);
+declare(strict_types=1);
 
 use DI\DependencyException;
 use DI\NotFoundException;
@@ -16,8 +9,12 @@ use Pu239\ImageProxy;
 use Pu239\Person;
 use Spatie\Image\Exceptions\InvalidManipulation;
 
-require_once __DIR__ . '/../include/bittorrent.php';
+require_once __DIR__ . '/../include/runtime_safe.php';
+require_once __DIR__ . '/../include/bootstrap_pdo.php';
+
 global $container;
+
+$db = $container->get(Database::class);
 
 $limit = isset($argv[1]) && is_numeric($argv[1]) ? $argv[1] : 500;
 $offset = isset($argv[2]) && is_numeric($argv[2]) ? $argv[2] : 0;

@@ -1,14 +1,11 @@
 <?php
-$db = $container->get(Database::class);
+declare(strict_types=1);
 
 require_once __DIR__ . '/../include/runtime_safe.php';
-
-
-declare(strict_types = 1);
-
-require_once __DIR__ . '/../include/bittorrent.php';
+require_once __DIR__ . '/../include/bootstrap_pdo.php';
 require_once BIN_DIR . 'functions.php';
-global $site_config, $site_config;
+
+global $site_config, $BLOCKS;
 
 if (empty($BLOCKS)) {
     app_halt('BLOCKS are empty');
