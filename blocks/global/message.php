@@ -1,17 +1,16 @@
 <?php
-$db = $container->get(Database::class);
+declare(strict_types=1);
 
 require_once __DIR__ . '/../../include/runtime_safe.php';
-
 require_once __DIR__ . '/../../include/bootstrap_pdo.php';
 
-
-declare(strict_types = 1);
-
+use Pu239\Database;
 use Pu239\Message;
 
 $user = check_user_status();
 global $container, $site_config;
+
+$db = $container->get(Database::class);
 
 if ($site_config['alerts']['message'] && !empty($user)) {
     $messages_class = $container->get(Message::class);

@@ -1,14 +1,11 @@
 <?php
-$db = $container->get(Database::class);
+declare(strict_types=1);
 
 require_once __DIR__ . '/../../include/runtime_safe.php';
-
 require_once __DIR__ . '/../../include/bootstrap_pdo.php';
-
-
-declare(strict_types = 1);
 require_once INCL_DIR . 'function_html.php';
 
+use Pu239\Database;
 use Pu239\Comment;
 use Pu239\Image;
 use Pu239\User;
@@ -16,6 +13,7 @@ use Pu239\User;
 $user = check_user_status();
 global $container, $site_config;
 
+$db = $container->get(Database::class);
 $comment = $container->get(Comment::class);
 $comments = $comment->get_comments();
 $posted_comments .= "

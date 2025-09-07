@@ -1,15 +1,15 @@
 <?php
-$db = $container->get(Database::class);
+declare(strict_types=1);
 
 require_once __DIR__ . '/../../include/runtime_safe.php';
-
 require_once __DIR__ . '/../../include/bootstrap_pdo.php';
 
-
-declare(strict_types = 1);
+use Pu239\Database;
 
 $user = check_user_status();
 global $site_config;
+
+$db = $container->get(Database::class);
 
 if ($user && $user['override_class'] != 255) {
     $htmlout .= "

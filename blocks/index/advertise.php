@@ -1,14 +1,14 @@
 <?php
-$db = $container->get(Database::class);
+declare(strict_types=1);
 
 require_once __DIR__ . '/../../include/runtime_safe.php';
-
 require_once __DIR__ . '/../../include/bootstrap_pdo.php';
 
-
-declare(strict_types = 1);
+use Pu239\Database;
 
 global $site_config;
+
+$db = $container->get(Database::class);
 
 $advertise .= "
     <a id='advertise-hash'></a>
