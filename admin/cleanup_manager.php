@@ -282,7 +282,6 @@ function cleanup_take_edit($params)
  */
 function cleanup_show_new()
 {
-    global $site_config;
 
     $clean_time = strtotime('today midnight');
     $htmlout = '<h2>' . _('Add a new cleanup task') . "</h2>
