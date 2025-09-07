@@ -55,6 +55,28 @@ $ rg "mysqli_|sql_query\(|sqlesc\(" admin/bannedemails.php admin/user_hits.php a
 No matches in modified files.
 
 ## blocks
+- `blocks/global/demotion.php`: standardized `bootstrap_pdo.php` and added strict typing.
+- `blocks/global/freeleech.php`: standardized `bootstrap_pdo.php` and added strict typing.
+- `blocks/global/happyhour.php`: standardized `bootstrap_pdo.php` and added strict typing.
+- `blocks/global/message.php`: standardized `bootstrap_pdo.php` and added strict typing.
+- `blocks/index/advertise.php`: standardized `bootstrap_pdo.php` and added strict typing.
+- `blocks/index/ajaxchat.php`: standardized `bootstrap_pdo.php` and added strict typing.
+- `blocks/index/comments.php`: standardized `bootstrap_pdo.php` and added strict typing.
+- `blocks/index/cooker.php`: standardized `bootstrap_pdo.php` and added strict typing.
+- `blocks/index/disclaimer.php`: standardized `bootstrap_pdo.php` and added strict typing.
+- `blocks/index/gift.php`: standardized `bootstrap_pdo.php` and added strict typing.
+- `blocks/index/latest_movies.php`: standardized `bootstrap_pdo.php` and added strict typing.
+- `blocks/index/latest_torrents.php`: standardized `bootstrap_pdo.php` and added strict typing.
+- `blocks/index/latest_torrents_glide.php`: standardized `bootstrap_pdo.php` and added strict typing.
+- `blocks/index/latest_torrents_scroll.php`: standardized `bootstrap_pdo.php` and added strict typing.
+- `blocks/index/latest_tv.php`: standardized `bootstrap_pdo.php` and added strict typing.
+- `blocks/index/latest_user.php`: standardized `bootstrap_pdo.php` and added strict typing.
+- `blocks/index/mow.php`: standardized `bootstrap_pdo.php` and added strict typing.
+- `blocks/index/offers.php`: standardized `bootstrap_pdo.php` and added strict typing.
+- `blocks/index/poll.php`: standardized `bootstrap_pdo.php` and added strict typing.
+- `blocks/index/requests.php`: standardized `bootstrap_pdo.php` and added strict typing.
+
+### Previous migrations
 - `blocks/index/forum_posts.php`: migrated from legacy `sql_query`/`mysqli_fetch_assoc` to `$db->fetchAll` with bound parameters and standardized bootstrap/strict typing.
 
 ### Verification

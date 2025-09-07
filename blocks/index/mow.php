@@ -1,19 +1,17 @@
 <?php
-$db = $container->get(Database::class);
+declare(strict_types=1);
 
 require_once __DIR__ . '/../../include/runtime_safe.php';
-
 require_once __DIR__ . '/../../include/bootstrap_pdo.php';
 
-
-declare(strict_types = 1);
-
+use Pu239\Database;
 use Pu239\Image;
 use Pu239\Torrent;
 
 require_once PARTIALS_DIR . 'torrent_table.php';
 global $container, $site_config, $CURUSER;
 
+$db = $container->get(Database::class);
 $torrent = $container->get(Torrent::class);
 $motw = $torrent->get_mow();
 

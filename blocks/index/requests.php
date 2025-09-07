@@ -1,13 +1,10 @@
 <?php
-$db = $container->get(Database::class);
+declare(strict_types=1);
 
 require_once __DIR__ . '/../../include/runtime_safe.php';
-
 require_once __DIR__ . '/../../include/bootstrap_pdo.php';
 
-
-declare(strict_types = 1);
-
+use Pu239\Database;
 use Pu239\Image;
 use Pu239\Request;
 use Pu239\Torrent;
@@ -16,6 +13,7 @@ require_once INCL_DIR . 'function_torrent_hover.php';
 $user = check_user_status();
 global $container, $site_config;
 
+$db = $container->get(Database::class);
 $request_class = $container->get(Request::class);
 $requested = $request_class->get_all($site_config['latest']['requests_limit'], 0, 'added', false, false, (bool) $user['hidden'], $user['id']);
 $torrent_class = $container->get(Torrent::class);

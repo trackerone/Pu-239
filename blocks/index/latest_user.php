@@ -1,17 +1,15 @@
 <?php
-$db = $container->get(Database::class);
+declare(strict_types=1);
 
 require_once __DIR__ . '/../../include/runtime_safe.php';
-
 require_once __DIR__ . '/../../include/bootstrap_pdo.php';
 
-
-declare(strict_types = 1);
-
+use Pu239\Database;
 use Pu239\User;
 
 global $container, $site_config;
 
+$db = $container->get(Database::class);
 $user_class = $container->get(User::class);
 $userid = $user_class->get_latest_user();
 $latestuser = format_username((int) $userid);
