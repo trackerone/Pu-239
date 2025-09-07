@@ -13,24 +13,22 @@ require_once CLASS_DIR . 'class_check.php';
 
 global $container, $site_config;
 
+/** @var Database $db */
 $db = $container->get(Database::class);
 
 $class = get_access(basename($_SERVER['REQUEST_URI']));
 class_check($class);
 
-$view = isset($_GET['view']) ? htmlsafechars($_GET['view']) : '';
-
-$queryString = explode('=', $_SERVER['QUERY_STRING']);
-$queryString = array_reverse($queryString);
+$view = isset($_GET['view']) ? (string) htmlsafechars($_GET['view']) : '';
 
 $nav = "
     <div class='bottom10'>
         <ul class='tabs'>
-            <li><a" . ($queryString[0] === 'comments' ? " class='active'" : '') . " href='{$site_config['paths']['baseurl']}/staffpanel.php?tool=comments'>" . _('Comment Overview') . '</a></li>
-            <li><a" . ($queryString[0] === 'allComments' ? " class='active'" : '') . " href='{$site_config['paths']['baseurl']}/staffpanel.php?tool=comments&amp;view=allComments'>" . _('View All') . '</a></li>
-            <li><a" . ($queryString[0] === 'search' || $queryString[0] === 'results' ? " class='active'" : '') . " href='{$site_config['paths']['baseurl']}/staffpanel.php?tool=comments&amp;view=search'>" . _('Search Comments') . '</a></li>
+            <li><a" . ($view === '' ? " class='active'" : '') . " href='{$site_config['paths']['baseurl']}/staffpanel.php?tool=comments'>" . _('Comment Overview') . '</a></li>
+            <li><a" . ($view === 'allComments' ? " class='active'" : '') . " href='{$site_config['paths']['baseurl']}/staffpanel.php?tool=comments&amp;view=allComments'>" . _('View All') . '</a></li>
+            <li><a" . ($view === 'search' || $view === 'results' ? " class='active'" : '') . " href='{$site_config['paths']['baseurl']}/staffpanel.php?tool=comments&amp;view=search'>" . _('Search Comments') . '</a></li>
         </ul>
-    </div>';
+    </div>";
 
 $heading = '
     <tr>
@@ -46,28 +44,26 @@ $heading = '
     </tr>';
 
 /**
- * @param $comment
- *
+ * @param array $comment
  * @throws NotFoundException
  * @throws \PDOException
  * @throws InvalidManipulation
  * @throws DependencyException
- *
  * @return string
  */
-function format_data($comment)
+function format_data(array $comment): string
 {
     global $site_config;
 
     $comment = [
-        'user' => (int) $comment['user'],
-        'torrent' => (int) $comment['torrent'],
-        'id' => (int) $comment['id'],
-        'text' => format_comment($comment['text']),
-        'ori_text' => format_comment($comment['ori_text']),
-        'username' => format_comment($comment['username']),
-        'name' => format_comment($comment['name']),
-        'added' => (int) $comment['added'],
+        'user'     => (int) $comment['user'],
+        'torrent'  => (int) $comment['torrent'],
+        'id'       => (int) $comment['id'],
+        'text'     => format_comment((string) $comment['text']),
+        'ori_text' => format_comment((string) $comment['ori_text']),
+        'username' => format_comment((string) $comment['username']),
+        'name'     => format_comment((string) $comment['name']),
+        'added'    => (int) $comment['added'],
     ];
 
     return "
@@ -84,21 +80,26 @@ function format_data($comment)
                 </tr>';
 }
 
+// Router
 switch ($view) {
-    case 'allComments':
-        $sql = 'SELECT c.id, c.user, c.torrent, c.text, c.ori_text, c.added, t.name, u.username FROM comments AS c JOIN users AS u ON u.id=c.user JOIN torrents AS t ON  c.torrent = t.id ORDER BY c.id DESC';
-        $query = sql_query($sql) or sqlerr(__FILE__, __LINE__);
-        $rows = mysqli_num_rows($query);
+    case 'allComments': {
+        $rows = $db->fetchAll(
+            'SELECT c.id, c.user, c.torrent, c.text, c.ori_text, c.added, t.name, u.username
+             FROM comments AS c
+             JOIN users AS u ON u.id = c.user
+             JOIN torrents AS t ON t.id = c.torrent
+             ORDER BY c.id DESC'
+        );
 
         $HTMLOUT = "
-                <h1 class='has-text-centered'>" . _('All Comments (in reverse order)') . '</h1>' . $nav;
+            <h1 class='has-text-centered'>" . _('All Comments (in reverse order)') . '</h1>' . $nav;
 
         $body = '';
-        while ($comment = mysqli_fetch_assoc($query)) {
+        foreach ($rows as $comment) {
             $body .= format_data($comment);
         }
 
-        if ($rows == 0) {
+        if (empty($rows)) {
             $body .= "
                 <tr>
                     <td colspan='9'><div class='padding20'>" . _('There are no comments to display!') . '</div></td>
@@ -106,6 +107,7 @@ switch ($view) {
         }
 
         $HTMLOUT .= main_table($body, $heading);
+
         $title = _('All Comments (Reverse Order)');
         $breadcrumbs = [
             "<a href='{$site_config['paths']['baseurl']}/staffpanel.php'>" . _('Staff Panel') . '</a>',
@@ -113,8 +115,9 @@ switch ($view) {
         ];
         echo stdhead($title, [], 'page-wrapper', $breadcrumbs) . wrapper($HTMLOUT) . stdfoot();
         break;
+    }
 
-    case 'search':
+    case 'search': {
         $HTMLOUT = "
         <form method='post' action='{$_SERVER['PHP_SELF']}?tool=comments&amp;view=results' enctype='multipart/form-data' accept-charset='utf-8'>
             <h1 class='has-text-centered'>" . _('Search Comments') . '</h1>' . $nav;
@@ -133,6 +136,7 @@ switch ($view) {
             </tr>";
         $HTMLOUT .= main_table($body) . '
         </form>';
+
         $title = _('Search Comments');
         $breadcrumbs = [
             "<a href='{$site_config['paths']['baseurl']}/staffpanel.php'>" . _('Staff Panel') . '</a>',
@@ -140,21 +144,31 @@ switch ($view) {
         ];
         echo stdhead($title, [], 'page-wrapper', $breadcrumbs) . wrapper($HTMLOUT) . stdfoot();
         break;
+    }
 
-    case 'results':
-        $sql = 'SELECT c.id, c.user, c.torrent, c.text, c.added, t.name, u.username FROM comments AS c JOIN users AS u ON u.id=c.user JOIN torrents AS t ON c.torrent = t.id WHERE c.text LIKE ' . sqlesc("%{$_POST['keywords']}%") . ' ORDER BY c.added DESC';
-        $query = sql_query($sql) or sqlerr(__FILE__, __LINE__);
-        $rows = mysqli_num_rows($query);
+    case 'results': {
+        $kw = isset($_POST['keywords']) ? (string) $_POST['keywords'] : '';
+        $kw_like = '%' . $kw . '%';
+
+        $rows = $db->fetchAll(
+            'SELECT c.id, c.user, c.torrent, c.text, c.ori_text, c.added, t.name, u.username
+             FROM comments AS c
+             JOIN users AS u ON u.id = c.user
+             JOIN torrents AS t ON t.id = c.torrent
+             WHERE c.text LIKE :kw
+             ORDER BY c.added DESC',
+            [':kw' => $kw_like]
+        );
 
         $HTMLOUT = "
-                <h1 class='has-text-centered'>" . _('Search Results for') . ': ' . format_comment($_POST['keywords']) . '</h1>' . $nav;
+            <h1 class='has-text-centered'>" . _('Search Results for') . ': ' . format_comment($kw) . '</h1>' . $nav;
 
         $body = '';
-        while ($comment = mysqli_fetch_assoc($query)) {
+        foreach ($rows as $comment) {
             $body .= format_data($comment);
         }
 
-        if ($rows == 0) {
+        if (empty($rows)) {
             $body .= "
                 <tr>
                     <td colspan='9'><div class='padding20'>" . _('There are no comments to display!') . '</div></td>
@@ -170,31 +184,9 @@ switch ($view) {
         ];
         echo stdhead($title, [], 'page-wrapper', $breadcrumbs) . wrapper($HTMLOUT) . stdfoot();
         break;
+    }
 }
 
-$sql = 'SELECT c.id, c.user, c.torrent, c.text, c.ori_text, c.added, c.checked_by, c.checked_when, t.name, u.username FROM comments AS c JOIN users AS u ON u.id=c.user JOIN torrents AS t ON  c.torrent = t.id ORDER BY c.id DESC LIMIT 10';
-$query = sql_query($sql) or sqlerr(__FILE__, __LINE__);
-$rows = mysqli_num_rows($query);
-
-$HTMLOUT = "
-                <h1 class='has-text-centered'>" . _('All Comments (in reverse order)') . '</h1>' . $nav;
-
-$body = '';
-while ($comment = mysqli_fetch_assoc($query)) {
-    $body .= format_data($comment);
-}
-
-if ($rows == 0) {
-    $body .= "
-                <tr>
-                    <td colspan='9'><div class='padding20'>" . _('There are no comments to display!') . '</div></td>
-                </tr>';
-}
-
-$HTMLOUT .= main_table($body, $heading);
-$title = _('Comments Overview');
-$breadcrumbs = [
-    "<a href='{$site_config['paths']['baseurl']}/staffpanel.php'>" . _('Staff Panel') . '</a>',
-    "<a href='{$_SERVER['PHP_SELF']}'>$title</a>",
-];
-echo stdhead($title, [], 'page-wrapper', $breadcrumbs) . wrapper($HTMLOUT) . stdfoot();
+// Default overview (latest 10)
+$rows = $db->fetchAll(
+    '
