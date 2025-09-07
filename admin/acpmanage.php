@@ -4,6 +4,7 @@ declare(strict_types=1);
 use Pu239\Database;
 
 require_once __DIR__ . '/../include/runtime_safe.php';
+require_once __DIR__ . '/../include/bootstrap_pdo.php';
 require_once INCL_DIR . 'function_users.php';
 require_once INCL_DIR . 'function_html.php';
 require_once INCL_DIR . 'function_pager.php';
@@ -35,15 +36,31 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['ids'])) {
     }
     $do = isset($_POST['do']) ? htmlsafechars($_POST['do']) : '';
     if ($do == 'enabled') {
-        sql_query('UPDATE users SET status = 0 WHERE id IN (' . implode(', ', array_map('sqlesc', $ids)) . ') AND status = 2') or sqlerr(__FILE__, __LINE__);
-        $cache->update_row('user_' . $id, [
-            'status' => 0,
-        ], $site_config['expires']['user_cache']);
+        $placeholders = [];
+        $params = [];
+        foreach ($ids as $i => $id) {
+            $placeholders[] = ':id' . $i;
+            $params[':id' . $i] = $id;
+        }
+        $db->run('UPDATE users SET status = 0 WHERE id IN (' . implode(',', $placeholders) . ') AND status = 2', $params);
+        foreach ($ids as $id) {
+            $cache->update_row('user_' . $id, [
+                'status' => 0,
+            ], $site_config['expires']['user_cache']);
+        }
     } elseif ($do == 'confirm') {
-        sql_query('UPDATE users SET verified = 1 WHERE id IN (' . implode(', ', array_map('sqlesc', $ids)) . ') AND verified = 0') or sqlerr(__FILE__, __LINE__);
-        $cache->update_row('user_' . $id, [
-            'status' => 'confirmed',
-        ], $site_config['expires']['user_cache']);
+        $placeholders = [];
+        $params = [];
+        foreach ($ids as $i => $id) {
+            $placeholders[] = ':id' . $i;
+            $params[':id' . $i] = $id;
+        }
+        $db->run('UPDATE users SET verified = 1 WHERE id IN (' . implode(',', $placeholders) . ') AND verified = 0', $params);
+        foreach ($ids as $id) {
+            $cache->update_row('user_' . $id, [
+                'status' => 'confirmed',
+            ], $site_config['expires']['user_cache']);
+        }
     } elseif ($do == 'delete' && ($CURUSER['class'] >= UC_MAX)) {
         foreach ($ids as $id) {
             $username = account_delete((int) $id);
