@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 use Pu239\Database;
 use Pu239\Cache;
+use Pu239\Message;
 
 require_once __DIR__ . '/../include/runtime_safe.php';
 require_once __DIR__ . '/../include/bootstrap_pdo.php';
@@ -12,81 +13,120 @@ require_once CLASS_DIR . 'class_check.php';
 
 global $container, $site_config, $CURUSER;
 
+/** @var Database $db */
 $db = $container->get(Database::class);
+/** @var Cache $cache */
+$cache = $container->get(Cache::class);
 
 $class = get_access(basename($_SERVER['REQUEST_URI']));
 class_check($class);
 
 $HTMLOUT = '';
-$this_url = $_SERVER['SCRIPT_NAME'];
+$this_url = $_SERVER['SCRIPT_NAME'] ?? '';
 $do = (isset($_GET['do']) && $_GET['do'] === 'disabled') ? 'disabled' : 'hnrwarn';
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $cache = $container->get(Cache::class);
-    $r = isset($_POST['ref']) ? $_POST['ref'] : $this_url;
-    $_uids = isset($_POST['users']) ? array_map('intval', $_POST['users']) : 0;
-    if ($_uids == 0 || count($_uids) == 0) {
+    $r = isset($_POST['ref']) ? (string) $_POST['ref'] : $this_url;
+    $uids = isset($_POST['users']) && is_array($_POST['users']) ? array_map('intval', $_POST['users']) : [];
+
+    if (empty($uids)) {
         stderr(_('Error'), _("Looks like you didn't select any user!"));
     }
-    $valid = [
-        'unwarn',
-        'disable',
-        'delete',
-    ];
-    $act = isset($_POST['action']) && in_array($_POST['action'], $valid) ? $_POST['action'] : false;
-    if (!$act) {
+
+    $valid = ['unwarn', 'disable', 'delete'];
+    $act = isset($_POST['action']) && in_array($_POST['action'], $valid, true) ? (string) $_POST['action'] : '';
+
+    if ($act === '') {
         stderr(_('Error'), _('Something went wrong!'));
     }
-if ($act === 'delete' && has_access($CURUSER['class'], UC_SYSOP, 'coder')) {
-    // TODO: skriv den rigtige DELETE/UPDATE-query
-    $res_del = $db->perform('/* TODO: delete something by id */', [
-        // 'id' => (int)$id,
-    ]);
 
-    if ($res_del && $res_del->rowCount() > 0) {
-        // evt. success-håndtering
-    } else {
-        stderr('Error', 'Something went wrong!');
+    // Run action
+    if ($act === 'unwarn') {
+        // Clear HnR warn and reason, notify users
+        /** @var Message $messages */
+        $messages = $container->get(Message::class);
+        $buffer = [];
+        $sub = _('HnR Warning Removed');
+        $bodyTpl = _fe('Hey, your Hit and Run warning was removed by {0}. Please keep your best behaviour from now on.', $CURUSER['username']);
+
+        $db->run(
+            'UPDATE users SET hnrwarn = :no, warn_reason = NULL WHERE id IN (' . implode(',', array_fill(0, count($uids), '?')) . ')',
+            array_merge([':no' => 'no'], $uids)
+        );
+
+        foreach ($uids as $id) {
+            $cache->delete('user_' . (int) $id);
+            $buffer[] = [
+                'receiver' => (int) $id,
+                'added'    => TIME_NOW,
+                'msg'      => $bodyTpl,
+                'subject'  => $sub,
+            ];
+        }
+        if (!empty($buffer)) {
+            $messages->insert($buffer);
+        }
+
+        header('Refresh: 2; url=' . $r);
+        stderr(_('Success'), _pfe("{0} user's HnR warning removed", "{0} users' HnR warnings removed", count($uids)));
+    } elseif ($act === 'disable') {
+        // Disable accounts and clear warning
+        $reason = _fe('Disabled for HnR by {0} on {1}', $CURUSER['username'], get_date(TIME_NOW, 'DATE', 1));
+        $params = [$reason, 'no'];
+        $placeholders = implode(',', array_fill(0, count($uids), '?'));
+        $db->run(
+            "UPDATE users
+             SET status = 2, disable_reason = ?, hnrwarn = ?
+             WHERE id IN ($placeholders)",
+            array_merge($params, $uids)
+        );
+        foreach ($uids as $id) {
+            $cache->delete('user_' . (int) $id);
+        }
+
+        header('Refresh: 2; url=' . $r);
+        stderr(_('Success'), _pfe('{0} user disabled', '{0} users disabled', count($uids)));
+    } elseif ($act === 'delete') {
+        if (!has_access((int) $CURUSER['class'], UC_SYSOP, 'coder')) {
+            stderr(_('Error'), _('Permission denied.'));
+        }
+        $placeholders = implode(',', array_fill(0, count($uids), '?'));
+        $db->run("DELETE FROM users WHERE id IN ($placeholders)", $uids);
+        foreach ($uids as $id) {
+            $cache->delete('user_' . (int) $id);
+        }
+
+        header('Refresh: 2; url=' . $r);
+        stderr(_('Success'), _pfe('{0} user deleted', '{0} users deleted', count($uids)));
     }
+
+    app_halt('Exit called');
 }
 
-    if ($act === 'disable') {
-        if ($db->run(');
-        $body = _fe('Hey, your Hit and Run warning was removed by {0}. Please keep in your best behaviour from now on.', $CURUSER['username']);
-        $pms = [];
-        foreach ($_uids as $id) {
-            $pms[] = '(2,' . $id . ',' . sqlesc($sub) . ',' . sqlesc($body) . ',' . sqlesc(TIME_NOW) . ')';
-        }
-        $cache->update_row('user_' . $id, [
-            'hnrwarn' => 'no',
-        ], $site_config['expires']['user_cache']);
-        if (!empty($pms) && count($pms)) {
-            $g = $db->run(');
-            if ($g && $q1) {
-                header('Refresh: 2; url=' . $r);
-                stderr(_('Success'), _pfe("{0} user HnR's warning removed", "{0} users HnR's warning removed", count($pms)));
-            } else {
-                stderr(_('Error'), _('Something went wrong!'));
-            }
-        }
-    }
-app_halt('Exit called');
-}
+// -------------------------------------------
+// Views
+// -------------------------------------------
 switch ($do) {
     case 'disabled':
-        $query = "SELECT id,username, class, downloaded, uploaded, IF(downloaded>0, round((uploaded/downloaded),2), '---') AS ratio, disable_reason, registered, last_access FROM users WHERE status = 2 ORDER BY last_access DESC ";
+        $query = "SELECT id, username, class, downloaded, uploaded, IF(downloaded>0, round((uploaded/downloaded),2), '---') AS ratio, disable_reason, registered, last_access
+                  FROM users WHERE status = 2 ORDER BY last_access DESC";
         $title = _('Disabled users');
-        $link = '<a href="staffpanel.php?tool=hnrwarn&amp;action=hnrwarn&amp;?do=warned">' . _('Hit and Run warned users') . '</a>';
+        $link = '<a href="staffpanel.php?tool=hnrwarn&amp;action=hnrwarn&amp;do=warned">' . _('Hit and Run warned users') . '</a>';
         break;
 
     case 'hnrwarn':
-        $query = "SELECT id, username, class, downloaded, uploaded, IF(downloaded>0, round((uploaded/downloaded),2), '---') AS ratio, warn_reason, hnrwarn, registered, last_access FROM users WHERE hnrwarn='yes' ORDER BY last_access DESC, hnrwarn DESC ";
+    default:
+        $query = "SELECT id, username, class, downloaded, uploaded, IF(downloaded>0, round((uploaded/downloaded),2), '---') AS ratio, warn_reason, hnrwarn, registered, last_access
+                  FROM users WHERE hnrwarn='yes' ORDER BY last_access DESC, hnrwarn DESC";
         $title = _('Hit and Run Warned users');
         $link = '<a href="staffpanel.php?tool=hnrwarn&amp;action=hnrwarn&amp;do=disabled">' . _('disabled users') . '</a>';
         break;
 }
-$g = sql_query($query) or sqlerr(__FILE__, __LINE__);
-$count = mysqli_num_rows($g);
-if ($count == 0) {
+
+$rows = $db->fetchAll($query);
+$count = count($rows);
+
+if ($count === 0) {
     $HTMLOUT .= stdmsg(_('Hey'), _('There are no ') . strtolower($title));
 } else {
     $HTMLOUT .= "<form action='staffpanel.php?tool=hnrwarn&amp;action=hnrwarn' method='post' enctype='multipart/form-data' accept-charset='utf-8'>
@@ -99,26 +139,29 @@ if ($count == 0) {
             <td class='colhead' nowrap='nowrap'>" . _('Joined') . "</td>
             <td class='colhead' nowrap='nowrap'><input type='checkbox' id='checkThemAll'></td>
         </tr>";
-    while ($a = mysqli_fetch_assoc($g)) {
-        $tip = ($do === 'hnrwarn' ? _('Hit and run Warned for: ') . htmlsafechars($a['warn_reason']) . '<br>' : _('Disabled for ') . htmlsafechars($a['disable_reason']));
+
+    foreach ($rows as $a) {
+        $tip = ($do === 'hnrwarn'
+            ? _('Hit and run Warned for: ') . htmlsafechars((string) ($a['warn_reason'] ?? ''))
+            : _('Disabled for ') . htmlsafechars((string) ($a['disable_reason'] ?? ''))
+        );
         $HTMLOUT .= "<tr>
-                  <td><a href='userdetails.php?id=" . (int) $a['id'] . "' class='tooltipper' title='$tip'>" . htmlsafechars($a['username']) . "</a></td>
-                  <td nowrap='nowrap'>" . (float) $a['ratio'] . "<br><span class='small'><b>" . _('D:') . '</b>' . mksize($a['downloaded']) . '&#160;<b>' . _('U:') . '</b> ' . mksize($a['uploaded']) . "</span></td>
+                  <td><a href='userdetails.php?id=" . (int) $a['id'] . "' class='tooltipper' title='$tip'>" . htmlsafechars((string) $a['username']) . "</a></td>
+                  <td nowrap='nowrap'>" . (is_numeric($a['ratio']) ? (float) $a['ratio'] : '---') . "<br><span class='small'><b>" . _('D:') . '</b>' . mksize((int) $a['downloaded']) . '&#160;<b>' . _('U:') . '</b> ' . mksize((int) $a['uploaded']) . "</span></td>
                   <td nowrap='nowrap'>" . get_user_class_name((int) $a['class']) . "</td>
                   <td nowrap='nowrap'>" . get_date((int) $a['last_access'], 'LONG', 0, 1) . "</td>
                   <td nowrap='nowrap'>" . get_date((int) $a['registered'], 'DATE', 1) . "</td>
                   <td nowrap='nowrap'><input type='checkbox' name='users[]' value='" . (int) $a['id'] . "'></td>
                 </tr>";
     }
+
     $HTMLOUT .= "<tr>
             <td colspan='6' class='colhead'>
                 <select name='action'>
                     <option value='unwarn'>" . _('Unwarn') . "</option>
-                    <option value='disable'>" . _('Disable') . '</option>
-                    ';
-    $HTMLOUT .= "<option value='delete' " . (!has_access($CURUSER['class'], UC_ADMINISTRATOR, 'coder') ? 'disabled' : '') . '>' . _('Delete') . '</option>';
-    $HTMLOUT .= "
-                    </select>
+                    <option value='disable'>" . _('Disable') . "</option>
+                    <option value='delete' " . (!has_access((int) $CURUSER['class'], UC_SYSOP, 'coder') ? 'disabled' : '') . '>' . _('Delete') . "</option>
+                </select>
                 &raquo;
                 <input type='submit' value='" . _('Apply') . "'>
                 <input type='hidden' value='" . htmlsafechars($_SERVER['REQUEST_URI']) . "' name='ref'>
@@ -127,6 +170,8 @@ if ($count == 0) {
             </table>
             </form>";
 }
+
+$title = $title ?? _('HnR Warn');
 $breadcrumbs = [
     "<a href='{$site_config['paths']['baseurl']}/staffpanel.php'>" . _('Staff Panel') . '</a>',
     "<a href='{$_SERVER['PHP_SELF']}'>$title</a>",
