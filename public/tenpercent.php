@@ -1,21 +1,22 @@
 <?php
+
+declare(strict_types=1);
+
 require_once __DIR__ . '/../include/runtime_safe.php';
-
-
-declare(strict_types = 1);
-
-use Pu239\Database;
+require_once __DIR__ . '/../include/bootstrap_pdo.php';
 
 use Pu239\Cache;
+use Pu239\Database;
 use Pu239\Message;
 
-require_once __DIR__ . '/../include/bittorrent.php';
 require_once INCL_DIR . 'function_users.php';
 require_once INCL_DIR . 'function_html.php';
 
 $user = check_user_status();
-global $container;
-$db = $container->get(Database::class);, $site_config;
+global $container, $site_config;
+$db = $container->get(Database::class);
+$cache = $container->get(Cache::class);
+$message_class = $container->get(Message::class);
 
 $uploaded = $user['uploaded'];
 $downloaded = $user['downloaded'];
@@ -40,22 +41,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $dt = TIME_NOW;
     $subject = '10% Addition';
     $msg = 'Today, ' . get_date((int) $dt, 'LONG', 0, 1) . ', you have increased your total upload amount by 10% from [b]' . mksize($uploaded) . '[/b] to [b]' . mksize($newuploaded) . '[/b], which brings your ratio to [b]' . $newratio . '[/b].';
-    $rows = $db->fetchAll("UPDATE users SET uploaded = uploaded * 1.1, tenpercent = 'yes' WHERE id=" . sqlesc($user['id'])) or sqlerr(__FILE__, __LINE__);
+    $result = $db->run('UPDATE users SET uploaded = uploaded * 1.1, tenpercent = ? WHERE id = ?', ['yes', $user['id']]);
     $update['uploaded'] = $user['uploaded'] * 1.1;
-    $cache = $container->get(Cache::class);
     $cache->update_row('user_' . $user['id'], [
         'tenpercent' => 'yes',
         'uploaded' => $update['uploaded'],
     ], $site_config['expires']['user_cache']);
-    $msgs_buffer[] = [
+    $messages = [
         'receiver' => $user['id'],
         'added' => $dt,
         'msg' => $msg,
         'subject' => $subject,
     ];
-    $message_class = $container->get(Message::class);
-    $message_class->insert($msgs_buffer);
-    if (!$res) {
+    $message_class->insert([$messages]);
+    if (!$result->rowCount()) {
         stderr(_('Error'), 'It appears that something went wrong while trying to add 10% to your upload amount.');
     } else {
         stderr('10% Added', 'Your total upload amount has been increased by 10% from <b>' . mksize($uploaded) . '</b> to <b>' . mksize($newuploaded) . "</b>, which brings your ratio to <b>$newratio</b>.");
