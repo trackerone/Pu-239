@@ -11,102 +11,167 @@ require_once INCL_DIR . 'function_html.php';
 
 global $container, $site_config, $CURUSER;
 
-$db     = $container->get(Database::class);
-$fluent = $db; // alias
+/** @var Database $db */
+$db = $container->get(Database::class);
+/** @var Session $session */
+$session = $container->get(Session::class);
 
 $class = get_access(basename($_SERVER['REQUEST_URI']));
 class_check($class);
 
-$promos = $fluent->from('class_promo')
-    ->orderBy('id');
-
+// ---------------------------------------------------------------------
+// Load existing promo rules
+// ---------------------------------------------------------------------
+$class_config = [];
+$promos = $db->fetchAll('SELECT * FROM class_promo ORDER BY id');
 foreach ($promos as $ac) {
-    $class_config[$ac['name']]['id'] = $ac['id'];
-    $class_config[$ac['name']]['name'] = $ac['name'];
-    $class_config[$ac['name']]['min_ratio'] = $ac['min_ratio'];
-    $class_config[$ac['name']]['uploaded'] = $ac['uploaded'];
-    $class_config[$ac['name']]['time'] = $ac['time'];
-    $class_config[$ac['name']]['low_ratio'] = $ac['low_ratio'];
+    $class_config[$ac['name']] = [
+        'id' => (int) $ac['id'],
+        'name' => (string) $ac['name'],
+        'min_ratio' => (float) $ac['min_ratio'],
+        'uploaded' => (int) $ac['uploaded'],
+        'time' => (int) $ac['time'],
+        'low_ratio' => (float) $ac['low_ratio'],
+    ];
 }
-$possible_modes = [
-    'add',
-    'edit',
-    'remove',
-    '',
-];
-$mode = (isset($_GET['mode']) ? htmlsafechars($_GET['mode']) : '');
-if (!in_array($mode, $possible_modes)) {
+
+$possible_modes = ['add', 'edit', 'remove', ''];
+$mode = isset($_GET['mode']) ? (string) htmlsafechars($_GET['mode']) : '';
+if (!in_array($mode, $possible_modes, true)) {
     $session->set('is-error', _('A ruffian that will swear, drink, dance, revel the night, rob, murder and commit the oldest of ins the newest kind of ways.'));
+    $mode = '';
 }
+
+// ---------------------------------------------------------------------
+// POST handling (add / edit / remove)
+// ---------------------------------------------------------------------
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $session = $container->get(Session::class);
     if ($mode === 'edit') {
-        if (!empty($class_config)) {
-            foreach ($class_config as $c_name => $value) {
-                $c_value = $value['id']; // $key is like 0, 1, 2 etc....
-                $c_name = strtoupper($value['name']);
-                $c_min_ratio = $value['min_ratio'];
-                $c_uploaded = $value['uploaded'];
-                $c_time = $value['time'];
-                $c_low_ratio = $value['low_ratio'];
-                $post_data = $_POST[$c_name]; //    0=> name,1=>min_ratio,2=>uploaded,3=>time,4=>low_ratio
-                $value = $post_data[0];
-                $name = $post_data[1];
-                $min_ratio = strtoupper($post_data[2]);
-                $uploaded = $post_data[3];
-                $time = $post_data[4];
-                $low_ratio = $post_data[5];
-                if (isset($_POST[$c_name][0]) && (($value != $c_value) || ($name != $c_name) || ($min_ratio != $c_min_ratio) || ($uploaded != $c_uploaded) || ($time != $c_time) || ($low_ratio != $c_low_ratio))) {
-                    $update[$c_name] = '(' . sqlesc($c_name) . ', ' . sqlesc(is_array($min_ratio) ? implode('|', $min_ratio) : $min_ratio) . ', ' . sqlesc(is_array($uploaded) ? implode('|', $uploaded) : $uploaded) . ', ' . sqlesc(is_array($time) ? implode('|', $time) : $time) . ', ' . sqlesc(is_array($low_ratio) ? implode('|', $low_ratio) : $low_ratio) . ')';
+        $rows = [];
+        foreach ($class_config as $cName => $current) {
+            // POST structure per row: [ name, id, min_ratio, uploaded, time, low_ratio ]
+            if (!isset($_POST[$cName]) || !is_array($_POST[$cName])) {
+                continue;
+            }
+            $p = $_POST[$cName];
+            $posted = [
+                'name' => isset($p[0]) ? (string) $p[0] : $cName,
+                'id' => isset($p[1]) ? (int) $p[1] : $current['id'],
+                'min_ratio' => isset($p[2]) ? (float) $p[2] : $current['min_ratio'],
+                'uploaded' => isset($p[3]) ? (int) $p[3] : $current['uploaded'],
+                'time' => isset($p[4]) ? (int) $p[4] : $current['time'],
+                'low_ratio' => isset($p[5]) ? (float) $p[5] : $current['low_ratio'],
+            ];
+
+            $changed = $posted['name'] !== $current['name']
+                || $posted['min_ratio'] !== (float) $current['min_ratio']
+                || $posted['uploaded'] !== (int) $current['uploaded']
+                || $posted['time'] !== (int) $current['time']
+                || $posted['low_ratio'] !== (float) $current['low_ratio'];
+
+            if ($changed) {
+                $rows[] = [
+                    'name' => $posted['name'],
+                    'min_ratio' => $posted['min_ratio'],
+                    'uploaded' => $posted['uploaded'],
+                    'time' => $posted['time'],
+                    'low_ratio' => $posted['low_ratio'],
+                ];
+            }
+        }
+
+        if (!empty($rows)) {
+            // Build a single UPSERT statement with bound params
+            $valuesSql = [];
+            $params = [];
+            foreach ($rows as $i => $r) {
+                $valuesSql[] = "(:name{$i}, :min_ratio{$i}, :uploaded{$i}, :time{$i}, :low_ratio{$i})";
+                $params[":name{$i}"] = $r['name'];
+                $params[":min_ratio{$i}"] = $r['min_ratio'];
+                $params[":uploaded{$i}"] = $r['uploaded'];
+                $params[":time{$i}"] = $r['time'];
+                $params[":low_ratio{$i}"] = $r['low_ratio'];
+            }
+            $sql = 'INSERT INTO class_promo (name, min_ratio, uploaded, time, low_ratio) VALUES ' . implode(', ', $valuesSql) . ' '
+                . 'ON DUPLICATE KEY UPDATE '
+                . 'name = VALUES(name), '
+                . 'min_ratio = VALUES(min_ratio), '
+                . 'uploaded = VALUES(uploaded), '
+                . 'time = VALUES(time), '
+                . 'low_ratio = VALUES(low_ratio)';
+
+            $ok = $db->run($sql, $params);
+            if ($ok) {
+                $session->set('is-success', _('User promotion configuration was saved!'));
+            } else {
+                $session->set('is-error', _('There was an error while executing the update query or nothing was updated.'));
+            }
+        } else {
+            $session->set('is-warning', _('No changes detected.'));
+        }
+    } elseif ($mode === 'add') {
+        // Resolve selected numeric class id -> class name string from class_config
+        if (!isset($_POST['name']) || $_POST['name'] === '') {
+            $session->set('is-error', _('We cannot have empty class name!'));
+        } else {
+            $class_id = (int) $_POST['name'];
+            $name = $db->fetch('SELECT name FROM class_config WHERE value = :id AND name NOT IN (\'UC_STAFF\', \'UC_MIN\', \'UC_MAX\')', [':id' => $class_id]);
+            $class_name = $name['name'] ?? '';
+            if ($class_name === '') {
+                $session->set('is-error', _('Invalid class selected.'));
+            } else {
+                $min_ratio = isset($_POST['min_ratio']) ? (float) $_POST['min_ratio'] : null;
+                $uploaded = isset($_POST['uploaded']) ? (int) $_POST['uploaded'] : null;
+                $time = isset($_POST['time']) ? (int) $_POST['time'] : null;
+                $low_ratio = isset($_POST['low_ratio']) ? (float) $_POST['low_ratio'] : null;
+
+                if ($min_ratio === null) {
+                    $session->set('is-error', _('We cannot have empty min ratio!'));
+                } elseif ($uploaded === null) {
+                    $session->set('is-error', _('We cannot have empty uploaded!'));
+                } elseif ($time === null) {
+                    $session->set('is-error', _('We cannot have empty time!'));
+                } elseif ($low_ratio === null) {
+                    $session->set('is-error', _('We cannot have empty low ratio!'));
+                } else {
+                    $ok = $db->run(
+                        'INSERT INTO class_promo (name, min_ratio, uploaded, time, low_ratio) VALUES (:name, :min_ratio, :uploaded, :time, :low_ratio) '
+                        . 'ON DUPLICATE KEY UPDATE min_ratio = VALUES(min_ratio), uploaded = VALUES(uploaded), time = VALUES(time), low_ratio = VALUES(low_ratio)',
+                        [
+                            ':name' => $class_name,
+                            ':min_ratio' => $min_ratio,
+                            ':uploaded' => $uploaded,
+                            ':time' => $time,
+                            ':low_ratio' => $low_ratio,
+                        ]
+                    );
+                    if ($ok) {
+                        $session->set('is-success', _('Promotion rule added/updated.'));
+                    } else {
+                        $session->set('is-error', _('Insert failed.'));
+                    }
                 }
             }
         }
-        if ($db->run('INSERT INTO class_promo (name,min_ratio,uploaded,time,low_ratio) VALUES ' . implode(', ', $update) . ' ON DUPLICATE KEY UPDATE name = VALUES(name),min_ratio = VALUES(min_ratio),uploaded = VALUES(uploaded),time = VALUES(time),low_ratio = VALUES(low_ratio)')) { // need to change strut
-            $session->set('is-success', _('user configuration was saved!'));
+    } elseif ($mode === 'remove') {
+        if (!isset($_POST['remove']) || $_POST['remove'] === '') {
+            $session->set('is-error', _('Missing class name to remove.'));
         } else {
-            $session->set('is-error', _('There was an error while executing the update query or nothing was updated 1.'));
-        }
-    } elseif ($mode === 'add') {
-        if (isset($_POST['name'])) {
-            $class_id = (int) $_POST['name'];
-            $name = $fluent->from('class_config')
-                ->select(null)
-                ->select('name')
-                ->where('value = ?', $class_id)
-                ->where('name != ?', 'UC_STAFF')
-                ->where('name != ?', 'UC_MIN')
-                ->where('name != ?', 'UC_MAX')
-                ->fetch('name');
-        } else {
-            $session->set('is-error', _('We cannot have empty class name!'));
-        }
-        if (isset($_POST['min_ratio'])) {
-            $min_ratio = (float) $_POST['min_ratio'];
-        } else {
-            $session->set('is-error', _('We cannot have empty min ratio!'));
-        }
-        if (isset($_POST['uploaded'])) {
-            $uploaded = (int) $_POST['uploaded'];
-        } else {
-            $session->set('is-error', _('We cannot have empty uploaded!'));
-        }
-        if (isset($_POST['uploaded'])) {
-            $time = (int) $_POST['time'];
-        } else {
-            $session->set('is-error', _('We cannot have empty time'));
-        }
-        if (isset($_POST['uploaded'])) {
-            $low_ratio = (float) $_POST['low_ratio'];
-        } else {
-            $session->set('is-error', _('We cannot have empty low ratio!'));
-        }
-        if ($db->run(');
+            $ok = $db->run('DELETE FROM class_promo WHERE name = :name', [':name' => (string) $_POST['remove']]);
+            $session->set($ok ? 'is-success' : 'is-error', $ok ? _('Promotion rule removed.') : _('Nothing removed.'));
         }
     }
+
+    // Reload latest config after writes
+    $promos = $db->fetchAll('SELECT * FROM class_promo ORDER BY id');
 }
 
-$rows = $db->fetchAll('SELECT * FROM class_promo ORDER BY id');
-if (mysqli_num_rows($res) >= 1) {
+// ---------------------------------------------------------------------
+// Render
+// ---------------------------------------------------------------------
+$HTMLOUT = '';
+
+if (!empty($promos)) {
     $head_top = "
     <h3 class='has-text-centered top20'>" . _('User Promotion Settings') . "</h3>
     <form name='edit' action='{$site_config['paths']['baseurl']}/staffpanel.php?tool=class_promo&amp;mode=edit' method='post' enctype='multipart/form-data' accept-charset='utf-8'>";
@@ -120,19 +185,20 @@ if (mysqli_num_rows($res) >= 1) {
             <th class='has-text-centered'>" . _('Low Ratio') . "</th>
             <th class='has-text-centered'>" . _('Remove') . '</th>
         </tr>';
+
     $body = '';
-    foreach ($rows as $arr) {
+    foreach ($promos as $arr) {
         $body .= '
         <tr>
             <td>
                 ' . get_user_class_name(constant($arr['name']), false) . "
                 <input type='hidden' name='" . htmlsafechars($arr['name']) . "[]' value='" . htmlsafechars($arr['name']) . "'>
-                <input type='hidden' name='" . htmlsafechars($arr['name']) . "[]' value='" . htmlsafechars($arr['id']) . "'>
+                <input type='hidden' name='" . htmlsafechars($arr['name']) . "[]' value='" . (int) $arr['id'] . "'>
             </td>
-            <td class='has-text-centered'><input type='text' name='" . htmlsafechars($arr['name']) . "[]' value='" . format_comment($arr['min_ratio']) . "' class='has-text-centered'></td>
-            <td class='has-text-centered'><input type='text' name='" . htmlsafechars($arr['name']) . "[]' value='" . format_comment($arr['uploaded']) . "' class='has-text-centered'></td>
-            <td class='has-text-centered'><input type='text' name='" . htmlsafechars($arr['name']) . "[]' value='" . format_comment($arr['time']) . "' class='has-text-centered'></td>
-            <td class='has-text-centered'><input type='text' name='" . htmlsafechars($arr['name']) . "[]' value='" . format_comment($arr['low_ratio']) . "' class='has-text-centered'></td>
+            <td class='has-text-centered'><input type='text' name='" . htmlsafechars($arr['name']) . "[]' value='" . format_comment((string) $arr['min_ratio']) . "' class='has-text-centered'></td>
+            <td class='has-text-centered'><input type='text' name='" . htmlsafechars($arr['name']) . "[]' value='" . format_comment((string) $arr['uploaded']) . "' class='has-text-centered'></td>
+            <td class='has-text-centered'><input type='text' name='" . htmlsafechars($arr['name']) . "[]' value='" . format_comment((string) $arr['time']) . "' class='has-text-centered'></td>
+            <td class='has-text-centered'><input type='text' name='" . htmlsafechars($arr['name']) . "[]' value='" . format_comment((string) $arr['low_ratio']) . "' class='has-text-centered'></td>
             <td class='has-text-centered'>
                 <form name='remove' action='staffpanel.php?tool=class_promo&amp;mode=remove' method='post' enctype='multipart/form-data' accept-charset='utf-8'>
                     <input type='hidden' name='remove' value='" . htmlsafechars($arr['name']) . "'>
@@ -169,7 +235,7 @@ $heading = "
             <th>' . _('Min Uploaded (GB)') . '</th>
             <th>' . _('Min Time On Site (Days)') . '</th>
             <th>' . _('Low Ratio') . '</th>
-        </tr>';
+        </tr>";
 
 $body = "
         <tr>
@@ -178,7 +244,7 @@ $body = "
 $maxclass = UC_STAFF;
 for ($i = 1; $i < $maxclass; ++$i) {
     $body .= "
-                    <option value='$i'>" . get_user_class_name((int) $i) . '</option>';
+                    <option value='" . (int) $i . "'>" . get_user_class_name((int) $i) . '</option>';
 }
 $body .= "
                 </select>
