@@ -10,90 +10,145 @@ require_once CLASS_DIR . 'class_check.php';
 
 global $container, $site_config, $CURUSER;
 
+/** @var Database $db */
 $db = $container->get(Database::class);
+/** @var Cache $cache */
+$cache = $container->get(Cache::class);
 
 $class = get_access(basename($_SERVER['REQUEST_URI']));
 class_check($class);
 
 $HTMLOUT = '';
-if (isset($_POST) || isset($_GET)) {
-    $edit_params = array_merge($_GET, $_POST);
+
+// Merge params
+$edit_params = array_merge($_GET, $_POST);
+$action = isset($edit_params['action']) ? (string) $edit_params['action'] : '';
+$id     = isset($edit_params['id']) ? (int) $edit_params['id'] : 0;
+$name   = isset($edit_params['name']) ? (string) $edit_params['name'] : '';
+$image  = isset($edit_params['image']) ? (string) $edit_params['image'] : '';
+$bonus  = isset($edit_params['bonus']) ? 1 : 0;
+
+// Helpers
+function mood_row(string $name, string $image, int $bonus): string
+{
+    global $site_config;
+    return '<tr>'
+        . "<td><img src=\"{$site_config['paths']['images_baseurl']}smilies/" . htmlsafechars($image) . "\" alt=\"\"></td>"
+        . '<td>' . htmlsafechars($name) . '</td>'
+        . '<td>' . htmlsafechars($image) . '</td>'
+        . '<td>' . ($bonus !== 0 ? _('Yes') : _('No')) . '</td>';
 }
-$edit_mood['action'] = isset($edit_params['action']) ? $edit_params['action'] : 0;
-$edit_mood['id'] = isset($edit_params['id']) ? (int) $edit_params['id'] : 0;
-$edit_mood['name'] = isset($edit_params['name']) ? $edit_params['name'] : '';
-$edit_mood['image'] = isset($edit_params['image']) ? $edit_params['image'] : '';
-$edit_mood['bonus'] = isset($edit_params['bonus']) ? 1 : 0;
-$cache = $container->get(Cache::class);
-if ($edit_mood['action'] === 'added') {
-    if ($edit_mood['name'] != 'is example mood' && $edit_mood['image'] != 'smile1.gif') {
-        $db->run('INSERT INTO moods (name, image, bonus) VALUES (' . sqlesc($edit_mood['name']) . ', ' . sqlesc($edit_mood['image']) . ', ' . sqlesc($edit_mood['bonus']) . ')') or sqlerr(__FILE__, __LINE__);
+
+// Actions
+if ($action === 'added') {
+    // prevent adding placeholders
+    if ($name !== 'is example mood' && $image !== 'smiley1.gif') {
+        $db->run(
+            'INSERT INTO moods (name, image, bonus) VALUES (:name, :image, :bonus)',
+            [':name' => $name, ':image' => $image, ':bonus' => (int) $bonus]
+        );
         $cache->delete('topmoods');
-        write_log('<b>' . _('Mood Added') . '</b> ' . htmlsafechars($CURUSER['username']) . ' - ' . htmlsafechars($edit_mood['name']) . '<img src="' . $site_config['paths']['images_baseurl'] . 'smilies/' . htmlsafechars($edit_mood['image']) . '" alt="">');
+        if (function_exists('write_log')) {
+            write_log('<b>' . _('Mood Added') . '</b> ' . htmlsafechars($CURUSER['username']) . ' - ' . htmlsafechars($name) . '<img src="' . $site_config['paths']['images_baseurl'] . 'smilies/' . htmlsafechars($image) . '" alt="">');
+        }
     }
-} elseif ($edit_mood['action'] === 'edited') {
-    $db->run(');
-    write_log('<b>' . _('Mood Edited') . '</b> ' . htmlsafechars($CURUSER['username']) . ' - ' . htmlsafechars($edit_mood['name']) . '<img src="' . $site_config['paths']['images_baseurl'] . 'smilies/' . htmlsafechars($edit_mood['image']) . '" alt="">');
+} elseif ($action === 'edited') {
+    if ($id > 0) {
+        $db->run(
+            'UPDATE moods SET name = :name, image = :image, bonus = :bonus WHERE id = :id',
+            [':name' => $name, ':image' => $image, ':bonus' => (int) $bonus, ':id' => (int) $id]
+        );
+        $cache->delete('topmoods');
+        if (function_exists('write_log')) {
+            write_log('<b>' . _('Mood Edited') . '</b> ' . htmlsafechars($CURUSER['username']) . ' - ' . htmlsafechars($name) . '<img src="' . $site_config['paths']['images_baseurl'] . 'smilies/' . htmlsafechars($image) . '" alt="">');
+        }
+    }
 }
-if ($edit_mood['action'] === 'edit' && $edit_mood['id']) {
-    $edit_mood['res'] = sql_query('SELECT * FROM moods WHERE id=' . sqlesc($edit_mood['id'])) or sqlerr(__FILE__, __LINE__);
-    if (mysqli_num_rows($edit_mood['res'])) {
-        $edit_mood['arr'] = mysqli_fetch_assoc($edit_mood['res']);
+
+// Forms
+if ($action === 'edit' && $id > 0) {
+    $row = $db->fetch('SELECT * FROM moods WHERE id = :id', [':id' => (int) $id]);
+    if ($row) {
         $HTMLOUT .= "<h1 class='has-text-centered'>" . _('Edit Mood') . "</h1>
             <form method='post' action='staffpanel.php?tool=edit_moods&amp;action=edited' enctype='multipart/form-data' accept-charset='utf-8'>
             <table class='table table-bordered table-striped'>
-            <tr><td class='colhead'>" . _('Name') . "</td>
-            <td><input type='text' name='name' size='40' value ='" . htmlsafechars($edit_mood['arr']['name']) . "'></td></tr>
-            <tr><td class='colhead'>" . _('Image') . "</td>
-            <td><input type='text' name='image' size='40' value ='" . htmlsafechars($edit_mood['arr']['image']) . "'></td></tr>
-            <tr><td class='colhead'>" . _('Bonus') . "</td>
-            <td><input type='checkbox' name='bonus' " . ($edit_mood['arr']['bonus'] ? 'checked' : '') . "></td></tr>
-            <tr><td colspan='2' class='has-text-centered'>
-            <input type='hidden' name='id' value='" . (int) $edit_mood['id'] . "'>
-            <input type='submit' name='okay' value='" . _('Add') . "' class='button is-small'>
-            </td></tr>
-            </table></form>";
+                <tr>
+                    <td class='colhead'>" . _('Name') . "</td>
+                    <td><input type='text' name='name' size='40' value='" . htmlsafechars((string) $row['name']) . "'></td>
+                </tr>
+                <tr>
+                    <td class='colhead'>" . _('Image') . "</td>
+                    <td><input type='text' name='image' size='40' value='" . htmlsafechars((string) $row['image']) . "'></td>
+                </tr>
+                <tr>
+                    <td class='colhead'>" . _('Bonus') . "</td>
+                    <td><input type='checkbox' name='bonus' " . ((int) $row['bonus'] === 1 ? 'checked' : '') . "></td>
+                </tr>
+                <tr>
+                    <td colspan='2' class='has-text-centered'>
+                        <input type='hidden' name='id' value='" . (int) $id . "'>
+                        <input type='submit' name='okay' value='" . _('Save') . "' class='button is-small'>
+                    </td>
+                </tr>
+            </table>
+            </form>";
     }
 } else {
+    // Add form
     $HTMLOUT .= "<h1 class='has-text-centered'>" . _('Add New Mood') . "</h1>
          <form method='post' action='staffpanel.php?tool=edit_moods&amp;action=added' enctype='multipart/form-data' accept-charset='utf-8'>
          <table class='table table-bordered table-striped'>
-         <tr><td class='colhead'>" . _('Name') . "</td>
-         <td><input type='text' name='name' size='40' value ='is example mood'></td></tr>
-         <tr><td class='colhead'>" . _('Image') . "</td>
-         <td><input type='text' name='image' size='40' value ='smiley1.gif'></td></tr>
-         <tr><td class='colhead'>" . _('Bonus') . "</td>
-         <td><input type='checkbox' name='bonus'></td></tr>
-         <tr><td colspan='2' class='has-text-centered'>
-         <input type='submit' name='okay' value='" . _('Add') . "' class='button is-small'>
-         </td></tr>
-         </table></form>";
+            <tr>
+                <td class='colhead'>" . _('Name') . "</td>
+                <td><input type='text' name='name' size='40' value='is example mood'></td>
+            </tr>
+            <tr>
+                <td class='colhead'>" . _('Image') . "</td>
+                <td><input type='text' name='image' size='40' value='smiley1.gif'></td>
+            </tr>
+            <tr>
+                <td class='colhead'>" . _('Bonus') . "</td>
+                <td><input type='checkbox' name='bonus'></td>
+            </tr>
+            <tr>
+                <td colspan='2' class='has-text-centered'>
+                    <input type='submit' name='okay' value='" . _('Add') . "' class='button is-small'>
+                </td>
+            </tr>
+         </table>
+         </form>";
 }
+
+// List moods
 $HTMLOUT .= '<h1 class="has-text-centered">' . _('Current Moods') . '</h1>';
 $HTMLOUT .= "<table class='table table-bordered table-striped'>
-      <tr><td class='colhead'>" . _('Added') . "</td>
-      <td class='colhead'>" . _('Name') . "</td>
-      <td class='colhead'>" . _('Image') . "</td>
-      <td class='colhead'>" . _('Bonus') . "</td>
-      <td class='colhead'>" . _('Edit') . '</td>' . //<td class='colhead'>" . _('Remove') . "</td>
-    '</tr>';
+      <tr>
+        <td class='colhead'>" . _('Added') . "</td>
+        <td class='colhead'>" . _('Name') . "</td>
+        <td class='colhead'>" . _('Image') . "</td>
+        <td class='colhead'>" . _('Bonus') . "</td>
+        <td class='colhead'>" . _('Edit') . "</td>
+      </tr>";
+
 $rows = $db->fetchAll('SELECT * FROM moods ORDER BY id');
-if (mysqli_num_rows($res)) {
+if (!empty($rows)) {
     $color = true;
     foreach ($rows as $arr) {
         $HTMLOUT .= '<tr ' . (($color = !$color) ? ' style="background-color:#000000;"' : 'style="background-color:#0f0f0f;"') . '>
-      <td><img src="' . $site_config['paths']['images_baseurl'] . 'smilies/' . htmlsafechars($arr['image']) . '" alt=""></td>
-      <td>' . htmlsafechars($arr['name']) . '</td>
-      <td>' . htmlsafechars($arr['image']) . '</td>
-      <td>' . ($arr['bonus'] != 0 ? _('Yes') . '' : _('No') . '') . '</td>
-      <td><a style="color:#FF0000" href="' . $site_config['paths']['baseurl'] . '/staffpanel.php?tool=edit_moods&amp;id=' . (int) $arr['id'] . '&amp;action=edit">' . _('Edit') . '</a></td></tr>' . //<td><a style="color:#FF0000" href="' . $site_config['paths']['baseurl'] . '/staffpanel.php?tool=edit_moods&amp;action=remove$amp;id='.$arr['id'].'&amp;hash='.$form_hash.'>'._('Remove').'</a></td></tr>
-            '';
+            <td><img src="' . $site_config['paths']['images_baseurl'] . 'smilies/' . htmlsafechars((string) $arr['image']) . '" alt=""></td>
+            <td>' . htmlsafechars((string) $arr['name']) . '</td>
+            <td>' . htmlsafechars((string) $arr['image']) . '</td>
+            <td>' . ((int) $arr['bonus'] !== 0 ? _('Yes') : _('No')) . '</td>
+            <td><a style="color:#FF0000" href="' . $site_config['paths']['baseurl'] . '/staffpanel.php?tool=edit_moods&amp;id=' . (int) $arr['id'] . '&amp;action=edit">' . _('Edit') . '</a></td>
+        </tr>';
     }
-    $HTMLOUT .= '</table>';
 }
+$HTMLOUT .= '</table>';
+
 $title = _('Edit Moods');
 $breadcrumbs = [
     "<a href='{$site_config['paths']['baseurl']}/staffpanel.php'>" . _('Staff Panel') . '</a>',
     "<a href='{$_SERVER['PHP_SELF']}'>$title</a>",
 ];
+
 echo stdhead($title, [], 'page-wrapper', $breadcrumbs) . wrapper($HTMLOUT) . stdfoot();
