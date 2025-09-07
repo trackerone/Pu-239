@@ -87,23 +87,24 @@ $db = $container->get(Database::class);;
  */
 function manualclean($params)
 {
-    if (function_exists('docleanup')) {
-        stderr(_('Error'), _('Another cleanup operation is already in progress. Refresh to try again.'));
-    }
-    $opts = [
-        'options' => [
-            'min_range' => 1,
-        ],
-    ];
-$cid = filter_var($params['cid'] ?? null, FILTER_VALIDATE_INT, $opts);
-if ($cid === false) {
-    stderr('Error', 'Bad you!');
+if (function_exists('docleanup')) {
+    stderr(_('Error'), _('Another cleanup operation is already in progress. Refresh to try again.'));
 }
 
-// Brug bind-parametre – ikke sqlesc
-$stmt = $db->perform(
-    '/* TODO: write real query using :cid */',
-    ['cid' => $cid]
+$opts = [
+    'options' => [
+        'min_range' => 1,
+    ],
+];
+
+$cid = filter_var($params['cid'] ?? null, FILTER_VALIDATE_INT, $opts);
+if ($cid === false) {
+    stderr(_('Error'), _('Invalid cleanup id.'));
+}
+
+// Use bound parameters — do not use sqlesc
+// TODO: replace with the real statement, e.g. UPDATE ... WHERE id = :cid
+$stmt = $db->perform('SELECT :cid AS cid', ['cid' => $cid]);    ['cid' => $cid]
 );
 
 /**
