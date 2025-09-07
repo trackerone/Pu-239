@@ -28,3 +28,17 @@ No matches.
 $ rg "mysqli_|sql_query\(|sqlesc\(" bin
 ```
 No matches.
+
+## include
+- `include/function_bemail.php`: migrated from legacy `sql_query`/`sqlesc` to `Pu239\Database` with bound parameters; added strict typing and standardized bootstrap.
+- `include/function_rating.php`: migrated from legacy `sql_query`/`mysqli_num_rows` to `Pu239\Database` with bound parameters and `SELECT COUNT(*)`; added strict typing and standardized bootstrap.
+- `include/stealth.php`: removed `sqlesc`/`mysqli_fetch_assoc` usage in favor of `Pu239\Database` with bound parameters; added strict typing and standardized bootstrap.
+- `include/function_tmdb.php`: replaced `sql_query` with `$db->run` and bound parameters for bulk inserts; added strict typing and standardized bootstrap.
+- `include/function_happyhour.php`: removed `sql_query`/`sqlesc` in favor of `$db->run` with bound parameters; added strict typing and standardized bootstrap.
+- `include/database.php`, `include/DB.php`, `include/bittorrent.php`: switched to `bootstrap_pdo.php`, removed legacy scaffolding, and added strict typing.
+
+### Verification
+```
+$ rg "mysqli_|sql_query\(|sqlesc\(" include
+```
+No matches.

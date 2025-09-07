@@ -1,22 +1,19 @@
 <?php
-require_once __DIR__ . '/runtime_safe.php';
 
+declare(strict_types=1);
 
-declare(strict_types = 1);
-
-use Pu239\Database;
+require_once __DIR__.'/runtime_safe.php';
+require_once __DIR__.'/bootstrap_pdo.php';
 
 use DI\DependencyException;
 use DI\NotFoundException;
 use MatthiasMullie\Scrapbook\Exception\UnbegunTransaction;
 use Pu239\Cache;
+use Pu239\Database;
 use Pu239\Session;
 use Pu239\User;
 
 /**
- * @param int  $userid
- * @param bool $stealth
- *
  * @throws DependencyException
  * @throws NotFoundException
  * @throws UnbegunTransaction
@@ -24,8 +21,8 @@ use Pu239\User;
  */
 function stealth(int $userid, bool $stealth = true)
 {
-    global $container;
-$db = $container->get(Database::class);, $site_config, $CURUSER;
+    global $container, $site_config, $CURUSER;
+    $db = $container->get(Database::class);
 
     $users_class = $container->get(User::class);
     $username = $users_class->get_item('username', $userid);
@@ -39,27 +36,26 @@ $db = $container->get(Database::class);, $site_config, $CURUSER;
     }
 
     if ($setbits || $clrbits) {
-        $db->run('UPDATE users SET perms = ((perms | ' . $setbits . ') & ~' . $clrbits . ') WHERE id = :id', [':id' => $userid]) or sqlerr(__FILE__, __LINE__);
+        $db->run('UPDATE users SET perms = ((perms | '.$setbits.') & ~'.$clrbits.') WHERE id = :id', [':id' => $userid]);
     }
-    $rows = $db->fetchAll('SELECT username, perms, modcomment FROM users WHERE id = ' . sqlesc($userid) . ' LIMIT 1');
-    $row = mysqli_fetch_assoc($res);
+    $row = $db->fetch('SELECT username, perms, modcomment FROM users WHERE id = :id', [':id' => $userid]);
     $row['perms'] = (int) $row['perms'];
-    $modcomment = get_date((int) TIME_NOW, '', 1) . ' - ' . $display . ' in Stealth Mode thanks to ' . $CURUSER['username'] . "\n" . $row['modcomment'];
-    $db->run('UPDATE users SET modcomment = ' . sqlesc($modcomment) . ' WHERE id = :id', [':id' => $userid]) or sqlerr(__FILE__, __LINE__);
+    $modcomment = \get_date((int) TIME_NOW, '', 1).' - '.$display.' in Stealth Mode thanks to '.$CURUSER['username']."\n".$row['modcomment'];
+    $db->run('UPDATE users SET modcomment = :modcomment WHERE id = :id', [':modcomment' => $modcomment, ':id' => $userid]);
     $cache = $container->get(Cache::class);
-    $cache->update_row('user_' . $userid, [
+    $cache->update_row('user_'.$userid, [
         'perms' => $row['perms'],
         'modcomment' => $modcomment,
     ], $site_config['expires']['user_cache']);
     if ($userid === $CURUSER['id']) {
-        $cache->update_row('user_' . $CURUSER['id'], [
+        $cache->update_row('user_'.$CURUSER['id'], [
             'perms' => $row['perms'],
             'modcomment' => $modcomment,
         ], $site_config['expires']['user_cache']);
     }
-    write_log('Member [b][url=userdetails.php?id=' . $userid . ']' . (htmlsafechars($row['username'])) . '[/url][/b] ' . $display . ' in Stealth Mode thanks to [b]' . $CURUSER['username'] . '[/b]');
+    \write_log('Member [b][url=userdetails.php?id='.$userid.']'.(\htmlsafechars($row['username'])).'[/url][/b] '.$display.' in Stealth Mode thanks to [b]'.$CURUSER['username'].'[/b]');
     $session = $container->get(Session::class);
     $session->set('is-info', "{$username} $display Stealthy");
-    header("Location: {$site_config['paths']['baseurl']}/userdetails.php?id=$userid");
-    app_halt('Exit called');
+    \header("Location: {$site_config['paths']['baseurl']}/userdetails.php?id=$userid");
+    \app_halt('Exit called');
 }
