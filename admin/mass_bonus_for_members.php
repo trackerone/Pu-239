@@ -6,14 +6,18 @@ use Pu239\Message;
 use Pu239\User;
 
 require_once __DIR__ . '/../include/runtime_safe.php';
+require_once __DIR__ . '/../include/bootstrap_pdo.php';
 require_once INCL_DIR . 'function_users.php';
 require_once INCL_DIR . 'function_bbcode.php';
 require_once CLASS_DIR . 'class_check.php';
 
 global $container, $site_config, $CURUSER;
 
+/** @var Database $db */
 $db = $container->get(Database::class);
+/** @var User $users_class */
 $users_class = $container->get(User::class);
+/** @var Message $messages_class */
 $messages_class = $container->get(Message::class);
 
 $class = get_access(basename($_SERVER['REQUEST_URI']));
@@ -42,67 +46,202 @@ $good_stuff = [
     'pm',
 ];
 
-$action = !empty($_POST['bonus_options_1']) && in_array($_POST['bonus_options_1'], $good_stuff) ? $_POST['bonus_options_1'] : '';
-$free_for = !empty($_POST['free_for_classes']) && is_array($_POST['free_for_classes']) ? '(' . implode(', ', $_POST['free_for_classes']) . ')' : '';
-if (empty($free_for)) {
-    $action = '';
-    unset($_POST);
+// ------ helpers ------
+
+/**
+ * Fetch recipient user IDs by selected classes (enabled users only).
+ *
+ * @param array<int> $class_ids
+ * @return int[]
+ */
+function get_recipient_ids(Database $db, array $class_ids): array
+{
+    if (empty($class_ids)) {
+        return [];
+    }
+    $class_ids = array_values(array_unique(array_map('intval', $class_ids)));
+    $ph = [];
+    $params = [];
+    foreach ($class_ids as $i => $c) {
+        $k = ":c$i";
+        $ph[] = $k;
+        $params[$k] = $c;
+    }
+    $rows = $db->fetchAll(
+        'SELECT id FROM users WHERE status = 0 AND class IN (' . implode(',', $ph) . ')',
+        $params
+    );
+    return array_map(static fn($r) => (int) $r['id'], $rows);
 }
 
+/**
+ * Send a system PM to a list of user IDs.
+ *
+ * @param int[] $user_ids
+ */
+function mass_pm(Message $messages_class, array $user_ids, string $subject, string $body, int $added): void
+{
+    if (empty($user_ids)) {
+        return;
+    }
+    $batch = [];
+    foreach ($user_ids as $uid) {
+        $batch[] = [
+            'receiver' => (int) $uid,
+            'added'    => $added,
+            'msg'      => $body,
+            'subject'  => $subject,
+        ];
+    }
+    if (!empty($batch)) {
+        $messages_class->insert($batch);
+    }
+}
+
+// ------ controller ------
+
+$action = !empty($_POST['bonus_options_1']) && in_array($_POST['bonus_options_1'], $good_stuff, true)
+    ? (string) $_POST['bonus_options_1']
+    : '';
+
+$class_ids = !empty($_POST['free_for_classes']) && is_array($_POST['free_for_classes'])
+    ? array_map('intval', $_POST['free_for_classes'])
+    : [];
+
+if (empty($class_ids)) {
+    $action = '';
+    $_POST = [];
+}
 
 switch ($action) {
-    case 'upload_credit':
-        $GB = isset($_POST['GB']) ? (int) $_POST['GB'] : 0;
-        if ($GB < 1073741824 || $GB > 53687091200) {
+    case 'upload_credit': {
+        $GB = isset($_POST['GB']) ? (int) $_POST['GB'] : 0; // value in bytes from <select>
+        if ($GB < 1073741824 || $GB > 53687091200) { // 1 GB .. 50 GB (bytes)
             stderr(_('Error'), _('You forgot to select an amount!'));
         }
-        $bonus_added = $GB / 1073741824;
-        $res_GB = $db->run(');
+
+        $ids = get_recipient_ids($db, $class_ids);
+        if (empty($ids)) {
+            stderr(_('Info'), _('No enabled users matched the selected classes.'));
+        }
+
+        // Add to users.uploaded
+        $db->run(
+            'UPDATE users SET uploaded = uploaded + :bytes WHERE status = 0 AND class IN (' . implode(',', array_fill(0, count($class_ids), '?')) . ')',
+            array_merge([':bytes' => $GB], $class_ids)
+        );
+
+        // Notify
+        $gb_amount = $GB / 1073741824;
+        $subject = _('Upload Credit Awarded');
+        $body = _fe('You have been awarded {0} GB upload credit by staff.', (int) $gb_amount);
+        mass_pm($messages_class, $ids, $subject, $body, $dt);
+
+        header('Location: ' . $_SERVER['PHP_SELF'] . '?tool=mass_bonus_for_members&action=mass_bonus_for_members&GB=1');
         app_halt('Exit called');
         break;
+    }
 
-    case 'karma':
-        $karma = isset($_POST['karma']) ? (int) $_POST['karma'] : 0;
-        if ($karma < 100 || $karma > 5000) {
+    case 'karma': {
+        $karma_points = isset($_POST['karma']) ? (int) $_POST['karma'] : 0;
+        if ($karma_points < 100 || $karma_points > 5000) {
             stderr(_('Error'), _('You forgot to select an amount!'));
         }
-        $res_karma = $db->run(');
+
+        $ids = get_recipient_ids($db, $class_ids);
+        if (empty($ids)) {
+            stderr(_('Info'), _('No enabled users matched the selected classes.'));
+        }
+
+        // NOTE: adjust column name if different in your schema (e.g., "seedbonus" or "karma")
+        $db->run(
+            'UPDATE users SET seedbonus = seedbonus + :pts WHERE status = 0 AND class IN (' . implode(',', array_fill(0, count($class_ids), '?')) . ')',
+            array_merge([':pts' => $karma_points], $class_ids)
+        );
+
+        $subject = _('Karma Points Awarded');
+        $body = _fe('You have been awarded {0} Karma Bonus Points by staff.', $karma_points);
+        mass_pm($messages_class, $ids, $subject, $body, $dt);
+
+        header('Location: ' . $_SERVER['PHP_SELF'] . '?tool=mass_bonus_for_members&action=mass_bonus_for_members&karma=1');
         app_halt('Exit called');
         break;
+    }
 
-    case 'freeslots':
+    case 'freeslots': {
         $freeslots = isset($_POST['freeslots']) ? (int) $_POST['freeslots'] : 0;
         if ($freeslots < 1 || $freeslots > 50) {
             stderr(_('Error'), _('You forgot to select an amount!'));
         }
-        $res_freeslots = $db->run(');
+
+        $ids = get_recipient_ids($db, $class_ids);
+        if (empty($ids)) {
+            stderr(_('Info'), _('No enabled users matched the selected classes.'));
+        }
+
+        $db->run(
+            'UPDATE users SET freeslots = freeslots + :num WHERE status = 0 AND class IN (' . implode(',', array_fill(0, count($class_ids), '?')) . ')',
+            array_merge([':num' => $freeslots], $class_ids)
+        );
+
+        $subject = _('Freeleech Slot(s) Awarded');
+        $body = _fe('You have been awarded {0} freeleech slot(s) by staff.', $freeslots);
+        mass_pm($messages_class, $ids, $subject, $body, $dt);
+
+        header('Location: ' . $_SERVER['PHP_SELF'] . '?tool=mass_bonus_for_members&action=mass_bonus_for_members&freeslots=1');
         app_halt('Exit called');
         break;
+    }
 
-    case 'invite':
+    case 'invite': {
         $invites = isset($_POST['invites']) ? (int) $_POST['invites'] : 0;
         if ($invites < 1 || $invites > 50) {
             stderr(_('Error'), _('You forgot to select an amount!'));
         }
-        $res_invites = $db->run(");
-            }
-            unset($pm_values, $user_values, $user_updates, $count);
+
+        $ids = get_recipient_ids($db, $class_ids);
+        if (empty($ids)) {
+            stderr(_('Info'), _('No enabled users matched the selected classes.'));
         }
+
+        $db->run(
+            'UPDATE users SET invites = invites + :num WHERE status = 0 AND class IN (' . implode(',', array_fill(0, count($class_ids), '?')) . ')',
+            array_merge([':num' => $invites], $class_ids)
+        );
+
+        $subject = _('Invite(s) Awarded');
+        $body = _fe('You have been awarded {0} invite(s) by staff.', $invites);
+        mass_pm($messages_class, $ids, $subject, $body, $dt);
+
         header('Location: ' . $_SERVER['PHP_SELF'] . '?tool=mass_bonus_for_members&action=mass_bonus_for_members&invites=1');
         app_halt('Exit called');
         break;
+    }
 
-    case 'pm':
-        if (!isset($_POST['subject'])) {
+    case 'pm': {
+        $subject = isset($_POST['subject']) ? trim((string) $_POST['subject']) : '';
+        $body = isset($_POST['body']) ? (string) $_POST['body'] : '';
+        if ($subject === '') {
             stderr(_('Error'), _('No subject text... Please enter something to send!'));
         }
-        if (!isset($_POST['body'])) {
+        if ($body === '') {
             stderr(_('Error'), _('No body text... Please enter something to send!'));
         }
-        $res_pms = $db->run(');
+
+        $ids = get_recipient_ids($db, $class_ids);
+        if (empty($ids)) {
+            stderr(_('Info'), _('No enabled users matched the selected classes.'));
+        }
+
+        mass_pm($messages_class, $ids, $subject, $body, $dt);
+
+        header('Location: ' . $_SERVER['PHP_SELF'] . '?tool=mass_bonus_for_members&action=mass_bonus_for_members&pm=1');
         app_halt('Exit called');
         break;
+    }
 }
+
+// ---------------- UI ----------------
 
 $all_classes_check_boxes = '
     <div class="level-center">';
@@ -134,36 +273,39 @@ $bonus_GB = '<select name="GB">
         <option class="body" value="32212254720">' . _fe('{0} GB', 30) . '</option>
         <option class="body" value="53687091200">' . _fe('{0} GB', 50) . '</option>
         </select>' . _('select amount of bonus GB to add to members upload credit.') . ' ';
+
 $karma_drop_down = '
         <select name="karma">
         <option class="head" value="">' . _('Add Karma Bonus Points') . '</option>';
 $i = 100;
 while ($i <= 5000) {
-    $karma_drop_down .= '<option class="body" value="' . $i . '.0">' . $i . ' ' . _('Karma Points') . '</option>';
-    $i = ($i < 1000 ? $i = $i + 100 : $i = $i + 500);
+    $karma_drop_down .= '<option class="body" value="' . $i . '">' . $i . ' ' . _('Karma Points') . '</option>';
+    $i = ($i < 1000 ? $i + 100 : $i + 500);
 }
 $karma_drop_down .= '</select> ' . _('select amount of Karma Bonus Points to add.') . ' ';
+
 $free_leech_slot_drop_down = '
         <select name="freeslots">
         <option class="head" value="">' . _('Add freeslots') . '</option>';
 $i = 1;
 while ($i <= 50) {
-    $free_leech_slot_drop_down .= '<option class="body" value="' . $i . '.0">' . $i . _('freeslot') . ($i !== 1 ? 's' : '') . '</option>';
-    $i = ($i < 10 ? $i = $i + 1 : $i = $i + 5);
+    $free_leech_slot_drop_down .= '<option class="body" value="' . $i . '">' . $i . ' ' . _('freeslot') . ($i !== 1 ? 's' : '') . '</option>';
+    $i = ($i < 10 ? $i + 1 : $i + 5);
 }
 $free_leech_slot_drop_down .= '</select>' . _('select amount of freeslots to add.') . ' ';
+
 $invites_drop_down = '
         <select name="invites">
         <option class="head" value="">' . _('Add Invites') . '</option>';
 $i = 1;
 while ($i <= 50) {
-    $invites_drop_down .= '<option class="body" value="' . $i . '.0">' . $i . ' ' . _('Add Invites') . ($i !== 1 ? 's' : '') . '</option>';
-    $i = ($i < 10 ? $i = $i + 1 : $i = $i + 5);
+    $invites_drop_down .= '<option class="body" value="' . $i . '">' . $i . ' ' . _('Invite') . ($i !== 1 ? 's' : '') . '</option>';
+    $i = ($i < 10 ? $i + 1 : $i + 5);
 }
 $invites_drop_down .= '</select>' . _('select amount of invites to add.') . '';
 
-$subject = isset($_POST['subject']) ? htmlsafechars($_POST['subject']) : _('Mass PM');
-$body = isset($_POST['body']) ? htmlsafechars($_POST['body']) : _('Your text here');
+$subject = isset($_POST['subject']) ? htmlsafechars((string) $_POST['subject']) : _('Mass PM');
+$body = isset($_POST['body']) ? htmlsafechars((string) $_POST['body']) : _('Your text here');
 $pm_drop_down = '
                 <table class="w-100">
                     <tr>
@@ -181,6 +323,7 @@ $pm_drop_down = '
                         <td class="is-paddingless">' . BBcode($body, '', 300) . '</td>
                     </tr>
                 </table>';
+
 $drop_down = '
         <select name="bonus_options_1" id="bonus_options_1">
         <option value="">' . _('Select Bonus Type') . '</option>
@@ -192,15 +335,18 @@ $drop_down = '
         <option value="">' . _('Reset bonus type') . '</option>
         </select>';
 
-$h1_thingie .= (isset($_GET['GB']) ? ($_GET['GB'] === 1 ? '<h2>' . _('Bonus GB added to all enabled members') . '</h2>' : '<h2>' . _('Bonus GB added to all enabled members') . '</h2>') : '');
-$h1_thingie .= (isset($_GET['karma']) ? ($_GET['karma'] === 1 ? '<h2>' . _('Bonus Karma added to all enabled members') . '</h2>' : '<h2>' . _('Bonus Karma added to selected member classes') . '</h2>') : '');
-$h1_thingie .= (isset($_GET['freeslots']) ? ($_GET['freeslots'] === 1 ? '<h2>' . _('Bonus Free Leech Slots added to all enabled members') . '</h2>' : '<h2>' . _('Bonus Free Leech Slots added to selected member classes') . '</h2>') : '');
-$h1_thingie .= (isset($_GET['invites']) ? ($_GET['invites'] === 1 ? '<h2>' . _('Bonus invites added to all enabled members') . '</h2>' : '<h2>' . _('Bonus invites added to selected member classes') . '</h2>') : '');
-$h1_thingie .= (isset($_GET['pm']) ? ($_GET['pm'] === 1 ? '<h2>' . _('Mass pm sent to all enabled members') . '</h2>' : '<h2>' . _('Mass pm sent to selected member classes') . '</h2>') : '');
+// Success headers
+$h1_thingie .= (isset($_GET['GB']) && (int) $_GET['GB'] === 1) ? '<h2>' . _('Bonus GB added to selected member classes') . '</h2>' : '';
+$h1_thingie .= (isset($_GET['karma']) && (int) $_GET['karma'] === 1) ? '<h2>' . _('Bonus Karma added to selected member classes') . '</h2>' : '';
+$h1_thingie .= (isset($_GET['freeslots']) && (int) $_GET['freeslots'] === 1) ? '<h2>' . _('Bonus Free Leech Slots added to selected member classes') . '</h2>' : '';
+$h1_thingie .= (isset($_GET['invites']) && (int) $_GET['invites'] === 1) ? '<h2>' . _('Bonus invites added to selected member classes') . '</h2>' : '';
+$h1_thingie .= (isset($_GET['pm']) && (int) $_GET['pm'] === 1) ? '<h2>' . _('Mass pm sent to selected member classes') . '</h2>' : '';
+
 $HTMLOUT .= '<h1 class="has-text-centered">' . $site_config['site']['name'] . ' ' . _('Mass Bonus') . '</h1>' . $h1_thingie;
 $HTMLOUT .= '
     <form name="inputform" method="post" action="' . $_SERVER['PHP_SELF'] . '?tool=mass_bonus_for_members&amp;action=mass_bonus_for_members" enctype="multipart/form-data" accept-charset="utf-8">';
-$body = '
+
+$body_html = '
         <tr>
             <td class="colhead" colspan="2">' . _('Mass bonus for all or selected members:') . '</td>
         </tr>
@@ -222,13 +368,14 @@ $body = '
         </tr>
         <tr>
             <td colspan="2">
-                <div class="has-text-centered margin20">' . _("*** Please note, pm's are automatically sent to all users awarded by the script.") . '</div>
+                <div class="has-text-centered margin20">' . _("*** Please note, PM's are automatically sent to all users awarded by the script.") . '</div>
                 <div class="has-text-centered margin20">
                     <input type="submit" class="button is-small" value="' . _('Do it') . '">
                 </div>
             </td>
         </tr>';
-$HTMLOUT .= main_table($body) . '
+
+$HTMLOUT .= main_table($body_html) . '
     </form>';
 
 $title = _('Bonus Manager');
