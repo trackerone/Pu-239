@@ -1,17 +1,15 @@
 <?php
-$db = $container->get(Database::class);
+declare(strict_types=1);
 
 require_once __DIR__ . '/../../include/runtime_safe.php';
-
 require_once __DIR__ . '/../../include/bootstrap_pdo.php';
 
-
-declare(strict_types = 1);
-
 use Pu239\Cache;
+use Pu239\Database;
 
 global $container, $site_config;
 
+$db = $container->get(Database::class);
 $cache = $container->get(Cache::class);
 $stats_cache = $cache->get('site_stats_');
 if ($stats_cache === false || is_null($stats_cache)) {

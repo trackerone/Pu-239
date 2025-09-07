@@ -1,30 +1,20 @@
 <?php
-$db = $container->get(Database::class);
+declare(strict_types=1);
 
 require_once __DIR__ . '/../../include/runtime_safe.php';
-
 require_once __DIR__ . '/../../include/bootstrap_pdo.php';
-
-
-declare(strict_types = 1);
 
 use Pu239\Cache;
 use Pu239\Database;
 
 global $container, $site_config, $CURUSER;
 
+$db = $container->get(Database::class);
 $cache = $container->get(Cache::class);
 $news = $cache->get('latest_news_');
 if ($news === false || is_null($news)) {
     $dt = TIME_NOW - (86400 * 45);
-    // $fluent removed — use $this->db (ExtendedPdo)
-    $news = $fluent->from('news')
-                   ->where('(added > ? AND sticky = "no") OR sticky = "yes"', $dt)
-                   ->orderBy('sticky')
-                   ->orderBy('added DESC')
-                   ->limit(10)
-                   ->fetchAll();
-
+    $news = $db->fetchAll('SELECT * FROM news WHERE (added > :dt AND sticky = "no") OR sticky = "yes" ORDER BY sticky, added DESC LIMIT 10', [':dt' => $dt]);
     $cache->set('latest_news_', $news, $site_config['expires']['latest_news']);
 }
 

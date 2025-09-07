@@ -1,32 +1,24 @@
 <?php
-$db = $container->get(Database::class);
+declare(strict_types=1);
 
 require_once __DIR__ . '/../../include/runtime_safe.php';
-
 require_once __DIR__ . '/../../include/bootstrap_pdo.php';
-
-
-declare(strict_types = 1);
 
 use Pu239\Cache;
 use Pu239\Database;
 
 global $container, $site_config;
 
+$db = $container->get(Database::class);
 $cache = $container->get(Cache::class);
 $irc = $cache->get('ircusers_');
 if ($irc === false || is_null($irc)) {
     $irc = $list = [];
-    // $fluent removed — use $this->db (ExtendedPdo)
-    $query = $fluent->from('users')
-                    ->select(null)
-                    ->select('id')
-                    ->where('onirc = ?', 'yes')
-                    ->where('perms < ?', PERMS_STEALTH)
-                    ->where('anonymous_until < ?', TIME_NOW)
-                    ->where('id != 2')
-                    ->orderBy('username')
-                    ->fetchAll();
+    $query = $db->fetchAll('SELECT id FROM users WHERE onirc = :onirc AND perms < :perms AND anonymous_until < :now AND id != 2 ORDER BY username', [
+        ':onirc' => 'yes',
+        ':perms' => PERMS_STEALTH,
+        ':now' => TIME_NOW,
+    ]);
 
     $count = count($query);
     $i = 0;

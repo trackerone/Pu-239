@@ -1,33 +1,26 @@
 <?php
-$db = $container->get(Database::class);
+declare(strict_types=1);
 
 require_once __DIR__ . '/../../include/runtime_safe.php';
-
 require_once __DIR__ . '/../../include/bootstrap_pdo.php';
-
-
-declare(strict_types = 1);
 
 use Pu239\Cache;
 use Pu239\Database;
 
 global $container, $site_config;
 
+$db = $container->get(Database::class);
 $cache = $container->get(Cache::class);
 $birthday = $cache->get('birthdayusers_');
 if ($birthday === false || is_null($birthday)) {
     $birthday = $list = [];
     $current_date = getdate();
-    // $fluent removed — use $this->db (ExtendedPdo)
-    $query = $fluent->from('users')
-                    ->select(null)
-                    ->select('id')
-                    ->where('MONTH(birthday) = ?', $current_date['mon'])
-                    ->where('DAYOFMONTH(birthday) = ?', $current_date['mday'])
-                    ->where('perms < ?', PERMS_STEALTH)
-                    ->where('anonymous_until < ?', TIME_NOW)
-                    ->orderBy('username')
-                    ->fetchAll();
+    $query = $db->fetchAll('SELECT id FROM users WHERE MONTH(birthday) = :mon AND DAYOFMONTH(birthday) = :day AND perms < :perms AND anonymous_until < :now ORDER BY username', [
+        ':mon' => $current_date['mon'],
+        ':day' => $current_date['mday'],
+        ':perms' => PERMS_STEALTH,
+        ':now' => TIME_NOW,
+    ]);
 
     $count = count($query);
     $i = 0;

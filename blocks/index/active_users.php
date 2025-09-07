@@ -1,33 +1,25 @@
 <?php
-$db = $container->get(Database::class);
+declare(strict_types=1);
 
 require_once __DIR__ . '/../../include/runtime_safe.php';
-
 require_once __DIR__ . '/../../include/bootstrap_pdo.php';
-
-
-declare(strict_types = 1);
 
 use Pu239\Cache;
 use Pu239\Database;
 
 global $container, $site_config;
 
+$db = $container->get(Database::class);
 $cache = $container->get(Cache::class);
 $active = $cache->get('activeusers_');
 if ($active === false || is_null($active)) {
     $list = [];
     $dt = TIME_NOW - 900;
-    // $fluent removed — use $this->db (ExtendedPdo)
-    $query = $fluent->from('users')
-                    ->select(null)
-                    ->select('id')
-                    ->where('last_access > ?', $dt)
-                    ->where('perms < ?', PERMS_STEALTH)
-                    ->where('anonymous_until < ?', TIME_NOW)
-                    ->where('id != 2')
-                    ->orderBy('username')
-                    ->fetchAll();
+    $query = $db->fetchAll('SELECT id FROM users WHERE last_access > :dt AND perms < :perms AND anonymous_until < :now AND id != 2 ORDER BY username', [
+        ':dt' => $dt,
+        ':perms' => PERMS_STEALTH,
+        ':now' => TIME_NOW,
+    ]);
 
     $count = count($query);
     $i = 0;

@@ -1,12 +1,8 @@
 <?php
-$db = $container->get(Database::class);
+declare(strict_types=1);
 
 require_once __DIR__ . '/../../include/runtime_safe.php';
-
 require_once __DIR__ . '/../../include/bootstrap_pdo.php';
-
-
-declare(strict_types = 1);
 
 use Pu239\Cache;
 use Pu239\Database;
@@ -14,14 +10,14 @@ use Pu239\Database;
 $user = check_user_status();
 global $container, $site_config;
 
+$db = $container->get(Database::class);
+
 if ($user) {
     $cache = $container->get(Cache::class);
     $lottery_info = $cache->get('lottery_info_');
     if ($lottery_info === false || is_null($lottery_info)) {
-        // $fluent removed — use $this->db (ExtendedPdo)
-        $lottery_info = $fluent->from('lottery_config')
-                               ->fetchPairs('name', 'value');
-
+        $lottery_info = $db->fetchAll('SELECT name, value FROM lottery_config');
+        $lottery_info = array_column($lottery_info, 'value', 'name');
         $cache->set('lottery_info_', $lottery_info, 86400);
     }
 

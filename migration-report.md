@@ -76,6 +76,27 @@ No matches in modified files.
 - `blocks/index/poll.php`: standardized `bootstrap_pdo.php` and added strict typing.
 - `blocks/index/requests.php`: standardized `bootstrap_pdo.php` and added strict typing.
 
+- `blocks/global/bugmessages.php`: migrated from `$fluent` to `$db->fetchValue` for bug count; standardized `bootstrap_pdo.php` and added strict typing.
+- `blocks/global/crazyhour.php`: replaced `$fluent` queries with `$db->fetch`/`run`; standardized `bootstrap_pdo.php` and added strict typing.
+- `blocks/global/freeleech_contribution.php`: switched `$fluent` lookups to `$db->fetch`; standardized `bootstrap_pdo.php` and added strict typing.
+- `blocks/global/lottery.php`: converted `$fluent` usage to `$db->fetchAll` with `array_column`; standardized `bootstrap_pdo.php` and added strict typing.
+- `blocks/global/report.php`: migrated report count to `$db->fetchValue`; standardized `bootstrap_pdo.php` and added strict typing.
+- `blocks/global/staffmessages.php`: replaced `$fluent` count with `$db->fetchValue`; standardized `bootstrap_pdo.php` and added strict typing.
+- `blocks/global/uploadapp.php`: replaced `$fluent` count with `$db->fetchValue`; standardized `bootstrap_pdo.php` and added strict typing.
+- `blocks/index/active_24h_users.php`: migrated record and user queries to `$db->fetch`/`fetchAll` and `run`; standardized `bootstrap_pdo.php` and added strict typing.
+- `blocks/index/active_birthday_users.php`: migrated birthday lookup to `$db->fetchAll`; standardized `bootstrap_pdo.php` and added strict typing.
+- `blocks/index/active_irc_users.php`: migrated IRC user lookup to `$db->fetchAll`; standardized `bootstrap_pdo.php` and added strict typing.
+- `blocks/index/active_users.php`: migrated active user lookup to `$db->fetchAll`; standardized `bootstrap_pdo.php` and added strict typing.
+- `blocks/index/news.php`: migrated news listing to `$db->fetchAll`; standardized `bootstrap_pdo.php` and added strict typing.
+- `blocks/index/staff_picks.php`: standardized `bootstrap_pdo.php` and added strict typing.
+- `blocks/index/stats.php`: standardized `bootstrap_pdo.php` and added strict typing.
+- `blocks/index/top_torrents.php`: standardized `bootstrap_pdo.php` and added strict typing.
+- `blocks/index/torrentfreak.php`: standardized `bootstrap_pdo.php` and added strict typing.
+- `blocks/index/trivia.php`: standardized `bootstrap_pdo.php` and added strict typing.
+- `blocks/userdetails/avatar.php`: standardized `bootstrap_pdo.php` and added strict typing.
+- `blocks/userdetails/birthday.php`: standardized `bootstrap_pdo.php` and added strict typing.
+- `blocks/userdetails/browser.php`: standardized `bootstrap_pdo.php` and added strict typing.
+
 ### Previous migrations
 - `blocks/index/forum_posts.php`: migrated from legacy `sql_query`/`mysqli_fetch_assoc` to `$db->fetchAll` with bound parameters and standardized bootstrap/strict typing.
 
