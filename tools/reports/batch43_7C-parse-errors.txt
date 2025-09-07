@@ -1,0 +1,72 @@
+Batch 43.7C — admin/*.php parse error report
+Generated: 2025-09-07T09:34:22+00:00
+================================================================
+Scanned files: 83
+Files with errors: 22
+
+/home/runner/work/Pu-239/Pu-239/tools/../admin/class_config.php
+  PHP Parse error:  syntax error, unexpected string content "", expecting "-" or identifier or variable or number in /home/runner/work/Pu-239/Pu-239/tools/../admin/class_config.php on line 230
+
+/home/runner/work/Pu-239/Pu-239/tools/../admin/class_promo.php
+  PHP Parse error:  syntax error, unexpected identifier "SELECT", expecting ")" in /home/runner/work/Pu-239/Pu-239/tools/../admin/class_promo.php on line 108
+
+/home/runner/work/Pu-239/Pu-239/tools/../admin/cleanup_manager.php
+  PHP Parse error:  syntax error, unexpected string content "", expecting "-" or identifier or variable or number in /home/runner/work/Pu-239/Pu-239/tools/../admin/cleanup_manager.php on line 100
+
+/home/runner/work/Pu-239/Pu-239/tools/../admin/comments.php
+  PHP Parse error:  syntax error, unexpected identifier "allComments" in /home/runner/work/Pu-239/Pu-239/tools/../admin/comments.php on line 30
+
+/home/runner/work/Pu-239/Pu-239/tools/../admin/doubleusers.php
+  PHP Parse error:  Unclosed '{' on line 24 in /home/runner/work/Pu-239/Pu-239/tools/../admin/doubleusers.php on line 96
+
+/home/runner/work/Pu-239/Pu-239/tools/../admin/edit_moods.php
+  PHP Parse error:  syntax error, unexpected token ">" in /home/runner/work/Pu-239/Pu-239/tools/../admin/edit_moods.php on line 36
+
+/home/runner/work/Pu-239/Pu-239/tools/../admin/flush.php
+  PHP Parse error:  syntax error, unexpected identifier "Success", expecting ")" in /home/runner/work/Pu-239/Pu-239/tools/../admin/flush.php on line 29
+
+/home/runner/work/Pu-239/Pu-239/tools/../admin/freeusers.php
+  PHP Parse error:  Unclosed '{' on line 24 in /home/runner/work/Pu-239/Pu-239/tools/../admin/freeusers.php on line 96
+
+/home/runner/work/Pu-239/Pu-239/tools/../admin/grouppm.php
+  PHP Parse error:  syntax error, unexpected identifier "There", expecting ")" in /home/runner/work/Pu-239/Pu-239/tools/../admin/grouppm.php on line 91
+
+/home/runner/work/Pu-239/Pu-239/tools/../admin/hnrwarn.php
+  PHP Parse error:  syntax error, unexpected identifier "Hey", expecting ")" in /home/runner/work/Pu-239/Pu-239/tools/../admin/hnrwarn.php on line 54
+
+/home/runner/work/Pu-239/Pu-239/tools/../admin/inactive.php
+  PHP Parse error:  syntax error, unexpected identifier "is", expecting ")" in /home/runner/work/Pu-239/Pu-239/tools/../admin/inactive.php on line 47
+
+/home/runner/work/Pu-239/Pu-239/tools/../admin/leechwarn.php
+  PHP Parse error:  Unclosed '{' on line 22 in /home/runner/work/Pu-239/Pu-239/tools/../admin/leechwarn.php on line 178
+
+/home/runner/work/Pu-239/Pu-239/tools/../admin/mass_bonus_for_members.php
+  PHP Parse error:  syntax error, unexpected token "exit", expecting ")" in /home/runner/work/Pu-239/Pu-239/tools/../admin/mass_bonus_for_members.php on line 61
+
+/home/runner/work/Pu-239/Pu-239/tools/../admin/namechanger.php
+  PHP Parse error:  syntax error, unexpected single-quoted string ">" . _(", expecting ")" in /home/runner/work/Pu-239/Pu-239/tools/../admin/namechanger.php on line 33
+
+/home/runner/work/Pu-239/Pu-239/tools/../admin/reports.php
+  PHP Parse error:  syntax error, unexpected string content "", expecting "-" or identifier or variable or number in /home/runner/work/Pu-239/Pu-239/tools/../admin/reports.php on line 99
+
+/home/runner/work/Pu-239/Pu-239/tools/../admin/reputation_ad.php
+  PHP Parse error:  syntax error, unexpected token "else", expecting end of file in /home/runner/work/Pu-239/Pu-239/tools/../admin/reputation_ad.php on line 256
+
+/home/runner/work/Pu-239/Pu-239/tools/../admin/shit_list.php
+  PHP Parse error:  syntax error, unexpected identifier "shit_list_", expecting ")" in /home/runner/work/Pu-239/Pu-239/tools/../admin/shit_list.php on line 45
+
+/home/runner/work/Pu-239/Pu-239/tools/../admin/sitelog.php
+  PHP Parse error:  syntax error, unexpected identifier "SELECT", expecting ")" in /home/runner/work/Pu-239/Pu-239/tools/../admin/sitelog.php on line 32
+
+/home/runner/work/Pu-239/Pu-239/tools/../admin/sysoplog.php
+  PHP Parse error:  syntax error, unexpected single-quoted string ";", expecting ")" in /home/runner/work/Pu-239/Pu-239/tools/../admin/sysoplog.php on line 32
+
+/home/runner/work/Pu-239/Pu-239/tools/../admin/system_view.php
+  PHP Parse error:  syntax error, unexpected fully qualified name "\n", expecting ")" in /home/runner/work/Pu-239/Pu-239/tools/../admin/system_view.php on line 96
+
+/home/runner/work/Pu-239/Pu-239/tools/../admin/warn.php
+  PHP Parse error:  syntax error, unexpected identifier "Hey", expecting ")" in /home/runner/work/Pu-239/Pu-239/tools/../admin/warn.php on line 58
+
+/home/runner/work/Pu-239/Pu-239/tools/../admin/watched_users.php
+  PHP Parse error:  Unclosed '{' on line 25 in /home/runner/work/Pu-239/Pu-239/tools/../admin/watched_users.php on line 208
+
