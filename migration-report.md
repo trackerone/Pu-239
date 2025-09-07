@@ -53,3 +53,12 @@ No matches.
 $ rg "mysqli_|sql_query\(|sqlesc\(" admin/bannedemails.php admin/user_hits.php admin/acpmanage.php
 ```
 No matches in modified files.
+
+## blocks
+- `blocks/index/forum_posts.php`: migrated from legacy `sql_query`/`mysqli_fetch_assoc` to `$db->fetchAll` with bound parameters and standardized bootstrap/strict typing.
+
+### Verification
+```
+$ rg "mysqli_|sql_query\(|sqlesc\(" blocks
+```
+No matches.
