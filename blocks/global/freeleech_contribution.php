@@ -1,16 +1,14 @@
 <?php
-$db = $container->get(Database::class);
+declare(strict_types=1);
 
 require_once __DIR__ . '/../../include/runtime_safe.php';
-
 require_once __DIR__ . '/../../include/bootstrap_pdo.php';
-
-
-declare(strict_types = 1);
 
 use Pu239\Database;
 
 global $container, $site_config;
+
+$db = $container->get(Database::class);
 
 require_once INCL_DIR . 'function_event.php';
 $free = get_event(false);
@@ -41,16 +39,9 @@ if (!empty($free) && $free['modifier'] != 0) {
     }
 }
 
-// $fluent removed — use $this->db (ExtendedPdo)
 $freeleech = $cache->get('freeleech_alerts_');
 if ($freeleech === false || is_null($freeleech)) {
-    $freeleech = $fluent->from('bonus')
-                        ->select(null)
-                        ->select('pointspool / points * 100 AS percent')
-                        ->select('enabled')
-                        ->where('id=11')
-                        ->fetch();
-
+    $freeleech = $db->fetch('SELECT pointspool / points * 100 AS percent, enabled FROM bonus WHERE id = :id', [':id' => 11]);
     $cache->set('freeleech_alerts_', $freeleech, 0);
 }
 
@@ -86,13 +77,7 @@ if ($freeleech['enabled'] === 'yes') {
 
 $doubleupload = $cache->get('doubleupload_alerts_');
 if ($doubleupload === false || is_null($doubleupload)) {
-    $doubleupload = $fluent->from('bonus')
-                           ->select(null)
-                           ->select('pointspool / points * 100 AS percent')
-                           ->select('enabled')
-                           ->where('id=12')
-                           ->fetch();
-
+    $doubleupload = $db->fetch('SELECT pointspool / points * 100 AS percent, enabled FROM bonus WHERE id = :id', [':id' => 12]);
     $cache->set('doubleupload_alerts_', $doubleupload, 0);
 }
 
@@ -128,13 +113,7 @@ if ($doubleupload['enabled'] === 'yes') {
 
 $halfdownload = $cache->get('halfdownload_alerts_');
 if ($halfdownload === false || is_null($halfdownload)) {
-    $halfdownload = $fluent->from('bonus')
-                           ->select(null)
-                           ->select('pointspool / points * 100 AS percent')
-                           ->select('enabled')
-                           ->where('id=13')
-                           ->fetch();
-
+    $halfdownload = $db->fetch('SELECT pointspool / points * 100 AS percent, enabled FROM bonus WHERE id = :id', [':id' => 13]);
     $cache->set('halfdownload_alerts_', $halfdownload, 0);
 }
 

@@ -1,12 +1,8 @@
 <?php
-$db = $container->get(Database::class);
+declare(strict_types=1);
 
 require_once __DIR__ . '/../../include/runtime_safe.php';
-
 require_once __DIR__ . '/../../include/bootstrap_pdo.php';
-
-
-declare(strict_types = 1);
 
 use Pu239\Cache;
 use Pu239\Database;
@@ -14,17 +10,12 @@ use Pu239\Database;
 $user = check_user_status();
 global $container, $site_config;
 
+$db = $container->get(Database::class);
 if ($site_config['alerts']['uploadapp'] && has_access($user['class'], UC_STAFF, 'coder')) {
     $cache = $container->get(Cache::class);
     $newapp = $cache->get('new_uploadapp_');
     if ($newapp === false || is_null($newapp)) {
-        // $fluent removed — use $this->db (ExtendedPdo)
-        $newapp = $fluent->from('uploadapp')
-                         ->select(null)
-                         ->select('COUNT(id) AS count')
-                         ->where('status = ?', 'pending')
-                         ->fetch("count");
-
+        $newapp = $db->fetchValue('SELECT COUNT(id) FROM uploadapp WHERE status = ?', ['pending']);
         $cache->set('new_uploadapp_', $newapp, $site_config['expires']['alerts']);
     }
     if ($newapp > 0) {

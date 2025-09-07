@@ -1,22 +1,19 @@
 <?php
-$db = $container->get(Database::class);
+declare(strict_types=1);
 
 require_once __DIR__ . '/../../include/runtime_safe.php';
-
 require_once __DIR__ . '/../../include/bootstrap_pdo.php';
-
-
-declare(strict_types = 1);
 
 use DI\DependencyException;
 use DI\NotFoundException;
 use Pu239\Cache;
 use Pu239\Database;
 
-global $site_config;
+global $container, $site_config;
 
+$db = $container->get(Database::class);
 if ($site_config['bonus']['crazy_hour']) {
-    $htmlout .= crazyhour();
+    $htmlout .= crazyhour($db);
 }
 
 /**
@@ -27,33 +24,25 @@ if ($site_config['bonus']['crazy_hour']) {
  *
  * @return string
  */
-function crazyhour()
+function crazyhour(Database $db)
 {
     global $CURUSER, $container;
 
     $cache = $container->get(Cache::class);
-    // $fluent removed — use $this->db (ExtendedPdo)
     $htmlout = $cz = '';
     $crazy_hour = (TIME_NOW + 3600);
     $crazyhour['crazyhour'] = $cache->get('crazyhour_');
     if ($crazyhour['crazyhour'] === false || is_null($crazyhour['crazyhour'])) {
-        $crazyhour['crazyhour'] = $fluent->from('freeleech')
-                                         ->select(null)
-                                         ->select('var')
-                                         ->select('amount')
-                                         ->where("type = 'crazyhour'")
-                                         ->fetch();
+        $crazyhour['crazyhour'] = $db->fetch('SELECT var, amount FROM freeleech WHERE type = :type', [':type' => 'crazyhour']);
         if (empty($crazyhour['crazyhour'])) {
             $crazyhour['crazyhour']['var'] = random_int(TIME_NOW, (TIME_NOW + 86400));
             $crazyhour['crazyhour']['amount'] = 0;
             $update = [
-                'var' => $crazyhour['crazyhour']['var'],
-                'amount' => $crazyhour['crazyhour']['amount'],
+                ':var' => $crazyhour['crazyhour']['var'],
+                ':amount' => $crazyhour['crazyhour']['amount'],
+                ':type' => 'crazyhour',
             ];
-            $fluent->update('freeleech')
-                   ->set($update)
-                   ->where("type = 'crazyhour'")
-                   ->execute();
+            $db->run('UPDATE freeleech SET var = :var, amount = :amount WHERE type = :type', $update);
         }
         $cache->set('crazyhour_', $crazyhour['crazyhour'], 0);
     }
@@ -65,13 +54,11 @@ function crazyhour()
             $crazyhour['crazyhour']['amount'] = 0;
             $crazyhour['remaining'] = ($crazyhour['crazyhour']['var'] - TIME_NOW);
             $update = [
-                'var' => $crazyhour['crazyhour']['var'],
-                'amount' => $crazyhour['crazyhour']['amount'],
+                ':var' => $crazyhour['crazyhour']['var'],
+                ':amount' => $crazyhour['crazyhour']['amount'],
+                ':type' => 'crazyhour',
             ];
-            $fluent->update('freeleech')
-                   ->set($update)
-                   ->where("type = 'crazyhour'")
-                   ->execute();
+            $db->run('UPDATE freeleech SET var = :var, amount = :amount WHERE type = :type', $update);
             $cache->set('crazyhour_', $crazyhour['crazyhour'], 0);
             write_log('Next [color=#FFCC00][b]Crazyhour[/b][/color] is at ' . get_date((int) $crazyhour['crazyhour']['var'] + ($CURUSER['time_offset'] - 3600), 'LONG') . '');
             $msg = 'Next [color=orange][b]Crazyhour[/b][/color] is at ' . get_date((int) $crazyhour['crazyhour']['var'] + ($CURUSER['time_offset'] - 3600), 'LONG');
@@ -83,12 +70,10 @@ function crazyhour()
             $cz_lock = $cache->set('crazyhour_lock_', 1, 10);
             if ($cz_lock !== false) {
                 $update = [
-                    'amount' => $crazyhour['crazyhour']['amount'],
+                    ':amount' => $crazyhour['crazyhour']['amount'],
+                    ':type' => 'crazyhour',
                 ];
-                $fluent->update('freeleech')
-                       ->set($update)
-                       ->where("type = 'crazyhour'")
-                       ->execute();
+                $db->run('UPDATE freeleech SET amount = :amount WHERE type = :type', $update);
                 $cache->set('crazyhour_', $crazyhour['crazyhour'], 0);
                 $msg = _("It's CrazyHour");
                 write_log($msg);

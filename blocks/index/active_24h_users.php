@@ -1,37 +1,27 @@
 <?php
-$db = $container->get(Database::class);
+declare(strict_types=1);
 
 require_once __DIR__ . '/../../include/runtime_safe.php';
-
 require_once __DIR__ . '/../../include/bootstrap_pdo.php';
-
-
-declare(strict_types = 1);
 
 use Pu239\Cache;
 use Pu239\Database;
 
 global $container, $site_config;
 
+$db = $container->get(Database::class);
 $cache = $container->get(Cache::class);
 $active24 = $cache->get('last24_users_');
 if ($active24 === false || is_null($active24)) {
     $list = [];
-    // $fluent removed — use $this->db (ExtendedPdo)
-    $record = $fluent->from('avps')
-                     ->where('arg = ?', 'last24')
-                     ->fetch();
+    $record = $db->fetch('SELECT value_i, value_u FROM avps WHERE arg = :arg', [':arg' => 'last24']);
 
     $dt = TIME_NOW - 86400;
-    $query = $fluent->from('users')
-                    ->select(null)
-                    ->select('id')
-                    ->where('last_access > ?', $dt)
-                    ->where('anonymous_until < ?', TIME_NOW)
-                    ->where('perms < ?', PERMS_STEALTH)
-                    ->where('id != 2')
-                    ->orderBy('username')
-                    ->fetchAll();
+    $query = $db->fetchAll('SELECT id FROM users WHERE last_access > :dt AND anonymous_until < :now AND perms < :perms AND id != 2 ORDER BY username', [
+        ':dt' => $dt,
+        ':now' => TIME_NOW,
+        ':perms' => PERMS_STEALTH,
+    ]);
 
     $count = count($query);
     $i = 0;
@@ -53,15 +43,12 @@ if ($active24 === false || is_null($active24)) {
     $active24['last24'] = number_format($record['value_i']);
     $active24['record'] = get_date((int) $record['value_u'], '');
     if ($count > $record['value_i']) {
-        $set = [
-            'value_s' => 0,
-            'value_i' => $count,
-            'value_u' => TIME_NOW,
-        ];
-        $fluent->update('avps')
-               ->set($set)
-               ->where('arg = ?', 'last24')
-               ->execute();
+        $db->run('UPDATE avps SET value_s = :value_s, value_i = :value_i, value_u = :value_u WHERE arg = :arg', [
+            ':value_s' => 0,
+            ':value_i' => $count,
+            ':value_u' => TIME_NOW,
+            ':arg' => 'last24',
+        ]);
     }
 
     $cache->set('last24_users_', $active24, $site_config['expires']['last24']);

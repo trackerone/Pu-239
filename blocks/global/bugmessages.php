@@ -1,12 +1,8 @@
 <?php
-$db = $container->get(Database::class);
+declare(strict_types=1);
 
 require_once __DIR__ . '/../../include/runtime_safe.php';
-
 require_once __DIR__ . '/../../include/bootstrap_pdo.php';
-
-
-declare(strict_types = 1);
 
 use Pu239\Cache;
 use Pu239\Database;
@@ -14,17 +10,12 @@ use Pu239\Database;
 $user = check_user_status();
 global $container, $site_config;
 
+$db = $container->get(Database::class);
 $cache = $container->get(Cache::class);
 if ($site_config['alerts']['bug'] && has_access($user['class'], UC_STAFF, 'coder')) {
     $bug_count = $cache->get('bug_mess_');
     if ($bug_count === false || is_null($bug_count)) {
-        // $fluent removed — use $this->db (ExtendedPdo)
-        $bug_count = $fluent->from('bugs')
-                            ->select(null)
-                            ->select('COUNT(id) AS count')
-                            ->where('status = ?', 'na')
-                            ->fetch("count");
-
+        $bug_count = $db->fetchValue('SELECT COUNT(id) FROM bugs WHERE status = ?', ['na']);
         $cache->set('bug_mess_', $bug_count, $site_config['expires']['alerts']);
     }
     if ($bug_count > 0) {
