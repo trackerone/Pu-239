@@ -4,6 +4,7 @@ declare(strict_types=1);
 use Pu239\Database;
 
 require_once __DIR__ . '/../include/runtime_safe.php';
+require_once __DIR__ . '/../include/bootstrap_pdo.php';
 require_once INCL_DIR . 'function_users.php';
 require_once INCL_DIR . 'function_html.php';
 require_once INCL_DIR . 'function_pager.php';
@@ -12,6 +13,7 @@ require_once CLASS_DIR . 'class_check.php';
 global $container, $CURUSER, $site_config;
 
 $db = $container->get(Database::class);
+$fluent = $db;
 
 $class = get_access(basename($_SERVER['REQUEST_URI']));
 class_check($class);
@@ -28,7 +30,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (!$email || !$comment) {
         stderr(_('Error'), _('Missing Form Data.'));
     }
-    sql_query('INSERT INTO bannedemails (added, addedby, comment, email) VALUES(' . TIME_NOW . ', ' . sqlesc($CURUSER['id']) . ', ' . sqlesc($comment) . ', ' . sqlesc($email) . ')') or sqlerr(__FILE__, __LINE__);
+    $db->run(
+        'INSERT INTO bannedemails (added, addedby, comment, email) VALUES (:added, :addedby, :comment, :email)',
+        [
+            ':added' => TIME_NOW,
+            ':addedby' => $CURUSER['id'],
+            ':comment' => $comment,
+            ':email' => $email,
+        ],
+    );
     header('Location: ' . $_SERVER['PHP_SELF'] . '?tool=bannedemails');
     app_halt('Exit called');
 }
@@ -52,15 +62,15 @@ $body = "
         </tr>";
 $HTMLOUT .= main_table($body) . '
     </form>';
-$db = $container->get(Database::class);
-$fluent = $db;
 $count1 = $fluent->from('bannedemails')
                  ->select(null)
                  ->select('COUNT(id) AS count')
-                 ->fetch("count");
+                 ->fetch('count');
 $perpage = 15;
 $pager = pager($perpage, $count1, 'staffpanel.php?tool=bannedemails&amp;');
-$res = sql_query('SELECT b.id, b.added, b.addedby, b.comment, b.email, u.username FROM bannedemails AS b LEFT JOIN users AS u ON b.addedby=u.id ORDER BY added DESC ' . $pager['limit']) or sqlerr(__FILE__, __LINE__);
+$rows = $db->fetchAll(
+    'SELECT b.id, b.added, b.addedby, b.comment, b.email, u.username FROM bannedemails AS b LEFT JOIN users AS u ON b.addedby = u.id ORDER BY added DESC ' . $pager['limit']
+);
 $HTMLOUT .= "<h1 class='has-text-centered'>" . _('Current Banned Emails') . '</h1>';
 if ($count1 > $perpage) {
     $HTMLOUT .= $pager['pagertop'];

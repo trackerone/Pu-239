@@ -24,18 +24,17 @@ $id = (int) $_GET['id'];
 if (!is_valid_id($id) || $CURUSER['id'] != $id && $CURUSER['class'] < UC_STAFF) {
     $id = $CURUSER['id'];
 }
-$rows = $db->fetchAll('SELECT COUNT(id) FROM userhits WHERE hitid = ' . sqlesc($id)) or sqlerr(__FILE__, __LINE__);
-$row = mysqli_fetch_row($res);
-$count = $row[0];
+$count = (int) $db->fetch(
+    'SELECT COUNT(id) AS count FROM userhits WHERE hitid = :id',
+    [':id' => $id],
+)['count'];
 $perpage = 15;
 $pager = pager($perpage, $count, "staffpanel.php?tool=user_hits&amp;id=$id&amp;");
 if (!$count) {
     stderr(_('No views'), _('This user has had no profile views yet.'));
 }
 $users_class = $container->get(User::class);
-$user = $users_class->getUserFromId($id);
-$res = sql_query('SELECT username FROM users WHERE id=' . sqlesc($id)) or sqlerr(__FILE__, __LINE__);
-$user = mysqli_fetch_assoc($res);
+$user = $db->fetch('SELECT username FROM users WHERE id = :id', [':id' => $id]);
 $HTMLOUT .= '<h1>' . _('Profile views of ') . '' . format_username((int) $id) . '</h1>
 <h2>' . _('In total ') . '' . htmlsafechars($count) . '' . _(' views') . '</h2>';
 if ($count > $perpage) {
@@ -48,7 +47,10 @@ $HTMLOUT .= "
 <td class='colhead'>" . _('Username') . "</td>
 <td class='colhead'>" . _('Viewed at') . "</td>
 </tr>\n";
-$res = sql_query('SELECT uh.*, username, users.id AS uid FROM userhits uh LEFT JOIN users ON uh.userid=users.id WHERE hitid =' . sqlesc($id) . ' ORDER BY uh.id DESC ' . $pager['limit']);
+$rows = $db->fetchAll(
+    'SELECT uh.*, username, users.id AS uid FROM userhits AS uh LEFT JOIN users ON uh.userid = users.id WHERE hitid = :id ORDER BY uh.id DESC ' . $pager['limit'],
+    [':id' => $id],
+);
 foreach ($rows as $arr) {
     $HTMLOUT .= '
 <tr><td>' . number_format($arr['number']) . '</td>
