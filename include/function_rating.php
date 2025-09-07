@@ -1,10 +1,9 @@
 <?php
-require_once __DIR__ . '/runtime_safe.php';
 
-require_once __DIR__ . '/bootstrap_pdo.php';
+declare(strict_types=1);
 
-
-declare(strict_types = 1);
+require_once __DIR__.'/runtime_safe.php';
+require_once __DIR__.'/bootstrap_pdo.php';
 
 use DI\DependencyException;
 use DI\NotFoundException;
@@ -12,69 +11,72 @@ use Pu239\Cache;
 use Pu239\Database;
 
 /**
- * @param $id
- * @param $what
+ * @return bool|string
  *
  * @throws NotFoundException
  * @throws \PDOException
  * @throws DependencyException
- *
- * @return bool|string
  */
 function getRate($id, $what)
 {
-    global $container;
-$db = $container->get(Database::class);, $CURUSER;
+    global $container, $CURUSER;
+    $db = $container->get(Database::class);
 
     $return = false;
-    if ($id == 0 || !in_array($what, [
+    if ($id == 0 || ! \in_array($what, [
         'topic',
         'torrent',
     ])) {
         return $return;
     }
-    $keys['rating'] = 'rating_' . $what . '_' . $id . '_' . $CURUSER['id'];
+    $keys['rating'] = 'rating_'.$what.'_'.$id.'_'.$CURUSER['id'];
     $cache = $container->get(Cache::class);
     $rating_cache = $cache->get($keys['rating']);
-    if ($rating_cache === false || is_null($rating_cache)) {
+    if ($rating_cache === false || \is_null($rating_cache)) {
         $fluent = $db; // alias
-// $fluent removed — use $this->db (ExtendedPdo)
+        // $fluent removed — use $this->db (ExtendedPdo)
         $qy1 = $fluent->from('rating')
-                      ->select(null)
-                      ->select('IFNULL(SUM(rating), 0) AS sum')
-                      ->select('IFNULL(COUNT(id), 0) AS count')
-                      ->where("$what = ?", $id)
-                      ->fetch();
+            ->select(null)
+            ->select('IFNULL(SUM(rating), 0) AS sum')
+            ->select('IFNULL(COUNT(id), 0) AS count')
+            ->where("$what = ?", $id)
+            ->fetch();
 
         $qy2 = $fluent->from('rating')
-                      ->select(null)
-                      ->select('id AS rated')
-                      ->select('rating')
-                      ->where("$what = ?", $id)
-                      ->where('user = ?', $CURUSER['id'])
-                      ->fetch();
+            ->select(null)
+            ->select('id AS rated')
+            ->select('rating')
+            ->where("$what = ?", $id)
+            ->where('user = ?', $CURUSER['id'])
+            ->fetch();
 
-        if (!empty($qy2)) {
-            $rating_cache = array_merge($qy1, $qy2);
+        if (! empty($qy2)) {
+            $rating_cache = \array_merge($qy1, $qy2);
         } else {
             $rating_cache = $qy1;
             $rating_cache['rated'] = 0;
             $rating_cache['rating'] = 0;
         }
         $cache->set($keys['rating'], $rating_cache, 0);
-        $ratings = $cache->get('ratings_' . $id);
-        if (!empty($ratings) && !in_array($CURUSER['id'], $ratings)) {
+        $ratings = $cache->get('ratings_'.$id);
+        if (! empty($ratings) && ! \in_array($CURUSER['id'], $ratings)) {
             $ratings[] = $CURUSER['id'];
-            $cache->set('ratings_' . $id, $ratings, 0);
+            $cache->set('ratings_'.$id, $ratings, 0);
         }
     }
 
-    $completeres = sql_query('SELECT * FROM snatched WHERE complete_date != 0 AND userid = ' . $CURUSER['id'] . ' AND torrentid = ' . $id) or sqlerr(__FILE__, __LINE__);
-    $completecount = mysqli_num_rows($completeres);
+    $complete = $db->fetch(
+        'SELECT COUNT(*) AS count FROM snatched WHERE complete_date != 0 AND userid = :userid AND torrentid = :id',
+        [
+            ':userid' => $CURUSER['id'],
+            ':id' => $id,
+        ],
+    );
+    $completecount = (int) ($complete['count'] ?? 0);
     if ($rating_cache['rated']) {
-        $rated = number_format($rating_cache['sum'] / $rating_cache['count'] / 5 * 100, 0) . '%';
+        $rated = \number_format($rating_cache['sum'] / $rating_cache['count'] / 5 * 100, 0).'%';
         $rate = "
-            <div class='star-ratings-css tooltipper' title='Rating: $rated.<br>You rated this $what {$rating_cache['rating']} star" . plural($rating_cache['rating']) . "'>
+            <div class='star-ratings-css tooltipper' title='Rating: $rated.<br>You rated this $what {$rating_cache['rating']} star".\plural($rating_cache['rating'])."'>
                 <div class='star-ratings-css-top' style='width: $rated;'>
                     <span>&#9733;</span>
                     <span>&#9733;</span>
@@ -93,8 +95,8 @@ $db = $container->get(Database::class);, $CURUSER;
     } elseif ($what === 'torrent' && $completecount == 0) {
         $rated = 0;
         $title = 'Unrated';
-        if (!empty($rating_cache['count'])) {
-            $rated = number_format($rating_cache['sum'] / $rating_cache['count'] / 5 * 100, 0) . '%';
+        if (! empty($rating_cache['count'])) {
+            $rated = \number_format($rating_cache['sum'] / $rating_cache['count'] / 5 * 100, 0).'%';
             $title = "Rating: $rated.";
         }
         $rate = "
@@ -126,17 +128,17 @@ $db = $container->get(Database::class);, $CURUSER;
             'one star',
         ] as $star) {
             $rate .= '<span>☆</span>';
-            --$i;
+            $i--;
         }
         $rate .= '</div>';
     }
     switch ($what) {
         case 'torrent':
-            $return = '<div id="rate_' . $id . '">' . $rate . '</div>';
+            $return = '<div id="rate_'.$id.'">'.$rate.'</div>';
             break;
 
         case 'topic':
-            $return = '<div id="rate_' . $id . '">' . $rate . '</div>';
+            $return = '<div id="rate_'.$id.'">'.$rate.'</div>';
             break;
     }
 
