@@ -1,28 +1,23 @@
 <?php
-$db = $container->get(Database::class);
+declare(strict_types=1);
 
 require_once __DIR__ . '/../../include/runtime_safe.php';
-
 require_once __DIR__ . '/../../include/bootstrap_pdo.php';
-
-
-declare(strict_types = 1);
 
 use Pu239\Cache;
 use Pu239\Database;
 
 global $container, $site_config, $CURUSER;
 
+$db = $container->get(Database::class);
+
 $cache = $container->get(Cache::class);
 $forumposts = $cache->get('forum_posts_' . $id);
 if ($forumposts === false || is_null($forumposts)) {
-    // $fluent removed — use $this->db (ExtendedPdo)
-    $forumposts = $fluent->from('posts')
-                         ->select(null)
-                         ->select('COUNT(id) AS count')
-                         ->where('user_id = ?', $user['id'])
-                         ->fetch("count");
-
+    $forumposts = (int) $db->fetchValue(
+        'SELECT COUNT(id) FROM posts WHERE user_id = ?',
+        [$user['id']]
+    );
     $cache->set('forum_posts_' . $id, $forumposts, $site_config['expires']['forum_posts']);
 }
 if ($user['paranoia'] < 2 || $CURUSER['id'] == $id || $CURUSER['class'] >= UC_STAFF) {

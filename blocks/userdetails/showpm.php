@@ -1,35 +1,30 @@
 <?php
-$db = $container->get(Database::class);
+declare(strict_types=1);
 
 require_once __DIR__ . '/../../include/runtime_safe.php';
-
 require_once __DIR__ . '/../../include/bootstrap_pdo.php';
-
-
-declare(strict_types = 1);
 
 use Pu239\Database;
 
 global $container, $CURUSER, $user;
 
-// $fluent removed — use $this->db (ExtendedPdo)
+$db = $container->get(Database::class);
+
 if ($CURUSER['id'] != $user['id']) {
     if ($CURUSER['class'] >= UC_STAFF) {
         $showpmbutton = 1;
     } elseif ($user['acceptpms'] === 'yes') {
-        $blocked = $fluent->from('blocks')
-                          ->select('id')
-                          ->where('userid = ?', $user['id'])
-                          ->where('blockid = ?', $CURUSER['id'])
-                          ->fetch();
-        $showpmbutton = !empty($blocked) ? false : true;
+        $blocked = $db->fetch(
+            'SELECT id FROM blocks WHERE userid = ? AND blockid = ?',
+            [$user['id'], $CURUSER['id']]
+        );
+        $showpmbutton = empty($blocked);
     } elseif ($user['acceptpms'] === 'friends') {
-        $friend = $fluent->from('friends')
-                         ->select('id')
-                         ->where('userid = ?', $user['id'])
-                         ->where('friendid = ?', $CURUSER['id'])
-                         ->fetch();
-        $showpmbutton = !empty($friend) ? true : false;
+        $friend = $db->fetch(
+            'SELECT id FROM friends WHERE userid = ? AND friendid = ?',
+            [$user['id'], $CURUSER['id']]
+        );
+        $showpmbutton = !empty($friend);
     }
 }
 if (isset($showpmbutton)) {

@@ -1,12 +1,8 @@
 <?php
-$db = $container->get(Database::class);
+declare(strict_types=1);
 
 require_once __DIR__ . '/../../include/runtime_safe.php';
-
 require_once __DIR__ . '/../../include/bootstrap_pdo.php';
-
-
-declare(strict_types = 1);
 
 use Pu239\Cache;
 use Pu239\Database;
@@ -14,29 +10,21 @@ use Pu239\Database;
 global $container, $CURUSER, $site_config;
 
 require_once INCL_DIR . 'function_users.php';
+$db = $container->get(Database::class);
 $dt = TIME_NOW - 180;
 $keys['user_friends'] = 'user_friends_' . $id;
 $cache = $container->get(Cache::class);
 $users_friends = $cache->get($keys['user_friends']);
 if ($users_friends === false || is_null($users_friends)) {
-    // $fluent removed — use $this->db (ExtendedPdo)
-    $friends = $fluent->from('friends')
-                      ->select(null)
-                      ->select('friendid AS uid')
-                      ->select('userid')
-                      ->select('username')
-                      ->select('last_access')
-                      ->select('perms')
-                      ->select('uploaded')
-                      ->select('downloaded')
-                      ->innerJoin('users ON users.id = friendid')
-                      ->where('userid = ?', $id)
-                      ->orderBy('username')
-                      ->limit(100);
-
-    foreach ($friends as $user_friend) {
-        $users_friends[] = $user_friend;
-    }
+    $users_friends = $db->fetchAll(
+        'SELECT friendid AS uid, userid, username, last_access, perms, uploaded, downloaded
+            FROM friends
+            INNER JOIN users ON users.id = friendid
+            WHERE userid = ?
+            ORDER BY username
+            LIMIT 100',
+        [$id]
+    );
     $cache->set($keys['user_friends'], $users_friends, 86400);
 }
 
