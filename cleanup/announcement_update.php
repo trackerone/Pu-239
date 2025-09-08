@@ -1,20 +1,16 @@
 <?php
-$db = $container->get(Database::class);
+
+declare(strict_types=1);
 
 require_once __DIR__ . '/../include/runtime_safe.php';
-
 require_once __DIR__ . '/../include/bootstrap_pdo.php';
-
-
-declare(strict_types = 1);
-
-use Pu239\Database;
 
 use DI\DependencyException;
 use DI\NotFoundException;
+use Pu239\Database;
 
 /**
- * @param $data
+ * @param mixed $data
  *
  * @throws DependencyException
  * @throws NotFoundException
@@ -22,8 +18,11 @@ use DI\NotFoundException;
  */
 function announcement_update($data)
 {
+    global $container;
+
     $time_start = microtime(true);
-    sql_query('DELETE FROM announcement_main WHERE expires < ' . TIME_NOW) or sqlerr(__FILE__, __LINE__);
+    $db = $container->get(Database::class);
+    $db->run('DELETE FROM announcement_main WHERE expires < ?', [TIME_NOW]);
 
     $time_end = microtime(true);
     $run_time = $time_end - $time_start;

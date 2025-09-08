@@ -119,8 +119,9 @@ No matches.
 ## cleanup
 - `cleanup/optimizedb.php`: migrated from `sql_query`/`mysqli_fetch_assoc`/`sqlesc` to `Pu239\Database` with bound parameters; standardized bootstrap and strict typing.
 
+- `cleanup/announcement_update.php`: migrated from legacy `sql_query` to `Pu239\Database` with bound parameters; standardized bootstrap and strict typing.
 ### Verification
 ```
-$ rg "mysqli_|sql_query\(|sqlesc\(" cleanup/optimizedb.php
+$ rg "mysqli_|sql_query\(|sqlesc\(" cleanup/optimizedb.php cleanup/announcement_update.php
 ```
 No matches.
