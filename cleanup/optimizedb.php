@@ -1,17 +1,13 @@
 <?php
-$db = $container->get(Database::class);
+
+declare(strict_types=1);
 
 require_once __DIR__ . '/../include/runtime_safe.php';
-
 require_once __DIR__ . '/../include/bootstrap_pdo.php';
-
-
-declare(strict_types = 1);
-
-use Pu239\Database;
 
 use DI\DependencyException;
 use DI\NotFoundException;
+use Pu239\Database;
 
 /**
  * @param $data
@@ -22,20 +18,25 @@ use DI\NotFoundException;
  */
 function optimizedb($data)
 {
-    global $site_config;
+    global $container, $site_config;
+
+    $db = $container->get(Database::class);
     $time_start = microtime(true);
     $minwaste = 1024 * 1024 * 10; // 10 MB
-    $sql = sql_query("SHOW TABLE STATUS FROM {$site_config['db']['database']} WHERE Data_free > " . sqlesc($minwaste)) or sqlerr(__FILE__, __LINE__);
+    $rows = $db->fetchAll(
+        'SHOW TABLE STATUS FROM ' . $site_config['db']['database'] . ' WHERE Data_free > :minwaste',
+        ['minwaste' => $minwaste]
+    );
     $oht = '';
     $tables = [];
 
-    while ($row = mysqli_fetch_assoc($sql)) {
+    foreach ($rows as $row) {
         $oht .= $row['Name'] . ',';
         $tables[] = $row['Name'];
     }
     $oht = rtrim($oht, ',');
     foreach ($tables as $table) {
-        sql_query("OPTIMIZE TABLE {$table}") or sqlerr(__FILE__, __LINE__);
+        $db->run('OPTIMIZE TABLE ' . $table);
     }
     if ($data['clean_log']) {
         write_log('Auto Optimize DB Cleanup: Completed');
@@ -44,7 +45,7 @@ function optimizedb($data)
     $run_time = $time_end - $time_start;
     $text = " Run time: $run_time seconds";
     echo $text . "\n";
-    if ($data['clean_log'] && $oht != '') {
-        write_log('MySQL Optimized ' . count($tables) . ' table' . plural(count($tables)) . ": {$oht}" . $text);
+    if ($data['clean_log'] && $oht !== '') {
+        write_log('MySQL Optimized ' . count($tables) . ' table' . plural(count($tables)) . ': ' . $oht . $text);
     }
 }
