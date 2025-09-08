@@ -97,6 +97,14 @@ No matches in modified files.
 - `blocks/userdetails/birthday.php`: standardized `bootstrap_pdo.php` and added strict typing.
 - `blocks/userdetails/browser.php`: standardized `bootstrap_pdo.php` and added strict typing.
 - `blocks/userdetails/connectable.php`: migrated `FluentPDO` lookup to `$db->fetch`; standardized bootstrap and strict typing.
+- `blocks/userdetails/comments.php`: migrated from `$fluent` to `$db->fetchValue`; standardized bootstrap and strict typing.
+- `blocks/userdetails/completed.php`: migrated from `$fluent` to `$db->fetchAll`; standardized bootstrap and strict typing.
+- `blocks/userdetails/forumposts.php`: migrated from `$fluent` to `$db->fetchValue`; standardized bootstrap and strict typing.
+- `blocks/userdetails/invitedby.php`: migrated from `$fluent` to `$db->fetchValue`/`fetchAll`; standardized bootstrap and strict typing.
+- `blocks/userdetails/seedtimeratio.php`: migrated from `$fluent` to `$db->fetch`; standardized bootstrap and strict typing.
+- `blocks/userdetails/showfriends.php`: migrated from `$fluent` to `$db->fetchAll`; standardized bootstrap and strict typing.
+- `blocks/userdetails/showpm.php`: migrated from `$fluent` to `$db->fetch`; standardized bootstrap and strict typing.
+- `blocks/userdetails/usercomments.php`: migrated from `$fluent` to `$db->fetchValue`/`fetchAll`; standardized bootstrap and strict typing.
 - `blocks/userdetails/contactinfo.php`, `flush.php`, `freestuffs.php`, `gender.php`, `iphistory.php`, `irc.php`, `joined.php`, `onlinetime.php`, `report.php`, `reputation.php`, `seedbonus.php`, `shareratio.php`, `snatched_staff.php`, `torrents_block.php`, `traffic.php`, `userclass.php`, `userhits.php`, `userinfo.php`, `userstatus.php`: standardized `bootstrap_pdo.php` and added strict typing.
 
 ### Previous migrations

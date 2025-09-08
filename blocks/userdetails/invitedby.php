@@ -1,16 +1,14 @@
 <?php
-$db = $container->get(Database::class);
+declare(strict_types=1);
 
 require_once __DIR__ . '/../../include/runtime_safe.php';
-
 require_once __DIR__ . '/../../include/bootstrap_pdo.php';
-
-
-declare(strict_types = 1);
 
 use Pu239\Database;
 
 global $container, $site_config, $viewer;
+
+$db = $container->get(Database::class);
 
 $type = !empty($user['join_type']) ? $user['join_type'] : 'open';
 $invite_by = (int) $user['invitedby'];
@@ -21,12 +19,10 @@ if ($invite_by > 0 && $type === 'invite') {
             <td>' . format_username($invite_by) . '</td>
         </tr>';
 } elseif ($invite_by > 0 && $type === 'promo') {
-    // $fluent removed — use $this->db (ExtendedPdo)
-    $name = $fluent->from('promo')
-                   ->select(null)
-                   ->select('name')
-                   ->where('id = ?', $invite_by)
-                   ->fetch('name');
+    $name = $db->fetchValue(
+        'SELECT name FROM promo WHERE id = ?',
+        [$invite_by]
+    );
     $name = !empty($name) ? htmlsafechars($name) : 'Promo has been Deleted';
     $HTMLOUT .= '
         <tr>
@@ -40,18 +36,14 @@ if ($invite_by > 0 && $type === 'invite') {
             <td><b>' . _('Open Signups') . '</b></td>
         </tr>';
 }
-$invited = $fluent->from('users AS u')
-                  ->select(null)
-                  ->select('u.id')
-                  ->select('u.email')
-                  ->select('u.uploaded')
-                  ->select('u.downloaded')
-                  ->select('i.status')
-                  ->leftJoin('invite_codes AS i ON u.id = i.receiver')
-                  ->where('u.invitedby = ?', $viewer['id'])
-                  ->where('u.join_type = "invite"')
-                  ->orderBy('u.registered')
-                  ->fetchAll();
+$invited = $db->fetchAll(
+    'SELECT u.id, u.username, u.email, u.uploaded, u.downloaded, i.status
+        FROM users AS u
+        LEFT JOIN invite_codes AS i ON u.id = i.receiver
+        WHERE u.invitedby = ? AND u.join_type = ?
+        ORDER BY u.registered',
+    [$viewer['id'], 'invite']
+);
 
 $inviteted_by_this_member = '';
 if (empty($invited)) {

@@ -1,27 +1,22 @@
 <?php
-$db = $container->get(Database::class);
+declare(strict_types=1);
 
 require_once __DIR__ . '/../../include/runtime_safe.php';
-
 require_once __DIR__ . '/../../include/bootstrap_pdo.php';
-
-
-declare(strict_types = 1);
 
 use Pu239\Cache;
 use Pu239\Database;
 
 global $container, $site_config, $CURUSER;
 
+$db = $container->get(Database::class);
 $cache = $container->get(Cache::class);
 $usercomments = $cache->get('user_comments_' . $user['id']);
 if ($usercomments === false || is_null($usercomments)) {
-    // $fluent removed — use $this->db (ExtendedPdo)
-    $usercomments = $fluent->from('comments')
-                           ->select(null)
-                           ->select('COUNT(id) AS count')
-                           ->where('user = ?', $user['id'])
-                           ->fetch("count");
+    $usercomments = (int) $db->fetchValue(
+        'SELECT COUNT(id) FROM comments WHERE user = ?',
+        [$user['id']]
+    );
     $cache->set('user_comments_' . $user['id'], $usercomments, $site_config['expires']['torrent_comments']);
 }
 

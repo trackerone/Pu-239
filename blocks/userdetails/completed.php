@@ -1,52 +1,30 @@
 <?php
-$db = $container->get(Database::class);
+declare(strict_types=1);
 
 require_once __DIR__ . '/../../include/runtime_safe.php';
-
 require_once __DIR__ . '/../../include/bootstrap_pdo.php';
-
-
-declare(strict_types = 1);
 
 use Pu239\Database;
 
 global $container, $site_config, $CURUSER;
 
+$db = $container->get(Database::class);
+
 if ($site_config['hnr_config']['hnr_online'] == 1 && $user['paranoia'] < 2 || $CURUSER['id'] == $id || $CURUSER['class'] >= (UC_MIN + 1)) {
     $completed = $count2 = $dlc = '';
-    // $fluent removed — use $this->db (ExtendedPdo)
-    $torrents = $fluent->from('snatched AS s')
-                       ->select('t.name')
-                       ->select('t.added AS torrent_added')
-                       ->select('s.complete_date AS c')
-                       ->select('s.downspeed')
-                       ->select('s.seedtime')
-                       ->select('s.seeder')
-                       ->select('s.torrentid AS tid')
-                       ->select('s.id')
-                       ->select('c.id AS category')
-                       ->select('c.image')
-                       ->select('c.name AS catname')
-                       ->select('p.name AS parent_name')
-                       ->select('s.uploaded')
-                       ->select('s.downloaded')
-                       ->select('s.hit_and_run')
-                       ->select('s.mark_of_cain')
-                       ->select('s.complete_date')
-                       ->select('s.last_action')
-                       ->select('t.seeders')
-                       ->select('t.leechers')
-                       ->select('t.owner')
-                       ->select('s.start_date AS st')
-                       ->select('s.start_date')
-                       ->leftJoin('torrents AS t ON t.id=s.torrentid')
-                       ->leftJoin('categories AS c ON c.id=t.category')
-                       ->leftJoin('categories AS p ON c.parent_id=p.id')
-                       ->where('s.finished = "yes"')
-                       ->where('userid = ?', $id)
-                       ->where('t.owner != ?', $id)
-                       ->orderBy('s.id DESC')
-                       ->fetchAll();
+    $torrents = $db->fetchAll(
+        'SELECT t.name, t.added AS torrent_added, s.complete_date AS c, s.downspeed, s.seedtime, s.seeder,
+                s.torrentid AS tid, s.id, c.id AS category, c.image, c.name AS catname, p.name AS parent_name,
+                s.uploaded, s.downloaded, s.hit_and_run, s.mark_of_cain, s.complete_date, s.last_action,
+                t.seeders, t.leechers, t.owner, s.start_date AS st, s.start_date
+            FROM snatched AS s
+            LEFT JOIN torrents AS t ON t.id = s.torrentid
+            LEFT JOIN categories AS c ON c.id = t.category
+            LEFT JOIN categories AS p ON c.parent_id = p.id
+            WHERE s.finished = ? AND userid = ? AND t.owner != ?
+            ORDER BY s.id DESC',
+        ['yes', $id, $id]
+    );
 
     if (count($torrents) > 0) {
         $heading = '

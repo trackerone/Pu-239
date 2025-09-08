@@ -1,29 +1,23 @@
 <?php
-$db = $container->get(Database::class);
+declare(strict_types=1);
 
 require_once __DIR__ . '/../../include/runtime_safe.php';
-
 require_once __DIR__ . '/../../include/bootstrap_pdo.php';
-
-
-declare(strict_types = 1);
 
 use Pu239\Cache;
 use Pu239\Database;
 
 global $container, $site_config, $user, $CURUSER;
 
-$cache = $container->get(Cache::class);
+$db = $container->get(Database::class);
+
+ $cache = $container->get(Cache::class);
 $cache_share_ratio = $cache->get('share_ratio_' . $user['id']);
 if ($cache_share_ratio === false || is_null($cache_share_ratio)) {
-    // $fluent removed — use $this->db (ExtendedPdo)
-    $sql = $fluent->from('snatched')
-                  ->select(null)
-                  ->select('SUM(seedtime) AS seed_time_total')
-                  ->select('COUNT(id) AS total_number')
-                  ->where('seedtime > 0')
-                  ->where('userid = ?', $user['id'])
-                  ->fetch();
+    $sql = $db->fetch(
+        'SELECT SUM(seedtime) AS seed_time_total, COUNT(id) AS total_number FROM snatched WHERE seedtime > 0 AND userid = ?',
+        [$user['id']]
+    );
 
     $cache_share_ratio['total_number'] = (int) $sql['total_number'];
     $cache_share_ratio['seed_time_total'] = (int) $sql['seed_time_total'];

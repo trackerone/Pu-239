@@ -1,18 +1,15 @@
 <?php
-$db = $container->get(Database::class);
+declare(strict_types=1);
 
 require_once __DIR__ . '/../../include/runtime_safe.php';
-
 require_once __DIR__ . '/../../include/bootstrap_pdo.php';
-
-
-declare(strict_types = 1);
 
 use Pu239\Database;
 
 global $container, $CURUSER, $user, $id, $site_config;
 
-// $fluent removed — use $this->db (ExtendedPdo)
+$db = $container->get(Database::class);
+
 $text = "
     <a id='startcomments'></a>
     <div>
@@ -20,11 +17,10 @@ $text = "
         <div class='has-text-centered bottom20'>
             <a href='{$site_config['paths']['baseurl']}/usercomment.php?action=add&amp;userid={$id}' class='button is-small'>Add a comment</a>
         </div>";
-$count = $fluent->from('usercomments')
-                ->select(null)
-                ->select('COUNT(id) AS count')
-                ->where('userid = ?', $id)
-                ->fetch("count");
+$count = (int) $db->fetchValue(
+    'SELECT COUNT(id) FROM usercomments WHERE userid = ?',
+    [$id]
+);
 
 if (!$count) {
     $text .= "<div class='has-text-centered padding20 size_6'>" . _('No comments yet') . '</div>';
@@ -35,12 +31,14 @@ if (!$count) {
         'lastpagedefault' => 1,
     ]);
 
-    $res = $fluent->from('usercomments')
-                  ->select('id as comment_id')
-                  ->where('userid = ?', $id)
-                  ->orderBy('id DESC')
-                  ->limit($pager['pdo']['limit'])
-                  ->offset($pager['pdo']['offset']);
+    $res = $db->fetchAll(
+        'SELECT id AS comment_id FROM usercomments WHERE userid = :id ORDER BY id DESC LIMIT :limit OFFSET :offset',
+        [
+            ':id' => $id,
+            ':limit' => $pager['pdo']['limit'],
+            ':offset' => $pager['pdo']['offset'],
+        ]
+    );
 
     $allrows = [];
     foreach ($res as $row) {
