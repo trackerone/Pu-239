@@ -125,3 +125,12 @@ No matches.
 $ rg "mysqli_|sql_query\(|sqlesc\(" cleanup/optimizedb.php cleanup/announcement_update.php
 ```
 No matches.
+
+## database
+- `database/sql_updates.php`: standardized `bootstrap_pdo.php`, added strict typing, and imported `Pu239\\Database`.
+
+### Verification
+```
+$ rg "mysqli_|sql_query\\(|sqlesc\\(" database
+```
+No matches.
