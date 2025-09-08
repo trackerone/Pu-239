@@ -1,37 +1,31 @@
 <?php
-$db = $container->get(Database::class);
+declare(strict_types=1);
 
 require_once __DIR__ . '/../../include/runtime_safe.php';
-
 require_once __DIR__ . '/../../include/bootstrap_pdo.php';
 
-
-declare(strict_types = 1);
-
+use Pu239\Cache;
 use Pu239\Database;
 
 global $container, $CURUSER, $site_config;
+
+$db = $container->get(Database::class);
+$cache = $container->get(Cache::class);
 
 if ($user['paranoia'] < 1 || $CURUSER['id'] == $id || $CURUSER['class'] >= UC_STAFF) {
     $What_Cache = 'port_data_';
     $Ident_Client = '';
     $port_data = $cache->get($What_Cache . $id);
     if ($port_data === false || is_null($port_data)) {
-        // $fluent removed — use $this->db (ExtendedPdo)
-        $port_data = $fluent->from('peers')
-                            ->select(null)
-                            ->select('connectable')
-                            ->select('port')
-                            ->select('agent')
-                            ->where('userid = ?', $id)
-                            ->limit(1)
-                            ->fetch();
+        $port_data = $db->fetch('SELECT connectable, port, agent FROM peers WHERE userid = :id LIMIT 1', [
+            ':id' => $id,
+        ]);
         $cache->set('port_data_' . $id, $port_data, $site_config['expires']['port_data']);
     }
-    if (!empty($port_data) && isset($port_data[2])) {
-        $connect = $port_data[0];
-        $port = (int) $port_data[1];
-        $Ident_Client = $port_data[2];
+    if (!empty($port_data) && isset($port_data['agent'])) {
+        $connect = $port_data['connectable'];
+        $port = (int) $port_data['port'];
+        $Ident_Client = $port_data['agent'];
         if ($connect === 'yes') {
             $connectable = "
     <div class='has-text-success tooltipper' title='" . _('Sorted Yer connectable') . "'>

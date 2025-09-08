@@ -1,13 +1,14 @@
 <?php
-$db = $container->get(Database::class);
+declare(strict_types=1);
 
 require_once __DIR__ . '/../../include/runtime_safe.php';
-
 require_once __DIR__ . '/../../include/bootstrap_pdo.php';
 
+use Pu239\Database;
 
-declare(strict_types = 1);
-global $free, $user;
+global $container, $free, $user;
+
+$db = $container->get(Database::class);
 
 $personal_freeleech = strtotime($user['personal_freeleech']);
 $HTMLOUT .= "

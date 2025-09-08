@@ -1,14 +1,14 @@
 <?php
-$db = $container->get(Database::class);
+declare(strict_types=1);
 
 require_once __DIR__ . '/../../include/runtime_safe.php';
-
 require_once __DIR__ . '/../../include/bootstrap_pdo.php';
 
+use Pu239\Database;
 
-declare(strict_types = 1);
+global $container, $CURUSER;
 
-global $CURUSER;
+$db = $container->get(Database::class);
 
 $count_snatched = $count2 = $dlc = '';
 if ($CURUSER['class'] >= UC_STAFF) {

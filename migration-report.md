@@ -96,6 +96,8 @@ No matches in modified files.
 - `blocks/userdetails/avatar.php`: standardized `bootstrap_pdo.php` and added strict typing.
 - `blocks/userdetails/birthday.php`: standardized `bootstrap_pdo.php` and added strict typing.
 - `blocks/userdetails/browser.php`: standardized `bootstrap_pdo.php` and added strict typing.
+- `blocks/userdetails/connectable.php`: migrated `FluentPDO` lookup to `$db->fetch`; standardized bootstrap and strict typing.
+- `blocks/userdetails/contactinfo.php`, `flush.php`, `freestuffs.php`, `gender.php`, `iphistory.php`, `irc.php`, `joined.php`, `onlinetime.php`, `report.php`, `reputation.php`, `seedbonus.php`, `shareratio.php`, `snatched_staff.php`, `torrents_block.php`, `traffic.php`, `userclass.php`, `userhits.php`, `userinfo.php`, `userstatus.php`: standardized `bootstrap_pdo.php` and added strict typing.
 
 ### Previous migrations
 - `blocks/index/forum_posts.php`: migrated from legacy `sql_query`/`mysqli_fetch_assoc` to `$db->fetchAll` with bound parameters and standardized bootstrap/strict typing.

@@ -1,13 +1,14 @@
 <?php
-$db = $container->get(Database::class);
+declare(strict_types=1);
 
 require_once __DIR__ . '/../../include/runtime_safe.php';
-
 require_once __DIR__ . '/../../include/bootstrap_pdo.php';
 
+use Pu239\Database;
 
-declare(strict_types = 1);
-global $viewer, $user;
+global $container, $viewer, $user;
+
+$db = $container->get(Database::class);
 
 if (has_access($viewer['class'], UC_STAFF, 'coder') || $viewer['id'] === $user['id']) {
     $table_data .= '
