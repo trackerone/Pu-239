@@ -1,13 +1,14 @@
 <?php
-$db = $container->get(Database::class);
+declare(strict_types=1);
 
 require_once __DIR__ . '/../../include/runtime_safe.php';
-
 require_once __DIR__ . '/../../include/bootstrap_pdo.php';
 
+use Pu239\Database;
 
-declare(strict_types = 1);
-global $CURUSER, $user, $site_config;
+global $container, $CURUSER, $user, $site_config;
+
+$db = $container->get(Database::class);
 
 if ($user['paranoia'] < 2 || $CURUSER['id'] === $user['id'] || $CURUSER['class'] >= UC_STAFF) {
     if ($user['downloaded'] > 0) {
