@@ -125,3 +125,14 @@ No matches.
 $ rg "mysqli_|sql_query\(|sqlesc\(" cleanup/optimizedb.php cleanup/announcement_update.php
 ```
 No matches.
+
+## config
+- `config/ann_config.php`: standardized bootstrap order, removed legacy `database.php` include, and added strict typing.
+- `config/classes.php`, `config/config_example.php`, `config/define.php`, `config/emoticons.php`, `config/functions.php`, `config/session.php`, `config/subtitles.php`, `config/whereis.php`: standardized bootstrap and added strict typing.
+- `config/definitions.php`: added missing `bootstrap_pdo.php`, imported `Pu239\\Database`, and enforced strict typing.
+
+### Verification
+```
+$ rg "mysqli_|sql_query\(|sqlesc\(" config
+```
+No matches.
