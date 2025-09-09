@@ -1,13 +1,14 @@
 <?php
 declare(strict_types=1);
 
-
-$db = $container->get(Database::class);
 namespace Pu239;
 
 use PDO;
 use PDOException;
 use Throwable;
+
+$db = $container->get(Database::class);
+
 
 /**
  * Lightweight PDO wrapper with safe defaults.

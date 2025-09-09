@@ -1,8 +1,5 @@
 <?php
-require_once __DIR__ . '/../include/runtime_safe.php';
-
-
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Pu239;
 
@@ -12,6 +9,9 @@ use MatthiasMullie\Scrapbook\Buffered\BufferedStore;
 use MatthiasMullie\Scrapbook\Buffered\TransactionalStore;
 use MatthiasMullie\Scrapbook\Exception\UnbegunTransaction;
 use Psr\Container\ContainerInterface;
+
+require_once __DIR__ . '/../include/runtime_safe.php';
+require_once __DIR__ . '/../include/bootstrap_pdo.php';
 
 /**
  * Class PeerCache.

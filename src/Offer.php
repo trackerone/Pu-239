@@ -1,10 +1,5 @@
 <?php
-require_once __DIR__ . '/../include/runtime_safe.php';
-
-require_once __DIR__ . '/../include/bootstrap_pdo.php';
-
-
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Pu239;
 
@@ -12,6 +7,9 @@ use Envms\FluentPDO\Exception;
 use Envms\FluentPDO\Queries\Delete;
 use Envms\FluentPDO\Queries\Select;
 use PDOStatement;
+
+require_once __DIR__ . '/../include/runtime_safe.php';
+require_once __DIR__ . '/../include/bootstrap_pdo.php';
 
 /**
  * Class Offer.
