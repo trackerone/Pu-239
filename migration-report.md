@@ -181,3 +181,12 @@ No matches.
 $ rg "mysqli_|sql_query\\(|sqlesc\\(" partials
 ```
 No matches.
+
+## forums
+- `forums/stafflock_post.php`: switched to `bootstrap_pdo.php`, added strict typing, and migrated from `sql_query`/`sqlesc` to `$db->run` with bound parameters.
+
+### Verification
+```
+$ rg "mysqli_|sql_query\\(|sqlesc\\(" forums/stafflock_post.php
+```
+No matches.
