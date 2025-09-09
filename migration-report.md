@@ -2,12 +2,13 @@
 
 ## public
 - `public/tenpercent.php`: migrated from legacy mysqli/sql_query/sqlesc to `Pu239\Database` with bound parameters; switched to `bootstrap_pdo.php`; added strict typing.
+- `public/contactstaff.php`: migrated from `sql_query`/`sqlesc` to `$db->run` with bound parameters; standardized bootstrap and added strict typing.
 
 ### Verification
 ```
-$ rg "mysqli_|sql_query\(|sqlesc\(" public/tenpercent.php
+$ rg "mysqli_|sql_query\(|sqlesc\(" public/contactstaff.php public/tenpercent.php
 ```
-No matches.
+No matches in modified files.
 
 ## bin
 - `bin/validate_images.php`: switched to `bootstrap_pdo.php`, added strict typing, and removed legacy bootstrap scaffolding.
@@ -149,6 +150,7 @@ $ rg "mysqli_|sql_query\\(|sqlesc\\(" database
 ```
 No matches.
 
+******* codex/migrate-pu239-to-aura-extendedpdo-in-batches-i3ntgl
 ## src
 - : standardized strict typing and bootstrap order.
 - : standardized strict typing and bootstrap order.
@@ -268,5 +270,45 @@ No matches.
 ### Verification
 ```
 $ rg "mysqli_|sql_query\(|sqlesc\(" src
+=======
+## plugins
+- `plugins/database-hide.php`, `plugins/dump-bz2.php`, `plugins/dump-date.php`, `plugins/dump-zip.php`, `plugins/enum_types.php`, `plugins/frames.php`, `plugins/plugin.php`, `plugins/readable-dates.php`, `plugins/tables-filter.php`, `plugins/file-upload.php`, `plugins/version-noverify.php`: standardized `bootstrap_pdo.php` and added strict typing.
+
+### Verification
+```
+$ rg "mysqli_|sql_query\\(|sqlesc\\(" plugins
+```
+No matches.
+
+## messages
+- `messages/*.php`: standardized `bootstrap_pdo.php` inclusion and added strict typing across all files.
+- `messages/search.php`: replaced legacy `sqlesc` with bound parameter placeholder.
+- `messages/use_draft.php`: removed `sqlesc`, `sql_query`, and `mysqli_*` calls in favor of `Pu239\Message` with bound parameters.
+
+### Verification
+```
+$ rg "mysqli_|sql_query\(|sqlesc\(" messages
+```
+No matches.
+
+## partials
+- `partials/categories.php`: standardized `bootstrap_pdo.php` and added strict typing.
+- `partials/free_details.php`: standardized `bootstrap_pdo.php` and added strict typing.
+- `partials/genres.php`: standardized `bootstrap_pdo.php` and added strict typing.
+- `partials/torrent_table.php`: standardized `bootstrap_pdo.php` and added strict typing.
+
+### Verification
+```
+$ rg "mysqli_|sql_query\\(|sqlesc\\(" partials
+```
+No matches.
+
+## forums
+- `forums/stafflock_post.php`: switched to `bootstrap_pdo.php`, added strict typing, and migrated from `sql_query`/`sqlesc` to `$db->run` with bound parameters.
+
+### Verification
+```
+$ rg "mysqli_|sql_query\\(|sqlesc\\(" forums/stafflock_post.php
+******* master
 ```
 No matches.

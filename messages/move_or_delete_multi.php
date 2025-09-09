@@ -1,15 +1,16 @@
 <?php
-$db = $container->get(Database::class);
+
+declare(strict_types=1);
 
 require_once __DIR__ . '/../include/runtime_safe.php';
-
-
-declare(strict_types = 1);
+require_once __DIR__ . '/../include/bootstrap_pdo.php';
 
 use Pu239\Cache;
+use Pu239\Database;
 use Pu239\Message;
 
 global $container, $site_config, $CURUSER;
+$db = $container->get(Database::class);
 
 if (empty($_POST['pm'])) {
     header("Location: {$_SERVER['HTTP_REFERER']}");

@@ -1,8 +1,9 @@
 <?php
+
+declare(strict_types=1);
+
 require_once __DIR__ . '/../include/runtime_safe.php';
-
-
-declare(strict_types = 1);
+require_once __DIR__ . '/../include/bootstrap_pdo.php';
 
 use Pu239\Database;
 
@@ -13,8 +14,8 @@ use Pu239\Message;
 use Pu239\User;
 
 $subject = $msg = '';
-global $container;
-$db = $container->get(Database::class);, $CURUSER, $site_config;
+global $container, $CURUSER, $site_config;
+$db = $container->get(Database::class);
 
 $messages_class = $container->get(Message::class);
 $users_class = $container->get(User::class);
@@ -51,7 +52,46 @@ if (isset($_POST['buttonval']) && $_POST['buttonval'] === _('Send')) {
         $should_i_send_this = $arr_receiver['acceptpms'] === 'yes' ? 'yes' : ($arr_receiver['acceptpms'] === 'no' ? 'no' : ($arr_receiver['acceptpms'] === 'friends' ? 'friends' : ''));
         switch ($should_i_send_this) {
             case 'yes':
-                $r = $db->run(');
+                $messages = [[
+                    'sender' => $CURUSER['id'],
+                    'poster' => $CURUSER['id'],
+                    'receiver' => $receiver,
+                    'added' => TIME_NOW,
+                    'msg' => $msg,
+                    'subject' => $subject,
+                    'saved' => $save,
+                    'urgent' => $urgent,
+                ]];
+                $r = $messages_class->insert($messages);
+                break;
+            default:
+                stderr(_('Refused'), _('This member does not accept PMs.'));
+        }
+    } else {
+        $messages = [[
+            'sender' => $CURUSER['id'],
+            'poster' => $CURUSER['id'],
+            'receiver' => $receiver,
+            'added' => TIME_NOW,
+            'msg' => $msg,
+            'subject' => $subject,
+            'saved' => $save,
+            'urgent' => $urgent,
+        ]];
+        $r = $messages_class->insert($messages);
+    }
+
+    if (!$r) {
+        stderr(_('Error'), _("Messages weren't sent!"));
+    }
+
+    if ($delete) {
+        $messages_class->delete($delete, $CURUSER['id']);
+    }
+    if ($returnto) {
+        header('Location: ' . $returnto);
+    } else {
+        header('Location: ' . $_SERVER['PHP_SELF'] . '?action=view_mailbox&sent=1');
     }
     app_halt('Exit called');
 }

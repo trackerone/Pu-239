@@ -1,8 +1,12 @@
 <?php
-require_once __DIR__ . '/../include/runtime_safe.php';
+declare(strict_types=1);
 
+require_once __DIR__ . '/../include/runtime_safe.php';
 require_once __DIR__ . '/../include/bootstrap_pdo.php';
- declare(strict_types=1);
+
+use Pu239\Database;
+
+$db = $container->get(Database::class);
 
 /** This plugin replaces UNIX timestamps with human-readable dates in your local format.
  * Mouse click on the date field reveals timestamp back.
