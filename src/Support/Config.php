@@ -1,9 +1,9 @@
 <?php
 declare(strict_types=1);
 
+namespace Pu239\Support;
 
 $db = $container->get(Database::class);
-namespace Pu239\Support;
 
 /**
  * Minimal config loader.

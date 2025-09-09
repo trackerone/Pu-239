@@ -1,8 +1,5 @@
 <?php
-require_once __DIR__ . '/../include/runtime_safe.php';
-
-
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Pu239;
 
@@ -28,6 +25,9 @@ use PDOStatement;
 use Psr\Container\ContainerInterface;
 use Spatie\Image\Exceptions\InvalidManipulation;
 use function urlencode;
+
+require_once __DIR__ . '/../include/runtime_safe.php';
+require_once __DIR__ . '/../include/bootstrap_pdo.php';
 
 /**
  * Class User.
