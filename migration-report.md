@@ -134,3 +134,12 @@ No matches.
 $ rg "mysqli_|sql_query\\(|sqlesc\\(" database
 ```
 No matches.
+
+## plugins
+- `plugins/database-hide.php`, `plugins/dump-bz2.php`, `plugins/dump-date.php`, `plugins/dump-zip.php`, `plugins/enum_types.php`, `plugins/frames.php`, `plugins/plugin.php`, `plugins/readable-dates.php`, `plugins/tables-filter.php`, `plugins/file-upload.php`, `plugins/version-noverify.php`: standardized `bootstrap_pdo.php` and added strict typing.
+
+### Verification
+```
+$ rg "mysqli_|sql_query\\(|sqlesc\\(" plugins
+```
+No matches.
