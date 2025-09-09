@@ -1,8 +1,5 @@
 <?php
-require_once __DIR__ . '/../include/runtime_safe.php';
-
-
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Pu239;
 
@@ -22,6 +19,9 @@ use MatthiasMullie\Scrapbook\Exception\Exception;
 use MatthiasMullie\Scrapbook\Exception\ServerUnhealthy;
 use MatthiasMullie\Scrapbook\Exception\UnbegunTransaction;
 use Psr\Container\ContainerInterface;
+
+require_once __DIR__ . '/../include/runtime_safe.php';
+require_once __DIR__ . '/../include/bootstrap_pdo.php';
 
 /**
  * Class Cache.

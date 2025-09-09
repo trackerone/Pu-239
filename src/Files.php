@@ -1,15 +1,13 @@
 <?php
-require_once __DIR__ . '/../include/runtime_safe.php';
-
-require_once __DIR__ . '/../include/bootstrap_pdo.php';
-
-
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Pu239;
 
 use Envms\FluentPDO\Exception;
 use Psr\Container\ContainerInterface;
+
+require_once __DIR__ . '/../include/runtime_safe.php';
+require_once __DIR__ . '/../include/bootstrap_pdo.php';
 
 /**
  * Class Files.

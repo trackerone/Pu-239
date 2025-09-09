@@ -1,12 +1,8 @@
 <?php
-$db = $container->get(Database::class);
+declare(strict_types=1);
 
 require_once __DIR__ . '/../../include/runtime_safe.php';
-
 require_once __DIR__ . '/../../include/bootstrap_pdo.php';
-
-
-declare(strict_types = 1);
 
 use Delight\Auth\AuthError;
 use Delight\Auth\NotLoggedInException;
@@ -17,6 +13,8 @@ use Pu239\Cache;
 use Pu239\Database;
 use Pu239\Session;
 use Spatie\Image\Exceptions\InvalidManipulation;
+
+$db = $container->get(Database::class);
 
 /**
  *
@@ -450,17 +448,14 @@ function StatusBar()
  */
 function platform_menu()
 {
-    global $container, $CURUSER, $site_config;
+    global $container, $CURUSER, $site_config, $db;
 
     $cache = $container->get(Cache::class);
 
     $templates = $cache->get('templates_' . $CURUSER['class']);
     if ($templates === false || is_null($templates)) {
-        // $fluent removed — use $this->db (ExtendedPdo)
-        $templates = $fluent->from('stylesheets')
-                            ->orderBy('id')
-                            ->where('min_class_to_view <= ?', $CURUSER['class'])
-                            ->fetchAll();
+        $sql = 'SELECT * FROM stylesheets WHERE min_class_to_view <= :class ORDER BY id';
+        $templates = $db->fetchAll($sql, [':class' => $CURUSER['class']]);
 
         $cache->set('templates_' . $CURUSER['class'], $templates, 0);
     }
