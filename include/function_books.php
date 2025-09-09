@@ -1,15 +1,12 @@
 <?php
-$db = $container->get(Database::class);
-
-require_once __DIR__ . '/runtime_safe.php';
-
-require_once __DIR__ . '/bootstrap_pdo.php';
-
 
 declare(strict_types = 1);
 
+require_once __DIR__ . '/runtime_safe.php';
+require_once __DIR__ . '/bootstrap_pdo.php';
 require_once INCL_DIR . 'function_html.php';
 
+use Pu239\Database;
 use Biblys\Isbn\Isbn;
 use DI\DependencyException;
 use DI\NotFoundException;
@@ -19,6 +16,8 @@ use Pu239\Image;
 use Pu239\Torrent;
 use Scriptotek\GoogleBooks\GoogleBooks;
 use Spatie\Image\Exceptions\InvalidManipulation;
+
+$db = $container->get(Database::class);
 
 /**
  *

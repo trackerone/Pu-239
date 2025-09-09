@@ -1,19 +1,18 @@
 <?php
-$db = $container->get(Database::class);
-
-require_once __DIR__ . '/runtime_safe.php';
-
-require_once __DIR__ . '/bootstrap_pdo.php';
-
 
 declare(strict_types = 1);
 
+require_once __DIR__ . '/runtime_safe.php';
+require_once __DIR__ . '/bootstrap_pdo.php';
+
+use Pu239\Database;
 use DI\DependencyException;
 use DI\NotFoundException;
 use Pu239\Cache;
 use Pu239\Comment;
-use Pu239\Database;
 use Pu239\Torrent;
+
+$db = $container->get(Database::class);
 
 require_once dirname(__FILE__) . DIRECTORY_SEPARATOR . 'bittorrent.php';
 require_once INCL_DIR . 'function_users.php';
@@ -52,18 +51,15 @@ function autoclean(string $run)
     $cache = $container->get(Cache::class);
     $cache->set('cleanup_check_', 'running', 600);
     $now = TIME_NOW;
-    // $fluent removed — use $this->db (ExtendedPdo)
-    $query = $fluent->from('cleanup');
+    // using $db (ExtendedPdo)
     if (!empty($run)) {
-        $query = $query->where('function_name = ?', $run);
+        $sql = 'SELECT * FROM cleanup WHERE function_name = :run';
+        $params = ['run' => $run];
     } else {
-        $query = $query->where('clean_on = 1')
-                       ->where('function_name != ?', 'funds_table_update')
-                       ->where('clean_time < ?', $now)
-                       ->orderBy('clean_time ASC')
-                       ->orderBy('clean_increment ASC');
+        $sql = 'SELECT * FROM cleanup WHERE clean_on = 1 AND function_name != :function AND clean_time < :now ORDER BY clean_time ASC, clean_increment ASC';
+        $params = ['function' => 'funds_table_update', 'now' => $now];
     }
-    $query = $query->fetchAll();
+    $query = $db->fetchAll($sql, $params);
     if (!$query) {
         echo "Nothing to process, all caught up.\n";
     } else {
@@ -92,9 +88,7 @@ $db->perform($sql, array_merge($set, ['clean_id' => $row['clean_id']]));
         echo "Newsrss Starting\n";
         $tfreak_cron = $cache->get('tfreak_cron_');
         if ($tfreak_cron === false || is_null($tfreak_cron)) {
-            $query = $fluent->from('newsrss')
-                            ->select(null)
-                            ->select('link');
+            $query = $db->fetchAll('SELECT link FROM newsrss');
 
             foreach ($query as $tfreak_new) {
                 $tfreak_news[] = $tfreak_new['link'];
