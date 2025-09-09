@@ -1,10 +1,9 @@
 <?php
-$db = $container->get(Database::class);
+
+declare(strict_types=1);
 
 require_once __DIR__ . '/../include/runtime_safe.php';
-
-
-declare(strict_types = 1);
+require_once __DIR__ . '/../include/bootstrap_pdo.php';
 
 use Pu239\Cache;
 use Pu239\Database;
@@ -13,6 +12,7 @@ use Pu239\User;
 
 require_once INCL_DIR . 'function_categories.php';
 global $container, $CURUSER, $site_config;
+$db = $container->get(Database::class);
 
 $all_my_boxes = $user_cache = $categories = '';
 $users_class = $container->get(User::class);
