@@ -126,6 +126,7 @@ $ rg "mysqli_|sql_query\(|sqlesc\(" cleanup/optimizedb.php cleanup/announcement_
 ```
 No matches.
 
+****** codex/migrate-config-directory-to-aura-extendedpdo
 ## config
 - `config/ann_config.php`: standardized bootstrap order, removed legacy `database.php` include, and added strict typing.
 - `config/classes.php`, `config/config_example.php`, `config/define.php`, `config/emoticons.php`, `config/functions.php`, `config/session.php`, `config/subtitles.php`, `config/whereis.php`: standardized bootstrap and added strict typing.
@@ -134,5 +135,13 @@ No matches.
 ### Verification
 ```
 $ rg "mysqli_|sql_query\(|sqlesc\(" config
+....................
+## database
+- `database/sql_updates.php`: standardized `bootstrap_pdo.php`, added strict typing, and imported `Pu239\\Database`.
+
+### Verification
+```
+$ rg "mysqli_|sql_query\\(|sqlesc\\(" database
+******* master
 ```
 No matches.
