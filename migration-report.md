@@ -168,3 +168,15 @@ No matches.
 $ rg "mysqli_|sql_query\(|sqlesc\(" messages
 ```
 No matches.
+
+## partials
+- `partials/categories.php`: standardized `bootstrap_pdo.php` and added strict typing.
+- `partials/free_details.php`: standardized `bootstrap_pdo.php` and added strict typing.
+- `partials/genres.php`: standardized `bootstrap_pdo.php` and added strict typing.
+- `partials/torrent_table.php`: standardized `bootstrap_pdo.php` and added strict typing.
+
+### Verification
+```
+$ rg "mysqli_|sql_query\\(|sqlesc\\(" partials
+```
+No matches.
