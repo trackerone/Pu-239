@@ -181,3 +181,14 @@ No matches.
 $ rg "mysqli_|sql_query\\(|sqlesc\\(" partials
 ```
 No matches.
+
+## root
+- `acpmanage.php`: switched to `runtime_safe.php`/`bootstrap_pdo.php` and used `$db->fetchAll` for settings lookup.
+- `bannedemails.php`: standardized bootstrap and replaced manual `PDO` usage with `$db->fetchAll`.
+- `bonusmanage.php`: standardized bootstrap and replaced manual `PDO` usage with `$db->fetchAll`.
+
+### Verification
+```
+$ rg "mysqli_|sql_query\\(|sqlesc\\(" acpmanage.php bannedemails.php bonusmanage.php
+```
+No matches in modified files.
