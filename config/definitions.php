@@ -1,20 +1,20 @@
 <?php
-$db = $container->get(Database::class);
+declare(strict_types=1);
 
 require_once __DIR__ . '/../include/runtime_safe.php';
-
-
-declare(strict_types = 1);
+require_once __DIR__ . '/../include/bootstrap_pdo.php';
 
 use Aura\Sql\ExtendedPdo;
 use Delight\Auth\Auth;
 use Delight\I18n\I18n;
 use Imdb\Config;
 use PHPMailer\PHPMailer\PHPMailer;
+use Pu239\Database;
 use Psr\Container\ContainerInterface;
 use Rakit\Validation\Validator;
 use Scriptotek\GoogleBooks\GoogleBooks;
 
+$db = $container->get(Database::class);
 return [
     Auth::class => DI\factory(function (ContainerInterface $c) {
         $pdo = $c->get(PDO::class);
