@@ -303,6 +303,16 @@ $ rg "mysqli_|sql_query\\(|sqlesc\\(" partials
 ```
 No matches.
 
+********* codex/migrate-pu239-to-aura-extendedpdo-in-batches-d696mh
+## templates/1
+- `templates/1/files.php`: standardized bootstrap order and added strict typing.
+- `templates/1/template.php`: standardized bootstrap, added strict typing, and migrated `stylesheets` lookup to `$db->fetchAll` with bound parameters.
+- `templates/1/navbar.php`: standardized bootstrap, added strict typing, and migrated `staffpanel` lookup to `$db->fetchAll` with bound parameters.
+
+### Verification
+```
+$ rg "mysqli_|sql_query\(|sqlesc\(" templates/1
+=======
 ## forums
 - `forums/stafflock_post.php`: switched to `bootstrap_pdo.php`, added strict typing, and migrated from `sql_query`/`sqlesc` to `$db->run` with bound parameters.
 
@@ -310,5 +320,6 @@ No matches.
 ```
 $ rg "mysqli_|sql_query\\(|sqlesc\\(" forums/stafflock_post.php
 ******* master
+********* master
 ```
 No matches.

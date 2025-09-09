@@ -1,12 +1,8 @@
 <?php
-$db = $container->get(Database::class);
+declare(strict_types=1);
 
 require_once __DIR__ . '/../../include/runtime_safe.php';
-
 require_once __DIR__ . '/../../include/bootstrap_pdo.php';
-
-
-declare(strict_types = 1);
 
 use Delight\Auth\Auth;
 use DI\DependencyException;
@@ -14,6 +10,8 @@ use DI\NotFoundException;
 use Pu239\Cache;
 use Pu239\Database;
 use Pu239\Roles;
+
+$db = $container->get(Database::class);
 
 /**
  * @throws Exception
@@ -180,7 +178,7 @@ function make_link(array $value)
  */
 function staff_panel()
 {
-    global $BLOCKS, $CURUSER, $container, $site_config;
+    global $BLOCKS, $CURUSER, $container, $site_config, $db;
 
     $cache = $container->get(Cache::class);
     $panel = '';
@@ -189,12 +187,8 @@ function staff_panel()
         $user_class = $CURUSER['class'] >= UC_STAFF ? $CURUSER['class'] : UC_MAX;
         $staff_panel = $cache->get('staff_panels_' . $user_class);
         if ($staff_panel === false || is_null($staff_panel)) {
-            // $fluent removed — use $this->db (ExtendedPdo)
-            $staff_panel = $fluent->from('staffpanel')
-                                  ->where('navbar = 1')
-                                  ->where('av_class <= ?', $user_class)
-                                  ->orderBy('page_name')
-                                  ->fetchAll();
+            $sql = 'SELECT * FROM staffpanel WHERE navbar = 1 AND av_class <= :class ORDER BY page_name';
+            $staff_panel = $db->fetchAll($sql, [':class' => $user_class]);
 
             $cache->set('staff_panels_' . $user_class, $staff_panel, 0);
         }
