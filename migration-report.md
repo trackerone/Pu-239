@@ -157,3 +157,14 @@ No matches.
 $ rg "mysqli_|sql_query\\(|sqlesc\\(" plugins
 ```
 No matches.
+
+## messages
+- `messages/*.php`: standardized `bootstrap_pdo.php` inclusion and added strict typing across all files.
+- `messages/search.php`: replaced legacy `sqlesc` with bound parameter placeholder.
+- `messages/use_draft.php`: removed `sqlesc`, `sql_query`, and `mysqli_*` calls in favor of `Pu239\Message` with bound parameters.
+
+### Verification
+```
+$ rg "mysqli_|sql_query\(|sqlesc\(" messages
+```
+No matches.

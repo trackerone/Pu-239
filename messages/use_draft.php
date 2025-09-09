@@ -1,20 +1,25 @@
 <?php
-$db = $container->get(Database::class);
+
+declare(strict_types=1);
 
 require_once __DIR__ . '/../include/runtime_safe.php';
-
-
-declare(strict_types = 1);
+require_once __DIR__ . '/../include/bootstrap_pdo.php';
 
 use Pu239\Database;
+use Pu239\Message;
+use Pu239\User;
 
 require_once INCL_DIR . 'function_html.php';
 
 $save_or_edit = (isset($_POST['edit']) ? 'edit' : (isset($_GET['edit']) ? 'edit' : 'save'));
 $save_or_edit = (isset($_POST['send']) ? 'send' : (isset($_GET['send']) ? 'send' : $save_or_edit));
-global $contianer, $site_config, $CURUSER;
 
-if (isset($_POST['buttonval']) && $_POST['buttonval'] == $save_or_edit) {
+global $container, $site_config, $CURUSER;
+$db = $container->get(Database::class);
+$messages_class = $container->get(Message::class);
+$users_class = $container->get(User::class);
+
+if (isset($_POST['buttonval']) && $_POST['buttonval'] === $save_or_edit) {
     if (empty($_POST['subject'])) {
         stderr(_('Error'), _('To save a message in your draft folder, it must have a subject!'));
     }
@@ -22,35 +27,48 @@ if (isset($_POST['buttonval']) && $_POST['buttonval'] == $save_or_edit) {
         stderr(_('Error'), _('To save a message in your draft folder, it must have body text!'));
     }
 
-    $body = sqlesc(trim($_POST['body']));
-    $subject = sqlesc(strip_tags(trim($_POST['subject'])));
-    $urgent = sqlesc((isset($_POST['urgent']) && $_POST['urgent'] === 'yes' && $CURUSER['class'] >= UC_STAFF) ? 'yes' : 'no');
+    $body = trim($_POST['body']);
+    $subject = strip_tags(trim($_POST['subject']));
+    $urgent = (isset($_POST['urgent']) && $_POST['urgent'] === 'yes' && $CURUSER['class'] >= UC_STAFF) ? 'yes' : 'no';
+    $returnto = isset($_POST['returnto']) ? htmlsafechars($_POST['returnto']) : '';
+
     if ($save_or_edit === 'save') {
-        $db->run('INSERT INTO messages (sender, receiver, added, msg, subject, location, draft, unread, saved) VALUES (' . sqlesc($CURUSER['id']) . ', ' . sqlesc($CURUSER['id']) . ',' . TIME_NOW . ', ' . $body . ', ' . $subject . ', \'-2\', \'yes\',\'no\',\'yes\')') or sqlerr(__FILE__, __LINE__);
+        $values = [[
+            'sender' => $CURUSER['id'],
+            'receiver' => $CURUSER['id'],
+            'added' => TIME_NOW,
+            'msg' => $body,
+            'subject' => $subject,
+            'location' => -2,
+            'draft' => 'yes',
+            'unread' => 'no',
+            'saved' => 'yes',
+        ]];
+        $result = $messages_class->insert($values);
     } elseif ($save_or_edit === 'edit') {
-        $db->run('UPDATE messages SET msg = ' . $body . ', subject = ' . $subject . ' WHERE id = :id', [':id' => $pm_id]) or sqlerr(__FILE__, __LINE__);
+        $update = [
+            'msg' => $body,
+            'subject' => $subject,
+        ];
+        $result = $messages_class->update($update, $pm_id);
     } elseif ($save_or_edit === 'send') {
-        $res_receiver = $db->run(');
-        $cache->increment('inbox_' . $receiver);
-        $cache->increment('messages_count_' . $receiver);
-        if (mysqli_affected_rows($mysqli) === 0) {
-            stderr(_('Error'), _("Messages weren't sent!"));
+        $receiver_id = (int) $users_class->getUserIdFromName((string) $_POST['to']);
+        if (!$receiver_id) {
+            stderr(_('Error'), _('Member not found!'));
         }
-
-        if (strpos($arr_receiver['notifs'], '[pm]') !== false) {
-            $username = htmlsafechars($CURUSER['username']);
-            $title = $site_config['site']['name'];
-            $body = doc_head("{$title} PM received") . '
-</head>
-<body>
-<p>' . _('You have received a PM from %s!', $username) . '</p>
-<p>' . _('You can use the URL below to view the message (you may have to login).') . "</p>
-<p>{$site_config['paths']['baseurl']}/messages.php</p>
-<p>--{$site_config['site']['name']}</p>
-</body>
-</html>";
-
-            send_mail($arr_receiver['email'], _('You have received a PM from %s!', $username), $body, strip_tags($body));
+        $messages = [[
+            'sender' => $CURUSER['id'],
+            'poster' => $CURUSER['id'],
+            'receiver' => $receiver_id,
+            'added' => TIME_NOW,
+            'msg' => $body,
+            'subject' => $subject,
+            'saved' => 'no',
+            'urgent' => $urgent,
+        ]];
+        $result = $messages_class->insert($messages);
+        if (!$result) {
+            stderr(_('Error'), _("Messages weren't sent!"));
         }
         if ($returnto) {
             header('Location: ' . $returnto);
@@ -59,7 +77,8 @@ if (isset($_POST['buttonval']) && $_POST['buttonval'] == $save_or_edit) {
         }
         app_halt('Exit called');
     }
-    if (mysqli_affected_rows($mysqli) === 0) {
+
+    if (!$result) {
         stderr(_('Error'), _("Draft wasn't saved!"));
     }
     header('Location: ' . $_SERVER['PHP_SELF'] . '?action=view_mailbox&box=-2&new_draft=1');
@@ -67,13 +86,11 @@ if (isset($_POST['buttonval']) && $_POST['buttonval'] == $save_or_edit) {
 }
 
 if (isset($_POST['buttonval'])) {
-    //=== Get the info
-    $res = sql_query('SELECT * FROM messages WHERE id = ' . sqlesc($pm_id)) or sqlerr(__FILE__, __LINE__);
-    $message = mysqli_fetch_assoc($res);
+    $message = $messages_class->get_by_id($pm_id);
     $subject = htmlsafechars($message['subject']);
     $draft = $message['msg'];
 }
-//=== print out the page
+
 $HTMLOUT .= '<h1>' . _('Use Draft: ') . $subject . '</h1>' . $top_links . '
         <form name="compose" action="messages.php" method="post" accept-charset="utf-8">
         <input type="hidden" name="id" value="' . $pm_id . '">
@@ -98,8 +115,9 @@ $HTMLOUT .= '<h1>' . _('Use Draft: ') . $subject . '</h1>' . $top_links . '
     </tr>
     <tr>
         <td colspan="2">' . ($CURUSER['class'] >= UC_STAFF ? '
-        <input type="checkbox" name="urgent" value="yes" ' . ((isset($_POST['urgent']) && $_POST['urgent'] === 'yes') ? 'checked' : '') . '> 
+        <input type="checkbox" name="urgent" value="yes" ' . ((isset($_POST['urgent']) && $_POST['urgent'] === 'yes') ? 'checked' : '') . '>
         <span style="font-weight: bold;color:red;">' . _('Mark as URGENT!') . '</span>' : '') . '
         <input type="submit" class="button is-small" name="buttonval" value="' . $save_or_edit . '"></td>
     </tr>
     </table></form>';
+

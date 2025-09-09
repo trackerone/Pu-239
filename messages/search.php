@@ -1,23 +1,23 @@
 <?php
+
+declare(strict_types=1);
+
 require_once __DIR__ . '/../include/runtime_safe.php';
-
 require_once __DIR__ . '/../include/bootstrap_pdo.php';
-
-
-declare(strict_types = 1);
 
 use Pu239\Database;
 
 $user = check_user_status();
-global $container;
-$db = $container->get(Database::class);, $site_config;
+global $container, $site_config;
+$db = $container->get(Database::class);
 
 $num_result = $and_member = '';
 $keywords = isset($_POST['keywords']) ? htmlsafechars($_POST['keywords']) : '';
 $member = isset($_POST['member']) ? htmlsafechars($_POST['member']) : '';
 $all_boxes = isset($_POST['all_boxes']) ? (int) $_POST['all_boxes'] : '';
 $sender_reciever = $mailbox >= 1 ? 'sender' : 'receiver';
-$what_in_out = $mailbox >= 1 ? 'AND receiver = ' . sqlesc($user['id']) : 'AND sender = ' . sqlesc($user['id']);
+$params = [':userid' => $user['id']];
+$what_in_out = $mailbox >= 1 ? 'AND receiver = :userid' : 'AND sender = :userid';
 $location = isset($_POST['all_boxes']) ? 'AND location != 0' : 'AND location = ' . $mailbox;
 $limit = isset($_POST['limit']) ? (int) $_POST['limit'] : 25;
 $as_list_post = isset($_POST['as_list_post']) ? (int) $_POST['as_list_post'] : 2;
@@ -39,5 +39,7 @@ if (!in_array($sort, $possible_sort)) {
 }
 
 if ($member) {
-    $res_username = $db->run(');
+    $res_username = $db->run('SELECT /* columns */ FROM users WHERE username = :member', [
+        ':member' => $member,
+    ]);
 }

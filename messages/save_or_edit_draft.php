@@ -1,14 +1,15 @@
 <?php
-$db = $container->get(Database::class);
+
+declare(strict_types=1);
 
 require_once __DIR__ . '/../include/runtime_safe.php';
+require_once __DIR__ . '/../include/bootstrap_pdo.php';
 
-
-declare(strict_types = 1);
-
+use Pu239\Database;
 use Pu239\Message;
 
 global $container, $CURUSER;
+$db = $container->get(Database::class);
 
 $save_or_edit = (isset($_POST['edit']) ? 'edit' : (isset($_GET['edit']) ? 'edit' : 'save'));
 $messages_class = $container->get(Message::class);

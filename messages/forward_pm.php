@@ -1,10 +1,9 @@
 <?php
-$db = $container->get(Database::class);
+
+declare(strict_types=1);
 
 require_once __DIR__ . '/../include/runtime_safe.php';
-
-
-declare(strict_types = 1);
+require_once __DIR__ . '/../include/bootstrap_pdo.php';
 
 require_once INCL_DIR . 'function_html.php';
 
@@ -13,6 +12,7 @@ use Pu239\Message;
 use Pu239\User;
 
 global $container, $CURUSER, $site_config;
+$db = $container->get(Database::class);
 
 flood_limit('messages');
 $messages_class = $container->get(Message::class);
