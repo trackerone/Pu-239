@@ -1,15 +1,15 @@
 <?php
-require_once __DIR__ . '/../include/runtime_safe.php';
+declare(strict_types=1);
 
+require_once __DIR__ . '/../include/runtime_safe.php';
 require_once __DIR__ . '/../include/bootstrap_pdo.php';
 
-
-declare(strict_types = 1);
-
 use Pu239\Database;
-
 use Pu239\Cache;
 use Pu239\Session;
+
+global $container, $site_config;
+$db = $container->get(Database::class);
 
 require_once __DIR__ . '/../include/bittorrent.php';
 require_once INCL_DIR . 'function_users.php';
@@ -17,8 +17,8 @@ require_once INCL_DIR . 'function_pager.php';
 require_once INCL_DIR . 'function_html.php';
 require_once INCL_DIR . 'function_bbcode.php';
 $user = check_user_status();
-global $container;
-$db = $container->get(Database::class);;
+$session = $container->get(Session::class);
+$cache = $container->get(Cache::class);
 
 $stdhead = [
     'css' => [
@@ -33,8 +33,6 @@ $stdfoot = [
 ];
 
 $msg = '';
-$session = $container->get(Session::class);
-$cache = $container->get(Cache::class);
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $msg = isset($_POST['body']) ? htmlsafechars($_POST['body']) : '';
     $subject = isset($_POST['subject']) ? htmlsafechars($_POST['subject']) : '';
@@ -50,8 +48,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
     if (!$fail) {
-        $sql = 'INSERT INTO staffmessages (sender, added, msg, subject) VALUES(' . sqlesc($user['id']) . ', ' . TIME_NOW . ', ' . sqlesc($msg) . ', ' . sqlesc($subject) . ')';
-        if (sql_query($sql)) {
+        $sql = 'INSERT INTO staffmessages (sender, added, msg, subject) VALUES (?, ?, ?, ?)';
+        $stmt = $db->run($sql, [$user['id'], TIME_NOW, $msg, $subject]);
+        if ($stmt->rowCount()) {
             $cache->delete('staff_mess_');
             $session->set('is-success', _('Message was sent! Wait for staff to respond now!'));
             header('Location: ' . $site_config['paths']['baseurl']);

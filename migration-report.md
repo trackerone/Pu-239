@@ -2,12 +2,13 @@
 
 ## public
 - `public/tenpercent.php`: migrated from legacy mysqli/sql_query/sqlesc to `Pu239\Database` with bound parameters; switched to `bootstrap_pdo.php`; added strict typing.
+- `public/contactstaff.php`: migrated from `sql_query`/`sqlesc` to `$db->run` with bound parameters; standardized bootstrap and added strict typing.
 
 ### Verification
 ```
-$ rg "mysqli_|sql_query\(|sqlesc\(" public/tenpercent.php
+$ rg "mysqli_|sql_query\(|sqlesc\(" public/contactstaff.php public/tenpercent.php
 ```
-No matches.
+No matches in modified files.
 
 ## bin
 - `bin/validate_images.php`: switched to `bootstrap_pdo.php`, added strict typing, and removed legacy bootstrap scaffolding.
