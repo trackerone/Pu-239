@@ -150,6 +150,127 @@ $ rg "mysqli_|sql_query\\(|sqlesc\\(" database
 ```
 No matches.
 
+******* codex/migrate-pu239-to-aura-extendedpdo-in-batches-i3ntgl
+## src
+- : standardized strict typing and bootstrap order.
+- : standardized strict typing and bootstrap order.
+- : standardized strict typing and bootstrap order.
+- : standardized strict typing and bootstrap order.
+- : standardized strict typing and bootstrap order.
+- : standardized strict typing and bootstrap order.
+- : standardized strict typing and bootstrap order.
+- : standardized strict typing and bootstrap order.
+- : standardized strict typing and bootstrap order.
+- : standardized strict typing and bootstrap order.
+- : standardized strict typing and bootstrap order.
+- : standardized strict typing and bootstrap order.
+- : standardized strict typing and bootstrap order.
+- : standardized strict typing and bootstrap order.
+- : standardized strict typing and bootstrap order.
+- : standardized strict typing and bootstrap order.
+- : standardized strict typing and bootstrap order.
+- : standardized strict typing and bootstrap order.
+- : standardized strict typing and bootstrap order.
+- : standardized strict typing and bootstrap order.
+- : standardized strict typing and bootstrap order.
+- : standardized strict typing and bootstrap order.
+- : standardized strict typing and bootstrap order.
+- : standardized strict typing and bootstrap order.
+- : standardized strict typing and bootstrap order.
+- : standardized strict typing and bootstrap order.
+- : standardized strict typing and bootstrap order.
+- : standardized strict typing and bootstrap order.
+- : standardized strict typing and bootstrap order.
+- : standardized strict typing and bootstrap order.
+- : standardized strict typing and bootstrap order.
+- : standardized strict typing and bootstrap order.
+- : standardized strict typing and bootstrap order.
+- : standardized strict typing and bootstrap order.
+- : standardized strict typing and bootstrap order.
+- : standardized strict typing and bootstrap order.
+- : standardized strict typing and bootstrap order.
+- : standardized strict typing and bootstrap order.
+- : standardized strict typing and bootstrap order.
+- : standardized strict typing and bootstrap order.
+- : standardized strict typing and bootstrap order.
+- : standardized strict typing and bootstrap order.
+- : standardized strict typing and bootstrap order.
+- : standardized strict typing and bootstrap order.
+- : standardized strict typing and bootstrap order.
+- : standardized strict typing and bootstrap order.
+- : standardized strict typing and bootstrap order.
+- : standardized strict typing and bootstrap order.
+- : standardized strict typing and bootstrap order.
+- : standardized strict typing and bootstrap order.
+- : standardized strict typing and bootstrap order.
+- : standardized strict typing and bootstrap order.
+- : standardized strict typing and bootstrap order.
+
+### Verification
+```
+$ rg "mysqli_|sql_query\(|sqlesc\(" src
+```
+No matches.
+
+## src
+- `src/Ach_bonus.php`: standardized strict typing and bootstrap order.
+- `src/Achievement.php`: standardized strict typing and bootstrap order.
+- `src/Achievementlist.php`: standardized strict typing and bootstrap order.
+- `src/Ban.php`: standardized strict typing and bootstrap order.
+- `src/Bencode.php`: standardized strict typing and bootstrap order.
+- `src/Block.php`: standardized strict typing and bootstrap order.
+- `src/Bonuslog.php`: standardized strict typing and bootstrap order.
+- `src/Bookmark.php`: standardized strict typing and bootstrap order.
+- `src/BotReplies.php`: standardized strict typing and bootstrap order.
+- `src/BotTriggers.php`: standardized strict typing and bootstrap order.
+- `src/Bounty.php`: standardized strict typing and bootstrap order.
+- `src/Cache.php`: standardized strict typing and bootstrap order.
+- `src/Casino.php`: standardized strict typing and bootstrap order.
+- `src/CasinoBets.php`: standardized strict typing and bootstrap order.
+- `src/Coin.php`: standardized strict typing and bootstrap order.
+- `src/Comment.php`: standardized strict typing and bootstrap order.
+- `src/Database.php`: standardized strict typing and bootstrap order.
+- `src/FailedLogin.php`: standardized strict typing and bootstrap order.
+- `src/Files.php`: standardized strict typing and bootstrap order.
+- `src/Forum.php`: standardized strict typing and bootstrap order.
+- `src/HappyLog.php`: standardized strict typing and bootstrap order.
+- `src/IP.php`: standardized strict typing and bootstrap order.
+- `src/Image.php`: standardized strict typing and bootstrap order.
+- `src/ImageProxy.php`: standardized strict typing and bootstrap order.
+- `src/Message.php`: standardized strict typing and bootstrap order.
+- `src/Mood.php`: standardized strict typing and bootstrap order.
+- `src/Nfo2Png.php`: standardized strict typing and bootstrap order.
+- `src/Notify.php`: standardized strict typing and bootstrap order.
+- `src/Offer.php`: standardized strict typing and bootstrap order.
+- `src/Peer.php`: standardized strict typing and bootstrap order.
+- `src/PeerCache.php`: standardized strict typing and bootstrap order.
+- `src/Person.php`: standardized strict typing and bootstrap order.
+- `src/Phpzip.php`: standardized strict typing and bootstrap order.
+- `src/Poll.php`: standardized strict typing and bootstrap order.
+- `src/PollVoter.php`: standardized strict typing and bootstrap order.
+- `src/Post.php`: standardized strict typing and bootstrap order.
+- `src/Radiance.php`: standardized strict typing and bootstrap order.
+- `src/Referrer.php`: standardized strict typing and bootstrap order.
+- `src/Request.php`: standardized strict typing and bootstrap order.
+- `src/Roles.php`: standardized strict typing and bootstrap order.
+- `src/Searchcloud.php`: standardized strict typing and bootstrap order.
+- `src/Session.php`: standardized strict typing and bootstrap order.
+- `src/Settings.php`: standardized strict typing and bootstrap order.
+- `src/Sitelog.php`: standardized strict typing and bootstrap order.
+- `src/Snatched.php`: standardized strict typing and bootstrap order.
+- `src/Support/Config.php`: standardized strict typing and bootstrap order.
+- `src/Topic.php`: standardized strict typing and bootstrap order.
+- `src/Torrent.php`: standardized strict typing and bootstrap order.
+- `src/Upcoming.php`: standardized strict typing and bootstrap order.
+- `src/User.php`: standardized strict typing and bootstrap order.
+- `src/Userblock.php`: standardized strict typing and bootstrap order.
+- `src/Usersachiev.php`: standardized strict typing and bootstrap order.
+- `src/Wiki.php`: standardized strict typing and bootstrap order.
+
+### Verification
+```
+$ rg "mysqli_|sql_query\(|sqlesc\(" src
+=======
 ## plugins
 - `plugins/database-hide.php`, `plugins/dump-bz2.php`, `plugins/dump-date.php`, `plugins/dump-zip.php`, `plugins/enum_types.php`, `plugins/frames.php`, `plugins/plugin.php`, `plugins/readable-dates.php`, `plugins/tables-filter.php`, `plugins/file-upload.php`, `plugins/version-noverify.php`: standardized `bootstrap_pdo.php` and added strict typing.
 
@@ -182,6 +303,7 @@ $ rg "mysqli_|sql_query\\(|sqlesc\\(" partials
 ```
 No matches.
 
+********* codex/migrate-pu239-to-aura-extendedpdo-in-batches-d696mh
 ## templates/1
 - `templates/1/files.php`: standardized bootstrap order and added strict typing.
 - `templates/1/template.php`: standardized bootstrap, added strict typing, and migrated `stylesheets` lookup to `$db->fetchAll` with bound parameters.
@@ -190,5 +312,14 @@ No matches.
 ### Verification
 ```
 $ rg "mysqli_|sql_query\(|sqlesc\(" templates/1
+=======
+## forums
+- `forums/stafflock_post.php`: switched to `bootstrap_pdo.php`, added strict typing, and migrated from `sql_query`/`sqlesc` to `$db->run` with bound parameters.
+
+### Verification
+```
+$ rg "mysqli_|sql_query\\(|sqlesc\\(" forums/stafflock_post.php
+******* master
+********* master
 ```
 No matches.

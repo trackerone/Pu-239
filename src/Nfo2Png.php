@@ -1,10 +1,10 @@
 <?php
+declare(strict_types=1);
+
+namespace Pu239;
+
 require_once __DIR__ . '/../include/runtime_safe.php';
-
 require_once __DIR__ . '/../include/bootstrap_pdo.php';
-
-
-declare(strict_types = 1);
 
 /**
  * NFO2PNG Online Script.
@@ -17,7 +17,6 @@ declare(strict_types = 1);
  * Converted to class for use in Pu-239
  */
 
-namespace Pu239;
 
 /**
  * Class Nfo2Png.
