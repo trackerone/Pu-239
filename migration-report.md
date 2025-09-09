@@ -36,6 +36,9 @@ No matches.
 - `include/function_tmdb.php`: replaced `sql_query` with `$db->run` and bound parameters for bulk inserts; added strict typing and standardized bootstrap.
 - `include/function_happyhour.php`: removed `sql_query`/`sqlesc` in favor of `$db->run` with bound parameters; added strict typing and standardized bootstrap.
 - `include/database.php`, `include/DB.php`, `include/bittorrent.php`: switched to `bootstrap_pdo.php`, removed legacy scaffolding, and added strict typing.
+- `include/arcade.php`: migrated from `$fluent` to `$db->fetch` and `$db->fetchAll` with bound parameters; standardized bootstrap.
+- `include/cron_controller.php`: replaced `$fluent` queries with `$db->fetchAll` and bound parameters; standardized bootstrap.
+- `include/function_books.php`, `include/timezone.php`: standardized bootstrap order.
 
 ### Verification
 ```
