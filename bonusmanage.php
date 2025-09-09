@@ -1,18 +1,17 @@
 <?php
+
 declare(strict_types=1);
 
-use Pu239\Database;
+require_once __DIR__ . '/include/runtime_safe.php';
+require_once __DIR__ . '/include/bootstrap_pdo.php';
 
-require_once __DIR__ . '/../include/bittorrent.php';
+use Pu239\Database;
 
 global $container;
 $db = $container->get(Database::class);
 
 // Example migration: fetch bonus logs
-$sql = 'SELECT id, userid, points, date FROM bonuslog ORDER BY date DESC LIMIT 50';
-$stmt = $db->prepare($sql);
-$stmt->execute();
-$logs = $stmt->fetchAll(PDO::FETCH_ASSOC);
+$logs = $db->fetchAll('SELECT id, userid, points, date FROM bonuslog ORDER BY date DESC LIMIT 50');
 
 echo "<h1>Bonus Management</h1>";
 echo "<table border='1'>";

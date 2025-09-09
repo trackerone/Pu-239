@@ -303,6 +303,18 @@ $ rg "mysqli_|sql_query\\(|sqlesc\\(" partials
 ```
 No matches.
 
+********* codex/migrate-pu239-to-aura-extendedpdo-in-batches-vu4gsh
+## root
+- `acpmanage.php`: switched to `runtime_safe.php`/`bootstrap_pdo.php` and used `$db->fetchAll` for settings lookup.
+- `bannedemails.php`: standardized bootstrap and replaced manual `PDO` usage with `$db->fetchAll`.
+- `bonusmanage.php`: standardized bootstrap and replaced manual `PDO` usage with `$db->fetchAll`.
+
+### Verification
+```
+$ rg "mysqli_|sql_query\\(|sqlesc\\(" acpmanage.php bannedemails.php bonusmanage.php
+```
+No matches in modified files.
+=======
 ********* codex/migrate-pu239-to-aura-extendedpdo-in-batches-d696mh
 ## templates/1
 - `templates/1/files.php`: standardized bootstrap order and added strict typing.
@@ -323,3 +335,4 @@ $ rg "mysqli_|sql_query\\(|sqlesc\\(" forums/stafflock_post.php
 ********* master
 ```
 No matches.
+********* master

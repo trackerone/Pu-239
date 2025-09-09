@@ -1,18 +1,17 @@
 <?php
+
 declare(strict_types=1);
 
-use Pu239\Database;
+require_once __DIR__ . '/include/runtime_safe.php';
+require_once __DIR__ . '/include/bootstrap_pdo.php';
 
-require_once __DIR__ . '/../include/bittorrent.php';
+use Pu239\Database;
 
 global $container;
 $db = $container->get(Database::class);
 
 // Example migration for ACP manage - load settings from DB
-$sql = 'SELECT name, value FROM settings ORDER BY name ASC';
-$stmt = $db->prepare($sql);
-$stmt->execute();
-$settings = $stmt->fetchAll(PDO::FETCH_ASSOC);
+$settings = $db->fetchAll('SELECT name, value FROM settings ORDER BY name ASC');
 
 echo "<h1>ACP Manage</h1>";
 echo "<ul>";
