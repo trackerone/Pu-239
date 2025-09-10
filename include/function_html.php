@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 $db = $container->get(Database::class);
 
 require_once __DIR__ . '/runtime_safe.php';
@@ -6,7 +8,6 @@ require_once __DIR__ . '/runtime_safe.php';
 require_once __DIR__ . '/bootstrap_pdo.php';
 
 
-declare(strict_types = 1);
 
 use Delight\Auth\AuthError;
 use Delight\Auth\NotLoggedInException;
