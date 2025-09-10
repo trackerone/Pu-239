@@ -1,7 +1,6 @@
 <?php
 declare(strict_types=1);
 
-
 $db = $container->get(Database::class);
 /**
  * runtime_safe.php
@@ -61,3 +60,11 @@ if (!function_exists('debug_log')) {
         }
     }
 }
+/**
+ * @deprecated Use bound parameters via Pu239\Database. To be removed when repo is clean.
+ */
+function sqlesc($x) {
+    trigger_error('sqlesc() is deprecated – migrate to bound params', E_USER_DEPRECATED);
+    return $x;
+}
+

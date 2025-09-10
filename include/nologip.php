@@ -1,10 +1,10 @@
 <?php
+declare(strict_types=1);
+
 $db = $container->get(Database::class);
 
 require_once __DIR__ . '/runtime_safe.php';
 
-
-declare(strict_types = 1);
 
 use DI\DependencyException;
 use DI\NotFoundException;
