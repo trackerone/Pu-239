@@ -1,0 +1,6651 @@
+# Forum Touchpoints Audit
+
+## Summary
+Total files touched: 529
+
+Counts per type:
+- db: 28
+- api: 5203
+- ui: 69
+- perm: 52
+- notify: 250
+- other: 0
+
+Top files by hit count:
+- public/user_blocks.php: 439
+- public/forums.php: 349
+- CHANGELOG.md: 347
+- database/sql_updates.php: 211
+- admin/polls_manager.php: 203
+- admin/modtask.php: 184
+- public/userdetails.php: 179
+- admin/forum_manage.php: 155
+- public/index.php: 116
+- chat/js/chat.js: 110
+- admin/reputation_ad.php: 97
+- public/mybonus.php: 96
+- FORUMS_REBUILD.md: 85
+- migration-report.md: 76
+- include/function_polls.php: 76
+- scripts/polls.js: 70
+- public/reputation.php: 65
+- blocks/index/forum_posts.php: 63
+- admin/over_forums.php: 62
+- admin/block.settings.php: 62
+
+## Heatmap
+File | DB | API | UI | PERM | NOTIFY | Other | Total
+--- | --- | --- | --- | --- | --- | --- | ---
+public/user_blocks.php | 0 | 438 | 0 | 0 | 1 | 0 | 439
+public/forums.php | 0 | 327 | 8 | 14 | 0 | 0 | 349
+CHANGELOG.md | 0 | 326 | 13 | 3 | 5 | 0 | 347
+database/sql_updates.php | 0 | 189 | 0 | 3 | 19 | 0 | 211
+admin/polls_manager.php | 0 | 203 | 0 | 0 | 0 | 0 | 203
+admin/modtask.php | 0 | 183 | 1 | 0 | 0 | 0 | 184
+public/userdetails.php | 0 | 175 | 0 | 3 | 1 | 0 | 179
+admin/forum_manage.php | 0 | 127 | 0 | 28 | 0 | 0 | 155
+public/index.php | 0 | 115 | 0 | 1 | 0 | 0 | 116
+chat/js/chat.js | 0 | 104 | 0 | 0 | 6 | 0 | 110
+admin/reputation_ad.php | 3 | 94 | 0 | 0 | 0 | 0 | 97
+public/mybonus.php | 0 | 96 | 0 | 0 | 0 | 0 | 96
+FORUMS_REBUILD.md | 0 | 69 | 16 | 0 | 0 | 0 | 85
+migration-report.md | 0 | 70 | 5 | 0 | 1 | 0 | 76
+include/function_polls.php | 0 | 76 | 0 | 0 | 0 | 0 | 76
+scripts/polls.js | 0 | 70 | 0 | 0 | 0 | 0 | 70
+public/reputation.php | 5 | 59 | 0 | 1 | 0 | 0 | 65
+blocks/index/forum_posts.php | 5 | 55 | 0 | 3 | 0 | 0 | 63
+admin/over_forums.php | 0 | 62 | 0 | 0 | 0 | 0 | 62
+admin/block.settings.php | 0 | 60 | 0 | 0 | 2 | 0 | 62
+chat/lib/template/loggedIn.html | 0 | 60 | 0 | 0 | 0 | 0 | 60
+templates/1/template.php | 0 | 53 | 0 | 0 | 0 | 0 | 53
+include/function_users.php | 0 | 51 | 0 | 1 | 0 | 0 | 52
+src/Poll.php | 1 | 49 | 0 | 0 | 0 | 0 | 50
+public/details.php | 0 | 47 | 0 | 0 | 1 | 0 | 48
+cleanup/forum_update.php | 1 | 45 | 0 | 0 | 0 | 0 | 46
+cleanup/achievement_fpost_update.php | 0 | 43 | 0 | 0 | 0 | 0 | 43
+cleanup/achievement_ftopics_update.php | 0 | 43 | 0 | 0 | 0 | 0 | 43
+public/polls_take_vote.php | 0 | 43 | 0 | 0 | 0 | 0 | 43
+admin/reputation_settings.php | 0 | 41 | 0 | 0 | 0 | 0 | 41
+admin/stats_extra.php | 0 | 40 | 0 | 0 | 0 | 0 | 40
+include/function_comments.php | 0 | 40 | 0 | 0 | 0 | 0 | 40
+src/PollVoter.php | 0 | 39 | 0 | 0 | 0 | 0 | 39
+public/usercp.php | 0 | 28 | 0 | 0 | 10 | 0 | 38
+admin/mass_bonus_for_members.php | 0 | 34 | 0 | 0 | 3 | 0 | 37
+include/function_bbcode.php | 0 | 33 | 0 | 0 | 0 | 0 | 33
+src/Settings.php | 0 | 32 | 0 | 1 | 0 | 0 | 33
+chat/css/1/global.css | 0 | 32 | 0 | 0 | 0 | 0 | 32
+bin/uglify.php | 0 | 28 | 0 | 0 | 3 | 0 | 31
+public/userhistory.php | 4 | 26 | 0 | 1 | 0 | 0 | 31
+refactor-safe-log.txt | 0 | 18 | 8 | 0 | 3 | 0 | 29
+chat/lib/lang/kr.php | 0 | 29 | 0 | 0 | 0 | 0 | 29
+chat/lib/lang/zh-tw.php | 0 | 29 | 0 | 0 | 0 | 0 | 29
+chat/lib/lang/zh.php | 0 | 29 | 0 | 0 | 0 | 0 | 29
+chat/lib/lang/ka.php | 0 | 29 | 0 | 0 | 0 | 0 | 29
+chat/lib/lang/ja.php | 0 | 29 | 0 | 0 | 0 | 0 | 29
+chat/lib/lang/th.php | 0 | 29 | 0 | 0 | 0 | 0 | 29
+chat/lib/lang/el.php | 0 | 29 | 0 | 0 | 0 | 0 | 29
+chat/lib/lang/fa.php | 0 | 29 | 0 | 0 | 0 | 0 | 29
+public/messages.php | 0 | 1 | 0 | 0 | 28 | 0 | 29
+admin/news.php | 0 | 28 | 0 | 0 | 0 | 0 | 28
+chat/lib/lang/uk.php | 0 | 28 | 0 | 0 | 0 | 0 | 28
+cleanup/achievement_sticky_update.php | 0 | 28 | 0 | 0 | 0 | 0 | 28
+chat/lib/lang/en.php | 0 | 27 | 0 | 0 | 0 | 0 | 27
+chat/lib/lang/fr.php | 0 | 27 | 0 | 0 | 0 | 0 | 27
+chat/lib/lang/it.php | 0 | 27 | 0 | 0 | 0 | 0 | 27
+chat/lib/lang/mk.php | 0 | 27 | 0 | 0 | 0 | 0 | 27
+chat/lib/lang/nl-be.php | 0 | 27 | 0 | 0 | 0 | 0 | 27
+chat/lib/lang/sv.php | 0 | 27 | 0 | 0 | 0 | 0 | 27
+chat/lib/lang/nl.php | 0 | 27 | 0 | 0 | 0 | 0 | 27
+chat/lib/lang/tr.php | 0 | 27 | 0 | 0 | 0 | 0 | 27
+chat/lib/lang/ar.php | 0 | 27 | 0 | 0 | 0 | 0 | 27
+chat/lib/lang/he.php | 0 | 27 | 0 | 0 | 0 | 0 | 27
+chat/lib/lang/cz.php | 0 | 27 | 0 | 0 | 0 | 0 | 27
+chat/lib/lang/et.php | 0 | 27 | 0 | 0 | 0 | 0 | 27
+chat/lib/lang/pt-pt.php | 0 | 27 | 0 | 0 | 0 | 0 | 27
+chat/lib/lang/da.php | 0 | 27 | 0 | 0 | 0 | 0 | 27
+chat/lib/lang/pt-br.php | 0 | 27 | 0 | 0 | 0 | 0 | 27
+chat/lib/lang/es.php | 0 | 27 | 0 | 0 | 0 | 0 | 27
+chat/lib/lang/ca.php | 0 | 27 | 0 | 0 | 0 | 0 | 27
+chat/lib/lang/hu.php | 0 | 27 | 0 | 0 | 0 | 0 | 27
+chat/lib/lang/de.php | 0 | 27 | 0 | 0 | 0 | 0 | 27
+chat/lib/lang/ru.php | 0 | 27 | 0 | 0 | 0 | 0 | 27
+chat/lib/lang/ro.php | 0 | 27 | 0 | 0 | 0 | 0 | 27
+chat/lib/lang/pl.php | 0 | 27 | 0 | 0 | 0 | 0 | 27
+chat/lib/lang/no.php | 0 | 27 | 0 | 0 | 0 | 0 | 27
+chat/lib/lang/bg.php | 0 | 27 | 0 | 0 | 0 | 0 | 27
+chat/lib/lang/gl.php | 0 | 27 | 0 | 0 | 0 | 0 | 27
+chat/lib/lang/sk.php | 0 | 27 | 0 | 0 | 0 | 0 | 27
+chat/lib/lang/cy.php | 0 | 27 | 0 | 0 | 0 | 0 | 27
+chat/lib/lang/sl.php | 0 | 26 | 0 | 0 | 0 | 0 | 26
+chat/lib/lang/sr.php | 0 | 26 | 0 | 0 | 0 | 0 | 26
+chat/js/config.js | 0 | 26 | 0 | 0 | 0 | 0 | 26
+chat/lib/lang/fi.php | 0 | 25 | 0 | 0 | 0 | 0 | 25
+messages/edit_mailboxes.php | 0 | 5 | 0 | 0 | 20 | 0 | 25
+chat/lib/lang/hr.php | 0 | 24 | 0 | 0 | 0 | 0 | 24
+chat/lib/lang/in.php | 0 | 24 | 0 | 0 | 0 | 0 | 24
+messages/view_message.php | 0 | 14 | 0 | 0 | 10 | 0 | 24
+public/signup.php | 0 | 18 | 0 | 0 | 5 | 0 | 23
+admin/forum_config.php | 0 | 22 | 0 | 0 | 0 | 0 | 22
+include/function_imdb.php | 0 | 22 | 0 | 0 | 0 | 0 | 22
+config/emoticons.php | 0 | 21 | 0 | 0 | 0 | 0 | 21
+include/emoticons.php | 0 | 21 | 0 | 0 | 0 | 0 | 21
+src/Forum.php | 1 | 20 | 0 | 0 | 0 | 0 | 21
+public/faq.php | 0 | 21 | 0 | 0 | 0 | 0 | 21
+public/ajax/like.php | 3 | 18 | 0 | 0 | 0 | 0 | 21
+templates/1/navbar.php | 0 | 19 | 0 | 1 | 1 | 0 | 21
+messages/view_mailbox.php | 0 | 8 | 0 | 0 | 12 | 0 | 20
+scripts/trivia.js | 0 | 20 | 0 | 0 | 0 | 0 | 20
+src/User.php | 0 | 18 | 0 | 0 | 2 | 0 | 20
+public/user_unlocks.php | 0 | 20 | 0 | 0 | 0 | 0 | 20
+admin/usersearch.php | 3 | 9 | 0 | 1 | 6 | 0 | 19
+tools/scan_php83_blockers.php | 0 | 19 | 0 | 0 | 0 | 0 | 19
+include/function_tmdb.php | 0 | 19 | 0 | 0 | 0 | 0 | 19
+include/function_bonus.php | 0 | 19 | 0 | 0 | 0 | 0 | 19
+public/requests.php | 0 | 14 | 0 | 0 | 5 | 0 | 19
+public/useragreement.php | 0 | 13 | 0 | 0 | 6 | 0 | 19
+.github/workflows/composer-locked-diagnostics.yml | 0 | 18 | 0 | 0 | 0 | 0 | 18
+admin/mega_search.php | 0 | 4 | 0 | 0 | 13 | 0 | 17
+scripts/sceditor.js | 0 | 17 | 0 | 0 | 0 | 0 | 17
+public/rules.php | 0 | 17 | 0 | 0 | 0 | 0 | 17
+public/friends.php | 0 | 17 | 0 | 0 | 0 | 0 | 17
+public/offers.php | 0 | 12 | 0 | 0 | 5 | 0 | 17
+include/function_autopost.php | 0 | 16 | 0 | 0 | 0 | 0 | 16
+docs/BATCH32_LOCKED_DIAGNOSTICS.md | 0 | 16 | 0 | 0 | 0 | 0 | 16
+public/allsmiles.php | 0 | 16 | 0 | 0 | 0 | 0 | 16
+templates/1/css/default.css | 0 | 14 | 0 | 0 | 2 | 0 | 16
+blocks/userdetails/forumposts.php | 1 | 14 | 0 | 0 | 0 | 0 | 15
+src/Userblock.php | 0 | 15 | 0 | 0 | 0 | 0 | 15
+src/Topic.php | 0 | 15 | 0 | 0 | 0 | 0 | 15
+public/bot_triggers.php | 0 | 15 | 0 | 0 | 0 | 0 | 15
+.github/workflows/composer-modernization.yml | 0 | 13 | 0 | 0 | 1 | 0 | 14
+cleanup/sitestats_update.php | 0 | 14 | 0 | 0 | 0 | 0 | 14
+scripts/jquery.thanks.js | 0 | 14 | 0 | 0 | 0 | 0 | 14
+public/blackjack.php | 0 | 14 | 0 | 0 | 0 | 0 | 14
+public/achievementhistory.php | 0 | 14 | 0 | 0 | 0 | 0 | 14
+public/recover.php | 0 | 13 | 0 | 0 | 0 | 0 | 13
+TODO.md | 0 | 12 | 0 | 0 | 0 | 0 | 12
+admin/promo.php | 0 | 12 | 0 | 0 | 0 | 0 | 12
+include/function_torrent_hover.php | 0 | 12 | 0 | 0 | 0 | 0 | 12
+src/Block.php | 0 | 12 | 0 | 0 | 0 | 0 | 12
+README.md | 0 | 11 | 0 | 0 | 0 | 0 | 11
+public/casino.php | 0 | 10 | 0 | 0 | 1 | 0 | 11
+public/ajax/ajax_tooltips.php | 0 | 11 | 0 | 0 | 0 | 0 | 11
+blocks/index/stats.php | 0 | 10 | 0 | 0 | 0 | 0 | 10
+include/function_chatbot.php | 0 | 10 | 0 | 0 | 0 | 0 | 10
+include/function_tvmaze.php | 0 | 10 | 0 | 0 | 0 | 0 | 10
+public/comment.php | 0 | 10 | 0 | 0 | 0 | 0 | 10
+public/login.php | 0 | 10 | 0 | 0 | 0 | 0 | 10
+public/ajax/thanks.php | 2 | 8 | 0 | 0 | 0 | 0 | 10
+admin/adduser.php | 0 | 8 | 0 | 0 | 1 | 0 | 9
+.github/workflows/php83-blockers-check.yml | 0 | 9 | 0 | 0 | 0 | 0 | 9
+include/bittorrent.php | 0 | 9 | 0 | 0 | 0 | 0 | 9
+scripts/ajaxchat.js | 0 | 9 | 0 | 0 | 0 | 0 | 9
+src/Notify.php | 0 | 0 | 0 | 0 | 9 | 0 | 9
+public/staffpanel.php | 0 | 9 | 0 | 0 | 0 | 0 | 9
+public/upcoming.php | 0 | 4 | 0 | 0 | 5 | 0 | 9
+public/ajax/offer_notify.php | 0 | 0 | 0 | 0 | 9 | 0 | 9
+public/ajax/cooker_notify.php | 0 | 0 | 0 | 0 | 9 | 0 | 9
+public/ajax/request_notify.php | 0 | 0 | 0 | 0 | 9 | 0 | 9
+admin/edit_moods.php | 0 | 8 | 0 | 0 | 0 | 0 | 8
+admin/categories.php | 0 | 8 | 0 | 0 | 0 | 0 | 8
+forums/view_forum.php | 0 | 6 | 2 | 0 | 0 | 0 | 8
+forums/stafflock_post.php | 0 | 6 | 2 | 0 | 0 | 0 | 8
+cleanup/customsmilie_update.php | 0 | 8 | 0 | 0 | 0 | 0 | 8
+public/usercomment.php | 0 | 8 | 0 | 0 | 0 | 0 | 8
+public/edit.php | 0 | 8 | 0 | 0 | 0 | 0 | 8
+public/tags.php | 0 | 8 | 0 | 0 | 0 | 0 | 8
+admin/findnotconnectable.php | 0 | 7 | 0 | 0 | 0 | 0 | 7
+admin/log_viewer.php | 0 | 7 | 0 | 0 | 0 | 0 | 7
+admin/cleanup_manager.php | 0 | 7 | 0 | 0 | 0 | 0 | 7
+admin/shit_list.php | 0 | 7 | 0 | 0 | 0 | 0 | 7
+chat/lib/template/logs.html | 0 | 7 | 0 | 0 | 0 | 0 | 7
+include/function_torrenttable.php | 0 | 7 | 0 | 0 | 0 | 0 | 7
+include/function_html.php | 0 | 7 | 0 | 0 | 0 | 0 | 7
+scripts/replaced.js | 0 | 7 | 0 | 0 | 0 | 0 | 7
+scripts/icarousel.js | 0 | 7 | 0 | 0 | 0 | 0 | 7
+scripts/offer_notify.js | 0 | 1 | 0 | 0 | 6 | 0 | 7
+scripts/cooker_notify.js | 0 | 1 | 0 | 0 | 6 | 0 | 7
+scripts/request_notify.js | 0 | 1 | 0 | 0 | 6 | 0 | 7
+src/Torrent.php | 1 | 6 | 0 | 0 | 0 | 0 | 7
+public/takethankyou.php | 0 | 7 | 0 | 0 | 0 | 0 | 7
+public/takeupload.php | 0 | 3 | 0 | 0 | 4 | 0 | 7
+public/gift.php | 0 | 7 | 0 | 0 | 0 | 0 | 7
+public/wiki.php | 0 | 7 | 0 | 0 | 0 | 0 | 7
+cache/block_settings_cache.php | 0 | 6 | 0 | 0 | 1 | 0 | 7
+templates/1/css/navbar.css | 0 | 7 | 0 | 0 | 0 | 0 | 7
+admin/deathrow.php | 0 | 3 | 0 | 0 | 3 | 0 | 6
+admin/class_promo.php | 0 | 6 | 0 | 0 | 0 | 0 | 6
+forums/delete_post.php | 0 | 4 | 2 | 0 | 0 | 0 | 6
+forums/poll.php | 0 | 6 | 0 | 0 | 0 | 0 | 6
+forums/view_topic.php | 0 | 4 | 2 | 0 | 0 | 0 | 6
+forums/edit_post.php | 0 | 4 | 2 | 0 | 0 | 0 | 6
+forums/undelete_post.php | 0 | 4 | 2 | 0 | 0 | 0 | 6
+forums/new_topic.php | 0 | 4 | 2 | 0 | 0 | 0 | 6
+forums/clear_unread_post.php | 0 | 4 | 2 | 0 | 0 | 0 | 6
+config/define.php | 0 | 5 | 0 | 0 | 1 | 0 | 6
+blocks/global/crazyhour.php | 0 | 6 | 0 | 0 | 0 | 0 | 6
+messages/move_or_delete_multi.php | 0 | 0 | 0 | 0 | 6 | 0 | 6
+messages/forward_pm.php | 0 | 5 | 0 | 0 | 1 | 0 | 6
+include/images_update.php | 0 | 6 | 0 | 0 | 0 | 0 | 6
+docs/BATCH31_PLATFORM_ALIGNMENT.md | 0 | 6 | 0 | 0 | 0 | 0 | 6
+src/Post.php | 0 | 6 | 0 | 0 | 0 | 0 | 6
+public/new_announcement.php | 0 | 6 | 0 | 0 | 0 | 0 | 6
+public/invite.php | 0 | 6 | 0 | 0 | 0 | 0 | 6
+public/takeeditcp.php | 0 | 0 | 0 | 0 | 6 | 0 | 6
+public/bugs.php | 0 | 6 | 0 | 0 | 0 | 0 | 6
+public/takeedit.php | 0 | 6 | 0 | 0 | 0 | 0 | 6
+templates/1/files.php | 0 | 6 | 0 | 0 | 0 | 0 | 6
+admin/uploadapps.php | 0 | 5 | 0 | 0 | 0 | 0 | 5
+admin/manage_images.php | 0 | 5 | 0 | 0 | 0 | 0 | 5
+admin/grouppm.php | 0 | 5 | 0 | 0 | 0 | 0 | 5
+admin/site_settings.php | 0 | 5 | 0 | 0 | 0 | 0 | 5
+admin/trivia_config.php | 0 | 5 | 0 | 0 | 0 | 0 | 5
+admin/hnrwarn.php | 0 | 4 | 0 | 0 | 1 | 0 | 5
+chat/css/1/Uranium.css | 0 | 5 | 0 | 0 | 0 | 0 | 5
+cleanup/achievement_shouts_update.php | 0 | 5 | 0 | 0 | 0 | 0 | 5
+blocks/index/requests.php | 0 | 0 | 0 | 0 | 5 | 0 | 5
+blocks/index/offers.php | 0 | 0 | 0 | 0 | 5 | 0 | 5
+blocks/index/cooker.php | 0 | 0 | 0 | 0 | 5 | 0 | 5
+messages/use_draft.php | 0 | 2 | 0 | 0 | 3 | 0 | 5
+messages/delete.php | 0 | 0 | 0 | 0 | 5 | 0 | 5
+messages/save_or_edit_draft.php | 0 | 2 | 0 | 0 | 3 | 0 | 5
+include/function_announce.php | 0 | 5 | 0 | 0 | 0 | 0 | 5
+include/class/class_blocks_userdetails.php | 0 | 5 | 0 | 0 | 0 | 0 | 5
+docs/BATCH30_COMPOSER_MODERNIZE.md | 0 | 5 | 0 | 0 | 0 | 0 | 5
+public/upload.php | 0 | 5 | 0 | 0 | 0 | 0 | 5
+public/credits.php | 0 | 5 | 0 | 0 | 0 | 0 | 5
+public/takereseed.php | 0 | 0 | 0 | 0 | 5 | 0 | 5
+public/ajax/adminer.css | 0 | 5 | 0 | 0 | 0 | 0 | 5
+admin/themes.php | 0 | 4 | 0 | 0 | 0 | 0 | 4
+admin/leechwarn.php | 0 | 3 | 0 | 0 | 1 | 0 | 4
+chat/css/1/default.css | 0 | 4 | 0 | 0 | 0 | 0 | 4
+.github/workflows/fix-lock.yml | 0 | 4 | 0 | 0 | 0 | 0 | 4
+bin/set_perms.php | 0 | 4 | 0 | 0 | 0 | 0 | 4
+bin/usersfix.php | 0 | 4 | 0 | 0 | 0 | 0 | 4
+forums/subscriptions.php | 0 | 4 | 0 | 0 | 0 | 0 | 4
+forums/member_post_history.php | 0 | 4 | 0 | 0 | 0 | 0 | 4
+forums/section_view.php | 0 | 4 | 0 | 0 | 0 | 0 | 4
+forums/attachment.php | 0 | 4 | 0 | 0 | 0 | 0 | 4
+forums/view_post_history.php | 0 | 4 | 0 | 0 | 0 | 0 | 4
+forums/add_subscription.php | 0 | 4 | 0 | 0 | 0 | 0 | 4
+forums/delete_subscription.php | 0 | 4 | 0 | 0 | 0 | 0 | 4
+forums/staff_actions.php | 0 | 4 | 0 | 0 | 0 | 0 | 4
+forums/quick_reply.php | 0 | 4 | 0 | 0 | 0 | 0 | 4
+forums/editor.php | 0 | 4 | 0 | 0 | 0 | 0 | 4
+forums/view_unread_posts.php | 0 | 4 | 0 | 0 | 0 | 0 | 4
+forums/post_reply.php | 0 | 4 | 0 | 0 | 0 | 0 | 4
+forums/download_attachment.php | 0 | 4 | 0 | 0 | 0 | 0 | 4
+forums/view_my_posts.php | 0 | 4 | 0 | 0 | 0 | 0 | 4
+forums/search.php | 0 | 4 | 0 | 0 | 0 | 0 | 4
+forums/mark_all_as_read.php | 0 | 4 | 0 | 0 | 0 | 0 | 4
+forums/last_ten.php | 0 | 4 | 0 | 0 | 0 | 0 | 4
+forums/new_replies.php | 0 | 4 | 0 | 0 | 0 | 0 | 4
+cleanup/karmavip_update.php | 0 | 4 | 0 | 0 | 0 | 0 | 4
+blocks/global/freeleech_contribution.php | 0 | 4 | 0 | 0 | 0 | 0 | 4
+blocks/userdetails/showpm.php | 0 | 4 | 0 | 0 | 0 | 0 | 4
+blocks/userdetails/reputation.php | 0 | 4 | 0 | 0 | 0 | 0 | 4
+blocks/index/comments.php | 0 | 4 | 0 | 0 | 0 | 0 | 4
+blocks/index/latest_torrents_scroll.php | 0 | 4 | 0 | 0 | 0 | 0 | 4
+messages/send_message.php | 0 | 4 | 0 | 0 | 0 | 0 | 4
+messages/forward.php | 0 | 2 | 0 | 0 | 2 | 0 | 4
+include/function_fanart.php | 0 | 4 | 0 | 0 | 0 | 0 | 4
+include/class/class_blocks_index.php | 0 | 4 | 0 | 0 | 0 | 0 | 4
+src/Upcoming.php | 0 | 2 | 0 | 0 | 2 | 0 | 4
+src/Message.php | 0 | 4 | 0 | 0 | 0 | 0 | 4
+public/subtitles.php | 0 | 4 | 0 | 0 | 0 | 0 | 4
+public/report.php | 0 | 4 | 0 | 0 | 0 | 0 | 4
+public/hnrs.php | 0 | 4 | 0 | 0 | 0 | 0 | 4
+public/contactstaff.php | 0 | 4 | 0 | 0 | 0 | 0 | 4
+public/ajax/rating.php | 0 | 3 | 1 | 0 | 0 | 0 | 4
+admin/changelog.php | 0 | 3 | 0 | 0 | 0 | 0 | 3
+admin/reports.php | 0 | 3 | 0 | 0 | 0 | 0 | 3
+admin/watched_users.php | 0 | 3 | 0 | 0 | 0 | 0 | 3
+admin/hit_and_run.php | 0 | 3 | 0 | 0 | 0 | 0 | 3
+admin/todo.php | 0 | 3 | 0 | 0 | 0 | 0 | 3
+admin/inactive.php | 0 | 3 | 0 | 0 | 0 | 0 | 3
+admin/freeleech.php | 0 | 3 | 0 | 0 | 0 | 0 | 3
+chat/lib/class/AJAXChatLanguage.php | 0 | 3 | 0 | 0 | 0 | 0 | 3
+.github/workflows/batch-43_7.yml | 0 | 3 | 0 | 0 | 0 | 0 | 3
+tools/batch-43_7B-admin-autofix.php | 0 | 3 | 0 | 0 | 0 | 0 | 3
+cleanup/karma_update.php | 0 | 3 | 0 | 0 | 0 | 0 | 3
+cleanup/tvmaze_shows_update.php | 0 | 3 | 0 | 0 | 0 | 0 | 3
+cleanup/leechwarn_update.php | 0 | 3 | 0 | 0 | 0 | 0 | 3
+cleanup/achievement_karma_update.php | 0 | 3 | 0 | 0 | 0 | 0 | 3
+config/whereis.php | 0 | 3 | 0 | 0 | 0 | 0 | 3
+blocks/index/news.php | 0 | 3 | 0 | 0 | 0 | 0 | 3
+messages/new_draft.php | 0 | 2 | 0 | 0 | 1 | 0 | 3
+include/function_rating.php | 0 | 3 | 0 | 0 | 0 | 0 | 3
+include/function_trivia.php | 0 | 3 | 0 | 0 | 0 | 0 | 3
+include/class/class_user_options_2.php | 0 | 1 | 0 | 0 | 2 | 0 | 3
+scripts/sack.js | 0 | 3 | 0 | 0 | 0 | 0 | 3
+docs/BATCH33_UPGRADE_PLAN.md | 0 | 3 | 0 | 0 | 0 | 0 | 3
+src/Request.php | 0 | 1 | 0 | 0 | 2 | 0 | 3
+src/Offer.php | 0 | 1 | 0 | 0 | 2 | 0 | 3
+public/videoformats.php | 0 | 3 | 0 | 0 | 0 | 0 | 3
+public/usermood.php | 0 | 3 | 0 | 0 | 0 | 0 | 3
+public/delete.php | 0 | 1 | 0 | 0 | 2 | 0 | 3
+public/css/rss.css | 0 | 3 | 0 | 0 | 0 | 0 | 3
+templates/1/css/breadcrumbs.css | 0 | 3 | 0 | 0 | 0 | 0 | 3
+admin/hit_and_run_settings.php | 0 | 2 | 0 | 0 | 0 | 0 | 2
+admin/upgrade_database.php | 0 | 2 | 0 | 0 | 0 | 0 | 2
+admin/sitelog.php | 0 | 2 | 0 | 0 | 0 | 0 | 2
+admin/delacct.php | 0 | 2 | 0 | 0 | 0 | 0 | 2
+admin/bans.php | 0 | 2 | 0 | 0 | 0 | 0 | 2
+admin/bonusmanage.php | 0 | 2 | 0 | 0 | 0 | 0 | 2
+admin/datareset.php | 0 | 2 | 0 | 0 | 0 | 0 | 2
+admin/sysoplog.php | 0 | 2 | 0 | 0 | 0 | 0 | 2
+admin/warn.php | 0 | 2 | 0 | 0 | 0 | 0 | 2
+admin/reset.php | 0 | 2 | 0 | 0 | 0 | 0 | 2
+admin/bannedemails.php | 0 | 2 | 0 | 0 | 0 | 0 | 2
+admin/invite_tree.php | 0 | 2 | 0 | 0 | 0 | 0 | 2
+admin/cloudview.php | 0 | 2 | 0 | 0 | 0 | 0 | 2
+admin/class_config.php | 0 | 2 | 0 | 0 | 0 | 0 | 2
+admin/floodlimit.php | 0 | 2 | 0 | 0 | 0 | 0 | 2
+admin/modded_torrents.php | 0 | 2 | 0 | 0 | 0 | 0 | 2
+admin/acpmanage.php | 0 | 2 | 0 | 0 | 0 | 0 | 2
+chat/js/logs.js | 0 | 2 | 0 | 0 | 0 | 0 | 2
+chat/js/lang/ar.js | 0 | 2 | 0 | 0 | 0 | 0 | 2
+chat/js/lang/ca.js | 0 | 2 | 0 | 0 | 0 | 0 | 2
+chat/js/lang/es.js | 0 | 2 | 0 | 0 | 0 | 0 | 2
+chat/js/lang/mk.js | 0 | 2 | 0 | 0 | 0 | 0 | 2
+chat/js/lang/th.js | 0 | 2 | 0 | 0 | 0 | 0 | 2
+chat/js/lang/de.js | 0 | 2 | 0 | 0 | 0 | 0 | 2
+chat/js/lang/sk.js | 0 | 2 | 0 | 0 | 0 | 0 | 2
+chat/js/lang/zh.js | 0 | 2 | 0 | 0 | 0 | 0 | 2
+chat/js/lang/ru.js | 0 | 2 | 0 | 0 | 0 | 0 | 2
+chat/js/lang/uk.js | 0 | 2 | 0 | 0 | 0 | 0 | 2
+chat/js/lang/fi.js | 0 | 2 | 0 | 0 | 0 | 0 | 2
+chat/js/lang/kr.js | 0 | 2 | 0 | 0 | 0 | 0 | 2
+chat/js/lang/ro.js | 0 | 2 | 0 | 0 | 0 | 0 | 2
+chat/js/lang/sv.js | 0 | 2 | 0 | 0 | 0 | 0 | 2
+chat/js/lang/fr.js | 0 | 2 | 0 | 0 | 0 | 0 | 2
+chat/js/lang/pt-br.js | 0 | 2 | 0 | 0 | 0 | 0 | 2
+chat/js/lang/nl.js | 0 | 2 | 0 | 0 | 0 | 0 | 2
+chat/js/lang/zh-tw.js | 0 | 2 | 0 | 0 | 0 | 0 | 2
+chat/js/lang/pl.js | 0 | 2 | 0 | 0 | 0 | 0 | 2
+chat/js/lang/da.js | 0 | 2 | 0 | 0 | 0 | 0 | 2
+chat/js/lang/el.js | 0 | 2 | 0 | 0 | 0 | 0 | 2
+chat/js/lang/cz.js | 0 | 2 | 0 | 0 | 0 | 0 | 2
+chat/js/lang/ka.js | 0 | 2 | 0 | 0 | 0 | 0 | 2
+chat/js/lang/bg.js | 0 | 2 | 0 | 0 | 0 | 0 | 2
+chat/js/lang/cy.js | 0 | 2 | 0 | 0 | 0 | 0 | 2
+chat/js/lang/et.js | 0 | 2 | 0 | 0 | 0 | 0 | 2
+chat/js/lang/sl.js | 0 | 2 | 0 | 0 | 0 | 0 | 2
+chat/js/lang/pt-pt.js | 0 | 2 | 0 | 0 | 0 | 0 | 2
+chat/js/lang/hr.js | 0 | 2 | 0 | 0 | 0 | 0 | 2
+chat/js/lang/in.js | 0 | 2 | 0 | 0 | 0 | 0 | 2
+chat/js/lang/tr.js | 0 | 2 | 0 | 0 | 0 | 0 | 2
+chat/js/lang/no.js | 0 | 2 | 0 | 0 | 0 | 0 | 2
+chat/js/lang/it.js | 0 | 2 | 0 | 0 | 0 | 0 | 2
+chat/js/lang/sr.js | 0 | 2 | 0 | 0 | 0 | 0 | 2
+chat/js/lang/hu.js | 0 | 2 | 0 | 0 | 0 | 0 | 2
+chat/js/lang/he.js | 0 | 2 | 0 | 0 | 0 | 0 | 2
+chat/js/lang/en.js | 0 | 2 | 0 | 0 | 0 | 0 | 2
+chat/js/lang/ja.js | 0 | 2 | 0 | 0 | 0 | 0 | 2
+chat/js/lang/gl.js | 0 | 2 | 0 | 0 | 0 | 0 | 2
+chat/js/lang/nl-be.js | 0 | 2 | 0 | 0 | 0 | 0 | 2
+.github/workflows/batch-40.yml | 0 | 2 | 0 | 0 | 0 | 0 | 2
+.github/workflows/static-analysis.yml | 0 | 2 | 0 | 0 | 0 | 0 | 2
+.github/workflows/batch-40_5.yml | 0 | 2 | 0 | 0 | 0 | 0 | 2
+.github/workflows/php-composer.yml | 0 | 2 | 0 | 0 | 0 | 0 | 2
+.github/workflows/composer-modernize-pr.yml | 0 | 2 | 0 | 0 | 0 | 0 | 2
+tools/batch-40_3-sweep.php | 0 | 2 | 0 | 0 | 0 | 0 | 2
+tools/check_platform.php | 0 | 2 | 0 | 0 | 0 | 0 | 2
+cleanup/downloadpos_update.php | 0 | 2 | 0 | 0 | 0 | 0 | 2
+cleanup/anime_title_update.php | 0 | 2 | 0 | 0 | 0 | 0 | 2
+cleanup/gameaccess_update.php | 0 | 2 | 0 | 0 | 0 | 0 | 2
+cleanup/pirate_update.php | 0 | 2 | 0 | 0 | 0 | 0 | 2
+cleanup/king_update.php | 0 | 2 | 0 | 0 | 0 | 0 | 2
+cleanup/tvmaze_update.php | 0 | 2 | 0 | 0 | 0 | 0 | 2
+cleanup/anonymous_update.php | 0 | 2 | 0 | 0 | 0 | 0 | 2
+cleanup/avatarpos_update.php | 0 | 2 | 0 | 0 | 0 | 0 | 2
+cleanup/immunity_update.php | 0 | 2 | 0 | 0 | 0 | 0 | 2
+cleanup/chatpost_update.php | 0 | 2 | 0 | 0 | 0 | 0 | 2
+cleanup/tvmaze_schedule_update.php | 0 | 2 | 0 | 0 | 0 | 0 | 2
+blocks/userdetails/contactinfo.php | 0 | 2 | 0 | 0 | 0 | 0 | 2
+blocks/index/poll.php | 0 | 2 | 0 | 0 | 0 | 0 | 2
+blocks/index/latest_torrents_glide.php | 0 | 2 | 0 | 0 | 0 | 0 | 2
+messages/move.php | 0 | 0 | 0 | 0 | 2 | 0 | 2
+include/geoipregionvars.php | 0 | 2 | 0 | 0 | 0 | 0 | 2
+include/function_books.php | 0 | 2 | 0 | 0 | 0 | 0 | 2
+include/stealth.php | 0 | 2 | 0 | 0 | 0 | 0 | 2
+include/function_bluray.php | 0 | 2 | 0 | 0 | 0 | 0 | 2
+include/arcade.php | 0 | 2 | 0 | 0 | 0 | 0 | 2
+include/nologip.php | 0 | 2 | 0 | 0 | 0 | 0 | 2
+include/function_tfreak.php | 0 | 2 | 0 | 0 | 0 | 0 | 2
+include/invincible.php | 0 | 2 | 0 | 0 | 0 | 0 | 2
+include/class/class_blocks_apis.php | 0 | 2 | 0 | 0 | 0 | 0 | 2
+include/class/class_user_options.php | 0 | 2 | 0 | 0 | 0 | 0 | 2
+include/class/class_blocks_stdhead.php | 0 | 2 | 0 | 0 | 0 | 0 | 2
+include/class/class_check.php | 0 | 1 | 1 | 0 | 0 | 0 | 2
+scripts/forums.js | 0 | 1 | 0 | 0 | 1 | 0 | 2
+scripts/dragndrop.js | 0 | 2 | 0 | 0 | 0 | 0 | 2
+scripts/scroll_to_poll.js | 0 | 2 | 0 | 0 | 0 | 0 | 2
+scripts/upload_image_from_url.js | 0 | 2 | 0 | 0 | 0 | 0 | 2
+scripts/checkports.js | 0 | 2 | 0 | 0 | 0 | 0 | 2
+src/Comment.php | 0 | 2 | 0 | 0 | 0 | 0 | 2
+src/Person.php | 0 | 2 | 0 | 0 | 0 | 0 | 2
+src/Snatched.php | 0 | 2 | 0 | 0 | 0 | 0 | 2
+public/verify.php | 0 | 2 | 0 | 0 | 0 | 0 | 2
+public/getrss.php | 0 | 2 | 0 | 0 | 0 | 0 | 2
+public/achievementlist.php | 0 | 2 | 0 | 0 | 0 | 0 | 2
+public/staffbox.php | 0 | 2 | 0 | 0 | 0 | 0 | 2
+public/announce.php | 0 | 1 | 0 | 0 | 1 | 0 | 2
+public/bitbucket.php | 0 | 2 | 0 | 0 | 0 | 0 | 2
+public/tenpercent.php | 0 | 2 | 0 | 0 | 0 | 0 | 2
+public/uploadapp.php | 0 | 2 | 0 | 0 | 0 | 0 | 2
+public/ajax/trivia_lookup.php | 0 | 2 | 0 | 0 | 0 | 0 | 2
+cache/rep_cache.php | 0 | 2 | 0 | 0 | 0 | 0 | 2
+templates/1/css/fontello.css | 0 | 2 | 0 | 0 | 0 | 0 | 2
+CONTRIBUTING.md | 0 | 1 | 0 | 0 | 0 | 0 | 1
+admin/backup.php | 0 | 1 | 0 | 0 | 0 | 0 | 1
+admin/traceroute.php | 0 | 1 | 0 | 0 | 0 | 0 | 1
+admin/comments.php | 0 | 1 | 0 | 0 | 0 | 0 | 1
+admin/system_view.php | 0 | 1 | 0 | 0 | 0 | 0 | 1
+admin/cheaters.php | 0 | 1 | 0 | 0 | 0 | 0 | 1
+admin/memcache.php | 0 | 1 | 0 | 0 | 0 | 0 | 1
+admin/editlog.php | 0 | 1 | 0 | 0 | 0 | 0 | 1
+admin/flush.php | 0 | 1 | 0 | 0 | 0 | 0 | 1
+chat/license.txt | 0 | 1 | 0 | 0 | 0 | 0 | 1
+chat/lib/template/loggedOut.html | 0 | 1 | 0 | 0 | 0 | 0 | 1
+chat/lib/data/channels.php | 0 | 1 | 0 | 0 | 0 | 0 | 1
+chat/lib/class/CustomAJAXChat.php | 0 | 1 | 0 | 0 | 0 | 0 | 1
+chat/js/custom.js | 0 | 1 | 0 | 0 | 0 | 0 | 1
+.github/workflows/batch37.7-fluentpdo-split.yml | 0 | 1 | 0 | 0 | 0 | 0 | 1
+.github/workflows/batch-40_3.yml | 0 | 1 | 0 | 0 | 0 | 0 | 1
+.github/workflows/batch-43_7C.yml | 0 | 1 | 0 | 0 | 0 | 0 | 1
+.github/workflows/batch-43_7B.yml | 0 | 1 | 0 | 0 | 0 | 0 | 1
+.github/workflows/batch-43_3.yml | 0 | 1 | 0 | 0 | 0 | 0 | 1
+.github/workflows/batch-sanity.yml | 0 | 1 | 0 | 0 | 0 | 0 | 1
+.github/workflows/composer-platform-check.yml | 0 | 1 | 0 | 0 | 0 | 0 | 1
+.github/workflows/batch-43_1.yml | 0 | 1 | 0 | 0 | 0 | 0 | 1
+.github/workflows/static-guard.yml | 0 | 1 | 0 | 0 | 0 | 0 | 1
+.github/workflows/batch37.6-fluentpdo-split.yml | 0 | 1 | 0 | 0 | 0 | 0 | 1
+.github/workflows/batch-43_6.yml | 0 | 1 | 0 | 0 | 0 | 0 | 1
+.github/workflows/batch-41.yml | 0 | 1 | 0 | 0 | 0 | 0 | 1
+.github/workflows/batch-43.yml | 0 | 1 | 0 | 0 | 0 | 0 | 1
+.github/workflows/fluentpdo-scan.yml | 0 | 1 | 0 | 0 | 0 | 0 | 1
+.github/workflows/batch37.5-fluentpdo-split.yml | 0 | 1 | 0 | 0 | 0 | 0 | 1
+.github/workflows/batch-43_5.yml | 0 | 1 | 0 | 0 | 0 | 0 | 1
+.github/workflows/batch37.4-fluentpdo-split.yml | 0 | 1 | 0 | 0 | 0 | 0 | 1
+.github/workflows/fix-then-guard.yml | 0 | 1 | 0 | 0 | 0 | 0 | 1
+.github/workflows/batch-42.yml | 0 | 1 | 0 | 0 | 0 | 0 | 1
+.github/workflows/batch37.8-fluentpdo-split.yml | 0 | 1 | 0 | 0 | 0 | 0 | 1
+bin/validate_images.php | 0 | 1 | 0 | 0 | 0 | 0 | 1
+bin/rename_image_hashes.php | 0 | 1 | 0 | 0 | 0 | 0 | 1
+bin/pu239.scss | 0 | 1 | 0 | 0 | 0 | 0 | 1
+bin/remove_altered_images.php | 0 | 1 | 0 | 0 | 0 | 0 | 1
+bin/install.php | 0 | 1 | 0 | 0 | 0 | 0 | 1
+tools/batch-40-sweep.php | 0 | 1 | 0 | 0 | 0 | 0 | 1
+tools/batch-43_3-admin-fix.php | 0 | 1 | 0 | 0 | 0 | 0 | 1
+tools/fluentpdo-refactor-safe.php | 0 | 1 | 0 | 0 | 0 | 0 | 1
+tools/batch-38-apply.php | 0 | 1 | 0 | 0 | 0 | 0 | 1
+tools/batch-43_7-admin-rewrite.php | 0 | 1 | 0 | 0 | 0 | 0 | 1
+tools/batch-43_6-admin-fix-from-report.php | 0 | 1 | 0 | 0 | 0 | 0 | 1
+tools/batch-43_1-apply.php | 0 | 1 | 0 | 0 | 0 | 0 | 1
+tools/batch-40_5-sweep.php | 0 | 1 | 0 | 0 | 0 | 0 | 1
+tools/batch-40-apply.php | 0 | 1 | 0 | 0 | 0 | 0 | 1
+cleanup/hitrun_update.php | 0 | 1 | 0 | 0 | 0 | 0 | 1
+cleanup/uploadpos_update.php | 0 | 1 | 0 | 0 | 0 | 0 | 1
+cleanup/backupdb.php | 0 | 1 | 0 | 0 | 0 | 0 | 1
+cleanup/torrents_normalize.php | 0 | 1 | 0 | 0 | 0 | 0 | 1
+cleanup/ajax_chat_cleanup.php | 0 | 1 | 0 | 0 | 0 | 0 | 1
+cleanup/freetorrents_update.php | 0 | 1 | 0 | 0 | 0 | 0 | 1
+cleanup/trivia_update.php | 0 | 1 | 0 | 0 | 0 | 0 | 1
+blocks/userdetails/report.php | 0 | 1 | 0 | 0 | 0 | 0 | 1
+blocks/userdetails/seedbonus.php | 0 | 1 | 0 | 0 | 0 | 0 | 1
+blocks/userdetails/flush.php | 0 | 1 | 0 | 0 | 0 | 0 | 1
+blocks/index/disclaimer.php | 0 | 1 | 0 | 0 | 0 | 0 | 1
+blocks/index/latest_movies.php | 0 | 1 | 0 | 0 | 0 | 0 | 1
+blocks/index/latest_torrents.php | 0 | 1 | 0 | 0 | 0 | 0 | 1
+blocks/index/top_torrents.php | 0 | 1 | 0 | 0 | 0 | 0 | 1
+blocks/index/staff_picks.php | 0 | 1 | 0 | 0 | 0 | 0 | 1
+blocks/index/mow.php | 0 | 1 | 0 | 0 | 0 | 0 | 1
+blocks/index/latest_tv.php | 0 | 1 | 0 | 0 | 0 | 0 | 1
+include/function_bitbucket.php | 0 | 1 | 0 | 0 | 0 | 0 | 1
+include/cron_controller.php | 0 | 1 | 0 | 0 | 0 | 0 | 1
+include/function_event.php | 0 | 1 | 0 | 0 | 0 | 0 | 1
+scripts/offer_status.js | 0 | 1 | 0 | 0 | 0 | 0 | 1
+scripts/user_torrents.js | 0 | 1 | 0 | 0 | 0 | 0 | 1
+scripts/flip_box.js | 0 | 1 | 0 | 0 | 0 | 0 | 1
+scripts/ignore_images.js | 0 | 1 | 0 | 0 | 0 | 0 | 1
+scripts/flipper.js | 0 | 1 | 0 | 0 | 0 | 0 | 1
+scripts/autocomplete.js | 0 | 1 | 0 | 0 | 0 | 0 | 1
+scripts/acp.js | 0 | 1 | 0 | 0 | 0 | 0 | 1
+scripts/flush_torrents.js | 0 | 1 | 0 | 0 | 0 | 0 | 1
+scripts/descr.js | 0 | 1 | 0 | 0 | 0 | 0 | 1
+scripts/usersearch.js | 0 | 1 | 0 | 0 | 0 | 0 | 1
+scripts/offer_vote.js | 0 | 1 | 0 | 0 | 0 | 0 | 1
+scripts/request_vote.js | 0 | 1 | 0 | 0 | 0 | 0 | 1
+scripts/isbn.js | 0 | 1 | 0 | 0 | 0 | 0 | 1
+scripts/imdb.js | 0 | 1 | 0 | 0 | 0 | 0 | 1
+scripts/tooltipster.js | 0 | 1 | 0 | 0 | 0 | 0 | 1
+scripts/bookmarks.js | 0 | 1 | 0 | 0 | 0 | 0 | 1
+scripts/tvmaze.js | 0 | 1 | 0 | 0 | 0 | 0 | 1
+scripts/navbar_show.js | 0 | 1 | 0 | 0 | 0 | 0 | 1
+scripts/staff_picks.js | 0 | 1 | 0 | 0 | 0 | 0 | 1
+scripts/jquery.tabcontrol.js | 0 | 1 | 0 | 0 | 0 | 0 | 1
+docs/BATCH34_FLUENTPDO_PHASEOUT.md | 0 | 1 | 0 | 0 | 0 | 0 | 1
+docs/README-batch-40.md | 0 | 1 | 0 | 0 | 0 | 0 | 1
+src/CasinoBets.php | 0 | 1 | 0 | 0 | 0 | 0 | 1
+src/Casino.php | 0 | 1 | 0 | 0 | 0 | 0 | 1
+src/Usersachiev.php | 0 | 1 | 0 | 0 | 0 | 0 | 1
+src/Cache.php | 0 | 1 | 0 | 0 | 0 | 0 | 1
+src/Bounty.php | 0 | 1 | 0 | 0 | 0 | 0 | 1
+src/BotTriggers.php | 0 | 1 | 0 | 0 | 0 | 0 | 1
+src/Wiki.php | 0 | 1 | 0 | 0 | 0 | 0 | 1
+src/Roles.php | 0 | 1 | 0 | 0 | 0 | 0 | 1
+src/BotReplies.php | 0 | 1 | 0 | 0 | 0 | 0 | 1
+src/Session.php | 0 | 1 | 0 | 0 | 0 | 0 | 1
+src/IP.php | 0 | 1 | 0 | 0 | 0 | 0 | 1
+public/catalog.php | 0 | 1 | 0 | 0 | 0 | 0 | 1
+public/topmoods.php | 0 | 1 | 0 | 0 | 0 | 0 | 1
+public/mytorrents.php | 0 | 1 | 0 | 0 | 0 | 0 | 1
+public/announcement.php | 0 | 1 | 0 | 0 | 0 | 0 | 1
+public/flash.php | 0 | 1 | 0 | 0 | 0 | 0 | 1
+public/browse.php | 0 | 1 | 0 | 0 | 0 | 0 | 1
+public/arcade.php | 0 | 1 | 0 | 0 | 0 | 0 | 1
+public/movies.php | 0 | 1 | 0 | 0 | 0 | 0 | 1
+public/arcade_top_scores.php | 0 | 1 | 0 | 0 | 0 | 0 | 1
+public/download.php | 0 | 1 | 0 | 0 | 0 | 0 | 1
+public/view_announce_history.php | 0 | 1 | 0 | 0 | 0 | 0 | 1
+public/viewnfo.php | 0 | 1 | 0 | 0 | 0 | 0 | 1
+public/search.php | 0 | 1 | 0 | 0 | 0 | 0 | 1
+public/fastdelete.php | 0 | 1 | 0 | 0 | 0 | 0 | 1
+public/achievementbonus.php | 0 | 1 | 0 | 0 | 0 | 0 | 1
+public/clear_announcement.php | 0 | 1 | 0 | 0 | 0 | 0 | 1
+public/ajax/show_in_navbar.php | 0 | 1 | 0 | 0 | 0 | 0 | 1
+public/ajax/descr_format.php | 0 | 1 | 0 | 0 | 0 | 0 | 1
+public/ajax/take_upload.php | 0 | 1 | 0 | 0 | 0 | 0 | 1
+public/ajax/offer_status.php | 0 | 1 | 0 | 0 | 0 | 0 | 1
+public/ajax/take_url_upload.php | 0 | 1 | 0 | 0 | 0 | 0 | 1
+public/ajax/emailcheck.php | 0 | 1 | 0 | 0 | 0 | 0 | 1
+public/ajax/trivia_answers.php | 0 | 1 | 0 | 0 | 0 | 0 | 1
+public/ajax/staff_picks.php | 0 | 1 | 0 | 0 | 0 | 0 | 1
+templates/1/default.scss | 0 | 1 | 0 | 0 | 0 | 0 | 1
+templates/1/css/iCarousel.css | 0 | 1 | 0 | 0 | 0 | 0 | 1
+templates/1/css/cards.css | 0 | 1 | 0 | 0 | 0 | 0 | 1
+
+## Detailed Listings
+### DB
+- admin/reputation_ad.php:320 — FROM reputation r
+- admin/reputation_ad.php:321 — LEFT JOIN posts p ON p.id=r.postid
+- admin/reputation_ad.php:322 — LEFT JOIN topics t ON p.topic_id=t.id
+- admin/usersearch.php:790 — FROM posts AS p LEFT JOIN topics AS t ON p.topic_id=t.id
+- admin/usersearch.php:790 — FROM posts AS p LEFT JOIN topics AS t ON p.topic_id=t.id
+- admin/usersearch.php:791 — LEFT JOIN forums AS f ON t.forum_id=f.id
+- blocks/index/forum_posts.php:29 — (SELECT COUNT(id) FROM posts WHERE topic_id = t.id) AS p_count, p.user_id AS puser_id, p.added, p.anonymous AS pan
+- blocks/index/forum_posts.php:30 — FROM topics AS t
+- blocks/index/forum_posts.php:31 — INNER JOIN forums AS f ON f.id = t.forum_id
+- blocks/index/forum_posts.php:32 — INNER JOIN posts AS p ON p.id = (SELECT MAX(id) FROM posts WHERE topic_id = t.id)
+- blocks/index/forum_posts.php:32 — INNER JOIN posts AS p ON p.id = (SELECT MAX(id) FROM posts WHERE topic_id = t.id)
+- blocks/userdetails/forumposts.php:18 — 'SELECT COUNT(id) FROM posts WHERE user_id = ?',
+- cleanup/forum_update.php:66 — $sql = "DELETE FROM topics WHERE id = :id";
+- public/ajax/like.php:77 — "SELECT COUNT(id) FROM likes WHERE user_id = :uid AND {$type}_id = :id",
+- public/ajax/like.php:103 — $db->run("DELETE FROM likes WHERE {$type}_id = :id AND user_id = :uid", [':id' => $id, ':uid' => (int) $user['id']]);
+- public/ajax/like.php:123 — "SELECT user_id FROM likes WHERE {$type}_id = :id AND user_id != :uid",
+- public/ajax/thanks.php:52 — $qt = sql_query('SELECT th.userid, u.username, u.seedbonus FROM thanks AS th INNER JOIN users AS u ON u.id=th.userid WHERE th.torrentid='...
+- public/ajax/thanks.php:121 — $c = 'SELECT count(id) FROM thanks WHERE userid=' . sqlesc($uid) . ' AND torrentid=' . sqlesc($tid);
+- public/reputation.php:53 — FROM posts
+- public/reputation.php:54 — LEFT JOIN topics ON topic_id = topics.id
+- public/reputation.php:55 — LEFT JOIN forums ON topics.forum_id = forums.id
+- public/reputation.php:110 — FROM reputation
+- public/reputation.php:125 — 'SELECT dateadd, userid FROM reputation
+- public/userhistory.php:39 — $from_is = 'posts AS p LEFT JOIN topics as t ON p.topic_id=t.id LEFT JOIN forums AS f ON t.forum_id=f.id';
+- public/userhistory.php:52 — $from_is = 'posts AS p LEFT JOIN topics as t ON p.topic_id=t.id LEFT JOIN forums AS f ON t.forum_id=f.id LEFT JOIN read_posts as r ON p.t...
+- src/Forum.php:46 — $sql = "DELETE FROM forums WHERE id = :id";
+- src/Poll.php:39 — $sql = "DELETE FROM polls WHERE pid = :pid";
+- src/Torrent.php:61 — FROM likes
+
+### API
+- .github/workflows/batch-40.yml:51 — --arg body  "Writes reports to tools/reports/ and applies conservative fixes. Review and merge." \
+- .github/workflows/batch-40.yml:53 — RESP=$(curl -sS -X POST -H "Authorization: Bearer ${GH_TOKEN}" -H "Accept: application/vnd.github+json" \
+- .github/workflows/batch-40_3.yml:7 — description: 'Apply conservative automatic fixes (imports, docblocks, obvious patterns)'
+- .github/workflows/batch-40_5.yml:50 — - Conservative safe replacements (imports/docblocks/obvious admin patterns)
+- .github/workflows/batch-40_5.yml:51 — Review and merge when ready.
+- .github/workflows/batch-41.yml:53 — curl -sS -X POST -H "Authorization: Bearer ${GH_TOKEN}" -H "Accept: application/vnd.github+json" \
+- .github/workflows/batch-42.yml:53 — curl -sS -X POST -H "Authorization: Bearer ${GH_TOKEN}" -H "Accept: application/vnd.github+json" \
+- .github/workflows/batch-43.yml:53 — curl -sS -X POST -H "Authorization: Bearer ${GH_TOKEN}" -H "Accept: application/vnd.github+json" \
+- .github/workflows/batch-43_1.yml:53 — curl -sS -X POST -H "Authorization: Bearer ${GH_TOKEN}" -H "Accept: application/vnd.github+json" \
+- .github/workflows/batch-43_3.yml:51 — curl -sS -X POST -H "Authorization: Bearer ${GH_TOKEN}" -H "Accept: application/vnd.github+json" \
+- .github/workflows/batch-43_5.yml:51 — curl -sS -X POST -H "Authorization: Bearer ${GH_TOKEN}" -H "Accept: application/vnd.github+json" \
+- .github/workflows/batch-43_6.yml:51 — curl -sS -X POST -H "Authorization: Bearer ${GH_TOKEN}" -H "Accept: application/vnd.github+json" "${API}" -d "${DATA}" | jq .
+- .github/workflows/batch-43_7.yml:56 — git commit -m 'batch43.7: admin/ rewrite — strict_types truly first (single PHP block), $db init after use + runtime_safe, mysqli/sql_que...
+- .github/workflows/batch-43_7.yml:67 — --arg body  'Two-pass fix: (1) flatten PHP blocks and force declare(strict_types=1) as the first statement across admin/*.php; (2) conver...
+- .github/workflows/batch-43_7.yml:69 — curl -sS -X POST -H "Authorization: Bearer ${GH_TOKEN}" -H "Accept: application/vnd.github+json" \
+- .github/workflows/batch-43_7B.yml:63 — curl -sS -X POST -H "Authorization: Bearer ${GH_TOKEN}" -H "Accept: application/vnd.github+json" \
+- .github/workflows/batch-43_7C.yml:50 — curl -sS -X POST -H "Authorization: Bearer ${GH_TOKEN}" -H "Accept: application/vnd.github+json" \
+- .github/workflows/batch-sanity.yml:50 — RESP=$(curl -sS -X POST -H "Authorization: Bearer ${GH_TOKEN}" -H "Accept: application/vnd.github+json" \
+- .github/workflows/batch37.4-fluentpdo-split.yml:1 — name: Batch 37.4 – FluentPDO Split Refactor
+- .github/workflows/batch37.5-fluentpdo-split.yml:1 — name: Batch 37.5 – FluentPDO Split Refactor (Safe + TODO)
+- .github/workflows/batch37.6-fluentpdo-split.yml:1 — name: Batch 37.6 – FluentPDO Split Refactor (Safe + TODO)
+- .github/workflows/batch37.7-fluentpdo-split.yml:1 — name: Batch 37.7 – FluentPDO Split Refactor (Safe + TODO + Logs)
+- .github/workflows/batch37.8-fluentpdo-split.yml:1 — name: Batch 37.8 – FluentPDO Split Refactor (Safe + TODO)
+- .github/workflows/composer-locked-diagnostics.yml:1 — name: Composer Locked Install Diagnostics (PHP 8.3)
+- .github/workflows/composer-locked-diagnostics.yml:12 — diagnose-locked:
+- .github/workflows/composer-locked-diagnostics.yml:13 — name: Diagnose blockers using lockfile (non-destructive)
+- .github/workflows/composer-locked-diagnostics.yml:31 — cp composer.lock ci-tmp/composer.lock
+- .github/workflows/composer-locked-diagnostics.yml:51 — - name: Why-not PHP ^8.3 (locked)
+- .github/workflows/composer-locked-diagnostics.yml:54 — run: composer why-not php ^8.3 --locked -t > composer-why-not-php83-locked.txt || true
+- .github/workflows/composer-locked-diagnostics.yml:56 — - name: Outdated (direct, locked)
+- .github/workflows/composer-locked-diagnostics.yml:59 — run: composer outdated --direct --locked --format=json > composer-outdated-locked.json || true
+- .github/workflows/composer-locked-diagnostics.yml:61 — - name: Attempt locked install (expect failure if blockers exist)
+- .github/workflows/composer-locked-diagnostics.yml:82 — name: composer-locked-diagnostics
+- .github/workflows/composer-locked-diagnostics.yml:85 — ci-tmp/composer.lock
+- .github/workflows/composer-locked-diagnostics.yml:86 — ci-tmp/composer-why-not-php83-locked.txt
+- .github/workflows/composer-locked-diagnostics.yml:87 — ci-tmp/composer-outdated-locked.json
+- .github/workflows/composer-modernization.yml:6 — update_lock:
+- .github/workflows/composer-modernization.yml:48 — composer.lock
+- .github/workflows/composer-modernization.yml:54 — if: ${{ github.event_name == 'workflow_dispatch' && inputs.update_lock == 'true' }}
+- .github/workflows/composer-modernization.yml:55 — name: Update (attempt lock refresh)
+- .github/workflows/composer-modernization.yml:77 — composer outdated --direct --format=json > composer-outdated-post.json || true
+- .github/workflows/composer-modernization.yml:80 — - name: Create PR with lockfile and reports (if update succeeded)
+- .github/workflows/composer-modernization.yml:84 — commit-message: "chore(composer): update lockfile for PHP 8.3 compatibility"
+- .github/workflows/composer-modernization.yml:85 — title: "Composer lock update (automated)"
+- .github/workflows/composer-modernization.yml:92 — branch: ci/composer-lock-update
+- .github/workflows/composer-modernization.yml:95 — composer.lock
+- .github/workflows/composer-modernization.yml:96 — composer-outdated-post.json
+- .github/workflows/composer-modernization.yml:104 — composer.lock
+- .github/workflows/composer-modernization.yml:105 — composer-outdated-post.json
+- .github/workflows/composer-modernize-pr.yml:70 — composer.lock
+- .github/workflows/composer-modernize-pr.yml:80 — composer.lock
+- .github/workflows/composer-platform-check.yml:43 — composer.lock
+- .github/workflows/fix-lock.yml:1 — name: Fix lockfile (isbn + permissions-handler)
+- .github/workflows/fix-lock.yml:7 — fix-lock:
+- .github/workflows/fix-lock.yml:17 — - name: Update and remove blockers
+- .github/workflows/fix-lock.yml:22 — - name: Commit lockfile changes
+- .github/workflows/fix-then-guard.yml:74 — GUARD_FAIL_ON: merge_conflict_marker,short_open_tag,eval_usage,terminate_calls,debug_calls,deprecated_mysql
+- .github/workflows/fluentpdo-scan.yml:23 — - name: Print summary (non-blocking)
+- .github/workflows/php-composer.yml:17 — - name: Validate composer.json strictly (ignore lock mismatch)
+- .github/workflows/php-composer.yml:18 — run: composer validate --strict --no-check-lock
+- .github/workflows/php83-blockers-check.yml:1 — name: PHP 8.3 Blockers Check (Soft)
+- .github/workflows/php83-blockers-check.yml:14 — - name: Scan composer.lock for known PHP 7.x only packages
+- .github/workflows/php83-blockers-check.yml:15 — run: php tools/scan_php83_blockers.php > php83-blockers-report.txt
+- .github/workflows/php83-blockers-check.yml:20 — name: php83-blockers-report
+- .github/workflows/php83-blockers-check.yml:21 — path: php83-blockers-report.txt
+- .github/workflows/php83-blockers-check.yml:23 — - name: Print summary (non-blocking)
+- .github/workflows/php83-blockers-check.yml:26 — echo "---- PHP 8.3 Blockers (soft) ----"
+- .github/workflows/php83-blockers-check.yml:27 — cat php83-blockers-report.txt || true
+- .github/workflows/static-analysis.yml:29 — - name: Pint (non-blocking)
+- .github/workflows/static-analysis.yml:33 — - name: PHPStan (non-blocking)
+- .github/workflows/static-guard.yml:24 — GUARD_FAIL_ON: merge_conflict_marker,short_open_tag,eval_usage,terminate_calls,debug_calls,deprecated_mysql
+- CHANGELOG.md:27 — fix: disable users forums access
+- CHANGELOG.md:38 — add: movie, tv shows, forums and messages links to platform-wrapper
+- CHANGELOG.md:52 — update: no duplicate banner titles in glide block
+- CHANGELOG.md:55 — update: forum block title length
+- CHANGELOG.md:96 — merge: css files
+- CHANGELOG.md:109 — add: bounty to index page requests block
+- CHANGELOG.md:129 — update: user blocks for cooker
+- CHANGELOG.md:144 — add: undelete soft deleted forum posts
+- CHANGELOG.md:146 — add: FORUM_MOD role with minimal edit/delete permissions
+- CHANGELOG.md:151 — update: allow coder to see staff global blocks
+- CHANGELOG.md:152 — update: replace global $CURUSER with local $user global blocks
+- CHANGELOG.md:171 — fix: check contents of characters before checking if user exists function_bbcode.php
+- CHANGELOG.md:181 — update: style forum_posts.php
+- CHANGELOG.md:186 — update: rotate badges to the left site of torrent blocks, if enabled
+- CHANGELOG.md:187 — update: disable torrent block badges
+- CHANGELOG.md:190 — update: set torrent blocks title correctly
+- CHANGELOG.md:191 — update: add comments to torrent blocks
+- CHANGELOG.md:193 — update: torrent blocks use more icons
+- CHANGELOG.md:195 — add: site setting to scroll to poll
+- CHANGELOG.md:217 — update: poll question style
+- CHANGELOG.md:219 — revert: set post data to session for staffpanel.php
+- CHANGELOG.md:225 — remove: upload upload from forum config, move to define.php
+- CHANGELOG.md:229 — move: forum config upload folder to define.php
+- CHANGELOG.md:232 — fix: image quoting function_bbcode.php
+- CHANGELOG.md:237 — fix: typo karma_update.php
+- CHANGELOG.md:241 — add: download links to index page torrent blocks
+- CHANGELOG.md:254 — update: split no log ip from invincible
+- CHANGELOG.md:261 — fix: array_merge(): Expected parameter 1 to be an array, null given staffpanel.php
+- CHANGELOG.md:267 — fix: lose post data when confirming identity
+- CHANGELOG.md:305 — update: forum style on mobile
+- CHANGELOG.md:307 — update: view forum link to 'View Forum' function_breadcrumbs.php
+- CHANGELOG.md:312 — update: group by in Snatched.php karma_update.php
+- CHANGELOG.md:314 — update: show empty block when no results trivia_results.php
+- CHANGELOG.md:315 — remove: redundant switch block browse.php, mybonus.php, mytorrents.php
+- CHANGELOG.md:316 — update: phpDoc blocks
+- CHANGELOG.md:324 — add: view forum breadcrumb
+- CHANGELOG.md:359 — fix: code bbcode block not displayed correctly function_bbcode.php
+- CHANGELOG.md:361 — fix: Undefined index: children_ids forums.php
+- CHANGELOG.md:382 — update: add user ids to torrent blocks snatched_staff.php, torrents_block.php
+- CHANGELOG.md:385 — fix: topic/post count on main forum page not matching topic/post count on view_forum.php
+- CHANGELOG.md:389 — fix: duplicated results for messages when user has friends/blocks
+- CHANGELOG.md:399 — remove: paranoia from index page blocks
+- CHANGELOG.md:440 — add: missing BBcode tags tags.php
+- CHANGELOG.md:443 — fix: saving BBcode() items as html instead of bbcode
+- CHANGELOG.md:447 — update: html for youtube iframe function_bbcode.php, chat.js
+- CHANGELOG.md:508 — merge: user['perms'] user['anonymous_until'] user['paranoia'] into 1 function check_anonymous()
+- CHANGELOG.md:515 — fix: index page comments block
+- CHANGELOG.md:536 — update: clean url without breaking code blocks
+- CHANGELOG.md:537 — add: post id to forum posts
+- CHANGELOG.md:549 — fix: user torrent blocks userdetails.php
+- CHANGELOG.md:559 — fix: typo blocks cache
+- CHANGELOG.md:587 — update: torrent name width index torrent blocks
+- CHANGELOG.md:596 — update: duplicate posts view_unread_posts.php
+- CHANGELOG.md:600 — fix: read forum posts
+- CHANGELOG.md:608 — fix: forum poll votes
+- CHANGELOG.md:609 — fix: cast to int function_bbcode.php
+- CHANGELOG.md:615 — update: remove package from doc block
+- CHANGELOG.md:618 — update: index page torrent blocks
+- CHANGELOG.md:648 — add: missing docblock
+- CHANGELOG.md:661 — update: allow get or post request to search.php
+- CHANGELOG.md:678 — fix: read last post update
+- CHANGELOG.md:700 — fix: must be of the type int reputation.php
+- CHANGELOG.md:732 — update: font color blocks/global/uploadapp.php
+- CHANGELOG.md:740 — update: add ignore() Userblock.php Usersachiev.php
+- CHANGELOG.md:742 — add: script to fix usersachiev userblocks usersfix.php
+- CHANGELOG.md:758 — fix: cast to int poll.php
+- CHANGELOG.md:765 — add: latest tv torrents block index page
+- CHANGELOG.md:766 — add: latest movie torrents block index page
+- CHANGELOG.md:786 — fix: add bot to user_blocks and usersachiev install.php
+- CHANGELOG.md:808 — update: karma_update.php
+- CHANGELOG.md:819 — fix: forum polls
+- CHANGELOG.md:906 — fix: say_thanks()
+- CHANGELOG.md:909 — fix: forum post history
+- CHANGELOG.md:910 — update: make forum posts and comments same format
+- CHANGELOG.md:913 — fix: imdb block format details.php
+- CHANGELOG.md:969 — fix: over_forums.php
+- CHANGELOG.md:977 — fix: mass_bonus_for_members.php polls_manager.php invincible.php
+- CHANGELOG.md:981 — fix: polls
+- CHANGELOG.md:982 — fix: not showing forums when no child board exists
+- CHANGELOG.md:993 — update: allow index page blocks to be shown as staff only blocks
+- CHANGELOG.md:999 — fix: thanks
+- CHANGELOG.md:1024 — fix: BBcode null issues
+- CHANGELOG.md:1026 — fix: delete/recycle forum post
+- CHANGELOG.md:1030 — add: forum quick reply
+- CHANGELOG.md:1036 — fix: forum attachments
+- CHANGELOG.md:1041 — fix: forums
+- CHANGELOG.md:1043 — update: uncomment sceditor in forums
+- CHANGELOG.md:1068 — update: format_bbcode $images == false hides image instead of leaving bbcode
+- CHANGELOG.md:1103 — fix: BBcode quote
+- CHANGELOG.md:1123 — fix: Block.php
+- CHANGELOG.md:1131 — fix: missing user_blocks during install
+- CHANGELOG.md:1140 — fix: userdetails torrent blocks
+- CHANGELOG.md:1144 — update: polls
+- CHANGELOG.md:1146 — update: merge freeleech cache with events cache
+- CHANGELOG.md:1162 — fix: delete torrent block caches
+- CHANGELOG.md:1163 — update: torrent block caches when updating torrents
+- CHANGELOG.md:1168 — update: show only visible torrents in torrent blocks
+- CHANGELOG.md:1184 — update: youtube bbcode
+- CHANGELOG.md:1194 — fix: forum view topic format
+- CHANGELOG.md:1197 — fix: page format forums.php
+- CHANGELOG.md:1205 — update: order staff picks block by timestamp
+- CHANGELOG.md:1256 — fix: template not showing clock when use_12_hour is false
+- CHANGELOG.md:1293 — fix: delete posts
+- CHANGELOG.md:1306 — fix: forums.php
+- CHANGELOG.md:1402 — add: index on rating.topic
+- CHANGELOG.md:1403 — add: index on over_forums.min_class_view
+- CHANGELOG.md:1404 — add: index on forum_config.id
+- CHANGELOG.md:1406 — add: index on forums.parent_forum
+- CHANGELOG.md:1407 — add: index on forums.min_class_read
+- CHANGELOG.md:1408 — add: index on posts.added
+- CHANGELOG.md:1409 — add: index on topics.added
+- CHANGELOG.md:1461 — fix: typo view_forums.php
+- CHANGELOG.md:1497 — update: show the correct number of replies view_forums.php
+- CHANGELOG.md:1523 — remove: original blocks folder
+- CHANGELOG.md:1539 — fix: bbcode editor youtube
+- CHANGELOG.md:1540 — fix: group by error view_forums.php
+- CHANGELOG.md:1542 — fix: initial user blocks setting for userdetails
+- CHANGELOG.md:1551 — update: breadcrumbs for forum search page
+- CHANGELOG.md:1558 — fix: forums search
+- CHANGELOG.md:1561 — add: missing forum quote style
+- CHANGELOG.md:1587 — update: make allow bbcode default for new forum posts
+- CHANGELOG.md:1592 — update: add cache to trivia block
+- CHANGELOG.md:1593 — update: clear last post cache when deleting topic or post
+- CHANGELOG.md:1595 — update: display last update time as static, not relative imdb block
+- CHANGELOG.md:1602 — fix: child forums not included in stats on main forum page
+- CHANGELOG.md:1606 — update: concatenate parent name with child name in index page torrent blocks
+- CHANGELOG.md:1620 — fix: IMDb block not showing genres
+- CHANGELOG.md:1630 — update: stats block formatting
+- CHANGELOG.md:1639 — fix: unneeded margins in index blocks
+- CHANGELOG.md:1657 — merge: human_filesize() and mksize() both provided same functionality
+- CHANGELOG.md:1700 — fix: show bbcode not getting set properly in edit_topic.php
+- CHANGELOG.md:1739 — update: remove fieldset/legend from index page blocks
+- CHANGELOG.md:1758 — fix: comments block not showing comment text
+- CHANGELOG.md:1764 — fix: don't give space to empty or disabled block index.php
+- CHANGELOG.md:1776 — update: easier to rearrange index page block
+- CHANGELOG.md:1778 — fix: incorrect url in index page comments block
+- CHANGELOG.md:1784 — fix: bbcode images with width or height
+- CHANGELOG.md:1785 — update: enable poll questions to use bbcode
+- CHANGELOG.md:1789 — update: make torrent blocks initial state hidden
+- CHANGELOG.md:1790 — update: make torrent blocks ajax userdetails.php
+- CHANGELOG.md:1791 — fix: userdetails torrent blocks, incorrect values
+- CHANGELOG.md:1797 — fix: forums section view
+- CHANGELOG.md:1808 — fix: polls
+- CHANGELOG.md:1822 — remove IE, announcement blocks
+- CHANGELOG.md:1836 — fix: use user poster in imdb block
+- CHANGELOG.md:1838 — add: click to IMDb on title imdb block
+- CHANGELOG.md:1853 — fix: error when there are topics but no posts view_forum.php
+- CHANGELOG.md:1873 — update: get poster from images table when torrents.poster is empty index blocks
+- CHANGELOG.md:1876 — update: resize signature and avatar in forums
+- CHANGELOG.md:1882 — update: global blocks
+- CHANGELOG.md:1890 — fix: flash message using html instead of bbcode tickets.php
+- CHANGELOG.md:1894 — update: update forum_config min_delete_view_class when adding/removing classes
+- CHANGELOG.md:1895 — update: edit topic, post reply to use same html
+- CHANGELOG.md:1896 — fix: forum signatures
+- CHANGELOG.md:1897 — fix: forum attachments
+- CHANGELOG.md:1898 — fix: update forum classes when adding/removing classes
+- CHANGELOG.md:1899 — fix: autoshout for new topics/replies
+- CHANGELOG.md:1901 — fix: polls
+- CHANGELOG.md:1926 — add: added column to topics table
+- CHANGELOG.md:1931 — remove: readpost_update.php can't see any reason to reset a users read post history every 2 weeks
+- CHANGELOG.md:1969 — fix: news block icon size
+- CHANGELOG.md:1971 — fix: call image_proxy with width/height when bbcode image tag includes width/height
+- CHANGELOG.md:1972 — fix: db insert Post.php
+- CHANGELOG.md:2004 — update: merge tvmaze title info with episode info
+- CHANGELOG.md:2027 — fix: typo forums.php
+- CHANGELOG.md:2034 — fix: display freeleech.php block
+- CHANGELOG.md:2055 — remove: bottom margin staff picks block
+- CHANGELOG.md:2095 — fix: last post link forums.php
+- CHANGELOG.md:2106 — fix: staff allowed fail post to correct forum/topic
+- CHANGELOG.md:2113 — update: AJAX Chat polling timer to 45 seconds after 10 min inactive
+- CHANGELOG.md:2118 — fix: missing require user_unlocks.php
+- CHANGELOG.md:2131 — update: write_classes() to write chat/js/config bbCodeTags
+- CHANGELOG.md:2134 — fix: clear index page user blocks when edit any user
+- CHANGELOG.md:2145 — fix: get correct page/post when post count greater than per page
+- CHANGELOG.md:2154 — add: apis block to enable/disable individual apis
+- CHANGELOG.md:2176 — fix: typo bbcode_functions.php and anatomy.php
+- CHANGELOG.md:2200 — fix: left join when no topic forum_posts.php
+- CHANGELOG.md:2212 — fix: customsmilie_update.php
+- CHANGELOG.md:2236 — fix: direct link to post view_topic.php
+- CHANGELOG.md:2243 — fix: delete torrent not deleting all caches and all likes to comments, only remove bp if torrent newer than 14 days
+- CHANGELOG.md:2244 — fix: tfreak block if no results
+- CHANGELOG.md:2262 — update: only post newest newsrss item when starting for the first time
+- CHANGELOG.md:2266 — add: missing Avatar toggle in user blocks, currently only used in userdetails.php
+- CHANGELOG.md:2267 — fix: bbcode image class
+- CHANGELOG.md:2274 — update: only show block in user_blocks if block is enabled by site
+- CHANGELOG.md:2294 — update: log viewer better messages splitting
+- CHANGELOG.md:2295 — fix: direct link to post button
+- CHANGELOG.md:2317 — merged: all lists into 1 file
+- CHANGELOG.md:2333 — add: min-width to index page blocks titles
+- CHANGELOG.md:2336 — remove: manage_likes table
+- CHANGELOG.md:2353 — fix: error on valid empty post contents takesignup.php
+- CHANGELOG.md:2356 — update: README innodb_autoinc_lock_mode   = 0
+- CHANGELOG.md:2359 — fix: missing require thanks.php
+- CHANGELOG.md:2381 — add: user option to use 12 or 24 hour clock everywhere except AJAX Chat(working on it)
+- CHANGELOG.md:2387 — add: option to use 12 or 24 hour clock everywhere except AJAX Chat(working on it)
+- CHANGELOG.md:2440 — add: forum_id column to over_forums
+- CHANGELOG.md:2441 — remove: unused css links in forums.php
+- CHANGELOG.md:2442 — remove: direct link to Pu-239.pw/forums.php
+- CHANGELOG.md:2443 — fix: staff forums id
+- CHANGELOG.md:2444 — fix: over_forums.php edit forum with same sort number
+- CHANGELOG.md:2454 — fix: forums scroll to post
+- CHANGELOG.md:2472 — update: forums display, still incomplete but much better
+- CHANGELOG.md:2480 — change: pre to code to keep bbcode code block from breaking template
+- CHANGELOG.md:2491 — remove: redundant parked() check in forums.php
+- CHANGELOG.md:2510 — fix: tracker bencode issue, you will need to manually merge this with your include/ann_config.php
+- CHANGELOG.md:2515 — add: missing sqlerr in many forum queries
+- CHANGELOG.md:2516 — fix: bbcode code block breaking layout
+- CHANGELOG.md:2524 — fix: ambiguous 'status' view_forum.php
+- CHANGELOG.md:2540 — fix: properly display html chars in forum posts
+- CHANGELOG.md:2558 — update: timeout for all index page blocks
+- CHANGELOG.md:2608 — update: increase karma achievement to start at 250, users start with 200
+- CHANGELOG.md:2613 — fix: count in forum_posts.php
+- CHANGELOG.md:2616 — fix: topics view increment
+- CHANGELOG.md:2624 — update: enable latest forum posts on index page
+- CHANGELOG.md:2643 — fix: newest user block shows user id instead of formatted user name #1
+- CHANGELOG.md:2661 — add: stock forums(mostly done, but not happy with it)
+- CHANGELOG.md:2668 — add: stock forums
+- CHANGELOG.md:2710 — update: AJAX Chat polling timer
+- CHANGELOG.md:2714 — add: anonymize url in advertise block
+- CHANGELOG.md:2736 — update: queries block
+- CHANGELOG.md:2756 — fix: code block bbcode on ajax chat
+- CHANGELOG.md:2766 — update: catalog.php formatting remove bbcode from description
+- CHANGELOG.md:2772 — update: get_poll return false when no poll
+- CHANGELOG.md:2773 — update: update poll_data cache when user votes
+- CHANGELOG.md:2774 — update: scroll to poll if user not voted
+- CHANGELOG.md:2789 — fix: polls
+- CHANGELOG.md:2800 — fix: incorrect array being passed to get_reputation
+- CHANGELOG.md:2833 — merge: userstatus_ and user_status_ caches
+- CHANGELOG.md:2835 — fix: show/hide userdetails torrent blocks, should be closed at start
+- CHANGELOG.md:2838 — fix: undefined var in news block
+- CHANGELOG.md:2846 — fix: userdetails table blocks
+- CHANGELOG.md:2854 — update: user_unlocks.php to same style as the other block pages
+- CHANGELOG.md:2856 — add: missing admin 'Show Friends' block
+- CHANGELOG.md:2862 — update: index news block
+- CHANGELOG.md:2885 — update: karma cleanup
+- CHANGELOG.md:2894 — fix: AJAX Chat admin/sysop delete own posts
+- CHANGELOG.md:2922 — update: hide latest forum posts
+- CHANGELOG.md:2954 — remove: forums link
+- CHANGELOG.md:2955 — remove: forums
+- CHANGELOG.md:2962 — fix: global block uploadapp.php
+- CHANGELOG.md:2985 — fix: AJAX Chat anonymize url without bbcode
+- CHANGELOG.md:3009 — update: split install.php.sql into schema.php.sql and data.php.sql
+- CHANGELOG.md:3014 — fix: index trivia block display slightly different than all the others
+- CHANGELOG.md:3015 — add: add bbcode for [p]
+- CHANGELOG.md:3021 — update: allow notifications to use bbcode
+- CHANGELOG.md:3024 — update: forums sort links to tabs
+- CHANGELOG.md:3026 — add: mini navbar for links in usercp.php, userdetails.php forums.php
+- CHANGELOG.md:3067 — fix: index page poll
+- CHANGELOG.md:3070 — fix: index page news block spacing
+- CHANGELOG.md:3086 — merge: torrents-today.php into browse.php
+- CHANGELOG.md:3101 — add: doc blocks(a start)
+- CHANGELOG.md:3115 — add: index page latest comments block(request)
+- CHANGELOG.md:3123 — fix: unset blocks not getting cached
+- CHANGELOG.md:3132 — update: admin/block.settings.php
+- CHANGELOG.md:3133 — update: user_blocks.php
+- CHANGELOG.md:3190 — remove: empty extra tools button from bbcode editor
+- CHANGELOG.md:3191 — update: tfreak news block format to match news block
+- CHANGELOG.md:3197 — fix: BBcode editor using 100% of available space
+- CHANGELOG.md:3198 — update: index news block
+- CHANGELOG.md:3208 — update: index page forum posts, remove unneeded joins
+- CHANGELOG.md:3221 — add: bbcode code for [code]
+- CHANGELOG.md:3238 — update: index blocks ->torrents to uniform style
+- CHANGELOG.md:3244 — add: missing jquery-ui in merged and minified js files
+- CHANGELOG.md:3264 — hide index page poll block when no poll
+- CHANGELOG.md:3265 — hide index page ie alert block if not using ie
+- CHANGELOG.md:3274 — fix: all index blocks to display correctly
+- CHANGELOG.md:3280 — remove: php preview, replaced with inline bbcode editor preview
+- CHANGELOG.md:3281 — fix: bbcode parser adding extra newlines when displaying tables
+- CHANGELOG.md:3282 — moved: home button to sticky navbar
+- CHANGELOG.md:3285 — modify: bbcode editor, add preview
+- CHANGELOG.md:3287 — merge: default.css, bootstrap.css and bootstrap-responsive.css
+- CONTRIBUTING.md:15 — - Merge into `main` happens via PR after review
+- FORUMS_REBUILD.md:1 — # Forums Rebuild Guide
+- FORUMS_REBUILD.md:4 — 27 forum module files were quarantined. All originals now reside in `forums/_quarantine/*.orig` while active endpoints are 503 stubs.
+- FORUMS_REBUILD.md:9 — | forums/add_subscription.php | a044c5956d494397dbb964144866f73ce052ea78 | 585 | dangling_quote, missing_bootstrap, missing_strict_types |
+- FORUMS_REBUILD.md:10 — | forums/attachment.php | d60566b4e3fecf792024741904962f33c8649372 | 2912 | likely_insert, missing_strict_types |
+- FORUMS_REBUILD.md:11 — | forums/clear_unread_post.php | d3065cf60691c9f4d7d4c3c19267c8d378e3c4e3 | 1079 | missing_bootstrap, missing_strict_types |
+- FORUMS_REBUILD.md:12 — | forums/delete_post.php | 04c79440a244c5a0a414b5616947b62d49d32e0f | 4635 | unclosed_brace, dangling_quote, missing_bootstrap, missing_s...
+- FORUMS_REBUILD.md:13 — | forums/delete_subscription.php | 97e0fa437aeeaa31934e86210830dc5251720d5d | 762 | unclosed_brace, missing_bootstrap, missing_strict_typ...
+- FORUMS_REBUILD.md:14 — | forums/download_attachment.php | 2de4617fa58ce928d1dc9708bcab6ab72ae6dba5 | 1068 | likely_update, missing_strict_types |
+- FORUMS_REBUILD.md:15 — | forums/edit_post.php | e0ac92f833128fca91b6239107e0f00bd5b074be | 9188 | contains_sqlesc, unclosed_brace, likely_update, missing_bootst...
+- FORUMS_REBUILD.md:16 — | forums/editor.php | 99c5c2b77594c5f8e214f44c566769a3d1a22533 | 13248 | missing_strict_types |
+- FORUMS_REBUILD.md:17 — | forums/last_ten.php | 22790358b4c8eec11db35217567140993c3be6fe | 2636 | contains_sql_query, contains_mysqli, contains_sqlesc, likely_se...
+- FORUMS_REBUILD.md:18 — | forums/mark_all_as_read.php | 6bd5c3b3d664102098c9782f72953c8823fbeccc | 3277 | missing_bootstrap, missing_strict_types |
+- FORUMS_REBUILD.md:19 — | forums/member_post_history.php | 54592838fb3069ed372c56f74027854b2260a718 | 17836 | contains_sql_query, contains_mysqli, contains_sqles...
+- FORUMS_REBUILD.md:20 — | forums/new_replies.php | 387bdce2768ca22a16b8db0991af2f46992c5812 | 9788 | contains_sql_query, contains_mysqli, contains_sqlesc, likely...
+- FORUMS_REBUILD.md:21 — | forums/new_topic.php | d3a5f8c4be9d71aba65b0ebf52c626f0c5944d82 | 7653 | dangling_quote, likely_update, likely_insert, missing_bootstra...
+- FORUMS_REBUILD.md:22 — | forums/poll.php | 76d26e1d70e9bb24a9f3c1d38b83caebe2d49211 | 12962 | contains_mysqli, contains_sqlesc, unclosed_brace, dangling_quote, ...
+- FORUMS_REBUILD.md:23 — | forums/post_reply.php | d8308a7cfed06ea5633995cbcb3655088fadb991 | 3523 | contains_mysqli, contains_sqlesc, unclosed_brace, likely_sele...
+- FORUMS_REBUILD.md:24 — | forums/quick_reply.php | d13f6c108cc618ae2ff17c6497c9800f8012d378 | 858 | missing_strict_types |
+- FORUMS_REBUILD.md:25 — | forums/search.php | 663e15c94797b98925b45df77ff1b3967466bbf6 | 28695 | missing_strict_types |
+- FORUMS_REBUILD.md:26 — | forums/section_view.php | 65bac16e20ad66a5b3ce544beb0168952302dcbb | 9006 | contains_sql_query, contains_mysqli, contains_sqlesc, likel...
+- FORUMS_REBUILD.md:27 — | forums/staff_actions.php | f595cf5c7a1ba491b7f3ef0a0495c400414ceb8a | 10910 | contains_mysqli, contains_sqlesc, unclosed_brace, danglin...
+- FORUMS_REBUILD.md:28 — | forums/stafflock_post.php | 146a13d35af675f22224e3458a9c052e1d5fab86 | 1107 | dangling_quote, likely_select, likely_update |
+- FORUMS_REBUILD.md:29 — | forums/subscriptions.php | d1166103d8df47b223905f5d3bfd6906e123daa6 | 11109 | contains_sql_query, contains_mysqli, contains_sqlesc, lik...
+- FORUMS_REBUILD.md:30 — | forums/undelete_post.php | 368c090ab1d930f7184552e28361d0a04da1114a | 3660 | dangling_quote, likely_update, missing_bootstrap, missing_...
+- FORUMS_REBUILD.md:31 — | forums/view_forum.php | 5dfe1030717e4eb043baecbd5e72d3434f40feaf | 9201 | unclosed_brace, dangling_quote, likely_insert, missing_bootst...
+- FORUMS_REBUILD.md:32 — | forums/view_my_posts.php | 70d7e7bc0f3f4d74ee85bdcf9347a2b5c35bcd27 | 11446 | contains_sql_query, contains_mysqli, contains_sqlesc, lik...
+- FORUMS_REBUILD.md:33 — | forums/view_post_history.php | fbb054570f39da379e9016535db703721f738b8b | 3040 | dangling_quote, missing_bootstrap, missing_strict_types |
+- FORUMS_REBUILD.md:34 — | forums/view_topic.php | b438bf4573aef19997906f0fab95dd9c3b0034eb | 35632 | unclosed_brace, dangling_quote, likely_update, likely_insert...
+- FORUMS_REBUILD.md:35 — | forums/view_unread_posts.php | 852914e9e67975214c7ae5dcf3ef5dcb3ca30d0b | 12231 | missing_bootstrap, missing_strict_types |
+- FORUMS_REBUILD.md:38 — - forums/add_subscription.php
+- FORUMS_REBUILD.md:39 — - forums/attachment.php
+- FORUMS_REBUILD.md:40 — - forums/clear_unread_post.php
+- FORUMS_REBUILD.md:41 — - forums/delete_post.php
+- FORUMS_REBUILD.md:42 — - forums/delete_subscription.php
+- FORUMS_REBUILD.md:43 — - forums/download_attachment.php
+- FORUMS_REBUILD.md:44 — - forums/edit_post.php
+- FORUMS_REBUILD.md:45 — - forums/editor.php
+- FORUMS_REBUILD.md:46 — - forums/last_ten.php
+- FORUMS_REBUILD.md:47 — - forums/mark_all_as_read.php
+- FORUMS_REBUILD.md:48 — - forums/member_post_history.php
+- FORUMS_REBUILD.md:49 — - forums/new_replies.php
+- FORUMS_REBUILD.md:50 — - forums/new_topic.php
+- FORUMS_REBUILD.md:51 — - forums/poll.php
+- FORUMS_REBUILD.md:52 — - forums/post_reply.php
+- FORUMS_REBUILD.md:53 — - forums/quick_reply.php
+- FORUMS_REBUILD.md:54 — - forums/search.php
+- FORUMS_REBUILD.md:55 — - forums/section_view.php
+- FORUMS_REBUILD.md:56 — - forums/staff_actions.php
+- FORUMS_REBUILD.md:57 — - forums/stafflock_post.php
+- FORUMS_REBUILD.md:58 — - forums/subscriptions.php
+- FORUMS_REBUILD.md:59 — - forums/undelete_post.php
+- FORUMS_REBUILD.md:60 — - forums/view_forum.php
+- FORUMS_REBUILD.md:61 — - forums/view_my_posts.php
+- FORUMS_REBUILD.md:62 — - forums/view_post_history.php
+- FORUMS_REBUILD.md:63 — - forums/view_topic.php
+- FORUMS_REBUILD.md:64 — - forums/view_unread_posts.php
+- FORUMS_REBUILD.md:74 — cp forums/_quarantine/<file>.orig forums/<file>
+- FORUMS_REBUILD.md:79 — All current forum endpoints intentionally return HTTP 503 until each file is rebuilt.
+- FORUMS_REBUILD.md:83 — - `rg -n "mysqli_|sql_query\(|sqlesc\(" forums/` → no matches outside `forums/_quarantine/*.orig`
+- FORUMS_REBUILD.md:84 — - `php -l forums/*.php` → syntax OK for all stubs
+- README.md:9 — This is a torrent tracker written in PHP. Also included is a realtime chat(AJAX Chat), Private Messaging System, Message Boards(Forums), ...
+- README.md:35 — 3. Remove merged bootstrap
+- README.md:38 — 6. Merge, minify and gzip css/js files to reduce size and requests(not as important if http2 is enabled)
+- README.md:108 — innodb_autoinc_lock_mode = 0
+- README.md:174 — * Forum Mod : Can moderate forum posts
+- README.md:175 — * Torrent Mod : Can moderate torrents and their descriptions
+- README.md:176 — * Internal : Required to post to the Cooker
+- README.md:219 — * usersfix.php : adds users to userblocks and usersachiev tables, usually not needed
+- TODO.md:3 — add: cleanup scrip to add reputation points based on active time on site
+- TODO.md:6 — update: blocks to include cooker
+- TODO.md:20 — check: thanks
+- TODO.md:21 — fix: forum topic rating
+- TODO.md:33 — fix karma cleanup
+- TODO.md:36 — user blocks AVATAR is only used in userdetails.php, check to see if useful elsewhere in code
+- TODO.md:44 — add live search (look ahead) to all search blocks
+- TODO.md:49 — merge thanks and thankyou tables/code
+- TODO.md:55 — finish torrent blocks in userdetails, add pagination, initially closed on page load
+- TODO.md:59 — remove/replace function textbbcode calls, doesn't exist
+- admin/acpmanage.php:29 — if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['ids'])) {
+- admin/acpmanage.php:103 — $HTMLOUT .= "<form action='{$_SERVER['PHP_SELF']}?tool=acpmanage&amp;action=acpmanage' method='post' enctype='multipart/form-data' accept...
+- admin/adduser.php:32 — if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+- admin/adduser.php:33 — $post = $_POST;
+- admin/adduser.php:36 — $validation = $validator->validate($post, [
+- admin/adduser.php:40 — if ($validation->fails() || !valid_username($post['username'], false, true)) {
+- admin/adduser.php:41 — write_log(getip(0,) . ' has used invalid data to signup. ' . json_encode($post, JSON_PRETTY_PRINT));
+- admin/adduser.php:47 — 'email' => $post['email'],
+- admin/adduser.php:49 — 'username' => $post['username'],
+- admin/adduser.php:65 — <form method="post" action="' . $site_config['paths']['baseurl'] . '/staffpanel.php?tool=adduser&amp;action=adduser" accept-charset="utf-...
+- admin/backup.php:41 — <form method='post' action='{$_SERVER['PHP_SELF']}?tool=backup&amp;mode=delete' enctype='multipart/form-data' accept-charset='utf-8'>
+- admin/bannedemails.php:27 — if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+- admin/bannedemails.php:47 — <form method='post' action='staffpanel.php?tool=bannedemails' enctype='multipart/form-data' accept-charset='utf-8'>";
+- admin/bans.php:47 — if ($_SERVER['REQUEST_METHOD'] === 'POST' && $CURUSER['class'] >= UC_MAX) {
+- admin/bans.php:136 — <form method='post' action='staffpanel.php?tool=bans' enctype='multipart/form-data' accept-charset='utf-8'>";
+- admin/block.settings.php:29 — 'forum_posts_on',
+- admin/block.settings.php:41 — 'active_poll_on',
+- admin/block.settings.php:59 — 'userdetails_reputation_on',
+- admin/block.settings.php:75 — 'userdetails_forumposts_on',
+- admin/block.settings.php:77 — 'userdetails_torrents_block_on',
+- admin/block.settings.php:101 — if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+- admin/block.settings.php:103 — $filename = CACHE_DIR . 'block_settings_cache.php';
+- admin/block.settings.php:104 — $block_out = "<?php\n\ndeclare(strict_types = 1);\n\n\$BLOCKS = [\n";
+- admin/block.settings.php:107 — $block_out .= ($k === 'block_undefined') ? "\t'{$k}' => '" . htmlsafechars($v) . "',\n" : "\t'{$k}' => " . (int) $v . ",\n";
+- admin/block.settings.php:111 — $block_out .= ($k === 'block_undefined') ? "\t'{$k}' => '" . htmlsafechars($v) . "',\n" : "\t'{$k}' => 0,\n";
+- admin/block.settings.php:113 — $block_out .= '];';
+- admin/block.settings.php:114 — file_put_contents($filename, $block_out);
+- admin/block.settings.php:117 — $session->set('is-success', _('Block Settings Have Been Updated!'));
+- admin/block.settings.php:119 — unset($_POST, $block_out, $block_set_cache);
+- admin/block.settings.php:120 — $cache->delete('site_blocks_');
+- admin/block.settings.php:122 — header('Location: ' . $_SERVER['PHP_SELF'] . '?tool=block.settings');
+- admin/block.settings.php:127 — <form action='{$_SERVER['PHP_SELF']}?tool=block.settings' method='post' enctype='multipart/form-data' accept-charset='utf-8'>
+- admin/block.settings.php:128 — <h1 class='has-text-centered'>" . _('Global Block Settings') . "</h1>
+- admin/block.settings.php:130 — <fieldset id='user_blocks_index' class='header'>
+- admin/block.settings.php:159 — <div class='w-100 has-text-centered'>" . _("Set this option to 'On' if you want to enable the News Block.") . '</div>';
+- admin/block.settings.php:212 — <div class='w-100 has-text-centered'>" . _('Enable Latest Forum Posts?') . "</div>
+- admin/block.settings.php:213 — <div class='slideThree'><#forum_posts_on#></div>
+- admin/block.settings.php:214 — <div class='w-100 has-text-centered'>" . _("Set this option to 'On' if you want to enable latest Forum Posts.") . '</div>';
+- admin/block.settings.php:249 — <div class='w-100 has-text-centered'>" . _("Set this option to 'On' if you want to enable the Announcement Block.") . '</div>';
+- admin/block.settings.php:272 — <div class='w-100 has-text-centered'>" . _('Enable Poll?') . "</div>
+- admin/block.settings.php:273 — <div class='slideThree'><#active_poll_on#></div>
+- admin/block.settings.php:274 — <div class='w-100 has-text-centered'>" . _("Set this option to 'On' if you want to enable the Active Poll.") . '</div>';
+- admin/block.settings.php:305 — <fieldset id='user_blocks_stdhead' class='header'>
+- admin/block.settings.php:319 — <div class='w-100 has-text-centered'>" . _('Enable the global demotion alert block') . '</div>';
+- admin/block.settings.php:322 — <div class='w-100 has-text-centered'>" . _('Message block?') . "</div>
+- admin/block.settings.php:324 — <div class='w-100 has-text-centered'>" . _('Enable message alert block') . '</div>';
+- admin/block.settings.php:357 — <div class='w-100 has-text-centered'>" . _('Karma Contributions') . "</div>
+- admin/block.settings.php:359 — <div class='w-100 has-text-centered'>" . _('Enable karma contribution status alert in stdhead') . '</div>';
+- admin/block.settings.php:395 — <fieldset id='user_blocks_userdetails' class='header'>
+- admin/block.settings.php:427 — <div class='w-100 has-text-centered'>" . _('Reputation?') . "</div>
+- admin/block.settings.php:428 — <div class='slideThree'><#userdetails_reputation_on#></div>
+- admin/block.settings.php:429 — <div class='w-100 has-text-centered'>" . _('Enable reputation link') . '</div>';
+- admin/block.settings.php:507 — <div class='w-100 has-text-centered'>" . _('Forum posts?') . "</div>
+- admin/block.settings.php:508 — <div class='slideThree'><#userdetails_forumposts_on#></div>
+- admin/block.settings.php:509 — <div class='w-100 has-text-centered'>" . _('Enable forum posts history') . '</div>';
+- admin/block.settings.php:518 — <div class='slideThree'><#userdetails_torrents_block_on#></div>
+- admin/block.settings.php:580 — <fieldset id='user_blocks_apis' class='header'>
+- admin/block.settings.php:647 — $title = _('Block Settings');
+- admin/block.settings.php:661 — $BLOCKS = [];
+- admin/block.settings.php:662 — if (!is_file(CACHE_DIR . 'block_settings_cache.php')) {
+- admin/block.settings.php:663 — $BLOCKS = [];
+- admin/block.settings.php:665 — include CACHE_DIR . 'block_settings_cache.php';
+- admin/block.settings.php:666 — if (!is_array($BLOCKS)) {
+- admin/block.settings.php:667 — $BLOCKS = [];
+- admin/block.settings.php:672 — <input type='checkbox' id='{$matches[1]}' name='{$matches[1]}' value='1' " . (!empty($BLOCKS[$matches[1]]) && $BLOCKS[$matches[1]] == 1 ?...
+- admin/bonusmanage.php:20 — if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+- admin/bonusmanage.php:78 — <form name='bonusmanage' method='post' action='{$_SERVER['PHP_SELF']}?tool=bonusmanage&amp;action=bonusmanage' enctype='multipart/form-da...
+- admin/categories.php:23 — $params              = array_merge($_GET, $_POST);
+- admin/categories.php:99 — $results = $db->perform($sql, array_merge($set, ['category' => $params['id']]));
+- admin/categories.php:151 — <form action='{$_SERVER['PHP_SELF']}?tool=categories' method='post' enctype='multipart/form-data' accept-charset='utf-8'>
+- admin/categories.php:296 — <form action='{$_SERVER['PHP_SELF']}?tool=categories' method='post' enctype='multipart/form-data' accept-charset='utf-8'>
+- admin/categories.php:358 — $update = $db->perform($sql, array_merge($set, ['id' => $params['id']]));
+- admin/categories.php:401 — <form action='{$_SERVER['PHP_SELF']}?tool=categories' method='post' enctype='multipart/form-data' accept-charset='utf-8'>
+- admin/categories.php:445 — <form action='" . $site_config['paths']['baseurl'] . "/staffpanel.php?tool=categories' method='post' enctype='multipart/form-data' accept...
+- admin/categories.php:616 — $db->perform($sql, array_merge($set, ['id' => $cat['id']]));
+- admin/changelog.php:19 — $markdown  = file_get_contents(ROOT_DIR . 'CHANGELOG.md');
+- admin/changelog.php:21 — if (!empty($markdown)) {
+- admin/changelog.php:23 — <h1 class='has-text-centered'>CHANGELOG</h1><div class='padding20 round10 bg-00'>" . $parsedown->parse($markdown) . '</div>';
+- admin/cheaters.php:76 — <form action='{$_SERVER['PHP_SELF']}?tool=cheaters&amp;action=cheaters' method='post' enctype='multipart/form-data' accept-charset='utf-8...
+- admin/class_config.php:27 — if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+- admin/class_config.php:43 — if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+- admin/class_promo.php:46 — // POST handling (add / edit / remove)
+- admin/class_promo.php:48 — if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+- admin/class_promo.php:52 — // POST structure per row: [ name, id, min_ratio, uploaded, time, low_ratio ]
+- admin/class_promo.php:177 — <form name='edit' action='{$site_config['paths']['baseurl']}/staffpanel.php?tool=class_promo&amp;mode=edit' method='post' enctype='multip...
+- admin/class_promo.php:203 — <form name='remove' action='staffpanel.php?tool=class_promo&amp;mode=remove' method='post' enctype='multipart/form-data' accept-charset='...
+- admin/class_promo.php:230 — <form name='add' action='staffpanel.php?tool=class_promo&amp;mode=add' method='post' enctype='multipart/form-data' accept-charset='utf-8'>";
+- admin/cleanup_manager.php:24 — $params = array_merge($_GET, $_POST);
+- admin/cleanup_manager.php:28 — case 'unlock':
+- admin/cleanup_manager.php:29 — cleanup_take_unlock($params);
+- admin/cleanup_manager.php:193 — <td class='has-text-centered'><a class='button is-small' href='{$site_config['paths']['baseurl']}/staffpanel.php?tool=cleanup_manager&amp...
+- admin/cleanup_manager.php:259 — <h2 class='has-text-centered'>" . _('Editing cleanup: ') . " {$row['clean_title']}</h2>" . main_div("\n    <div class='padding20 w-50'>\n...
+- admin/cleanup_manager.php:346 — <form name='inputform' method='post' action='staffpanel.php?tool=cleanup_manager&amp;mode=takenew' enctype='multipart/form-data' accept-c...
+- admin/cleanup_manager.php:487 — function cleanup_take_unlock(array $params): void
+- admin/cloudview.php:11 — require_once INCL_DIR . 'function_bbcode.php';
+- admin/cloudview.php:41 — <form id='checkbox_container' method='post' action='{$_SERVER['PHP_SELF']}?tool=cloudview&amp;action=cloudview' enctype='multipart/form-d...
+- admin/comments.php:122 — <form method='post' action='{$_SERVER['PHP_SELF']}?tool=comments&amp;view=results' enctype='multipart/form-data' accept-charset='utf-8'>
+- admin/datareset.php:24 — if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+- admin/datareset.php:98 — <form action='{$_SERVER['PHP_SELF']}?tool=datareset&amp;action=datareset' method='post' enctype='multipart/form-data' accept-charset='utf...
+- admin/deathrow.php:19 — require_once INCL_DIR . 'function_bbcode.php';
+- admin/deathrow.php:95 — $db->perform($sql, array_merge($set, ['tid' => $torrent['id']]));
+- admin/deathrow.php:241 — <form action='' method='post' enctype='multipart/form-data' accept-charset='utf-8'>";
+- admin/delacct.php:22 — if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+- admin/delacct.php:63 — <form method='post' action='{$_SERVER['PHP_SELF']}?tool=delacct&amp;action=delacct' onsubmit='return deleteConfirm();' enctype='multipart...
+- admin/edit_moods.php:23 — // Merge params
+- admin/edit_moods.php:24 — $edit_params = array_merge($_GET, $_POST);
+- admin/edit_moods.php:36 — . "<td><img src=\"{$site_config['paths']['images_baseurl']}smilies/" . htmlsafechars($image) . "\" alt=\"\"></td>"
+- admin/edit_moods.php:52 — write_log('<b>' . _('Mood Added') . '</b> ' . htmlsafechars($CURUSER['username']) . ' - ' . htmlsafechars($name) . '<img src="' . $site_c...
+- admin/edit_moods.php:63 — write_log('<b>' . _('Mood Edited') . '</b> ' . htmlsafechars($CURUSER['username']) . ' - ' . htmlsafechars($name) . '<img src="' . $site_...
+- admin/edit_moods.php:73 — <form method='post' action='staffpanel.php?tool=edit_moods&amp;action=edited' enctype='multipart/form-data' accept-charset='utf-8'>
+- admin/edit_moods.php:99 — <form method='post' action='staffpanel.php?tool=edit_moods&amp;action=added' enctype='multipart/form-data' accept-charset='utf-8'>
+- admin/edit_moods.php:138 — <td><img src="' . $site_config['paths']['images_baseurl'] . 'smilies/' . htmlsafechars((string) $arr['image']) . '" alt=""></td>
+- admin/editlog.php:185 — <form method='post' action='staffpanel.php?tool=editlog&amp;action=editlog' enctype='multipart/form-data' accept-charset='utf-8'>
+- admin/findnotconnectable.php:12 — require_once INCL_DIR . 'function_bbcode.php';
+- admin/findnotconnectable.php:73 — if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+- admin/findnotconnectable.php:121 — <form method='post' action='{$_SERVER['PHP_SELF']}?tool=findnotconnectable&amp;action=findnotconnectable' enctype='multipart/form-data' a...
+- admin/findnotconnectable.php:130 — The way to solve the problem involves opening the ports used for incoming connections (the same range you defined in your client) on the ...
+- admin/findnotconnectable.php:132 — Also if you need help please come into our IRC chat room or post in the forums your problems. We are always glad to help out.
+- admin/findnotconnectable.php:135 — $HTMLOUT .= main_div(BBcode($body, '', 250) . "
+- admin/floodlimit.php:21 — if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+- admin/floodlimit.php:40 — <form method='post' action='' enctype='multipart/form-data' accept-charset='utf-8'>";
+- admin/flush.php:9 — require_once INCL_DIR . 'function_bbcode.php';
+- admin/forum_config.php:24 — if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['do_it'])) {
+- admin/forum_config.php:34 — $sql = "UPDATE forum_config SET /* columns */ WHERE id = :id";
+- admin/forum_config.php:35 — $db->perform($sql, array_merge($update, ['id' => $config_id]));
+- admin/forum_config.php:36 — $cache->delete('forum_config_');
+- admin/forum_config.php:37 — header('Location: ' . $_SERVER['PHP_SELF'] . '?tool=forum_config');
+- admin/forum_config.php:44 — <a href='{$site_config['paths']['baseurl']}/staffpanel.php?tool=over_forums&amp;action=over_forums'>" . _('Over Forums') . "</a>
+- admin/forum_config.php:47 — <a href='{$site_config['paths']['baseurl']}/staffpanel.php?tool=forum_manage&amp;action=forum_manage'>" . _('Forum Manager') . "</a>
+- admin/forum_config.php:51 — <h1 class='has-text-centered'>" . _('Config Forums') . '</h1>';
+- admin/forum_config.php:54 — accepted_file_types, max_file_size FROM forum_config WHERE id = ' . sqlesc($config_id));
+- admin/forum_config.php:63 — $HTMLOUT .= $main_links . '<form method="post" action="staffpanel.php?tool=forum_config" accept-charset="utf-8">
+- admin/forum_config.php:67 — <td><span class="has-text-weight-bold">' . _('Delete posts/topics:') . '</span></td>
+- admin/forum_config.php:71 — ' . _('Setting this to No will give the option for selected class and above to see deleted posts and threads and decide if they should be...
+- admin/forum_config.php:77 — ' . _('Set this to the lowest member class you wish to be able to view deleted posts and threads.') . '<br>' . _('[Implicit - Admin]') . ...
+- admin/forum_config.php:80 — <td><span class="has-text-weight-bold">' . _('Read post expiration') . ':</span></td>
+- admin/forum_config.php:89 — ' . _('Set this to the lowest member class you wish to give the right to add attachments to a post.') . '</td>
+- admin/forum_config.php:128 — $title = _('Config Forums');
+- admin/forum_manage.php:5 — use Pu239\Forum;
+- admin/forum_manage.php:18 — $HTMLOUT = $options = $options_2 = $options_3 = $options_4 = $options_5 = $options_6 = $option_7 = $option_8 = $option_9 = $option_10 = $...
+- admin/forum_manage.php:25 — $parent_forum = isset($_POST['parent_forum']) ? (int) $_POST['parent_forum'] : 0;
+- admin/forum_manage.php:26 — $over_forums = isset($_POST['over_forums']) ? (int) $_POST['over_forums'] : 0;
+- admin/forum_manage.php:34 — <a href='{$site_config['paths']['baseurl']}/staffpanel.php?tool=over_forums&amp;action=over_forums'>" . _('Over Forums') . "</a>
+- admin/forum_manage.php:37 — <a href='{$site_config['paths']['baseurl']}/staffpanel.php?tool=forum_config&amp;action=forum_config'>" . _('Configure Forums') . "</a>
+- admin/forum_manage.php:41 — <h1 class='has-text-centered'>" . _('Forum Manager') . '</h1>';
+- admin/forum_manage.php:46 — 'edit_forum',
+- admin/forum_manage.php:47 — 'add_forum',
+- admin/forum_manage.php:48 — 'edit_forum_page',
+- admin/forum_manage.php:52 — $forum_class = $container->get(Forum::class);
+- admin/forum_manage.php:56 — header('Location: ' . $_SERVER['PHP_SELF'] . '?tool=forum_manage&action=forum_manage');
+- admin/forum_manage.php:59 — $forum_class->delete($id);
+- admin/forum_manage.php:60 — header('Location: ' . $_SERVER['PHP_SELF'] . '?tool=forum_manage&action=forum_manage');
+- admin/forum_manage.php:64 — case 'edit_forum':
+- admin/forum_manage.php:66 — header('Location: ' . $_SERVER['PHP_SELF'] . '?tool=forum_manage&action=forum_manage');
+- admin/forum_manage.php:72 — 'parent_forum' => $parent_forum,
+- admin/forum_manage.php:74 — 'forum_id' => $over_forums,
+- admin/forum_manage.php:79 — $forum_class->update($set, $id);
+- admin/forum_manage.php:80 — header('Location: ' . $_SERVER['PHP_SELF'] . '?tool=forum_manage&action=forum_manage');
+- admin/forum_manage.php:84 — case 'add_forum':
+- admin/forum_manage.php:86 — header('Location: ' . $_SERVER['PHP_SELF'] . '?tool=forum_manage&action=forum_manage');
+- admin/forum_manage.php:92 — 'parent_forum' => $parent_forum,
+- admin/forum_manage.php:97 — 'forum_id' => $over_forums,
+- admin/forum_manage.php:99 — $forum_class->add($values);
+- admin/forum_manage.php:100 — header('Location: ' . $_SERVER['PHP_SELF'] . '?tool=forum_manage&action=forum_manage');
+- admin/forum_manage.php:104 — case 'edit_forum_page':
+- admin/forum_manage.php:105 — $forum = $forum_class->get_forum($id);
+- admin/forum_manage.php:106 — if (!empty($forum)) {
+- admin/forum_manage.php:108 — <form method="post" action="' . $_SERVER['PHP_SELF'] . '?tool=forum_manage&amp;action=forum_manage" accept-charset="utf-8">';
+- admin/forum_manage.php:111 — <td colspan='2'>" . _('Edit forum:') . ' ' . htmlsafechars($forum['name']) . '</td>
+- admin/forum_manage.php:114 — <td>' . _('Forum name:') . "</td>
+- admin/forum_manage.php:115 — <td><input name='name' type='text' class='w-100' maxlength='60' value='" . htmlsafechars($forum['name']) . "'></td>
+- admin/forum_manage.php:118 — <td>" . _('Forum description:') . "</td>
+- admin/forum_manage.php:119 — <td><input name='desc' type='text' class='w-100' maxlength='200' value='" . htmlsafechars($forum['description']) . "'></td>
+- admin/forum_manage.php:122 — <td>" . _('OverForum:') . "</td>
+- admin/forum_manage.php:124 — <select name='over_forums'>";
+- admin/forum_manage.php:125 — $query = $fluent->from('over_forums');
+- admin/forum_manage.php:128 — <option class='body' value='{$arr['id']}' " . ($forum['forum_id'] === $arr['id'] ? 'selected' : '') . '>' . htmlsafechars($arr['name']) ....
+- admin/forum_manage.php:135 — <td>' . _('Sub-Forum of?') . "</td>
+- admin/forum_manage.php:137 — <select name='parent_forum'>
+- admin/forum_manage.php:138 — <option class='body' value='0' " . ($parent_forum === 0 ? 'selected' : '') . '>' . _('select parent forum if sub-forum') . '</option>';
+- admin/forum_manage.php:139 — $query = $fluent->from('forums')
+- admin/forum_manage.php:148 — <option class='body' value='{$arr['id']}' " . ($parent_forum === $arr['id'] ? 'selected' : '') . '>' . htmlsafechars($arr['name']) . '</o...
+- admin/forum_manage.php:161 — <option class='body' value='{$i}' " . ($forum['min_class_read'] === $i ? 'selected' : '') . '>' . get_user_class_name((int) $i) . '</opti...
+- admin/forum_manage.php:173 — <option class='body' value='{$i}' " . ($forum['min_class_write'] === $i ? 'selected' : '') . '>' . get_user_class_name((int) $i) . '</opt...
+- admin/forum_manage.php:180 — <td>' . _('Minimun create topic permission') . ":</td>
+- admin/forum_manage.php:185 — <option class='body' value='{$i}' " . ($forum['min_class_create'] === $i ? 'selected' : '') . '>' . get_user_class_name((int) $i) . '</op...
+- admin/forum_manage.php:192 — <td>' . _('Forum rank') . ":</td>
+- admin/forum_manage.php:195 — $count = $forum_class->get_count();
+- admin/forum_manage.php:199 — <option class='body' value='{$i}' " . ($forum['sort'] === $i ? 'selected' : '') . ">$i</option>";
+- admin/forum_manage.php:207 — <input type="hidden" name="action2" value="edit_forum">
+- admin/forum_manage.php:209 — <input type="submit" name="button" class="button is-small margin20" value="' . _('Edit forum') . '">
+- admin/forum_manage.php:221 — <th>' . _('Sub-Forum of') . '</th>
+- admin/forum_manage.php:222 — <th>' . _('OverForum') . '</th>
+- admin/forum_manage.php:225 — <th>' . _('Create topic') . '</th>
+- admin/forum_manage.php:228 — $forums = $fluent->from('forums AS f')
+- admin/forum_manage.php:230 — ->select('s.name AS subforum_name')
+- admin/forum_manage.php:231 — ->leftJoin('over_forums AS o ON f.forum_id = o.id')
+- admin/forum_manage.php:232 — ->leftJoin('forums AS s ON f.parent_forum = s.id')
+- admin/forum_manage.php:233 — ->orderBy('f.forum_id')
+- admin/forum_manage.php:237 — foreach ($forums as $row) {
+- admin/forum_manage.php:238 — $forum_id = $row['forum_id'];
+- admin/forum_manage.php:240 — $subforum = $row['parent_forum'];
+- admin/forum_manage.php:241 — $subforum_name = !empty($row['subforum_name']) ? htmlsafechars($row['subforum_name']) : '';
+- admin/forum_manage.php:244 — <td><a class="is-link" href="' . $site_config['paths']['baseurl'] . '/forums.php?action=view_forum&amp;forum_id=' . (int) $row['id'] . '">
+- admin/forum_manage.php:248 — <td><span>' . $subforum_name . '</span></td>
+- admin/forum_manage.php:256 — <a href="' . $site_config['paths']['baseurl'] . '/staffpanel.php?tool=forum_manage&amp;action=forum_manage&amp;action2=edit_forum_page&am...
+- admin/forum_manage.php:271 — <form method="post" action="' . $_SERVER['PHP_SELF'] . '?tool=forum_manage&amp;action=forum_manage" accept-charset="utf-8">';
+- admin/forum_manage.php:274 — <td colspan="2">' . _('Make new forum') . '</td>
+- admin/forum_manage.php:277 — <td>' . _('Forum name') . ':</td>
+- admin/forum_manage.php:281 — <td>' . _('Forum description') . ':</td>
+- admin/forum_manage.php:285 — <td>' . _('OverForum') . ':</td>
+- admin/forum_manage.php:287 — <select name="over_forums">';
+- admin/forum_manage.php:289 — $query = $fluent->from('over_forums');
+- admin/forum_manage.php:299 — <td>' . _('Sub-Forum of?') . ':</td>
+- admin/forum_manage.php:301 — <select name="parent_forum">
+- admin/forum_manage.php:303 — $query = $fluent->from('forums');
+- admin/forum_manage.php:337 — <td>' . _('Minimun create topic permission') . ':</td>
+- admin/forum_manage.php:349 — <td>' . _('Forum rank') . ':</td>
+- admin/forum_manage.php:352 — $count = $fluent->from('forums')
+- admin/forum_manage.php:367 — <input type="hidden" name="action2" value="add_forum">
+- admin/forum_manage.php:368 — <input type="submit" name="button" class="button is-small margin20" value="' . _('Make forum') . '">
+- admin/forum_manage.php:375 — if (confirm(\'' . _('Delete forum?') . '\'))
+- admin/forum_manage.php:377 — self.location.href=\'staffpanel.php?tool=forum_manage&amp;action=forum_manage&action2=delete&id=\'+id;
+- admin/forum_manage.php:382 — $title = _('Forum Manager');
+- admin/freeleech.php:21 — if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+- admin/freeleech.php:98 — <form method='post' action='{$_SERVER['PHP_SELF']}?tool=freeleech&amp;action=remove' enctype='multipart/form-data' accept-charset='utf-8'>
+- admin/freeleech.php:112 — <form method='post' action='{$_SERVER['PHP_SELF']}?tool=freeleech&amp;action=freeleech' enctype='multipart/form-data' accept-charset='utf...
+- admin/grouppm.php:12 — require_once INCL_DIR . 'function_bbcode.php';
+- admin/grouppm.php:49 — if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+- admin/grouppm.php:52 — // Get raw body (allow BBCode), but normalize &amp; -> & as original code intended
+- admin/grouppm.php:223 — <form action='staffpanel.php?tool=grouppm&amp;action=grouppm' method='post' enctype='multipart/form-data' accept-charset='utf-8'>
+- admin/grouppm.php:234 — <td class='is-paddingless'>" . BBcode() . "</td>
+- admin/hit_and_run.php:9 — require_once INCL_DIR . 'function_bbcode.php';
+- admin/hit_and_run.php:124 — ' . _('Site ratio') . ': <span style="color: "' . get_ratio_color($site_ratio) . '" title="' . _('includes all bonus and karma stuff') . ...
+- admin/hit_and_run.php:126 — <a class="is-link" href="' . $site_config['paths']['baseurl'] . '/staffpanel.php?tool=shit_list&amp;action2=new&amp;shit_list_id=' . (int...
+- admin/hit_and_run_settings.php:19 — if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+- admin/hit_and_run_settings.php:44 — <form action='staffpanel.php?tool=hit_and_run_settings' method='post' enctype='multipart/form-data' accept-charset='utf-8'>";
+- admin/hnrwarn.php:28 — if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+- admin/hnrwarn.php:54 — array_merge([':no' => 'no'], $uids)
+- admin/hnrwarn.php:81 — array_merge($params, $uids)
+- admin/hnrwarn.php:132 — $HTMLOUT .= "<form action='staffpanel.php?tool=hnrwarn&amp;action=hnrwarn' method='post' enctype='multipart/form-data' accept-charset='ut...
+- admin/inactive.php:32 — if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+- admin/inactive.php:61 — $params = array_merge([$reason], $ids);
+- admin/inactive.php:183 — <form method='post' action='staffpanel.php?tool=inactive&amp;action=inactive' enctype='multipart/form-data' accept-charset='utf-8'>
+- admin/invite_tree.php:9 — require_once INCL_DIR . 'function_bbcode.php';
+- admin/invite_tree.php:237 — $cc = array_merge($aa, $bb);
+- admin/leechwarn.php:30 — if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+- admin/leechwarn.php:72 — $params = array_merge($params, $uids);
+- admin/leechwarn.php:144 — <form action='{$_SERVER['PHP_SELF']}?tool=leechwarn&amp;action=leechwarn' method='post' enctype='multipart/form-data' accept-charset='utf...
+- admin/log_viewer.php:8 — require_once INCL_DIR . 'function_bbcode.php';
+- admin/log_viewer.php:23 — if ($_SERVER['REQUEST_METHOD'] === 'POST' && $_POST['delete'] === 'Delete') {
+- admin/log_viewer.php:54 — $temp_contents = preg_split('!(\[\d+\-\w+\-\d{4}\s+\d{2}:\d{2}:\d{2}\])!iU', $content, -1, PREG_SPLIT_NO_EMPTY | PREG_SPLIT_DELIM_CAPTURE);
+- admin/log_viewer.php:105 — $paths = array_merge($site_config['paths']['log_viewer'], [LOGS_DIR]);
+- admin/log_viewer.php:155 — <form action='{$_SERVER['PHP_SELF']}?tool=log_viewer' method='post' name='checkme' enctype='multipart/form-data' accept-charset='utf-8'>"...
+- admin/manage_images.php:12 — require_once INCL_DIR . 'function_bbcode.php';
+- admin/manage_images.php:28 — if ($_SERVER['REQUEST_METHOD'] === 'POST' && !empty($_POST['delete']) && $_POST['delete'] === 'Delete') {
+- admin/manage_images.php:50 — if ($_SERVER['REQUEST_METHOD'] === 'POST' && !empty($_POST['terms'])) {
+- admin/manage_images.php:122 — <form action='{$_SERVER['PHP_SELF']}?tool=manage_images' method='post' name='terms' enctype='multipart/form-data' accept-charset='utf-8'>
+- admin/manage_images.php:128 — <form action='{$_SERVER['PHP_SELF']}?tool=manage_images' method='post' name='checkme' enctype='multipart/form-data' accept-charset='utf-8...
+- admin/mass_bonus_for_members.php:11 — require_once INCL_DIR . 'function_bbcode.php';
+- admin/mass_bonus_for_members.php:43 — 'karma',
+- admin/mass_bonus_for_members.php:131 — array_merge([':bytes' => $GB], $class_ids)
+- admin/mass_bonus_for_members.php:145 — case 'karma': {
+- admin/mass_bonus_for_members.php:146 — $karma_points = isset($_POST['karma']) ? (int) $_POST['karma'] : 0;
+- admin/mass_bonus_for_members.php:147 — if ($karma_points < 100 || $karma_points > 5000) {
+- admin/mass_bonus_for_members.php:156 — // NOTE: adjust column name if different in your schema (e.g., "seedbonus" or "karma")
+- admin/mass_bonus_for_members.php:159 — array_merge([':pts' => $karma_points], $class_ids)
+- admin/mass_bonus_for_members.php:162 — $subject = _('Karma Points Awarded');
+- admin/mass_bonus_for_members.php:163 — $body = _fe('You have been awarded {0} Karma Bonus Points by staff.', $karma_points);
+- admin/mass_bonus_for_members.php:166 — header('Location: ' . $_SERVER['PHP_SELF'] . '?tool=mass_bonus_for_members&action=mass_bonus_for_members&karma=1');
+- admin/mass_bonus_for_members.php:184 — array_merge([':num' => $freeslots], $class_ids)
+- admin/mass_bonus_for_members.php:209 — array_merge([':num' => $invites], $class_ids)
+- admin/mass_bonus_for_members.php:277 — $karma_drop_down = '
+- admin/mass_bonus_for_members.php:278 — <select name="karma">
+- admin/mass_bonus_for_members.php:279 — <option class="head" value="">' . _('Add Karma Bonus Points') . '</option>';
+- admin/mass_bonus_for_members.php:282 — $karma_drop_down .= '<option class="body" value="' . $i . '">' . $i . ' ' . _('Karma Points') . '</option>';
+- admin/mass_bonus_for_members.php:285 — $karma_drop_down .= '</select> ' . _('select amount of Karma Bonus Points to add.') . ' ';
+- admin/mass_bonus_for_members.php:323 — <td class="is-paddingless">' . BBcode($body, '', 300) . '</td>
+- admin/mass_bonus_for_members.php:331 — <option value="karma">' . _('Karma Points') . '</option>
+- admin/mass_bonus_for_members.php:340 — $h1_thingie .= (isset($_GET['karma']) && (int) $_GET['karma'] === 1) ? '<h2>' . _('Bonus Karma added to selected member classes') . '</h2...
+- admin/mass_bonus_for_members.php:347 — <form name="inputform" method="post" action="' . $_SERVER['PHP_SELF'] . '?tool=mass_bonus_for_members&amp;action=mass_bonus_for_members" ...
+- admin/mass_bonus_for_members.php:363 — <div id="div_karma" class="select_me"><br>' . $karma_drop_down . '</div>
+- admin/mega_search.php:32 — <form method="post" action="' . $_SERVER['PHP_SELF'] . '?tool=mega_search&action=mega_search" accept-charset="utf-8">
+- admin/mega_search.php:33 — ' . bubble(_('Text:'), _('Use this section to search emails and IPs whithin a block of text. Everything else will be ignored!')) . '
+- admin/mega_search.php:42 — <form method="post" action="' . $_SERVER['PHP_SELF'] . '?tool=mega_search&action=mega_search" accept-charset="utf-8">
+- admin/mega_search.php:52 — <form method="post" action="' . $_SERVER['PHP_SELF'] . '?tool=mega_search&action=mega_search" accept-charset="utf-8">
+- admin/memcache.php:805 — <td>' . chunk_split($r['VALUE'][$theKey]['value'], 40) . "</td>
+- admin/modded_torrents.php:232 — } elseif ($_SERVER['REQUEST_METHOD'] === 'POST') {
+- admin/modded_torrents.php:358 — <form method='post' action='{$_SERVER['PHP_SELF']}?tool=modded_torrents&amp;type=search_modded' enctype='multipart/form-data' accept-char...
+- admin/modtask.php:44 — $post = $_POST;
+- admin/modtask.php:46 — $userid = !empty($post['userid']) ? (int) $post['userid'] : 0;
+- admin/modtask.php:65 — $modcomment = $post['modcomment'];
+- admin/modtask.php:69 — if (isset($post['role_coder']) && $post['role_coder'] == 1 && !($user['roles_mask'] & Roles::CODER)) {
+- admin/modtask.php:79 — } elseif (!isset($post['role_coder']) && $user['roles_mask'] & Roles::CODER) {
+- admin/modtask.php:90 — if (isset($post['role_uploader']) && $post['role_uploader'] == 1 && !($user['roles_mask'] & Roles::UPLOADER)) {
+- admin/modtask.php:100 — } elseif (!isset($post['role_uploader']) && $user['roles_mask'] & Roles::UPLOADER) {
+- admin/modtask.php:112 — if (isset($post['role_forum_mod']) && $post['role_forum_mod'] == 1 && !($user['roles_mask'] & Roles::FORUM_MOD)) {
+- admin/modtask.php:113 — $setbits |= Roles::FORUM_MOD;
+- admin/modtask.php:118 — 'msg' => _fe("'FORUM_MOD' Role has been added to your profile by {0}", $username),
+- admin/modtask.php:121 — $modcomment = _fe("{0} - FORUM_MOD Role Added by {1}\n", get_date($dt, 'DATE', 1), $CURUSER['username']) . $modcomment;
+- admin/modtask.php:122 — } elseif (!isset($post['role_forum_mod']) && $user['roles_mask'] & Roles::FORUM_MOD) {
+- admin/modtask.php:123 — $clrbits |= Roles::FORUM_MOD;
+- admin/modtask.php:128 — 'msg' => _fe("'FORUM_MOD' Role has been removed from your profile by {0}", $username),
+- admin/modtask.php:131 — $modcomment = _fe("{0} - FORUM_MOD Role Removed by {1}\n", get_date($dt, 'DATE', 1), $CURUSER['username']) . $modcomment;
+- admin/modtask.php:133 — if (isset($post['role_torrent_mod']) && $post['role_torrent_mod'] == 1 && !($user['roles_mask'] & Roles::TORRENT_MOD)) {
+- admin/modtask.php:143 — } elseif (!isset($post['role_torrent_mod']) && $user['roles_mask'] & Roles::TORRENT_MOD) {
+- admin/modtask.php:154 — if (isset($post['role_internal']) && $post['role_internal'] == 1 && !($user['roles_mask'] & Roles::INTERNAL)) {
+- admin/modtask.php:164 — } elseif (!isset($post['role_internal']) && $user['roles_mask'] & Roles::INTERNAL) {
+- admin/modtask.php:178 — if (isset($post['class']) && (($class = (int) $post['class']) !== $user['class'])) {
+- admin/modtask.php:198 — if ((isset($post['donated'])) && (($donated = (int) $post['donated']) !== $user['donated'])) {
+- admin/modtask.php:212 — if (isset($post['donorlength']) && (($donorlength = (int) $post['donorlength']))) {
+- admin/modtask.php:224 — Thanks for your support to {1}!
+- admin/modtask.php:226 — As a donor, you are given some bonus gigs added to your uploaded amount, the status of VIP, and the warm fuzzy feeling you get inside for...
+- admin/modtask.php:249 — if (isset($post['donorlengthadd'])) {
+- admin/modtask.php:251 — $donorlengthadd = $post['donorlengthadd'] === 255 ? 2607 : $post['donorlengthadd'];
+- admin/modtask.php:255 — Thanks for your continued support to {1}!
+- admin/modtask.php:257 — As a donor, you are given some bonus gigs added to your uploaded amount, and, you have the the status of VIP, and the warm fuzzy feeling ...
+- admin/modtask.php:271 — if (isset($post['donor']) && (($donor = $post['donor']) !== $user['donor'])) {
+- admin/modtask.php:288 — if (isset($post['downloadpos']) && ($downloadpos = (int) $post['downloadpos'])) {
+- admin/modtask.php:290 — if (isset($post['disable_pm'])) {
+- admin/modtask.php:291 — $disable_pm = $post['disable_pm'];
+- admin/modtask.php:320 — if (isset($post['uploadpos']) && ($uploadpos = (int) $post['uploadpos'])) {
+- admin/modtask.php:322 — if (isset($post['updisable_pm'])) {
+- admin/modtask.php:323 — $updisable_pm = $post['updisable_pm'];
+- admin/modtask.php:352 — if (isset($post['sendpmpos']) && ($sendpmpos = (int) $post['sendpmpos'])) {
+- admin/modtask.php:354 — if (isset($post['pmdisable_pm'])) {
+- admin/modtask.php:355 — $pmdisable_pm = $post['pmdisable_pm'];
+- admin/modtask.php:384 — if (isset($post['chatpost']) && ($chatpost = (int) $post['chatpost'])) {
+- admin/modtask.php:386 — if (isset($post['chatdisable_pm'])) {
+- admin/modtask.php:387 — $chatdisable_pm = $post['chatdisable_pm'];
+- admin/modtask.php:416 — if (isset($post['immunity']) && (($immunity = (int) $post['immunity']) !== $user['immunity'])) {
+- admin/modtask.php:418 — if (isset($post['immunity_pm'])) {
+- admin/modtask.php:419 — $immunity_pm = $post['immunity_pm'];
+- admin/modtask.php:445 — if (isset($post['leechwarn']) && (($leechwarn = (int) $post['leechwarn']) !== $user['leechwarn'])) {
+- admin/modtask.php:447 — if (isset($post['leechwarn_pm'])) {
+- admin/modtask.php:448 — $leechwarn_pm = $post['leechwarn_pm'];
+- admin/modtask.php:474 — if (isset($post['warned']) && (($warned = (int) $post['warned']) !== $user['warned'])) {
+- admin/modtask.php:476 — if (isset($post['warned_pm'])) {
+- admin/modtask.php:477 — $warned_pm = $post['warned_pm'];
+- admin/modtask.php:504 — $uploadtoadd = (int) $post['amountup'];
+- admin/modtask.php:505 — $downloadtoadd = (int) $post['amountdown'];
+- admin/modtask.php:506 — $formatup = $post['formatup'];
+- admin/modtask.php:507 — $formatdown = $post['formatdown'];
+- admin/modtask.php:508 — $mpup = $post['upchange'];
+- admin/modtask.php:509 — $mpdown = $post['downchange'];
+- admin/modtask.php:539 — if (isset($post['title'])) {
+- admin/modtask.php:541 — $title = $post['title'];
+- admin/modtask.php:548 — if (!empty($post['reset_torrent_pass'])) {
+- admin/modtask.php:554 — if (!empty($post['reset_auth'])) {
+- admin/modtask.php:560 — if (!empty($post['reset_apikey'])) {
+- admin/modtask.php:566 — if ((isset($post['seedbonus'])) && (($seedbonus = (int) $post['seedbonus']) !== (int) $user['seedbonus'])) {
+- admin/modtask.php:571 — if ((isset($post['reputation'])) && (($reputation = (int) $post['reputation']) !== $user['reputation'])) {
+- admin/modtask.php:572 — $modcomment = get_date($dt, 'DATE', 1) . ' - ' . _('Reputation points changed to ') . $reputation . _(' from ') . $user['reputation'] . _...
+- admin/modtask.php:573 — $update['reputation'] = $reputation;
+- admin/modtask.php:574 — $useredit[] = _('Reputation points total adjusted');
+- admin/modtask.php:576 — if ((isset($post['addcomment'])) && ($addcomment = trim($post['addcomment']))) {
+- admin/modtask.php:579 — if ((isset($post['avatar'])) && (($avatar = $post['avatar']) !== $user['avatar'])) {
+- admin/modtask.php:594 — if ((isset($post['signature'])) && (($signature = $post['signature']) !== $user['signature'])) {
+- admin/modtask.php:609 — if ((isset($post['invite_on'])) && (($invite_on = $post['invite_on']) != $user['invite_on'])) {
+- admin/modtask.php:614 — if ((isset($post['invites'])) && (($invites = (int) $post['invites']) !== $user['invites'])) {
+- admin/modtask.php:619 — if ((isset($post['support'])) && (($support = $post['support']) !== $user['support'])) {
+- admin/modtask.php:627 — $supportfor = $post['supportfor'];
+- admin/modtask.php:633 — if ((isset($post['freeslots'])) && (($freeslots = (int) $post['freeslots']) !== $user['freeslots'])) {
+- admin/modtask.php:638 — if (isset($post['personal_freeleech']) && ($personal_freeleech = (int) $post['personal_freeleech'])) {
+- admin/modtask.php:640 — if (isset($post['free_pm'])) {
+- admin/modtask.php:641 — $free_pm = $post['free_pm'];
+- admin/modtask.php:665 — if (isset($post['personal_doubleseed']) && ($personal_doubleseed = (int) $post['personal_doubleseed'])) {
+- admin/modtask.php:667 — if (isset($post['double_pm'])) {
+- admin/modtask.php:668 — $double_pm = $post['double_pm'];
+- admin/modtask.php:692 — if (isset($post['game_access']) && ($game_access = (int) $post['game_access'])) {
+- admin/modtask.php:694 — if (isset($post['game_disable_pm'])) {
+- admin/modtask.php:695 — $disable_pm = $post['game_disable_pm'];
+- admin/modtask.php:724 — if (isset($post['avatarpos']) && ($avatarpos = (int) $post['avatarpos'])) {
+- admin/modtask.php:726 — if (isset($post['avatardisable_pm'])) {
+- admin/modtask.php:727 — $avatardisable_pm = $post['avatardisable_pm'];
+- admin/modtask.php:756 — if ((isset($post['highspeed'])) && (($highspeed = $post['highspeed']) !== $user['highspeed'])) {
+- admin/modtask.php:778 — if ((isset($post['can_leech'])) && (($can_leech = (int) $post['can_leech']) !== $user['can_leech'])) {
+- admin/modtask.php:800 — if ((isset($post['wait_time'])) && (($wait_time = $post['wait_time']) !== $user['wait_time'])) {
+- admin/modtask.php:805 — if ((isset($post['peers_limit'])) && (($peers_limit = $post['peers_limit']) !== $user['peers_limit'])) {
+- admin/modtask.php:810 — if ((isset($post['torrents_limit'])) && (($torrents_limit = $post['torrents_limit']) !== $user['torrents_limit'])) {
+- admin/modtask.php:815 — if (isset($post['status'])) {
+- admin/modtask.php:816 — $status = (int) $post['status'];
+- admin/modtask.php:825 — $update['forum_post'] = isset($update['forum_post']) ? $update['forum_post'] : 'yes';
+- admin/modtask.php:832 — $update['forum_post'] = 'no';
+- admin/modtask.php:849 — $suspended_reason = $post['suspended_reason'];
+- admin/modtask.php:888 — if ((isset($post['hit_and_run_total'])) && (($hit_and_run_total = (int) $post['hit_and_run_total']) !== $user['hit_and_run_total'])) {
+- admin/modtask.php:893 — if ((isset($post['forum_post'])) && (($forum_post = $post['forum_post']) !== $user['forum_post'])) {
+- admin/modtask.php:894 — if ($forum_post === 'yes') {
+- admin/modtask.php:896 — $msg = _('Your Posting rights have been given back by ') . $username . _('. You can post to forum again.');
+- admin/modtask.php:908 — $update['forum_post'] = $forum_post;
+- admin/modtask.php:909 — $useredit[] = _('Forum post enabled = ') . $forum_post;
+- admin/modtask.php:911 — if ((isset($post['signature_post'])) && (($signature_post = $post['signature_post']) !== $user['signature_post'])) {
+- admin/modtask.php:927 — $useredit[] = _('Signature post enabled = ') . $signature_post;
+- admin/modtask.php:929 — if ((isset($post['avatar_rights'])) && (($avatar_rights = $post['avatar_rights']) !== $user['avatar_rights'])) {
+- admin/modtask.php:938 — if ((isset($post['offensive_avatar'])) && (($offensive_avatar = $post['offensive_avatar']) !== $user['offensive_avatar'])) {
+- admin/modtask.php:956 — if ((isset($post['view_offensive_avatar'])) && (($view_offensive_avatar = $post['view_offensive_avatar']) !== $user['view_offensive_avata...
+- admin/modtask.php:965 — if ((isset($post['paranoia'])) && (($paranoia = (int) $post['paranoia']) !== $user['paranoia'])) {
+- admin/modtask.php:966 — $modcomment = get_date($dt, 'DATE', 1) . ' - ' . _fe('Paranoia changed to {0} from {1} by {2}', $post['paranoia'], $user['paranoia'], $CU...
+- admin/modtask.php:970 — if ((isset($post['website'])) && (($website = $post['website']) !== $user['website'])) {
+- admin/modtask.php:971 — $modcomment = get_date($dt, 'DATE', 1) . ' - ' . _fe('website changed to {0} from {1} by {2}', strip_tags($post['website']), htmlsafechar...
+- admin/modtask.php:975 — if ((isset($post['skype'])) && (($skype = $post['skype']) !== $user['skype'])) {
+- admin/modtask.php:976 — $modcomment = get_date($dt, 'DATE', 1) . ' - ' . _fe('skype changed to {0} from {1} by {2}', strip_tags($post['skype']), htmlsafechars((s...
+- admin/modtask.php:983 — if (isset($post['class']) && $post['class'] !== $user['class']) {
+- admin/modtask.php:1001 — $returnto = htmlsafechars($post['returnto']) . '#edit';
+- admin/news.php:11 — require_once INCL_DIR . 'function_bbcode.php';
+- admin/news.php:71 — $sticky = isset($_POST['sticky']) ? htmlsafechars($_POST['sticky']) : 'yes';
+- admin/news.php:89 — 'sticky' => $sticky,
+- admin/news.php:113 — if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+- admin/news.php:115 — $sticky = isset($_POST['sticky']) ? htmlsafechars($_POST['sticky']) : 'yes';
+- admin/news.php:126 — 'sticky' => $sticky,
+- admin/news.php:131 — $db->perform($sql, array_merge($update, ['id' => $newsid]));
+- admin/news.php:139 — <form method='post' name='compose' action='./staffpanel.php?tool=news&amp;mode=edit&amp;newsid=$newsid' enctype='multipart/form-data' acc...
+- admin/news.php:151 — BBcode Editor
+- admin/news.php:154 — " . BBcode($arr['body']) . '
+- admin/news.php:159 — ' . _('Sticky') . "
+- admin/news.php:162 — <input type='radio' " . ($arr['sticky'] === 'yes' ? 'checked' : '') . " name='sticky' value='yes'>
+- admin/news.php:164 — <input type='radio' " . ($arr['sticky'] === 'no' ? 'checked' : '') . " name='sticky' value='no'>
+- admin/news.php:198 — ->orderBy('sticky')
+- admin/news.php:204 — <form method='post' name='compose' action='./staffpanel.php?tool=news&amp;mode=add' enctype='multipart/form-data' accept-charset='utf-8'>
+- admin/news.php:216 — BBcode Editor
+- admin/news.php:218 — <td class='is-paddingless'>" . BBcode() . '
+- admin/news.php:223 — ' . _('Sticky') . "
+- admin/news.php:226 — <input type='radio' checked name='sticky' value='yes'>
+- admin/news.php:228 — <input name='sticky' type='radio' value='no'>
+- admin/over_forums.php:17 — $HTMLOUT = $over_forums = $count = $min_class_viewer = $sorted = '';
+- admin/over_forums.php:22 — <a href='{$site_config['paths']['baseurl']}/staffpanel.php?tool=forum_config&amp;action=forum_config'>" . _('Configure Forum') . "</a>
+- admin/over_forums.php:25 — <a href='{$site_config['paths']['baseurl']}/staffpanel.php?tool=forum_manage&amp;action=forum_manage'>" . _('Forum Manager') . "</a>
+- admin/over_forums.php:29 — <h1 class='has-text-centered'>" . _('Over Forum') . '</h1>';
+- admin/over_forums.php:40 — 'edit_forum',
+- admin/over_forums.php:41 — 'add_forum',
+- admin/over_forums.php:42 — 'edit_forum_page',
+- admin/over_forums.php:44 — $action = (in_array($posted_action, $valid_actions) ? $posted_action : 'forum');
+- admin/over_forums.php:51 — $sql = "DELETE FROM over_forums WHERE id = :id";
+- admin/over_forums.php:53 — header('Location: ' . $_SERVER['PHP_SELF'] . '?tool=over_forums');
+- admin/over_forums.php:57 — case 'edit_forum':
+- admin/over_forums.php:61 — $count = $fluent->from('over_forums')
+- admin/over_forums.php:68 — stderr(_('Error'), _('Over Forum Sort number in use. Please select another Over Forum Sort number!'));
+- admin/over_forums.php:76 — $sql = "UPDATE over_forums SET /* columns */ WHERE id = :id";
+- admin/over_forums.php:77 — $db->perform($sql, array_merge($set, ['id' => $id]));
+- admin/over_forums.php:78 — header('Location: ' . $_SERVER['PHP_SELF'] . '?tool=over_forums');
+- admin/over_forums.php:82 — case 'add_forum':
+- admin/over_forums.php:86 — $count = $fluent->from('over_forums')
+- admin/over_forums.php:92 — stderr(_('Error'), _('Over Forum Sort number in use. Please select another Over Forum Sort number!'));
+- admin/over_forums.php:100 — $sql = "INSERT INTO over_forums (/* columns */) VALUES (/* values */)";
+- admin/over_forums.php:103 — header('Location: ' . $_SERVER['PHP_SELF'] . '?tool=over_forums');
+- admin/over_forums.php:107 — case 'edit_forum_page':
+- admin/over_forums.php:108 — $row = $fluent->from('over_forums')
+- admin/over_forums.php:113 — <form method="post" action="staffpanel.php?tool=over_forums&amp;action=over_forums" accept-charset="utf-8">
+- admin/over_forums.php:114 — <input type="hidden" name="action2" value="edit_forum">
+- admin/over_forums.php:118 — <td colspan="2">' . _('edit overforum') . ': ' . htmlsafechars($row['name']) . '</td>
+- admin/over_forums.php:120 — <td><span class="has-text-weight-bold">' . _('Overforum name') . ':</span></td>
+- admin/over_forums.php:124 — <td><span class="has-text-weight-bold">' . _('Overforum description') . ':</span>  </td>
+- admin/over_forums.php:132 — $over_forums .= '<option class="body" value="' . $i . '" ' . ($row['min_class_view'] == $i ? 'selected' : '') . '>' . get_user_class_name...
+- admin/over_forums.php:134 — $HTMLOUT .= $over_forums . '</select></td></tr><tr>
+- admin/over_forums.php:135 — <td><span class="has-text-weight-bold">' . _('Over forum Sort') . ':</span></td>
+- admin/over_forums.php:138 — $count = $fluent->from('over_forums')
+- admin/over_forums.php:150 — <input type="submit" name="button" class="button is-small margin20" value="' . _('Edit overforum') . '">
+- admin/over_forums.php:157 — case 'forum':
+- admin/over_forums.php:166 — $query = $fluent->from('over_forums')
+- admin/over_forums.php:176 — <a class="is-link" href="' . $site_config['paths']['baseurl'] . '/forums.php?action=forum_view&amp;fourm_id=' . $row['id'] . '">' . htmls...
+- admin/over_forums.php:183 — <a href="' . $site_config['paths']['baseurl'] . '/staffpanel.php?tool=over_forums&amp;action=over_forums&amp;action2=edit_forum_page&amp;...
+- admin/over_forums.php:199 — <form method="post" action="' . $_SERVER['PHP_SELF'] . '?tool=over_forums&amp;action=over_forums" accept-charset="utf-8">
+- admin/over_forums.php:200 — <input type="hidden" name="action2" value="add_forum">';
+- admin/over_forums.php:203 — <td colspan="2">' . _('Make new over forum') . '</td>
+- admin/over_forums.php:206 — <td><span>' . _('Overforum name') . ':</span></td>
+- admin/over_forums.php:210 — <td><span>' . _('Overforum description') . ':</span>  </td>
+- admin/over_forums.php:226 — <td><span>' . _('Over forum Sort') . ':</span></td>
+- admin/over_forums.php:229 — $count = $fluent->from('over_forums')
+- admin/over_forums.php:245 — <input type="submit" name="button" class="button is-small margin20" value="' . _('Make overforum') . '">
+- admin/over_forums.php:254 — if (confirm(\'Are you sure you want to delete this overforum?\'))
+- admin/over_forums.php:256 — self.location.href=\'staffpanel.php?tool=over_forums&action=over_forums&action2=delete&id=\'+id;
+- admin/over_forums.php:261 — $title = _('Over Forum Manager');
+- admin/polls_manager.php:10 — use Pu239\Poll;
+- admin/polls_manager.php:11 — use Pu239\PollVoter;
+- admin/polls_manager.php:28 — get_file_name('pollsmanager_js'),
+- admin/polls_manager.php:32 — $params = array_merge($_GET, $_POST);
+- admin/polls_manager.php:37 — delete_poll($stdfoot);
+- admin/polls_manager.php:41 — edit_poll_form($stdfoot);
+- admin/polls_manager.php:45 — show_poll_form($stdfoot);
+- admin/polls_manager.php:48 — case 'poll_new':
+- admin/polls_manager.php:49 — insert_new_poll();
+- admin/polls_manager.php:52 — case 'poll_update':
+- admin/polls_manager.php:53 — update_poll();
+- admin/polls_manager.php:57 — show_poll_archive($stdfoot);
+- admin/polls_manager.php:72 — function delete_poll($stdfoot)
+- admin/polls_manager.php:76 — $poll_stuffs = $container->get(Poll::class);
+- admin/polls_manager.php:77 — $pollvoter_class = $container->get(PollVoter::class);
+- admin/polls_manager.php:79 — stderr(_('Error'), _('There is no poll with that ID!'));
+- admin/polls_manager.php:85 — <h1>" . _('You are about to delete a poll forever!') . "</h1>
+- admin/polls_manager.php:89 — <a href='{$site_config['paths']['baseurl']}/staffpanel.php?tool=polls_manager&amp;action=polls_manager&amp;mode=delete&amp;pid={$pid}&amp...
+- admin/polls_manager.php:94 — $poll_stuffs->delete($pid);
+- admin/polls_manager.php:95 — $pollvoter_class->delete($pid);
+- admin/polls_manager.php:96 — $pollvoter_class->delete_users_cache();
+- admin/polls_manager.php:97 — show_poll_archive($stdfoot);
+- admin/polls_manager.php:104 — function update_poll()
+- admin/polls_manager.php:108 — $poll_stuffs = $container->get(Poll::class);
+- admin/polls_manager.php:109 — $pollvoter_class = $container->get(PollVoter::class);
+- admin/polls_manager.php:112 — stderr(_('Error'), _('There is no poll with that ID!'));
+- admin/polls_manager.php:115 — if (!isset($_POST['poll_question']) || empty($_POST['poll_question'])) {
+- admin/polls_manager.php:118 — $poll_title = htmlsafechars(strip_tags($_POST['poll_question']));
+- admin/polls_manager.php:119 — $poll_data = makepoll();
+- admin/polls_manager.php:120 — $total_votes = isset($poll_data['total_votes']) ? (int) $poll_data['total_votes'] : 0;
+- admin/polls_manager.php:121 — unset($poll_data['total_votes']);
+- admin/polls_manager.php:122 — if (!is_array($poll_data) || !count($poll_data)) {
+- admin/polls_manager.php:126 — 'choices' => json_encode($poll_data),
+- admin/polls_manager.php:129 — 'poll_question' => $poll_title,
+- admin/polls_manager.php:131 — $result = $poll_stuffs->update($set, $pid);
+- admin/polls_manager.php:132 — $pollvoter_class->delete_users_cache();
+- admin/polls_manager.php:139 — header("Location: {$_SERVER['PHP_SELF']}?tool=polls_manager&action=polls_manager");
+- admin/polls_manager.php:146 — function insert_new_poll()
+- admin/polls_manager.php:150 — $poll_stuffs = $container->get(Poll::class);
+- admin/polls_manager.php:151 — $pollvoter_class = $container->get(PollVoter::class);
+- admin/polls_manager.php:153 — if (!isset($_POST['poll_question']) || empty($_POST['poll_question'])) {
+- admin/polls_manager.php:156 — $poll_title = htmlsafechars(strip_tags($_POST['poll_question']));
+- admin/polls_manager.php:157 — $poll_data = makepoll();
+- admin/polls_manager.php:158 — if (!is_array($poll_data) || !count($poll_data)) {
+- admin/polls_manager.php:164 — 'choices' => json_encode($poll_data),
+- admin/polls_manager.php:167 — 'poll_question' => $poll_title,
+- admin/polls_manager.php:169 — $result = $poll_stuffs->insert($values);
+- admin/polls_manager.php:170 — $pollvoter_class->delete_users_cache();
+- admin/polls_manager.php:177 — header("Location: {$_SERVER['PHP_SELF']}?tool=polls_manager&action=polls_manager");
+- admin/polls_manager.php:189 — function show_poll_form($stdfoot)
+- admin/polls_manager.php:193 — $poll_box = poll_box($site_config['poll']['max_questions'], $site_config['poll']['max_choices_per_question'], 'poll_new');
+- admin/polls_manager.php:194 — $title = _('Add New Poll');
+- admin/polls_manager.php:199 — echo stdhead($title, [], 'page-wrapper', $breadcrumbs) . wrapper($poll_box) . stdfoot($stdfoot);
+- admin/polls_manager.php:213 — function edit_poll_form($stdfoot)
+- admin/polls_manager.php:217 — $poll_stuffs = $container->get(Poll::class);
+- admin/polls_manager.php:218 — $poll_questions = '';
+- admin/polls_manager.php:219 — $poll_multi = '';
+- admin/polls_manager.php:220 — $poll_choices = '';
+- admin/polls_manager.php:221 — $poll_votes = '';
+- admin/polls_manager.php:222 — $poll_data = $poll_stuffs->get((int) $_GET['pid']);
+- admin/polls_manager.php:223 — if (empty($poll_data)) {
+- admin/polls_manager.php:224 — return _('No poll with that ID');
+- admin/polls_manager.php:226 — $poll_answers = $poll_data['choices'] ? json_decode($poll_data['choices'], true) : [];
+- admin/polls_manager.php:227 — foreach ($poll_answers as $question_id => $data) {
+- admin/polls_manager.php:228 — $poll_questions .= "\t{$question_id} : '" . str_replace("'", '&#39;', $data['question']) . "',\n";
+- admin/polls_manager.php:230 — $poll_multi .= "\t{$question_id} : '" . $data['multi'] . "',\n";
+- admin/polls_manager.php:234 — $poll_choices .= "\t'{$question_id}_{$choice_id}' : '" . str_replace("'", '&#39;', $choice) . "',\n";
+- admin/polls_manager.php:235 — $poll_votes .= "\t'{$question_id}_{$choice_id}' : '" . $votes . "',\n";
+- admin/polls_manager.php:238 — $poll_questions = preg_replace("#,(\n)?$#", '\\1', $poll_questions);
+- admin/polls_manager.php:239 — $poll_choices = preg_replace("#,(\n)?$#", '\\1', $poll_choices);
+- admin/polls_manager.php:240 — $poll_multi = preg_replace("#,(\n)?$#", '\\1', $poll_multi);
+- admin/polls_manager.php:241 — $poll_votes = preg_replace("#,(\n)?$#", '\\1', $poll_votes);
+- admin/polls_manager.php:242 — $poll_question = $poll_data['poll_question'];
+- admin/polls_manager.php:243 — $show_open = $poll_data['choices'] ? 1 : 0;
+- admin/polls_manager.php:244 — $poll_box = poll_box($site_config['poll']['max_questions'], $site_config['poll']['max_choices_per_question'], 'poll_update', $poll_questi...
+- admin/polls_manager.php:246 — $title = _('Edit Poll');
+- admin/polls_manager.php:251 — echo stdhead($title, [], 'page-wrapper', $breadcrumbs) . wrapper($poll_box) . stdfoot($stdfoot);
+- admin/polls_manager.php:265 — function show_poll_archive($stdfoot)
+- admin/polls_manager.php:269 — $poll_stuffs = $container->get(Poll::class);
+- admin/polls_manager.php:271 — $polls = $poll_stuffs->get_all();
+- admin/polls_manager.php:272 — if (empty($polls)) {
+- admin/polls_manager.php:274 — <h1 class='has-text-centered'>" . _('No polls defined') . "</h1>
+- admin/polls_manager.php:276 — <a href='{$site_config['paths']['baseurl']}/staffpanel.php?tool=polls_manager&amp;action=polls_manager&amp;mode=new' class='button is-sma...
+- admin/polls_manager.php:277 — " . _('Add New Poll') . '
+- admin/polls_manager.php:282 — <h1 class='has-text-centered'>" . _('Manage Polls') . "</h1>
+- admin/polls_manager.php:284 — <a href='{$site_config['paths']['baseurl']}/staffpanel.php?tool=polls_manager&amp;action=polls_manager&amp;mode=new' class='button is-sma...
+- admin/polls_manager.php:285 — " . _('Add New Poll') . '
+- admin/polls_manager.php:298 — foreach ($polls as $row) {
+- admin/polls_manager.php:303 — <td>' . htmlsafechars($row['poll_question']) . '</td>
+- admin/polls_manager.php:312 — <a href='{$site_config['paths']['baseurl']}/staffpanel.php?tool=polls_manager&amp;action=polls_manager&amp;mode=edit&amp;pid=" . (int) $r...
+- admin/polls_manager.php:317 — <a href='{$site_config['paths']['baseurl']}/staffpanel.php?tool=polls_manager&amp;action=polls_manager&amp;mode=delete&amp;pid=" . (int) ...
+- admin/polls_manager.php:327 — $title = _('Poll Archive');
+- admin/polls_manager.php:336 — * @param string $max_poll_questions
+- admin/polls_manager.php:337 — * @param string $max_poll_choices
+- admin/polls_manager.php:339 — * @param string $poll_questions
+- admin/polls_manager.php:340 — * @param string $poll_choices
+- admin/polls_manager.php:341 — * @param string $poll_votes
+- admin/polls_manager.php:343 — * @param string $poll_question
+- admin/polls_manager.php:344 — * @param string $poll_multi
+- admin/polls_manager.php:348 — function poll_box($max_poll_questions = '', $max_poll_choices = '', $form_type = '', $poll_questions = '', $poll_choices = '', $poll_vote...
+- admin/polls_manager.php:353 — $form_type = $form_type != '' ? $form_type : 'poll_update';
+- admin/polls_manager.php:359 — var poll_questions = {{$poll_questions}};
+- admin/polls_manager.php:360 — var poll_choices = {{$poll_choices}};
+- admin/polls_manager.php:361 — var poll_votes = {{$poll_votes}};
+- admin/polls_manager.php:362 — var poll_multi = {{$poll_multi}};
+- admin/polls_manager.php:365 — var max_poll_questions = parseInt(\"{$max_poll_questions}\");
+- admin/polls_manager.php:366 — var max_poll_choices = parseInt(\"{$max_poll_choices}\");
+- admin/polls_manager.php:369 — var html_add_question = \"<a href='#' title='" . _('Add Poll Question') . "' onclick='return poll_add_question()' class='button is-small ...
+- admin/polls_manager.php:370 — var html_add_choice = \"<li><a href='#' title='" . _('Add Poll Choice') . "' onclick='return poll_add_choice(\"+'\"'+'<%1>'+'\"'+\")' cla...
+- admin/polls_manager.php:371 — var html_question_box = \"<input type='text' id='question_<%1>' name='question[<%1>]' class='input w-100 bottom20' value='<%2>'> <a href=...
+- admin/polls_manager.php:373 — var html_choice_box = \"<li><input type='text' id='choice_<%1>_<%2>' name='choice[<%1>_<%2>]' class='input w-20 bottom20 right10' value='...
+- admin/polls_manager.php:380 — var poll_stat_lang = "' . _('You are allowed') . ' <%1> ' . _('more question(s) with') . ' <%2> ' . _('choices per question.') . "\";
+- admin/polls_manager.php:386 — <h1 class='has-text-centered'>" . _('Editing Poll') . "</h1>
+- admin/polls_manager.php:387 — <form id='postingform' action='{$_SERVER['PHP_SELF']}?tool=polls_manager&amp;action=polls_manager' method='post' name='inputform' enctype...
+- admin/polls_manager.php:392 — <legend>" . _('Poll Title') . "</legend>
+- admin/polls_manager.php:393 — <input type='text' name='poll_question' value='$poll_question' class='w-100 bottom20'>
+- admin/polls_manager.php:397 — <legend>" . _('Poll Content') . "</legend>
+- admin/polls_manager.php:398 — <div id='poll-box-main' class=''></div>
+- admin/polls_manager.php:402 — <legend>" . _('Poll Info') . "</legend>
+- admin/polls_manager.php:403 — <div id='poll-box-stat' class=''></div>
+- admin/polls_manager.php:406 — <input type='submit' name='submit' value='" . _('Post Poll') . "' class='button is-small right20'>
+- admin/polls_manager.php:407 — <a href='{$site_config['paths']['baseurl']}/staffpanel.php?tool=polls_manager&amp;action=polls_manager' class='button is-small'>" . _('Ca...
+- admin/polls_manager.php:418 — function makepoll()
+- admin/polls_manager.php:424 — $poll_total_votes = 0;
+- admin/polls_manager.php:455 — $poll_total_votes += $questions[$question_id]['votes'][$choice_id];
+- admin/polls_manager.php:465 — if (count($questions) > $site_config['poll']['max_questions']) {
+- admin/polls_manager.php:466 — app_halt('poll_to_many');
+- admin/polls_manager.php:468 — if ($choices_count > ($site_config['poll']['max_questions'] * $site_config['poll']['max_choices_per_question'])) {
+- admin/polls_manager.php:469 — app_halt('poll_to_many');
+- admin/polls_manager.php:471 — if (isset($_POST['mode']) && $_POST['mode'] == 'poll_update') {
+- admin/polls_manager.php:472 — $questions['total_votes'] = $poll_total_votes;
+- admin/promo.php:32 — if ($_SERVER['REQUEST_METHOD'] === 'POST' && $do === 'addpromo') {
+- admin/promo.php:47 — $bonus_karma = isset($_POST['bonus_karma']) ? (int) $_POST['bonus_karma'] : 0;
+- admin/promo.php:48 — if ($bonus_upload === 0 && $bonus_invites === 0 && $bonus_karma === 0) {
+- admin/promo.php:61 — 'bonus_karma' => $bonus_karma,
+- admin/promo.php:95 — <form action="' . $_SERVER['PHP_SELF'] . '?tool=promo" method="post" enctype="multipart/form-data" accept-charset="utf-8">';
+- admin/promo.php:118 — <td class='has-text-centered'>Karma</td>
+- admin/promo.php:128 — <input type='number' name='bonus_karma' class='w-100' min='1000' max='100000' value='10000' required>
+- admin/promo.php:224 — <th class='has-text-centered'>karma</th>
+- admin/promo.php:238 — <td class='has-text-centered'>" . number_format($ar['bonus_karma']) . "</td>
+- admin/reports.php:13 — require_once INCL_DIR . 'function_bbcode.php';
+- admin/reports.php:82 — 'Post',
+- admin/reports.php:101 — <form method='post' action='{$_SERVER['PHP_SELF']}?tool=reports&amp;action=reports&amp;deal_with_report=1' enctype='multipart/form-data' ...
+- admin/reputation_ad.php:22 — $input = array_merge($_GET, $_POST);
+- admin/reputation_ad.php:24 — $reputationid = 0;
+- admin/reputation_ad.php:97 — $title = _('User Reputation Manager - Overview');
+- admin/reputation_ad.php:99 — $rows = $db->fetchAll('SELECT * FROM reputationlevel ORDER BY minimumreputation');
+- admin/reputation_ad.php:106 — <h1 class='has-text-centered'>" . _('User Reputation Manager') . "</h1>
+- admin/reputation_ad.php:107 — <p class='margin20'>" . _('On this page you can modify the minimum amount required for each reputation level. Make sure you press Update ...
+- admin/reputation_ad.php:109 — <a href='{$site_config['paths']['baseurl']}/staffpanel.php?tool=reputation_ad&amp;mode=list'>
+- admin/reputation_ad.php:115 — $html .= "<form action='{$_SERVER['PHP_SELF']}?tool=reputation_ad' name='show_rep_form' method='post' enctype='multipart/form-data' accep...
+- admin/reputation_ad.php:120 — <th>' . _('Reputation Level') . '</th>
+- admin/reputation_ad.php:121 — <th>' . _('Minimum Reputation Level') . '</th>
+- admin/reputation_ad.php:128 — <td>#{$res['reputationlevelid']}</td>
+- admin/reputation_ad.php:130 — <td><input type='text' name='reputation[" . $res['reputationlevelid'] . "]' value='" . $res['minimumreputation'] . "'></td>
+- admin/reputation_ad.php:132 — <a href='{$site_config['paths']['baseurl']}/staffpanel.php?tool=reputation_ad&amp;mode=edit&amp;reputationlevelid=" . $res['reputationlev...
+- admin/reputation_ad.php:135 — <a href='{$site_config['paths']['baseurl']}/staffpanel.php?tool=reputation_ad&amp;mode=dodelete&amp;reputationlevelid=" . $res['reputatio...
+- admin/reputation_ad.php:146 — <a href='{$site_config['paths']['baseurl']}/staffpanel.php?tool=reputation_ad&amp;mode=add'>
+- admin/reputation_ad.php:169 — $html = _('This allows you to add a new reputation level or edit an existing reputation level.');
+- admin/reputation_ad.php:172 — $rows = $db->fetchAll('SELECT * FROM reputationlevel WHERE reputationlevelid = ' . (int) $input['reputationlevelid']) or sqlerr(__LINE__,...
+- admin/reputation_ad.php:176 — $title = _('Edit Reputation Level');
+- admin/reputation_ad.php:177 — $html .= '<br>' . _fe('{0} (ID: #{1})', format_comment($res['level']), $res['reputationlevelid']) . '<br>';
+- admin/reputation_ad.php:182 — $title = _('Add New Reputation Level');
+- admin/reputation_ad.php:187 — $replevid = isset($res['reputationlevelid']) ? $res['reputationlevelid'] : '';
+- admin/reputation_ad.php:189 — $minrep = isset($res['minimumreputation']) ? $res['minimumreputation'] : '';
+- admin/reputation_ad.php:190 — $html .= "<form action='staffpanel.php?tool=reputation_ad' name='show_rep_form' method='post' enctype='multipart/form-data' accept-charse...
+- admin/reputation_ad.php:191 — <input name='reputationlevelid' value='{$replevid}' type='hidden'>
+- admin/reputation_ad.php:196 — $html .= '<tr><td>' . _('Level Description') . "<div class='desctext'>" . _('This is what is displayed for the user when their reputation...
+- admin/reputation_ad.php:198 — $html .= '<tr><td>' . _('Minimum amount of reputation points required for this level') . '<div>' . _("This can be a positive or a negativ...
+- admin/reputation_ad.php:199 — $html .= "<td><input type='text' name='minimumreputation' value=\"{$minrep}\" maxlength='10'></td></tr>";
+- admin/reputation_ad.php:227 — $minrep = sqlesc(intval($input['minimumreputation']));
+- admin/reputation_ad.php:228 — $redirect = _fe('Saved Reputation Level <i>{0}</i> Successfully.', format_comment($input['level']));
+- admin/reputation_ad.php:233 — $db->perform('/* TODO: insert reputation level */', []);
+- admin/reputation_ad.php:235 — $levelid = (int)($input['reputationlevelid'] ?? 0);
+- admin/reputation_ad.php:240 — // $db->perform('UPDATE reputation_levels SET ... WHERE id = :id', ['id' => $levelid, /* ... */]);
+- admin/reputation_ad.php:245 — 'SELECT COUNT(*) FROM reputationlevel WHERE reputationlevelid = :id',
+- admin/reputation_ad.php:253 — // TODO: gør det der skulle ske her (fx UPDATE/DELETE på reputationlevel)
+- admin/reputation_ad.php:254 — $db->perform('/* TODO: write action for single reputation level */', ['id' => $levelid]);
+- admin/reputation_ad.php:257 — $ids = $input['reputation'] ?? [];
+- admin/reputation_ad.php:269 — '/* TODO: batch action for reputation levels */ -- e.g.
+- admin/reputation_ad.php:270 — /* UPDATE reputationlevel SET ... WHERE reputationlevelid IN (' . implode(',', $ph) . ') */',
+- admin/reputation_ad.php:277 — redirect('staffpanel.php?tool=reputation_ad&amp;mode=done', $redirect);
+- admin/reputation_ad.php:288 — if (!isset($input['reputationlevelid']) || !is_valid_id((int) $input['reputationlevelid'])) {
+- admin/reputation_ad.php:291 — $levelid = intval($input['reputationlevelid']);
+- admin/reputation_ad.php:293 — $rows = $db->fetchAll("SELECT reputationlevelid FROM reputationlevel WHERE reputationlevelid = $levelid");
+- admin/reputation_ad.php:300 — redirect('staffpanel.php?tool=reputation_ad&amp;mode=done', _('Reputation deleted successfully'), 5);
+- admin/reputation_ad.php:314 — if (!isset($input['reputationid']) || !is_valid_id((int) $input['reputationid'])) {
+- admin/reputation_ad.php:317 — $title = _('User Reputation Manager');
+- admin/reputation_ad.php:320 — FROM reputation r
+- admin/reputation_ad.php:321 — LEFT JOIN posts p ON p.id=r.postid
+- admin/reputation_ad.php:322 — LEFT JOIN topics t ON p.topic_id=t.id
+- admin/reputation_ad.php:325 — WHERE reputationid=' . sqlesc($input['reputationid'])) or sqlerr(__FILE__, __LINE__);
+- admin/reputation_ad.php:329 — $html = "<form action='staffpanel.php?tool=reputation_ad' name='show_rep_form' method='post' enctype='multipart/form-data' accept-charset...
+- admin/reputation_ad.php:330 — <input name='reputationid' value='{$res['reputationid']}' type='hidden'>
+- admin/reputation_ad.php:331 — <input name='oldreputation' value='{$res['reputation']}' type='hidden'>
+- admin/reputation_ad.php:333 — $html .= '<h2>' . _('Edit Reputation') . '</h2>';
+- admin/reputation_ad.php:335 — $html .= '<tr><td>' . _('Topic') . "</td><td><a href='{$site_config['paths']['baseurl']}/forums.php?action=viewtopic&amp;topicid={$res['t...
+- admin/reputation_ad.php:339 — $html .= '<tr><td>' . _('Reputation') . "</td><td><input type='text' name='reputation' value='{$res['reputation']}' maxlength='10'></td><...
+- admin/reputation_ad.php:359 — $title = _('User Reputation Manager');
+- admin/reputation_ad.php:360 — $html = '<h2>' . _('View Reputation Comments') . '</h2>';
+- admin/reputation_ad.php:361 — $html .= '<p>' . _('This page allows you to search for reputation comments left by / for specific users over the specified date range.') ...
+- admin/reputation_ad.php:362 — $html .= "<form action='{$_SERVER['PHP_SELF']}?tool=reputation_ad' name='list_form' method='post' enctype='multipart/form-data' accept-ch...
+- admin/reputation_ad.php:446 — $rows = $db->fetchAll('SELECT * FROM reputationlevel');
+- admin/reputation_ad.php:450 — $rep_out = '<' . "?php\n\n\$reputations = [\n";
+- admin/reputation_ad.php:452 — $rep_out .= "\t{$row['minimumreputation']} => '{$row['level']}',\n";
+- admin/reputation_settings.php:19 — if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+- admin/reputation_settings.php:39 — redirect($site_config['paths']['baseurl'] . '/staffpanel.php?tool=reputation_settings', _('Reputation Settings Have Been Updated!'), 3);
+- admin/reputation_settings.php:76 — <h1 class='has-text-centered'>" . _('Reputation System Settings') . "</h1>
+- admin/reputation_settings.php:77 — <p class='has-text-centered'>" . _('This section allows you to configure the User Reputation system.') . "</p>
+- admin/reputation_settings.php:78 — <form action='{$_SERVER['PHP_SELF']}?tool=reputation_settings' name='repoptions' method='post' enctype='multipart/form-data' accept-chars...
+- admin/reputation_settings.php:79 — <h2 class='has-text-centered'>" . _('Reputation On/Off') . '</h2>';
+- admin/reputation_settings.php:83 — <b>' . _('Enable User Reputation system?') . '</b>
+- admin/reputation_settings.php:84 — <div style="color: lightgray;">' . _("Set this option to 'Yes' if you want to enable the User Reputation system.") . '</div>
+- admin/reputation_settings.php:90 — <tr><td colspan="2" class="has-text-centered"><div class="padding20 size_6">' . _('Default Reputation Level') . '</div></td></tr>
+- admin/reputation_settings.php:93 — <b>' . _('Default Reputation') . ' </b>
+- admin/reputation_settings.php:94 — <div style="color: lightgrey;">' . _('What reputation level shall new users receive upon registration? Make sure that you have a reputati...
+- admin/reputation_settings.php:102 — <b>' . _('Default Reputation Phrase') . ' </b>
+- admin/reputation_settings.php:103 — <div style="color: lightgrey;">' . _('If you have any user gain a reputation that exceeds your lowest negative level, then this phrase wi...
+- admin/reputation_settings.php:110 — <td><b>' . _('Number of Reputation Ratings to Display') . ' </b><div style="color: lightgrey;">' . _("Controls how many ratings to displa...
+- admin/reputation_settings.php:113 — <tr><td colspan="2" class="has-text-centered"><div class="padding20 size_6">' . _('Reputation Powers') . '</div></td></tr>
+- admin/reputation_settings.php:116 — <b>' . _("Administrator's Reputation Power") . ' </b>
+- admin/reputation_settings.php:117 — <div style="color: lightgrey;">' . _('How many reputation points does an administrator give or take away with each click?<br>') . ' <br>'...
+- admin/reputation_settings.php:126 — <div style="color: lightgrey;">' . _('For every X number of days, users gain 1 point of reputation-altering power.') . ' </div>
+- admin/reputation_settings.php:134 — <b>' . _('Post Count Factor') . ' </b>
+- admin/reputation_settings.php:135 — <div style="color: lightgrey;">' . _('For every X number of posts, users gain 1 point of reputation-altering power.') . ' </div>
+- admin/reputation_settings.php:143 — <b>' . _('Reputation Point Factor') . ' </b>
+- admin/reputation_settings.php:144 — <div style="color: lightgrey;">' . _('For every X points of reputation, users gain 1 point of reputation-altering power.') . ' </div>
+- admin/reputation_settings.php:150 — <tr><td colspan="2" class="has-text-centered"><div class="padding20 size_6">' . _('User Reputation Settings') . '</div></td></tr>
+- admin/reputation_settings.php:153 — <b>' . _('Minimum Post Count') . ' </b>
+- admin/reputation_settings.php:154 — <div style="color: lightgrey;">' . _('How many posts must a user have before his reputation hits count on others?') . ' </div>
+- admin/reputation_settings.php:162 — <b>' . _('Minimum Reputation Count') . ' </b>
+- admin/reputation_settings.php:163 — <div style="color: lightgrey;">' . _('How much reputation must a user have before his reputation hits count on others?') . ' </div>
+- admin/reputation_settings.php:171 — <b>' . _('Daily Reputation Clicks Limit') . ' </b>
+- admin/reputation_settings.php:172 — <div style="color: lightgrey;">' . _('How many reputation clicks can a user give over each 24 hour period? Administrators are exempt from...
+- admin/reputation_settings.php:180 — <b>' . _('Reputation User Spread') . ' </b>
+- admin/reputation_settings.php:181 — <div style="color: lightgrey;">' . _('How many different users must you give reputation to before you can hit the same person again? Admi...
+- admin/reputation_settings.php:194 — $title = _('Reputation Manager');
+- admin/reset.php:26 — if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+- admin/reset.php:63 — <form method='post' action='{$site_config['paths']['baseurl']}/staffpanel.php?tool=reset&amp;action=reset' enctype='multipart/form-data' ...
+- admin/shit_list.php:10 — require_once INCL_DIR . 'function_bbcode.php';
+- admin/shit_list.php:63 — <img src="' . $site_config['paths']['images_baseurl'] . 'smilies/shit.gif" alt=" * ">' . _('shittiest at the top ') . '<img src="' . $sit...
+- admin/shit_list.php:70 — <img src="' . $site_config['paths']['images_baseurl'] . 'smilies/shit.gif" alt=" * ">' . _('Your shit list is empty. ') . '<img src="' . ...
+- admin/shit_list.php:76 — $shit .= ' <img src="' . $site_config['paths']['images_baseurl'] . 'smilies/shit.gif" title="' . _fe('{0} out of 10 on the shittyness sca...
+- admin/shit_list.php:85 — <a class="is-link" href="' . $site_config['paths']['baseurl'] . '/staffpanel.php?tool=shit_list&amp;action=shit_list&amp;action2=delete&a...
+- admin/site_settings.php:30 — if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+- admin/site_settings.php:34 — $post = array_keys($_post);
+- admin/site_settings.php:35 — foreach ($post as $key) {
+- admin/site_settings.php:98 — $results = $db->perform($sql, array_merge($set, ['id' => $id]));
+- admin/site_settings.php:205 — <form action='{$_SERVER['PHP_SELF']}?tool=site_settings' method='post' enctype='multipart/form-data' accept-charset='utf-8'>";
+- admin/sitelog.php:10 — require_once INCL_DIR . 'function_bbcode.php';
+- admin/sitelog.php:43 — <form method='post' action='./staffpanel.php?tool=sitelog&amp;action=sitelog' enctype='multipart/form-data' accept-charset='utf-8'>
+- admin/stats_extra.php:50 — result_screen('topic', $inbound, $month_names);
+- admin/stats_extra.php:53 — case 'topic':
+- admin/stats_extra.php:54 — main_screen('topic');
+- admin/stats_extra.php:82 — result_screen('post', $inbound, $month_names);
+- admin/stats_extra.php:85 — case 'post':
+- admin/stats_extra.php:86 — main_screen('post');
+- admin/stats_extra.php:131 — $count = $fluent->from('topics AS t')
+- admin/stats_extra.php:133 — ->select('t.forum_id')
+- admin/stats_extra.php:136 — ->groupBy('t.forum_id')
+- admin/stats_extra.php:145 — $query = $fluent->from('topics AS t')
+- admin/stats_extra.php:148 — ->select('t.forum_id')
+- admin/stats_extra.php:150 — ->leftJoin('forums AS f ON t.forum_id=f.id')
+- admin/stats_extra.php:153 — ->groupBy('t.forum_id')
+- admin/stats_extra.php:154 — ->orderBy("result_count $sort_by, t.forum_id")
+- admin/stats_extra.php:163 — $heading = '' . _('Topic Views') . " ({$human_from_date['mday']} {$month_names[$human_from_date['mon']]} {$human_from_date['year']} " . _...
+- admin/stats_extra.php:171 — <th>' . _('Forum Name') . '</th>
+- admin/stats_extra.php:255 — } elseif ($mode === 'topic') {
+- admin/stats_extra.php:256 — $table = _('New Topic Statistics');
+- admin/stats_extra.php:257 — $sql_table = 'topics';
+- admin/stats_extra.php:259 — $page_detail = _('Showing the number of topics started.');
+- admin/stats_extra.php:260 — } elseif ($mode === 'post') {
+- admin/stats_extra.php:261 — $table = _('Post Statistics');
+- admin/stats_extra.php:262 — $sql_table = 'posts';
+- admin/stats_extra.php:264 — $page_detail = _('Showing the number of posts.');
+- admin/stats_extra.php:281 — $table = _('Reputation Statistics');
+- admin/stats_extra.php:282 — $sql_table = 'reputation';
+- admin/stats_extra.php:284 — $page_detail = _('Showing the number of Reputations.');
+- admin/stats_extra.php:428 — } elseif ($mode === 'topic') {
+- admin/stats_extra.php:430 — $table = _('New Topic Statistics');
+- admin/stats_extra.php:431 — } elseif ($mode === 'post') {
+- admin/stats_extra.php:433 — $table = _('Post Statistics');
+- admin/stats_extra.php:439 — $table = _('Topic Views');
+- admin/stats_extra.php:448 — $table = _('Reputation Statistics');
+- admin/stats_extra.php:565 — <li class='margin10'><a href='{$site_config['paths']['baseurl']}/staffpanel.php?tool=stats_extra&amp;mode=topic'>" . _('New Topic Stats')...
+- admin/stats_extra.php:566 — <li class='margin10'><a href='{$site_config['paths']['baseurl']}/staffpanel.php?tool=stats_extra&amp;mode=post'>" . _('Post Stats') . "</...
+- admin/stats_extra.php:568 — <li class='margin10'><a href='{$site_config['paths']['baseurl']}/staffpanel.php?tool=stats_extra&amp;mode=views'>" . _('Topic Views') . "...
+- admin/stats_extra.php:571 — <li class='margin10'><a href='{$site_config['paths']['baseurl']}/staffpanel.php?tool=stats_extra&amp;mode=reps'>" . _('Reputation Stats')...
+- admin/sysoplog.php:9 — require_once INCL_DIR . 'function_bbcode.php';
+- admin/sysoplog.php:46 — <form method='post' action='{$_SERVER['PHP_SELF']}?tool=sysoplog&amp;action=sysoplog' enctype='multipart/form-data' accept-charset='utf-8'>
+- admin/system_view.php:112 — $mem = preg_split("#\s+#", $mem[0]);
+- admin/themes.php:54 — <form action='{$_SERVER['PHP_SELF']}?tool=themes&amp;action=themes&amp;act=4' method='post' enctype='multipart/form-data' accept-charset=...
+- admin/themes.php:108 — <form action='staffpanel.php?tool=themes&amp;action=themes&amp;act=6' method='post' enctype='multipart/form-data' accept-charset='utf-8'>
+- admin/themes.php:205 — $update = $db->perform($sql, array_merge($set, ['id' => $tid]));
+- admin/themes.php:239 — $db->perform($sql, array_merge($set, ['stylesheet' => $id]));
+- admin/todo.php:19 — $markdown  = file_get_contents(ROOT_DIR . 'TODO.md');
+- admin/todo.php:21 — if (!empty($markdown)) {
+- admin/todo.php:23 — <h1 class='has-text-centered'>TODO</h1><div class='padding20 round10 bg-00'>" . $parsedown->parse($markdown) . '</div>';
+- admin/traceroute.php:58 — <form method="post" action="' . $_SERVER['PHP_SELF'] . '" accept-charset="utf-8">' . _('Enter IP or Host ') . '<input type="text" id=spec...
+- admin/trivia_config.php:24 — if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+- admin/trivia_config.php:55 — $db->perform($sql, array_merge($set, ['qid' => $id]));
+- admin/trivia_config.php:115 — <form action='{$_SERVER['PHP_SELF']}?tool=trivia_config' method='post' enctype='multipart/form-data' accept-charset='utf-8'>
+- admin/trivia_config.php:123 — <form action='{$_SERVER['PHP_SELF']}?tool=trivia_config' method='post' enctype='multipart/form-data' accept-charset='utf-8'>
+- admin/trivia_config.php:139 — <form action='{$_SERVER['PHP_SELF']}?tool=trivia_config' method='post' enctype='multipart/form-data' accept-charset='utf-8'>
+- admin/upgrade_database.php:26 — if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+- admin/upgrade_database.php:116 — <form action='{$_SERVER['PHP_SELF']}?tool=upgrade_database' method='post' enctype='multipart/form-data' accept-charset='utf-8'>
+- admin/uploadapps.php:85 — $db->perform($sql, array_merge($update, ['id' => $id]));
+- admin/uploadapps.php:145 — $db->perform($sql, array_merge($update, ['id' => $id]));
+- admin/uploadapps.php:189 — <form method='post' action='{$_SERVER['PHP_SELF']}?tool=uploadapps&amp;action=takeappdelete' enctype='multipart/form-data' accept-charset...
+- admin/uploadapps.php:326 — <form method='post' action='{$_SERVER['PHP_SELF']}?tool=uploadapps&amp;action=acceptapp' enctype='multipart/form-data' accept-charset='ut...
+- admin/uploadapps.php:335 — <form method='post' action='{$_SERVER['PHP_SELF']}?tool=uploadapps&amp;action=rejectapp' enctype='multipart/form-data' accept-charset='ut...
+- admin/usersearch.php:19 — $search = array_merge($_POST, $_GET);
+- admin/usersearch.php:59 — The History column lists the number of forum posts and torrent comments, respectively, as well as linking to the history page.") . '</div...
+- admin/usersearch.php:61 — <form method='post' action='{$_SERVER['PHP_SELF']}?tool=usersearch' enctype='multipart/form-data' accept-charset='utf-8'>";
+- admin/usersearch.php:790 — FROM posts AS p LEFT JOIN topics AS t ON p.topic_id=t.id
+- admin/usersearch.php:791 — LEFT JOIN forums AS f ON t.forum_id=f.id
+- admin/usersearch.php:821 — <form method='post' action='{$site_config['paths']['baseurl']}/new_announcement.php' enctype='multipart/form-data' accept-charset='utf-8'>
+- admin/warn.php:25 — if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+- admin/warn.php:118 — $HTMLOUT .= "<form action='{$_SERVER['PHP_SELF']}?tool=warn&amp;action=warn' method='post' enctype='multipart/form-data' accept-charset='...
+- admin/watched_users.php:8 — require_once INCL_DIR . 'function_bbcode.php';
+- admin/watched_users.php:67 — <form method='post' action='./staffpanel.php?tool=watched_users&amp;action=watched_users&amp;add=2&amp;id={$member}' enctype='multipart/f...
+- admin/watched_users.php:101 — <form action='{$_SERVER['PHP_SELF']}?tool=watched_users&amp;action=watched_users&amp;remove=1' method='post'  name='checkme' accept-chars...
+- bin/install.php:291 — $db->run('INSERT INTO user_blocks (userid) VALUES (:id)', [':id' => $userid]);
+- bin/pu239.scss:5 — // Just uncomment the following block to see the result.
+- bin/remove_altered_images.php:25 — $urls = array_merge($urls, $photos);
+- bin/rename_image_hashes.php:30 — $urls = array_merge($urls, $photos);
+- bin/set_perms.php:8 — global $site_config, $BLOCKS;
+- bin/set_perms.php:10 — if (empty($BLOCKS)) {
+- bin/set_perms.php:11 — app_halt('BLOCKS are empty');
+- bin/set_perms.php:66 — $folders = array_merge($dirs, $folders);
+- bin/uglify.php:38 — global $site_config, $BLOCKS;
+- bin/uglify.php:40 — if (empty($BLOCKS)) {
+- bin/uglify.php:41 — return 'BLOCKS are empty';
+- bin/uglify.php:72 — $spurpose = "-O2 'all:on;mergeSemantically:off;removeUnusedAtRules:off' --format beautify";
+- bin/uglify.php:81 — $spurpose = "-O2 'all:on;mergeSemantically:off;removeUnusedAtRules:off'";
+- bin/uglify.php:111 — if ($BLOCKS['ajaxchat_on']) {
+- bin/uglify.php:112 — $js_list = array_merge($js_list, [
+- bin/uglify.php:141 — if ($BLOCKS['staff_picks_on']) {
+- bin/uglify.php:142 — $js_list['browse_js'] = array_merge($js_list['browse_js'], [
+- bin/uglify.php:147 — if ($BLOCKS['latest_torrents_scroll_on']) {
+- bin/uglify.php:154 — if ($BLOCKS['latest_torrents_slider_on']) {
+- bin/uglify.php:167 — if ($BLOCKS['userdetails_flush_on']) {
+- bin/uglify.php:168 — $js_list['userdetails_js'] = array_merge($js_list['userdetails_js'], [
+- bin/uglify.php:203 — ROOT_DIR . 'node_modules/sceditor/minified/jquery.sceditor.bbcode.min.js',
+- bin/uglify.php:254 — $js_list = array_merge($js_list, [
+- bin/uglify.php:275 — 'scroll_to_poll_js' => [
+- bin/uglify.php:276 — SCRIPTS_DIR . 'scroll_to_poll.js',
+- bin/uglify.php:290 — SCRIPTS_DIR . 'jquery.thanks.js',
+- bin/uglify.php:292 — 'forums_js' => [
+- bin/uglify.php:294 — SCRIPTS_DIR . 'forums.js',
+- bin/uglify.php:296 — 'pollsmanager_js' => [
+- bin/uglify.php:297 — SCRIPTS_DIR . 'polls.js',
+- bin/uglify.php:314 — if ($BLOCKS['latest_torrents_scroll_on']) {
+- bin/uglify.php:315 — $css_list['index_css'] = array_merge($css_list['index_css'], [
+- bin/uglify.php:320 — if ($BLOCKS['latest_torrents_slider_on']) {
+- bin/uglify.php:321 — $css_list['index_css'] = array_merge($css_list['index_css'], [
+- bin/uglify.php:361 — if ($BLOCKS['ajaxchat_on']) {
+- bin/uglify.php:362 — $css_list = array_merge([
+- bin/usersfix.php:5 — use Pu239\Userblock;
+- bin/usersfix.php:22 — $userblock = $container->get(Userblock::class);
+- bin/usersfix.php:25 — $userblock->add(['userid' => $user['id']]);
+- bin/validate_images.php:36 — $urls = array_merge($images, $photos);
+- blocks/global/crazyhour.php:50 — $cz_lock = $cache->set('crazyhour_lock_', 1, 10);
+- blocks/global/crazyhour.php:51 — if ($cz_lock !== false) {
+- blocks/global/crazyhour.php:70 — $cz_lock = $cache->set('crazyhour_lock_', 1, 10);
+- blocks/global/crazyhour.php:71 — if ($cz_lock !== false) {
+- blocks/global/freeleech_contribution.php:175 — <span class='button tag is-success dt-tooltipper-large' data-tooltip-content='#karma_tooltip'>" . _("Karma Contribution's") . "</span>
+- blocks/global/freeleech_contribution.php:177 — <div id='karma_tooltip' class='margin20'>
+- blocks/global/freeleech_contribution.php:179 — " . _("Karma Contribution's") . '
+- blocks/index/comments.php:30 — <th class='w-1 has-text-centered has-no-border-left tooltipper' title='" . _('Likes') . "'><i class='icon-thumbs-up icon has-text-success...
+- blocks/index/comments.php:58 — $block_id = "comment_id_{$comment['comment_id']}";
+- blocks/index/comments.php:59 — $posted_comments .= torrent_tooltip(format_comment($comment['text']), $comment['id'], $block_id, $comment['name'], $comment['poster'], $u...
+- blocks/index/comments.php:63 — <td class='has-text-centered'>" . number_format($comment['user_likes']) . '</td>
+- blocks/index/disclaimer.php:19 — " . _("Disclaimer: None of the files shown here are actually hosted on this server. The links are provided solely by this site's users. T...
+- blocks/index/forum_posts.php:17 — $forum_posts .= "
+- blocks/index/forum_posts.php:18 — <a id='latestforum-hash'></a>
+- blocks/index/forum_posts.php:19 — <div id='latestforum' class='box'>
+- blocks/index/forum_posts.php:24 — $topics = $cache->get('last_posts_' . $CURUSER['class']);
+- blocks/index/forum_posts.php:25 — if ($topics === false || is_null($topics)) {
+- blocks/index/forum_posts.php:26 — $topics = $db->fetchAll(
+- blocks/index/forum_posts.php:27 — 'SELECT t.id, t.user_id AS tuser_id, t.topic_name, t.locked, t.forum_id, t.last_post, t.sticky, t.views, t.anonymous AS tan,
+- blocks/index/forum_posts.php:29 — (SELECT COUNT(id) FROM posts WHERE topic_id = t.id) AS p_count, p.user_id AS puser_id, p.added, p.anonymous AS pan
+- blocks/index/forum_posts.php:30 — FROM topics AS t
+- blocks/index/forum_posts.php:31 — INNER JOIN forums AS f ON f.id = t.forum_id
+- blocks/index/forum_posts.php:32 — INNER JOIN posts AS p ON p.id = (SELECT MAX(id) FROM posts WHERE topic_id = t.id)
+- blocks/index/forum_posts.php:41 — if (!empty($topics)) {
+- blocks/index/forum_posts.php:42 — $cache->set('last_posts_' . $CURUSER['class'], $topics, $site_config['expires']['latestposts']);
+- blocks/index/forum_posts.php:47 — $forum_posts .= "
+- blocks/index/forum_posts.php:51 — <th class='w-50 min-350'>" . _('Latest Forum Posts') . "</th>
+- blocks/index/forum_posts.php:58 — if (!empty($topics) && is_array($topics)) {
+- blocks/index/forum_posts.php:59 — foreach ($topics as $topicarr) {
+- blocks/index/forum_posts.php:66 — $posts = (int) $topicarr['p_count'];
+- blocks/index/forum_posts.php:67 — $replies = max(0, $posts - 1);
+- blocks/index/forum_posts.php:73 — $pages = ceil($posts / $perpage);
+- blocks/index/forum_posts.php:80 — $menu .= "<a href='{$site_config['paths']['baseurl']}/forums.php?action=view_topic&amp;topic_id=$topicid&amp;page=$i'>$i</a>\n";
+- blocks/index/forum_posts.php:108 — $staffimg = $topicarr['min_class_read'] >= UC_STAFF ? "<img src='" . $site_config['paths']['images_baseurl'] . "staff.png' alt='Staff for...
+- blocks/index/forum_posts.php:109 — $stickyimg = $topicarr['sticky'] === 'yes' ? "<img src='" . $site_config['paths']['images_baseurl'] . "sticky.gif' alt='" . _('Sticky') ....
+- blocks/index/forum_posts.php:110 — $lockedimg = $topicarr['locked'] === 'yes' ? "<img src='" . $site_config['paths']['images_baseurl'] . "forumicons/locked.gif' alt='" . _(...
+- blocks/index/forum_posts.php:111 — $topic_name = "<div class='level-left'>{$lockedimg}{$stickyimg}<a href='{$site_config['paths']['baseurl']}/forums.php?action=view_topic&a...
+- blocks/index/forum_posts.php:112 — $forum_posts .= "
+- blocks/index/forum_posts.php:120 — $forum_posts .= '
+- blocks/index/forum_posts.php:127 — $forum_posts .= "
+- blocks/index/forum_posts.php:129 — <td colspan='4'>" . _('There are no forum posts.') . '</td>
+- blocks/index/latest_movies.php:40 — $last['block_id'] = "last_movie_id_{$last['id']}";
+- blocks/index/latest_torrents.php:39 — $last['block_id'] = "last_id_{$last['id']}";
+- blocks/index/latest_torrents_glide.php:15 — $torrents = $cache->get('torrent_slider_block_');
+- blocks/index/latest_torrents_glide.php:19 — $cache->set('torrent_slider_block_', $torrents, 300);
+- blocks/index/latest_torrents_scroll.php:15 — $torrents = $cache->get('torrent_scroller_block_');
+- blocks/index/latest_torrents_scroll.php:19 — $cache->set('torrent_scroller_block_', $torrents, 300);
+- blocks/index/latest_torrents_scroll.php:63 — $block_id = "scroll_id_{$id}";
+- blocks/index/latest_torrents_scroll.php:64 — $torrents_scroller .= torrent_tooltip($torrname, $id, $block_id, $name, $poster, $uploader, $added, $size, $seeders, $leechers, $imdb_id,...
+- blocks/index/latest_tv.php:39 — $last['block_id'] = "last_tv_id_{$last['id']}";
+- blocks/index/mow.php:39 — $last['block_id'] = "mow_id_{$last['id']}";
+- blocks/index/news.php:17 — $news = $db->fetchAll('SELECT * FROM news WHERE (added > :dt AND sticky = "no") OR sticky = "yes" ORDER BY sticky, added DESC LIMIT 10', ...
+- blocks/index/poll.php:10 — $site_poll .= parse_poll();
+- blocks/index/staff_picks.php:38 — $last['block_id'] = "staff_pick_id_{$last['id']}";
+- blocks/index/stats.php:40 — $forums = [
+- blocks/index/stats.php:41 — '<tr><td>' . _('Topics') . "</td><td class='w-15 has-text-centered'>{$stats_cache['forumtopics']}</td></tr>",
+- blocks/index/stats.php:42 — '<tr><td>' . _('New Topics Today') . "</td><td class='w-15 has-text-centered'>{$stats_cache['topicstoday']}</td></tr>",
+- blocks/index/stats.php:43 — '<tr><td>' . _('New Topics This Month') . "</td><td class='w-15 has-text-centered'>{$stats_cache['topicsmonth']}</td></tr>",
+- blocks/index/stats.php:44 — '<tr><td>' . _('Posts') . "</td><td class='w-15 has-text-centered'>{$stats_cache['forumposts']}</td></tr>",
+- blocks/index/stats.php:45 — '<tr><td>' . _('New Posts Today') . "</td><td class='w-15 has-text-centered'>{$stats_cache['poststoday']}</td></tr>",
+- blocks/index/stats.php:46 — '<tr><td>' . _('New Topics This Month') . "</td><td class='w-15 has-text-centered'>{$stats_cache['postsmonth']}</td></tr>",
+- blocks/index/stats.php:67 — <div class='col'>" . wrap_this($forums) . '</div>
+- blocks/index/top_torrents.php:39 — $last['block_id'] = "top_id_{$last['id']}";
+- blocks/userdetails/contactinfo.php:20 — <td><a class="is-link" href="' . htmlsafechars((string) $user['skype']) . '" title="' . _('click for Skype') . '"  target="_blank"><img w...
+- blocks/userdetails/contactinfo.php:24 — <td><a class="is-link" href="' . htmlsafechars((string) $user['website']) . '" target="_blank" title="' . _('click to go to website') . '...
+- blocks/userdetails/flush.php:18 — <form method="post" id="form" action="" name="flush_thing" accept-charset="utf-8">
+- blocks/userdetails/forumposts.php:15 — $forumposts = $cache->get('forum_posts_' . $id);
+- blocks/userdetails/forumposts.php:16 — if ($forumposts === false || is_null($forumposts)) {
+- blocks/userdetails/forumposts.php:17 — $forumposts = (int) $db->fetchValue(
+- blocks/userdetails/forumposts.php:18 — 'SELECT COUNT(id) FROM posts WHERE user_id = ?',
+- blocks/userdetails/forumposts.php:21 — $cache->set('forum_posts_' . $id, $forumposts, $site_config['expires']['forum_posts']);
+- blocks/userdetails/forumposts.php:24 — $HTMLOUT .= "<tr><td class='rowhead'>" . _('Forum Posts') . '</td>';
+- blocks/userdetails/forumposts.php:25 — if ($forumposts && (($user['class'] >= (UC_MIN + 1) && $user['id'] == $CURUSER['id']) || $CURUSER['class'] >= UC_STAFF)) {
+- blocks/userdetails/forumposts.php:26 — $HTMLOUT .= "<td><a href='userhistory.php?action=viewposts&amp;id=$id'>" . (int) $forumposts . "</a></td></tr>\n";
+- blocks/userdetails/forumposts.php:28 — $HTMLOUT .= '<td>' . (int) $forumposts . "</td></tr>\n";
+- blocks/userdetails/report.php:14 — <form method='post' action='{$site_config['paths']['baseurl']}/report.php?type=User&amp;id={$id}' enctype='multipart/form-data' accept-ch...
+- blocks/userdetails/reputation.php:13 — $member_reputation = get_reputation($user, 'users');
+- blocks/userdetails/reputation.php:16 — <td class='rowhead'>" . _('Reputation') . "</td>
+- blocks/userdetails/reputation.php:17 — <td>{$member_reputation}</td>
+- blocks/userdetails/seedbonus.php:15 — <td class='rowhead'>" . _('Karma Points') . "</td>
+- blocks/userdetails/showpm.php:17 — $blocked = $db->fetch(
+- blocks/userdetails/showpm.php:18 — 'SELECT id FROM blocks WHERE userid = ? AND blockid = ?',
+- blocks/userdetails/showpm.php:21 — $showpmbutton = empty($blocked);
+- cache/block_settings_cache.php:11 — $BLOCKS = [
+- cache/block_settings_cache.php:27 — 'forum_posts_on' => 1,
+- cache/block_settings_cache.php:39 — 'active_poll_on' => 1,
+- cache/block_settings_cache.php:59 — 'userdetails_reputation_on' => 1,
+- cache/block_settings_cache.php:75 — 'userdetails_forumposts_on' => 1,
+- cache/block_settings_cache.php:77 — 'userdetails_torrents_block_on' => 1,
+- cache/rep_cache.php:11 — $reputations = [
+- cache/rep_cache.php:26 — 2000 => 'has a reputation beyond repute',
+- chat/css/1/Uranium.css:92 — display:       block;
+- chat/css/1/Uranium.css:131 — #content #bbCodeContainer {
+- chat/css/1/Uranium.css:149 — #content #bbCodeContainer input {
+- chat/css/1/Uranium.css:155 — #content #bbCodeContainer input:hover {
+- chat/css/1/Uranium.css:160 — #content #bbCodeContainer input:active, #content #logoutButton:active, #content #submitButton:active, #loginContent #loginButton:active {
+- chat/css/1/default.css:66 — display:       block;
+- chat/css/1/default.css:103 — #content #bbCodeContainer {
+- chat/css/1/default.css:121 — #content #bbCodeContainer input {
+- chat/css/1/default.css:125 — #content #bbCodeContainer input:hover {
+- chat/css/1/global.css:132 — display: block;
+- chat/css/1/global.css:193 — #content #bbCodeContainer {
+- chat/css/1/global.css:200 — #content #bbCodeContainer input {
+- chat/css/1/global.css:201 — display:      block;
+- chat/css/1/global.css:206 — #content #bbCodeContainer #bbCodeEmoticon {
+- chat/css/1/global.css:238 — display: block;
+- chat/css/1/global.css:254 — #content #bbCodeContainer input,
+- chat/css/1/global.css:262 — display: block;
+- chat/css/1/global.css:283 — #content #chatList .bbCodeImage {
+- chat/css/1/global.css:288 — display:      block;
+- chat/css/1/global.css:302 — display: block;
+- chat/css/1/global.css:386 — #content #bbCodeContainer input,
+- chat/css/1/global.css:411 — display:           inline-block;
+- chat/css/1/global.css:420 — display:           inline-block;
+- chat/css/1/global.css:443 — #content #bbCodeContainer {
+- chat/css/1/global.css:444 — display: block;
+- chat/css/1/global.css:451 — #content #bbCodeContainer #bbCodeUnderline,
+- chat/css/1/global.css:452 — #content #bbCodeContainer #bbCodeUpsideDown {
+- chat/css/1/global.css:456 — #content #bbCodeContainer {
+- chat/css/1/global.css:544 — #content #bbCodeContainer #bbCodeQuote,
+- chat/css/1/global.css:545 — #content #bbCodeContainer #bbCodeUpsideDown {
+- chat/css/1/global.css:549 — #content #bbCodeContainer {
+- chat/css/1/global.css:560 — #content #bbCodeContainer #bbCodeVideo {
+- chat/css/1/global.css:585 — #content #bbCodeContainer #bbCodeCode {
+- chat/css/1/global.css:595 — #content #bbCodeContainer,
+- chat/js/chat.js:34 — bbCodeTags: null,
+- chat/js/chat.js:80 — inUrlBBCode: null,
+- chat/js/chat.js:94 — this.inUrlBBCode = false;
+- chat/js/chat.js:125 — this.bbCodeTags = config['bbCodeTags'];
+- chat/js/chat.js:152 — this.dirs['emoticons'] = './images/smilies/';
+- chat/js/chat.js:162 — settingsArray = store.split('&');
+- chat/js/chat.js:164 — setting = settingsArray[i].split('=');
+- chat/js/chat.js:564 — messageParts = messageText.split(' ', 1);
+- chat/js/chat.js:698 — if (method === 'POST') {
+- chat/js/chat.js:741 — // change polling timer to maximum of 45 sec
+- chat/js/chat.js:1076 — + ' \');" title="Give the user a gift of Karma.">'
+- chat/js/chat.js:1077 — + 'Karma Gift'
+- chat/js/chat.js:1082 — + 'Reputation Gift'
+- chat/js/chat.js:1117 — + '<li class="disc"><a href="javascript:ajaxChat.sendMessageWrapper(\'/mentions \');" title="Show last 25 posts that mention you by name.">'
+- chat/js/chat.js:1559 — stripBBCodeTags: function (str) {
+- chat/js/chat.js:1696 — this.makeRequest(this.ajaxURL, 'POST', message);
+- chat/js/chat.js:1706 — textParts = text.split(' ');
+- chat/js/chat.js:1797 — this.ignoredUserNames = ignoredUserNamesString.split(' ');
+- chat/js/chat.js:1813 — textParts = messageText.split(' ');
+- chat/js/chat.js:1947 — this.makeRequest(this.ajaxURL, 'POST', message);
+- chat/js/chat.js:1957 — this.makeRequest(this.ajaxURL + '&token=' + this.token, 'POST', message);
+- chat/js/chat.js:1985 — node.style.display = (displayInline ? 'inline' : 'block');
+- chat/js/chat.js:2027 — insertBBCode: function (bbCode) {
+- chat/js/chat.js:2028 — switch (bbCode) {
+- chat/js/chat.js:2037 — this.insert('[' + bbCode + ']', '[/' + bbCode + ']');
+- chat/js/chat.js:2098 — text = this.replaceBBCode(text);
+- chat/js/chat.js:2099 — text = this.replaceBBCode(text);
+- chat/js/chat.js:2120 — var textParts = text.split(' ');
+- chat/js/chat.js:2192 — privMsgText = this.replaceBBCode(privMsgText);
+- chat/js/chat.js:2203 — privMsgText = this.replaceBBCode(privMsgText);
+- chat/js/chat.js:2214 — privActionText = this.replaceBBCode(privActionText);
+- chat/js/chat.js:2226 — privActionText = this.replaceBBCode(privActionText);
+- chat/js/chat.js:2238 — actionText = this.replaceBBCode(actionText);
+- chat/js/chat.js:2386 — return this.replaceBBCode(textParts);
+- chat/js/chat.js:2390 — return this.replaceBBCode(textParts);
+- chat/js/chat.js:2394 — return this.replaceBBCode(textParts);
+- chat/js/chat.js:2398 — return this.replaceBBCode(textParts);
+- chat/js/chat.js:2402 — return this.replaceBBCode(textParts);
+- chat/js/chat.js:2406 — return this.replaceBBCode(textParts);
+- chat/js/chat.js:2544 — replaceBBCode: function (text) {
+- chat/js/chat.js:2545 — if (!this.settings['bbCode']) {
+- chat/js/chat.js:2546 — // If BBCode is disabled, just strip the text from BBCode tags:
+- chat/js/chat.js:2549 — // Remove the BBCode tags:
+- chat/js/chat.js:2550 — text = text.replace(/\[(\w+)(?:=([^<>]*?))?\](.+?)\[\/\1\]/gmu, this.replaceBBCodeCallback);
+- chat/js/chat.js:2551 — text = text.replace(/\[(\w+)(?:=([^<>]*?))?\](.+?)\[\/\1\]/gmu, this.replaceBBCodeCallback);
+- chat/js/chat.js:2552 — text = text.replace(/\[(\w+)(?:=([^<>]*?))?\](.+?)\[\/\1\]/gmu, this.replaceBBCodeCallback);
+- chat/js/chat.js:2553 — return text = text.replace(/\[(\w+)(?:=([^<>]*?))?\](.+?)\[\/\1\]/gmu, this.replaceBBCodeCallback);
+- chat/js/chat.js:2556 — replaceBBCodeCallback: function (str, p1, p2, p3) {
+- chat/js/chat.js:2557 — // Only replace predefined BBCode tags:
+- chat/js/chat.js:2558 — if (!ajaxChat.inArray(ajaxChat.bbCodeTags, p1)) {
+- chat/js/chat.js:2567 — return ajaxChat.replaceBBCodeVideo(p3);
+- chat/js/chat.js:2569 — return ajaxChat.replaceBBCodeColor(p3, p2);
+- chat/js/chat.js:2571 — return ajaxChat.replaceBBCodeUrl(p3, p2);
+- chat/js/chat.js:2574 — return ajaxChat.replaceBBCodeImage(p3);
+- chat/js/chat.js:2576 — return ajaxChat.replaceBBCodeQuote(p3, p2);
+- chat/js/chat.js:2578 — return ajaxChat.replaceBBCodeCode(p3);
+- chat/js/chat.js:2580 — return ajaxChat.replaceBBCodeUnderline(p3);
+- chat/js/chat.js:2582 — return ajaxChat.replaceBBCodeBold(p3);
+- chat/js/chat.js:2584 — return ajaxChat.replaceBBCodeItalic(p3);
+- chat/js/chat.js:2586 — return ajaxChat.replaceBBCodeUpDown(p3);
+- chat/js/chat.js:2588 — return ajaxChat.replaceBBCodeCenter(p3);
+- chat/js/chat.js:2591 — return ajaxChat.replaceCustomBBCode(p1, p2, p3);
+- chat/js/chat.js:2595 — replaceBBCodeVideo: function (content) {
+- chat/js/chat.js:2642 — replaceBBCodeColor: function (content, attribute) {
+- chat/js/chat.js:2643 — if (this.settings['bbCodeColors']) {
+- chat/js/chat.js:2649 — + this.replaceBBCode(content)
+- chat/js/chat.js:2655 — replaceBBCodeUrl: function (content, attribute) {
+- chat/js/chat.js:2660 — url = this.stripBBCodeTags(content.replace(/\s/gm, this.encodeText(' ')));
+- chat/js/chat.js:2670 — this.inUrlBBCode = true;
+- chat/js/chat.js:2680 — + this.replaceBBCode(content)
+- chat/js/chat.js:2682 — this.inUrlBBCode = false;
+- chat/js/chat.js:2686 — replaceBBCodeImage: function (url) {
+- chat/js/chat.js:2688 — if (this.settings['bbCodeImages']) {
+- chat/js/chat.js:2703 — link = '<img class="bbCodeImage" style="max-width:'
+- chat/js/chat.js:2710 — if (!this.inUrlBBCode) {
+- chat/js/chat.js:2722 — replaceBBCodeQuote: function (content, attribute) {
+- chat/js/chat.js:2727 — + this.replaceBBCode(content)
+- chat/js/chat.js:2730 — + this.replaceBBCode(content)
+- chat/js/chat.js:2734 — replaceBBCodeCode: function (content) {
+- chat/js/chat.js:2737 — + this.replaceBBCode(content.replace(/\t|(?:  )/gm, '&#160;&#160;'))
+- chat/js/chat.js:2741 — replaceBBCodeUnderline: function (content) {
+- chat/js/chat.js:2743 — + this.replaceBBCode(content)
+- chat/js/chat.js:2747 — replaceBBCodeBold: function (content) {
+- chat/js/chat.js:2749 — + this.replaceBBCode(content)
+- chat/js/chat.js:2753 — replaceBBCodeItalic: function (content) {
+- chat/js/chat.js:2755 — + this.replaceBBCode(content)
+- chat/js/chat.js:2759 — replaceBBCodeUpDown: function (content) {
+- chat/js/chat.js:2761 — + this.replaceBBCode(content)
+- chat/js/chat.js:2765 — replaceBBCodeCenter: function (content) {
+- chat/js/chat.js:2768 — + this.replaceBBCode(content)
+- chat/js/chat.js:3001 — // text contains the whole message, textParts the message split up as words array
+- chat/js/chat.js:3018 — // text contains the whole message, textParts the message split up as words array
+- chat/js/chat.js:3023 — // Override to replace custom BBCodes:
+- chat/js/chat.js:3024 — // Return replaced text and call replaceBBCode recursively for the content text
+- chat/js/chat.js:3025 — // tag contains the BBCode tag, attribute the BBCode attribute and content the content text
+- chat/js/chat.js:3026 — // This method is only called for BBCode tags which are in the bbCodeTags list
+- chat/js/chat.js:3027 — replaceCustomBBCode: function (tag, attribute, content) {
+- chat/js/chat.js:3028 — return '<span class="' + tag + '">' + this.replaceBBCode(content) + '</span>';
+- chat/js/config.js:55 — // Defines if BBCode tags are replaced with the associated HTML code tags:
+- chat/js/config.js:56 — bbCode: true,
+- chat/js/config.js:57 — // Defines if image BBCode is replaced with the associated image HTML code:
+- chat/js/config.js:58 — bbCodeImages: true,
+- chat/js/config.js:59 — // Defines if color BBCode is replaced with the associated color HTML code:
+- chat/js/config.js:60 — bbCodeColors: true,
+- chat/js/config.js:123 — // Defines the list of allowed BBCodes:
+- chat/js/config.js:124 — bbCodeTags: [
+- chat/js/config.js:393 — ':locked:',
+- chat/js/config.js:403 — ':rblocked:',
+- chat/js/config.js:404 — ':maxlocked:',
+- chat/js/config.js:405 — ':hslocked:',
+- chat/js/config.js:525 — ':karma:',
+- chat/js/config.js:599 — ':rblocked:',
+- chat/js/config.js:600 — ':maxlocked:',
+- chat/js/config.js:601 — ':hslocked:',
+- chat/js/config.js:602 — ':locked:',
+- chat/js/config.js:826 — 'locked.gif',
+- chat/js/config.js:836 — 'rblocked.gif',
+- chat/js/config.js:837 — 'maxlocked.gif',
+- chat/js/config.js:838 — 'hslocked.gif',
+- chat/js/config.js:958 — 'karma.gif',
+- chat/js/config.js:1032 — 'rblocked.gif',
+- chat/js/config.js:1033 — 'maxlocked.gif',
+- chat/js/config.js:1034 — 'hslocked.gif',
+- chat/js/config.js:1035 — 'locked.gif',
+- chat/js/custom.js:22 — return e = e.replace('/takeover', ' '), e = this.replaceBBCode(e), e = this.replaceHyperLinks(e), e = this.replaceEmoticons(e), '<span cl...
+- chat/js/lang/ar.js:90 — errorNotEnoughKarma: 'Error: Not enough karma(seedbonus) points.'
+- chat/js/lang/bg.js:90 — errorNotEnoughKarma: 'Error: Not enough karma(seedbonus) points.'
+- chat/js/lang/ca.js:90 — errorNotEnoughKarma: 'Error: Not enough karma(seedbonus) points.'
+- chat/js/lang/cy.js:91 — errorNotEnoughKarma: 'Error: Not enough karma(seedbonus) points.'
+- chat/js/lang/cz.js:89 — errorNotEnoughKarma: 'Error: Not enough karma(seedbonus) points.'
+- chat/js/lang/da.js:89 — errorNotEnoughKarma: 'Error: Not enough karma(seedbonus) points.'
+- chat/js/lang/de.js:89 — errorNotEnoughKarma: 'Error: Not enough karma(seedbonus) points.'
+- chat/js/lang/el.js:90 — errorNotEnoughKarma: 'Error: Not enough karma(seedbonus) points.'
+- chat/js/lang/en.js:89 — errorNotEnoughKarma: 'Error: Not enough karma(seedbonus) points.'
+- chat/js/lang/es.js:90 — errorNotEnoughKarma: 'Error: Not enough karma(seedbonus) points.'
+- chat/js/lang/et.js:89 — errorNotEnoughKarma: 'Error: Not enough karma(seedbonus) points.'
+- chat/js/lang/fi.js:91 — errorNotEnoughKarma: 'Error: Not enough karma(seedbonus) points.'
+- chat/js/lang/fr.js:88 — errorNotEnoughKarma: 'Error: Not enough karma(seedbonus) points.'
+- chat/js/lang/gl.js:90 — errorNotEnoughKarma: 'Error: Not enough karma(seedbonus) points.'
+- chat/js/lang/he.js:90 — errorNotEnoughKarma: 'Error: Not enough karma(seedbonus) points.'
+- chat/js/lang/hr.js:90 — errorNotEnoughKarma: 'Error: Not enough karma(seedbonus) points.'
+- chat/js/lang/hu.js:89 — errorNotEnoughKarma: 'Error: Not enough karma(seedbonus) points.'
+- chat/js/lang/in.js:89 — errorNotEnoughKarma: 'Error: Not enough karma(seedbonus) points.'
+- chat/js/lang/it.js:91 — errorNotEnoughKarma: 'Error: Not enough karma(seedbonus) points.'
+- chat/js/lang/ja.js:89 — errorNotEnoughKarma: 'Error: Not enough karma(seedbonus) points.'
+- chat/js/lang/ka.js:89 — errorNotEnoughKarma: 'Error: Not enough karma(seedbonus) points.'
+- chat/js/lang/kr.js:89 — errorNotEnoughKarma: 'Error: Not enough karma(seedbonus) points.'
+- chat/js/lang/mk.js:89 — errorNotEnoughKarma: 'Error: Not enough karma(seedbonus) points.'
+- chat/js/lang/nl-be.js:90 — errorNotEnoughKarma: 'Error: Not enough karma(seedbonus) points.'
+- chat/js/lang/nl.js:90 — errorNotEnoughKarma: 'Error: Not enough karma(seedbonus) points.'
+- chat/js/lang/no.js:90 — errorNotEnoughKarma: 'Error: Not enough karma(seedbonus) points.'
+- chat/js/lang/pl.js:90 — errorNotEnoughKarma: 'Error: Not enough karma(seedbonus) points.'
+- chat/js/lang/pt-br.js:90 — errorNotEnoughKarma: 'Error: Not enough karma(seedbonus) points.'
+- chat/js/lang/pt-pt.js:91 — errorNotEnoughKarma: 'Error: Not enough karma(seedbonus) points.'
+- chat/js/lang/ro.js:90 — errorNotEnoughKarma: 'Error: Not enough karma(seedbonus) points.'
+- chat/js/lang/ru.js:91 — errorNotEnoughKarma: 'Error: Not enough karma(seedbonus) points.'
+- chat/js/lang/sk.js:90 — errorNotEnoughKarma: 'Error: Not enough karma(seedbonus) points.'
+- chat/js/lang/sl.js:90 — errorNotEnoughKarma: 'Error: Not enough karma(seedbonus) points.'
+- chat/js/lang/sr.js:90 — errorNotEnoughKarma: 'Error: Not enough karma(seedbonus) points.'
+- chat/js/lang/sv.js:90 — errorNotEnoughKarma: 'Error: Not enough karma(seedbonus) points.'
+- chat/js/lang/th.js:90 — errorNotEnoughKarma: 'Error: Not enough karma(seedbonus) points.'
+- chat/js/lang/tr.js:90 — errorNotEnoughKarma: 'Error: Not enough karma(seedbonus) points.'
+- chat/js/lang/uk.js:90 — errorNotEnoughKarma: 'Error: Not enough karma(seedbonus) points.'
+- chat/js/lang/zh-tw.js:89 — errorNotEnoughKarma: 'Error: Not enough karma(seedbonus) points.'
+- chat/js/lang/zh.js:90 — errorNotEnoughKarma: 'Error: Not enough karma(seedbonus) points.'
+- chat/js/logs.js:50 — this.makeRequest(this.ajaxURL, 'POST', this.getLogsCommand());
+- chat/js/logs.js:88 — //this.makeRequest(this.ajaxURL, 'POST', 'logout=true');
+- chat/lib/class/AJAXChatLanguage.php:75 — // Split up the HTTP_ACCEPT_LANGUAGE header:
+- chat/lib/class/AJAXChatLanguage.php:76 — $acceptedLanguages = preg_split('/,\s*/', $_SERVER['HTTP_ACCEPT_LANGUAGE']);
+- chat/lib/class/AJAXChatLanguage.php:89 — // Get and split the language code:
+- chat/lib/class/CustomAJAXChat.php:95 — $this->_allChannels = array_merge([
+- chat/lib/data/channels.php:28 — $channels = array_merge($channels, $this->_siteConfig['ajaxchat']['channels']);
+- chat/lib/lang/ar.php:37 — $lang['bbCodeLabelBold'] = 'b';
+- chat/lib/lang/ar.php:38 — $lang['bbCodeLabelItalic'] = 'i';
+- chat/lib/lang/ar.php:39 — $lang['bbCodeLabelUnderline'] = 'u';
+- chat/lib/lang/ar.php:40 — $lang['bbCodeLabelQuote'] = 'اقتباس';
+- chat/lib/lang/ar.php:41 — $lang['bbCodeLabelCode'] = 'كود';
+- chat/lib/lang/ar.php:42 — $lang['bbCodeLabelURL'] = 'رابط';
+- chat/lib/lang/ar.php:43 — $lang['bbCodeLabelImg'] = 'Image';
+- chat/lib/lang/ar.php:44 — $lang['bbCodeLabelColor'] = 'لون الخط';
+- chat/lib/lang/ar.php:45 — $lang['bbCodeLabelEmoticon'] = 'Emoticons';
+- chat/lib/lang/ar.php:46 — $lang['bbCodeTitleBold'] = 'نص عريض: [b]نص[/b]';
+- chat/lib/lang/ar.php:47 — $lang['bbCodeTitleItalic'] = 'نص مائل: [i]نص[/i]';
+- chat/lib/lang/ar.php:48 — $lang['bbCodeTitleUnderline'] = 'نص تحته خط: [u]نص[/u]';
+- chat/lib/lang/ar.php:49 — $lang['bbCodeTitleQuote'] = 'نص مقتبس: [quote]نص[/quote] او [quote=الكاتب]نص[/quote]';
+- chat/lib/lang/ar.php:50 — $lang['bbCodeTitleCode'] = 'عرض الكود: [code]كود[/code]';
+- chat/lib/lang/ar.php:51 — $lang['bbCodeTitleURL'] = 'ادحال رابط: [url]http://example.org[/url] او [url=http://example.org]نص[/url]';
+- chat/lib/lang/ar.php:52 — $lang['bbCodeTitleImg'] = 'Insert image: [img]http://example.org/image.jpg[/img]';
+- chat/lib/lang/ar.php:53 — $lang['bbCodeTitleColor'] = 'لون النص: [color=red]نص[/color]';
+- chat/lib/lang/ar.php:54 — $lang['bbCodeTitleEmoticon'] = 'Emoticons list';
+- chat/lib/lang/ar.php:99 — $lang['settingsBBCode'] = 'Enable BBCode:';
+- chat/lib/lang/ar.php:100 — $lang['settingsBBCodeImages'] = 'Enable image BBCode:';
+- chat/lib/lang/ar.php:101 — $lang['settingsBBCodeColors'] = 'Enable font color BBCode:';
+- chat/lib/lang/ar.php:136 — $lang['bbCodeLabelUpsideDown'] = 'up';
+- chat/lib/lang/ar.php:137 — $lang['bbCodeTitleVideo'] = 'Insert Video: [video]http://youtbue.com/watch?=videoid[/video]';
+- chat/lib/lang/ar.php:138 — $lang['bbCodeTitleUpsideDown'] = 'Upside Down text: [updown]text[/updown]';
+- chat/lib/lang/bg.php:37 — $lang['bbCodeLabelBold'] = 'b';
+- chat/lib/lang/bg.php:38 — $lang['bbCodeLabelItalic'] = 'i';
+- chat/lib/lang/bg.php:39 — $lang['bbCodeLabelUnderline'] = 'u';
+- chat/lib/lang/bg.php:40 — $lang['bbCodeLabelQuote'] = 'Цитат';
+- chat/lib/lang/bg.php:41 — $lang['bbCodeLabelCode'] = 'Код';
+- chat/lib/lang/bg.php:42 — $lang['bbCodeLabelURL'] = 'URL';
+- chat/lib/lang/bg.php:43 — $lang['bbCodeLabelImg'] = 'Картинка';
+- chat/lib/lang/bg.php:44 — $lang['bbCodeLabelColor'] = 'Цвят на шрифта';
+- chat/lib/lang/bg.php:45 — $lang['bbCodeLabelEmoticon'] = 'Усмивките';
+- chat/lib/lang/bg.php:46 — $lang['bbCodeTitleBold'] = 'Получер текст: [b]текст[/b]';
+- chat/lib/lang/bg.php:47 — $lang['bbCodeTitleItalic'] = 'Курсивен текст: [i]текст[/i]';
+- chat/lib/lang/bg.php:48 — $lang['bbCodeTitleUnderline'] = 'Подчертан текст: [u]текст[/u]';
+- chat/lib/lang/bg.php:49 — $lang['bbCodeTitleQuote'] = 'Цитиран текст: [quote]текст[/quote] или [quote=Автор]текст[/quote]';
+- chat/lib/lang/bg.php:50 — $lang['bbCodeTitleCode'] = 'Показване на код: [code]код[/code]';
+- chat/lib/lang/bg.php:51 — $lang['bbCodeTitleURL'] = 'URL: [url]http://example.org[/url] или [url=http://example.org]текст[/url]';
+- chat/lib/lang/bg.php:52 — $lang['bbCodeTitleImg'] = 'Вмъкване на картинка: [img]http://primer.org/kartinka.jpg[/img]';
+- chat/lib/lang/bg.php:53 — $lang['bbCodeTitleColor'] = 'Цвят на шрифта: [color=red]текст[/color]';
+- chat/lib/lang/bg.php:54 — $lang['bbCodeTitleEmoticon'] = 'списък Усмивките';
+- chat/lib/lang/bg.php:99 — $lang['settingsBBCode'] = 'Позволяване на BBCode:';
+- chat/lib/lang/bg.php:100 — $lang['settingsBBCodeImages'] = 'Позволяване на BBCode за картинки:';
+- chat/lib/lang/bg.php:101 — $lang['settingsBBCodeColors'] = 'Позволяване на BBCode за шрифтов цвят:';
+- chat/lib/lang/bg.php:136 — $lang['bbCodeLabelUpsideDown'] = 'up';
+- chat/lib/lang/bg.php:137 — $lang['bbCodeTitleVideo'] = 'Insert Video: [video]http://youtbue.com/watch?=videoid[/video]';
+- chat/lib/lang/bg.php:138 — $lang['bbCodeTitleUpsideDown'] = 'Upside Down text: [updown]text[/updown]';
+- chat/lib/lang/ca.php:37 — $lang['bbCodeLabelBold'] = 'b';
+- chat/lib/lang/ca.php:38 — $lang['bbCodeLabelItalic'] = 'i';
+- chat/lib/lang/ca.php:39 — $lang['bbCodeLabelUnderline'] = 'u';
+- chat/lib/lang/ca.php:40 — $lang['bbCodeLabelQuote'] = 'Citar';
+- chat/lib/lang/ca.php:41 — $lang['bbCodeLabelCode'] = 'Codi';
+- chat/lib/lang/ca.php:42 — $lang['bbCodeLabelURL'] = 'Enllaç';
+- chat/lib/lang/ca.php:43 — $lang['bbCodeLabelImg'] = 'Imatge';
+- chat/lib/lang/ca.php:44 — $lang['bbCodeLabelColor'] = 'Color de la Font';
+- chat/lib/lang/ca.php:45 — $lang['bbCodeLabelEmoticon'] = 'Emoticons';
+- chat/lib/lang/ca.php:46 — $lang['bbCodeTitleBold'] = 'text en negreta: [b]text[/b]';
+- chat/lib/lang/ca.php:47 — $lang['bbCodeTitleItalic'] = 'text en cursiva: [i]text[/i]';
+- chat/lib/lang/ca.php:48 — $lang['bbCodeTitleUnderline'] = 'text subratllat: [u]text[/u]';
+- chat/lib/lang/ca.php:49 — $lang['bbCodeTitleQuote'] = 'text citat: [quote]text[/quote] o [quote=author]text[/quote]';
+- chat/lib/lang/ca.php:50 — $lang['bbCodeTitleCode'] = 'Mostrar codi: [code]code[/code]';
+- chat/lib/lang/ca.php:51 — $lang['bbCodeTitleURL'] = 'Insertar enllaç: [url]http://example.org[/url] o [url=http://example.org]text[/url]';
+- chat/lib/lang/ca.php:52 — $lang['bbCodeTitleImg'] = 'Insertar imatge: [img]http://example.org/image.jpg[/img]';
+- chat/lib/lang/ca.php:53 — $lang['bbCodeTitleColor'] = 'Color de la font: [color=red]text[/color]';
+- chat/lib/lang/ca.php:54 — $lang['bbCodeTitleEmoticon'] = 'Emoticons llista';
+- chat/lib/lang/ca.php:99 — $lang['settingsBBCode'] = 'Habilitar BBCode:';
+- chat/lib/lang/ca.php:100 — $lang['settingsBBCodeImages'] = 'Habilitar imatge BBCode:';
+- chat/lib/lang/ca.php:101 — $lang['settingsBBCodeColors'] = 'habilitar color de font BBCode:';
+- chat/lib/lang/ca.php:136 — $lang['bbCodeLabelUpsideDown'] = 'up';
+- chat/lib/lang/ca.php:137 — $lang['bbCodeTitleVideo'] = 'Insert Video: [video]http://youtbue.com/watch?=videoid[/video]';
+- chat/lib/lang/ca.php:138 — $lang['bbCodeTitleUpsideDown'] = 'Upside Down text: [updown]text[/updown]';
+- chat/lib/lang/cy.php:37 — $lang['bbCodeLabelBold'] = 'b';
+- chat/lib/lang/cy.php:38 — $lang['bbCodeLabelItalic'] = 'i';
+- chat/lib/lang/cy.php:39 — $lang['bbCodeLabelUnderline'] = 'u';
+- chat/lib/lang/cy.php:40 — $lang['bbCodeLabelQuote'] = 'Dyfyniad';
+- chat/lib/lang/cy.php:41 — $lang['bbCodeLabelCode'] = 'Cod';
+- chat/lib/lang/cy.php:42 — $lang['bbCodeLabelURL'] = 'URL';
+- chat/lib/lang/cy.php:43 — $lang['bbCodeLabelImg'] = 'Delwedd';
+- chat/lib/lang/cy.php:44 — $lang['bbCodeLabelColor'] = 'Lliw Ffont';
+- chat/lib/lang/cy.php:45 — $lang['bbCodeLabelEmoticon'] = 'Gwenogluniau';
+- chat/lib/lang/cy.php:46 — $lang['bbCodeTitleBold'] = 'Testun bras: [b]testun[/b]';
+- chat/lib/lang/cy.php:47 — $lang['bbCodeTitleItalic'] = 'Testun italig: [i]testun[/i]';
+- chat/lib/lang/cy.php:48 — $lang['bbCodeTitleUnderline'] = 'Tanlinellu testun: [u]testun[/u]';
+- chat/lib/lang/cy.php:49 — $lang['bbCodeTitleQuote'] = 'Dyfynnu testun: [quote]testun[/quote] neu [quote=awdur]testun[/quote]';
+- chat/lib/lang/cy.php:50 — $lang['bbCodeTitleCode'] = 'Dangos cod: [code]cod[/code]';
+- chat/lib/lang/cy.php:51 — $lang['bbCodeTitleURL'] = 'Mewnosod URL: [url]http://example.org[/url] neu [url=http://example.org]testun[/url]';
+- chat/lib/lang/cy.php:52 — $lang['bbCodeTitleImg'] = 'Mewnosod delwedd: [img]http://example.org/image.jpg[/img]';
+- chat/lib/lang/cy.php:53 — $lang['bbCodeTitleColor'] = 'Lliw Ffont: [color=red]testun[/color]';
+- chat/lib/lang/cy.php:54 — $lang['bbCodeTitleEmoticon'] = 'Gwenogluniau list';
+- chat/lib/lang/cy.php:99 — $lang['settingsBBCode'] = 'Galluogi BBCode:';
+- chat/lib/lang/cy.php:100 — $lang['settingsBBCodeImages'] = 'Galluogi delweddau BBCode:';
+- chat/lib/lang/cy.php:101 — $lang['settingsBBCodeColors'] = 'Galluogi lliwiau ffont BBCode:';
+- chat/lib/lang/cy.php:136 — $lang['bbCodeLabelUpsideDown'] = 'up';
+- chat/lib/lang/cy.php:137 — $lang['bbCodeTitleVideo'] = 'Insert Video: [video]http://youtbue.com/watch?=videoid[/video]';
+- chat/lib/lang/cy.php:138 — $lang['bbCodeTitleUpsideDown'] = 'Upside Down text: [updown]text[/updown]';
+- chat/lib/lang/cz.php:36 — $lang['bbCodeLabelBold'] = 'b';
+- chat/lib/lang/cz.php:37 — $lang['bbCodeLabelItalic'] = 'i';
+- chat/lib/lang/cz.php:38 — $lang['bbCodeLabelUnderline'] = 'u';
+- chat/lib/lang/cz.php:39 — $lang['bbCodeLabelQuote'] = 'Citace';
+- chat/lib/lang/cz.php:40 — $lang['bbCodeLabelCode'] = 'Kód';
+- chat/lib/lang/cz.php:41 — $lang['bbCodeLabelURL'] = 'URL';
+- chat/lib/lang/cz.php:42 — $lang['bbCodeLabelImg'] = 'Obrázek';
+- chat/lib/lang/cz.php:43 — $lang['bbCodeLabelColor'] = 'Barva písma';
+- chat/lib/lang/cz.php:44 — $lang['bbCodeLabelEmoticon'] = 'Smajlíky';
+- chat/lib/lang/cz.php:45 — $lang['bbCodeTitleBold'] = 'Tučně: [b]text[/b]';
+- chat/lib/lang/cz.php:46 — $lang['bbCodeTitleItalic'] = 'Kurzívou: [i]text[/i]';
+- chat/lib/lang/cz.php:47 — $lang['bbCodeTitleUnderline'] = 'Podtržené: [u]text[/u]';
+- chat/lib/lang/cz.php:48 — $lang['bbCodeTitleQuote'] = 'Citace: [quote]text[/quote] nebo [quote=autor]text[/quote]';
+- chat/lib/lang/cz.php:49 — $lang['bbCodeTitleCode'] = 'Zobrazit kód: [code]kód[/code]';
+- chat/lib/lang/cz.php:50 — $lang['bbCodeTitleURL'] = 'Vložit URL: [url]http://example.org[/url] nebo [url=http://example.org]text[/url]';
+- chat/lib/lang/cz.php:51 — $lang['bbCodeTitleImg'] = 'Vložit obrázek: [img]http://example.org/image.jpg[/img]';
+- chat/lib/lang/cz.php:52 — $lang['bbCodeTitleColor'] = 'Barva písma: [color=red]text[/color]';
+- chat/lib/lang/cz.php:53 — $lang['bbCodeTitleEmoticon'] = 'Smajlíky list';
+- chat/lib/lang/cz.php:98 — $lang['settingsBBCode'] = 'Povolit kódy BBCode:';
+- chat/lib/lang/cz.php:99 — $lang['settingsBBCodeImages'] = 'Povolit image BBCode:';
+- chat/lib/lang/cz.php:100 — $lang['settingsBBCodeColors'] = 'Povolit font color BBCode:';
+- chat/lib/lang/cz.php:135 — $lang['bbCodeLabelUpsideDown'] = 'up';
+- chat/lib/lang/cz.php:136 — $lang['bbCodeTitleVideo'] = 'Insert Video: [video]http://youtbue.com/watch?=videoid[/video]';
+- chat/lib/lang/cz.php:137 — $lang['bbCodeTitleUpsideDown'] = 'Upside Down text: [updown]text[/updown]';
+- chat/lib/lang/da.php:36 — $lang['bbCodeLabelBold'] = 'b';
+- chat/lib/lang/da.php:37 — $lang['bbCodeLabelItalic'] = 'i';
+- chat/lib/lang/da.php:38 — $lang['bbCodeLabelUnderline'] = 'u';
+- chat/lib/lang/da.php:39 — $lang['bbCodeLabelQuote'] = 'Citat';
+- chat/lib/lang/da.php:40 — $lang['bbCodeLabelCode'] = 'Kode';
+- chat/lib/lang/da.php:41 — $lang['bbCodeLabelURL'] = 'URL';
+- chat/lib/lang/da.php:42 — $lang['bbCodeLabelImg'] = 'Billede';
+- chat/lib/lang/da.php:43 — $lang['bbCodeLabelColor'] = 'Font Farve';
+- chat/lib/lang/da.php:44 — $lang['bbCodeLabelEmoticon'] = 'Smileys';
+- chat/lib/lang/da.php:45 — $lang['bbCodeTitleBold'] = 'Fed tekst: [b]tekstt[/b]';
+- chat/lib/lang/da.php:46 — $lang['bbCodeTitleItalic'] = 'Kursiv tekst: [i]tekst[/i]';
+- chat/lib/lang/da.php:47 — $lang['bbCodeTitleUnderline'] = 'Understreget tekst: [u]tekst[/u]';
+- chat/lib/lang/da.php:48 — $lang['bbCodeTitleQuote'] = 'Citer tekst: [quote]citat[/quote] eller [quote=author]tekst[/quote]';
+- chat/lib/lang/da.php:49 — $lang['bbCodeTitleCode'] = 'Vis kode: [code]kode[/code]';
+- chat/lib/lang/da.php:50 — $lang['bbCodeTitleURL'] = 'Indsæt URL: [url]http://example.org[/url] eller [url=http://example.org]text[/url]';
+- chat/lib/lang/da.php:51 — $lang['bbCodeTitleImg'] = 'Indsæt image: [img]http://example.org/image.jpg[/img]';
+- chat/lib/lang/da.php:52 — $lang['bbCodeTitleColor'] = 'Font Farve: [color=red]tekst[/color]';
+- chat/lib/lang/da.php:53 — $lang['bbCodeTitleEmoticon'] = 'Smileys list';
+- chat/lib/lang/da.php:98 — $lang['settingsBBCode'] = 'Aktiver BBCode:';
+- chat/lib/lang/da.php:99 — $lang['settingsBBCodeImages'] = 'Aktiver billede BBCode:';
+- chat/lib/lang/da.php:100 — $lang['settingsBBCodeColors'] = 'Aktiver font farve BBCode:';
+- chat/lib/lang/da.php:135 — $lang['bbCodeLabelUpsideDown'] = 'up';
+- chat/lib/lang/da.php:136 — $lang['bbCodeTitleVideo'] = 'Insert Video: [video]http://youtbue.com/watch?=videoid[/video]';
+- chat/lib/lang/da.php:137 — $lang['bbCodeTitleUpsideDown'] = 'Upside Down text: [updown]text[/updown]';
+- chat/lib/lang/de.php:36 — $lang['bbCodeLabelBold'] = 'b';
+- chat/lib/lang/de.php:37 — $lang['bbCodeLabelItalic'] = 'i';
+- chat/lib/lang/de.php:38 — $lang['bbCodeLabelUnderline'] = 'u';
+- chat/lib/lang/de.php:39 — $lang['bbCodeLabelQuote'] = 'Zitat';
+- chat/lib/lang/de.php:40 — $lang['bbCodeLabelCode'] = 'Code';
+- chat/lib/lang/de.php:41 — $lang['bbCodeLabelURL'] = 'URL';
+- chat/lib/lang/de.php:42 — $lang['bbCodeLabelImg'] = 'Bild';
+- chat/lib/lang/de.php:43 — $lang['bbCodeLabelColor'] = 'Schriftfarbe';
+- chat/lib/lang/de.php:44 — $lang['bbCodeLabelEmoticon'] = 'Smileys';
+- chat/lib/lang/de.php:45 — $lang['bbCodeTitleBold'] = 'Fett: [b]Text[/b]';
+- chat/lib/lang/de.php:46 — $lang['bbCodeTitleItalic'] = 'Kursiv: [i]Text[/i]';
+- chat/lib/lang/de.php:47 — $lang['bbCodeTitleUnderline'] = 'Unterstrichen: [u]Text[/u]';
+- chat/lib/lang/de.php:48 — $lang['bbCodeTitleQuote'] = 'Zitat: [quote]Text[/quote] oder [quote=Autor]Text[/quote]';
+- chat/lib/lang/de.php:49 — $lang['bbCodeTitleCode'] = 'Code anzeigen: [code]code[/code]';
+- chat/lib/lang/de.php:50 — $lang['bbCodeTitleURL'] = 'Link einfügen: [url]http://example.org[/url] oder [url=http://example.org]Text[/url]';
+- chat/lib/lang/de.php:51 — $lang['bbCodeTitleImg'] = 'Bild einfügen: [img]http://example.org/image.jpg[/img]';
+- chat/lib/lang/de.php:52 — $lang['bbCodeTitleColor'] = 'Schriftfarbe: [color=red]Text[/color]';
+- chat/lib/lang/de.php:53 — $lang['bbCodeTitleEmoticon'] = 'Smileys list';
+- chat/lib/lang/de.php:98 — $lang['settingsBBCode'] = 'BBCode aktivieren:';
+- chat/lib/lang/de.php:99 — $lang['settingsBBCodeImages'] = ' Bilder BBCode aktivieren:';
+- chat/lib/lang/de.php:100 — $lang['settingsBBCodeColors'] = 'Schriftfarben BBCode aktivieren:';
+- chat/lib/lang/de.php:135 — $lang['bbCodeLabelUpsideDown'] = 'up';
+- chat/lib/lang/de.php:136 — $lang['bbCodeTitleVideo'] = 'Insert Video: [video]http://youtbue.com/watch?=videoid[/video]';
+- chat/lib/lang/de.php:137 — $lang['bbCodeTitleUpsideDown'] = 'Upside Down text: [updown]text[/updown]';
+- chat/lib/lang/el.php:37 — $lang['bbCodeLabelBold'] = 'b';
+- chat/lib/lang/el.php:38 — $lang['bbCodeLabelItalic'] = 'i';
+- chat/lib/lang/el.php:39 — $lang['bbCodeLabelUnderline'] = 'u';
+- chat/lib/lang/el.php:40 — $lang['bbCodeLabelQuote'] = 'Παράθεση';
+- chat/lib/lang/el.php:41 — $lang['bbCodeLabelCode'] = 'Κώδικας';
+- chat/lib/lang/el.php:42 — $lang['bbCodeLabelURL'] = 'URL';
+- chat/lib/lang/el.php:43 — $lang['bbCodeLabelImg'] = 'Image';
+- chat/lib/lang/el.php:44 — $lang['bbCodeLabelColor'] = 'Χρώμα γραμματοσειράς';
+- chat/lib/lang/el.php:45 — $lang['bbCodeLabelEmoticon'] = 'Smilies list';
+- chat/lib/lang/el.php:46 — $lang['bbCodeTitleBold'] = 'Έντονο κείμενο: [b]κείμενο[/b]';
+- chat/lib/lang/el.php:47 — $lang['bbCodeTitleItalic'] = 'Πλάγια γραφή: [i]κείμενο[/i]';
+- chat/lib/lang/el.php:48 — $lang['bbCodeTitleUnderline'] = 'Υπογραμμισμένο κείμενο: [u]κείμενο[/u]';
+- chat/lib/lang/el.php:49 — $lang['bbCodeTitleQuote'] = 'Κείμενο σε παράθεση: [quote]κείμενο[/quote] ή [quote=author]κείμενο[/quote]';
+- chat/lib/lang/el.php:50 — $lang['bbCodeTitleCode'] = 'Εμφάνιση κώδικα: [code]code[/code]';
+- chat/lib/lang/el.php:51 — $lang['bbCodeTitleURL'] = 'Εισαγωγή URL: [url]http://example.org[/url] ή [url=http://example.org]κείμενο[/url]';
+- chat/lib/lang/el.php:52 — $lang['bbCodeTitleImg'] = 'Insert image: [img]http://example.org/image.jpg[/img]';
+- chat/lib/lang/el.php:53 — $lang['bbCodeTitleColor'] = 'Χρώμα γραμματοσειράς: [color=red]κείμενο[/color]';
+- chat/lib/lang/el.php:54 — $lang['bbCodeTitleEmoticon'] = 'Smilies list';
+- chat/lib/lang/el.php:99 — $lang['settingsBBCode'] = 'Ενεργοποίηση BBCode:';
+- chat/lib/lang/el.php:100 — $lang['settingsBBCodeImages'] = 'Enable image BBCode:';
+- chat/lib/lang/el.php:101 — $lang['settingsBBCodeColors'] = 'Enable font color BBCode:';
+- chat/lib/lang/el.php:136 — $lang['bbCodeLabelUpsideDown'] = 'up';
+- chat/lib/lang/el.php:137 — $lang['bbCodeTitleVideo'] = 'Insert Video: [video]http://youtbue.com/watch?=videoid[/video]';
+- chat/lib/lang/el.php:138 — $lang['bbCodeTitleUpsideDown'] = 'Upside Down text: [updown]text[/updown]';
+- chat/lib/lang/en.php:36 — $lang['bbCodeLabelBold'] = 'b';
+- chat/lib/lang/en.php:37 — $lang['bbCodeLabelItalic'] = 'i';
+- chat/lib/lang/en.php:38 — $lang['bbCodeLabelUnderline'] = 'u';
+- chat/lib/lang/en.php:39 — $lang['bbCodeLabelQuote'] = 'Quote';
+- chat/lib/lang/en.php:40 — $lang['bbCodeLabelCode'] = 'Code';
+- chat/lib/lang/en.php:41 — $lang['bbCodeLabelURL'] = 'URL';
+- chat/lib/lang/en.php:42 — $lang['bbCodeLabelImg'] = 'Image';
+- chat/lib/lang/en.php:43 — $lang['bbCodeLabelColor'] = 'Color';
+- chat/lib/lang/en.php:44 — $lang['bbCodeLabelEmoticon'] = 'Emoticons';
+- chat/lib/lang/en.php:45 — $lang['bbCodeTitleBold'] = 'Bold text: [b]text[/b]';
+- chat/lib/lang/en.php:46 — $lang['bbCodeTitleItalic'] = 'Italic text: [i]text[/i]';
+- chat/lib/lang/en.php:47 — $lang['bbCodeTitleUnderline'] = 'Underline text: [u]text[/u]';
+- chat/lib/lang/en.php:48 — $lang['bbCodeTitleQuote'] = 'Quote text: [quote]text[/quote] or [quote=author]text[/quote]';
+- chat/lib/lang/en.php:49 — $lang['bbCodeTitleCode'] = 'Code display: [code]code[/code]';
+- chat/lib/lang/en.php:50 — $lang['bbCodeTitleURL'] = 'Insert URL: [url]http://example.org[/url] or [url=http://example.org]text[/url]';
+- chat/lib/lang/en.php:51 — $lang['bbCodeTitleImg'] = 'Insert image: [img]http://example.org/image.jpg[/img]';
+- chat/lib/lang/en.php:52 — $lang['bbCodeTitleColor'] = 'Font Color: [color=red]text[/color]';
+- chat/lib/lang/en.php:53 — $lang['bbCodeTitleEmoticon'] = 'Emoticons list';
+- chat/lib/lang/en.php:98 — $lang['settingsBBCode'] = 'Enable BBCode:';
+- chat/lib/lang/en.php:99 — $lang['settingsBBCodeImages'] = 'Enable image BBCode:';
+- chat/lib/lang/en.php:100 — $lang['settingsBBCodeColors'] = 'Enable font color BBCode:';
+- chat/lib/lang/en.php:135 — $lang['bbCodeLabelUpsideDown'] = 'up';
+- chat/lib/lang/en.php:136 — $lang['bbCodeTitleVideo'] = 'Insert Video: [video]http://youtbue.com/watch?=videoid[/video]';
+- chat/lib/lang/en.php:137 — $lang['bbCodeTitleUpsideDown'] = 'Upside Down text: [updown]text[/updown]';
+- chat/lib/lang/es.php:37 — $lang['bbCodeLabelBold'] = 'b';
+- chat/lib/lang/es.php:38 — $lang['bbCodeLabelItalic'] = 'i';
+- chat/lib/lang/es.php:39 — $lang['bbCodeLabelUnderline'] = 'u';
+- chat/lib/lang/es.php:40 — $lang['bbCodeLabelQuote'] = 'Citar';
+- chat/lib/lang/es.php:41 — $lang['bbCodeLabelCode'] = 'Código';
+- chat/lib/lang/es.php:42 — $lang['bbCodeLabelURL'] = 'URL';
+- chat/lib/lang/es.php:43 — $lang['bbCodeLabelImg'] = 'Imagen';
+- chat/lib/lang/es.php:44 — $lang['bbCodeLabelColor'] = 'Color de Fuente';
+- chat/lib/lang/es.php:45 — $lang['bbCodeLabelEmoticon'] = 'Emoticonos listo';
+- chat/lib/lang/es.php:46 — $lang['bbCodeTitleBold'] = 'Texto Negrita: [b]texto[/b]';
+- chat/lib/lang/es.php:47 — $lang['bbCodeTitleItalic'] = 'Texto Cursiva: [i]texto[/i]';
+- chat/lib/lang/es.php:48 — $lang['bbCodeTitleUnderline'] = 'Texto Subrayado: [u]texto[/u]';
+- chat/lib/lang/es.php:49 — $lang['bbCodeTitleQuote'] = 'Texto Citado: [quote]texto[/quote] o [quote=author]text[/quote]';
+- chat/lib/lang/es.php:50 — $lang['bbCodeTitleCode'] = 'Mostrar código: [code]código[/code]';
+- chat/lib/lang/es.php:51 — $lang['bbCodeTitleURL'] = 'Insertar URL: [url]http://example.org[/url] or [url=http://example.org]texto[/url]';
+- chat/lib/lang/es.php:52 — $lang['bbCodeTitleImg'] = 'Insertar imagen: [img]http://example.org/imagen.jpg[/img]';
+- chat/lib/lang/es.php:53 — $lang['bbCodeTitleColor'] = 'Color de Fuente: [color=red]texto[/color]';
+- chat/lib/lang/es.php:54 — $lang['bbCodeTitleEmoticon'] = 'Emoticonos list';
+- chat/lib/lang/es.php:99 — $lang['settingsBBCode'] = 'Permitir BBCode:';
+- chat/lib/lang/es.php:100 — $lang['settingsBBCodeImages'] = 'Permitir BBCode de imagen:';
+- chat/lib/lang/es.php:101 — $lang['settingsBBCodeColors'] = 'Permitir BBCode de color de fuente:';
+- chat/lib/lang/es.php:136 — $lang['bbCodeLabelUpsideDown'] = 'up';
+- chat/lib/lang/es.php:137 — $lang['bbCodeTitleVideo'] = 'Insert Video: [video]http://youtbue.com/watch?=videoid[/video]';
+- chat/lib/lang/es.php:138 — $lang['bbCodeTitleUpsideDown'] = 'Upside Down text: [updown]text[/updown]';
+- chat/lib/lang/et.php:36 — $lang['bbCodeLabelBold'] = 'b';
+- chat/lib/lang/et.php:37 — $lang['bbCodeLabelItalic'] = 'i';
+- chat/lib/lang/et.php:38 — $lang['bbCodeLabelUnderline'] = 'u';
+- chat/lib/lang/et.php:39 — $lang['bbCodeLabelQuote'] = 'Tsitaat';
+- chat/lib/lang/et.php:40 — $lang['bbCodeLabelCode'] = 'Kood';
+- chat/lib/lang/et.php:41 — $lang['bbCodeLabelURL'] = 'URL';
+- chat/lib/lang/et.php:42 — $lang['bbCodeLabelImg'] = 'Pilt';
+- chat/lib/lang/et.php:43 — $lang['bbCodeLabelColor'] = 'Fondi värv';
+- chat/lib/lang/et.php:44 — $lang['bbCodeLabelEmoticon'] = 'Emotikonid';
+- chat/lib/lang/et.php:45 — $lang['bbCodeTitleBold'] = 'Rasvases kirjas tekst: [b]tekst[/b]';
+- chat/lib/lang/et.php:46 — $lang['bbCodeTitleItalic'] = 'Kaldkirjas tekst: [i]tekst[/i]';
+- chat/lib/lang/et.php:47 — $lang['bbCodeTitleUnderline'] = 'Underline text: [u]tekst[/u]';
+- chat/lib/lang/et.php:48 — $lang['bbCodeTitleQuote'] = 'Tsiteeritud tekst: [quote]tekst[/quote] või [quote=autor]tekst[/quote]';
+- chat/lib/lang/et.php:49 — $lang['bbCodeTitleCode'] = 'Koodi esitamine: [code]kood[/code]';
+- chat/lib/lang/et.php:50 — $lang['bbCodeTitleURL'] = 'Lisa URL: [url]http://näide.org[/url] või [url=http://näide.org]tekst[/url]';
+- chat/lib/lang/et.php:51 — $lang['bbCodeTitleImg'] = 'Lisa pilt: [img]http://näide.org/pilt.jpg[/img]';
+- chat/lib/lang/et.php:52 — $lang['bbCodeTitleColor'] = 'Fondi värv: [color=red]tekst[/color]';
+- chat/lib/lang/et.php:53 — $lang['bbCodeTitleEmoticon'] = 'Emotikonid nimekiri';
+- chat/lib/lang/et.php:98 — $lang['settingsBBCode'] = 'Luba BBCode:';
+- chat/lib/lang/et.php:99 — $lang['settingsBBCodeImages'] = 'Luba pildi BBCode:';
+- chat/lib/lang/et.php:100 — $lang['settingsBBCodeColors'] = 'Luba fondi värvi BBCode:';
+- chat/lib/lang/et.php:135 — $lang['bbCodeLabelUpsideDown'] = 'up';
+- chat/lib/lang/et.php:136 — $lang['bbCodeTitleVideo'] = 'Insert Video: [video]http://youtbue.com/watch?=videoid[/video]';
+- chat/lib/lang/et.php:137 — $lang['bbCodeTitleUpsideDown'] = 'Upside Down text: [updown]text[/updown]';
+- chat/lib/lang/fa.php:37 — $lang['bbCodeLabelBold'] = 'b';
+- chat/lib/lang/fa.php:38 — $lang['bbCodeLabelItalic'] = 'i';
+- chat/lib/lang/fa.php:39 — $lang['bbCodeLabelUnderline'] = 'u';
+- chat/lib/lang/fa.php:40 — $lang['bbCodeLabelQuote'] = 'اقتباس';
+- chat/lib/lang/fa.php:41 — $lang['bbCodeLabelCode'] = 'کد';
+- chat/lib/lang/fa.php:42 — $lang['bbCodeLabelURL'] = 'URL';
+- chat/lib/lang/fa.php:43 — $lang['bbCodeLabelImg'] = 'تصویر';
+- chat/lib/lang/fa.php:44 — $lang['bbCodeLabelColor'] = 'رنگ خط';
+- chat/lib/lang/fa.php:45 — $lang['bbCodeLabelEmoticon'] = 'Smilies';
+- chat/lib/lang/fa.php:46 — $lang['bbCodeTitleBold'] = 'متن درشت: [b]متن[/b]';
+- chat/lib/lang/fa.php:47 — $lang['bbCodeTitleItalic'] = 'متن کج: [i]متن[/i]';
+- chat/lib/lang/fa.php:48 — $lang['bbCodeTitleUnderline'] = 'زیر خط دار: [u]متن[/u]';
+- chat/lib/lang/fa.php:49 — $lang['bbCodeTitleQuote'] = 'نقل قول: [quote]متن[/quote] او [quote=الكاتب]نص[/quote]';
+- chat/lib/lang/fa.php:50 — $lang['bbCodeTitleCode'] = 'نمایش کد: [code]code[/code]';
+- chat/lib/lang/fa.php:51 — $lang['bbCodeTitleURL'] = 'وارد کردن آدرس: [url]http://example.org[/url] یا [url=http://example.org]متن[/url]';
+- chat/lib/lang/fa.php:52 — $lang['bbCodeTitleImg'] = 'وارد کردن تصویر: [img]http://example.org/image.jpg[/img]';
+- chat/lib/lang/fa.php:53 — $lang['bbCodeTitleColor'] = 'رنگ متن: [color=red]متن[/color]';
+- chat/lib/lang/fa.php:54 — $lang['bbCodeTitleEmoticon'] = 'Smilies list';
+- chat/lib/lang/fa.php:99 — $lang['settingsBBCode'] = 'فعال سازی BBCode:';
+- chat/lib/lang/fa.php:100 — $lang['settingsBBCodeImages'] = 'فعال سازی تصاویر BBCode:';
+- chat/lib/lang/fa.php:101 — $lang['settingsBBCodeColors'] = 'فعال سازی رنگ متن BBCode:';
+- chat/lib/lang/fa.php:136 — $lang['bbCodeLabelUpsideDown'] = 'up';
+- chat/lib/lang/fa.php:137 — $lang['bbCodeTitleVideo'] = 'Insert Video: [video]http://youtbue.com/watch?=videoid[/video]';
+- chat/lib/lang/fa.php:138 — $lang['bbCodeTitleUpsideDown'] = 'Upside Down text: [updown]text[/updown]';
+- chat/lib/lang/fi.php:38 — $lang['bbCodeLabelBold'] = 'b';
+- chat/lib/lang/fi.php:39 — $lang['bbCodeLabelItalic'] = 'i';
+- chat/lib/lang/fi.php:40 — $lang['bbCodeLabelUnderline'] = 'u';
+- chat/lib/lang/fi.php:41 — $lang['bbCodeLabelQuote'] = 'Lainaus';
+- chat/lib/lang/fi.php:42 — $lang['bbCodeLabelCode'] = 'Koodi';
+- chat/lib/lang/fi.php:43 — $lang['bbCodeLabelURL'] = 'URL';
+- chat/lib/lang/fi.php:44 — $lang['bbCodeLabelImg'] = 'Kuva';
+- chat/lib/lang/fi.php:45 — $lang['bbCodeLabelColor'] = 'Fontin väri';
+- chat/lib/lang/fi.php:46 — $lang['bbCodeLabelEmoticon'] = 'Hymiöt';
+- chat/lib/lang/fi.php:47 — $lang['bbCodeTitleBold'] = 'Lihavoitu teksti: [b]teksti[/b]';
+- chat/lib/lang/fi.php:48 — $lang['bbCodeTitleItalic'] = 'Kursivoitu teksti: [i]teksti[/i]';
+- chat/lib/lang/fi.php:49 — $lang['bbCodeTitleUnderline'] = 'Alleviivattu teksti: [u]teksti[/u]';
+- chat/lib/lang/fi.php:50 — $lang['bbCodeTitleQuote'] = 'Lainattu teksti: [quote]teksti[/quote] tai [quote=kirjoittaja]teksti[/quote]';
+- chat/lib/lang/fi.php:51 — $lang['bbCodeTitleCode'] = 'Koodi: [code]koodi[/code]';
+- chat/lib/lang/fi.php:52 — $lang['bbCodeTitleURL'] = 'Lisää linkki: [url]http://example.org[/url] tai [url=http://example.org]teksti[/url]';
+- chat/lib/lang/fi.php:53 — $lang['bbCodeTitleImg'] = 'Lisää kuva: [img]http://example.org/image.jpg[/img]';
+- chat/lib/lang/fi.php:54 — $lang['bbCodeTitleColor'] = 'Kirjaisimen väri: [color=red]teksti[/color]';
+- chat/lib/lang/fi.php:55 — $lang['bbCodeTitleEmoticon'] = 'Hymiöt lista';
+- chat/lib/lang/fi.php:100 — $lang['settingsBBCode'] = 'BBCode päälle:';
+- chat/lib/lang/fi.php:101 — $lang['settingsBBCodeImages'] = 'Salli kuvat:';
+- chat/lib/lang/fi.php:102 — $lang['settingsBBCodeColors'] = 'Salli värit:';
+- chat/lib/lang/fi.php:137 — $lang['bbCodeLabelUpsideDown'] = 'up';
+- chat/lib/lang/fi.php:138 — $lang['bbCodeTitleVideo'] = 'Insert Video: [video]http://youtbue.com/watch?=videoid[/video]';
+- chat/lib/lang/fi.php:139 — $lang['bbCodeTitleUpsideDown'] = 'Upside Down text: [updown]text[/updown]';
+- chat/lib/lang/fr.php:38 — $lang['bbCodeLabelBold'] = 'b';
+- chat/lib/lang/fr.php:39 — $lang['bbCodeLabelItalic'] = 'i';
+- chat/lib/lang/fr.php:40 — $lang['bbCodeLabelUnderline'] = 'u';
+- chat/lib/lang/fr.php:41 — $lang['bbCodeLabelQuote'] = 'Citation';
+- chat/lib/lang/fr.php:42 — $lang['bbCodeLabelCode'] = 'Code';
+- chat/lib/lang/fr.php:43 — $lang['bbCodeLabelURL'] = 'URL';
+- chat/lib/lang/fr.php:44 — $lang['bbCodeLabelImg'] = 'Image';
+- chat/lib/lang/fr.php:45 — $lang['bbCodeLabelColor'] = 'Couleur de police';
+- chat/lib/lang/fr.php:46 — $lang['bbCodeLabelEmoticon'] = 'émoticons';
+- chat/lib/lang/fr.php:47 — $lang['bbCodeTitleBold'] = 'Texte en gras : [b]texte[/b]';
+- chat/lib/lang/fr.php:48 — $lang['bbCodeTitleItalic'] = 'Texte en italique : [i]texte[/i]';
+- chat/lib/lang/fr.php:49 — $lang['bbCodeTitleUnderline'] = 'Texte souligné : [u]texte[/u]';
+- chat/lib/lang/fr.php:50 — $lang['bbCodeTitleQuote'] = 'Citation : [quote]texte[/quote] ou [quote=auteur]texte[/quote]';
+- chat/lib/lang/fr.php:51 — $lang['bbCodeTitleCode'] = 'Affichage de code : [code]code[/code]';
+- chat/lib/lang/fr.php:52 — $lang['bbCodeTitleURL'] = 'Insérer une URL : [url]http://example.org[/url] ou [url=http://example.org]text[/url]';
+- chat/lib/lang/fr.php:53 — $lang['bbCodeTitleImg'] = 'Insérer une image : [img]http://example.org/image.jpg[/img]';
+- chat/lib/lang/fr.php:54 — $lang['bbCodeTitleColor'] = 'Couleur de la police: [color=red]texte[/color]';
+- chat/lib/lang/fr.php:55 — $lang['bbCodeTitleEmoticon'] = 'Liste des émoticônes';
+- chat/lib/lang/fr.php:100 — $lang['settingsBBCode'] = 'Activer le BBCode :';
+- chat/lib/lang/fr.php:101 — $lang['settingsBBCodeImages'] = 'Activer le BBCode des images :';
+- chat/lib/lang/fr.php:102 — $lang['settingsBBCodeColors'] = 'Activer le BBCode pour la couleur de la police :';
+- chat/lib/lang/fr.php:137 — $lang['bbCodeLabelUpsideDown'] = 'up';
+- chat/lib/lang/fr.php:138 — $lang['bbCodeTitleVideo'] = 'Insert Video: [video]http://youtbue.com/watch?=videoid[/video]';
+- chat/lib/lang/fr.php:139 — $lang['bbCodeTitleUpsideDown'] = 'Upside Down text: [updown]text[/updown]';
+- chat/lib/lang/gl.php:37 — $lang['bbCodeLabelBold'] = 'b';
+- chat/lib/lang/gl.php:38 — $lang['bbCodeLabelItalic'] = 'i';
+- chat/lib/lang/gl.php:39 — $lang['bbCodeLabelUnderline'] = 'u';
+- chat/lib/lang/gl.php:40 — $lang['bbCodeLabelQuote'] = 'Quote';
+- chat/lib/lang/gl.php:41 — $lang['bbCodeLabelCode'] = 'Code';
+- chat/lib/lang/gl.php:42 — $lang['bbCodeLabelURL'] = 'URL';
+- chat/lib/lang/gl.php:43 — $lang['bbCodeLabelImg'] = 'Imagen';
+- chat/lib/lang/gl.php:44 — $lang['bbCodeLabelColor'] = 'Color fonte';
+- chat/lib/lang/gl.php:45 — $lang['bbCodeLabelEmoticon'] = 'Emoticonos';
+- chat/lib/lang/gl.php:46 — $lang['bbCodeTitleBold'] = 'Texto negriña: [b]text[/b]';
+- chat/lib/lang/gl.php:47 — $lang['bbCodeTitleItalic'] = 'Texto cursiva: [i]text[/i]';
+- chat/lib/lang/gl.php:48 — $lang['bbCodeTitleUnderline'] = 'Texto subraiado: [u]text[/u]';
+- chat/lib/lang/gl.php:49 — $lang['bbCodeTitleQuote'] = 'Texto entrecomillado: [quote]text[/quote] or [quote=author]text[/quote]';
+- chat/lib/lang/gl.php:50 — $lang['bbCodeTitleCode'] = 'Mosrar código: [code]code[/code]';
+- chat/lib/lang/gl.php:51 — $lang['bbCodeTitleURL'] = 'Insertar URL: [url]http://example.org[/url] or [url=http://example.org]text[/url]';
+- chat/lib/lang/gl.php:52 — $lang['bbCodeTitleImg'] = 'Insertar imaxe: [img]http://example.org/image.jpg[/img]';
+- chat/lib/lang/gl.php:53 — $lang['bbCodeTitleColor'] = 'Cor fonte: [color=red]text[/color]';
+- chat/lib/lang/gl.php:54 — $lang['bbCodeTitleEmoticon'] = 'Emoticonos lista';
+- chat/lib/lang/gl.php:99 — $lang['settingsBBCode'] = 'Activar BBCode:';
+- chat/lib/lang/gl.php:100 — $lang['settingsBBCodeImages'] = 'Activar imaxes BBCode:';
+- chat/lib/lang/gl.php:101 — $lang['settingsBBCodeColors'] = 'Activar cor fonte BBCode:';
+- chat/lib/lang/gl.php:136 — $lang['bbCodeLabelUpsideDown'] = 'up';
+- chat/lib/lang/gl.php:137 — $lang['bbCodeTitleVideo'] = 'Insert Video: [video]http://youtbue.com/watch?=videoid[/video]';
+- chat/lib/lang/gl.php:138 — $lang['bbCodeTitleUpsideDown'] = 'Upside Down text: [updown]text[/updown]';
+- chat/lib/lang/he.php:37 — $lang['bbCodeLabelBold'] = 'b';
+- chat/lib/lang/he.php:38 — $lang['bbCodeLabelItalic'] = 'i';
+- chat/lib/lang/he.php:39 — $lang['bbCodeLabelUnderline'] = 'u';
+- chat/lib/lang/he.php:40 — $lang['bbCodeLabelQuote'] = 'צטט';
+- chat/lib/lang/he.php:41 — $lang['bbCodeLabelCode'] = 'קוד';
+- chat/lib/lang/he.php:42 — $lang['bbCodeLabelURL'] = 'כתובת אינטרנט';
+- chat/lib/lang/he.php:43 — $lang['bbCodeLabelImg'] = 'Image';
+- chat/lib/lang/he.php:44 — $lang['bbCodeLabelColor'] = 'צבע גופן';
+- chat/lib/lang/he.php:45 — $lang['bbCodeLabelEmoticon'] = 'Emoticons';
+- chat/lib/lang/he.php:46 — $lang['bbCodeTitleBold'] = 'טקסט מודגש: [b]טקסט[/b]';
+- chat/lib/lang/he.php:47 — $lang['bbCodeTitleItalic'] = 'טקסט נטוי: [i]טקסט[/i]';
+- chat/lib/lang/he.php:48 — $lang['bbCodeTitleUnderline'] = 'טקסט מודגש קו: [u]טקסט[/u]';
+- chat/lib/lang/he.php:49 — $lang['bbCodeTitleQuote'] = 'צטט טקסט: [quote]טקסט[/quote] או [quote=כותב מקורי]טקסט[/quote]';
+- chat/lib/lang/he.php:50 — $lang['bbCodeTitleCode'] = 'הראה קוד: [code]קוד[/code]';
+- chat/lib/lang/he.php:51 — $lang['bbCodeTitleURL'] = 'הכנס כתובת: [url]http://www.example.org[/url] או[url=http://www.example.org]טקסט[/url]';
+- chat/lib/lang/he.php:52 — $lang['bbCodeTitleImg'] = 'Insert image: [img]http://example.org/image.jpg[/img]';
+- chat/lib/lang/he.php:53 — $lang['bbCodeTitleColor'] = 'צבע גופן: [color=צבע]טקסט[/color]';
+- chat/lib/lang/he.php:54 — $lang['bbCodeTitleEmoticon'] = 'Emoticons list';
+- chat/lib/lang/he.php:99 — $lang['settingsBBCode'] = 'Enable BBCode:';
+- chat/lib/lang/he.php:100 — $lang['settingsBBCodeImages'] = 'Enable image BBCode:';
+- chat/lib/lang/he.php:101 — $lang['settingsBBCodeColors'] = 'Enable font color BBCode:';
+- chat/lib/lang/he.php:136 — $lang['bbCodeLabelUpsideDown'] = 'up';
+- chat/lib/lang/he.php:137 — $lang['bbCodeTitleVideo'] = 'Insert Video: [video]http://youtbue.com/watch?=videoid[/video]';
+- chat/lib/lang/he.php:138 — $lang['bbCodeTitleUpsideDown'] = 'Upside Down text: [updown]text[/updown]';
+- chat/lib/lang/hr.php:36 — $lang['bbCodeLabelBold'] = 'b';
+- chat/lib/lang/hr.php:37 — $lang['bbCodeLabelItalic'] = 'i';
+- chat/lib/lang/hr.php:38 — $lang['bbCodeLabelUnderline'] = 'u';
+- chat/lib/lang/hr.php:39 — $lang['bbCodeLabelQuote'] = 'Citat';
+- chat/lib/lang/hr.php:40 — $lang['bbCodeLabelCode'] = 'Kôd';
+- chat/lib/lang/hr.php:41 — $lang['bbCodeLabelURL'] = 'URL';
+- chat/lib/lang/hr.php:42 — $lang['bbCodeLabelImg'] = 'Slika';
+- chat/lib/lang/hr.php:43 — $lang['bbCodeLabelColor'] = 'Boja';
+- chat/lib/lang/hr.php:44 — $lang['bbCodeLabelEmoticon'] = 'Emotikone';
+- chat/lib/lang/hr.php:45 — $lang['bbCodeTitleBold'] = 'Snažan tekst: [b]tekst[/b]';
+- chat/lib/lang/hr.php:46 — $lang['bbCodeTitleItalic'] = 'Kurziv: [i]tekst[/i]';
+- chat/lib/lang/hr.php:47 — $lang['bbCodeTitleUnderline'] = 'Podvučeni tekst: [u]tekst[/u]';
+- chat/lib/lang/hr.php:48 — $lang['bbCodeTitleQuote'] = 'Citirani tekst: [quote]tekst[/quote] ili [quote=autor]tekst[/quote]';
+- chat/lib/lang/hr.php:49 — $lang['bbCodeTitleCode'] = 'Prikaz kôda: [code]kôd[/code]';
+- chat/lib/lang/hr.php:50 — $lang['bbCodeTitleURL'] = 'Umetanje URL: [url]http://primjer.org[/url] ili [url=http://primjer.org]tekst[/url]';
+- chat/lib/lang/hr.php:51 — $lang['bbCodeTitleImg'] = 'Umetanje slike: [img]http://primjer.org/slika.jpg[/img]';
+- chat/lib/lang/hr.php:52 — $lang['bbCodeTitleColor'] = 'Boja fonta: [color=red]tekst[/color]';
+- chat/lib/lang/hr.php:53 — $lang['bbCodeTitleEmoticon'] = 'Emotikone popis';
+- chat/lib/lang/hr.php:98 — $lang['settingsBBCode'] = 'Omogući BB kôd:';
+- chat/lib/lang/hr.php:99 — $lang['settingsBBCodeImages'] = 'Omogući BB kôd za slike:';
+- chat/lib/lang/hr.php:100 — $lang['settingsBBCodeColors'] = 'Omogući BB kôd za boju fonta:';
+- chat/lib/lang/hr.php:135 — $lang['bbCodeLabelUpsideDown'] = 'up';
+- chat/lib/lang/hr.php:136 — $lang['bbCodeTitleVideo'] = 'Insert Video: [video]http://youtbue.com/watch?=videoid[/video]';
+- chat/lib/lang/hr.php:137 — $lang['bbCodeTitleUpsideDown'] = 'Upside Down text: [updown]text[/updown]';
+- chat/lib/lang/hu.php:36 — $lang['bbCodeLabelBold'] = 'B';
+- chat/lib/lang/hu.php:37 — $lang['bbCodeLabelItalic'] = 'I';
+- chat/lib/lang/hu.php:38 — $lang['bbCodeLabelUnderline'] = 'U';
+- chat/lib/lang/hu.php:39 — $lang['bbCodeLabelQuote'] = 'Idézet';
+- chat/lib/lang/hu.php:40 — $lang['bbCodeLabelCode'] = 'Kód';
+- chat/lib/lang/hu.php:41 — $lang['bbCodeLabelURL'] = 'URL';
+- chat/lib/lang/hu.php:42 — $lang['bbCodeLabelImg'] = 'Kép';
+- chat/lib/lang/hu.php:43 — $lang['bbCodeLabelColor'] = 'Szöveg szín';
+- chat/lib/lang/hu.php:44 — $lang['bbCodeLabelEmoticon'] = 'Hangulatjelek';
+- chat/lib/lang/hu.php:45 — $lang['bbCodeTitleBold'] = 'Félkövér szöveg: [b]szöveg[/b]';
+- chat/lib/lang/hu.php:46 — $lang['bbCodeTitleItalic'] = 'Dőlt szöveg: [i]szöveg[/i]';
+- chat/lib/lang/hu.php:47 — $lang['bbCodeTitleUnderline'] = 'Aláhúzott szöveg: [u]szöveg[/u]';
+- chat/lib/lang/hu.php:48 — $lang['bbCodeTitleQuote'] = 'Idézett szöveg: [quote]szöveg[/quote] vagy [quote=szerző]szöveg[/quote]';
+- chat/lib/lang/hu.php:49 — $lang['bbCodeTitleCode'] = 'Kód: [code]kód[/code]';
+- chat/lib/lang/hu.php:50 — $lang['bbCodeTitleURL'] = 'URL beszúrása: [url]http://example.org[/url] vagy [url=http://example.org]szöveg[/url]';
+- chat/lib/lang/hu.php:51 — $lang['bbCodeTitleImg'] = 'Kép beszúrása: [img]http://example.org/image.jpg[/img]';
+- chat/lib/lang/hu.php:52 — $lang['bbCodeTitleColor'] = 'Szöveg szín: [color=red]szöveg[/color]';
+- chat/lib/lang/hu.php:53 — $lang['bbCodeTitleEmoticon'] = 'Hangulatjelek lista';
+- chat/lib/lang/hu.php:98 — $lang['settingsBBCode'] = 'BBCode engedélyezése:';
+- chat/lib/lang/hu.php:99 — $lang['settingsBBCodeImages'] = 'Kép BBCode engedélyezése:';
+- chat/lib/lang/hu.php:100 — $lang['settingsBBCodeColors'] = 'Szöveg szín BBCode engedélyezése:';
+- chat/lib/lang/hu.php:135 — $lang['bbCodeLabelUpsideDown'] = 'up';
+- chat/lib/lang/hu.php:136 — $lang['bbCodeTitleVideo'] = 'Insert Video: [video]http://youtbue.com/watch?=videoid[/video]';
+- chat/lib/lang/hu.php:137 — $lang['bbCodeTitleUpsideDown'] = 'Upside Down text: [updown]text[/updown]';
+- chat/lib/lang/in.php:36 — $lang['bbCodeLabelBold'] = 'b';
+- chat/lib/lang/in.php:37 — $lang['bbCodeLabelItalic'] = 'i';
+- chat/lib/lang/in.php:38 — $lang['bbCodeLabelUnderline'] = 'u';
+- chat/lib/lang/in.php:39 — $lang['bbCodeLabelQuote'] = 'Salin';
+- chat/lib/lang/in.php:40 — $lang['bbCodeLabelCode'] = 'Kode';
+- chat/lib/lang/in.php:41 — $lang['bbCodeLabelURL'] = 'URL';
+- chat/lib/lang/in.php:42 — $lang['bbCodeLabelImg'] = 'Gambar';
+- chat/lib/lang/in.php:43 — $lang['bbCodeLabelColor'] = 'Warna Huruf';
+- chat/lib/lang/in.php:44 — $lang['bbCodeLabelEmoticon'] = 'Emoticons';
+- chat/lib/lang/in.php:45 — $lang['bbCodeTitleBold'] = 'Huruf Tebal: [b]kata[/b]';
+- chat/lib/lang/in.php:46 — $lang['bbCodeTitleItalic'] = 'Huruf Miring: [i]kata[/i]';
+- chat/lib/lang/in.php:47 — $lang['bbCodeTitleUnderline'] = 'Garis Bawah: [u]kata[/u]';
+- chat/lib/lang/in.php:48 — $lang['bbCodeTitleQuote'] = 'Kata Saduran: [quote]kata[/quote] or [quote=author]text[/quote]';
+- chat/lib/lang/in.php:49 — $lang['bbCodeTitleCode'] = 'Code display: [code]code[/code]';
+- chat/lib/lang/in.php:50 — $lang['bbCodeTitleURL'] = 'Sisip URL: [url]http://example.org[/url] or [url=http://example.org]text[/url]';
+- chat/lib/lang/in.php:51 — $lang['bbCodeTitleImg'] = 'Sisip gambar: [img]http://example.org/image.jpg[/img]';
+- chat/lib/lang/in.php:52 — $lang['bbCodeTitleColor'] = 'Warna Huruf: [color=red]text[/color]';
+- chat/lib/lang/in.php:53 — $lang['bbCodeTitleEmoticon'] = 'Emoticons list';
+- chat/lib/lang/in.php:98 — $lang['settingsBBCode'] = 'Membolehkan BBCode:';
+- chat/lib/lang/in.php:99 — $lang['settingsBBCodeImages'] = 'Membolehkan gambar BBCode:';
+- chat/lib/lang/in.php:100 — $lang['settingsBBCodeColors'] = 'Membolehkan warna huruf BBCode:';
+- chat/lib/lang/it.php:38 — $lang['bbCodeLabelBold'] = 'b';
+- chat/lib/lang/it.php:39 — $lang['bbCodeLabelItalic'] = 'i';
+- chat/lib/lang/it.php:40 — $lang['bbCodeLabelUnderline'] = 'u';
+- chat/lib/lang/it.php:41 — $lang['bbCodeLabelQuote'] = 'Cita';
+- chat/lib/lang/it.php:42 — $lang['bbCodeLabelCode'] = 'Codice';
+- chat/lib/lang/it.php:43 — $lang['bbCodeLabelURL'] = 'URL';
+- chat/lib/lang/it.php:44 — $lang['bbCodeLabelImg'] = 'Image';
+- chat/lib/lang/it.php:45 — $lang['bbCodeLabelColor'] = 'Colore Testo';
+- chat/lib/lang/it.php:46 — $lang['bbCodeLabelEmoticon'] = 'Emoticons';
+- chat/lib/lang/it.php:47 — $lang['bbCodeTitleBold'] = 'Grassetto: [b]testo[/b]';
+- chat/lib/lang/it.php:48 — $lang['bbCodeTitleItalic'] = 'Corsivo: [i]testo[/i]';
+- chat/lib/lang/it.php:49 — $lang['bbCodeTitleUnderline'] = 'Sottolineato: [u]testo[/u]';
+- chat/lib/lang/it.php:50 — $lang['bbCodeTitleQuote'] = 'Cita: [quote]testo[/quote] oppure [quote=autore]testo[/quote]';
+- chat/lib/lang/it.php:51 — $lang['bbCodeTitleCode'] = 'Mostra Codice: [code]codice[/code]';
+- chat/lib/lang/it.php:52 — $lang['bbCodeTitleURL'] = 'Inserire URL: [url]http://example.org/[/url] oppure [url=http://example.org/]testo[/url]';
+- chat/lib/lang/it.php:53 — $lang['bbCodeTitleImg'] = 'Insert image: [img]http://example.org/image.jpg[/img]';
+- chat/lib/lang/it.php:54 — $lang['bbCodeTitleColor'] = 'Colore Testo: [color=red]testo[/color]';
+- chat/lib/lang/it.php:55 — $lang['bbCodeTitleEmoticon'] = 'Emoticons list';
+- chat/lib/lang/it.php:100 — $lang['settingsBBCode'] = 'Attiva BBCode:';
+- chat/lib/lang/it.php:101 — $lang['settingsBBCodeImages'] = 'Enable image BBCode:';
+- chat/lib/lang/it.php:102 — $lang['settingsBBCodeColors'] = 'Enable font color BBCode:';
+- chat/lib/lang/it.php:137 — $lang['bbCodeLabelUpsideDown'] = 'up';
+- chat/lib/lang/it.php:138 — $lang['bbCodeTitleVideo'] = 'Insert Video: [video]http://youtbue.com/watch?=videoid[/video]';
+- chat/lib/lang/it.php:139 — $lang['bbCodeTitleUpsideDown'] = 'Upside Down text: [updown]text[/updown]';
+- chat/lib/lang/ja.php:36 — $lang['bbCodeLabelBold'] = 'b';
+- chat/lib/lang/ja.php:37 — $lang['bbCodeLabelItalic'] = 'i';
+- chat/lib/lang/ja.php:38 — $lang['bbCodeLabelUnderline'] = 'u';
+- chat/lib/lang/ja.php:39 — $lang['bbCodeLabelQuote'] = 'Quote';
+- chat/lib/lang/ja.php:40 — $lang['bbCodeLabelCode'] = 'Code';
+- chat/lib/lang/ja.php:41 — $lang['bbCodeLabelURL'] = 'URL';
+- chat/lib/lang/ja.php:42 — $lang['bbCodeLabelImg'] = 'Image';
+- chat/lib/lang/ja.php:43 — $lang['bbCodeLabelColor'] = 'フォントカラー';
+- chat/lib/lang/ja.php:44 — $lang['bbCodeLabelEmoticon'] = 'Smilies';
+- chat/lib/lang/ja.php:45 — $lang['bbCodeTitleBold'] = 'ボールド（太字）: [b]text[/b]';
+- chat/lib/lang/ja.php:46 — $lang['bbCodeTitleItalic'] = 'イタリック（斜体）: [i]text[/i]';
+- chat/lib/lang/ja.php:47 — $lang['bbCodeTitleUnderline'] = 'アンダーライン: [u]text[/u]';
+- chat/lib/lang/ja.php:48 — $lang['bbCodeTitleQuote'] = '引用: [quote]text[/quote] or [quote=author]text[/quote]';
+- chat/lib/lang/ja.php:49 — $lang['bbCodeTitleCode'] = 'コード表示: [code]code[/code]';
+- chat/lib/lang/ja.php:50 — $lang['bbCodeTitleURL'] = 'URLリンク: [url]http://example.org[/url] or [url=http://example.org]text[/url]';
+- chat/lib/lang/ja.php:51 — $lang['bbCodeTitleImg'] = '画像: [img]http://example.org/image.jpg[/img]';
+- chat/lib/lang/ja.php:52 — $lang['bbCodeTitleColor'] = 'フォントカラー: [color=red]text[/color]';
+- chat/lib/lang/ja.php:53 — $lang['bbCodeTitleEmoticon'] = 'Smilies list';
+- chat/lib/lang/ja.php:98 — $lang['settingsBBCode'] = 'BBCode を有効にする:';
+- chat/lib/lang/ja.php:99 — $lang['settingsBBCodeImages'] = 'BBCode [image] を有効にする :';
+- chat/lib/lang/ja.php:100 — $lang['settingsBBCodeColors'] = 'BBCode [color] を有効にする :';
+- chat/lib/lang/ja.php:135 — $lang['bbCodeLabelUpsideDown'] = 'up';
+- chat/lib/lang/ja.php:136 — $lang['bbCodeTitleVideo'] = 'Insert Video: [video]http://youtbue.com/watch?=videoid[/video]';
+- chat/lib/lang/ja.php:137 — $lang['bbCodeTitleUpsideDown'] = 'Upside Down text: [updown]text[/updown]';
+- chat/lib/lang/ka.php:36 — $lang['bbCodeLabelBold'] = 'b';
+- chat/lib/lang/ka.php:37 — $lang['bbCodeLabelItalic'] = 'i';
+- chat/lib/lang/ka.php:38 — $lang['bbCodeLabelUnderline'] = 'u';
+- chat/lib/lang/ka.php:39 — $lang['bbCodeLabelQuote'] = 'ციტატა';
+- chat/lib/lang/ka.php:40 — $lang['bbCodeLabelCode'] = 'კოდი';
+- chat/lib/lang/ka.php:41 — $lang['bbCodeLabelURL'] = 'URL';
+- chat/lib/lang/ka.php:42 — $lang['bbCodeLabelImg'] = 'სურათი';
+- chat/lib/lang/ka.php:43 — $lang['bbCodeLabelColor'] = 'შრიფტის ფერი';
+- chat/lib/lang/ka.php:44 — $lang['bbCodeLabelEmoticon'] = 'Smilies';
+- chat/lib/lang/ka.php:45 — $lang['bbCodeTitleBold'] = 'მსხვილი ტექსტი: [b]ტექსტი[/b]';
+- chat/lib/lang/ka.php:46 — $lang['bbCodeTitleItalic'] = 'დახრილი ტექსტი: [i]ტექსტი[/i]';
+- chat/lib/lang/ka.php:47 — $lang['bbCodeTitleUnderline'] = 'ხაზგასმული ტექსტი: [u]ტექსტი[/u]';
+- chat/lib/lang/ka.php:48 — $lang['bbCodeTitleQuote'] = 'ციტატის ტექსტი: [quote]ტექსტი[/quote] ან [quote=ავტორი]ტექსტი[/quote]';
+- chat/lib/lang/ka.php:49 — $lang['bbCodeTitleCode'] = 'კოდის ჩვენება: [code]კოდი[/code]';
+- chat/lib/lang/ka.php:50 — $lang['bbCodeTitleURL'] = 'URL ბმულის ჩასმა: [url]http://example.org[/url] ან [url=http://example.org]ტექსტი[/url]';
+- chat/lib/lang/ka.php:51 — $lang['bbCodeTitleImg'] = 'ნახატის ჩასმა: [img]http://example.org/image.jpg[/img]';
+- chat/lib/lang/ka.php:52 — $lang['bbCodeTitleColor'] = 'შრიფტის ფერი: [color=red]ტექსტი[/color]';
+- chat/lib/lang/ka.php:53 — $lang['bbCodeTitleEmoticon'] = 'Smilies list';
+- chat/lib/lang/ka.php:98 — $lang['settingsBBCode'] = 'ჩართე BBCode:';
+- chat/lib/lang/ka.php:99 — $lang['settingsBBCodeImages'] = 'ჩართე ნახატის BBCode:';
+- chat/lib/lang/ka.php:100 — $lang['settingsBBCodeColors'] = 'ჩართე შრიფტის ფერის BBCode:';
+- chat/lib/lang/ka.php:135 — $lang['bbCodeLabelUpsideDown'] = 'up';
+- chat/lib/lang/ka.php:136 — $lang['bbCodeTitleVideo'] = 'Insert Video: [video]http://youtbue.com/watch?=videoid[/video]';
+- chat/lib/lang/ka.php:137 — $lang['bbCodeTitleUpsideDown'] = 'Upside Down text: [updown]text[/updown]';
+- chat/lib/lang/kr.php:36 — $lang['bbCodeLabelBold'] = '굵게';
+- chat/lib/lang/kr.php:37 — $lang['bbCodeLabelItalic'] = '이탤릭';
+- chat/lib/lang/kr.php:38 — $lang['bbCodeLabelUnderline'] = '밑줄';
+- chat/lib/lang/kr.php:39 — $lang['bbCodeLabelQuote'] = '따옴표';
+- chat/lib/lang/kr.php:40 — $lang['bbCodeLabelCode'] = '코드';
+- chat/lib/lang/kr.php:41 — $lang['bbCodeLabelURL'] = 'URL';
+- chat/lib/lang/kr.php:42 — $lang['bbCodeLabelImg'] = '이미지';
+- chat/lib/lang/kr.php:43 — $lang['bbCodeLabelColor'] = '글자색';
+- chat/lib/lang/kr.php:44 — $lang['bbCodeLabelEmoticon'] = 'Smilies';
+- chat/lib/lang/kr.php:45 — $lang['bbCodeTitleBold'] = '굵게: [b]내용[/b]';
+- chat/lib/lang/kr.php:46 — $lang['bbCodeTitleItalic'] = '이탤릭: [i]내용[/i]';
+- chat/lib/lang/kr.php:47 — $lang['bbCodeTitleUnderline'] = '밑줄: [u]내용[/u]';
+- chat/lib/lang/kr.php:48 — $lang['bbCodeTitleQuote'] = '따옴표: [quote]내용[/quote] 또는 [quote=문자]내용[/quote]';
+- chat/lib/lang/kr.php:49 — $lang['bbCodeTitleCode'] = '코드: [code]코드[/code]';
+- chat/lib/lang/kr.php:50 — $lang['bbCodeTitleURL'] = '주소: [url]http://example.org[/url] or [url=http://example.org]text[/url]';
+- chat/lib/lang/kr.php:51 — $lang['bbCodeTitleImg'] = '이미지: [img]http://example.org/image.jpg[/img]';
+- chat/lib/lang/kr.php:52 — $lang['bbCodeTitleColor'] = '글자색: [color=red]내용[/color]';
+- chat/lib/lang/kr.php:53 — $lang['bbCodeTitleEmoticon'] = 'Smilies list';
+- chat/lib/lang/kr.php:98 — $lang['settingsBBCode'] = 'BBCode 사용:';
+- chat/lib/lang/kr.php:99 — $lang['settingsBBCodeImages'] = '이미지 BBCode 사용:';
+- chat/lib/lang/kr.php:100 — $lang['settingsBBCodeColors'] = '글자색 BBCode 사용:';
+- chat/lib/lang/kr.php:135 — $lang['bbCodeLabelUpsideDown'] = 'up';
+- chat/lib/lang/kr.php:136 — $lang['bbCodeTitleVideo'] = 'Insert Video: [video]http://youtbue.com/watch?=videoid[/video]';
+- chat/lib/lang/kr.php:137 — $lang['bbCodeTitleUpsideDown'] = 'Upside Down text: [updown]text[/updown]';
+- chat/lib/lang/mk.php:37 — $lang['bbCodeLabelBold'] = 'b';
+- chat/lib/lang/mk.php:38 — $lang['bbCodeLabelItalic'] = 'i';
+- chat/lib/lang/mk.php:39 — $lang['bbCodeLabelUnderline'] = 'u';
+- chat/lib/lang/mk.php:40 — $lang['bbCodeLabelQuote'] = 'Цитат';
+- chat/lib/lang/mk.php:41 — $lang['bbCodeLabelCode'] = 'Код';
+- chat/lib/lang/mk.php:42 — $lang['bbCodeLabelURL'] = 'URL';
+- chat/lib/lang/mk.php:43 — $lang['bbCodeLabelImg'] = 'Image';
+- chat/lib/lang/mk.php:44 — $lang['bbCodeLabelColor'] = 'Боја на фонт';
+- chat/lib/lang/mk.php:45 — $lang['bbCodeLabelEmoticon'] = 'емоции';
+- chat/lib/lang/mk.php:46 — $lang['bbCodeTitleBold'] = 'Задебелен текст: [b]текст[/b]';
+- chat/lib/lang/mk.php:47 — $lang['bbCodeTitleItalic'] = 'Закосен текст: [i]текст[/i]';
+- chat/lib/lang/mk.php:48 — $lang['bbCodeTitleUnderline'] = 'Подцртан текст: [u]текст[/u]';
+- chat/lib/lang/mk.php:49 — $lang['bbCodeTitleQuote'] = 'Цитиран текст: [quote]текст[/quote] или [quote=Автор]текст[/quote]';
+- chat/lib/lang/mk.php:50 — $lang['bbCodeTitleCode'] = 'Покажување на код: [code]код[/code]';
+- chat/lib/lang/mk.php:51 — $lang['bbCodeTitleURL'] = 'URL: [url]http://example.org[/url] или [url=http://example.org]текст[/url]';
+- chat/lib/lang/mk.php:52 — $lang['bbCodeTitleImg'] = 'Insert image: [img]http://example.org/image.jpg[/img]';
+- chat/lib/lang/mk.php:53 — $lang['bbCodeTitleColor'] = 'Боја на заглавие: [color=red]текст[/color]';
+- chat/lib/lang/mk.php:54 — $lang['bbCodeTitleEmoticon'] = 'емоции листа';
+- chat/lib/lang/mk.php:99 — $lang['settingsBBCode'] = 'Користење на BBCode:';
+- chat/lib/lang/mk.php:100 — $lang['settingsBBCodeImages'] = 'Enable image BBCode:';
+- chat/lib/lang/mk.php:101 — $lang['settingsBBCodeColors'] = 'Enable font color BBCode:';
+- chat/lib/lang/mk.php:136 — $lang['bbCodeLabelUpsideDown'] = 'up';
+- chat/lib/lang/mk.php:137 — $lang['bbCodeTitleVideo'] = 'Insert Video: [video]http://youtbue.com/watch?=videoid[/video]';
+- chat/lib/lang/mk.php:138 — $lang['bbCodeTitleUpsideDown'] = 'Upside Down text: [updown]text[/updown]';
+- chat/lib/lang/nl-be.php:37 — $lang['bbCodeLabelBold'] = 'b';
+- chat/lib/lang/nl-be.php:38 — $lang['bbCodeLabelItalic'] = 'i';
+- chat/lib/lang/nl-be.php:39 — $lang['bbCodeLabelUnderline'] = 'u';
+- chat/lib/lang/nl-be.php:40 — $lang['bbCodeLabelQuote'] = 'Quote';
+- chat/lib/lang/nl-be.php:41 — $lang['bbCodeLabelCode'] = 'Code';
+- chat/lib/lang/nl-be.php:42 — $lang['bbCodeLabelURL'] = 'URL';
+- chat/lib/lang/nl-be.php:43 — $lang['bbCodeLabelImg'] = 'Figuur';
+- chat/lib/lang/nl-be.php:44 — $lang['bbCodeLabelColor'] = 'Kleur lettertype';
+- chat/lib/lang/nl-be.php:45 — $lang['bbCodeLabelEmoticon'] = 'Emoticons';
+- chat/lib/lang/nl-be.php:46 — $lang['bbCodeTitleBold'] = 'Tekst in vet: [b]text[/b]';
+- chat/lib/lang/nl-be.php:47 — $lang['bbCodeTitleItalic'] = 'Tekst in cursief: [i]text[/i]';
+- chat/lib/lang/nl-be.php:48 — $lang['bbCodeTitleUnderline'] = 'Tekst onderlijnd: [u]text[/u]';
+- chat/lib/lang/nl-be.php:49 — $lang['bbCodeTitleQuote'] = 'Quote tekst: [quote]text[/quote] or [quote=author]text[/quote]';
+- chat/lib/lang/nl-be.php:50 — $lang['bbCodeTitleCode'] = 'Code ingeven: [code]code[/code]';
+- chat/lib/lang/nl-be.php:51 — $lang['bbCodeTitleURL'] = 'Voeg URL in: [url]http://example.org[/url] or [url=http://example.org]text[/url]';
+- chat/lib/lang/nl-be.php:52 — $lang['bbCodeTitleImg'] = 'Voeg figuur toe: [img]http://example.org/image.jpg[/img]';
+- chat/lib/lang/nl-be.php:53 — $lang['bbCodeTitleColor'] = 'Kleur lettertype: [color=red]text[/color]';
+- chat/lib/lang/nl-be.php:54 — $lang['bbCodeTitleEmoticon'] = 'Emoticons list';
+- chat/lib/lang/nl-be.php:99 — $lang['settingsBBCode'] = 'Inschakelen BBCode:';
+- chat/lib/lang/nl-be.php:100 — $lang['settingsBBCodeImages'] = 'Inschakelen figuur BBCode:';
+- chat/lib/lang/nl-be.php:101 — $lang['settingsBBCodeColors'] = 'Inschakelen lettertype kleur BBCode:';
+- chat/lib/lang/nl-be.php:136 — $lang['bbCodeLabelUpsideDown'] = 'up';
+- chat/lib/lang/nl-be.php:137 — $lang['bbCodeTitleVideo'] = 'Insert Video: [video]http://youtbue.com/watch?=videoid[/video]';
+- chat/lib/lang/nl-be.php:138 — $lang['bbCodeTitleUpsideDown'] = 'Upside Down text: [updown]text[/updown]';
+- chat/lib/lang/nl.php:37 — $lang['bbCodeLabelBold'] = 'b';
+- chat/lib/lang/nl.php:38 — $lang['bbCodeLabelItalic'] = 'i';
+- chat/lib/lang/nl.php:39 — $lang['bbCodeLabelUnderline'] = 'u';
+- chat/lib/lang/nl.php:40 — $lang['bbCodeLabelQuote'] = 'Citeer';
+- chat/lib/lang/nl.php:41 — $lang['bbCodeLabelCode'] = 'Code';
+- chat/lib/lang/nl.php:42 — $lang['bbCodeLabelURL'] = 'URL';
+- chat/lib/lang/nl.php:43 — $lang['bbCodeLabelImg'] = 'Figuur';
+- chat/lib/lang/nl.php:44 — $lang['bbCodeLabelColor'] = 'Kleur lettertype';
+- chat/lib/lang/nl.php:45 — $lang['bbCodeLabelEmoticon'] = 'Emoticons';
+- chat/lib/lang/nl.php:46 — $lang['bbCodeTitleBold'] = 'Vetgedrukte tekst: [b]text[/b]';
+- chat/lib/lang/nl.php:47 — $lang['bbCodeTitleItalic'] = 'Cursieve tekst: [i]text[/i]';
+- chat/lib/lang/nl.php:48 — $lang['bbCodeTitleUnderline'] = 'Onderlijnde tekst: [u]text[/u]';
+- chat/lib/lang/nl.php:49 — $lang['bbCodeTitleQuote'] = 'Citeer tekst: [quote]text[/quote] of [quote=author]text[/quote]';
+- chat/lib/lang/nl.php:50 — $lang['bbCodeTitleCode'] = 'Code ingeven: [code]code[/code]';
+- chat/lib/lang/nl.php:51 — $lang['bbCodeTitleURL'] = 'Voeg URL in: [url]http://example.org[/url] of [url=http://example.org]text[/url]';
+- chat/lib/lang/nl.php:52 — $lang['bbCodeTitleImg'] = 'Voeg figuur toe: [img]http://example.org/image.jpg[/img]';
+- chat/lib/lang/nl.php:53 — $lang['bbCodeTitleColor'] = 'Kleur lettertype: [color=red]text[/color]';
+- chat/lib/lang/nl.php:54 — $lang['bbCodeTitleEmoticon'] = 'Emoticons list';
+- chat/lib/lang/nl.php:99 — $lang['settingsBBCode'] = 'Inschakelen BBCode:';
+- chat/lib/lang/nl.php:100 — $lang['settingsBBCodeImages'] = 'Inschakelen figuur BBCode:';
+- chat/lib/lang/nl.php:101 — $lang['settingsBBCodeColors'] = 'Inschakelen lettertype kleur BBCode:';
+- chat/lib/lang/nl.php:136 — $lang['bbCodeLabelUpsideDown'] = 'up';
+- chat/lib/lang/nl.php:137 — $lang['bbCodeTitleVideo'] = 'Insert Video: [video]http://youtbue.com/watch?=videoid[/video]';
+- chat/lib/lang/nl.php:138 — $lang['bbCodeTitleUpsideDown'] = 'Upside Down text: [updown]text[/updown]';
+- chat/lib/lang/no.php:37 — $lang['bbCodeLabelBold'] = 'b';
+- chat/lib/lang/no.php:38 — $lang['bbCodeLabelItalic'] = 'i';
+- chat/lib/lang/no.php:39 — $lang['bbCodeLabelUnderline'] = 'u';
+- chat/lib/lang/no.php:40 — $lang['bbCodeLabelQuote'] = 'Siter';
+- chat/lib/lang/no.php:41 — $lang['bbCodeLabelCode'] = 'Kode';
+- chat/lib/lang/no.php:42 — $lang['bbCodeLabelURL'] = 'URL';
+- chat/lib/lang/no.php:43 — $lang['bbCodeLabelImg'] = 'Image';
+- chat/lib/lang/no.php:44 — $lang['bbCodeLabelColor'] = 'Tekst Farge';
+- chat/lib/lang/no.php:45 — $lang['bbCodeLabelEmoticon'] = 'Emoticons';
+- chat/lib/lang/no.php:46 — $lang['bbCodeTitleBold'] = 'Fet tekst: [b]tekst[/b]';
+- chat/lib/lang/no.php:47 — $lang['bbCodeTitleItalic'] = 'Kursiv tekst: [i]tekst[/i]';
+- chat/lib/lang/no.php:48 — $lang['bbCodeTitleUnderline'] = 'Understrek tekst: [u]tekst[/u]';
+- chat/lib/lang/no.php:49 — $lang['bbCodeTitleQuote'] = 'Siter tekst: [quote]tekst[/quote] or [quote=author]tekst[/quote]';
+- chat/lib/lang/no.php:50 — $lang['bbCodeTitleCode'] = 'Vis kode: [code]code[/code]';
+- chat/lib/lang/no.php:51 — $lang['bbCodeTitleURL'] = 'Legg til url: [url]http://example.org[/url] or [url=http://example.org]text[/url]';
+- chat/lib/lang/no.php:52 — $lang['bbCodeTitleImg'] = 'Insert image: [img]http://example.org/image.jpg[/img]';
+- chat/lib/lang/no.php:53 — $lang['bbCodeTitleColor'] = 'Tekst farge: [color=red]text[/color]';
+- chat/lib/lang/no.php:54 — $lang['bbCodeTitleEmoticon'] = 'Emoticons list';
+- chat/lib/lang/no.php:99 — $lang['settingsBBCode'] = 'Enable BBCode:';
+- chat/lib/lang/no.php:100 — $lang['settingsBBCodeImages'] = 'Enable image BBCode:';
+- chat/lib/lang/no.php:101 — $lang['settingsBBCodeColors'] = 'Enable font color BBCode:';
+- chat/lib/lang/no.php:136 — $lang['bbCodeLabelUpsideDown'] = 'up';
+- chat/lib/lang/no.php:137 — $lang['bbCodeTitleVideo'] = 'Insert Video: [video]http://youtbue.com/watch?=videoid[/video]';
+- chat/lib/lang/no.php:138 — $lang['bbCodeTitleUpsideDown'] = 'Upside Down text: [updown]text[/updown]';
+- chat/lib/lang/pl.php:37 — $lang['bbCodeLabelBold'] = 'b';
+- chat/lib/lang/pl.php:38 — $lang['bbCodeLabelItalic'] = 'i';
+- chat/lib/lang/pl.php:39 — $lang['bbCodeLabelUnderline'] = 'u';
+- chat/lib/lang/pl.php:40 — $lang['bbCodeLabelQuote'] = 'Cytat';
+- chat/lib/lang/pl.php:41 — $lang['bbCodeLabelCode'] = 'Kod';
+- chat/lib/lang/pl.php:42 — $lang['bbCodeLabelURL'] = 'URL';
+- chat/lib/lang/pl.php:43 — $lang['bbCodeLabelImg'] = 'Image';
+- chat/lib/lang/pl.php:44 — $lang['bbCodeLabelColor'] = 'Kolor tekstu';
+- chat/lib/lang/pl.php:45 — $lang['bbCodeLabelEmoticon'] = 'Emotikonki';
+- chat/lib/lang/pl.php:46 — $lang['bbCodeTitleBold'] = 'Pogrubiony: [b]tekst[/b]';
+- chat/lib/lang/pl.php:47 — $lang['bbCodeTitleItalic'] = 'Kursywa: [i]tekst[/i]';
+- chat/lib/lang/pl.php:48 — $lang['bbCodeTitleUnderline'] = 'Podkreślony: [u]tekst[/u]';
+- chat/lib/lang/pl.php:49 — $lang['bbCodeTitleQuote'] = 'Cytat: [quote]tekst[/quote] lub [quote=autor]tekst[/quote]';
+- chat/lib/lang/pl.php:50 — $lang['bbCodeTitleCode'] = 'Kod: [code]kod[/code]';
+- chat/lib/lang/pl.php:51 — $lang['bbCodeTitleURL'] = 'Wstaw adres: [url]http://example.org[/url] lub [url=http://example.org]opis[/url]';
+- chat/lib/lang/pl.php:52 — $lang['bbCodeTitleImg'] = 'Insert image: [img]http://example.org/image.jpg[/img]';
+- chat/lib/lang/pl.php:53 — $lang['bbCodeTitleColor'] = 'Kolor tekstu: [color=red]tekst[/color]';
+- chat/lib/lang/pl.php:54 — $lang['bbCodeTitleEmoticon'] = 'Emotikonki lista';
+- chat/lib/lang/pl.php:99 — $lang['settingsBBCode'] = 'Pozwól na BBCode:';
+- chat/lib/lang/pl.php:100 — $lang['settingsBBCodeImages'] = 'Enable image BBCode:';
+- chat/lib/lang/pl.php:101 — $lang['settingsBBCodeColors'] = 'Enable font color BBCode:';
+- chat/lib/lang/pl.php:136 — $lang['bbCodeLabelUpsideDown'] = 'up';
+- chat/lib/lang/pl.php:137 — $lang['bbCodeTitleVideo'] = 'Insert Video: [video]http://youtbue.com/watch?=videoid[/video]';
+- chat/lib/lang/pl.php:138 — $lang['bbCodeTitleUpsideDown'] = 'Upside Down text: [updown]text[/updown]';
+- chat/lib/lang/pt-br.php:37 — $lang['bbCodeLabelBold'] = 'b';
+- chat/lib/lang/pt-br.php:38 — $lang['bbCodeLabelItalic'] = 'i';
+- chat/lib/lang/pt-br.php:39 — $lang['bbCodeLabelUnderline'] = 'u';
+- chat/lib/lang/pt-br.php:40 — $lang['bbCodeLabelQuote'] = 'Citar';
+- chat/lib/lang/pt-br.php:41 — $lang['bbCodeLabelCode'] = 'Código';
+- chat/lib/lang/pt-br.php:42 — $lang['bbCodeLabelURL'] = 'URL';
+- chat/lib/lang/pt-br.php:43 — $lang['bbCodeLabelImg'] = 'Imagem';
+- chat/lib/lang/pt-br.php:44 — $lang['bbCodeLabelColor'] = 'Cor da fonte';
+- chat/lib/lang/pt-br.php:45 — $lang['bbCodeLabelEmoticon'] = 'Emoticons';
+- chat/lib/lang/pt-br.php:46 — $lang['bbCodeTitleBold'] = 'Texto negrito: [b]texto[/b]';
+- chat/lib/lang/pt-br.php:47 — $lang['bbCodeTitleItalic'] = 'Texto itálico: [i]texto[/i]';
+- chat/lib/lang/pt-br.php:48 — $lang['bbCodeTitleUnderline'] = 'Texto sublinhado: [u]texto[/u]';
+- chat/lib/lang/pt-br.php:49 — $lang['bbCodeTitleQuote'] = 'Citar texto: [quote]texto[/quote] ou [quote=autor]texto[/quote]';
+- chat/lib/lang/pt-br.php:50 — $lang['bbCodeTitleCode'] = 'Citar código: [code]código[/code]';
+- chat/lib/lang/pt-br.php:51 — $lang['bbCodeTitleURL'] = 'Inserir URL: [url]http://example.org[/url] or [url=http://example.org]texto[/url]';
+- chat/lib/lang/pt-br.php:52 — $lang['bbCodeTitleImg'] = 'Inserir imagem: [img]http://example.org/image.jpg[/img]';
+- chat/lib/lang/pt-br.php:53 — $lang['bbCodeTitleColor'] = 'Cor da fonte: [color=red]texto[/color]';
+- chat/lib/lang/pt-br.php:54 — $lang['bbCodeTitleEmoticon'] = 'Emoticons list';
+- chat/lib/lang/pt-br.php:99 — $lang['settingsBBCode'] = 'Permitir BBCode:';
+- chat/lib/lang/pt-br.php:100 — $lang['settingsBBCodeImages'] = 'Permitir BBCode image (imagem):';
+- chat/lib/lang/pt-br.php:101 — $lang['settingsBBCodeColors'] = 'Permitir BBCode font color (cor de fonte):';
+- chat/lib/lang/pt-br.php:136 — $lang['bbCodeLabelUpsideDown'] = 'up';
+- chat/lib/lang/pt-br.php:137 — $lang['bbCodeTitleVideo'] = 'Insert Video: [video]http://youtbue.com/watch?=videoid[/video]';
+- chat/lib/lang/pt-br.php:138 — $lang['bbCodeTitleUpsideDown'] = 'Upside Down text: [updown]text[/updown]';
+- chat/lib/lang/pt-pt.php:37 — $lang['bbCodeLabelBold'] = 'b';
+- chat/lib/lang/pt-pt.php:38 — $lang['bbCodeLabelItalic'] = 'i';
+- chat/lib/lang/pt-pt.php:39 — $lang['bbCodeLabelUnderline'] = 'u';
+- chat/lib/lang/pt-pt.php:40 — $lang['bbCodeLabelQuote'] = 'Citar';
+- chat/lib/lang/pt-pt.php:41 — $lang['bbCodeLabelCode'] = 'Código';
+- chat/lib/lang/pt-pt.php:42 — $lang['bbCodeLabelURL'] = 'URL';
+- chat/lib/lang/pt-pt.php:43 — $lang['bbCodeLabelImg'] = 'Imagem';
+- chat/lib/lang/pt-pt.php:44 — $lang['bbCodeLabelColor'] = 'Cor da fonte';
+- chat/lib/lang/pt-pt.php:45 — $lang['bbCodeLabelEmoticon'] = 'Smileys';
+- chat/lib/lang/pt-pt.php:46 — $lang['bbCodeTitleBold'] = 'Texto a negrito: [b]texto[/b]';
+- chat/lib/lang/pt-pt.php:47 — $lang['bbCodeTitleItalic'] = 'Texto itálico: [i]texto[/i]';
+- chat/lib/lang/pt-pt.php:48 — $lang['bbCodeTitleUnderline'] = 'Texto sublinhado: [u]texto[/u]';
+- chat/lib/lang/pt-pt.php:49 — $lang['bbCodeTitleQuote'] = 'Citar texto: [quote]texto[/quote] ou [quote=autor]texto[/quote]';
+- chat/lib/lang/pt-pt.php:50 — $lang['bbCodeTitleCode'] = 'Citar código: [code]código[/code]';
+- chat/lib/lang/pt-pt.php:51 — $lang['bbCodeTitleURL'] = 'Inserir URL: [url]http://example.org[/url] ou [url=http://example.org]texto[/url]';
+- chat/lib/lang/pt-pt.php:52 — $lang['bbCodeTitleImg'] = 'Inserir imagem: [img]http://example.org/imagem.jpg[/img]';
+- chat/lib/lang/pt-pt.php:53 — $lang['bbCodeTitleColor'] = 'Cor da fonte: [color=red]texto[/color]';
+- chat/lib/lang/pt-pt.php:54 — $lang['bbCodeTitleEmoticon'] = 'Smileys list';
+- chat/lib/lang/pt-pt.php:99 — $lang['settingsBBCode'] = 'Permitir BBCode:';
+- chat/lib/lang/pt-pt.php:100 — $lang['settingsBBCodeImages'] = 'Permitir BBCode para imagem:';
+- chat/lib/lang/pt-pt.php:101 — $lang['settingsBBCodeColors'] = 'Permitir BBCode para cor da fonte:';
+- chat/lib/lang/pt-pt.php:136 — $lang['bbCodeLabelUpsideDown'] = 'up';
+- chat/lib/lang/pt-pt.php:137 — $lang['bbCodeTitleVideo'] = 'Insert Video: [video]http://youtbue.com/watch?=videoid[/video]';
+- chat/lib/lang/pt-pt.php:138 — $lang['bbCodeTitleUpsideDown'] = 'Upside Down text: [updown]text[/updown]';
+- chat/lib/lang/ro.php:37 — $lang['bbCodeLabelBold'] = 'b';
+- chat/lib/lang/ro.php:38 — $lang['bbCodeLabelItalic'] = 'i';
+- chat/lib/lang/ro.php:39 — $lang['bbCodeLabelUnderline'] = 'u';
+- chat/lib/lang/ro.php:40 — $lang['bbCodeLabelQuote'] = 'Citat';
+- chat/lib/lang/ro.php:41 — $lang['bbCodeLabelCode'] = 'Cod';
+- chat/lib/lang/ro.php:42 — $lang['bbCodeLabelURL'] = 'URL';
+- chat/lib/lang/ro.php:43 — $lang['bbCodeLabelImg'] = 'Image';
+- chat/lib/lang/ro.php:44 — $lang['bbCodeLabelColor'] = 'Culoare fontului';
+- chat/lib/lang/ro.php:45 — $lang['bbCodeLabelEmoticon'] = 'Emoticons';
+- chat/lib/lang/ro.php:46 — $lang['bbCodeTitleBold'] = 'Text îngroşat: [b]text[/b]';
+- chat/lib/lang/ro.php:47 — $lang['bbCodeTitleItalic'] = 'Text înclinat: [i]text[/i]';
+- chat/lib/lang/ro.php:48 — $lang['bbCodeTitleUnderline'] = 'Text subliniat: [u]text[/u]';
+- chat/lib/lang/ro.php:49 — $lang['bbCodeTitleQuote'] = 'Citează text: [quote]text[/quote] or [quote=author]text[/quote]';
+- chat/lib/lang/ro.php:50 — $lang['bbCodeTitleCode'] = 'Scrie cod: [code]code[/code]';
+- chat/lib/lang/ro.php:51 — $lang['bbCodeTitleURL'] = 'Introdu URL: [url]http://example.org[/url] or [url=http://example.org]text[/url]';
+- chat/lib/lang/ro.php:52 — $lang['bbCodeTitleImg'] = 'Insert image: [img]http://example.org/image.jpg[/img]';
+- chat/lib/lang/ro.php:53 — $lang['bbCodeTitleColor'] = 'Culoarea fontului: [color=red]text[/color]';
+- chat/lib/lang/ro.php:54 — $lang['bbCodeTitleEmoticon'] = 'Emoticons list';
+- chat/lib/lang/ro.php:99 — $lang['settingsBBCode'] = 'Enable BBCode:';
+- chat/lib/lang/ro.php:100 — $lang['settingsBBCodeImages'] = 'Enable image BBCode:';
+- chat/lib/lang/ro.php:101 — $lang['settingsBBCodeColors'] = 'Enable font color BBCode:';
+- chat/lib/lang/ro.php:136 — $lang['bbCodeLabelUpsideDown'] = 'up';
+- chat/lib/lang/ro.php:137 — $lang['bbCodeTitleVideo'] = 'Insert Video: [video]http://youtbue.com/watch?=videoid[/video]';
+- chat/lib/lang/ro.php:138 — $lang['bbCodeTitleUpsideDown'] = 'Upside Down text: [updown]text[/updown]';
+- chat/lib/lang/ru.php:38 — $lang['bbCodeLabelBold'] = 'b';
+- chat/lib/lang/ru.php:39 — $lang['bbCodeLabelItalic'] = 'i';
+- chat/lib/lang/ru.php:40 — $lang['bbCodeLabelUnderline'] = 'u';
+- chat/lib/lang/ru.php:41 — $lang['bbCodeLabelQuote'] = 'Цитата';
+- chat/lib/lang/ru.php:42 — $lang['bbCodeLabelCode'] = 'Код';
+- chat/lib/lang/ru.php:43 — $lang['bbCodeLabelURL'] = 'URL';
+- chat/lib/lang/ru.php:44 — $lang['bbCodeLabelImg'] = 'Image';
+- chat/lib/lang/ru.php:45 — $lang['bbCodeLabelColor'] = 'Цвет шрифта';
+- chat/lib/lang/ru.php:46 — $lang['bbCodeLabelEmoticon'] = 'Смайли';
+- chat/lib/lang/ru.php:47 — $lang['bbCodeTitleBold'] = 'Жирный текст: [b]текст[/b]';
+- chat/lib/lang/ru.php:48 — $lang['bbCodeTitleItalic'] = 'Курсив: [i]текст[/i]';
+- chat/lib/lang/ru.php:49 — $lang['bbCodeTitleUnderline'] = 'Подчеркнутый текст: [u]текст[/u]';
+- chat/lib/lang/ru.php:50 — $lang['bbCodeTitleQuote'] = 'Цитата: [quote]текст[/quote] или [quote=автор]текст[/quote]';
+- chat/lib/lang/ru.php:51 — $lang['bbCodeTitleCode'] = 'Код: [code]текст[/code]';
+- chat/lib/lang/ru.php:52 — $lang['bbCodeTitleURL'] = 'Вставить ссылку: [url]http://example.org[/url] или [url=http://example.org]текст[/url]';
+- chat/lib/lang/ru.php:53 — $lang['bbCodeTitleImg'] = 'Insert image: [img]http://example.org/image.jpg[/img]';
+- chat/lib/lang/ru.php:54 — $lang['bbCodeTitleColor'] = 'Цвет шрифта: [color=red]текст[/color]';
+- chat/lib/lang/ru.php:55 — $lang['bbCodeTitleEmoticon'] = 'список Смайли';
+- chat/lib/lang/ru.php:100 — $lang['settingsBBCode'] = 'Разрешить BBCode:';
+- chat/lib/lang/ru.php:101 — $lang['settingsBBCodeImages'] = 'Enable image BBCode:';
+- chat/lib/lang/ru.php:102 — $lang['settingsBBCodeColors'] = 'Enable font color BBCode:';
+- chat/lib/lang/ru.php:137 — $lang['bbCodeLabelUpsideDown'] = 'up';
+- chat/lib/lang/ru.php:138 — $lang['bbCodeTitleVideo'] = 'Insert Video: [video]http://youtbue.com/watch?=videoid[/video]';
+- chat/lib/lang/ru.php:139 — $lang['bbCodeTitleUpsideDown'] = 'Upside Down text: [updown]text[/updown]';
+- chat/lib/lang/sk.php:37 — $lang['bbCodeLabelBold'] = 'b';
+- chat/lib/lang/sk.php:38 — $lang['bbCodeLabelItalic'] = 'i';
+- chat/lib/lang/sk.php:39 — $lang['bbCodeLabelUnderline'] = 'u';
+- chat/lib/lang/sk.php:40 — $lang['bbCodeLabelQuote'] = 'Citovať';
+- chat/lib/lang/sk.php:41 — $lang['bbCodeLabelCode'] = 'Kód';
+- chat/lib/lang/sk.php:42 — $lang['bbCodeLabelURL'] = 'URL';
+- chat/lib/lang/sk.php:43 — $lang['bbCodeLabelImg'] = 'Image';
+- chat/lib/lang/sk.php:44 — $lang['bbCodeLabelColor'] = 'Farba písma';
+- chat/lib/lang/sk.php:45 — $lang['bbCodeLabelEmoticon'] = 'Emoticons';
+- chat/lib/lang/sk.php:46 — $lang['bbCodeTitleBold'] = 'Tučné: [b]text[/b]';
+- chat/lib/lang/sk.php:47 — $lang['bbCodeTitleItalic'] = 'Kurzívou: [i]text[/i]';
+- chat/lib/lang/sk.php:48 — $lang['bbCodeTitleUnderline'] = 'Podčiarknuté: [u]text[/u]';
+- chat/lib/lang/sk.php:49 — $lang['bbCodeTitleQuote'] = 'Citovať text: [quote]text[/quote] alebo [quote=autor]text[/quote]';
+- chat/lib/lang/sk.php:50 — $lang['bbCodeTitleCode'] = 'Zobraziť kód: [code]kód[/code]';
+- chat/lib/lang/sk.php:51 — $lang['bbCodeTitleURL'] = 'Vložiť URL: [url]http://www.example.org/[/url] alebo [url=http://www.example.org/]text[/url]';
+- chat/lib/lang/sk.php:52 — $lang['bbCodeTitleImg'] = 'Insert image: [img]http://example.org/image.jpg[/img]';
+- chat/lib/lang/sk.php:53 — $lang['bbCodeTitleColor'] = 'Farba písma: [color=red]text[/color]';
+- chat/lib/lang/sk.php:54 — $lang['bbCodeTitleEmoticon'] = 'Emoticons list';
+- chat/lib/lang/sk.php:99 — $lang['settingsBBCode'] = 'Enable BBCode:';
+- chat/lib/lang/sk.php:100 — $lang['settingsBBCodeImages'] = 'Enable image BBCode:';
+- chat/lib/lang/sk.php:101 — $lang['settingsBBCodeColors'] = 'Enable font color BBCode:';
+- chat/lib/lang/sk.php:136 — $lang['bbCodeLabelUpsideDown'] = 'up';
+- chat/lib/lang/sk.php:137 — $lang['bbCodeTitleVideo'] = 'Insert Video: [video]http://youtbue.com/watch?=videoid[/video]';
+- chat/lib/lang/sk.php:138 — $lang['bbCodeTitleUpsideDown'] = 'Upside Down text: [updown]text[/updown]';
+- chat/lib/lang/sl.php:37 — $lang['bbCodeLabelBold'] = 'b';
+- chat/lib/lang/sl.php:38 — $lang['bbCodeLabelItalic'] = 'i';
+- chat/lib/lang/sl.php:39 — $lang['bbCodeLabelUnderline'] = 'u';
+- chat/lib/lang/sl.php:40 — $lang['bbCodeLabelQuote'] = 'Citiranje';
+- chat/lib/lang/sl.php:41 — $lang['bbCodeLabelCode'] = 'Koda';
+- chat/lib/lang/sl.php:42 — $lang['bbCodeLabelURL'] = 'URL';
+- chat/lib/lang/sl.php:43 — $lang['bbCodeLabelImg'] = 'Slika';
+- chat/lib/lang/sl.php:44 — $lang['bbCodeLabelColor'] = 'Barva črk';
+- chat/lib/lang/sl.php:45 — $lang['bbCodeLabelEmoticon'] = 'Smeške';
+- chat/lib/lang/sl.php:46 — $lang['bbCodeTitleBold'] = 'Odebeljeno besedilo: [b]besedilo[/b]';
+- chat/lib/lang/sl.php:47 — $lang['bbCodeTitleItalic'] = 'Poševno besedilo: [i]besedilo[/i]';
+- chat/lib/lang/sl.php:48 — $lang['bbCodeTitleUnderline'] = 'Podčrtano besedilo: [u]besedilo[/u]';
+- chat/lib/lang/sl.php:49 — $lang['bbCodeTitleQuote'] = 'Citirano besedilo: [quote]besedilo[/quote] ali [quote=autor]besedilo[/quote]';
+- chat/lib/lang/sl.php:50 — $lang['bbCodeTitleCode'] = 'Prikazovanje kode: [code]koda[/code]';
+- chat/lib/lang/sl.php:51 — $lang['bbCodeTitleURL'] = 'Vnesi URL: [url]http://www.primer.org/[/url] ali [url=http://www.primer.org/]besedilo[/url]';
+- chat/lib/lang/sl.php:52 — $lang['bbCodeTitleImg'] = 'Vstavi sliko: [img]http://priemr.org/slika.jpg[/img]';
+- chat/lib/lang/sl.php:53 — $lang['bbCodeTitleColor'] = 'Barva črk: [color=red]besedilo[/color]';
+- chat/lib/lang/sl.php:54 — $lang['bbCodeTitleEmoticon'] = 'Smeške seznam';
+- chat/lib/lang/sl.php:99 — $lang['settingsBBCode'] = 'Omogoči BB kodo:';
+- chat/lib/lang/sl.php:100 — $lang['settingsBBCodeImages'] = 'Omogoči slikovno BBCode:';
+- chat/lib/lang/sl.php:101 — $lang['settingsBBCodeColors'] = 'Omogoči barvo črk BBCode:';
+- chat/lib/lang/sl.php:136 — $lang['bbCodeLabelUpsideDown'] = 'up';
+- chat/lib/lang/sl.php:137 — $lang['bbCodeTitleVideo'] = 'Insert Video: [video]http://youtbue.com/watch?=videoid[/video]';
+- chat/lib/lang/sl.php:138 — $lang['bbCodeTitleUpsideDown'] = 'Upside Down text: [updown]text[/updown]';
+- chat/lib/lang/sr.php:37 — $lang['bbCodeLabelBold'] = 'b';
+- chat/lib/lang/sr.php:38 — $lang['bbCodeLabelItalic'] = 'i';
+- chat/lib/lang/sr.php:39 — $lang['bbCodeLabelUnderline'] = 'u';
+- chat/lib/lang/sr.php:40 — $lang['bbCodeLabelQuote'] = 'Citiranje';
+- chat/lib/lang/sr.php:41 — $lang['bbCodeLabelCode'] = 'Kod';
+- chat/lib/lang/sr.php:42 — $lang['bbCodeLabelURL'] = 'URL';
+- chat/lib/lang/sr.php:43 — $lang['bbCodeLabelImg'] = 'Image';
+- chat/lib/lang/sr.php:44 — $lang['bbCodeLabelColor'] = 'Boja fonta';
+- chat/lib/lang/sr.php:45 — $lang['bbCodeLabelEmoticon'] = 'Emocije';
+- chat/lib/lang/sr.php:46 — $lang['bbCodeTitleBold'] = 'Podebljan tekst: [b]text[/b]';
+- chat/lib/lang/sr.php:47 — $lang['bbCodeTitleItalic'] = 'Iskrivljen tekst: [i]text[/i]';
+- chat/lib/lang/sr.php:48 — $lang['bbCodeTitleUnderline'] = 'Podvučen tekst: [u]text[/u]';
+- chat/lib/lang/sr.php:49 — $lang['bbCodeTitleQuote'] = 'Citiran tekst: [quote]text[/quote] ili [quote=autor]text[/quote]';
+- chat/lib/lang/sr.php:50 — $lang['bbCodeTitleCode'] = 'Prikazivanje koda: [code]kod[/code]';
+- chat/lib/lang/sr.php:51 — $lang['bbCodeTitleURL'] = 'Unesi URL: [url]http://www.example.org/[/url] ili [url=http://www.example.org/]text[/url]';
+- chat/lib/lang/sr.php:52 — $lang['bbCodeTitleImg'] = 'Insert image: [img]http://example.org/image.jpg[/img]';
+- chat/lib/lang/sr.php:53 — $lang['bbCodeTitleColor'] = 'Boja fonta: [color=red]text[/color]';
+- chat/lib/lang/sr.php:54 — $lang['bbCodeTitleEmoticon'] = 'Emocije list';
+- chat/lib/lang/sr.php:99 — $lang['settingsBBCode'] = 'Omogući BB kod:';
+- chat/lib/lang/sr.php:100 — $lang['settingsBBCodeImages'] = 'Enable image BBCode:';
+- chat/lib/lang/sr.php:101 — $lang['settingsBBCodeColors'] = 'Enable font color BBCode:';
+- chat/lib/lang/sr.php:136 — $lang['bbCodeLabelUpsideDown'] = 'up';
+- chat/lib/lang/sr.php:137 — $lang['bbCodeTitleVideo'] = 'Insert Video: [video]http://youtbue.com/watch?=videoid[/video]';
+- chat/lib/lang/sr.php:138 — $lang['bbCodeTitleUpsideDown'] = 'Upside Down text: [updown]text[/updown]';
+- chat/lib/lang/sv.php:37 — $lang['bbCodeLabelBold'] = 'b';
+- chat/lib/lang/sv.php:38 — $lang['bbCodeLabelItalic'] = 'i';
+- chat/lib/lang/sv.php:39 — $lang['bbCodeLabelUnderline'] = 'u';
+- chat/lib/lang/sv.php:40 — $lang['bbCodeLabelQuote'] = 'Citera';
+- chat/lib/lang/sv.php:41 — $lang['bbCodeLabelCode'] = 'Kod';
+- chat/lib/lang/sv.php:42 — $lang['bbCodeLabelURL'] = 'URL';
+- chat/lib/lang/sv.php:43 — $lang['bbCodeLabelImg'] = 'Image';
+- chat/lib/lang/sv.php:44 — $lang['bbCodeLabelColor'] = 'Textfärg';
+- chat/lib/lang/sv.php:45 — $lang['bbCodeLabelEmoticon'] = 'Smileys';
+- chat/lib/lang/sv.php:46 — $lang['bbCodeTitleBold'] = 'Fet text: [b]text[/b]';
+- chat/lib/lang/sv.php:47 — $lang['bbCodeTitleItalic'] = 'Kursiv text: [i]text[/i]';
+- chat/lib/lang/sv.php:48 — $lang['bbCodeTitleUnderline'] = 'Understruken text: [u]text[/u]';
+- chat/lib/lang/sv.php:49 — $lang['bbCodeTitleQuote'] = 'Citera text: [quote]text[/quote] or [quote=author]text[/quote]';
+- chat/lib/lang/sv.php:50 — $lang['bbCodeTitleCode'] = 'Visa kod: [code]code[/code]';
+- chat/lib/lang/sv.php:51 — $lang['bbCodeTitleURL'] = 'Lägg till URL: [url]http://www.example.org/[/url] or [url=http://www.example.org/]text[/url]';
+- chat/lib/lang/sv.php:52 — $lang['bbCodeTitleImg'] = 'Infoga bild: [img]http://example.org/image.jpg[/img]';
+- chat/lib/lang/sv.php:53 — $lang['bbCodeTitleColor'] = 'Textfärg: [color=red]text[/color]';
+- chat/lib/lang/sv.php:54 — $lang['bbCodeTitleEmoticon'] = 'Smileys list';
+- chat/lib/lang/sv.php:99 — $lang['settingsBBCode'] = 'Aktivera BBCode:';
+- chat/lib/lang/sv.php:100 — $lang['settingsBBCodeImages'] = 'Aktivera BBCode bilder:';
+- chat/lib/lang/sv.php:101 — $lang['settingsBBCodeColors'] = 'Enable BBCode textfärg:';
+- chat/lib/lang/sv.php:136 — $lang['bbCodeLabelUpsideDown'] = 'up';
+- chat/lib/lang/sv.php:137 — $lang['bbCodeTitleVideo'] = 'Insert Video: [video]http://youtbue.com/watch?=videoid[/video]';
+- chat/lib/lang/sv.php:138 — $lang['bbCodeTitleUpsideDown'] = 'Upside Down text: [updown]text[/updown]';
+- chat/lib/lang/th.php:37 — $lang['bbCodeLabelBold'] = 'b';
+- chat/lib/lang/th.php:38 — $lang['bbCodeLabelItalic'] = 'i';
+- chat/lib/lang/th.php:39 — $lang['bbCodeLabelUnderline'] = 'u';
+- chat/lib/lang/th.php:40 — $lang['bbCodeLabelQuote'] = 'อ้างอิง';
+- chat/lib/lang/th.php:41 — $lang['bbCodeLabelCode'] = 'โค๊ด';
+- chat/lib/lang/th.php:42 — $lang['bbCodeLabelURL'] = 'ลิงค์';
+- chat/lib/lang/th.php:43 — $lang['bbCodeLabelImg'] = 'ภาพ';
+- chat/lib/lang/th.php:44 — $lang['bbCodeLabelColor'] = 'สีอักษร';
+- chat/lib/lang/th.php:45 — $lang['bbCodeLabelEmoticon'] = 'Smilies';
+- chat/lib/lang/th.php:46 — $lang['bbCodeTitleBold'] = 'อักษรตัวหน้า: [b]ข้อความ[/b]';
+- chat/lib/lang/th.php:47 — $lang['bbCodeTitleItalic'] = 'อักษรตัวเอียง: [i]ข้อความ[/i]';
+- chat/lib/lang/th.php:48 — $lang['bbCodeTitleUnderline'] = 'อักษรขีดเส้นใต้: [u]ข้อความ[/u]';
+- chat/lib/lang/th.php:49 — $lang['bbCodeTitleQuote'] = 'อ้างอิงข้อความ: [quote]ข้อความ[/quote] หรือ [quote=เจ้าของข้อความ]ข้อความ[/quote]';
+- chat/lib/lang/th.php:50 — $lang['bbCodeTitleCode'] = 'แสดงโค๊ด: [code]โค๊ด[/code]';
+- chat/lib/lang/th.php:51 — $lang['bbCodeTitleURL'] = 'แทรกลิงค์: [url]http://example.org[/url] or [url=http://example.org]ข้อความ[/url]';
+- chat/lib/lang/th.php:52 — $lang['bbCodeTitleImg'] = 'แทรกภาพ: [img]http://example.org/image.jpg[/img]';
+- chat/lib/lang/th.php:53 — $lang['bbCodeTitleColor'] = 'ตัวอักษรสี: [color=red]ข้อความ[/color]';
+- chat/lib/lang/th.php:54 — $lang['bbCodeTitleEmoticon'] = 'Smilies list';
+- chat/lib/lang/th.php:99 — $lang['settingsBBCode'] = 'เปิดใช้งาน BBCode:';
+- chat/lib/lang/th.php:100 — $lang['settingsBBCodeImages'] = 'เปิดใช้งาน BBCode ภาพ:';
+- chat/lib/lang/th.php:101 — $lang['settingsBBCodeColors'] = 'เปิดใช้งาน อักษรสี BBCode:';
+- chat/lib/lang/th.php:136 — $lang['bbCodeLabelUpsideDown'] = 'up';
+- chat/lib/lang/th.php:137 — $lang['bbCodeTitleVideo'] = 'Insert Video: [video]http://youtbue.com/watch?=videoid[/video]';
+- chat/lib/lang/th.php:138 — $lang['bbCodeTitleUpsideDown'] = 'Upside Down text: [updown]text[/updown]';
+- chat/lib/lang/tr.php:37 — $lang['bbCodeLabelBold'] = 'b';
+- chat/lib/lang/tr.php:38 — $lang['bbCodeLabelItalic'] = 'i';
+- chat/lib/lang/tr.php:39 — $lang['bbCodeLabelUnderline'] = 'u';
+- chat/lib/lang/tr.php:40 — $lang['bbCodeLabelQuote'] = 'Büyük';
+- chat/lib/lang/tr.php:41 — $lang['bbCodeLabelCode'] = 'Kod';
+- chat/lib/lang/tr.php:42 — $lang['bbCodeLabelURL'] = 'URL';
+- chat/lib/lang/tr.php:43 — $lang['bbCodeLabelImg'] = 'Resim';
+- chat/lib/lang/tr.php:44 — $lang['bbCodeLabelColor'] = 'Renkli Yazı';
+- chat/lib/lang/tr.php:45 — $lang['bbCodeLabelEmoticon'] = 'Emoticons';
+- chat/lib/lang/tr.php:46 — $lang['bbCodeTitleBold'] = 'Kalın text: [b]text[/b]';
+- chat/lib/lang/tr.php:47 — $lang['bbCodeTitleItalic'] = 'Eğik text: [i]text[/i]';
+- chat/lib/lang/tr.php:48 — $lang['bbCodeTitleUnderline'] = 'Altçizgili text: [u]text[/u]';
+- chat/lib/lang/tr.php:49 — $lang['bbCodeTitleQuote'] = 'Büyük text: [quote]text[/quote] or [quote=author]text[/quote]';
+- chat/lib/lang/tr.php:50 — $lang['bbCodeTitleCode'] = 'Kod gösterim: [code]kod[/code]';
+- chat/lib/lang/tr.php:51 — $lang['bbCodeTitleURL'] = 'URL gir: [url]http://example.org[/url] veya [url=http://example.org]text[/url]';
+- chat/lib/lang/tr.php:52 — $lang['bbCodeTitleImg'] = 'Resim gir: [img]http://example.org/image.jpg[/img]';
+- chat/lib/lang/tr.php:53 — $lang['bbCodeTitleColor'] = 'Font Rengi: [color=red]text[/color]';
+- chat/lib/lang/tr.php:54 — $lang['bbCodeTitleEmoticon'] = 'Emoticons list';
+- chat/lib/lang/tr.php:99 — $lang['settingsBBCode'] = 'BBCode u aç:';
+- chat/lib/lang/tr.php:100 — $lang['settingsBBCodeImages'] = 'Resim BBCode u aç:';
+- chat/lib/lang/tr.php:101 — $lang['settingsBBCodeColors'] = 'Font Rengi BBCode u aç:';
+- chat/lib/lang/tr.php:136 — $lang['bbCodeLabelUpsideDown'] = 'up';
+- chat/lib/lang/tr.php:137 — $lang['bbCodeTitleVideo'] = 'Insert Video: [video]http://youtbue.com/watch?=videoid[/video]';
+- chat/lib/lang/tr.php:138 — $lang['bbCodeTitleUpsideDown'] = 'Upside Down text: [updown]text[/updown]';
+- chat/lib/lang/uk.php:37 — $lang['bbCodeLabelBold'] = 'Ж';
+- chat/lib/lang/uk.php:38 — $lang['bbCodeLabelItalic'] = 'Н';
+- chat/lib/lang/uk.php:39 — $lang['bbCodeLabelUnderline'] = 'П';
+- chat/lib/lang/uk.php:40 — $lang['bbCodeLabelQuote'] = 'Цитата';
+- chat/lib/lang/uk.php:41 — $lang['bbCodeLabelCode'] = 'Код';
+- chat/lib/lang/uk.php:42 — $lang['bbCodeLabelURL'] = 'URL';
+- chat/lib/lang/uk.php:43 — $lang['bbCodeLabelImg'] = 'Image';
+- chat/lib/lang/uk.php:44 — $lang['bbCodeLabelColor'] = 'Колір шрифту';
+- chat/lib/lang/uk.php:45 — $lang['bbCodeLabelEmoticon'] = 'Smilies';
+- chat/lib/lang/uk.php:46 — $lang['bbCodeTitleBold'] = 'Жирний текст: [b]текст[/b]';
+- chat/lib/lang/uk.php:47 — $lang['bbCodeTitleItalic'] = 'Текст курсивом: [i]текст[/i]';
+- chat/lib/lang/uk.php:48 — $lang['bbCodeTitleUnderline'] = 'Підкреслений текст: [u]текст[/u]';
+- chat/lib/lang/uk.php:49 — $lang['bbCodeTitleQuote'] = 'Цитований текст: [quote]текст[/quote] чи [quote=author]текст[/quote]';
+- chat/lib/lang/uk.php:50 — $lang['bbCodeTitleCode'] = 'Показати код: [code]код[/code]';
+- chat/lib/lang/uk.php:51 — $lang['bbCodeTitleURL'] = 'Показати URL: [url]http://example.org[/url] or [url=http://example.org]текст[/url]';
+- chat/lib/lang/uk.php:52 — $lang['bbCodeTitleImg'] = 'Insert image: [img]http://example.org/image.jpg[/img]';
+- chat/lib/lang/uk.php:53 — $lang['bbCodeTitleColor'] = 'Колір шрифту: [color=red]текст[/color]';
+- chat/lib/lang/uk.php:54 — $lang['bbCodeTitleEmoticon'] = 'Smilies list';
+- chat/lib/lang/uk.php:99 — $lang['settingsBBCode'] = 'Дозволити коди BB:';
+- chat/lib/lang/uk.php:100 — $lang['settingsBBCodeImages'] = 'Enable image BBCode:';
+- chat/lib/lang/uk.php:101 — $lang['settingsBBCodeColors'] = 'Enable font color BBCode:';
+- chat/lib/lang/uk.php:136 — $lang['bbCodeLabelUpsideDown'] = 'up';
+- chat/lib/lang/uk.php:137 — $lang['bbCodeTitleVideo'] = 'Insert Video: [video]http://youtbue.com/watch?=videoid[/video]';
+- chat/lib/lang/uk.php:138 — $lang['bbCodeTitleUpsideDown'] = 'Upside Down text: [updown]text[/updown]';
+- chat/lib/lang/zh-tw.php:36 — $lang['bbCodeLabelBold'] = '粗體';
+- chat/lib/lang/zh-tw.php:37 — $lang['bbCodeLabelItalic'] = '斜體';
+- chat/lib/lang/zh-tw.php:38 — $lang['bbCodeLabelUnderline'] = '底線';
+- chat/lib/lang/zh-tw.php:39 — $lang['bbCodeLabelQuote'] = '引用';
+- chat/lib/lang/zh-tw.php:40 — $lang['bbCodeLabelCode'] = '代碼';
+- chat/lib/lang/zh-tw.php:41 — $lang['bbCodeLabelURL'] = '連結';
+- chat/lib/lang/zh-tw.php:42 — $lang['bbCodeLabelImg'] = '圖片';
+- chat/lib/lang/zh-tw.php:43 — $lang['bbCodeLabelColor'] = '字體顏色';
+- chat/lib/lang/zh-tw.php:44 — $lang['bbCodeLabelEmoticon'] = 'Smilies';
+- chat/lib/lang/zh-tw.php:45 — $lang['bbCodeTitleBold'] = '粗體字： [b]文字[/b]';
+- chat/lib/lang/zh-tw.php:46 — $lang['bbCodeTitleItalic'] = '斜體字： [i]文字[/i]';
+- chat/lib/lang/zh-tw.php:47 — $lang['bbCodeTitleUnderline'] = '底線： [u]文字[/u]';
+- chat/lib/lang/zh-tw.php:48 — $lang['bbCodeTitleQuote'] = '引用文字： [quote]文字[/quote] 或 [quote=某人]文字[/quote]';
+- chat/lib/lang/zh-tw.php:49 — $lang['bbCodeTitleCode'] = '代碼： [code]代碼[/code]';
+- chat/lib/lang/zh-tw.php:50 — $lang['bbCodeTitleURL'] = '插入URL： [url]http://example.org[/url] 或 [url=http://example.org]文字[/url]';
+- chat/lib/lang/zh-tw.php:51 — $lang['bbCodeTitleImg'] = '插入圖片： [img]http://example.org/image.png[/img]';
+- chat/lib/lang/zh-tw.php:52 — $lang['bbCodeTitleColor'] = '字體顏色： [color=red]文字[/color]';
+- chat/lib/lang/zh-tw.php:53 — $lang['bbCodeTitleEmoticon'] = 'Smilies list';
+- chat/lib/lang/zh-tw.php:98 — $lang['settingsBBCode'] = '啟用BBCode：';
+- chat/lib/lang/zh-tw.php:99 — $lang['settingsBBCodeImages'] = '啟用圖形的BBCode：';
+- chat/lib/lang/zh-tw.php:100 — $lang['settingsBBCodeColors'] = '啟用字體顏色的BBCode：';
+- chat/lib/lang/zh-tw.php:135 — $lang['bbCodeLabelUpsideDown'] = 'up';
+- chat/lib/lang/zh-tw.php:136 — $lang['bbCodeTitleVideo'] = 'Insert Video: [video]http://youtbue.com/watch?=videoid[/video]';
+- chat/lib/lang/zh-tw.php:137 — $lang['bbCodeTitleUpsideDown'] = 'Upside Down text: [updown]text[/updown]';
+- chat/lib/lang/zh.php:37 — $lang['bbCodeLabelBold'] = '粗体';
+- chat/lib/lang/zh.php:38 — $lang['bbCodeLabelItalic'] = '斜体';
+- chat/lib/lang/zh.php:39 — $lang['bbCodeLabelUnderline'] = '下划线';
+- chat/lib/lang/zh.php:40 — $lang['bbCodeLabelQuote'] = '引用';
+- chat/lib/lang/zh.php:41 — $lang['bbCodeLabelCode'] = '代码';
+- chat/lib/lang/zh.php:42 — $lang['bbCodeLabelURL'] = 'URL';
+- chat/lib/lang/zh.php:43 — $lang['bbCodeLabelImg'] = 'Image';
+- chat/lib/lang/zh.php:44 — $lang['bbCodeLabelColor'] = '文字颜色';
+- chat/lib/lang/zh.php:45 — $lang['bbCodeLabelEmoticon'] = 'Smilies';
+- chat/lib/lang/zh.php:46 — $lang['bbCodeTitleBold'] = '粗体：[b]文字[/b]';
+- chat/lib/lang/zh.php:47 — $lang['bbCodeTitleItalic'] = '斜体：[i]文字[/i]';
+- chat/lib/lang/zh.php:48 — $lang['bbCodeTitleUnderline'] = '下划线：[u]文字[/u]';
+- chat/lib/lang/zh.php:49 — $lang['bbCodeTitleQuote'] = '引用：[quote]引用[/quote] or [quote=作者]引用[/quote]';
+- chat/lib/lang/zh.php:50 — $lang['bbCodeTitleCode'] = '显示代码：[code]代码[/code]';
+- chat/lib/lang/zh.php:51 — $lang['bbCodeTitleURL'] = '插入 URL：[url]http://example.org[/url] 或者 [url=http://example.org]文字[/url]';
+- chat/lib/lang/zh.php:52 — $lang['bbCodeTitleImg'] = 'Insert image: [img]http://example.org/image.jpg[/img]';
+- chat/lib/lang/zh.php:53 — $lang['bbCodeTitleColor'] = '文字颜色：[color=red]文字[/color]';
+- chat/lib/lang/zh.php:54 — $lang['bbCodeTitleEmoticon'] = 'Smilies list';
+- chat/lib/lang/zh.php:99 — $lang['settingsBBCode'] = '可用 BBCode：';
+- chat/lib/lang/zh.php:100 — $lang['settingsBBCodeImages'] = 'Enable image BBCode:';
+- chat/lib/lang/zh.php:101 — $lang['settingsBBCodeColors'] = 'Enable font color BBCode:';
+- chat/lib/lang/zh.php:136 — $lang['bbCodeLabelUpsideDown'] = 'up';
+- chat/lib/lang/zh.php:137 — $lang['bbCodeTitleVideo'] = 'Insert Video: [video]http://youtbue.com/watch?=videoid[/video]';
+- chat/lib/lang/zh.php:138 — $lang['bbCodeTitleUpsideDown'] = 'Upside Down text: [updown]text[/updown]';
+- chat/lib/template/loggedIn.html:121 — <dt>Mentions: Last 25 posts where your nick was mentioned(Private)</dt>
+- chat/lib/template/loggedIn.html:125 — <dt>Reputation: Give rep gift</dt>
+- chat/lib/template/loggedIn.html:129 — <dt>Karma: Give karma gift</dt>
+- chat/lib/template/loggedIn.html:153 — <dt><label for="bbCodeSetting">[LANG]settingsBBCode[/LANG]</label></dt>
+- chat/lib/template/loggedIn.html:154 — <dd><input id="bbCodeSetting" onclick="ajaxChat.setSetting('bbCode', this.checked);"
+- chat/lib/template/loggedIn.html:158 — <dt><label for="bbCodeImagesSetting">[LANG]settingsBBCodeImages[/LANG]</label></dt>
+- chat/lib/template/loggedIn.html:159 — <dd><input id="bbCodeImagesSetting" onclick="ajaxChat.setSetting('bbCodeImages', this.checked);"
+- chat/lib/template/loggedIn.html:163 — <dt><label for="bbCodeColorsSetting">[LANG]settingsBBCodeColors[/LANG]</label></dt>
+- chat/lib/template/loggedIn.html:164 — <dd><input id="bbCodeColorsSetting" onclick="ajaxChat.setSetting('bbCodeColors', this.checked);"
+- chat/lib/template/loggedIn.html:341 — <div id="bbCodeContainer">
+- chat/lib/template/loggedIn.html:342 — <input id="bbCodeBold" onclick="ajaxChat.insertBBCode('b');" style="font-weight:bold;" title="[LANG]bbCodeTitleBold[/LANG]"
+- chat/lib/template/loggedIn.html:343 — type="button" value="[LANG]bbCodeLabelBold[/LANG]"/>
+- chat/lib/template/loggedIn.html:344 — <input id="bbCodeItalic" onclick="ajaxChat.insertBBCode('i');" style="font-style:italic;"
+- chat/lib/template/loggedIn.html:345 — title="[LANG]bbCodeTitleItalic[/LANG]" type="button" value="[LANG]bbCodeLabelItalic[/LANG]"/>
+- chat/lib/template/loggedIn.html:346 — <input id="bbCodeUnderline" onclick="ajaxChat.insertBBCode('u');" style="text-decoration:underline;"
+- chat/lib/template/loggedIn.html:347 — title="[LANG]bbCodeTitleUnderline[/LANG]" type="button"
+- chat/lib/template/loggedIn.html:348 — value="[LANG]bbCodeLabelUnderline[/LANG]"/>
+- chat/lib/template/loggedIn.html:349 — <input class="txtUpsideDown" id="bbCodeUpsideDown" onclick="ajaxChat.insertBBCode('updown');" title="[LANG]bbCodeTitleUpsideDown[/LANG]"
+- chat/lib/template/loggedIn.html:350 — type="button" value="[LANG]bbCodeLabelUpsideDown[/LANG]"/>
+- chat/lib/template/loggedIn.html:351 — <input id="bbCodeQuote" onclick="ajaxChat.insertBBCode('quote');" title="[LANG]bbCodeTitleQuote[/LANG]"
+- chat/lib/template/loggedIn.html:352 — type="button" value="[LANG]bbCodeLabelQuote[/LANG]"/>
+- chat/lib/template/loggedIn.html:353 — <input id="bbCodeCode" onclick="ajaxChat.insertBBCode('code');" title="[LANG]bbCodeTitleCode[/LANG]" type="button"
+- chat/lib/template/loggedIn.html:354 — value="[LANG]bbCodeLabelCode[/LANG]"/>
+- chat/lib/template/loggedIn.html:355 — <input id="bbCodeURL" onclick="ajaxChat.insertBBCode('url');" title="[LANG]bbCodeTitleURL[/LANG]" type="button"
+- chat/lib/template/loggedIn.html:356 — value="[LANG]bbCodeLabelURL[/LANG]"/>
+- chat/lib/template/loggedIn.html:357 — <input id="bbCodeVideo" onclick="ajaxChat.insertBBCode('video');" title="[LANG]bbCodeTitleVideo[/LANG]" type="button"
+- chat/lib/template/loggedIn.html:359 — <input id="bbCodeIMG" onclick="ajaxChat.insertBBCode('img');" title="[LANG]bbCodeTitleImg[/LANG]" type="button"
+- chat/lib/template/loggedIn.html:360 — value="[LANG]bbCodeLabelImg[/LANG]"/>
+- chat/lib/template/loggedIn.html:361 — <input id="bbCodeColor" title="[LANG]bbCodeTitleColor[/LANG]" type="button"
+- chat/lib/template/loggedIn.html:362 — value="[LANG]bbCodeLabelColor[/LANG]"/>
+- chat/lib/template/loggedIn.html:363 — <input id="bbCodeSmilies" onclick="PopMoreSmiles();" title="[LANG]bbCodeTitleEmoticon[/LANG]" type="button"
+- chat/lib/template/loggedIn.html:364 — value="Smilies"/>
+- chat/lib/template/loggedIn.html:391 — Thanks,
+- chat/lib/template/loggedOut.html:25 — Thanks,
+- chat/lib/template/logs.html:31 — document.getElementById('bbCodeSetting').checked = ajaxChat.getSetting('bbCode');
+- chat/lib/template/logs.html:141 — <td><label for="bbCodeSetting">[LANG]settingsBBCode[/LANG]</label></td>
+- chat/lib/template/logs.html:142 — <td class="setting"><input id="bbCodeSetting" onclick="ajaxChat.setSetting('bbCode', this.checked);"
+- chat/lib/template/logs.html:314 — Thanks,
+- chat/license.txt:8 — to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+- cleanup/achievement_fpost_update.php:25 — $rows = $db->fetchAll('SELECT userid, forumposts, postachiev FROM usersachiev WHERE forumposts >= 1');
+- cleanup/achievement_fpost_update.php:34 — $posts = (int) $arr['forumposts'];
+- cleanup/achievement_fpost_update.php:37 — if ($posts >= 1 && $lvl === 0) {
+- cleanup/achievement_fpost_update.php:38 — $msg = 'Congratulations, you have just earned the [b]Forum Poster Level 1[/b] achievement. :) [img]' . $site_config['paths']['images_base...
+- cleanup/achievement_fpost_update.php:39 — $achievements_buffer[] = '(' . $arr['userid'] . ', ' . $dt . ', \'Forum Poster LVL1\', \'fpost1.png\' , \'Made at least 1 post in the for...
+- cleanup/achievement_fpost_update.php:41 — } elseif ($posts >= 25 && $lvl === 1) {
+- cleanup/achievement_fpost_update.php:42 — $msg = 'Congratulations, you have just earned the [b]Forum Poster Level 2[/b] achievement. :) [img]' . $site_config['paths']['images_base...
+- cleanup/achievement_fpost_update.php:43 — $achievements_buffer[] = '(' . $arr['userid'] . ', ' . $dt . ', \'Forum Poster LVL2\', \'fpost2.png\' , \'Made at least 25 posts in the f...
+- cleanup/achievement_fpost_update.php:45 — } elseif ($posts >= 50 && $lvl === 2) {
+- cleanup/achievement_fpost_update.php:46 — $msg = 'Congratulations, you have just earned the [b]Forum Poster Level 3[/b] achievement. :) [img]' . $site_config['paths']['images_base...
+- cleanup/achievement_fpost_update.php:47 — $achievements_buffer[] = '(' . $arr['userid'] . ', ' . $dt . ', \'Forum Poster LVL3\', \'fpost3.png\' , \'Made at least 50 posts in the f...
+- cleanup/achievement_fpost_update.php:49 — } elseif ($posts >= 100 && $lvl === 3) {
+- cleanup/achievement_fpost_update.php:50 — $msg = 'Congratulations, you have just earned the [b]Forum Poster Level 4[/b] achievement. :) [img]' . $site_config['paths']['images_base...
+- cleanup/achievement_fpost_update.php:51 — $achievements_buffer[] = '(' . $arr['userid'] . ', ' . $dt . ', \'Forum Poster LVL4\', \'fpost4.png\' , \'Made at least 100 posts in the ...
+- cleanup/achievement_fpost_update.php:53 — } elseif ($posts >= 250 && $lvl === 4) {
+- cleanup/achievement_fpost_update.php:54 — $msg = 'Congratulations, you have just earned the [b]Forum Poster Level 5[/b] achievement. :) [img]' . $site_config['paths']['images_base...
+- cleanup/achievement_fpost_update.php:55 — $achievements_buffer[] = '(' . $arr['userid'] . ', ' . $dt . ', \'Forum Poster LVL5\', \'fpost5.png\' , \'Made at least 250 posts in the ...
+- cleanup/achievement_fpost_update.php:57 — } elseif ($posts >= 500 && $lvl === 5) {
+- cleanup/achievement_fpost_update.php:58 — $msg = 'Congratulations, you have just earned the [b]Forum Poster Level 6[/b] achievement. :) [img]' . $site_config['paths']['images_base...
+- cleanup/achievement_fpost_update.php:59 — $achievements_buffer[] = '(' . $arr['userid'] . ', ' . $dt . ', \'Forum Poster LVL6\', \'fpost6.png\' , \'Made at least 500 posts in the ...
+- cleanup/achievement_fpost_update.php:61 — } elseif ($posts >= 750 && $lvl === 6) {
+- cleanup/achievement_fpost_update.php:62 — $msg = 'Congratulations, you have just earned the [b]Forum Poster Level 7[/b] achievement. :) [img]' . $site_config['paths']['images_base...
+- cleanup/achievement_fpost_update.php:63 — $achievements_buffer[] = '(' . $arr['userid'] . ', ' . $dt . ', \'Forum Poster LVL7\', \'fpost7.png\' , \'Made at least 750 posts in the ...
+- cleanup/achievement_fpost_update.php:88 — write_log('Achievements Cleanup: Forum Posts Completed. Forum Posts Achievements awarded to - ' . $count . ' Member(s).' . $text);
+- cleanup/achievement_ftopics_update.php:25 — $rows = $db->fetchAll('SELECT userid, forumtopics, topicachiev FROM usersachiev WHERE forumtopics >= 1');
+- cleanup/achievement_ftopics_update.php:34 — $topics = (int) $arr['forumtopics'];
+- cleanup/achievement_ftopics_update.php:37 — if ($topics >= 1 && $lvl === 0) {
+- cleanup/achievement_ftopics_update.php:38 — $msg = 'Congratulations, you have just earned the [b]Forum Topic Starter Level 1[/b] achievement. :) [img]' . $site_config['paths']['imag...
+- cleanup/achievement_ftopics_update.php:39 — $achievements_buffer[] = '(' . $arr['userid'] . ', ' . $dt . ', \'Forum Topic Starter LVL1\', \'ftopic1.png\' , \'Started at least 1 topi...
+- cleanup/achievement_ftopics_update.php:41 — } elseif ($topics >= 10 && $lvl === 1) {
+- cleanup/achievement_ftopics_update.php:42 — $msg = 'Congratulations, you have just earned the [b]Forum Topic Starter Level 2[/b] achievement. :) [img]' . $site_config['paths']['imag...
+- cleanup/achievement_ftopics_update.php:43 — $achievements_buffer[] = '(' . $arr['userid'] . ', ' . $dt . ', \'Forum Topic Starter LVL2\', \'ftopic2.png\' , \'Started at least 10 top...
+- cleanup/achievement_ftopics_update.php:45 — } elseif ($topics >= 25 && $lvl === 2) {
+- cleanup/achievement_ftopics_update.php:46 — $msg = 'Congratulations, you have just earned the [b]Forum Topic Starter Level 3[/b] achievement. :) [img]' . $site_config['paths']['imag...
+- cleanup/achievement_ftopics_update.php:47 — $achievements_buffer[] = '(' . $arr['userid'] . ', ' . $dt . ', \'Forum Topic Starter LVL3\', \'ftopic3.png\' , \'Started at least 25 top...
+- cleanup/achievement_ftopics_update.php:49 — } elseif ($topics >= 50 && $lvl === 3) {
+- cleanup/achievement_ftopics_update.php:50 — $msg = 'Congratulations, you have just earned the [b]Forum Topic Starter Level 4[/b] achievement. :) [img]' . $site_config['paths']['imag...
+- cleanup/achievement_ftopics_update.php:51 — $achievements_buffer[] = '(' . $arr['userid'] . ', ' . $dt . ', \'Forum Topic Starter LVL4\', \'ftopic4.png\' , \'Started at least 50 top...
+- cleanup/achievement_ftopics_update.php:54 — if ($topics >= 75 && $lvl === 4) {
+- cleanup/achievement_ftopics_update.php:55 — $msg = 'Congratulations, you have just earned the [b]Forum Topic Starter Level 5[/b] achievement. :) [img]' . $site_config['paths']['imag...
+- cleanup/achievement_ftopics_update.php:56 — $achievements_buffer[] = '(' . $arr['userid'] . ', ' . $dt . ', \'Forum Topic Starter LVL5\', \'ftopic5.png\' , \'Started at least 75 top...
+- cleanup/achievement_ftopics_update.php:81 — write_log('Achievements Cleanup: Forum Topics Completed. Forum Topics Achievements awarded to - ' . $count . ' Member(s).' . $text);
+- cleanup/achievement_karma_update.php:21 — function achievement_karma_update($data)
+- cleanup/achievement_karma_update.php:180 — write_log('Achievements Cleanup: Karma Completed. Karma Achievements awarded to - ' . $count . ' Member(s).' . $text);
+- cleanup/achievement_shouts_update.php:39 — $achievements_buffer[] = '(' . $arr['userid'] . ', ' . $dt . ', \'AJAX Chat Spammer LVL1\', \'spam1.png\' , \'Made at least 10 posts to A...
+- cleanup/achievement_shouts_update.php:43 — $achievements_buffer[] = '(' . $arr['userid'] . ', ' . $dt . ', \'AJAX Chat Spammer LVL2\', \'spam2.png\' , \'Made at least 25 posts to A...
+- cleanup/achievement_shouts_update.php:47 — $achievements_buffer[] = '(' . $arr['userid'] . ', ' . $dt . ', \'AJAX Chat Spammer LVL3\', \'spam3.png\' , \'Made at least 50 posts to A...
+- cleanup/achievement_shouts_update.php:51 — $achievements_buffer[] = '(' . $arr['userid'] . ', ' . $dt . ', \'AJAX Chat Spammer LVL4\', \'spam4.png\' , \'Made at least 75 posts to A...
+- cleanup/achievement_shouts_update.php:55 — $achievements_buffer[] = '(' . $arr['userid'] . ', ' . $dt . ', \'AJAX Chat Spammer LVL5\', \'spam5.png\' , \'Made at least 100 posts to ...
+- cleanup/achievement_sticky_update.php:19 — function achievement_sticky_update($data)
+- cleanup/achievement_sticky_update.php:25 — $rows = $db->fetchAll('SELECT userid, stickyup, stickyachiev FROM usersachiev WHERE stickyup >= 1');
+- cleanup/achievement_sticky_update.php:31 — $var1 = 'stickyachiev';
+- cleanup/achievement_sticky_update.php:34 — $stickyup = (int) $arr['stickyup'];
+- cleanup/achievement_sticky_update.php:35 — $lvl = (int) $arr['stickyachiev'];
+- cleanup/achievement_sticky_update.php:37 — if ($stickyup >= 1 && $lvl === 0) {
+- cleanup/achievement_sticky_update.php:38 — $msg = 'Congratulations, you have just earned the [b]Stick Em Up LVL1[/b] achievement. :) [img]' . $site_config['paths']['images_baseurl'...
+- cleanup/achievement_sticky_update.php:39 — $achievements_buffer[] = '(' . $arr['userid'] . ', ' . $dt . ', \'Stick Em Up LVL1\', \'sticky1.png\' , \'Uploading at least 1 sticky tor...
+- cleanup/achievement_sticky_update.php:41 — } elseif ($stickyup >= 5 && $lvl === 1) {
+- cleanup/achievement_sticky_update.php:42 — $msg = 'Congratulations, you have just earned the [b]Stick Em Up LVL2[/b] achievement. :) [img]' . $site_config['paths']['images_baseurl'...
+- cleanup/achievement_sticky_update.php:43 — $achievements_buffer[] = '(' . $arr['userid'] . ', ' . $dt . ', \'Stick Em Up LVL2\', \'sticky2.png\' , \'Uploading at least 5 sticky tor...
+- cleanup/achievement_sticky_update.php:45 — } elseif ($stickyup >= 10 && $lvl === 2) {
+- cleanup/achievement_sticky_update.php:46 — $msg = 'Congratulations, you have just earned the [b]Stick Em Up LVL3[/b] achievement. :) [img]' . $site_config['paths']['images_baseurl'...
+- cleanup/achievement_sticky_update.php:47 — $achievements_buffer[] = '(' . $arr['userid'] . ', ' . $dt . ', \'Stick Em Up LVL3\', \'sticky3.png\' , \'Uploading at least 10 sticky to...
+- cleanup/achievement_sticky_update.php:49 — } elseif ($stickyup >= 25 && $lvl === 3) {
+- cleanup/achievement_sticky_update.php:50 — $msg = 'Congratulations, you have just earned the [b]Stick Em Up LVL4[/b] achievement. :) [img]' . $site_config['paths']['images_baseurl'...
+- cleanup/achievement_sticky_update.php:51 — $achievements_buffer[] = '(' . $arr['userid'] . ', ' . $dt . ', \'Stick Em Up LVL4\', \'sticky4.png\' , \'Uploading at least 25 sticky to...
+- cleanup/achievement_sticky_update.php:53 — } elseif ($stickyup >= 50 && $lvl === 4) {
+- cleanup/achievement_sticky_update.php:54 — $msg = 'Congratulations, you have just earned the [b]Stick Em Up LVL5[/b] achievement. :) [img]' . $site_config['paths']['images_baseurl'...
+- cleanup/achievement_sticky_update.php:55 — $achievements_buffer[] = '(' . $arr['userid'] . ', ' . $dt . ', \'Stick Em Up LVL5\', \'sticky5.png\' , \'Uploading at least 50 sticky to...
+- cleanup/ajax_chat_cleanup.php:46 — write_log('AJAX Chat Cleanup: Autoshout posts Deleted' . $text);
+- cleanup/anime_title_update.php:26 — global $container, $site_config, $BLOCKS;
+- cleanup/anime_title_update.php:30 — if (!$BLOCKS['anime_api_on']) {
+- cleanup/anonymous_update.php:45 — $msg = "Your Anonymous status has timed out and has been auto-removed by the system. If you would like to have it again, exchange some Ka...
+- cleanup/anonymous_update.php:62 — $db->perform($sql, array_merge($set, ['id' => $arr['id']]));
+- cleanup/avatarpos_update.php:46 — $msg = "Your Avatar ban has timed out and has been auto-removed by the system. If you would like to have it again, exchange some Karma Bo...
+- cleanup/avatarpos_update.php:65 — $db->perform($sql, array_merge($set, ['id' => $arr['id']]));
+- cleanup/backupdb.php:99 — $db->perform($sql, array_merge($set, ['id' => $site_config['chatbot']['id']]));
+- cleanup/chatpost_update.php:45 — $msg = "Your Chat ban has timed out and has been auto-removed by the system. If you would like to have it again, exchange some Karma Bonu...
+- cleanup/chatpost_update.php:64 — $db->perform($sql, array_merge($set, ['id' => $arr['id']]));
+- cleanup/customsmilie_update.php:30 — function customsmilie_update($data)
+- cleanup/customsmilie_update.php:44 — $subject = 'Custom smilies expired.';
+- cleanup/customsmilie_update.php:45 — $msg = "Your Custom smilies have timed out and has been auto-removed by the system. If you would like to have them again, exchange some K...
+- cleanup/customsmilie_update.php:51 — $modcomment = get_date((int) $dt, 'DATE', 1) . " - Custom smilies Automatically Removed By System.\n" . $modcomment;
+- cleanup/customsmilie_update.php:64 — $db->perform($sql, array_merge($set, ['id' => $arr['id']]));
+- cleanup/customsmilie_update.php:79 — write_log('Cleanup - Removed Custom smilies from ' . $count . ' members');
+- cleanup/customsmilie_update.php:80 — write_log('Custom Smilie Cleanup: Completed' . $text);
+- cleanup/downloadpos_update.php:45 — $msg = "Your Download ban has timed out and has been auto-removed by the system. If you would like to have it again, exchange some Karma ...
+- cleanup/downloadpos_update.php:64 — $db->perform($sql, array_merge($set, ['id' => $arr['id']]));
+- cleanup/forum_update.php:22 — function forum_update($data)
+- cleanup/forum_update.php:32 — $forums = $fluent->from('forums')
+- cleanup/forum_update.php:34 — ->select('forums.id')
+- cleanup/forum_update.php:35 — ->select('COUNT(DISTINCT topics.id) AS topics')
+- cleanup/forum_update.php:36 — ->select('COUNT(posts.id) AS posts')
+- cleanup/forum_update.php:37 — ->leftJoin('topics ON forums.id = topics.forum_id')
+- cleanup/forum_update.php:38 — ->leftJoin('posts ON topics.id = posts.topic_id')
+- cleanup/forum_update.php:39 — ->groupBy('forums.id');
+- cleanup/forum_update.php:41 — foreach ($forums as $forum) {
+- cleanup/forum_update.php:42 — $forum['posts'] = $forum['topics'] > 0 ? $forum['posts'] : 0;
+- cleanup/forum_update.php:44 — 'post_count' => $forum['posts'],
+- cleanup/forum_update.php:45 — 'topic_count' => $forum['topics'],
+- cleanup/forum_update.php:47 — $sql = "UPDATE forums SET /* columns */ WHERE id = :id";
+- cleanup/forum_update.php:48 — $db->perform($sql, array_merge($set, ['id' => $forum['id']]));
+- cleanup/forum_update.php:50 — $topics = $fluent->from('topics')
+- cleanup/forum_update.php:55 — foreach ($topics as $topic) {
+- cleanup/forum_update.php:56 — $last_post = $fluent->from('posts')
+- cleanup/forum_update.php:60 — ->where('topic_id = ?', $topic['id'])
+- cleanup/forum_update.php:66 — $sql = "DELETE FROM topics WHERE id = :id";
+- cleanup/forum_update.php:67 — $db->perform($sql, ['id' => $topic['id']]);
+- cleanup/forum_update.php:69 — $count = $fluent->from('posts')
+- cleanup/forum_update.php:72 — ->where('topic_id = ?', $topic['id'])
+- cleanup/forum_update.php:78 — $sql = "UPDATE topics SET /* columns */ WHERE id = :id";
+- cleanup/forum_update.php:79 — $db->perform($sql, array_merge($set, ['id' => $topic['id']]));
+- cleanup/forum_update.php:88 — write_log('Forum Cleanup: Completed' . $text);
+- cleanup/freetorrents_update.php:42 — $db->perform($sql, array_merge($set, ['id' => $arr['id']]));
+- cleanup/gameaccess_update.php:45 — $msg = "Your Games ban has timed out and has been auto-removed by the system. If you would like to have it again, exchange some Karma Bon...
+- cleanup/gameaccess_update.php:64 — $db->perform($sql, array_merge($set, ['id' => $arr['id']]));
+- cleanup/hitrun_update.php:58 — $hnrs = array_merge($hnrs, $users);
+- cleanup/immunity_update.php:45 — $msg = "Your Immunity status has timed out and has been auto-removed by the system. If you would like to have it again, exchange some Kar...
+- cleanup/immunity_update.php:64 — $db->perform($sql, array_merge($set, ['id' => $arr['id']]));
+- cleanup/karma_update.php:25 — function karma_update($data)
+- cleanup/karma_update.php:61 — write_log('Seedbonus Cleanup - ' . $count . ' user' . plural($count) . ' received seedbonus totaling ' . $total . ' karma');
+- cleanup/karma_update.php:70 — write_log('Karma Cleanup: Completed' . $text);
+- cleanup/karmavip_update.php:29 — function karmavip_update($data)
+- cleanup/karmavip_update.php:41 — $msg = "Your VIP status has timed out and has been auto-removed by the system. Become a VIP again by donating to {$site_config['site']['n...
+- cleanup/karmavip_update.php:68 — write_log('Cleanup - Karma Vip status expired on - ' . $count . ' Member(s)');
+- cleanup/karmavip_update.php:77 — write_log('Karma Vip Cleanup: Completed' . $text);
+- cleanup/king_update.php:45 — $msg = "Your King status has timed out and has been auto-removed by the system. If you would like to have it again, exchange some Karma B...
+- cleanup/king_update.php:64 — $db->perform($sql, array_merge($set, ['id' => $arr['id']]));
+- cleanup/leechwarn_update.php:76 — $db->perform($sql, array_merge($set, ['id' => $arr['id']]));
+- cleanup/leechwarn_update.php:114 — $db->perform($sql, array_merge($set, ['id' => $arr['id']]));
+- cleanup/leechwarn_update.php:139 — $db->perform($sql, array_merge($set, ['id' => $arr['id']]));
+- cleanup/pirate_update.php:45 — $msg = "Your Pirate status has timed out and has been auto-removed by the system. If you would like to have it again, exchange some Karma...
+- cleanup/pirate_update.php:64 — $db->perform($sql, array_merge($set, ['id' => $arr['id']]));
+- cleanup/sitestats_update.php:76 — $forumposts = $fluent->from('posts')
+- cleanup/sitestats_update.php:80 — foreach ($forumposts as $post) {
+- cleanup/sitestats_update.php:82 — $poststoday += date('Ymd') == date('Ymd', $post['added']) ? 1 : 0;
+- cleanup/sitestats_update.php:83 — $postsmonth += date('Ym') == date('Ym', $post['added']) ? 1 : 0;
+- cleanup/sitestats_update.php:87 — $forumtopics = $fluent->from('topics')
+- cleanup/sitestats_update.php:91 — foreach ($forumtopics as $topic) {
+- cleanup/sitestats_update.php:93 — $topicstoday += date('Ymd') == date('Ymd', $topic['added']) ? 1 : 0;
+- cleanup/sitestats_update.php:94 — $topicsmonth += date('Ym') == date('Ym', $topic['added']) ? 1 : 0;
+- cleanup/sitestats_update.php:118 — 'forumposts' => $posts_count,
+- cleanup/sitestats_update.php:121 — 'forumtopics' => $topics_count,
+- cleanup/torrents_normalize.php:58 — $bad = array_merge($bad1, $bad2);
+- cleanup/trivia_update.php:84 — $db->perform($sql, array_merge($set, ['qid' => $qid]));
+- cleanup/tvmaze_schedule_update.php:28 — global $container, $BLOCKS;
+- cleanup/tvmaze_schedule_update.php:33 — if (!$BLOCKS['tvmaze_api_on']) {
+- cleanup/tvmaze_shows_update.php:29 — global $container, $BLOCKS;
+- cleanup/tvmaze_shows_update.php:33 — if (!$BLOCKS['tvmaze_api_on']) {
+- cleanup/tvmaze_shows_update.php:80 — $db->perform($sql, array_merge($values, ['tvmaze_id' => $tvmaze_id]));
+- cleanup/tvmaze_update.php:26 — global $container, $BLOCKS;
+- cleanup/tvmaze_update.php:29 — if (!$BLOCKS['tvmaze_api_on']) {
+- cleanup/uploadpos_update.php:46 — $msg = "Your Upload Ban has timed out and has been auto-removed by the system. If you would like to have it again, exchange some Karma Bo...
+- config/define.php:17 — define('FORUM_DIR', ROOT_DIR . 'forums' . DIRECTORY_SEPARATOR);
+- config/define.php:23 — define('BLOCK_DIR', ROOT_DIR . 'blocks' . DIRECTORY_SEPARATOR);
+- config/define.php:58 — const UNLOCK_MORE_MOODS = 0x4; // 4
+- config/emoticons.php:12 — 'smilies' => [
+- config/emoticons.php:203 — ':locked:' => 'locked.gif',
+- config/emoticons.php:213 — ':rblocked:' => 'rblocked.gif',
+- config/emoticons.php:214 — ':maxlocked:' => 'maxlocked.gif',
+- config/emoticons.php:215 — ':hslocked:' => 'hslocked.gif',
+- config/emoticons.php:219 — 'staff_smilies' => [
+- config/emoticons.php:230 — ':rblocked:' => 'rblocked.gif',
+- config/emoticons.php:231 — ':maxlocked:' => 'maxlocked.gif',
+- config/emoticons.php:232 — ':hslocked:' => 'hslocked.gif',
+- config/emoticons.php:233 — ':locked:' => 'locked.gif',
+- config/emoticons.php:236 — 'custom_smilies' => [
+- config/emoticons.php:356 — ':karma:' => 'karma.gif',
+- config/whereis.php:23 — 'forums' => '%s is viewing the <a href="%s">Forums</a>',
+- config/whereis.php:42 — 'mybonus' => '%s is viewing the <a href="%s">Karma Store</a>',
+- database/sql_updates.php:51 — 'info' => 'Drop unneeded table manage_likes',
+- database/sql_updates.php:53 — 'query' => 'DROP TABLE `manage_likes`',
+- database/sql_updates.php:60 — 'query' => 'ALTER TABLE `likes` DROP COLUMN `userip`',
+- database/sql_updates.php:65 — 'info' => 'Modify comments.user_likes to int',
+- database/sql_updates.php:67 — 'query' => 'UPDATE `comments` SET `user_likes` = 0',
+- database/sql_updates.php:72 — 'info' => 'Modify comments.user_likes to int',
+- database/sql_updates.php:74 — 'query' => "ALTER TABLE `comments` MODIFY `user_likes` int(10) unsigned NOT NULL DEFAULT '0'",
+- database/sql_updates.php:79 — 'info' => 'Add column user_likes in usercomments',
+- database/sql_updates.php:81 — 'query' => "ALTER TABLE `usercomments` ADD COLUMN `user_likes` int(10) unsigned NOT NULL DEFAULT '0'",
+- database/sql_updates.php:88 — 'query' => "ALTER TABLE `likes` CHANGE `user_comment_id` `topic_id` int(10) unsigned NOT NULL DEFAULT '0'",
+- database/sql_updates.php:95 — 'query' => "ALTER TABLE `likes` MODIFY `post_id` int(10) unsigned NOT NULL DEFAULT '0'",
+- database/sql_updates.php:100 — 'info' => 'Drop columm likes',
+- database/sql_updates.php:102 — 'query' => 'ALTER TABLE `likes` DROP `likes`',
+- database/sql_updates.php:109 — 'query' => "ALTER TABLE `likes` MODIFY `comment_id` int(10) unsigned NOT NULL DEFAULT '0'",
+- database/sql_updates.php:116 — 'query' => "ALTER TABLE `likes` ADD COLUMN `usercomment_id` int(10) unsigned NOT NULL DEFAULT '0'",
+- database/sql_updates.php:130 — 'query' => "ALTER TABLE `likes` ADD COLUMN `request_id` int(10) unsigned NOT NULL DEFAULT '0'",
+- database/sql_updates.php:137 — 'query' => "ALTER TABLE `likes` ADD COLUMN `offer_id` int(10) unsigned NOT NULL DEFAULT '0'",
+- database/sql_updates.php:142 — 'info' => 'Add column user_likes in topics',
+- database/sql_updates.php:144 — 'query' => "ALTER TABLE `topics` ADD COLUMN `user_likes` int(10) unsigned NOT NULL DEFAULT '0'",
+- database/sql_updates.php:149 — 'info' => 'Add column user_likes in posts',
+- database/sql_updates.php:151 — 'query' => "ALTER TABLE `posts` ADD COLUMN `user_likes` int(10) unsigned NOT NULL DEFAULT '0'",
+- database/sql_updates.php:163 — 'info' => 'Add LATEST_TORRENTS_SLIDER to user_blocks',
+- database/sql_updates.php:165 — 'query' => 'ALTER TABLE `user_blocks` MODIFY `index_page` int(10) unsigned NOT NULL DEFAULT 16777215',
+- database/sql_updates.php:186 — 'query' => 'ALTER TABLE `users` DROP COLUMN `split`',
+- database/sql_updates.php:214 — 'query' => 'ALTER TABLE `user_blocks` MODIFY COLUMN `userdetails_page` int(11) unsigned NOT NULL DEFAULT "2147418111"',
+- database/sql_updates.php:352 — 'info' => 'Update user_blocks initial value',
+- database/sql_updates.php:354 — 'query' => 'ALTER TABLE `user_blocks` MODIFY `index_page` int unsigned NOT NULL DEFAULT 33554431',
+- database/sql_updates.php:359 — 'info' => 'Update user_blocks per user',
+- database/sql_updates.php:361 — 'query' => 'UPDATE `user_blocks` SET `index_page` = `index_page` + 16777216',
+- database/sql_updates.php:694 — 'query' => 'ALTER TABLE `posts` MODIFY `added` int unsigned NOT NULL DEFAULT 0',
+- database/sql_updates.php:701 — 'query' => 'ALTER TABLE `topics` ADD `added` int unsigned NOT NULL DEFAULT 0',
+- database/sql_updates.php:757 — 'query' => 'ALTER TABLE `forum_poll_votes` MODIFY `added` int unsigned NOT NULL DEFAULT 0',
+- database/sql_updates.php:1094 — 'query' => 'ALTER TABLE `forum_poll` MODIFY `poll_starts` int unsigned NOT NULL DEFAULT 0',
+- database/sql_updates.php:1101 — 'query' => 'ALTER TABLE `forum_poll` MODIFY `poll_ends` int unsigned NOT NULL DEFAULT 0',
+- database/sql_updates.php:1143 — 'query' => 'ALTER TABLE `posts` MODIFY `edit_date` int unsigned NOT NULL DEFAULT 0',
+- database/sql_updates.php:1171 — 'query' => 'ALTER TABLE `user_blocks` MODIFY `userdetails_page` int unsigned NOT NULL DEFAULT 0',
+- database/sql_updates.php:1213 — 'query' => 'ALTER TABLE `users` MODIFY `forumpost` int unsigned NOT NULL DEFAULT 0',
+- database/sql_updates.php:1241 — 'query' => 'ALTER TABLE `users` MODIFY `forum_access` int unsigned NOT NULL DEFAULT 0',
+- database/sql_updates.php:1472 — 'query' => 'ALTER TABLE `users` MODIFY `forumpost` int unsigned NOT NULL DEFAULT 1',
+- database/sql_updates.php:1535 — 'query' => 'ALTER TABLE `users` MODIFY `reputation` int unsigned NOT NULL DEFAULT 1',
+- database/sql_updates.php:1570 — 'query' => 'ALTER TABLE `users` MODIFY `reputation` int unsigned NOT NULL DEFAULT 10',
+- database/sql_updates.php:1730 — 'query' => 'ALTER TABLE `user_blocks` MODIFY COLUMN `userdetails_page` int(10) unsigned NOT NULL DEFAULT 2147483647',
+- database/sql_updates.php:1955 — 'info' => 'Add index sticky',
+- database/sql_updates.php:1957 — 'query' => 'ALTER TABLE `torrents` ADD INDEX `sticky`(`sticky`)',
+- database/sql_updates.php:2063 — 'query' => 'ALTER TABLE `posts` ADD INDEX `added`(`added`)',
+- database/sql_updates.php:2070 — 'query' => 'ALTER TABLE `topics` ADD INDEX `added`(`added`)',
+- database/sql_updates.php:2077 — 'query' => 'ALTER TABLE `forums` ADD INDEX `min_class_read`(`min_class_read`)',
+- database/sql_updates.php:2091 — 'query' => 'ALTER TABLE `forums` ADD INDEX `parent_forum`(`parent_forum`)',
+- database/sql_updates.php:2098 — 'query' => 'ALTER TABLE `forum_config` ADD INDEX `id`(`id`)',
+- database/sql_updates.php:2105 — 'query' => 'ALTER TABLE `over_forums` ADD INDEX `min_class_view`(`min_class_view`)',
+- database/sql_updates.php:2112 — 'query' => 'ALTER TABLE `rating` ADD INDEX `topic`(`topic`)',
+- database/sql_updates.php:2270 — 'query' => "INSERT INTO `site_config` VALUES (1,'site','max_torrent_size','int','3145728','The maximum torrent size allowed by this track...
+- database/sql_updates.php:2326 — 'query' => "UPDATE `forum_config` SET `accepted_file_types` = 'application/zip|application/x-zip|application/rar|application/x-rar', `acc...
+- database/sql_updates.php:2396 — 'query' => 'UPDATE `site_config` SET `parent` = "forum_config" WHERE `parent` = "forums"',
+- database/sql_updates.php:2575 — 'query' => 'ALTER TABLE `forum_poll_votes` DROP COLUMN `ip`',
+- database/sql_updates.php:2582 — 'query' => 'ALTER TABLE `poll_voters` DROP COLUMN `ip`',
+- database/sql_updates.php:2589 — 'query' => 'ALTER TABLE `posts` DROP COLUMN `ip`',
+- database/sql_updates.php:2827 — 'query' => 'UPDATE `forum_config` SET `accepted_file_types` = "application/zip|application/x-zip|application/x-zip-compressed|application...
+- database/sql_updates.php:2834 — 'query' => 'UPDATE `forum_config` SET `accepted_file_types` = "application/zip|application/x-zip|application/x-zip-compressed|application...
+- database/sql_updates.php:2839 — 'info' => 'Add fk constraint to posts',
+- database/sql_updates.php:2841 — 'query' => 'ALTER TABLE `posts` ADD FOREIGN KEY (`topic_id`) REFERENCES `topics`(`id`) ON DELETE CASCADE',
+- database/sql_updates.php:2846 — 'info' => 'Add fk constraint to topics',
+- database/sql_updates.php:2848 — 'query' => 'ALTER TABLE `topics` ADD FOREIGN KEY (`forum_id`) REFERENCES `forums`(`id`) ON DELETE CASCADE',
+- database/sql_updates.php:2888 — 'info' => 'Add staff_blocks to site_config',
+- database/sql_updates.php:2890 — 'query' => "INSERT INTO `site_config` (parent, name, type, value, description) VALUES ('site', 'staff_blocks', 'array', '', 'Array of ind...
+- database/sql_updates.php:2995 — 'query' => 'ALTER TABLE `forum_poll_votes` RENAME COLUMN `option` TO `options`',
+- database/sql_updates.php:3199 — 'query' => 'ALTER TABLE `poll_voters` ADD UNIQUE INDEX `userid_pollid` (`user_id`,`poll_id`)',
+- database/sql_updates.php:3206 — 'query' => 'ALTER TABLE `forum_poll_votes` ADD UNIQUE INDEX `userid_pollid` (`user_id`,`poll_id`)',
+- database/sql_updates.php:3213 — 'query' => 'ALTER TABLE `forum_poll_votes` MODIFY `options` smallint unsigned NOT NULL DEFAULT 0',
+- database/sql_updates.php:3218 — 'info' => 'Truncate poll tables',
+- database/sql_updates.php:3220 — 'query' => 'TRUNCATE table `polls`',
+- database/sql_updates.php:3225 — 'info' => 'Truncate poll tables',
+- database/sql_updates.php:3227 — 'query' => 'TRUNCATE `forum_poll`',
+- database/sql_updates.php:3232 — 'info' => 'Truncate poll tables',
+- database/sql_updates.php:3234 — 'query' => 'TRUNCATE `poll_voters`',
+- database/sql_updates.php:3239 — 'info' => 'Truncate poll tables',
+- database/sql_updates.php:3241 — 'query' => 'TRUNCATE `forum_poll_votes`',
+- database/sql_updates.php:3246 — 'info' => 'Drop poll table',
+- database/sql_updates.php:3248 — 'query' => 'DROP table `poll`',
+- database/sql_updates.php:3309 — 'info' => 'Update user_blocks initial value',
+- database/sql_updates.php:3311 — 'query' => 'ALTER TABLE `user_blocks` MODIFY `index_page` int unsigned NOT NULL DEFAULT 134217727',
+- database/sql_updates.php:3316 — 'info' => 'Update user_blocks initial value',
+- database/sql_updates.php:3318 — 'query' => 'UPDATE `user_blocks` SET `index_page` = 134217727 WHERE `index_page` = 33554431',
+- database/sql_updates.php:3563 — 'query' => "ALTER TABLE `posts` ADD COLUMN `anon` enum('0', '1') COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '0' AFTER `anonymous`",
+- database/sql_updates.php:3570 — 'query' => "UPDATE `posts` SET `anon` = '1' WHERE `anonymous` = 'yes'",
+- database/sql_updates.php:3577 — 'query' => 'ALTER TABLE `posts` DROP COLUMN `anonymous`',
+- database/sql_updates.php:3584 — 'query' => 'ALTER TABLE `posts` RENAME COLUMN `anon` TO `anonymous`',
+- database/sql_updates.php:3591 — 'query' => "ALTER TABLE `topics` ADD COLUMN `anon` enum('0', '1') COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '0' AFTER `anonymous`",
+- database/sql_updates.php:3598 — 'query' => "UPDATE `topics` SET `anon` = '1' WHERE `anonymous` = 'yes'",
+- database/sql_updates.php:3605 — 'query' => 'ALTER TABLE `topics` DROP COLUMN `anonymous`',
+- database/sql_updates.php:3612 — 'query' => 'ALTER TABLE `topics` RENAME COLUMN `anon` TO `anonymous`',
+- database/sql_updates.php:3765 — 'query' => 'ALTER TABLE `user_blocks` DROP INDEX `userid`, ADD PRIMARY KEY (`userid`)',
+- database/sql_updates.php:3977 — 'query' => 'ALTER TABLE `forum_config` DROP COLUMN `upload_folder`',
+- database/sql_updates.php:3984 — 'query' => 'ALTER TABLE `forum_config` MODIFY COLUMN `accepted_file_types` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci',
+- database/sql_updates.php:4054 — 'info' => 'Add forced poll',
+- database/sql_updates.php:4056 — 'query' => "INSERT INTO `site_config` (`parent`, `name`, `type`, `value`, `description`) VALUES ('poll', 'forced', 'bool', true, 'Wether ...
+- database/sql_updates.php:4070 — 'query' => "INSERT INTO `site_config` (`parent`, `name`, `type`, `value`, `description`) VALUES ('latest', 'recipes_limit', 'int', 5, 'Th...
+- database/sql_updates.php:4222 — 'info' => 'Update user_blocks',
+- database/sql_updates.php:4224 — 'query' => 'UPDATE `user_blocks` SET `index_page` = `index_page` + 134217728 WHERE `index_page` <= 134217727',
+- database/sql_updates.php:4229 — 'info' => 'Update user_blocks',
+- database/sql_updates.php:4231 — 'query' => 'UPDATE `user_blocks` SET `index_page` = `index_page` + 805306368 WHERE `index_page` <= 268435455',
+- database/sql_updates.php:4398 — 'query' => "INSERT INTO `site_config` (`parent`, `name`, `type`, `value`, `description`) VALUES ('latest', 'offers_limit', 'int', 5, 'The...
+- database/sql_updates.php:4405 — 'query' => "INSERT INTO `site_config` (`parent`, `name`, `type`, `value`, `description`) VALUES ('latest', 'requests_limit', 'int', 5, 'T...
+- database/sql_updates.php:4629 — 'query' => "UPDATE `ach_bonus` SET `bonus_desc` = REPLACE(`bonus_desc`, 'Bonus Points to your Total', 'Karma to your Seedbonus Total'), `...
+- database/sql_updates.php:4683 — 'info' => 'Cleanup blocks',
+- database/sql_updates.php:4685 — 'query' => 'CREATE TABLE `tmp_data` SELECT * FROM `blocks`',
+- database/sql_updates.php:4690 — 'info' => 'Cleanup blocks',
+- database/sql_updates.php:4692 — 'query' => 'TRUNCATE TABLE `blocks`',
+- database/sql_updates.php:4697 — 'info' => 'Cleanup blocks',
+- database/sql_updates.php:4699 — 'query' => 'ALTER TABLE `blocks` ADD UNIQUE INDEX `user_block` (`userid`,`blockid`)',
+- database/sql_updates.php:4704 — 'info' => 'Cleanup blocks',
+- database/sql_updates.php:4706 — 'query' => 'INSERT IGNORE INTO `blocks` SELECT * FROM `tmp_data`',
+- database/sql_updates.php:4711 — 'info' => 'Cleanup blocks',
+- database/sql_updates.php:4718 — 'info' => 'Add fk constraint to blocks',
+- database/sql_updates.php:4720 — 'query' => 'ALTER TABLE `blocks` ADD FOREIGN KEY (`blockid`) REFERENCES `users`(`id`) ON DELETE CASCADE ON UPDATE CASCADE',
+- database/sql_updates.php:4795 — 'info' => 'Update to user_blocks',
+- database/sql_updates.php:4797 — 'query' => 'UPDATE `user_blocks` SET `index_page` = 1073741823 WHERE `index_page` = 134217727',
+- database/sql_updates.php:4802 — 'info' => 'Update user_blocks',
+- database/sql_updates.php:4804 — 'query' => 'ALTER TABLE `user_blocks` MODIFY `index_page` int(10) unsigned NOT NULL DEFAULT 1073741823',
+- database/sql_updates.php:5021 — 'query' => "ALTER TABLE `over_forums` DROP COLUMN `forum_id`",
+- database/sql_updates.php:5028 — 'query' => "ALTER TABLE `posts` DROP INDEX `ft_body`",
+- database/sql_updates.php:5035 — 'query' => "ALTER TABLE `posts` DROP INDEX `ft_title`",
+- database/sql_updates.php:5056 — 'query' => "ALTER TABLE `topics` DROP INDEX `ft_name`",
+- docs/BATCH30_COMPOSER_MODERNIZE.md:3 — **Purpose:** Gain visibility into blockers for PHP 8.3/Laravel 11 without any local runs.
+- docs/BATCH30_COMPOSER_MODERNIZE.md:15 — 2. **Update** (manual trigger with input `update_lock=true`):
+- docs/BATCH30_COMPOSER_MODERNIZE.md:17 — - If successful: opens a PR with the updated `composer.lock` and reports
+- docs/BATCH30_COMPOSER_MODERNIZE.md:22 — This workflow focuses on the **dependency graph first** – not post-install hooks.
+- docs/BATCH30_COMPOSER_MODERNIZE.md:25 — - Use diagnosis to identify blockers and plan package upgrades or replacements.
+- docs/BATCH31_PLATFORM_ALIGNMENT.md:3 — **Goal:** Provide a CI-only, non-blocking check that your repository is aligned with **PHP 8.3**.
+- docs/BATCH31_PLATFORM_ALIGNMENT.md:4 — This makes blockers visible early without breaking pull requests.
+- docs/BATCH31_PLATFORM_ALIGNMENT.md:12 — Artifacts are uploaded for inspection. All steps are **non-blocking**.
+- docs/BATCH31_PLATFORM_ALIGNMENT.md:19 — A ready-made snippet you can merge into `composer.json` to pin the project to PHP 8.3.
+- docs/BATCH31_PLATFORM_ALIGNMENT.md:24 — 3. Download the artifacts to see whether your constraints permit PHP 8.3 and which packages (if any) block the upgrade.
+- docs/BATCH31_PLATFORM_ALIGNMENT.md:28 — - Use the `why-not` report to upgrade or replace blockers.
+- docs/BATCH32_LOCKED_DIAGNOSTICS.md:1 — # Batch 32 – Locked Install Diagnostics (PHP 8.3)
+- docs/BATCH32_LOCKED_DIAGNOSTICS.md:3 — **Goal:** Produce a **clean, non-destructive** report of which packages in your **existing lockfile** block PHP 8.3 — all in CI, without ...
+- docs/BATCH32_LOCKED_DIAGNOSTICS.md:6 — - Copies `composer.json` + `composer.lock` to a temporary directory
+- docs/BATCH32_LOCKED_DIAGNOSTICS.md:9 — - `composer why-not php ^8.3 --locked -t`
+- docs/BATCH32_LOCKED_DIAGNOSTICS.md:10 — - `composer outdated --direct --locked --format=json`
+- docs/BATCH32_LOCKED_DIAGNOSTICS.md:11 — - `composer install --no-dev --no-scripts --no-plugins` (will fail if blockers exist)
+- docs/BATCH32_LOCKED_DIAGNOSTICS.md:13 — - `composer-why-not-php83-locked.txt`
+- docs/BATCH32_LOCKED_DIAGNOSTICS.md:14 — - `composer-outdated-locked.json`
+- docs/BATCH32_LOCKED_DIAGNOSTICS.md:17 — - temp `composer.json` (with platform injected) and `composer.lock`
+- docs/BATCH32_LOCKED_DIAGNOSTICS.md:20 — 1. Commit the workflow file: `.github/workflows/composer-locked-diagnostics.yml`
+- docs/BATCH32_LOCKED_DIAGNOSTICS.md:21 — 2. In GitHub → **Actions** → Run **Composer Locked Install Diagnostics (PHP 8.3)**
+- docs/BATCH32_LOCKED_DIAGNOSTICS.md:22 — 3. Download the artifacts to see **exactly which packages** block PHP 8.3.
+- docs/BATCH32_LOCKED_DIAGNOSTICS.md:26 — - This avoids local runs and gives you a deterministic blockers list based on the current **lockfile**.
+- docs/BATCH32_LOCKED_DIAGNOSTICS.md:27 — - Once blockers are known, you can:
+- docs/BATCH33_UPGRADE_PLAN.md:3 — ## Known blockers
+- docs/BATCH33_UPGRADE_PLAN.md:9 — 1. Run `php83-blockers-check.yml` → soft report on PRs
+- docs/BATCH33_UPGRADE_PLAN.md:15 — 3. Merge PR, re-run Batch 32 diagnostics
+- docs/BATCH34_FLUENTPDO_PHASEOUT.md:5 — This unblocks PHP 8.3 completely.
+- docs/README-batch-40.md:8 — - Optionally applies **conservative fixes** to obvious patterns (imports, docblocks, container `$fluent` hints, and specific admin patter...
+- forums/add_subscription.php:13 — // TEMPORARY STUB: Forum module under maintenance.
+- forums/add_subscription.php:14 — // The original file has been quarantined to forums/_quarantine/add_subscription.php.orig
+- forums/add_subscription.php:17 — echo "Forum module is temporarily unavailable while we rebuild this section.\n";
+- forums/add_subscription.php:18 — echo "Reference: forums/_quarantine/add_subscription.php.orig\n";
+- forums/attachment.php:13 — // TEMPORARY STUB: Forum module under maintenance.
+- forums/attachment.php:14 — // The original file has been quarantined to forums/_quarantine/attachment.php.orig
+- forums/attachment.php:17 — echo "Forum module is temporarily unavailable while we rebuild this section.\n";
+- forums/attachment.php:18 — echo "Reference: forums/_quarantine/attachment.php.orig\n";
+- forums/clear_unread_post.php:13 — // TEMPORARY STUB: Forum module under maintenance.
+- forums/clear_unread_post.php:14 — // The original file has been quarantined to forums/_quarantine/clear_unread_post.php.orig
+- forums/clear_unread_post.php:17 — echo "Forum module is temporarily unavailable while we rebuild this section.\n";
+- forums/clear_unread_post.php:18 — echo "Reference: forums/_quarantine/clear_unread_post.php.orig\n";
+- forums/delete_post.php:13 — // TEMPORARY STUB: Forum module under maintenance.
+- forums/delete_post.php:14 — // The original file has been quarantined to forums/_quarantine/delete_post.php.orig
+- forums/delete_post.php:17 — echo "Forum module is temporarily unavailable while we rebuild this section.\n";
+- forums/delete_post.php:18 — echo "Reference: forums/_quarantine/delete_post.php.orig\n";
+- forums/delete_subscription.php:13 — // TEMPORARY STUB: Forum module under maintenance.
+- forums/delete_subscription.php:14 — // The original file has been quarantined to forums/_quarantine/delete_subscription.php.orig
+- forums/delete_subscription.php:17 — echo "Forum module is temporarily unavailable while we rebuild this section.\n";
+- forums/delete_subscription.php:18 — echo "Reference: forums/_quarantine/delete_subscription.php.orig\n";
+- forums/download_attachment.php:13 — // TEMPORARY STUB: Forum module under maintenance.
+- forums/download_attachment.php:14 — // The original file has been quarantined to forums/_quarantine/download_attachment.php.orig
+- forums/download_attachment.php:17 — echo "Forum module is temporarily unavailable while we rebuild this section.\n";
+- forums/download_attachment.php:18 — echo "Reference: forums/_quarantine/download_attachment.php.orig\n";
+- forums/edit_post.php:13 — // TEMPORARY STUB: Forum module under maintenance.
+- forums/edit_post.php:14 — // The original file has been quarantined to forums/_quarantine/edit_post.php.orig
+- forums/edit_post.php:17 — echo "Forum module is temporarily unavailable while we rebuild this section.\n";
+- forums/edit_post.php:18 — echo "Reference: forums/_quarantine/edit_post.php.orig\n";
+- forums/editor.php:13 — // TEMPORARY STUB: Forum module under maintenance.
+- forums/editor.php:14 — // The original file has been quarantined to forums/_quarantine/editor.php.orig
+- forums/editor.php:17 — echo "Forum module is temporarily unavailable while we rebuild this section.\n";
+- forums/editor.php:18 — echo "Reference: forums/_quarantine/editor.php.orig\n";
+- forums/last_ten.php:13 — // TEMPORARY STUB: Forum module under maintenance.
+- forums/last_ten.php:14 — // The original file has been quarantined to forums/_quarantine/last_ten.php.orig
+- forums/last_ten.php:17 — echo "Forum module is temporarily unavailable while we rebuild this section.\n";
+- forums/last_ten.php:18 — echo "Reference: forums/_quarantine/last_ten.php.orig\n";
+- forums/mark_all_as_read.php:13 — // TEMPORARY STUB: Forum module under maintenance.
+- forums/mark_all_as_read.php:14 — // The original file has been quarantined to forums/_quarantine/mark_all_as_read.php.orig
+- forums/mark_all_as_read.php:17 — echo "Forum module is temporarily unavailable while we rebuild this section.\n";
+- forums/mark_all_as_read.php:18 — echo "Reference: forums/_quarantine/mark_all_as_read.php.orig\n";
+- forums/member_post_history.php:13 — // TEMPORARY STUB: Forum module under maintenance.
+- forums/member_post_history.php:14 — // The original file has been quarantined to forums/_quarantine/member_post_history.php.orig
+- forums/member_post_history.php:17 — echo "Forum module is temporarily unavailable while we rebuild this section.\n";
+- forums/member_post_history.php:18 — echo "Reference: forums/_quarantine/member_post_history.php.orig\n";
+- forums/new_replies.php:13 — // TEMPORARY STUB: Forum module under maintenance.
+- forums/new_replies.php:14 — // The original file has been quarantined to forums/_quarantine/new_replies.php.orig
+- forums/new_replies.php:17 — echo "Forum module is temporarily unavailable while we rebuild this section.\n";
+- forums/new_replies.php:18 — echo "Reference: forums/_quarantine/new_replies.php.orig\n";
+- forums/new_topic.php:13 — // TEMPORARY STUB: Forum module under maintenance.
+- forums/new_topic.php:14 — // The original file has been quarantined to forums/_quarantine/new_topic.php.orig
+- forums/new_topic.php:17 — echo "Forum module is temporarily unavailable while we rebuild this section.\n";
+- forums/new_topic.php:18 — echo "Reference: forums/_quarantine/new_topic.php.orig\n";
+- forums/poll.php:13 — // TEMPORARY STUB: Forum module under maintenance.
+- forums/poll.php:14 — // The original file has been quarantined to forums/_quarantine/poll.php.orig
+- forums/poll.php:17 — echo "Forum module is temporarily unavailable while we rebuild this section.\n";
+- forums/poll.php:18 — echo "Reference: forums/_quarantine/poll.php.orig\n";
+- forums/post_reply.php:13 — // TEMPORARY STUB: Forum module under maintenance.
+- forums/post_reply.php:14 — // The original file has been quarantined to forums/_quarantine/post_reply.php.orig
+- forums/post_reply.php:17 — echo "Forum module is temporarily unavailable while we rebuild this section.\n";
+- forums/post_reply.php:18 — echo "Reference: forums/_quarantine/post_reply.php.orig\n";
+- forums/quick_reply.php:13 — // TEMPORARY STUB: Forum module under maintenance.
+- forums/quick_reply.php:14 — // The original file has been quarantined to forums/_quarantine/quick_reply.php.orig
+- forums/quick_reply.php:17 — echo "Forum module is temporarily unavailable while we rebuild this section.\n";
+- forums/quick_reply.php:18 — echo "Reference: forums/_quarantine/quick_reply.php.orig\n";
+- forums/search.php:13 — // TEMPORARY STUB: Forum module under maintenance.
+- forums/search.php:14 — // The original file has been quarantined to forums/_quarantine/search.php.orig
+- forums/search.php:17 — echo "Forum module is temporarily unavailable while we rebuild this section.\n";
+- forums/search.php:18 — echo "Reference: forums/_quarantine/search.php.orig\n";
+- forums/section_view.php:13 — // TEMPORARY STUB: Forum module under maintenance.
+- forums/section_view.php:14 — // The original file has been quarantined to forums/_quarantine/section_view.php.orig
+- forums/section_view.php:17 — echo "Forum module is temporarily unavailable while we rebuild this section.\n";
+- forums/section_view.php:18 — echo "Reference: forums/_quarantine/section_view.php.orig\n";
+- forums/staff_actions.php:13 — // TEMPORARY STUB: Forum module under maintenance.
+- forums/staff_actions.php:14 — // The original file has been quarantined to forums/_quarantine/staff_actions.php.orig
+- forums/staff_actions.php:17 — echo "Forum module is temporarily unavailable while we rebuild this section.\n";
+- forums/staff_actions.php:18 — echo "Reference: forums/_quarantine/staff_actions.php.orig\n";
+- forums/stafflock_post.php:13 — // TEMPORARY STUB: Forum module under maintenance.
+- forums/stafflock_post.php:14 — // The original file has been quarantined to forums/_quarantine/stafflock_post.php.orig
+- forums/stafflock_post.php:17 — echo "Forum module is temporarily unavailable while we rebuild this section.\n";
+- forums/stafflock_post.php:18 — echo "Reference: forums/_quarantine/stafflock_post.php.orig\n";
+- forums/subscriptions.php:13 — // TEMPORARY STUB: Forum module under maintenance.
+- forums/subscriptions.php:14 — // The original file has been quarantined to forums/_quarantine/subscriptions.php.orig
+- forums/subscriptions.php:17 — echo "Forum module is temporarily unavailable while we rebuild this section.\n";
+- forums/subscriptions.php:18 — echo "Reference: forums/_quarantine/subscriptions.php.orig\n";
+- forums/undelete_post.php:13 — // TEMPORARY STUB: Forum module under maintenance.
+- forums/undelete_post.php:14 — // The original file has been quarantined to forums/_quarantine/undelete_post.php.orig
+- forums/undelete_post.php:17 — echo "Forum module is temporarily unavailable while we rebuild this section.\n";
+- forums/undelete_post.php:18 — echo "Reference: forums/_quarantine/undelete_post.php.orig\n";
+- forums/view_forum.php:13 — // TEMPORARY STUB: Forum module under maintenance.
+- forums/view_forum.php:14 — // The original file has been quarantined to forums/_quarantine/view_forum.php.orig
+- forums/view_forum.php:17 — echo "Forum module is temporarily unavailable while we rebuild this section.\n";
+- forums/view_forum.php:18 — echo "Reference: forums/_quarantine/view_forum.php.orig\n";
+- forums/view_my_posts.php:13 — // TEMPORARY STUB: Forum module under maintenance.
+- forums/view_my_posts.php:14 — // The original file has been quarantined to forums/_quarantine/view_my_posts.php.orig
+- forums/view_my_posts.php:17 — echo "Forum module is temporarily unavailable while we rebuild this section.\n";
+- forums/view_my_posts.php:18 — echo "Reference: forums/_quarantine/view_my_posts.php.orig\n";
+- forums/view_post_history.php:13 — // TEMPORARY STUB: Forum module under maintenance.
+- forums/view_post_history.php:14 — // The original file has been quarantined to forums/_quarantine/view_post_history.php.orig
+- forums/view_post_history.php:17 — echo "Forum module is temporarily unavailable while we rebuild this section.\n";
+- forums/view_post_history.php:18 — echo "Reference: forums/_quarantine/view_post_history.php.orig\n";
+- forums/view_topic.php:13 — // TEMPORARY STUB: Forum module under maintenance.
+- forums/view_topic.php:14 — // The original file has been quarantined to forums/_quarantine/view_topic.php.orig
+- forums/view_topic.php:17 — echo "Forum module is temporarily unavailable while we rebuild this section.\n";
+- forums/view_topic.php:18 — echo "Reference: forums/_quarantine/view_topic.php.orig\n";
+- forums/view_unread_posts.php:13 — // TEMPORARY STUB: Forum module under maintenance.
+- forums/view_unread_posts.php:14 — // The original file has been quarantined to forums/_quarantine/view_unread_posts.php.orig
+- forums/view_unread_posts.php:17 — echo "Forum module is temporarily unavailable while we rebuild this section.\n";
+- forums/view_unread_posts.php:18 — echo "Reference: forums/_quarantine/view_unread_posts.php.orig\n";
+- include/arcade.php:64 — $message = "[color=#$classColor][b]{$user['username']}[/b][/color] has just set a new high score of " . number_format($score) . " in $lin...
+- include/arcade.php:93 — $db->perform($sql, array_merge($update, ['game' => $gname]));
+- include/bittorrent.php:39 — require_once CLASS_DIR.'class_blocks_index.php';
+- include/bittorrent.php:40 — require_once CLASS_DIR.'class_blocks_stdhead.php';
+- include/bittorrent.php:41 — require_once CLASS_DIR.'class_blocks_userdetails.php';
+- include/bittorrent.php:42 — require_once CLASS_DIR.'class_blocks_apis.php';
+- include/bittorrent.php:43 — require_once CACHE_DIR.'block_settings_cache.php';
+- include/bittorrent.php:68 — if (\preg_match('/(?:\< *(?:java|script)|script\:|\+document\.)/i', \serialize(\array_merge($_SERVER, $_GET, $_POST, $_COOKIE)))) {
+- include/bittorrent.php:705 — \app_halt('Site is down for maintenance, please check back again later... thanks<br>');
+- include/bittorrent.php:766 — } elseif ($role === 'forum_mod') {
+- include/bittorrent.php:767 — if ($userclass >= $class || $auth->hasRole(Roles::FORUM_MOD)) {
+- include/class/class_blocks_apis.php:10 — * Class class_blocks_apis.
+- include/class/class_blocks_apis.php:12 — class class_blocks_apis
+- include/class/class_blocks_index.php:10 — * Class class_blocks_index.
+- include/class/class_blocks_index.php:12 — class class_blocks_index
+- include/class/class_blocks_index.php:24 — const FORUMPOSTS = 0x400; // 1024
+- include/class/class_blocks_index.php:33 — const ACTIVE_POLL = 0x80000; // 524288
+- include/class/class_blocks_stdhead.php:10 — * Class class_blocks_stdhead.
+- include/class/class_blocks_stdhead.php:12 — class class_blocks_stdhead
+- include/class/class_blocks_userdetails.php:10 — * Class class_blocks_userdetails.
+- include/class/class_blocks_userdetails.php:12 — class class_blocks_userdetails
+- include/class/class_blocks_userdetails.php:19 — const REPUTATION = 0x20; //         32
+- include/class/class_blocks_userdetails.php:35 — const FORUMPOSTS = 0x200000; //    2097152
+- include/class/class_blocks_userdetails.php:37 — const TORRENTS_BLOCK = 0x800000; //    8388608
+- include/class/class_check.php:63 — write_log('Class Check System Initialized [url=' . $site_config['paths']['baseurl'] . '/forums.php?action=view_topic&amp;topic_id=' . $po...
+- include/class/class_user_options.php:34 — const FORUM_POST = 0x400000; // 4194304
+- include/class/class_user_options.php:42 — const GOTBLOCKS = 0x40000000; // 1073741824  exclude
+- include/class/class_user_options_2.php:16 — const SPLIT = 0x4; // 4  exclude
+- include/cron_controller.php:72 — $db->perform($sql, array_merge($set, ['clean_id' => $row['clean_id']]));
+- include/emoticons.php:10 — $smilies = [
+- include/emoticons.php:200 — ':locked:' => 'locked.gif',
+- include/emoticons.php:210 — ':rblocked:' => 'rblocked.gif',
+- include/emoticons.php:211 — ':maxlocked:' => 'maxlocked.gif',
+- include/emoticons.php:212 — ':hslocked:' => 'hslocked.gif',
+- include/emoticons.php:216 — $staff_smilies = [
+- include/emoticons.php:227 — ':rblocked:' => 'rblocked.gif',
+- include/emoticons.php:228 — ':maxlocked:' => 'maxlocked.gif',
+- include/emoticons.php:229 — ':hslocked:' => 'hslocked.gif',
+- include/emoticons.php:230 — ':locked:' => 'locked.gif',
+- include/emoticons.php:233 — $customsmilies = [
+- include/emoticons.php:353 — ':karma:' => 'karma.gif',
+- include/function_announce.php:50 — if (($cz_lock = $cache->set('crazyhour_lock_', 1, 10)) !== false) {
+- include/function_announce.php:83 — if (($cz_lock = $cache->set('crazyhour_lock_', 1, 10)) !== false) {
+- include/function_announce.php:95 — $text = 'w00t! It\'s <span style="font-weight:bold;color:orange;">Crazyhour</span> <img src="' . IMAGES_DIR . 'smilies/w00t.gif" alt=":w0...
+- include/function_autopost.php:43 — $topicid = $fluent->from('topics')
+- include/function_autopost.php:46 — ->where('forum_id = ?', $site_config['staff_forums'][0])
+- include/function_autopost.php:52 — 'forum_id' => $site_config['staff_forums'][0],
+- include/function_autopost.php:55 — $sql = "INSERT INTO topics (/* columns */) VALUES (/* values */)";
+- include/function_autopost.php:61 — $sql = "UPDATE forums SET /* columns */ WHERE id = :id";
+- include/function_autopost.php:62 — $db->perform($sql, array_merge($set, ['id' => $site_config['staff_forums'][0]]));
+- include/function_autopost.php:71 — $sql = "INSERT INTO posts (/* columns */) VALUES (/* values */)";
+- include/function_autopost.php:77 — $sql = "UPDATE topics SET /* columns */ WHERE id = :id";
+- include/function_autopost.php:78 — $db->perform($sql, array_merge($set, ['id' => $topicid]));
+- include/function_autopost.php:83 — $sql = "UPDATE forums SET /* columns */ WHERE id = :id";
+- include/function_autopost.php:84 — $db->perform($sql, array_merge($set, ['id' => $site_config['staff_forums'][0]]));
+- include/function_autopost.php:88 — $cache->delete('forum_posts_' . $CURUSER['id']);
+- include/function_bbcode.php:21 — * @param $smilies_set
+- include/function_bbcode.php:28 — function smilies_frame($smilies_set)
+- include/function_bbcode.php:34 — foreach ($smilies_set as $code => $url) {
+- include/function_bbcode.php:39 — <img src='{$image}' data-src='{$site_config['paths']['images_baseurl']}smilies/" . $url . "' alt='{$code}' class='lazy w-100'>
+- include/function_bbcode.php:60 — function BBcode(string $body = '', string $class = 'w-100', int $height = 600)
+- include/function_bbcode.php:64 — if (!$site_config['site']['BBcode']) {
+- include/function_bbcode.php:73 — $bbcode = "
+- include/function_bbcode.php:75 — <textarea name='body' id='bbcode-editor' style='height: {$height}px;'>" . $body . '</textarea>
+- include/function_bbcode.php:78 — return $bbcode;
+- include/function_bbcode.php:86 — function check_BBcode($html)
+- include/function_bbcode.php:215 — // This fixes the extraneous ;) smilies problem. When there was an html escaped
+- include/function_bbcode.php:217 — // to &xxx;), hence all the extra smilies. I created a new :wink: label, removed
+- include/function_bbcode.php:227 — $s = check_BBcode($s);
+- include/function_bbcode.php:245 — '/\[blockquote\](.*?)\[\/blockquote\]/is',
+- include/function_bbcode.php:314 — '<blockquote class="style"><span>\1</span></blockquote>',
+- include/function_bbcode.php:320 — '<div style="padding-top: 2px; white-space: nowrap;"><span style="cursor: pointer; border-bottom: 1px dotted;" onclick="if (document.getE...
+- include/function_bbcode.php:471 — $smilies = $container->get('smilies');
+- include/function_bbcode.php:472 — foreach ($smilies as $code => $url) {
+- include/function_bbcode.php:473 — $s = str_replace($code, "<img src='{$image}' data-src='{$site_config['paths']['images_baseurl']}smilies/{$url}' alt='' class='lazy'>", $s);
+- include/function_bbcode.php:475 — $staff_smilies = $container->get('staff_smilies');
+- include/function_bbcode.php:476 — foreach ($staff_smilies as $code => $url) {
+- include/function_bbcode.php:477 — $s = str_replace($code, "<img src='{$image}' data-src='{$site_config['paths']['images_baseurl']}smilies/{$url}' alt='' class='lazy'>", $s);
+- include/function_bbcode.php:479 — $custom_smilies = $container->get('custom_smilies');
+- include/function_bbcode.php:480 — foreach ($custom_smilies as $code => $url) {
+- include/function_bbcode.php:481 — $s = str_replace($code, "<img src='{$image}' data-src='{$site_config['paths']['images_baseurl']}smilies/{$url}' alt='' class='lazy'>", $s);
+- include/function_bbcode.php:547 — function format_comment_no_bbcode($text, $strip_html = true)
+- include/function_bitbucket.php:11 — use Blocktrail\CryptoJSAES\CryptoJSAES;
+- include/function_bluray.php:32 — global $container, $BLOCKS, $site_config;
+- include/function_bluray.php:34 — if (!$BLOCKS['bluray_com_api_on']) {
+- include/function_bonus.php:346 — <h1 class='top20 has-text-centered'>What the hell are these Karma Bonus points, and how do I get them?</h1>
+- include/function_bonus.php:350 — For every hour that you seed a torrent, you are awarded with " . number_format($bpt * 2, 2) . " Karma Bonus Point...
+- include/function_bonus.php:353 — If you save up enough of them, you can trade them in for goodies like bonus GB(s) to increase your upload stats, also to get more invites...
+- include/function_bonus.php:360 — karma per hour
+- include/function_bonus.php:367 — <h2>Other things that will get you karma points:</h2>
+- include/function_bonus.php:372 — Saying thanks = 2 points<br>
+- include/function_bonus.php:374 — Making a post = 1 point<br>
+- include/function_bonus.php:375 — Starting a topic = 2 points
+- include/function_bonus.php:382 — <h2>Some things that will cost you karma points:</h2>
+- include/function_bonus.php:389 — One month custom smilies for the forums and comments<br>
+- include/function_bonus.php:392 — Giving.gift of karma points to another user<br>
+- include/function_bonus.php:400 — Unlocking parked option<br>
+- include/function_bonus.php:402 — Reputation points<br>
+- include/function_bonus.php:403 — Userblocks<br>
+- include/function_bonus.php:406 — User unlocks<br>
+- include/function_bonus.php:409 — But keep in mind that everything that can get you karma can also be lost...<br>
+- include/function_bonus.php:412 — ie: If you up a torrent then delete it, you will gain and then lose 15 points, making a post and having it deleted will do the same... an...
+- include/function_books.php:38 — global $container, $BLOCKS;
+- include/function_books.php:40 — if (!$BLOCKS['google_books_api_on']) {
+- include/function_chatbot.php:161 — 'karma',
+- include/function_chatbot.php:162 — 'reputation',
+- include/function_chatbot.php:192 — case 'karma':
+- include/function_chatbot.php:195 — 'bonuscomment' => get_date(TIME_NOW, 'DATE', 1) . ' - Awarded ' . $amount . " Karma from Chat\n" . $user['bonuscomment'],
+- include/function_chatbot.php:198 — $msg = "{$username} has been randomly selected to receive " . number_format($amount) . ' karma points from ' . $site_config['chatbot']['n...
+- include/function_chatbot.php:200 — case 'reputation':
+- include/function_chatbot.php:203 — 'bonuscomment' => get_date(TIME_NOW, 'DATE', 1) . ' - Awarded ' . $amount . " Reputation from Chat.\n" . $user['bonuscomment'],
+- include/function_chatbot.php:204 — 'reputation' => $amount + $user['reputation'],
+- include/function_chatbot.php:206 — $msg = "{$username} has been randomly selected to receive $amount reputation points from " . $site_config['chatbot']['name'];
+- include/function_comments.php:69 — $likes = $att_str = '';
+- include/function_comments.php:70 — $likers = $user_likes = [];
+- include/function_comments.php:71 — if ($row['user_likes'] > 0) {
+- include/function_comments.php:73 — $user_likes = $cache->get("{$type}_user_likes_" . $cid);
+- include/function_comments.php:74 — if ($user_likes === false || is_null($user_likes)) {
+- include/function_comments.php:76 — $likes = $fluent->from('likes')
+- include/function_comments.php:80 — foreach ($likes as $like) {
+- include/function_comments.php:81 — $user_likes[] = $like['user_id'];
+- include/function_comments.php:83 — $cache->set("{$type}_user_likes_" . $cid, $user_likes, 86400);
+- include/function_comments.php:85 — if ($user_likes) {
+- include/function_comments.php:86 — foreach ($user_likes as $userid) {
+- include/function_comments.php:89 — $likes = implode(', ', $likers);
+- include/function_comments.php:90 — $count = count($user_likes);
+- include/function_comments.php:93 — if (!empty($likes) && $count > 0) {
+- include/function_comments.php:94 — if (in_array($CURUSER['id'], $user_likes)) {
+- include/function_comments.php:101 — $att_str = $likes . ' like' . plural($count) . ' this';
+- include/function_comments.php:104 — $wht = $count > 0 && in_array($CURUSER['id'], $user_likes) ? 'unlike' : 'like';
+- include/function_comments.php:113 — <img src="' . $site_config['paths']['images_baseurl'] . 'smilies/' . $moodpic . '" alt="' . $moodname . '" class="tooltipper" title="' . ...
+- include/function_comments.php:143 — $member_reputation = !empty($usersdata['username']) ? get_reputation($user, 'comments', true, 0, ($row['anonymous']) === '1' ? true : fal...
+- include/function_comments.php:145 — $htmlout .= format_table_no_border($row, $image, $this_text, $avatar, $CURUSER, $usersdata, $text, $member_reputation);
+- include/function_comments.php:147 — $htmlout .= format_table_border($row, $image, $this_text, $avatar, $CURUSER, $usersdata, $text, $top, $member_reputation);
+- include/function_comments.php:163 — * @param $member_reputation
+- include/function_comments.php:172 — function format_table_border($row, $image, $this_text, $avatar, $CURUSER, $usersdata, $text, $top, $member_reputation)
+- include/function_comments.php:184 — ' . ($usersdata['last_access'] > (TIME_NOW - 300) && get_anonymous($usersdata['id']) ? ' <img src="' . $image . '" data-src="' . $site_co...
+- include/function_comments.php:204 — * @param $member_reputation
+- include/function_comments.php:213 — function format_table_no_border($row, $image, $this_text, $avatar, $CURUSER, $usersdata, $text, $member_reputation)
+- include/function_comments.php:227 — ' . ($usersdata['last_access'] > (TIME_NOW - 300) && get_anonymous($usersdata['id']) ? ' <img src="' . $image . '" data-src="' . $site_co...
+- include/function_event.php:65 — $db->perform($sql, array_merge($set, ['expires' => $expires]));
+- include/function_fanart.php:29 — global $container, $BLOCKS, $site_config;
+- include/function_fanart.php:31 — if (!$BLOCKS['fanart_api_on']) {
+- include/function_fanart.php:122 — global $container, $BLOCKS, $site_config;
+- include/function_fanart.php:124 — if (!$BLOCKS['fanart_api_on']) {
+- include/function_html.php:130 — function insert_smilies_frame()
+- include/function_html.php:132 — global $smilies, $site_config;
+- include/function_html.php:134 — $htmlout .= begin_frame('Smilies', true);
+- include/function_html.php:137 — foreach ($smilies as $code => $url) {
+- include/function_html.php:138 — $htmlout .= "<tr><td>$code</td><td><img src=\"{$site_config['paths']['images_baseurl']}smilies/{$url}\" alt=''></td></tr>\n";
+- include/function_html.php:291 — $classes = "bbCodeTags: [\n        'b',\n        'i',\n        'u',\n        'quote',\n        'code',\n        'color',\n        'url',\...
+- include/function_html.php:292 — $html = preg_replace('/(bbCodeTags:\s+\[.*?\],)/s', $classes, $html);
+- include/function_imdb.php:16 — require_once INCL_DIR . 'function_bbcode.php';
+- include/function_imdb.php:49 — global $container, $site_config, $BLOCKS;
+- include/function_imdb.php:52 — if (!$BLOCKS['imdb_api_on']) {
+- include/function_imdb.php:190 — $set = array_merge($set, [
+- include/function_imdb.php:449 — global $BLOCKS;
+- include/function_imdb.php:451 — if (!$BLOCKS['imdb_api_on']) {
+- include/function_imdb.php:474 — global $container, $site_config, $BLOCKS;
+- include/function_imdb.php:481 — if (!$BLOCKS['imdb_api_on']) {
+- include/function_imdb.php:512 — $values = array_merge($values, [
+- include/function_imdb.php:631 — global $container, $BLOCKS;
+- include/function_imdb.php:634 — if (!$BLOCKS['imdb_api_on']) {
+- include/function_imdb.php:708 — global $container, $site_config, $BLOCKS;
+- include/function_imdb.php:711 — if (!$BLOCKS['imdb_api_on']) {
+- include/function_imdb.php:723 — $set = array_merge($set, [
+- include/function_imdb.php:761 — global $container, $site_config, $BLOCKS;
+- include/function_imdb.php:764 — if (!$BLOCKS['imdb_api_on']) {
+- include/function_imdb.php:792 — $db->perform($sql, array_merge($set, ['imdb_id' => $person_id]));
+- include/function_imdb.php:851 — $db->perform($sql, array_merge($set, ['imdb_id' => $person_id]));
+- include/function_imdb.php:926 — global $container, $BLOCKS;
+- include/function_imdb.php:929 — if (!$BLOCKS['imdb_api_on']) {
+- include/function_imdb.php:982 — global $container, $BLOCKS;
+- include/function_imdb.php:985 — if (!$BLOCKS['imdb_api_on']) {
+- include/function_polls.php:13 — use Pu239\PollVoter;
+- include/function_polls.php:24 — function parse_poll()
+- include/function_polls.php:30 — $poll_footer = '';
+- include/function_polls.php:34 — 'allow_poll_tags' => 1,
+- include/function_polls.php:36 — $pollvoter_class = $container->get(PollVoter::class);
+- include/function_polls.php:37 — $poll_data = $pollvoter_class->get_user_poll($CURUSER['id']);
+- include/function_polls.php:38 — if (empty($poll_data)) {
+- include/function_polls.php:43 — if ($poll_data['user_id']) {
+- include/function_polls.php:49 — $poll_footer = 'You have already voted';
+- include/function_polls.php:52 — if (($poll_data['starter_id'] == $CURUSER['id']) && ($GVARS['allow_creator_vote'] != 1)) {
+- include/function_polls.php:54 — $poll_footer = 'You created this poll and are not allowed to vote';
+- include/function_polls.php:60 — $poll_footer = '';
+- include/function_polls.php:65 — $htmlout = poll_header($poll_data['pid'], htmlsafechars($poll_data['poll_question']));
+- include/function_polls.php:66 — $poll_answers = json_decode($poll_data['choices'], true);
+- include/function_polls.php:67 — if (empty($poll_answers)) {
+- include/function_polls.php:68 — $poll_answers = [];
+- include/function_polls.php:70 — reset($poll_answers);
+- include/function_polls.php:71 — $tv_poll = 0;
+- include/function_polls.php:72 — foreach ($poll_answers as $id => $data) {
+- include/function_polls.php:77 — foreach ($poll_answers[$id]['votes'] as $number) {
+- include/function_polls.php:78 — $tv_poll += intval($number);
+- include/function_polls.php:87 — if ($GVARS['allow_poll_tags']) {
+- include/function_polls.php:90 — $percent = $votes == 0 ? 0 : $votes / $tv_poll * 100;
+- include/function_polls.php:93 — $choice_html .= poll_show_rendered_choice($choice_id, $votes, $id, $choice, $percent, $width);
+- include/function_polls.php:95 — $htmlout .= poll_show_rendered_question($question, $choice_html);
+- include/function_polls.php:97 — $htmlout .= show_total_votes($tv_poll);
+- include/function_polls.php:100 — $htmlout .= poll_header($poll_data['pid'], htmlsafechars($poll_data['poll_question']));
+- include/function_polls.php:101 — //$htmlout .= poll_show_no_guest_view();
+- include/function_polls.php:104 — $poll_answers = json_decode($poll_data['choices'], true);
+- include/function_polls.php:105 — //output poll form
+- include/function_polls.php:106 — $htmlout .= poll_header($poll_data['pid'], htmlsafechars($poll_data['poll_question']));
+- include/function_polls.php:107 — foreach ($poll_answers as $id => $data) {
+- include/function_polls.php:108 — foreach ($poll_answers[$id]['votes'] as $number) {
+- include/function_polls.php:121 — if ($GVARS['allow_poll_tags']) {
+- include/function_polls.php:125 — $choice_html .= poll_show_form_choice_multi($choice_id, $votes, $id, $choice);
+- include/function_polls.php:127 — $choice_html .= poll_show_form_choice($choice_id, $votes, $id, $choice);
+- include/function_polls.php:131 — $htmlout .= poll_show_form_question($id, $question, $choice_html);
+- include/function_polls.php:135 — $htmlout .= poll_footer();
+- include/function_polls.php:136 — if ($poll_footer != '') {
+- include/function_polls.php:137 — $htmlout = str_replace('<!--VOTE-->', $poll_footer, $htmlout);
+- include/function_polls.php:158 — * @param string $poll_q
+- include/function_polls.php:162 — function poll_header($pid = '', $poll_q = '')
+- include/function_polls.php:170 — window.location = \"{$site_config['paths']['baseurl']}/index.php?pollid={$pid}&mode=show&st=main\";
+- include/function_polls.php:174 — window.location = \"{$site_config['paths']['baseurl']}/index.php?pollid={$pid}&st=main\";
+- include/function_polls.php:178 — <a id='poll-hash'></a>
+- include/function_polls.php:179 — <div id='poll' class='box'>
+- include/function_polls.php:182 — <form action='{$site_config['paths']['baseurl']}/polls_take_vote.php?pollid={$pid}&amp;st=main&amp;addpoll=1' method='post' enctype='mult...
+- include/function_polls.php:190 — function poll_footer()
+- include/function_polls.php:211 — function poll_show_rendered_choice($choice_id = '', $votes = '', $id = '', $answer = '', $percentage = '', $width = '')
+- include/function_polls.php:221 — <img src='{$site_config['paths']['images_baseurl']}polls/bar.gif' style='width: {$width}px; height: 11px;' alt=''>
+- include/function_polls.php:234 — function poll_show_rendered_question($question = '', $choice_html = '')
+- include/function_polls.php:268 — function poll_show_form_choice_multi($choice_id = '', $votes = '', $id = '', $answer = '')
+- include/function_polls.php:284 — function poll_show_form_choice($choice_id = '', $votes = '', $id = '', $answer = '')
+- include/function_polls.php:299 — function poll_show_form_question($id = '', $question = '', $choice_html = '')
+- include/function_polls.php:317 — return "<input class='button is-small tooltipper margin10' type='button' name='viewresult' value='Show Votes'  title='Goto poll voting' o...
+- include/function_polls.php:325 — return "<input class='button is-small tooltipper margin10' type='button' value='Results' title='Show all poll results' onclick=\"go_gadge...
+- include/function_polls.php:341 — return "<input class='button is-small tooltipper margin10' type='submit' name='nullvote' value='View Results (Null Vote)' title='View res...
+- include/function_rating.php:26 — 'topic',
+- include/function_rating.php:53 — $rating_cache = \array_merge($qy1, $qy2);
+- include/function_rating.php:139 — case 'topic':
+- include/function_tfreak.php:32 — $html = $cache->get('tfreaknewsrss_block_');
+- include/function_tfreak.php:102 — $cache->set('tfreaknewsrss_block_', $html, 300);
+- include/function_tmdb.php:22 — global $container, $site_config, $BLOCKS;
+- include/function_tmdb.php:25 — if (! $BLOCKS['tmdb_api_on']) {
+- include/function_tmdb.php:50 — $tmdb_data = \array_merge($tmdb_data, \get_movies($json));
+- include/function_tmdb.php:94 — global $site_config, $BLOCKS, $container;
+- include/function_tmdb.php:97 — if (! $BLOCKS['tmdb_api_on']) {
+- include/function_tmdb.php:118 — $tmdb_data = \array_merge($tmdb_data, \get_movies($json));
+- include/function_tmdb.php:134 — global $container, $site_config, $BLOCKS;
+- include/function_tmdb.php:137 — if (! $BLOCKS['tmdb_api_on']) {
+- include/function_tmdb.php:161 — $tmdb_data = \array_merge($tmdb_data, \get_movies($json));
+- include/function_tmdb.php:199 — global $container, $site_config, $BLOCKS;
+- include/function_tmdb.php:202 — if (! $BLOCKS['tmdb_api_on']) {
+- include/function_tmdb.php:229 — $tmdb_data = \array_merge($tmdb_data, \get_movies($json));
+- include/function_tmdb.php:266 — global $container, $site_config, $BLOCKS;
+- include/function_tmdb.php:269 — if (! $BLOCKS['tmdb_api_on']) {
+- include/function_tmdb.php:321 — global $BLOCKS;
+- include/function_tmdb.php:323 — if (! $BLOCKS['tmdb_api_on']) {
+- include/function_tmdb.php:408 — global $site_config, $BLOCKS;
+- include/function_tmdb.php:410 — if (! $BLOCKS['tmdb_api_on']) {
+- include/function_tmdb.php:444 — $db->perform($sql, \array_merge($set, ['imdb_id' => $imdb_id]));
+- include/function_torrent_hover.php:22 — * @param        $block_id
+- include/function_torrent_hover.php:38 — * @param string $sticky
+- include/function_torrent_hover.php:46 — function torrent_tooltip($text, $id, $block_id, $name, $poster, $uploader, $added, $size, $seeders, $leechers, $imdb_id, $rating, $year, ...
+- include/function_torrent_hover.php:151 — <div class='dt-tooltipper-large $sticky' data-tooltip-content='#{$block_id}_tooltip'>$text
+- include/function_torrent_hover.php:153 — <div id='{$block_id}_tooltip' class='round10 tooltip-background' {$background}>
+- include/function_torrent_hover.php:233 — " . torrent_tooltip($data['text'], $data['id'], $data['block_id'], $data['name'], $data['poster'], $data['uploader'], $data['added'], $da...
+- include/function_torrent_hover.php:268 — * @param string $block_id
+- include/function_torrent_hover.php:284 — function upcoming_hover(string $url, string $block_id, string $text, string $background, string $poster, string $added, string $expected,...
+- include/function_torrent_hover.php:289 — <div class='dt-tooltipper-large torrent-name' data-tooltip-content='#{$block_id}_tooltip'>
+- include/function_torrent_hover.php:292 — <div id='{$block_id}_tooltip' class='round10 tooltip-background' {$background}>
+- include/function_torrenttable.php:75 — $sticky = $torrent['sticky'] === 'yes' ? "<img src='$image' data-src='{$site_config['paths']['images_baseurl']}sticky.gif' class='tooltip...
+- include/function_torrenttable.php:115 — <div>{$new}{$sticky}</div>
+- include/function_torrenttable.php:422 — <img src='$image' data-src='{$site_config['paths']['images_baseurl']}forums/up.gif' class='tooltipper icon lazy' alt='" . _('Re-Animated ...
+- include/function_trivia.php:123 — function trivia_clocks()
+- include/function_trivia.php:127 — <div id='clock_round'>
+- include/function_trivia.php:130 — <div id='clock_game'>
+- include/function_tvmaze.php:35 — global $container, $site_config, $BLOCKS;
+- include/function_tvmaze.php:38 — if (!$BLOCKS['tvmaze_api_on']) {
+- include/function_tvmaze.php:206 — global $site_config, $BLOCKS;
+- include/function_tvmaze.php:208 — if (!$BLOCKS['tvmaze_api_on']) {
+- include/function_tvmaze.php:249 — global $container, $BLOCKS;
+- include/function_tvmaze.php:251 — if (!$BLOCKS['tvmaze_api_on']) {
+- include/function_tvmaze.php:320 — global $container, $site_config, $BLOCKS;
+- include/function_tvmaze.php:322 — if (!$BLOCKS['tvmaze_api_on'] || empty($tvmaze_id)) {
+- include/function_tvmaze.php:434 — global $container, $BLOCKS;
+- include/function_tvmaze.php:435 — if (!$BLOCKS['tvmaze_api_on']) {
+- include/function_users.php:21 — require_once INCL_DIR . 'function_bbcode.php';
+- include/function_users.php:68 — function get_reputation(array $user, string $mode = '', bool $rep_is_on = true, int $post_id = 0, bool $anonymous = false)
+- include/function_users.php:77 — if (!isset($reputations) || !is_array($reputations) || count($reputations) < 1) {
+- include/function_users.php:78 — return '<span title="' . _("Cache doesn't exist or zero length") . '" class="tooltipper">' . _('Reputation: Offline') . '</span>';
+- include/function_users.php:82 — $max_rep = max(array_keys($reputations));
+- include/function_users.php:83 — if ($user['reputation'] >= $max_rep) {
+- include/function_users.php:84 — $user_reputation = $reputations[$max_rep];
+- include/function_users.php:86 — foreach ($reputations as $y => $x) {
+- include/function_users.php:88 — if ($y > $user['reputation']) {
+- include/function_users.php:89 — $user_reputation = $old;
+- include/function_users.php:94 — $rep_power = $user['reputation'];
+- include/function_users.php:96 — if ($user['reputation'] == 0) {
+- include/function_users.php:98 — $rep_power = $user['reputation'] * -1;
+- include/function_users.php:99 — } elseif ($user['reputation'] < 0) {
+- include/function_users.php:102 — $rep_power = $user['reputation'] * -1;
+- include/function_users.php:122 — case 'posts':
+- include/function_users.php:137 — $rep_level = isset($user_reputation) ? $user_reputation : 'rep_undefined';
+- include/function_users.php:140 — $posneg .= "<span title='" . _('Reputation Power') . " $rep_power<br> " . format_comment($user['username']) . " $rep_level' class='toolti...
+- include/function_users.php:142 — $posneg .= "<img src='{$image}' data-src='{$site_config['paths']['images_baseurl']}rep/reputation_{$rep_img_2}.gif' alt='" . _('Reputatio...
+- include/function_users.php:144 — $posneg .= "<img src='{$image}' data-src='{$site_config['paths']['images_baseurl']}rep/reputation_{$rep_img}.gif' alt='" . _('Reputation ...
+- include/function_users.php:151 — return '<div>Rep: ' . $posneg . "</div><span><a href='javascript:;' onclick=\"PopUp('{$site_config['paths']['baseurl']}/reputation.php?pi...
+- include/function_users.php:157 — return '<span title="' . _('Set offline by admin setting') . '" class="tooltipper">' . _('Reputation: Offline') . '</span>';
+- include/function_users.php:290 — return '<span class="tooltipper" title="' . ('Yay') . '"><img src="' . $image . '" data-src="' . $site_config['paths']['images_baseurl'] ...
+- include/function_users.php:293 — return '<span class="tooltipper" title="' . ('Pimp') . '"><img src="' . $image . '" data-src="' . $site_config['paths']['images_baseurl']...
+- include/function_users.php:296 — return '<span class="tooltipper" title="' . ('W00t') . '"><img src="' . $image . '" data-src="' . $site_config['paths']['images_baseurl']...
+- include/function_users.php:299 — return '<span class="tooltipper" title="' . ('Grin') . '"><img src="' . $image . '" data-src="' . $site_config['paths']['images_baseurl']...
+- include/function_users.php:302 — return '<span class="tooltipper" title="' . ('Evo') . '"><img src="' . $image . '" data-src="' . $site_config['paths']['images_baseurl'] ...
+- include/function_users.php:305 — return '<span class="tooltipper" title="' . ('Smile') . '"><img src="' . $image . '" data-src="' . $site_config['paths']['images_baseurl'...
+- include/function_users.php:308 — return '<span class="tooltipper" title="' . ('Blank') . '"><img src="' . $image . '" data-src="' . $site_config['paths']['images_baseurl'...
+- include/function_users.php:311 — return '<span class="tooltipper" title="' . ('Cry') . '"><img src="' . $image . '" data-src="' . $site_config['paths']['images_baseurl'] ...
+- include/function_users.php:314 — return '<span class="tooltipper" title="' . ('Shit') . '"><img src="' . $image . '" data-src="' . $site_config['paths']['images_baseurl']...
+- include/function_users.php:468 — <span class='level-left'>" . _('Karma') . ": </span>
+- include/function_users.php:585 — return '<span class="tooltipper" title="' . ('Bad Ratio') . '"><img src="' . $image . '" data-src="' . $site_config['paths']['images_base...
+- include/function_users.php:588 — return '<span class="tooltipper" title="' . ('Could be better') . '"><img src="' . $image . '" data-src="' . $site_config['paths']['image...
+- include/function_users.php:591 — return '<span class="tooltipper" title="' . ('Getting there!') . '"><img src="' . $image . '" data-src="' . $site_config['paths']['images...
+- include/function_users.php:594 — return '<span class="tooltipper" title="' . ('Good Ratio') . '"><img src="' . $image . '" data-src="' . $site_config['paths']['images_bas...
+- include/function_users.php:597 — return '<span class="tooltipper" title="' . ('Great Ratio') . '"><img src="' . $image . '" data-src="' . $site_config['paths']['images_ba...
+- include/function_users.php:600 — return '<span class="tooltipper" title="' . ('Wow!') . '"><img src="' . $image . '" data-src="' . $site_config['paths']['images_baseurl']...
+- include/function_users.php:603 — return '<span class="tooltipper" title="' . ('Fabulous Ratio!') . '"><img src="' . $image . '" data-src="' . $site_config['paths']['image...
+- include/function_users.php:606 — return '<span class="tooltipper" title="' . ('Awesome Ratio!') . '"><img src="' . $image . '" data-src="' . $site_config['paths']['images...
+- include/function_users.php:646 — $avatar = "<img src='{$site_config['paths']['images_baseurl']}forumicons/default_avatar.gif' alt='avatar' class='avatar mw-150 round5 bot...
+- include/function_users.php:663 — function clr_forums_cache(int $post_id)
+- include/function_users.php:671 — 'forum_last_post_' . $post_id . '_' . $uclass,
+- include/geoipregionvars.php:1637 — 15 => 'Splitsko-Dalmatinska',
+- include/geoipregionvars.php:3955 — 10 => 'Balikesir',
+- include/images_update.php:47 — global $container, $BLOCKS, $site_config;
+- include/images_update.php:366 — $db->perform($sql, array_merge($set, ['id' => $book['id']]));
+- include/images_update.php:394 — $db->perform($sql, array_merge($set, ['imdb_id' => $imdbid['imdb_id']]));
+- include/images_update.php:409 — if ($BLOCKS['tvmaze_api_on']) {
+- include/images_update.php:463 — $db->perform($sql, array_merge($set, ['id' => $link['id']]));
+- include/images_update.php:493 — $db->perform($sql, array_merge($set, ['id' => $link['id']]));
+- include/invincible.php:42 — 'modcomment' => get_date((int) TIME_NOW, '', 1) . ' - ' . $display . ' invincible thanks to ' . $CURUSER['username'] . "\n" . $user['modc...
+- include/invincible.php:46 — write_log('Member [b][url=userdetails.php?id=' . $userid . ']' . (htmlsafechars($user['username'])) . '[/url][/b] is ' . $display . ' inv...
+- include/nologip.php:44 — 'modcomment' => get_date((int) TIME_NOW, '', 1) . ' - ' . $display . ' Logging IP thanks to ' . $CURUSER['username'] . "\n" . $user['modc...
+- include/nologip.php:53 — write_log('Member [b][url=userdetails.php?id=' . $userid . ']' . (htmlsafechars($user['username'])) . '[/url][/b] is ' . $display . ' Log...
+- include/stealth.php:42 — $modcomment = \get_date((int) TIME_NOW, '', 1).' - '.$display.' in Stealth Mode thanks to '.$CURUSER['username']."\n".$row['modcomment'];
+- include/stealth.php:55 — \write_log('Member [b][url=userdetails.php?id='.$userid.']'.(\htmlsafechars($row['username'])).'[/url][/b] '.$display.' in Stealth Mode t...
+- messages/edit_mailboxes.php:91 — $db->perform($sql, array_merge($set, ['id' => $row['id']]));
+- messages/edit_mailboxes.php:241 — <form action="messages.php" method="post" accept-charset="utf-8">
+- messages/edit_mailboxes.php:276 — <form action="' . $site_config['paths']['baseurl'] . '/messages.php" method="post" accept-charset="utf-8">
+- messages/edit_mailboxes.php:289 — <form action="messages.php" method="post" accept-charset="utf-8">
+- messages/edit_mailboxes.php:305 — <input type="radio" name="acceptpms" ' . ($CURUSER['acceptpms'] === 'yes' ? 'checked' : '') . ' value="yes">' . _('All (except blocks)') . '
+- messages/forward.php:32 — <form action="messages.php" method="post" accept-charset="utf-8">
+- messages/forward.php:66 — <td class="is-paddingless">' . BBcode($body) . '</td>
+- messages/forward_pm.php:48 — $blocked = $fluent->from('blocks')
+- messages/forward_pm.php:52 — ->where('blockid = ?', $CURUSER['id'])
+- messages/forward_pm.php:54 — if (!$blocked) {
+- messages/forward_pm.php:55 — stderr(_('Refused'), _('This member has blocked PMs from you.'));
+- messages/new_draft.php:48 — <form name="compose" action="messages.php" method="post" accept-charset="utf-8">
+- messages/new_draft.php:58 — <td class="is-paddingless">' . BBcode($draft) . '</td>
+- messages/save_or_edit_draft.php:60 — <form name="compose" action="messages.php" method="post" accept-charset="utf-8">
+- messages/save_or_edit_draft.php:71 — <td class="is-paddingless">' . BBcode($draft) . '</td>
+- messages/send_message.php:124 — if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+- messages/send_message.php:130 — <form name='compose' method='post' action='{$site_config['paths']['baseurl']}/messages.php' enctype='multipart/form-data' accept-charset=...
+- messages/send_message.php:165 — <td class="is-paddingless">' . BBcode($msg) . '</td>
+- messages/send_message.php:178 — $accepted_file_types = str_replace('|', ', ', $site_config['forum_config']['accepted_file_types']);
+- messages/use_draft.php:95 — <form name="compose" action="messages.php" method="post" accept-charset="utf-8">
+- messages/use_draft.php:114 — <td class="is-paddingless">' . BBcode($draft) . '</td>
+- messages/view_mailbox.php:56 — <form action='{$site_config['paths']['baseurl']}/messages.php' method='post' name='checkme' enctype='multipart/form-data' accept-charset=...
+- messages/view_mailbox.php:98 — } elseif ($row['blocked'] > 0) {
+- messages/view_mailbox.php:100 — <a href="' . $site_config['paths']['baseurl'] . '/friends.php?action=delete&amp;type=block&amp;targetid=' . $row['id'] . '">
+- messages/view_mailbox.php:101 — <small><i class="icon-minus has-text-danger tooltipper" title="' . _('remove from blocks') . '"></i></small>
+- messages/view_mailbox.php:108 — <a href="' . $site_config['paths']['baseurl'] . '/friends.php?action=add&amp;type=block&amp;targetid=' . $row['id'] . '">
+- messages/view_mailbox.php:109 — <small><i class="icon-user-times icon has-text-danger tooltipper" title="' . _('add to blocks') . '"></i></small>
+- messages/view_mailbox.php:131 — $per_page_drop_down = '<form action="' . $site_config['paths']['baseurl'] . '/messages.php" method="post"><select name="amount_per_page" ...
+- messages/view_mailbox.php:140 — <form method="post" action="messages.php" accept-charset="utf-8">
+- messages/view_message.php:20 — ->select('b.id AS blocked')
+- messages/view_message.php:30 — ->leftJoin('blocks AS b ON b.userid = ? AND b.blockid = m.sender', $user['id'])
+- messages/view_message.php:47 — <a class='is-link tooltipper' href='{$site_config['paths']['baseurl']}/forums.php?action=download_attachment&amp;id={$file['id']}' title=...
+- messages/view_message.php:69 — } elseif ($message['blocked'] > 0) {
+- messages/view_message.php:71 — <a href="' . $site_config['paths']['baseurl'] . '/friends.php?action=delete&amp;type=block&amp;targetid=' . (int) $message['id'] . '">
+- messages/view_message.php:72 — <small><i class="icon-minus has-text-danger tooltipper" title="' . _('remove from blocks') . '"></i></small>
+- messages/view_message.php:79 — <a href="' . $site_config['paths']['baseurl'] . '/friends.php?action=add&amp;type=block&amp;targetid=' . (int) $message['id'] . '">
+- messages/view_message.php:80 — <small><i class="icon-user-times icon has-text-danger tooltipper" title="' . _('add to blocks') . '"></i></small>
+- messages/view_message.php:136 — <div class='level-center-center'><img src='{$image}' data-src='{$site_config['paths']['images_baseurl']}forums/online.gif' alt='" . _('On...
+- messages/view_message.php:137 — <div class='level-center-center'><img src='{$image}' data-src='{$site_config['paths']['images_baseurl']}forums/offline.gif' alt='" . _('O...
+- messages/view_message.php:138 — <div>' . _('Karma') . ': ' . number_format((float) $message['seedbonus']) . '</div>' . (!empty($message['website']) ? "
+- messages/view_message.php:141 — <img src='{$image}' data-src='{$site_config['paths']['images_baseurl']}forums/website.gif' alt='website' class='tooltipper emoticon lazy'>
+- messages/view_message.php:163 — <form action='{$site_config['paths']['baseurl']}/messages.php' method='post' enctype='multipart/form-data' accept-charset='utf-8'>
+- migration-report.md:68 — ## blocks
+- migration-report.md:69 — - `blocks/global/demotion.php`: standardized `bootstrap_pdo.php` and added strict typing.
+- migration-report.md:70 — - `blocks/global/freeleech.php`: standardized `bootstrap_pdo.php` and added strict typing.
+- migration-report.md:71 — - `blocks/global/happyhour.php`: standardized `bootstrap_pdo.php` and added strict typing.
+- migration-report.md:72 — - `blocks/global/message.php`: standardized `bootstrap_pdo.php` and added strict typing.
+- migration-report.md:73 — - `blocks/index/advertise.php`: standardized `bootstrap_pdo.php` and added strict typing.
+- migration-report.md:74 — - `blocks/index/ajaxchat.php`: standardized `bootstrap_pdo.php` and added strict typing.
+- migration-report.md:75 — - `blocks/index/comments.php`: standardized `bootstrap_pdo.php` and added strict typing.
+- migration-report.md:76 — - `blocks/index/cooker.php`: standardized `bootstrap_pdo.php` and added strict typing.
+- migration-report.md:77 — - `blocks/index/disclaimer.php`: standardized `bootstrap_pdo.php` and added strict typing.
+- migration-report.md:78 — - `blocks/index/gift.php`: standardized `bootstrap_pdo.php` and added strict typing.
+- migration-report.md:79 — - `blocks/index/latest_movies.php`: standardized `bootstrap_pdo.php` and added strict typing.
+- migration-report.md:80 — - `blocks/index/latest_torrents.php`: standardized `bootstrap_pdo.php` and added strict typing.
+- migration-report.md:81 — - `blocks/index/latest_torrents_glide.php`: standardized `bootstrap_pdo.php` and added strict typing.
+- migration-report.md:82 — - `blocks/index/latest_torrents_scroll.php`: standardized `bootstrap_pdo.php` and added strict typing.
+- migration-report.md:83 — - `blocks/index/latest_tv.php`: standardized `bootstrap_pdo.php` and added strict typing.
+- migration-report.md:84 — - `blocks/index/latest_user.php`: standardized `bootstrap_pdo.php` and added strict typing.
+- migration-report.md:85 — - `blocks/index/mow.php`: standardized `bootstrap_pdo.php` and added strict typing.
+- migration-report.md:86 — - `blocks/index/offers.php`: standardized `bootstrap_pdo.php` and added strict typing.
+- migration-report.md:87 — - `blocks/index/poll.php`: standardized `bootstrap_pdo.php` and added strict typing.
+- migration-report.md:88 — - `blocks/index/requests.php`: standardized `bootstrap_pdo.php` and added strict typing.
+- migration-report.md:90 — - `blocks/global/bugmessages.php`: migrated from `$fluent` to `$db->fetchValue` for bug count; standardized `bootstrap_pdo.php` and added...
+- migration-report.md:91 — - `blocks/global/crazyhour.php`: replaced `$fluent` queries with `$db->fetch`/`run`; standardized `bootstrap_pdo.php` and added strict ty...
+- migration-report.md:92 — - `blocks/global/freeleech_contribution.php`: switched `$fluent` lookups to `$db->fetch`; standardized `bootstrap_pdo.php` and added stri...
+- migration-report.md:93 — - `blocks/global/lottery.php`: converted `$fluent` usage to `$db->fetchAll` with `array_column`; standardized `bootstrap_pdo.php` and add...
+- migration-report.md:94 — - `blocks/global/report.php`: migrated report count to `$db->fetchValue`; standardized `bootstrap_pdo.php` and added strict typing.
+- migration-report.md:95 — - `blocks/global/staffmessages.php`: replaced `$fluent` count with `$db->fetchValue`; standardized `bootstrap_pdo.php` and added strict t...
+- migration-report.md:96 — - `blocks/global/uploadapp.php`: replaced `$fluent` count with `$db->fetchValue`; standardized `bootstrap_pdo.php` and added strict typing.
+- migration-report.md:97 — - `blocks/index/active_24h_users.php`: migrated record and user queries to `$db->fetch`/`fetchAll` and `run`; standardized `bootstrap_pdo...
+- migration-report.md:98 — - `blocks/index/active_birthday_users.php`: migrated birthday lookup to `$db->fetchAll`; standardized `bootstrap_pdo.php` and added stric...
+- migration-report.md:99 — - `blocks/index/active_irc_users.php`: migrated IRC user lookup to `$db->fetchAll`; standardized `bootstrap_pdo.php` and added strict typ...
+- migration-report.md:100 — - `blocks/index/active_users.php`: migrated active user lookup to `$db->fetchAll`; standardized `bootstrap_pdo.php` and added strict typing.
+- migration-report.md:101 — - `blocks/index/news.php`: migrated news listing to `$db->fetchAll`; standardized `bootstrap_pdo.php` and added strict typing.
+- migration-report.md:102 — - `blocks/index/staff_picks.php`: standardized `bootstrap_pdo.php` and added strict typing.
+- migration-report.md:103 — - `blocks/index/stats.php`: standardized `bootstrap_pdo.php` and added strict typing.
+- migration-report.md:104 — - `blocks/index/top_torrents.php`: standardized `bootstrap_pdo.php` and added strict typing.
+- migration-report.md:105 — - `blocks/index/torrentfreak.php`: standardized `bootstrap_pdo.php` and added strict typing.
+- migration-report.md:106 — - `blocks/index/trivia.php`: standardized `bootstrap_pdo.php` and added strict typing.
+- migration-report.md:107 — - `blocks/userdetails/avatar.php`: standardized `bootstrap_pdo.php` and added strict typing.
+- migration-report.md:108 — - `blocks/userdetails/birthday.php`: standardized `bootstrap_pdo.php` and added strict typing.
+- migration-report.md:109 — - `blocks/userdetails/browser.php`: standardized `bootstrap_pdo.php` and added strict typing.
+- migration-report.md:110 — - `blocks/userdetails/connectable.php`: migrated `FluentPDO` lookup to `$db->fetch`; standardized bootstrap and strict typing.
+- migration-report.md:111 — - `blocks/userdetails/comments.php`: migrated from `$fluent` to `$db->fetchValue`; standardized bootstrap and strict typing.
+- migration-report.md:112 — - `blocks/userdetails/completed.php`: migrated from `$fluent` to `$db->fetchAll`; standardized bootstrap and strict typing.
+- migration-report.md:113 — - `blocks/userdetails/forumposts.php`: migrated from `$fluent` to `$db->fetchValue`; standardized bootstrap and strict typing.
+- migration-report.md:114 — - `blocks/userdetails/invitedby.php`: migrated from `$fluent` to `$db->fetchValue`/`fetchAll`; standardized bootstrap and strict typing.
+- migration-report.md:115 — - `blocks/userdetails/seedtimeratio.php`: migrated from `$fluent` to `$db->fetch`; standardized bootstrap and strict typing.
+- migration-report.md:116 — - `blocks/userdetails/showfriends.php`: migrated from `$fluent` to `$db->fetchAll`; standardized bootstrap and strict typing.
+- migration-report.md:117 — - `blocks/userdetails/showpm.php`: migrated from `$fluent` to `$db->fetch`; standardized bootstrap and strict typing.
+- migration-report.md:118 — - `blocks/userdetails/usercomments.php`: migrated from `$fluent` to `$db->fetchValue`/`fetchAll`; standardized bootstrap and strict typing.
+- migration-report.md:119 — - `blocks/userdetails/contactinfo.php`, `flush.php`, `freestuffs.php`, `gender.php`, `iphistory.php`, `irc.php`, `joined.php`, `onlinetim...
+- migration-report.md:122 — - `blocks/index/forum_posts.php`: migrated from legacy `sql_query`/`mysqli_fetch_assoc` to `$db->fetchAll` with bound parameters and stan...
+- migration-report.md:126 — $ rg "mysqli_|sql_query\(|sqlesc\(" blocks
+- migration-report.md:230 — - `src/Block.php`: standardized strict typing and bootstrap order.
+- migration-report.md:244 — - `src/Forum.php`: standardized strict typing and bootstrap order.
+- migration-report.md:258 — - `src/Poll.php`: standardized strict typing and bootstrap order.
+- migration-report.md:259 — - `src/PollVoter.php`: standardized strict typing and bootstrap order.
+- migration-report.md:260 — - `src/Post.php`: standardized strict typing and bootstrap order.
+- migration-report.md:271 — - `src/Topic.php`: standardized strict typing and bootstrap order.
+- migration-report.md:275 — - `src/Userblock.php`: standardized strict typing and bootstrap order.
+- migration-report.md:335 — ## forums
+- migration-report.md:336 — - `forums/stafflock_post.php`: switched to `bootstrap_pdo.php`, added strict typing, and migrated from `sql_query`/`sqlesc` to `$db->run`...
+- migration-report.md:340 — $ rg "mysqli_|sql_query\\(|sqlesc\\(" forums/stafflock_post.php
+- public/achievementbonus.php:16 — require_once INCL_DIR . 'function_bbcode.php';
+- public/achievementhistory.php:12 — use Pu239\Post;
+- public/achievementhistory.php:13 — use Pu239\Topic;
+- public/achievementhistory.php:31 — $post = $container->get(Post::class);
+- public/achievementhistory.php:32 — $posts = $post->get_user_count($id);
+- public/achievementhistory.php:33 — $topic = $container->get(Topic::class);
+- public/achievementhistory.php:34 — $topics = $topic->get_user_count($id);
+- public/achievementhistory.php:38 — 'forumposts' => $posts,
+- public/achievementhistory.php:39 — 'forumtopics' => $topics,
+- public/achievementlist.php:21 — if ($_SERVER['REQUEST_METHOD'] == 'POST' && $user['class'] >= UC_MAX) {
+- public/achievementlist.php:62 — <form method='post' action='achievementlist.php' enctype='multipart/form-data' accept-charset='utf-8'>" . main_table("
+- public/ajax/adminer.css:1 — html>body .error{background:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABGdBTUEAAK/INwWK6QAAABl0RVh0U29mdHd...
+- public/ajax/ajax_tooltips.php:51 — $member_reputation = get_reputation($user);
+- public/ajax/ajax_tooltips.php:60 — <span class='navbar-start'>" . _('Reputation') . "</span>
+- public/ajax/ajax_tooltips.php:61 — <span>$member_reputation</span>
+- public/ajax/ajax_tooltips.php:69 — <span class='navbar-start'>" . _('Karma Store') . "</span>
+- public/ajax/ajax_tooltips.php:115 — " . ($user['class'] >= UC_STAFF || $user['got_blocks'] === 'yes' ? "
+- public/ajax/ajax_tooltips.php:117 — <span class='navbar-start'>:: " . _('User Blocks') . "</span>
+- public/ajax/ajax_tooltips.php:119 — <span class='navbar-start'>" . _('My Blocks') . "</span>
+- public/ajax/ajax_tooltips.php:120 — <span><a href='{$site_config['paths']['baseurl']}/user_blocks.php'>" . _('Click here') . '</a></span>' : '') . '
+- public/ajax/ajax_tooltips.php:124 — <span class='navbar-start'>" . _('My Unlocks') . "</span>
+- public/ajax/ajax_tooltips.php:125 — <span><a href='{$site_config['paths']['baseurl']}/user_unlocks.php'>" . _('Click here') . '</a></span>' : '') . '
+- public/ajax/descr_format.php:12 — require_once INCL_DIR . 'function_bbcode.php';
+- public/ajax/emailcheck.php:12 — app_halt('<div class="margin10 has-text-info">You can\'t post nothing please enter a email!</div>');
+- public/ajax/like.php:21 — 'topic' => 'topics',
+- public/ajax/like.php:22 — 'post' => 'posts',
+- public/ajax/like.php:66 — 'post' => 'posts',
+- public/ajax/like.php:68 — 'topic' => 'topics',
+- public/ajax/like.php:77 — "SELECT COUNT(id) FROM likes WHERE user_id = :uid AND {$type}_id = :id",
+- public/ajax/like.php:85 — $db->run("INSERT INTO likes ({$type}_id, user_id) VALUES (:id, :uid)", [':id' => $id, ':uid' => (int) $user['id']]);
+- public/ajax/like.php:86 — $db->run("UPDATE {$table} SET user_likes = user_likes + 1 WHERE id = :id", [':id' => $id]);
+- public/ajax/like.php:96 — $cache->delete("{$type}_user_likes_" . $id);
+- public/ajax/like.php:103 — $db->run("DELETE FROM likes WHERE {$type}_id = :id AND user_id = :uid", [':id' => $id, ':uid' => (int) $user['id']]);
+- public/ajax/like.php:104 — $db->run("UPDATE {$table} SET user_likes = user_likes - 1 WHERE id = :id", [':id' => $id]);
+- public/ajax/like.php:110 — $cache->delete("{$type}_user_likes_" . $id);
+- public/ajax/like.php:123 — "SELECT user_id FROM likes WHERE {$type}_id = :id AND user_id != :uid",
+- public/ajax/offer_status.php:38 — $db->perform($sql, array_merge($update, ['id' => $id]));
+- public/ajax/rating.php:27 — $what = isset($_POST['what']) && $_POST['what'] === 'torrent' ? 'torrent' : 'topic';
+- public/ajax/rating.php:28 — $ref = isset($_POST['ref']) ? $_POST['ref'] : ($what === 'torrent' ? 'details.php' : 'forums/view_topic.php');
+- public/ajax/rating.php:65 — $rating_cache = array_merge($qy1[0], $qy2[0]);
+- public/ajax/show_in_navbar.php:34 — $result = $db->perform($sql, array_merge($set, ['id' => $_POST['id']]));
+- public/ajax/staff_picks.php:34 — $result = $db->perform($sql, array_merge($set, ['id' => $id]));
+- public/ajax/take_upload.php:13 — require_once INCL_DIR . 'function_bbcode.php';
+- public/ajax/take_url_upload.php:13 — require_once INCL_DIR . 'function_bbcode.php';
+- public/ajax/thanks.php:52 — $qt = sql_query('SELECT th.userid, u.username, u.seedbonus FROM thanks AS th INNER JOIN users AS u ON u.id=th.userid WHERE th.torrentid='...
+- public/ajax/thanks.php:69 — $form = !$hadTh ? "<span class='left10'><form action='{$site_config['paths']['baseurl']}/ajax/thanks.php' method='post'><input type='subm...
+- public/ajax/thanks.php:121 — $c = 'SELECT count(id) FROM thanks WHERE userid=' . sqlesc($uid) . ' AND torrentid=' . sqlesc($tid);
+- public/ajax/thanks.php:125 — if ($db->run('INSERT INTO thanks (userid,torrentid) VALUES (' . sqlesc($uid) . ',' . sqlesc($tid) . ')')) {
+- public/ajax/thanks.php:137 — $db->run('UPDATE users SET seedbonus = seedbonus + ' . sqlesc($site_config['bonus']['per_thanks']) . ' WHERE id = :id', [':id' => $uid]) ...
+- public/ajax/thanks.php:140 — $update['seedbonus'] = ($User['seedbonus'] + $site_config['bonus']['per_thanks']);
+- public/ajax/trivia_answers.php:64 — 'content' => $table['table'] . $answered . trivia_clocks(),
+- public/ajax/trivia_lookup.php:49 — 'content' => $table . $answered . trivia_clocks(),
+- public/ajax/trivia_lookup.php:77 — 'content' => $question . $output . trivia_clocks(),
+- public/allsmiles.php:12 — require_once INCL_DIR . 'function_bbcode.php';
+- public/allsmiles.php:39 — $smilies = $container->get('smilies');
+- public/allsmiles.php:40 — foreach ($smilies as $code => $url) {
+- public/allsmiles.php:45 — <img src='{$site_config['paths']['images_baseurl']}smilies/" . $url . "' alt='{$code}'>
+- public/allsmiles.php:50 — $customsmilies = $container->get('custom_smilies');
+- public/allsmiles.php:51 — foreach ($customsmilies as $code => $url) {
+- public/allsmiles.php:56 — <img src='{$site_config['paths']['images_baseurl']}smilies/" . $url . "' alt='{$code}'>
+- public/allsmiles.php:62 — $staff_smilies = $container->get('staff_smilies');
+- public/allsmiles.php:63 — foreach ($staff_smilies as $code => $url) {
+- public/allsmiles.php:68 — <img src='{$site_config['paths']['images_baseurl']}smilies/" . $url . "' alt='{$code}'>
+- public/allsmiles.php:76 — <h1>Smilies</h1>
+- public/allsmiles.php:83 — <h1>Custom Smilies</h1>
+- public/allsmiles.php:91 — <h1>Staff Smilies</h1>
+- public/announce.php:400 — $values = array_merge($set, [
+- public/announcement.php:14 — require_once INCL_DIR . 'function_bbcode.php';
+- public/arcade.php:25 — <span>' . _fe('Top Scores Earn {0} Karma Points', $site_config['arcade']['top_score_points']) . "</span>
+- public/arcade_top_scores.php:22 — <div>" . _fe('Top Scores Earn {0} Karma Points', $site_config['arcade']['top_score_points']) . "</div>
+- public/bitbucket.php:104 — <img src='{$site_config['paths']['images_baseurl']}forums/updating.svg' alt='" . _('Loading...') . "'>
+- public/bitbucket.php:184 — <h3 class='top20'>" . _('Tag for forums or comments') . "</h3>
+- public/blackjack.php:232 — <form method='post' action='" . $_SERVER['PHP_SELF'] . "?id=$id' enctype='multipart/form-data' accept-charset='utf-8'>
+- public/blackjack.php:329 — <form method='post' action='" . $_SERVER['PHP_SELF'] . "?id=$id' enctype='multipart/form-data' accept-charset='utf-8'>
+- public/blackjack.php:342 — <form method='post' action='" . $_SERVER['PHP_SELF'] . "?id=$id' enctype='multipart/form-data' accept-charset='utf-8'>
+- public/blackjack.php:355 — <form method='post' action='" . $_SERVER['PHP_SELF'] . "?id=$id' enctype='multipart/form-data' accept-charset='utf-8'>
+- public/blackjack.php:672 — <form method='post' action='" . $_SERVER['PHP_SELF'] . "?id=$id' enctype='multipart/form-data' accept-charset='utf-8'>
+- public/blackjack.php:685 — <form method='post' action='" . $_SERVER['PHP_SELF'] . "?id=$id' enctype='multipart/form-data' accept-charset='utf-8'>
+- public/blackjack.php:698 — <form method='post' action='" . $_SERVER['PHP_SELF'] . "?id=$id' enctype='multipart/form-data' accept-charset='utf-8'>
+- public/blackjack.php:924 — <form method='post' action='" . $_SERVER['PHP_SELF'] . "?id=$id' enctype='multipart/form-data' accept-charset='utf-8'>
+- public/blackjack.php:1279 — $split = random_int(20, 84);
+- public/blackjack.php:1280 — $split_deck = array_chunk($cards, $split);
+- public/blackjack.php:1283 — for ($x = (count($split_deck) - 1); $x >= 0; --$x) {
+- public/blackjack.php:1284 — $temp_deck = array_merge($temp_deck, $split_deck[$x]);
+- public/bot_triggers.php:20 — require_once INCL_DIR . 'function_bbcode.php';
+- public/bot_triggers.php:47 — $data = array_merge($_POST, $_GET);
+- public/bot_triggers.php:169 — <form method='post' action='{$_SERVER['PHP_SELF']}?action=add_reply' enctype='multipart/form-data' accept-charset='utf-8'>
+- public/bot_triggers.php:170 — <div class='has-text-centered padding20'>" . _('BBCode and emoticons are allowed.') . "</div>
+- public/bot_triggers.php:172 — <div class='has-text-left'><span class='padding20'>" . _('Add response for') . ":</span> <blockquote class='padding20 bg-00 round10'>$tri...
+- public/bot_triggers.php:183 — <form method='post' action='{$_SERVER['PHP_SELF']}?action=edit_trigger' enctype='multipart/form-data' accept-charset='utf-8'>
+- public/bot_triggers.php:184 — <div class='has-text-centered padding20'>" . _('BBCode and emoticons are allowed.') . "</div>
+- public/bot_triggers.php:195 — <form method='post' action='{$_SERVER['PHP_SELF']}?action=edit_reply' enctype='multipart/form-data' accept-charset='utf-8'>
+- public/bot_triggers.php:196 — <div class='has-text-centered padding20'>" . _('BBCode and emoticons are allowed.') . "</div>
+- public/bot_triggers.php:242 — <form method='post' action='{$_SERVER['PHP_SELF']}?action=add_trigger' enctype='multipart/form-data' accept-charset='utf-8'>
+- public/bot_triggers.php:243 — <div class='has-text-centered padding20'>" . _('BBCode and emoticons are allowed.') . "</div>
+- public/bot_triggers.php:278 — <form method='post' action='{$_SERVER['PHP_SELF']}' enctype='multipart/form-data' accept-charset='utf-8'>
+- public/bot_triggers.php:299 — <form method='post' action='{$_SERVER['PHP_SELF']}' enctype='multipart/form-data' accept-charset='utf-8'>
+- public/bot_triggers.php:365 — <form method='post' action='{$_SERVER['PHP_SELF']}'>
+- public/browse.php:126 — ->orderBy('t.sticky')
+- public/bugs.php:25 — require_once INCL_DIR . 'function_bbcode.php';
+- public/bugs.php:46 — if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+- public/bugs.php:91 — $db->perform($sql, array_merge($update, ['id' => $id]));
+- public/bugs.php:158 — <form method='post' action='{$_SERVER['PHP_SELF']}?action=viewbug' enctype='multipart/form-data' accept-charset='utf-8'>
+- public/bugs.php:297 — if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+- public/bugs.php:329 — <form method='post' action='{$_SERVER['PHP_SELF']}?action=add' enctype='multipart/form-data' accept-charset='utf-8'>";
+- public/casino.php:414 — $blocks = [];
+- public/casino.php:421 — $blocks[] = "
+- public/casino.php:423 — <form name='p2p' method='post' action='{$_SERVER['PHP_SELF']}' enctype='multipart/form-data' accept-charset='utf-8'>
+- public/casino.php:464 — $blocks[] = $open_bets . main_table($body, $heading) . '
+- public/casino.php:467 — $blocks[] = $open_bets . main_div(_('Sorry no bets currently'), '', 'has-text-centered') . '
+- public/casino.php:477 — <form name='casino' method='post' action='{$_SERVER['PHP_SELF']}' enctype='multipart/form-data' accept-charset='utf-8'>
+- public/casino.php:515 — $blocks[] = $table . main_table($body) . '
+- public/casino.php:525 — <form name='casino' method='post' action='{$_SERVER['PHP_SELF']}' enctype='multipart/form-data' accept-charset='utf-8'>
+- public/casino.php:568 — $blocks[] = $table . main_table($body) . '
+- public/casino.php:647 — $HTMLOUT = main_div($HTMLOUT . "<div class='level-center'>" . implode('', $blocks) . '</div>' . $details);
+- public/catalog.php:19 — require_once INCL_DIR . 'function_bbcode.php';
+- public/clear_announcement.php:16 — require_once INCL_DIR . 'function_bbcode.php';
+- public/comment.php:18 — require_once INCL_DIR . 'function_bbcode.php';
+- public/comment.php:76 — if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+- public/comment.php:126 — <br><form name='compose' method='post' action='{$_SERVER['PHP_SELF']}?action=add' enctype='multipart/form-data' accept-charset='utf-8'>
+- public/comment.php:129 — $HTMLOUT .= BBcode($body);
+- public/comment.php:132 — <label for='anonymous'>" . _('Check this to post anonymously') . "</label>
+- public/comment.php:134 — <input type='submit' class='button is-small top20' value='" . _('Post Comment') . "'>
+- public/comment.php:137 — $sql = "SELECT c.id, c.text, c.added, c.$locale, c.anonymous, c.editedby, c.editedat, c.user, u.id as user, u.title, u.avatar, u.offensiv...
+- public/comment.php:150 — require_once INCL_DIR . 'function_bbcode.php';
+- public/comment.php:171 — <form method='post' action='{$_SERVER['PHP_SELF']}?action=edit&amp;cid=$commentid' enctype='multipart/form-data' accept-charset='utf-8'>
+- public/comment.php:175 — $HTMLOUT .= BBcode($arr['text']);
+- public/contactstaff.php:18 — require_once INCL_DIR . 'function_bbcode.php';
+- public/contactstaff.php:36 — if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+- public/contactstaff.php:63 — <form method='post' name='message' action='" . $_SERVER['PHP_SELF'] . "' enctype='multipart/form-data' accept-charset='utf-8'>";
+- public/contactstaff.php:84 — <td colspan='2' class='is-paddingless'>" . BBcode($msg) . "
+- public/credits.php:11 — require_once INCL_DIR . 'function_bbcode.php';
+- public/credits.php:62 — <form method='post' action='" . $_SERVER['PHP_SELF'] . '?action=update&amp;id=' . $id . "' enctype='multipart/form-data' accept-charset='...
+- public/credits.php:133 — <form method='post' action='{$_SERVER['PHP_SELF']}' enctype='multipart/form-data' accept-charset='utf-8'>
+- public/credits.php:151 — <option value='Forum'>" . _('Forum') . "</option>
+- public/css/rss.css:2 — display: block;
+- public/css/rss.css:28 — display: block;
+- public/css/rss.css:44 — display: block;
+- public/delete.php:23 — $data = array_merge($_GET, $_POST);
+- public/details.php:19 — require_once INCL_DIR . 'function_bbcode.php';
+- public/details.php:27 — global $container, $site_config, $BLOCKS;
+- public/details.php:51 — 'info_block' => 'main_table',
+- public/details.php:218 — if ($BLOCKS['google_books_api_on'] && in_array($torrent['category'], $site_config['categories']['ebook'])) {
+- public/details.php:236 — if ($BLOCKS['tvmaze_api_on'] && in_array($torrent['category'], $site_config['categories']['tv'])) {
+- public/details.php:254 — if ($BLOCKS['imdb_api_on'] && (in_array($torrent['category'], $site_config['categories']['movie']) || in_array($torrent['category'], $sit...
+- public/details.php:327 — $info_block = '';
+- public/details.php:329 — $info_block .= tr(_('NFO'), "<div class='left10'><a href='{$site_config['paths']['baseurl']}/viewnfo.php?id={$torrent['id']}'>" . _('View...
+- public/details.php:332 — $info_block .= tr(_('Subtitles'), $subtitles, 1);
+- public/details.php:335 — $info_block .= tr(_('Audios'), $audios, 1);
+- public/details.php:338 — $info_block .= tr(_('Visible'), '<div class="left10">' . _('No') . '(' . _('dead') . ')</div>', 1);
+- public/details.php:341 — $info_block .= tr(_('Banned'), "<div class='left10'>{$torrent['banned']}</div>", 1);
+- public/details.php:345 — $info_block .= tr('Nuked', "<div class='level-left left10'><img src='{$site_config['paths']['images_baseurl']}nuked.gif' alt='Nuked' clas...
+- public/details.php:349 — $info_block .= tr(_('Type'), '<div class="left10">' . htmlsafechars((string) $torrent['cat_name']) . '</div>', 1);
+- public/details.php:351 — $info_block .= tr(_('Type'), '<div class="left10">None</div>', 1);
+- public/details.php:354 — $info_block .= tr('Rating', '<div class="left10">' . getRate($id, 'torrent') . '</div>', 1);
+- public/details.php:355 — $info_block .= tr(_('Last&#160;seeder'), '<div class="left10">' . _('Last Activity ') . get_date(strtotime($lastseed), '', 0, 1) . '</div...
+- public/details.php:357 — $info_block .= tr(_('Num Files'), "<div class='level-left is-flex left10'><a href='{$site_config['paths']['baseurl']}/filelist.php?id=$id...
+- public/details.php:359 — $info_block .= tr(_('Size'), '<div class="left10">' . mksize($torrent['size']) . ' (' . number_format($torrent['size']) . ' ' . _('bytes ...
+- public/details.php:360 — $info_block .= tr(_('Added'), '<div class="left10">' . get_date((int) $torrent['added'], 'LONG') . '</div>', 1);
+- public/details.php:361 — $info_block .= tr(_('Views'), "<div class='left10'>{$torrent['views']}</div>", 1);
+- public/details.php:362 — $info_block .= tr(_('Hits'), "<div class='left10'>{$torrent['hits']}</div>", 1);
+- public/details.php:363 — $info_block .= tr(_('Snatched'), '<div class="left10">' . ($torrent['times_completed'] > 0 ? "<a href='{$site_config['paths']['baseurl']}...
+- public/details.php:364 — $info_block .= tr(_('Peers'), "<div class='left10'><a href='{$site_config['paths']['baseurl']}/peerlist.php?id=$id#seeders' class='toolti...
+- public/details.php:432 — $points .= tr('Karma Points', '
+- public/details.php:434 — <p>In total ' . $total_coins . ' Karma Points given to this torrent of which ' . $my_points . ' from you</p>
+- public/details.php:458 — <div>By clicking on the coins you can give Karma Points to the uploader of this torrent.</div>' . $coin_users . '
+- public/details.php:493 — <img src='{$site_config['paths']['images_baseurl']}smilies/{$s}.gif' alt='' class='emoticon right10'>
+- public/details.php:511 — $torrent_cache['rep'] = $users_class->get_item('reputation', $owner);
+- public/details.php:513 — $member_reputation = get_reputation($users_class->getUserFromId($owner), 'torrents', true, $id, ($torrent['anonymous'] === '1' ? true : f...
+- public/details.php:514 — $audit .= tr('Reputation', "
+- public/details.php:516 — $member_reputation counts towards uploaders Reputation
+- public/details.php:520 — <form action='{$site_config['paths']['baseurl']}/report.php?type=Torrent&amp;id=$id' method='post' enctype='multipart/form-data' accept-c...
+- public/details.php:537 — <form method='post' action='{$site_config['paths']['baseurl']}/details.php?id={$torrent['id']}' enctype='multipart/form-data' accept-char...
+- public/details.php:551 — <form method='post' action='{$site_config['paths']['baseurl']}/details.php?id={$torrent['id']}{$returnto}' enctype='multipart/form-data' ...
+- public/details.php:555 — <form method='post' action='{$site_config['paths']['baseurl']}/details.php?id={$torrent['id']}' enctype='multipart/form-data' accept-char...
+- public/details.php:562 — <form method='post' action='{$site_config['paths']['baseurl']}/details.php?id={$torrent['id']}{$returnto}' enctype='multipart/form-data' ...
+- public/details.php:569 — $audit .= tr(_('Thanks list'), "
+- public/details.php:571 — <iframe id='thanked' src ='{$site_config['paths']['baseurl']}/ajax/thanks.php?torrentid={$id}'>
+- public/details.php:575 — <div id='thanks_holder' data-tid='{$torrent['id']}' class='left10'></div>", 1);
+- public/details.php:581 — <form method='post' action='{$site_config['paths']['baseurl']}/takereseed.php' enctype='multipart/form-data' accept-charset='utf-8'>
+- public/details.php:604 — <img src='{$site_config['paths']['images_baseurl']}smilies/thankyou.gif' class='tooltipper' alt='Thank You' title='Give a quick \"Thank Y...
+- public/details.php:606 — <form name='comment' method='post' action='{$site_config['paths']['baseurl']}/comment.php' enctype='multipart/form-data' accept-charset='...
+- public/details.php:609 — " . BBcode('', '', 200) . "
+- public/details.php:653 — Remember to show your gratitude and Thank the Uploader. <img src='{$site_config['paths']['images_baseurl']}smilies/smile1.gif' alt=''>
+- public/download.php:61 — show_error(_('Error'), _("You don't have enough karma[seedbonus] to download, try seeding back some torrents =]"));
+- public/edit.php:17 — require_once INCL_DIR . 'function_bbcode.php';
+- public/edit.php:69 — $HTMLOUT .= "<form method='post' id='edit_form' name='edit_form' action='takeedit.php' enctype='multipart/form-data' accept-charset='utf-8'>
+- public/edit.php:93 — $HTMLOUT .= tr(_('Description'), BBcode($row['ori_descr']) . '<br>(' . _fe('HTML is not allowed. {0}Click here{1} for information on avai...
+- public/edit.php:195 — $HTMLOUT .= tr(_('Sticky'), "<input type='checkbox' name='sticky' " . (($row['sticky']) === 'yes' ? 'checked' : '') . " value='yes'>" . _...
+- public/edit.php:213 — <form name='delete_form' method='post' action='{$site_config['paths']['baseurl']}/delete.php' enctype='multipart/form-data' accept-charse...
+- public/faq.php:146 — " . _("Why can't I connect? Is the site blocking me?") . "
+- public/faq.php:152 — <li><a href='#conn3'>" . _("Your ISP blocks the site's address") . "</a></li>
+- public/faq.php:239 — <p>' . _fe('The way to solve the problem involves opening the ports used for incoming connections (the same range you defined in your cli...
+- public/faq.php:273 — <td class='rowhead'>" . _('Can edit and delete any uploaded torrents. Can also moderate user comments and disable accounts.') . "</td>
+- public/faq.php:343 — <p>' . _fe("Please do not make a post just to test your avatar. If everything is allright you'll see it in your profile {0}details page{1...
+- public/faq.php:415 — <p>' . _fe('Note also that in the ICS case it is preferable to run the BT client on the ICS gateway. Clients running on the other compute...
+- public/faq.php:516 — <p>' . _("See the hash fails topic. If your client receives bad data it will have to redownload it, therefore the total downloaded may be...
+- public/faq.php:684 — <p><i>" . _('Caveat: This is a large and complex topic. It is not possible to cover all variations here.') . '</i></p>
+- public/faq.php:732 — <p>' . _fe('If your ISP only allows HTTP traffic through port 80 or blocks the usual proxy ports then you would need to use something lik...
+- public/faq.php:769 — <h2 class='has-text-centered padtop10' id='answer_8'>" . _("Why can't I connect? Is the site blocking me?") . "</h2>
+- public/faq.php:778 — <p>" . _fe("The site blocks addresses listed in the (former) {0}PeerGuardian{1} database, as well as addresses of banned users. This work...
+- public/faq.php:779 — <p>' . _('If somehow your address is indeed blocked in the PG database do not contact us about it, it is not our policy to open <i>ad hoc...
+- public/faq.php:783 — <p>" . _("Your ISP blocks the site's address") . '</p>
+- public/faq.php:800 — <p>" . _fe("Post in the {0}Forums{1}, by all means. You'll find they are usually a friendly and helpful place, provided you follow a few ...
+- public/faq.php:806 — " . _("Before posting read the sticky topics (the ones at the top). Many times new information that still hasn't been incorporated in the...
+- public/faq.php:809 — " . _("Help us in helping you. Do not just say 'it doesn't work!'. Provide details so that we don't have to guess or waste time asking. W...
+- public/fastdelete.php:71 — $db->perform($sql, array_merge($set, ['id' => $tid['owner']]));
+- public/flash.php:59 — <div class='has-text-centered'>" . _fe('Top Scores Earn {0} Karma Points', $site_config['arcade']['top_score_points']) . '</div>';
+- public/forums.php:19 — require_once INCL_DIR . 'function_bbcode.php';
+- public/forums.php:34 — get_file_name('forums_js'),
+- public/forums.php:38 — $over_forum_id = $count = $now_viewing = $child_boards = '';
+- public/forums.php:39 — if (!$site_config['forum_config']['online'] && !has_access($user['class'], UC_STAFF, 'coder')) {
+- public/forums.php:40 — stderr(_('Information'), _('The forums are currently offline for maintainance work'));
+- public/forums.php:46 — ->set(['forum_access' => TIME_NOW])
+- public/forums.php:51 — if (has_access($user['class'], UC_STAFF, 'coder') || has_access($user['class'], UC_STAFF, 'forum_mod')) {
+- public/forums.php:53 — 'forum',
+- public/forums.php:54 — 'view_forum',
+- public/forums.php:73 — 'poll',
+- public/forums.php:77 — 'staff_lock',
+- public/forums.php:81 — 'forum',
+- public/forums.php:82 — 'view_forum',
+- public/forums.php:100 — 'poll',
+- public/forums.php:104 — $action = in_array($posted_action, $valid_actions) ? $posted_action : 'forum';
+- public/forums.php:109 — if(confirm('" . _('Are you sure you want to delete this forum?') . "')) {
+- public/forums.php:110 — self.location.href='staffpanel.php?tool=forum_manage&action=delete&id='+id;
+- public/forums.php:117 — <ul class='level-center bg-06'>" . ($action !== 'forum' ? "
+- public/forums.php:119 — <a href='{$site_config['paths']['baseurl']}/forums.php'>" . _('Main Forums') . '</a>
+- public/forums.php:122 — <a href='{$site_config['paths']['baseurl']}/forums.php?action=subscriptions'>" . _('My Subscriptions') . '</a>
+- public/forums.php:125 — <a href='{$site_config['paths']['baseurl']}/forums.php?action=search'>" . _('Search') . '</a>
+- public/forums.php:128 — <a href='{$site_config['paths']['baseurl']}/forums.php?action=view_unread_posts'>" . _('Unread Posts') . '</a>
+- public/forums.php:131 — <a href='{$site_config['paths']['baseurl']}/forums.php?action=new_replies'>" . _('New Replies') . '</a>
+- public/forums.php:134 — <a href='{$site_config['paths']['baseurl']}/forums.php?action=view_my_posts'>" . _('My Posts') . '</a>
+- public/forums.php:137 — <a href='{$site_config['paths']['baseurl']}/forums.php?action=mark_all_as_read'>" . _('Mark All As Read') . "</a>
+- public/forums.php:140 — <a href='{$site_config['paths']['baseurl']}/forums.php?action=mark_all_as_unread'>" . _('Mark All As Unread') . '</a>
+- public/forums.php:143 — <a href='{$site_config['paths']['baseurl']}/forums.php?action=member_post_history'>" . _('Member Post History') . '</a>
+- public/forums.php:153 — <td class='has-text-centered'><img src='{$image}' data-src='{$site_config['paths']['images_baseurl']}forums/unlockednew.gif' alt='unlocke...
+- public/forums.php:154 — <td>" . _('Unread forum') . "</td>
+- public/forums.php:155 — <td class='has-text-centered'><img src='{$image}' data-src='{$site_config['paths']['images_baseurl']}forums/unlocked.gif' alt='unlocked' ...
+- public/forums.php:156 — <td>" . _('Read forum') . "</td>
+- public/forums.php:157 — <td class='has-text-centered'><img src='{$image}' data-src='{$site_config['paths']['images_baseurl']}forums/topicnew.gif' alt='topicnew' ...
+- public/forums.php:158 — <td>" . _('Unread post') . "</td>
+- public/forums.php:159 — <td class='has-text-centered'><img src='{$image}' data-src='{$site_config['paths']['images_baseurl']}forums/topic.gif' alt='topic' title=...
+- public/forums.php:160 — <td>" . _('Read post') . "</td>
+- public/forums.php:163 — <td class='has-text-centered'><img src='{$image}' data-src='{$site_config['paths']['images_baseurl']}forums/hot_topic_new.gif' alt='hot_t...
+- public/forums.php:164 — <td>" . _('Hot topic un-read') . "</td>
+- public/forums.php:165 — <td class='has-text-centered'><img src='{$image}' data-src='{$site_config['paths']['images_baseurl']}forums/hot_topic.gif' alt='hot_topic...
+- public/forums.php:166 — <td>" . _('Hot topic [more than 30 replies]') . "</td>
+- public/forums.php:167 — <td class='has-text-centered'><img src='{$image}' data-src='{$site_config['paths']['images_baseurl']}forums/lockednew.gif' alt='lockednew...
+- public/forums.php:168 — <td>" . _('Locked un-read') . "</td>
+- public/forums.php:169 — <td class='has-text-centered'><img src='{$image}' data-src='{$site_config['paths']['images_baseurl']}forums/locked.gif' alt='locked' titl...
+- public/forums.php:170 — <td>" . _('Locked') . "</td>
+- public/forums.php:173 — <td class='has-text-centered'><img src='{$image}' data-src='{$site_config['paths']['images_baseurl']}forums/poll.gif' alt='poll' title='"...
+- public/forums.php:174 — <td>" . _('Poll') . "</td>
+- public/forums.php:175 — <td class='has-text-centered'><img src='{$image}' data-src='{$site_config['paths']['images_baseurl']}forums/pinned.gif' alt='pinned' titl...
+- public/forums.php:177 — <td class='has-text-centered'><img src='{$image}' data-src='{$site_config['paths']['images_baseurl']}forums/subscriptions.gif' alt='" . _...
+- public/forums.php:178 — <td>" . _('Subscribed to thread') . "</td>
+- public/forums.php:179 — <td class='has-text-centered'><img src='{$image}' data-src='{$site_config['paths']['images_baseurl']}forums/posted.gif' alt='posted' titl...
+- public/forums.php:184 — <i class='icon-search icon tooltipper' aria-hidden='true' title='" . _('1st Post Preview') . "'></i>
+- public/forums.php:186 — <td>" . _('1st Post Preview') . "</td>
+- public/forums.php:187 — <td class='has-text-centered'><img src='{$image}' data-src='{$site_config['paths']['images_baseurl']}forums/last_post.gif' alt='last post...
+- public/forums.php:188 — <td>" . _('Last Post') . "</td>
+- public/forums.php:189 — <td class='has-text-centered'><img src='{$image}' data-src='{$site_config['paths']['images_baseurl']}forums/topic_normal.gif' alt='" . _(...
+- public/forums.php:195 — $poll_starts = isset($_POST['poll_starts']) ? (int) $_POST['poll_starts'] : 0;
+- public/forums.php:196 — $poll_ends = isset($_POST['poll_ends']) ? (int) $_POST['poll_ends'] : 1356048000;
+- public/forums.php:199 — $can_add_poll = isset($_GET['action']) && $_GET['action'] === 'new_topic' ? 1 : 0;
+- public/forums.php:205 — $accept_types = str_replace('|', ', ', $site_config['forum_config']['accepted_file_types']);
+- public/forums.php:207 — <div id="staff_tools" ' . ((isset($_POST['poll_question']) && $_POST['poll_question'] !== '') ? '' : 'style="display:none"') . '>' . main...
+- public/forums.php:208 — <td><img src="' . $image . '" data-src="' . $site_config['paths']['images_baseurl'] . 'forums/attach.gif" alt="' . _('Attach') . '" class...
+- public/forums.php:212 — <img src="' . $image . '" data-src="' . $site_config['paths']['images_baseurl'] . 'forums/zip.gif" alt="' . _('Zip') . '}" class="emotico...
+- public/forums.php:213 — <img src="' . $image . '" data-src="' . $site_config['paths']['images_baseurl'] . 'forums/rar.gif" alt="' . _('Rar') . '" class="emoticon...
+- public/forums.php:223 — <td><span style="white-space:nowrap;font-weight: bold;"> <img src="' . $image . '" data-src="' . $site_config['paths']['images_baseurl'] ...
+- public/forums.php:227 — <td><img src="' . $image . '" data-src="' . $site_config['paths']['images_baseurl'] . 'forums/question.png" alt="Question" class="emotico...
+- public/forums.php:228 — <td><span style="white-space:nowrap;font-weight: bold;">' . _('Poll question') . ':</span></td>
+- public/forums.php:229 — <td><input type="text" name="poll_question" class="w-100" value="' . (isset($_POST['poll_question']) ? strip_tags($_POST['poll_question']...
+- public/forums.php:232 — <td><img src="' . $image . '" data-src="' . $site_config['paths']['images_baseurl'] . 'forums/options.gif" alt="' . _('Poll answers') . '...
+- public/forums.php:233 — <td><span style="white-space:nowrap;font-weight: bold;">' . _('Poll answers') . ':</span></td>
+- public/forums.php:234 — <td><textarea cols="30" rows="4" name="poll_answers" class="text_area_small">' . (isset($_POST['poll_answers']) ? strip_tags($_POST['poll...
+- public/forums.php:237 — <td><img src="' . $image . '" data-src="' . $site_config['paths']['images_baseurl'] . 'forums/clock.png" alt=' . _('Poll starts') . ' cla...
+- public/forums.php:238 — <td><span style="white-space:nowrap;font-weight: bold;">' . _('Poll starts') . ':</span></td>
+- public/forums.php:239 — <td><select name="poll_starts">
+- public/forums.php:240 — <option value="0" ' . ($poll_starts === 0 ? 'selected' : '') . '>' . _('Start Now') . '!</option>
+- public/forums.php:241 — <option value="1" ' . ($poll_starts === 1 ? 'selected' : '') . '>' . _pfe('in {0} day', 'in {0} days', 1) . '</option>
+- public/forums.php:242 — <option value="2" ' . ($poll_starts === 2 ? 'selected' : '') . '>' . _pfe('in {0} day', 'in {0} days', 2) . '</option>
+- public/forums.php:243 — <option value="3" ' . ($poll_starts === 3 ? 'selected' : '') . '>' . _pfe('in {0} day', 'in {0} days', 3) . '</option>
+- public/forums.php:244 — <option value="4" ' . ($poll_starts === 4 ? 'selected' : '') . '>' . _pfe('in {0} day', 'in {0} days', 4) . '</option>
+- public/forums.php:245 — <option value="5" ' . ($poll_starts === 5 ? 'selected' : '') . '>' . _pfe('in {0} day', 'in {0} days', 5) . '</option>
+- public/forums.php:246 — <option value="6" ' . ($poll_starts === 6 ? 'selected' : '') . '>' . _pfe('in {0} day', 'in {0} days', 6) . '</option>
+- public/forums.php:247 — <option value="7" ' . ($poll_starts === 7 ? 'selected' : '') . '>' . _pfe('in {0} week', 'in {0} weeks', 16) . '</option>
+- public/forums.php:248 — </select>' . _('When to start the poll. Default is: Start Now!') . '</td>
+- public/forums.php:251 — <td><img src="' . $image . '" data-src="' . $site_config['paths']['images_baseurl'] . 'forums/stop.png" alt=' . _('Poll ends') . ' class=...
+- public/forums.php:252 — <td><span style="white-space:nowrap;font-weight: bold;">' . _('Poll ends') . ':</span></td>
+- public/forums.php:253 — <td><select name="poll_ends">
+- public/forums.php:254 — <option value="1356048000" ' . ($poll_ends === 1356048000 ? 'selected' : '') . '>' . _('Run Forever') . '</option>
+- public/forums.php:255 — <option value="1" ' . ($poll_ends === 1 ? 'selected' : '') . '>' . _pfe('in {0} day', 'in {0} days', 1) . '</option>
+- public/forums.php:256 — <option value="2" ' . ($poll_ends === 2 ? 'selected' : '') . '>' . _pfe('in {0} day', 'in {0} days', 2) . '</option>
+- public/forums.php:257 — <option value="3" ' . ($poll_ends === 3 ? 'selected' : '') . '>' . _pfe('in {0} day', 'in {0} days', 3) . '</option>
+- public/forums.php:258 — <option value="4" ' . ($poll_ends === 4 ? 'selected' : '') . '>' . _pfe('in {0} day', 'in {0} days', 4) . '</option>
+- public/forums.php:259 — <option value="5" ' . ($poll_ends === 5 ? 'selected' : '') . '>' . _pfe('in {0} day', 'in {0} days', 5) . '</option>
+- public/forums.php:260 — <option value="6" ' . ($poll_ends === 6 ? 'selected' : '') . '>' . _pfe('in {0} day', 'in {0} days', 6) . '</option>
+- public/forums.php:261 — <option value="7" ' . ($poll_ends === 7 ? 'selected' : '') . '>' . _pfe('in {0} week', 'in {0} weeks', 1) . '</option>
+- public/forums.php:262 — <option value="14" ' . ($poll_ends === 14 ? 'selected' : '') . '>' . _pfe('in {0} week', 'in {0} weeks', 2) . '</option>
+- public/forums.php:263 — <option value="21" ' . ($poll_ends === 21 ? 'selected' : '') . '>' . _pfe('in {0} week', 'in {0} weeks', 3) . '</option>
+- public/forums.php:264 — <option value="28" ' . ($poll_ends === 28 ? 'selected' : '') . '>' . _pfe('in {0} month', 'in {0} months', 1) . '</option>
+- public/forums.php:265 — <option value="56" ' . ($poll_ends === 56 ? 'selected' : '') . '>' . _pfe('in {0} month', 'in {0} months', 2) . '</option>
+- public/forums.php:266 — <option value="84" ' . ($poll_ends === 84 ? 'selected' : '') . '>' . _pfe('in {0} month', 'in {0} months', 3) . '</option>
+- public/forums.php:267 — </select>' . _("How long should this poll run? Default is 'run forever'") . '</td>
+- public/forums.php:270 — <td><img src="' . $image . '" data-src="' . $site_config['paths']['images_baseurl'] . 'forums/multi.gif" alt=' . _('Multi options') . ' c...
+- public/forums.php:284 — $forum_id = isset($_GET['forum_id']) ? (int) $_GET['forum_id'] : (isset($_POST['forum_id']) ? (int) $_POST['forum_id'] : 0);
+- public/forums.php:286 — $the_bottom_of_the_page = insert_quick_jump_menu($forum_id) . $legend;
+- public/forums.php:289 — case 'view_forum':
+- public/forums.php:290 — require_once FORUM_DIR . 'view_forum.php';
+- public/forums.php:295 — require_once FORUM_DIR . 'view_topic.php';
+- public/forums.php:300 — require_once FORUM_DIR . 'section_view.php';
+- public/forums.php:304 — case 'poll':
+- public/forums.php:305 — require_once FORUM_DIR . 'poll.php';
+- public/forums.php:309 — require_once FORUM_DIR . 'subscriptions.php';
+- public/forums.php:314 — require_once FORUM_DIR . 'add_subscription.php';
+- public/forums.php:318 — require_once FORUM_DIR . 'delete_post.php';
+- public/forums.php:322 — require_once FORUM_DIR . 'undelete_post.php';
+- public/forums.php:326 — require_once FORUM_DIR . 'delete_subscription.php';
+- public/forums.php:330 — require_once FORUM_DIR . 'new_topic.php';
+- public/forums.php:335 — require_once FORUM_DIR . 'post_reply.php';
+- public/forums.php:340 — require_once FORUM_DIR . 'search.php';
+- public/forums.php:345 — require_once FORUM_DIR . 'view_unread_posts.php';
+- public/forums.php:350 — require_once FORUM_DIR . 'new_replies.php';
+- public/forums.php:355 — require_once FORUM_DIR . 'view_my_posts.php';
+- public/forums.php:360 — require_once FORUM_DIR . 'member_post_history.php';
+- public/forums.php:366 — require_once FORUM_DIR . 'mark_all_as_read.php';
+- public/forums.php:370 — require_once FORUM_DIR . 'download_attachment.php';
+- public/forums.php:374 — require_once FORUM_DIR . 'clear_unread_post.php';
+- public/forums.php:378 — require_once FORUM_DIR . 'edit_post.php';
+- public/forums.php:383 — if (!has_access($user['class'], UC_STAFF, 'coder') && !has_access($user['class'], UC_STAFF, 'forum_mod')) {
+- public/forums.php:386 — require_once FORUM_DIR . 'view_post_history.php';
+- public/forums.php:391 — if (!has_access($user['class'], UC_STAFF, 'coder') && !has_access($user['class'], UC_STAFF, 'forum_mod')) {
+- public/forums.php:394 — require_once FORUM_DIR . 'staff_actions.php';
+- public/forums.php:397 — case 'staff_lock':
+- public/forums.php:401 — require_once FORUM_DIR . 'stafflock_post.php';
+- public/forums.php:404 — case 'forum':
+- public/forums.php:405 — $query = $fluent->from('over_forums AS ovf')
+- public/forums.php:407 — ->select('ovf.id AS over_forum_id')
+- public/forums.php:408 — ->select('ovf.name AS over_forum_name')
+- public/forums.php:409 — ->select('ovf.description AS over_forum_description')
+- public/forums.php:410 — ->select('ovf.min_class_view AS over_forum_min_class_view')
+- public/forums.php:411 — ->select('f.id AS real_forum_id')
+- public/forums.php:416 — ->select('f.forum_id')
+- public/forums.php:417 — ->select('f.parent_forum')
+- public/forums.php:418 — ->innerJoin('forums AS f ON f.forum_id = ovf.id')
+- public/forums.php:424 — foreach ($query as $forum) {
+- public/forums.php:425 — if ($forum['parent_forum'] === 0) {
+- public/forums.php:426 — $parents[] = $forum;
+- public/forums.php:428 — $children[] = $forum;
+- public/forums.php:438 — $parent['children_ids'][] = $parent['real_forum_id'];
+- public/forums.php:439 — if ($parent['real_forum_id'] === $child['parent_forum']) {
+- public/forums.php:442 — $parent['children_ids'][] = $child['real_forum_id'];
+- public/forums.php:449 — foreach ($updated as $arr_forums) {
+- public/forums.php:450 — $HTMLOUT .= ($arr_forums['over_forum_id'] !== $over_forum_id ? "
+- public/forums.php:452 — <a href='{$_SERVER['PHP_SELF']}?action=section_view&amp;forum_id={$arr_forums['over_forum_id']}' title='" . format_comment($arr_forums['o...
+- public/forums.php:453 — <span>" . format_comment($arr_forums['over_forum_name']) . '</span>
+- public/forums.php:457 — if ($arr_forums['forum_id'] === $arr_forums['over_forum_id']) {
+- public/forums.php:458 — $forum_id = $arr_forums['real_forum_id'];
+- public/forums.php:459 — $forum_name = _(htmlsafechars($arr_forums['name']));
+- public/forums.php:460 — $forum_description = _(htmlsafechars($arr_forums['description']));
+- public/forums.php:461 — $topic_count = number_format($arr_forums['topic_count']);
+- public/forums.php:462 — $post_count = number_format($arr_forums['post_count']);
+- public/forums.php:463 — $last_post_arr = $cache->get('forum_last_post_' . $forum_id . '_' . $user['class']);
+- public/forums.php:465 — $query = $fluent->from('topics AS t')
+- public/forums.php:474 — ->leftJoin('posts AS p ON t.id = p.topic_id');
+- public/forums.php:478 — } elseif ($user['class'] < $site_config['forum_config']['min_delete_view_class']) {
+- public/forums.php:482 — $last_post_arr = $query->where('t.forum_id', $arr_forums['children_ids'])
+- public/forums.php:487 — $cache->set('forum_last_post_' . $forum_id . '_' . $user['class'], $last_post_arr, $site_config['expires']['last_post']);
+- public/forums.php:498 — $image_to_use = ($last_post_arr['added'] > (TIME_NOW - $site_config['forum_config']['readpost_expiry'])) ? (!$last_read_post_arr or $last...
+- public/forums.php:499 — $img = ($image_to_use ? 'unlockednew' : 'unlocked');
+- public/forums.php:503 — $last_post = '<span style="white-space:nowrap;">' . _('Last Post by') . ': <i>' . get_anonymous_name() . '</i> in &#9658; <a href="' . $s...
+- public/forums.php:505 — $last_post = '<span style="white-space:nowrap;">' . _('Last Post by') . ': <i>' . get_anonymous_name() . '</i> [' . (!empty($last_post_ar...
+- public/forums.php:508 — $last_post = '<span style="white-space:nowrap;">' . _('Last Post by') . ': ' . (!empty($last_post_arr['user_id']) ? format_username((int)...
+- public/forums.php:511 — $img = 'unlocked';
+- public/forums.php:514 — $keys['child_boards'] = 'child_boards_' . $arr_forums['real_forum_id'] . '_' . $user['class'];
+- public/forums.php:518 — $query = $fluent->from('forums')
+- public/forums.php:522 — ->where('parent_forum = ?', $arr_forums['real_forum_id'])
+- public/forums.php:527 — $child_boards_cache[] = '<a href="' . $site_config['paths']['baseurl'] . '/forums.php?action=view_forum&amp;forum_id=' . (int) $arr['id']...
+- public/forums.php:540 — <img src="' . $image . '" data-src="' . $site_config['paths']['images_baseurl'] . 'forums/' . $img . '.gif" alt="' . $img . '" title="' ....
+- public/forums.php:541 — ' . bubble('<a href="?action=view_forum&amp;forum_id=' . $arr_forums['real_forum_id'] . '">' . $forum_name . '</a>', $forum_description) ...
+- public/forums.php:545 — <a href="staffpanel.php?tool=forum_manage&amp;action=forum_manage&amp;action2=edit_forum_page&amp;id=' . $forum_id . '">
+- public/forums.php:546 — <i class="icon-edit icon has-text-info tooltipper" title="Edit Forum"></i>
+- public/forums.php:550 — <a href="javascript:confirm_delete(\'' . $forum_id . '\');">
+- public/forums.php:551 — <i class="icon-trash-empty icon has-text-danger tooltipper" aria-hidden="true" title="Delete Forum"></i>
+- public/forums.php:558 — <div>' . $forum_description . '</div>' . $child_boards . $now_viewing . '
+- public/forums.php:561 — <span>' . $post_count . ' ' . _('Posts') . '<br>' . $topic_count . ' ' . _('Topics') . '</span>
+- public/forums.php:566 — $over_forum_id = $arr_forums['over_forum_id'];
+- public/forums.php:574 — $forum_users_cache = $cache->get('now_viewing_');
+- public/forums.php:575 — if ($forum_users_cache === false || is_null($forum_users_cache)) {
+- public/forums.php:576 — $forumusers = '';
+- public/forums.php:577 — $forum_users_cache = [];
+- public/forums.php:588 — $forumusers = implode(',&nbsp;&nbsp;', $list);
+- public/forums.php:590 — $forum_users_cache['forum_users'] = $forumusers;
+- public/forums.php:591 — $forum_users_cache['actcount'] = count($list);
+- public/forums.php:592 — $cache->set('now_viewing_', $forum_users_cache, $site_config['expires']['forum_users']);
+- public/forums.php:594 — if (!$forum_users_cache['forum_users']) {
+- public/forums.php:595 — $forum_users_cache['forum_users'] = _('There have been no active users in the last 15 minutes');
+- public/forums.php:598 — $forum_users = $forum_users_cache['forum_users'];
+- public/forums.php:602 — <div class='padding10'>{$forum_users}</div>", 'bottom20 has-text-centered') . $legend;
+- public/forums.php:633 — function ratingpic_forums($num)
+- public/forums.php:643 — return '<img src="' . $image . '" data-src="' . $site_config['paths']['images_baseurl'] . 'forums/rating/' . $r . '.gif" alt="rating: ' ....
+- public/forums.php:647 — * @param int  $current_forum
+- public/forums.php:657 — function insert_quick_jump_menu($current_forum = 0, $staff = false)
+- public/forums.php:667 — $qjcache = $fluent->from('forums')
+- public/forums.php:669 — ->select('forums.id')
+- public/forums.php:670 — ->select('forums.name')
+- public/forums.php:671 — ->select('forums.parent_forum')
+- public/forums.php:672 — ->select('forums.min_class_read')
+- public/forums.php:673 — ->select('over_forums.name AS overforums_name')
+- public/forums.php:674 — ->select('over_forums.sort')
+- public/forums.php:675 — ->innerJoin('over_forums ON forums.forum_id=over_forums.id')
+- public/forums.php:676 — ->orderBy('over_forums.sort ASC')
+- public/forums.php:677 — ->orderBy('forums.parent_forum ASC')
+- public/forums.php:678 — ->orderBy('forums.sort ASC')
+- public/forums.php:680 — $cache->set($cachename, $qjcache, $site_config['expires']['forum_insertJumpTo']);
+- public/forums.php:686 — <form method="get" action="' . $site_config['paths']['baseurl'] . '/forums.php" name="jump" accept-charset="utf-8">
+- public/forums.php:688 — <input type="hidden" name="action" value="view_forum">
+- public/forums.php:689 — <select name="forum_id" onchange="if (this.options[this.selectedIndex].value != -1) {forms[\'jump\'].submit()}">
+- public/forums.php:690 — <option class="head" value="0">' . _('Select a forum to jump to') . '</option>' : '');
+- public/forums.php:694 — if ($switch !== $arr['overforums_name']) {
+- public/forums.php:696 — <option class="head" value="-1">' . format_comment($arr['overforums_name']) . '</option>';
+- public/forums.php:698 — $switch = format_comment($arr['overforums_name']);
+- public/forums.php:700 — <option value="' . (int) $arr['id'] . '">' . ($arr['parent_forum'] != 0 ? '&#176; ' . format_comment($arr['name']) . ' [ child-board ]' :...
+- public/forums.php:713 — $title = _('Forums');
+- public/friends.php:49 — } elseif ($type === 'block') {
+- public/friends.php:50 — $table_is = $frag = 'blocks';
+- public/friends.php:51 — $field_is = 'blockid';
+- public/friends.php:60 — if ($type === 'block') {
+- public/friends.php:70 — $type = $_GET['type'] === 'friend' ? 'friend' : 'block';
+- public/friends.php:129 — $blocks = '';
+- public/friends.php:131 — $blocks = '<em>' . _('Your blocked list is empty.') . '</em>';
+- public/friends.php:133 — while ($block = mysqli_fetch_assoc($res)) {
+- public/friends.php:134 — $blocks .= "
+- public/friends.php:136 — <a href='{$site_config['paths']['baseurl']}/friends.php?id=$userid&amp;action=delete&amp;type=block&amp;targetid=" . (int) $block['id'] ....
+- public/friends.php:158 — <h2><a id='blocks'>" . _('Blocked list') . "</a></h2>
+- public/friends.php:165 — <td><div class='level-left'>$blocks</div></td>
+- public/getrss.php:23 — if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+- public/getrss.php:50 — <form action='{$_SERVER['PHP_SELF']}' method='post' enctype='multipart/form-data' accept-charset='utf-8'>";
+- public/gift.php:39 — stderr(_('Congratulations!'), "<img src='{$site_config['paths']['images_baseurl']}gift.png' alt='" . _('Christmas Gift') . "' title='" . ...
+- public/gift.php:51 — stderr(_('Congratulations!'), "<img src='{$site_config['paths']['images_baseurl']}gift.png' alt='" . _('Christmas Gift') . "' title='" . ...
+- public/gift.php:65 — stderr(_('Congratulations!'), "<img src='{$site_config['paths']['images_baseurl']}gift.png' alt='" . _('Christmas Gift') . "' title='" . ...
+- public/gift.php:81 — stderr(_('Congratulations!'), "<img src='{$site_config['paths']['images_baseurl']}gift.png' alt='" . _('Christmas Gift') . "' title='" . ...
+- public/hnrs.php:17 — require_once INCL_DIR . 'function_bbcode.php';
+- public/hnrs.php:50 — if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+- public/hnrs.php:248 — <form method='post' action='{$site_config['paths']['baseurl']}/hnrs.php' enctype='multipart/form-data' accept-charset='utf-8'>
+- public/hnrs.php:265 — <form method='post' action='{$site_config['paths']['baseurl']}/hnrs.php' enctype='multipart/form-data' accept-charset='utf-8'>
+- public/index.php:12 — use Pu239\PollVoter;
+- public/index.php:19 — require_once INCL_DIR . 'function_bbcode.php';
+- public/index.php:20 — require_once INCL_DIR . 'function_polls.php';
+- public/index.php:53 — $pollvoter_class = $container->get(PollVoter::class);
+- public/index.php:54 — $poll_data = $pollvoter_class->get_user_poll($user['id']);
+- public/index.php:55 — if ($site_config['poll']['forced'] && !empty($poll_data['pid']) && empty($poll_data['user_id'])) {
+- public/index.php:56 — $stdfoot['js'] = array_merge($stdfoot['js'], [
+- public/index.php:57 — get_file_name('scroll_to_poll_js'),
+- public/index.php:80 — 'forum_posts',
+- public/index.php:81 — 'site_poll',
+- public/index.php:96 — $christmas_gift = $posted_comments = $advertise = $active_users = $active_users_irc = $birthday_users = $active_users_24 = $forum_posts =...
+- public/index.php:97 — $tfreak_feed = $torrents_top = $site_stats = $site_poll = $site_news = $torrents_mow = $latest_user = $torrents_scroller = $latest_torren...
+- public/index.php:98 — $available_columns = array_merge($above_columns, $left_column, $center_column, $right_column, $below_columns);
+- public/index.php:99 — $remove_columns = $user['class'] < UC_STAFF ? $site_config['site']['staff_blocks'] : [];
+- public/index.php:102 — $dir = BLOCK_DIR . 'index' . DIRECTORY_SEPARATOR;
+- public/index.php:103 — if (in_array('glide', $available_columns) && $torrents_class->get_torrent_count() >= 10 && $user['blocks']['index_page'] & class_blocks_i...
+- public/index.php:104 — $stdfoot = array_merge_recursive($stdfoot, [
+- public/index.php:114 — if (in_array('ajaxchat', $available_columns) && $user['blocks']['index_page'] & class_blocks_index::AJAXCHAT && $BLOCKS['ajaxchat_on'] &&...
+- public/index.php:115 — $stdfoot = array_merge_recursive($stdfoot, [
+- public/index.php:125 — if (in_array('trivia', $available_columns) && $user['blocks']['index_page'] & class_blocks_index::TRIVIA && $BLOCKS['trivia_on']) {
+- public/index.php:131 — if (in_array('forum_posts', $available_columns) && $user['blocks']['index_page'] & class_blocks_index::FORUMPOSTS && $BLOCKS['forum_posts...
+- public/index.php:132 — include_once $dir . 'forum_posts.php';
+- public/index.php:134 — $remove_columns[] = 'forum_posts';
+- public/index.php:137 — if (in_array('staffpicks', $available_columns) && $user['blocks']['index_page'] & class_blocks_index::STAFF_PICKS && $BLOCKS['staff_picks...
+- public/index.php:143 — if (in_array('latest_user', $available_columns) && $user['blocks']['index_page'] & class_blocks_index::LATEST_USER && $BLOCKS['latest_use...
+- public/index.php:149 — if (in_array('birthday_users', $available_columns) && $user['blocks']['index_page'] & class_blocks_index::BIRTHDAY_ACTIVE_USERS && $BLOCK...
+- public/index.php:155 — if (in_array('active_users_irc', $available_columns) && $user['blocks']['index_page'] & class_blocks_index::IRC_ACTIVE_USERS && $BLOCKS['...
+- public/index.php:161 — if (in_array('active_users', $available_columns) && $user['blocks']['index_page'] & class_blocks_index::ACTIVE_USERS && $BLOCKS['active_u...
+- public/index.php:167 — if (in_array('cooker', $available_columns) && $user['blocks']['index_page'] & class_blocks_index::COOKER && $BLOCKS['cooker_on']) {
+- public/index.php:173 — if (in_array('requests', $available_columns) && $user['blocks']['index_page'] & class_blocks_index::REQUESTS && $BLOCKS['requests_on']) {
+- public/index.php:179 — if (in_array('offers', $available_columns) && $user['blocks']['index_page'] & class_blocks_index::OFFERS && $BLOCKS['offers_on']) {
+- public/index.php:185 — if (in_array('active_users_24', $available_columns) && $user['blocks']['index_page'] & class_blocks_index::LAST_24_ACTIVE_USERS && $BLOCK...
+- public/index.php:191 — if (in_array('site_poll', $available_columns) && !empty($poll_data) && $user['blocks']['index_page'] & class_blocks_index::ACTIVE_POLL &&...
+- public/index.php:192 — include_once $dir . 'poll.php';
+- public/index.php:194 — $remove_columns[] = 'site_poll';
+- public/index.php:197 — if (in_array('site_stats', $available_columns) && $user['blocks']['index_page'] & class_blocks_index::STATS && $BLOCKS['stats_on']) {
+- public/index.php:203 — if (in_array('christmas_gift', $available_columns) && Christmas() && $user['blocks']['index_page'] & class_blocks_index::CHRISTMAS_GIFT &...
+- public/index.php:209 — if (in_array('torrents_scroller', $available_columns) && $torrents_class->get_torrent_count() >= 10 && $user['blocks']['index_page'] & cl...
+- public/index.php:210 — $stdfoot = array_merge_recursive($stdfoot, [
+- public/index.php:220 — if (in_array('torrents_top', $available_columns) && $user['blocks']['index_page'] & class_blocks_index::LATEST_TORRENTS && $BLOCKS['lates...
+- public/index.php:226 — if (in_array('latest_torrents', $available_columns) && $user['blocks']['index_page'] & class_blocks_index::LATEST_TORRENTS && $BLOCKS['la...
+- public/index.php:232 — if (in_array('latest_movies', $available_columns) && $user['blocks']['index_page'] & class_blocks_index::LATEST_MOVIES && $BLOCKS['latest...
+- public/index.php:238 — if (in_array('latest_tv', $available_columns) && $user['blocks']['index_page'] & class_blocks_index::LATEST_TV && $BLOCKS['latest_tv_on']) {
+- public/index.php:244 — if (in_array('site_news', $available_columns) && $user['blocks']['index_page'] & class_blocks_index::NEWS && $BLOCKS['news_on']) {
+- public/index.php:250 — if (in_array('advertise', $available_columns) && $user['blocks']['index_page'] & class_blocks_index::ADVERTISEMENTS && $BLOCKS['ads_on']) {
+- public/index.php:256 — if (in_array('posted_comments', $available_columns) && $user['blocks']['index_page'] & class_blocks_index::LATESTCOMMENTS && $BLOCKS['lat...
+- public/index.php:262 — if (in_array('torrents_mow', $available_columns) && $user['blocks']['index_page'] & class_blocks_index::MOVIEOFWEEK && $BLOCKS['movie_oft...
+- public/index.php:268 — if (in_array('tfreak_feed', $available_columns) && $user['blocks']['index_page'] & class_blocks_index::TORRENTFREAK && $BLOCKS['torrentfr...
+- public/index.php:274 — if (in_array('disclaimer', $available_columns) && $user['blocks']['index_page'] & class_blocks_index::DISCLAIMER && $BLOCKS['disclaimer_o...
+- public/invite.php:126 — $db->perform($sql, array_merge($set, ['id' => $user['id']]));
+- public/invite.php:151 — if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+- public/invite.php:200 — <form method='post' action='?do=send_email' enctype='multipart/form-data' accept-charset='utf-8'>
+- public/invite.php:246 — $db->perform($sql, array_merge($set, ['id' => $user['id']]));
+- public/invite.php:269 — {2} has a strong community (just check out forums), and is a feature rich site. We hope you'll join in on all the fun!
+- public/invite.php:272 — Just for kicks, we've started you out with 200.0 Karma Bonus Points, and a couple of bonus GB to get ya started!
+- public/login.php:31 — if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+- public/login.php:34 — $post = $_POST;
+- public/login.php:36 — $validation = $validator->validate($post, [
+- public/login.php:42 — write_log(_fe('{0} has tried to login using invalid data. ', getip(0)) . json_encode($post, JSON_PRETTY_PRINT));
+- public/login.php:47 — if ($user_class->login($post['email'], $post['password'], (int) isset($post['remember']) ? 1 : 0)) {
+- public/login.php:62 — if (!empty($post['returnto'])) {
+- public/login.php:63 — $returnto = get_return_to($post['returnto']);
+- public/login.php:88 — <form id='site_login' class='form-inline table-wrapper' method='post' action='{$site_config['paths']['baseurl']}/login.php' enctype='mult...
+- public/messages.php:20 — require_once INCL_DIR . 'function_bbcode.php';
+- public/movies.php:15 — require_once INCL_DIR . 'function_bbcode.php';
+- public/mybonus.php:32 — stderr(_('Error'), _('The Karma bonus system is currently offline for maintainance work'));
+- public/mybonus.php:57 — if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+- public/mybonus.php:58 — $post = $_POST;
+- public/mybonus.php:60 — $option = isset($post['option']) ? (int) $post['option'] : 0;
+- public/mybonus.php:61 — $art = isset($post['art']) ? $post['art'] : '';
+- public/mybonus.php:62 — $donate = isset($post['donate']) ? (int) $post['donate'] : 0;
+- public/mybonus.php:63 — $torrent_id = isset($post['torrent_id']) ? (int) $post['torrent_id'] : 0;
+- public/mybonus.php:64 — $username = isset($post['username']) ? htmlsafechars($post['username']) : '';
+- public/mybonus.php:65 — $bonusgift = isset($post['bonusgift']) ? (int) $post['bonusgift'] : 0;
+- public/mybonus.php:66 — $title = isset($post['title']) ? htmlsafechars($post['title']) : '';
+- public/mybonus.php:79 — $session->set('is-success', _fe('{0} You bought {1} for {2} Karma.', ':woot:', "[b]{$options[$option]['bonusname']}[/b]", number_format($...
+- public/mybonus.php:93 — $session->set('is-success', _fe('{0} You bought {1} for {2} Karma.', ':woot:', "[b]{$options[$option]['bonusname']}[/b]", number_format($...
+- public/mybonus.php:132 — $db->perform($sql, array_merge($update, ['id' => $post['option']]));
+- public/mybonus.php:134 — $session->set('is-success', _fe('{0} You donated {1} Karma {2} to the {3} fund.', ':woot:', "[b]{$options[$option]['bonusname']}[/b]", nu...
+- public/mybonus.php:150 — $session->set('is-success', _fe('{0} You bought {1} for {2} Karma.', ':woot:', "[b]{$options[$option]['bonusname']}[/b]", number_format($...
+- public/mybonus.php:167 — $session->set('is-success', _fe('{0} You bought {1} for {2} Karma.', ':woot:', "[b]{$options[$option]['bonusname']}[/b]", number_format($...
+- public/mybonus.php:184 — $session->set('is-success', _fe('{0} You bought {1} for {2} Karma.', ':woot:', "[b]{$options[$option]['bonusname']}[/b]", number_format($...
+- public/mybonus.php:209 — 'msg' => _fe('You have been given a gift of {0} Karma points by {1}', $bonusgift, $user['username']),
+- public/mybonus.php:212 — $session->set('is-success', _fe('{0} You donated {1} Karma to {2}.', ':woot:', number_format($bonusgift), $username));
+- public/mybonus.php:240 — ->select('reputation')
+- public/mybonus.php:242 — ->where('reputation > ?', $rep_to_steal)
+- public/mybonus.php:248 — $new_rep = $ar['reputation'] - $rep_to_steal;
+- public/mybonus.php:251 — 'reputation' => $new_rep,
+- public/mybonus.php:258 — 'msg' => _fe("Hey\nWe are sorry to announce that you have been robbed by {0}{1}{2}.\nNow your total reputation is [b]{3}[/b]\n[color=#ff0...
+- public/mybonus.php:262 — $new_rep = $user['reputation'] + ($user_limit * $rep_to_steal);
+- public/mybonus.php:267 — 'msg' => _fe("Hey {0}:\nYou robbed:\n{1}\nYour total reputation is now [b]{2}[/b] but you lost [b]{3}[/b] karma points ", $user['username...
+- public/mybonus.php:270 — 'reputation' => $new_rep,
+- public/mybonus.php:274 — $session->set('is-success', _fe('{0} You bought {1} for {2} Karma.', ':woot:', "[b]{$options[$option]['bonusname']}[/b]", number_format($...
+- public/mybonus.php:295 — $session->set('is-success', _fe('{0} You bought {1} for {2} Karma.', ':woot:', "[b]{$options[$option]['bonusname']}[/b]", number_format($...
+- public/mybonus.php:310 — 'modcomment' => get_date((int) $dt, 'DATE', 1) . ' - ' . _('Warning removed by - Bribe with Karma.') . "\n" . $user['modcomment'],
+- public/mybonus.php:313 — $session->set('is-success', _fe('{0} You bought {1} for {2} Karma. Please keep on your best behaviour from now on.', ':woot:', "[b]{$opti...
+- public/mybonus.php:340 — $session->set('is-success', _fe('{0} You bought {1} for {2} Karma. Please keep on your best behaviour from now on.', ':woot:', "[b]{$opti...
+- public/mybonus.php:355 — $session->set('is-success', _fe('{0} You bought {1} for {2} Karma.', ':woot:', "[b]{$options[$option]['bonusname']}[/b]", number_format($...
+- public/mybonus.php:371 — $session->set('is-success', _fe('{0} You bought {1} for {2} Karma.', ':woot:', "[b]{$options[$option]['bonusname']}[/b]", number_format($...
+- public/mybonus.php:377 — } elseif ($art === 'userunlock') {
+- public/mybonus.php:378 — if ($user['class'] === UC_MIN || $user['reputation'] < 50) {
+- public/mybonus.php:387 — 'bonuscomment' => get_date((int) $dt, 'DATE', 1) . ' - ' . $options[$option]['points'] . ' ' . _('Points for user unlocks access.') . "\n...
+- public/mybonus.php:390 — $session->set('is-success', _fe('{0} You bought {1} for {2} Karma.', ':woot:', "[b]{$options[$option]['bonusname']}[/b]", number_format($...
+- public/mybonus.php:396 — } elseif ($art === 'userblocks') {
+- public/mybonus.php:397 — if ($user['class'] === UC_MIN || $user['reputation'] < 50) {
+- public/mybonus.php:402 — 'got_blocks' => 'yes',
+- public/mybonus.php:404 — 'bonuscomment' => get_date((int) $dt, 'DATE', 1) . ' - ' . $options[$option]['points'] . ' ' . _('Points for user blocks access.') . "\n ...
+- public/mybonus.php:407 — $session->set('is-success', _fe('{0} You bought {1} for {2} Karma.', ':woot:', "[b]{$options[$option]['bonusname']}[/b]", number_format($...
+- public/mybonus.php:422 — $session->set('is-success', _fe('{0} You bought {1} for {2} Karma.', ':woot:', "[b]{$options[$option]['bonusname']}[/b]", number_format($...
+- public/mybonus.php:441 — 'bonuscomment' => get_date((int) $dt, 'DATE', 1) . ' - ' . $options[$option]['points'] . ' ' . _('Points for 1 month Custom Smilies.') . ...
+- public/mybonus.php:444 — $session->set('is-success', _fe('{0} You bought {1} for {2} Karma.', ':woot:', "[b]{$options[$option]['bonusname']}[/b]", number_format($...
+- public/mybonus.php:450 — } elseif ($art === 'reputation') {
+- public/mybonus.php:454 — 'reputation' => $user['reputation'] + 100,
+- public/mybonus.php:456 — 'bonuscomment' => get_date((int) $dt, 'DATE', 1) . ' - ' . $options[$option]['points'] . ' ' . _('Points for 100 Reputation Points.') . "...
+- public/mybonus.php:459 — $session->set('is-success', _fe('{0} You bought {1} for {2} Karma.', ':woot:', "[b]{$options[$option]['bonusname']}[/b]", number_format($...
+- public/mybonus.php:471 — 'bonuscomment' => get_date((int) $dt, 'DATE', 1) . ' - ' . _fe('{0} Invites for {1} Karma.', $options[$option]['menge'], $options[$option...
+- public/mybonus.php:474 — $session->set('is-success', _fe('{0} You bought {1} Invite for {2} Karma.', ':woot:', "[b]{$options[$option]['menge']}[/b]", number_forma...
+- public/mybonus.php:486 — 'bonuscomment' => get_date((int) $dt, 'DATE', 1) . ' - ' . _fe('{0} Invite for {1} Karma.', $options[$option]['points'], $options[$option...
+- public/mybonus.php:489 — $session->set('is-success', _fe('{0} You sold {1} Invite {2} Karma.', ':woot:', "[b]{$options[$option]['bonusname']}[/b]", number_format(...
+- public/mybonus.php:490 — $session->set('is-success', ":woot: You sold [b]{$options[$option]['points']} Invite[/b] for {$options[$option]['menge']} Karma");
+- public/mybonus.php:520 — $session->set('is-success', _fe('{0} You bought {1} Freeslots for {2} Karma.', ':woot:', "[b]{$options[$option]['menge']}[/b]", number_fo...
+- public/mybonus.php:533 — $title = 'I just wasted my karma';
+- public/mybonus.php:541 — $session->set('is-success', _fe('{0} You bought {1} for {2} Karma.', ':woot:', "[b]{$options[$option]['bonusname']}[/b]", number_format($...
+- public/mybonus.php:564 — $session->set('is-success', _fe('{0} You reanimated {1} for {2} Karma.', ':woot:', "[b]{$torrent['name']}[/b]", number_format($options[$o...
+- public/mybonus.php:587 — <div class='has-text-centered size_6 top20 bottom20'>" . _("Karma Bonus Point's System") . '</div>';
+- public/mybonus.php:590 — <span class='size_5'>" . _fe('Exchange your {0}{1}{2} Karma Bonus Points for goodies!', "<span class='has-text-primary'>", number_format(...
+- public/mybonus.php:612 — <input type='submit' class='button is-small' value='" . _fe('Cost: {0} Karma', number_format($gets['points'])) . "' " . ($user['seedbonus...
+- public/mybonus.php:626 — <label for='username'>" . _('Enter the <b>username</b> you would like to send karma to') . ":</label>
+- public/mybonus.php:635 — <input type='submit' class='button is-small' value='" . _('Give Karma Gift') . "'>
+- public/mybonus.php:716 — <form action='{$site_config['paths']['baseurl']}/mybonus.php' method='post' enctype='multipart/form-data' accept-charset='utf-8'>$additio...
+- public/mybonus.php:754 — <h1 class='top20 has-text-centered'>" . _('What the hell are these Karma Bonus points, and how do I get them?') . "</h1>
+- public/mybonus.php:758 — " . _fe('For every hour that you seed a torrent, you are awarded with {0} Karma Bonus Points', number_format($bpt * 2, 2)) . '
+- public/mybonus.php:761 — ' . _('If you save up enough of them, you can trade them in for goodies like bonus GB(s) to increase your upload stats, also to get more ...
+- public/mybonus.php:768 — " . _('karma per hour') . "
+- public/mybonus.php:774 — <h2>" . _('Other things that will get you karma points') . ':</h2>
+- public/mybonus.php:779 — ' . _fe('Saying thanks = {0} points', $site_config['bonus']['per_thanks']) . '<br>
+- public/mybonus.php:781 — ' . _fe('Making a post = {0} points', $site_config['bonus']['per_post']) . '<br>
+- public/mybonus.php:782 — ' . _fe('Starting a topic = {0} points', $site_config['bonus']['per_topic']) . "
+- public/mybonus.php:789 — <h2>" . _('Some things that will cost you karma points') . ':</h2>
+- public/mybonus.php:798 — ' . _('One month custom smilies for the forums and comments') . '<br>
+- public/mybonus.php:801 — ' . _('Giving a gift of karma points to another user') . '<br>
+- public/mybonus.php:809 — ' . _('Unlocking parked option') . '<br>
+- public/mybonus.php:811 — ' . _('Reputation points') . '<br>
+- public/mybonus.php:812 — ' . _('Userblocks') . '<br>
+- public/mybonus.php:815 — ' . _('User unlocks') . '<br>
+- public/mybonus.php:818 — ' . _('But keep in mind that everything that can get you karma can also be lost...') . '<br>
+- public/mybonus.php:821 — ' . _fe('ie: If you up a torrent then delete it, you will gain and then lose {0} points, making a post and having it deleted will do the ...
+- public/mybonus.php:830 — $title = _('Karma Store');
+- public/mytorrents.php:67 — ->orderBy('t.sticky')
+- public/new_announcement.php:13 — require_once INCL_DIR . 'function_bbcode.php';
+- public/new_announcement.php:32 — if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+- public/new_announcement.php:41 — //== Usersearch POST data...
+- public/new_announcement.php:50 — //== POST data ...
+- public/new_announcement.php:87 — $HTMLOUT .= "<form name='compose' method='post' action='{$site_config['paths']['baseurl']}/new_announcement.php' enctype='multipart/form-...
+- public/new_announcement.php:94 — " . BBcode() . '
+- public/offers.php:21 — require_once INCL_DIR . 'function_bbcode.php';
+- public/offers.php:61 — if (!empty($comment) && (has_access($user['class'], UC_STAFF, 'forum_mod') || $user['id'] === $comment['user'])) {
+- public/offers.php:83 — <form class='form-inline table-wrapper' method='post' action='{$site_config['paths']['baseurl']}/offers.php?action=edit_comment' accept-c...
+- public/offers.php:88 — <div class='column'>" . BBcode($comment['text']) . "</div>
+- public/offers.php:108 — <form class='form-inline table-wrapper' method='post' action='{$site_config['paths']['baseurl']}/offers.php?action=post_comment' accept-c...
+- public/offers.php:112 — <div class='column'>" . BBcode() . "</div>
+- public/offers.php:156 — if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+- public/offers.php:202 — if (!empty($comment) && (has_access($user['class'], UC_STAFF, 'forum_mod') || $user['id'] === $comment['user'])) {
+- public/offers.php:278 — <img src='{$site_config['paths']['images_baseurl']}/forums/updating.svg' alt='Loading...'>
+- public/offers.php:293 — <div class='column'>" . BBcode(!empty($post_data['description']) ? htmlsafechars($post_data['description']) : '') . '</div>
+- public/offers.php:299 — <form class='form-inline table-wrapper' method='post' action='{$_SERVER['PHP_SELF']}?action=add_offer' enctype='multipart/form-data' acce...
+- public/offers.php:308 — <form class='form-inline table-wrapper' method='post' action='{$_SERVER['PHP_SELF']}?action=edit_offer' enctype='multipart/form-data' acc...
+- public/polls_take_vote.php:13 — use Pu239\PollVoter;
+- public/polls_take_vote.php:18 — $poll_id = isset($_GET['pollid']) ? (int) $_GET['pollid'] : 0;
+- public/polls_take_vote.php:19 — if (!is_valid_id($poll_id)) {
+- public/polls_take_vote.php:20 — stderr(_('Error'), 'No poll with that ID');
+- public/polls_take_vote.php:27 — $poll_data = $fluent->from('polls')
+- public/polls_take_vote.php:28 — ->where('polls.pid = ?', $poll_id)
+- public/polls_take_vote.php:29 — ->leftJoin('poll_voters ON polls.pid = poll_voters.poll_id AND poll_voters.user_id = ?', $user['id'])
+- public/polls_take_vote.php:32 — if (empty($poll_data)) {
+- public/polls_take_vote.php:36 — if (!empty($poll_data['user_id'])) {
+- public/polls_take_vote.php:40 — $pollvoter_class = $container->get(PollVoter::class);
+- public/polls_take_vote.php:57 — $poll_answers = json_decode($poll_data['choices'], true);
+- public/polls_take_vote.php:58 — reset($poll_answers);
+- public/polls_take_vote.php:59 — if (!empty($vote_cast) && count($vote_cast) < count($poll_answers)) {
+- public/polls_take_vote.php:64 — 'poll_id' => $poll_data['pid'],
+- public/polls_take_vote.php:67 — $vid = $pollvoter_class->add($values);
+- public/polls_take_vote.php:74 — ++$poll_answers[$question_id]['votes'][$choice_id];
+- public/polls_take_vote.php:75 — if ($poll_answers[$question_id]['votes'][$choice_id] < 1) {
+- public/polls_take_vote.php:76 — $poll_answers[$question_id]['votes'][$choice_id] = 1;
+- public/polls_take_vote.php:81 — $choices = json_encode($poll_answers);
+- public/polls_take_vote.php:82 — $votes = $poll_data['votes'] + 1;
+- public/polls_take_vote.php:84 — $cache->update_row('poll_data_' . $user['id'], [
+- public/polls_take_vote.php:89 — ], $site_config['expires']['poll_data']);
+- public/polls_take_vote.php:95 — $sql = "UPDATE polls SET /* columns */ WHERE pid = :pid";
+- public/polls_take_vote.php:96 — $result = $db->perform($sql, array_merge($set, ['pid' => $poll_data['pid']]));
+- public/polls_take_vote.php:104 — 'poll_id' => $poll_data['pid'],
+- public/polls_take_vote.php:107 — $vid = $pollvoter_class->add($values);
+- public/polls_take_vote.php:108 — $votes = $poll_data['votes'] + 1;
+- public/polls_take_vote.php:109 — $cache->update_row('poll_data_' . $user['id'], [
+- public/polls_take_vote.php:113 — ], $site_config['expires']['poll_data']);
+- public/polls_take_vote.php:119 — header("location: {$site_config['paths']['baseurl']}/#poll");
+- public/recover.php:37 — if ($_SERVER['REQUEST_METHOD'] === 'POST' && !isset($_POST['selector'])) {
+- public/recover.php:38 — $post = $_POST;
+- public/recover.php:40 — $validation = $validator->validate($post, [
+- public/recover.php:44 — write_log(_fe('{0} has tried to reset password using invalid data. ', getip(0)) . json_encode($post, JSON_PRETTY_PRINT));
+- public/recover.php:48 — $email = trim($post['email']);
+- public/recover.php:50 — } elseif ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['selector'])) {
+- public/recover.php:51 — $post = $_POST;
+- public/recover.php:53 — $validation = $validator->validate($post, [
+- public/recover.php:60 — write_log(_fe('{0} has tried to reset password using invalid data. ', getip(0)) . json_encode($post, JSON_PRETTY_PRINT));
+- public/recover.php:64 — $user->reset_password($post, false);
+- public/recover.php:79 — $stdfoot = array_merge_recursive($stdfoot, [
+- public/recover.php:85 — <form method='post' action='{$site_config['paths']['baseurl']}/recover.php' enctype='multipart/form-data' accept-charset='utf-8'>
+- public/recover.php:121 — <form method='post' action='{$_SERVER['PHP_SELF']}' enctype='multipart/form-data' accept-charset='utf-8'>
+- public/report.php:16 — require_once INCL_DIR . 'function_bbcode.php';
+- public/report.php:49 — 'Post',
+- public/report.php:99 — <form method='post' action='{$site_config['paths']['baseurl']}/report.php' enctype='multipart/form-data' accept-charset='utf-8'>
+- public/report.php:102 — <p class='top10'><b>" . _('Reason') . ': </b></p>' . BBcode('', 'w-100', 200) . "
+- public/reputation.php:26 — stderr(_('Error'), _('Reputation system is offline.'));
+- public/reputation.php:30 — $input = array_merge($_GET, $_POST);
+- public/reputation.php:34 — rep_output(_('Reputation added!'));
+- public/reputation.php:40 — 'posts',
+- public/reputation.php:45 — $rep_locale = isset($input['locale']) && (in_array($input['locale'], $locales)) ? $input['locale'] : 'posts';
+- public/reputation.php:49 — if ($rep_locale === 'posts') {
+- public/reputation.php:50 — $forum = sql_query(
+- public/reputation.php:51 — 'SELECT posts.topic_id AS locale, posts.user_id AS userid, forums.min_class_read, posts.anonymous as anon,
+- public/reputation.php:52 — users.username, users.reputation
+- public/reputation.php:53 — FROM posts
+- public/reputation.php:54 — LEFT JOIN topics ON topic_id = topics.id
+- public/reputation.php:55 — LEFT JOIN forums ON topics.forum_id = forums.id
+- public/reputation.php:56 — LEFT JOIN users ON posts.user_id = users.id
+- public/reputation.php:57 — WHERE posts.id = ' . sqlesc($input['pid'])
+- public/reputation.php:60 — $forum = sql_query(
+- public/reputation.php:62 — comments.torrent AS locale, users.username, users.reputation
+- public/reputation.php:68 — $forum = sql_query(
+- public/reputation.php:70 — users.username, users.reputation
+- public/reputation.php:76 — $forum = sql_query(
+- public/reputation.php:77 — 'SELECT id AS userid, username, reputation, opt1, opt2, IF(anonymous_until > UNIX_TIMESTAMP(), 1, 0) AS anon
+- public/reputation.php:96 — $this_rep = _('Post');
+- public/reputation.php:99 — if (!mysqli_num_rows($forum)) {
+- public/reputation.php:103 — $res = mysqli_fetch_assoc($forum) or sqlerr(__LINE__, __FILE__);
+- public/reputation.php:110 — FROM reputation
+- public/reputation.php:125 — 'SELECT dateadd, userid FROM reputation
+- public/reputation.php:167 — 'Your reputation on {0}this Comment{1} is {2}<br>Total: {3} points.',
+- public/reputation.php:177 — 'Your reputation on {0}this Torrent{1} is {2}<br>Total: {3} points.',
+- public/reputation.php:187 — 'Your reputation on {0}your profile{1} is {2}<br>Total: {3} points.',
+- public/reputation.php:197 — 'Your reputation on {0}this Post{1} is {2}<br>Total: {3} points.',
+- public/reputation.php:198 — "{$site_config['paths']['baseurl']}/forums.php?action=viewtopic&amp;topicid={$res['locale']}&amp;page=p{$input['pid']}#{$input['pid']}' t...
+- public/reputation.php:204 — $rep_points = _pfe('You have {0} Reputation Point.', 'You have {0} Reputation Points.', $user['reputation']);
+- public/reputation.php:215 — <legend>" . _('Reputation Comments') . "</legend>
+- public/reputation.php:233 — <td class='has-text-centered'>" . _('Add To Reputation') . ' <b>' . htmlsafechars(
+- public/reputation.php:239 — <form action='reputation.php' method='post' enctype='multipart/form-data' accept-charset='utf-8'>
+- public/reputation.php:247 — <label for='rb_reputation_pos'>
+- public/reputation.php:248 — <input type='radio' name='reputation' value='pos' id='rb_reputation_pos' checked class='radiobutton'> &#160;" . _(
+- public/reputation.php:256 — <label for='rb_reputation_neg'>
+- public/reputation.php:257 — <input type='radio' name='reputation' value='neg' id='rb_reputation_neg' class='radiobutton'> &#160;" . _(
+- public/reputation.php:275 — <input type='hidden' name='act' value='reputation'>
+- public/reputation.php:279 — <input type='submit' value='" . _('Add To Reputation') . "' class='button is-small' accesskey='s'>
+- public/reputation.php:305 — $htmlout = doc_head(_('Reputation System')) . "
+- public/reputation.php:318 — <div class='has-text-success'>" . _('Reputation System') . "</div>
+- public/reputation.php:361 — } elseif (($user['posts'] < $GVARS['rep_minpost']) || ($user['reputation'] < $GVARS['rep_minrep'])) { // not an admin, then work out post...
+- public/reputation.php:366 — $reppower += (int) ($user['posts'] / $GVARS['rep_pcpower']);
+- public/reputation.php:369 — $reppower += (int) ($user['reputation'] / $GVARS['rep_kppower']);
+- public/requests.php:23 — require_once INCL_DIR . 'function_bbcode.php';
+- public/requests.php:72 — if (!empty($comment) && (has_access($user['class'], UC_STAFF, 'forum_mod') || $user['id'] === $comment['user'])) {
+- public/requests.php:94 — <form class='form-inline table-wrapper' method='post' action='{$site_config['paths']['baseurl']}/requests.php?action=edit_comment' accept...
+- public/requests.php:99 — <div class='column'>" . BBcode($comment['text']) . "</div>
+- public/requests.php:119 — <form class='form-inline table-wrapper' method='post' action='{$site_config['paths']['baseurl']}/requests.php?action=post_comment' accept...
+- public/requests.php:123 — <div class='column'>" . BBcode() . "</div>
+- public/requests.php:170 — if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+- public/requests.php:263 — if (!empty($comment) && (has_access($user['class'], UC_STAFF, 'forum_mod') || $user['id'] === $comment['user'])) {
+- public/requests.php:339 — <img src='{$site_config['paths']['images_baseurl']}/forums/updating.svg' alt='Loading...'>
+- public/requests.php:354 — <div class='column'>" . BBcode(!empty($post_data['description']) ? format_comment($post_data['description']) : '') . '</div>
+- public/requests.php:360 — <form class='form-inline table-wrapper' method='post' action='{$_SERVER['PHP_SELF']}?action=add_request' enctype='multipart/form-data' ac...
+- public/requests.php:369 — <form class='form-inline table-wrapper' method='post' action='{$_SERVER['PHP_SELF']}?action=edit_request' enctype='multipart/form-data' a...
+- public/requests.php:435 — <form class='form-inline table-wrapper' method='post' action='{$site_config['paths']['baseurl']}/requests.php?action=pay_bounty&amp;id={$...
+- public/requests.php:451 — <form class='form-inline table-wrapper' method='post' action='{$site_config['paths']['baseurl']}/requests.php?action=add_bounty' accept-c...
+- public/rules.php:41 — <li><a id='warning'></a>" . _fe("Disruptive behaviour in the forums or on the site will result in a warning ({0}).<br>You will only get <...
+- public/rules.php:54 — " . _('General Forum Guidelines -') . "<span class='is-blue'>" . _(' Please follow these guidelines or else you might end up with a warni...
+- public/rules.php:58 — <li>" . _('No aggressive behaviour or flaming in the forums.') . '</li>
+- public/rules.php:59 — <li>' . _('No trashing of other peoples topics (i.e. SPAM).') . '</li>
+- public/rules.php:60 — <li>' . _('No language other than English in the forums.') . '</li>
+- public/rules.php:62 — <li>' . _('No links to warez or crack sites in the forums.') . '</li>
+- public/rules.php:63 — <li>' . _('No requesting or posting of serials, CD keys, passwords or cracks in the forums.') . '</li>
+- public/rules.php:67 — <li>' . _('No double posting. If you wish to post again, and yours is the last post in the thread please use the EDIT function, instead o...
+- public/rules.php:152 — <li>' . _("Try correcting any 'off topics' rather then closing a thread.") . '</li>
+- public/rules.php:153 — <li>' . _('Move topics rather than locking them.') . '</li>
+- public/rules.php:155 — <li>' . _("If you lock a topic, give a brief explanation as to why you're locking it.") . '</li>
+- public/rules.php:166 — <li>" . _('You can delete and edit forum posts.') . '</li>
+- public/search.php:16 — $data = array_merge($_GET, $_POST);
+- public/signup.php:32 — if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+- public/signup.php:40 — $post = $_POST;
+- public/signup.php:42 — $validation = $validator->validate($post, [
+- public/signup.php:51 — if ($validation->fails() || !valid_username($post['username'], false, true)) {
+- public/signup.php:53 — write_log(getip(0) . ' has used invalid data to signup. ' . json_encode($post, JSON_PRETTY_PRINT));
+- public/signup.php:58 — 'email' => $post['email'],
+- public/signup.php:59 — 'password' => $post['password'],
+- public/signup.php:60 — 'username' => $post['username'],
+- public/signup.php:70 — $invite_id = !empty($post['invite_id']) ? (int) $post['invite_id'] : 0;
+- public/signup.php:71 — $invite_code = !empty($post['invite_code']) ? $post['invite_code'] : '';
+- public/signup.php:72 — $promo = !empty($post['promo']) ? $post['promo'] : '';
+- public/signup.php:83 — $msg = "Hey there [you]! :wave:\nYour invitation to " . htmlsafechars($post['username']) . " has been accepted! :clap2:\n\ncheers\n";
+- public/signup.php:107 — $db->perform($sql, array_merge($set, ['link' => $valid['link']]));
+- public/signup.php:112 — 'seedbonus' => $valid['bonus_karma'],
+- public/signup.php:184 — <form method='post' action='{$site_config['paths']['baseurl']}/signup.php' enctype='multipart/form-data' accept-charset='utf-8'>";
+- public/staffbox.php:14 — require_once INCL_DIR . 'function_bbcode.php';
+- public/staffbox.php:137 — <form method='post' name='staffbox' action='{$_SERVER['PHP_SELF']}' enctype='multipart/form-data' accept-charset='utf-8'>";
+- public/staffpanel.php:73 — $data = array_merge($_POST, $_GET);
+- public/staffpanel.php:129 — $user_bbcode = "[url={$site_config['paths']['baseurl']}/userdetails.php?id={$user['id']}][color=#" . get_user_class_color($user['class'])...
+- public/staffpanel.php:130 — write_log("$page " . _('in the staff panel was') . " $action by $user_bbcode");
+- public/staffpanel.php:213 — if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+- public/staffpanel.php:285 — $res = $db->perform($sql, array_merge($set, ['id' => $id]));
+- public/staffpanel.php:302 — $user_bbcode = "[url={$site_config['paths']['baseurl']}/userdetails.php?id={$user['id']}][color=#" . get_user_class_color($user['class'])...
+- public/staffpanel.php:303 — write_log("$page " . _('in the staff panel was') . " $what by $user_bbcode");
+- public/staffpanel.php:314 — $HTMLOUT .= "<form method='post' action='{$_SERVER['PHP_SELF']}' enctype='multipart/form-data' accept-charset='utf-8'>
+- public/staffpanel.php:405 — <form method='post' action='{$_SERVER['PHP_SELF']}' enctype='multipart/form-data' accept-charset='utf-8'>
+- public/subtitles.php:26 — if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+- public/subtitles.php:128 — $db->perform($sql, array_merge($updateset, ['id' => $id]));
+- public/subtitles.php:152 — <form method='post' action='subtitles.php' enctype='multipart/form-data' accept-charset='utf-8'>";
+- public/subtitles.php:337 — <form action='downloadsub.php' method='post' enctype='multipart/form-data' accept-charset='utf-8'>
+- public/tags.php:17 — require_once INCL_DIR . 'function_bbcode.php';
+- public/tags.php:85 — $HTMLOUT = "<h1 class='has-text-centered'>BBcode Tags</h1>";
+- public/tags.php:88 — <div class='padding20'>" . _('The Crafty forums supports a number of <i>BBcode tags</i> which you can embed to modify how your posts are ...
+- public/tags.php:89 — <div class='is-paddingless'>" . BBcode() . '</div>
+- public/tags.php:117 — $HTMLOUT .= insert_tag(_('Youtube (alt. 1)'), _('Display youtube video.'), '[youtube]<i>https://www.youtube.com/watch?v=u22BXhMu4tI</i>[/...
+- public/tags.php:118 — $HTMLOUT .= insert_tag(_('Youtube (alt. 2)'), _('Display youtube video.'), '[youtube]<i>https://www.youtube.com/watch?v=u22BXhMu4tI</i>[/...
+- public/takeedit.php:158 — if (($sticky = (!empty($_POST['sticky']) ? 'yes' : 'no')) != $fetch_assoc['sticky']) {
+- public/takeedit.php:159 — $updateset[] = 'sticky = ' . sqlesc($sticky);
+- public/takeedit.php:160 — if ($sticky === 'yes') {
+- public/takethankyou.php:28 — ->select('thanks')
+- public/takethankyou.php:36 — $thanks = $fluent->from('thankyou')
+- public/takethankyou.php:43 — if (!empty($thanks)) {
+- public/takethankyou.php:65 — 'thanks' => new Literal('thanks + 1'),
+- public/takethankyou.php:69 — $db->perform($sql, array_merge($set, ['id' => $id]));
+- public/takethankyou.php:80 — $db->perform($sql, array_merge($set, ['id' => $user['id']]));
+- public/takeupload.php:25 — require_once INCL_DIR . 'function_bbcode.php';
+- public/takeupload.php:537 — $db->perform($sql, array_merge($set, ['id' => $offer]));
+- public/takeupload.php:574 — $db->perform($sql, array_merge($set, ['id' => $request]));
+- public/tenpercent.php:33 — if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+- public/tenpercent.php:110 — <form name='tenpercent' method='post' action='tenpercent.php' enctype='multipart/form-data' accept-charset='utf-8'>
+- public/topmoods.php:34 — <td><img src="' . $site_config['paths']['images_baseurl'] . 'smilies/' . htmlsafechars($arr['image']) . '" alt=""></td>
+- public/upcoming.php:63 — if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+- public/upcoming.php:130 — <img src='{$site_config['paths']['images_baseurl']}/forums/updating.svg' alt='Loading...'>
+- public/upcoming.php:166 — <form class='form-inline table-wrapper' method='post' action='{$_SERVER['PHP_SELF']}?action=add_recipe' enctype='multipart/form-data' acc...
+- public/upcoming.php:175 — <form class='form-inline table-wrapper' method='post' action='{$_SERVER['PHP_SELF']}?action=edit_recipe' enctype='multipart/form-data' ac...
+- public/upload.php:20 — require_once INCL_DIR . 'function_bbcode.php';
+- public/upload.php:172 — <form id='upload_form' name='upload_form' action='{$site_config['paths']['baseurl']}/takeupload.php' method='post' enctype='multipart/for...
+- public/upload.php:174 — <input type='hidden' id='csrf' name='csrf' data-ebooks=" . json_encode($site_config['categories']['ebook']) . ' data-movies=' . json_enco...
+- public/upload.php:236 — <img src='{$site_config['paths']['images_baseurl']}forums/updating.svg' alt='Loading...'>
+- public/upload.php:271 — <td class='is-paddingless'>" . BBcode($body) . "
+- public/uploadapp.php:57 — if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+- public/uploadapp.php:153 — <form action='./uploadapp.php' method='post' enctype='multipart/form-data' accept-charset='utf-8'>
+- public/user_blocks.php:20 — global $container, $site_config, $BLOCKS;
+- public/user_blocks.php:32 — if ($user['class'] < UC_STAFF && $user['got_blocks'] === 'no') {
+- public/user_blocks.php:33 — $session->set('is-link', 'You will have to unlock this before you can access it.');
+- public/user_blocks.php:38 — if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+- public/user_blocks.php:43 — $setbits_index_page |= class_blocks_index::IE_ALERT;
+- public/user_blocks.php:45 — $clrbits_index_page |= class_blocks_index::IE_ALERT;
+- public/user_blocks.php:48 — $setbits_index_page |= class_blocks_index::NEWS;
+- public/user_blocks.php:50 — $clrbits_index_page |= class_blocks_index::NEWS;
+- public/user_blocks.php:53 — $setbits_index_page |= class_blocks_index::AJAXCHAT;
+- public/user_blocks.php:55 — $clrbits_index_page |= class_blocks_index::AJAXCHAT;
+- public/user_blocks.php:58 — $setbits_index_page |= class_blocks_index::TRIVIA;
+- public/user_blocks.php:60 — $clrbits_index_page |= class_blocks_index::TRIVIA;
+- public/user_blocks.php:63 — $setbits_index_page |= class_blocks_index::ACTIVE_USERS;
+- public/user_blocks.php:65 — $clrbits_index_page |= class_blocks_index::ACTIVE_USERS;
+- public/user_blocks.php:68 — $setbits_index_page |= class_blocks_index::LAST_24_ACTIVE_USERS;
+- public/user_blocks.php:70 — $clrbits_index_page |= class_blocks_index::LAST_24_ACTIVE_USERS;
+- public/user_blocks.php:73 — $setbits_index_page |= class_blocks_index::IRC_ACTIVE_USERS;
+- public/user_blocks.php:75 — $clrbits_index_page |= class_blocks_index::IRC_ACTIVE_USERS;
+- public/user_blocks.php:78 — $setbits_index_page |= class_blocks_index::COOKER;
+- public/user_blocks.php:80 — $clrbits_index_page |= class_blocks_index::COOKER;
+- public/user_blocks.php:83 — $setbits_index_page |= class_blocks_index::REQUESTS;
+- public/user_blocks.php:85 — $clrbits_index_page |= class_blocks_index::REQUESTS;
+- public/user_blocks.php:88 — $setbits_index_page |= class_blocks_index::OFFERS;
+- public/user_blocks.php:90 — $clrbits_index_page |= class_blocks_index::OFFERS;
+- public/user_blocks.php:93 — $setbits_index_page |= class_blocks_index::BIRTHDAY_ACTIVE_USERS;
+- public/user_blocks.php:95 — $clrbits_index_page |= class_blocks_index::BIRTHDAY_ACTIVE_USERS;
+- public/user_blocks.php:98 — $setbits_index_page |= class_blocks_index::STATS;
+- public/user_blocks.php:100 — $clrbits_index_page |= class_blocks_index::STATS;
+- public/user_blocks.php:103 — $setbits_index_page |= class_blocks_index::DISCLAIMER;
+- public/user_blocks.php:105 — $clrbits_index_page |= class_blocks_index::DISCLAIMER;
+- public/user_blocks.php:108 — $setbits_index_page |= class_blocks_index::LATEST_USER;
+- public/user_blocks.php:110 — $clrbits_index_page |= class_blocks_index::LATEST_USER;
+- public/user_blocks.php:113 — $setbits_index_page |= class_blocks_index::LATESTCOMMENTS;
+- public/user_blocks.php:115 — $clrbits_index_page |= class_blocks_index::LATESTCOMMENTS;
+- public/user_blocks.php:118 — if (isset($_POST['forumposts'])) {
+- public/user_blocks.php:119 — $setbits_index_page |= class_blocks_index::FORUMPOSTS;
+- public/user_blocks.php:121 — $clrbits_index_page |= class_blocks_index::FORUMPOSTS;
+- public/user_blocks.php:124 — $setbits_index_page |= class_blocks_index::STAFF_PICKS;
+- public/user_blocks.php:126 — $clrbits_index_page |= class_blocks_index::STAFF_PICKS;
+- public/user_blocks.php:129 — $setbits_index_page |= class_blocks_index::LATEST_TORRENTS;
+- public/user_blocks.php:131 — $clrbits_index_page |= class_blocks_index::LATEST_TORRENTS;
+- public/user_blocks.php:134 — $setbits_index_page |= class_blocks_index::LATEST_MOVIES;
+- public/user_blocks.php:136 — $clrbits_index_page |= class_blocks_index::LATEST_MOVIES;
+- public/user_blocks.php:139 — $setbits_index_page |= class_blocks_index::LATEST_TV;
+- public/user_blocks.php:141 — $clrbits_index_page |= class_blocks_index::LATEST_TV;
+- public/user_blocks.php:144 — $setbits_index_page |= class_blocks_index::LATEST_TORRENTS_SCROLL;
+- public/user_blocks.php:146 — $clrbits_index_page |= class_blocks_index::LATEST_TORRENTS_SCROLL;
+- public/user_blocks.php:149 — $setbits_index_page |= class_blocks_index::LATEST_TORRENTS_SLIDER;
+- public/user_blocks.php:151 — $clrbits_index_page |= class_blocks_index::LATEST_TORRENTS_SLIDER;
+- public/user_blocks.php:154 — $setbits_index_page |= class_blocks_index::ANNOUNCEMENT;
+- public/user_blocks.php:156 — $clrbits_index_page |= class_blocks_index::ANNOUNCEMENT;
+- public/user_blocks.php:159 — $setbits_index_page |= class_blocks_index::DONATION_PROGRESS;
+- public/user_blocks.php:161 — $clrbits_index_page |= class_blocks_index::DONATION_PROGRESS;
+- public/user_blocks.php:164 — $setbits_index_page |= class_blocks_index::ADVERTISEMENTS;
+- public/user_blocks.php:166 — $clrbits_index_page |= class_blocks_index::ADVERTISEMENTS;
+- public/user_blocks.php:169 — $setbits_index_page |= class_blocks_index::TORRENTFREAK;
+- public/user_blocks.php:171 — $clrbits_index_page |= class_blocks_index::TORRENTFREAK;
+- public/user_blocks.php:174 — $setbits_index_page |= class_blocks_index::CHRISTMAS_GIFT;
+- public/user_blocks.php:176 — $clrbits_index_page |= class_blocks_index::CHRISTMAS_GIFT;
+- public/user_blocks.php:178 — if (isset($_POST['active_poll'])) {
+- public/user_blocks.php:179 — $setbits_index_page |= class_blocks_index::ACTIVE_POLL;
+- public/user_blocks.php:181 — $clrbits_index_page |= class_blocks_index::ACTIVE_POLL;
+- public/user_blocks.php:184 — $setbits_index_page |= class_blocks_index::MOVIEOFWEEK;
+- public/user_blocks.php:186 — $clrbits_index_page |= class_blocks_index::MOVIEOFWEEK;
+- public/user_blocks.php:190 — $setbits_global_stdhead |= class_blocks_stdhead::STDHEAD_FREELEECH;
+- public/user_blocks.php:192 — $clrbits_global_stdhead |= class_blocks_stdhead::STDHEAD_FREELEECH;
+- public/user_blocks.php:195 — $setbits_global_stdhead |= class_blocks_stdhead::STDHEAD_DEMOTION;
+- public/user_blocks.php:197 — $clrbits_global_stdhead |= class_blocks_stdhead::STDHEAD_DEMOTION;
+- public/user_blocks.php:200 — $setbits_global_stdhead |= class_blocks_stdhead::STDHEAD_NEWPM;
+- public/user_blocks.php:202 — $clrbits_global_stdhead |= class_blocks_stdhead::STDHEAD_NEWPM;
+- public/user_blocks.php:205 — $setbits_global_stdhead |= class_blocks_stdhead::STDHEAD_STAFF_MESSAGE;
+- public/user_blocks.php:207 — $clrbits_global_stdhead |= class_blocks_stdhead::STDHEAD_STAFF_MESSAGE;
+- public/user_blocks.php:210 — $setbits_global_stdhead |= class_blocks_stdhead::STDHEAD_REPORTS;
+- public/user_blocks.php:212 — $clrbits_global_stdhead |= class_blocks_stdhead::STDHEAD_REPORTS;
+- public/user_blocks.php:215 — $setbits_global_stdhead |= class_blocks_stdhead::STDHEAD_UPLOADAPP;
+- public/user_blocks.php:217 — $clrbits_global_stdhead |= class_blocks_stdhead::STDHEAD_UPLOADAPP;
+- public/user_blocks.php:220 — $setbits_global_stdhead |= class_blocks_stdhead::STDHEAD_HAPPYHOUR;
+- public/user_blocks.php:222 — $clrbits_global_stdhead |= class_blocks_stdhead::STDHEAD_HAPPYHOUR;
+- public/user_blocks.php:225 — $setbits_global_stdhead |= class_blocks_stdhead::STDHEAD_CRAZYHOUR;
+- public/user_blocks.php:227 — $clrbits_global_stdhead |= class_blocks_stdhead::STDHEAD_CRAZYHOUR;
+- public/user_blocks.php:230 — $setbits_global_stdhead |= class_blocks_stdhead::STDHEAD_BUG_MESSAGE;
+- public/user_blocks.php:232 — $clrbits_global_stdhead |= class_blocks_stdhead::STDHEAD_BUG_MESSAGE;
+- public/user_blocks.php:235 — $setbits_global_stdhead |= class_blocks_stdhead::STDHEAD_FREELEECH_CONTRIBUTION;
+- public/user_blocks.php:237 — $clrbits_global_stdhead |= class_blocks_stdhead::STDHEAD_FREELEECH_CONTRIBUTION;
+- public/user_blocks.php:241 — $setbits_userdetails_page |= class_blocks_userdetails::FLUSH;
+- public/user_blocks.php:243 — $clrbits_userdetails_page |= class_blocks_userdetails::FLUSH;
+- public/user_blocks.php:246 — $setbits_userdetails_page |= class_blocks_userdetails::JOINED;
+- public/user_blocks.php:248 — $clrbits_userdetails_page |= class_blocks_userdetails::JOINED;
+- public/user_blocks.php:251 — $setbits_userdetails_page |= class_blocks_userdetails::ONLINETIME;
+- public/user_blocks.php:253 — $clrbits_userdetails_page |= class_blocks_userdetails::ONLINETIME;
+- public/user_blocks.php:256 — $setbits_userdetails_page |= class_blocks_userdetails::BROWSER;
+- public/user_blocks.php:258 — $clrbits_userdetails_page |= class_blocks_userdetails::BROWSER;
+- public/user_blocks.php:260 — if (isset($_POST['userdetails_reputation'])) {
+- public/user_blocks.php:261 — $setbits_userdetails_page |= class_blocks_userdetails::REPUTATION;
+- public/user_blocks.php:263 — $clrbits_userdetails_page |= class_blocks_userdetails::REPUTATION;
+- public/user_blocks.php:266 — $setbits_userdetails_page |= class_blocks_userdetails::PROFILE_HITS;
+- public/user_blocks.php:268 — $clrbits_userdetails_page |= class_blocks_userdetails::PROFILE_HITS;
+- public/user_blocks.php:271 — $setbits_userdetails_page |= class_blocks_userdetails::BIRTHDAY;
+- public/user_blocks.php:273 — $clrbits_userdetails_page |= class_blocks_userdetails::BIRTHDAY;
+- public/user_blocks.php:276 — $setbits_userdetails_page |= class_blocks_userdetails::BIRTHDAY;
+- public/user_blocks.php:278 — $clrbits_userdetails_page |= class_blocks_userdetails::BIRTHDAY;
+- public/user_blocks.php:281 — $setbits_userdetails_page |= class_blocks_userdetails::CONTACT_INFO;
+- public/user_blocks.php:283 — $clrbits_userdetails_page |= class_blocks_userdetails::CONTACT_INFO;
+- public/user_blocks.php:287 — $setbits_userdetails_page |= class_blocks_userdetails::AVATAR;
+- public/user_blocks.php:289 — $clrbits_userdetails_page |= class_blocks_userdetails::AVATAR;
+- public/user_blocks.php:292 — $setbits_userdetails_page |= class_blocks_userdetails::IPHISTORY;
+- public/user_blocks.php:294 — $clrbits_userdetails_page |= class_blocks_userdetails::IPHISTORY;
+- public/user_blocks.php:297 — $setbits_userdetails_page |= class_blocks_userdetails::TRAFFIC;
+- public/user_blocks.php:299 — $clrbits_userdetails_page |= class_blocks_userdetails::TRAFFIC;
+- public/user_blocks.php:302 — $setbits_userdetails_page |= class_blocks_userdetails::SHARE_RATIO;
+- public/user_blocks.php:304 — $clrbits_userdetails_page |= class_blocks_userdetails::SHARE_RATIO;
+- public/user_blocks.php:307 — $setbits_userdetails_page |= class_blocks_userdetails::SEEDTIME_RATIO;
+- public/user_blocks.php:309 — $clrbits_userdetails_page |= class_blocks_userdetails::SEEDTIME_RATIO;
+- public/user_blocks.php:312 — $setbits_userdetails_page |= class_blocks_userdetails::SEEDBONUS;
+- public/user_blocks.php:314 — $clrbits_userdetails_page |= class_blocks_userdetails::SEEDBONUS;
+- public/user_blocks.php:317 — $setbits_userdetails_page |= class_blocks_userdetails::IRC_STATS;
+- public/user_blocks.php:319 — $clrbits_userdetails_page |= class_blocks_userdetails::IRC_STATS;
+- public/user_blocks.php:322 — $setbits_userdetails_page |= class_blocks_userdetails::CONNECTABLE_PORT;
+- public/user_blocks.php:324 — $clrbits_userdetails_page |= class_blocks_userdetails::CONNECTABLE_PORT;
+- public/user_blocks.php:327 — $setbits_userdetails_page |= class_blocks_userdetails::USERCLASS;
+- public/user_blocks.php:329 — $clrbits_userdetails_page |= class_blocks_userdetails::USERCLASS;
+- public/user_blocks.php:332 — $setbits_userdetails_page |= class_blocks_userdetails::GENDER;
+- public/user_blocks.php:334 — $clrbits_userdetails_page |= class_blocks_userdetails::GENDER;
+- public/user_blocks.php:337 — $setbits_userdetails_page |= class_blocks_userdetails::FREESTUFFS;
+- public/user_blocks.php:339 — $clrbits_userdetails_page |= class_blocks_userdetails::FREESTUFFS;
+- public/user_blocks.php:342 — $setbits_userdetails_page |= class_blocks_userdetails::COMMENTS;
+- public/user_blocks.php:344 — $clrbits_userdetails_page |= class_blocks_userdetails::COMMENTS;
+- public/user_blocks.php:346 — if (isset($_POST['userdetails_forumposts'])) {
+- public/user_blocks.php:347 — $setbits_userdetails_page |= class_blocks_userdetails::FORUMPOSTS;
+- public/user_blocks.php:349 — $clrbits_userdetails_page |= class_blocks_userdetails::FORUMPOSTS;
+- public/user_blocks.php:352 — $setbits_userdetails_page |= class_blocks_userdetails::INVITEDBY;
+- public/user_blocks.php:354 — $clrbits_userdetails_page |= class_blocks_userdetails::INVITEDBY;
+- public/user_blocks.php:356 — if (isset($_POST['userdetails_torrents_block'])) {
+- public/user_blocks.php:357 — $setbits_userdetails_page |= class_blocks_userdetails::TORRENTS_BLOCK;
+- public/user_blocks.php:359 — $clrbits_userdetails_page |= class_blocks_userdetails::TORRENTS_BLOCK;
+- public/user_blocks.php:362 — $setbits_userdetails_page |= class_blocks_userdetails::COMPLETED;
+- public/user_blocks.php:364 — $clrbits_userdetails_page |= class_blocks_userdetails::COMPLETED;
+- public/user_blocks.php:367 — $setbits_userdetails_page |= class_blocks_userdetails::SNATCHED_STAFF;
+- public/user_blocks.php:369 — $clrbits_userdetails_page |= class_blocks_userdetails::SNATCHED_STAFF;
+- public/user_blocks.php:372 — $setbits_userdetails_page |= class_blocks_userdetails::USERINFO;
+- public/user_blocks.php:374 — $clrbits_userdetails_page |= class_blocks_userdetails::USERINFO;
+- public/user_blocks.php:377 — $setbits_userdetails_page |= class_blocks_userdetails::SHOWPM;
+- public/user_blocks.php:379 — $clrbits_userdetails_page |= class_blocks_userdetails::SHOWPM;
+- public/user_blocks.php:382 — $setbits_userdetails_page |= class_blocks_userdetails::REPORT_USER;
+- public/user_blocks.php:384 — $clrbits_userdetails_page |= class_blocks_userdetails::REPORT_USER;
+- public/user_blocks.php:387 — $setbits_userdetails_page |= class_blocks_userdetails::USERSTATUS;
+- public/user_blocks.php:389 — $clrbits_userdetails_page |= class_blocks_userdetails::USERSTATUS;
+- public/user_blocks.php:392 — $setbits_userdetails_page |= class_blocks_userdetails::USERCOMMENTS;
+- public/user_blocks.php:394 — $clrbits_userdetails_page |= class_blocks_userdetails::USERCOMMENTS;
+- public/user_blocks.php:397 — $setbits_userdetails_page |= class_blocks_userdetails::SHOWFRIENDS;
+- public/user_blocks.php:399 — $clrbits_userdetails_page |= class_blocks_userdetails::SHOWFRIENDS;
+- public/user_blocks.php:423 — $sql = "UPDATE user_blocks SET /* columns */ WHERE userid = :userid";
+- public/user_blocks.php:424 — $query = $db->perform($sql, array_merge($addset, ['userid' => $id]));
+- public/user_blocks.php:427 — $sql = "UPDATE user_blocks SET /* columns */ WHERE userid = :userid";
+- public/user_blocks.php:428 — $db->perform($sql, array_merge($removeset, ['userid' => $id]));
+- public/user_blocks.php:430 — $blocks = $fluent->from('user_blocks')
+- public/user_blocks.php:438 — $update['blocks'] = $blocks;
+- public/user_blocks.php:440 — $session->set('is-success', 'User Blocks Successfully Updated');
+- public/user_blocks.php:448 — $checkbox_index_ie_alert = $user['blocks']['index_page'] & class_blocks_index::IE_ALERT ? 'checked' : '';
+- public/user_blocks.php:449 — $checkbox_index_news = $user['blocks']['index_page'] & class_blocks_index::NEWS ? 'checked' : '';
+- public/user_blocks.php:450 — $checkbox_index_ajaxchat = $user['blocks']['index_page'] & class_blocks_index::AJAXCHAT ? 'checked' : '';
+- public/user_blocks.php:451 — $checkbox_index_active_users = $user['blocks']['index_page'] & class_blocks_index::ACTIVE_USERS ? 'checked' : '';
+- public/user_blocks.php:452 — $checkbox_index_trivia = $user['blocks']['index_page'] & class_blocks_index::TRIVIA ? 'checked' : '';
+- public/user_blocks.php:453 — $checkbox_index_active_24h_users = $user['blocks']['index_page'] & class_blocks_index::LAST_24_ACTIVE_USERS ? 'checked' : '';
+- public/user_blocks.php:454 — $checkbox_index_active_irc_users = $user['blocks']['index_page'] & class_blocks_index::IRC_ACTIVE_USERS ? 'checked' : '';
+- public/user_blocks.php:455 — $checkbox_index_active_birthday_users = $user['blocks']['index_page'] & class_blocks_index::BIRTHDAY_ACTIVE_USERS ? 'checked' : '';
+- public/user_blocks.php:456 — $checkbox_index_stats = $user['blocks']['index_page'] & class_blocks_index::STATS ? 'checked' : '';
+- public/user_blocks.php:457 — $checkbox_index_cooker = $user['blocks']['index_page'] & class_blocks_index::COOKER ? 'checked' : '';
+- public/user_blocks.php:458 — $checkbox_index_requests = $user['blocks']['index_page'] & class_blocks_index::REQUESTS ? 'checked' : '';
+- public/user_blocks.php:459 — $checkbox_index_offers = $user['blocks']['index_page'] & class_blocks_index::OFFERS ? 'checked' : '';
+- public/user_blocks.php:460 — $checkbox_index_disclaimer = $user['blocks']['index_page'] & class_blocks_index::DISCLAIMER ? 'checked' : '';
+- public/user_blocks.php:461 — $checkbox_index_latest_user = $user['blocks']['index_page'] & class_blocks_index::LATEST_USER ? 'checked' : '';
+- public/user_blocks.php:462 — $checkbox_index_latest_comments = $user['blocks']['index_page'] & class_blocks_index::LATESTCOMMENTS ? 'checked' : '';
+- public/user_blocks.php:463 — $checkbox_index_latest_forumposts = $user['blocks']['index_page'] & class_blocks_index::FORUMPOSTS ? 'checked' : '';
+- public/user_blocks.php:464 — $checkbox_index_staff_picks = $user['blocks']['index_page'] & class_blocks_index::STAFF_PICKS ? 'checked' : '';
+- public/user_blocks.php:465 — $checkbox_index_latest_torrents = $user['blocks']['index_page'] & class_blocks_index::LATEST_TORRENTS ? 'checked' : '';
+- public/user_blocks.php:466 — $checkbox_index_latest_movies = $user['blocks']['index_page'] & class_blocks_index::LATEST_MOVIES ? 'checked' : '';
+- public/user_blocks.php:467 — $checkbox_index_latest_tv = $user['blocks']['index_page'] & class_blocks_index::LATEST_TV ? 'checked' : '';
+- public/user_blocks.php:468 — $checkbox_index_latest_torrents_scroll = $user['blocks']['index_page'] & class_blocks_index::LATEST_TORRENTS_SCROLL ? 'checked' : '';
+- public/user_blocks.php:469 — $checkbox_index_latest_torrents_slider = $user['blocks']['index_page'] & class_blocks_index::LATEST_TORRENTS_SLIDER ? 'checked' : '';
+- public/user_blocks.php:470 — $checkbox_index_announcement = $user['blocks']['index_page'] & class_blocks_index::ANNOUNCEMENT ? 'checked' : '';
+- public/user_blocks.php:471 — $checkbox_index_donation_progress = $user['blocks']['index_page'] & class_blocks_index::DONATION_PROGRESS ? 'checked' : '';
+- public/user_blocks.php:472 — $checkbox_index_ads = $user['blocks']['index_page'] & class_blocks_index::ADVERTISEMENTS ? 'checked' : '';
+- public/user_blocks.php:473 — $checkbox_index_torrentfreak = $user['blocks']['index_page'] & class_blocks_index::TORRENTFREAK ? 'checked' : '';
+- public/user_blocks.php:474 — $checkbox_index_christmasgift = $user['blocks']['index_page'] & class_blocks_index::CHRISTMAS_GIFT ? 'checked' : '';
+- public/user_blocks.php:475 — $checkbox_index_active_poll = $user['blocks']['index_page'] & class_blocks_index::ACTIVE_POLL ? 'checked' : '';
+- public/user_blocks.php:476 — $checkbox_index_mow = $user['blocks']['index_page'] & class_blocks_index::MOVIEOFWEEK ? 'checked' : '';
+- public/user_blocks.php:478 — $checkbox_global_freeleech = $user['blocks']['global_stdhead'] & class_blocks_stdhead::STDHEAD_FREELEECH ? 'checked' : '';
+- public/user_blocks.php:479 — $checkbox_global_demotion = $user['blocks']['global_stdhead'] & class_blocks_stdhead::STDHEAD_DEMOTION ? 'checked' : '';
+- public/user_blocks.php:480 — $checkbox_global_message_alert = $user['blocks']['global_stdhead'] & class_blocks_stdhead::STDHEAD_NEWPM ? 'checked' : '';
+- public/user_blocks.php:481 — $checkbox_global_staff_message_alert = $user['blocks']['global_stdhead'] & class_blocks_stdhead::STDHEAD_STAFF_MESSAGE ? 'checked' : '';
+- public/user_blocks.php:482 — $checkbox_global_staff_report = $user['blocks']['global_stdhead'] & class_blocks_stdhead::STDHEAD_REPORTS ? 'checked' : '';
+- public/user_blocks.php:483 — $checkbox_global_staff_uploadapp = $user['blocks']['global_stdhead'] & class_blocks_stdhead::STDHEAD_UPLOADAPP ? 'checked' : '';
+- public/user_blocks.php:484 — $checkbox_global_happyhour = $user['blocks']['global_stdhead'] & class_blocks_stdhead::STDHEAD_HAPPYHOUR ? 'checked' : '';
+- public/user_blocks.php:485 — $checkbox_global_crazyhour = $user['blocks']['global_stdhead'] & class_blocks_stdhead::STDHEAD_CRAZYHOUR ? 'checked' : '';
+- public/user_blocks.php:486 — $checkbox_global_bugmessage = $user['blocks']['global_stdhead'] & class_blocks_stdhead::STDHEAD_BUG_MESSAGE ? 'checked' : '';
+- public/user_blocks.php:487 — $checkbox_global_freeleech_contribution = $user['blocks']['global_stdhead'] & class_blocks_stdhead::STDHEAD_FREELEECH_CONTRIBUTION ? 'che...
+- public/user_blocks.php:489 — $checkbox_userdetails_flush = $user['blocks']['userdetails_page'] & class_blocks_userdetails::FLUSH ? 'checked' : '';
+- public/user_blocks.php:490 — $checkbox_userdetails_joined = $user['blocks']['userdetails_page'] & class_blocks_userdetails::JOINED ? 'checked' : '';
+- public/user_blocks.php:491 — $checkbox_userdetails_onlinetime = $user['blocks']['userdetails_page'] & class_blocks_userdetails::ONLINETIME ? 'checked' : '';
+- public/user_blocks.php:492 — $checkbox_userdetails_browser = $user['blocks']['userdetails_page'] & class_blocks_userdetails::BROWSER ? 'checked' : '';
+- public/user_blocks.php:493 — $checkbox_userdetails_reputation = $user['blocks']['userdetails_page'] & class_blocks_userdetails::REPUTATION ? 'checked' : '';
+- public/user_blocks.php:494 — $checkbox_userdetails_userhits = $user['blocks']['userdetails_page'] & class_blocks_userdetails::PROFILE_HITS ? 'checked' : '';
+- public/user_blocks.php:495 — $checkbox_userdetails_birthday = $user['blocks']['userdetails_page'] & class_blocks_userdetails::BIRTHDAY ? 'checked' : '';
+- public/user_blocks.php:496 — $checkbox_userdetails_contact_info = $user['blocks']['userdetails_page'] & class_blocks_userdetails::CONTACT_INFO ? 'checked' : '';
+- public/user_blocks.php:497 — $checkbox_userdetails_avatar = $user['blocks']['userdetails_page'] & class_blocks_userdetails::AVATAR ? 'checked' : '';
+- public/user_blocks.php:498 — $checkbox_userdetails_iphistory = $user['blocks']['userdetails_page'] & class_blocks_userdetails::IPHISTORY ? 'checked' : '';
+- public/user_blocks.php:499 — $checkbox_userdetails_traffic = $user['blocks']['userdetails_page'] & class_blocks_userdetails::TRAFFIC ? 'checked' : '';
+- public/user_blocks.php:500 — $checkbox_userdetails_shareratio = $user['blocks']['userdetails_page'] & class_blocks_userdetails::SHARE_RATIO ? 'checked' : '';
+- public/user_blocks.php:501 — $checkbox_userdetails_seedtime_ratio = $user['blocks']['userdetails_page'] & class_blocks_userdetails::SEEDTIME_RATIO ? 'checked' : '';
+- public/user_blocks.php:502 — $checkbox_userdetails_seedbonus = $user['blocks']['userdetails_page'] & class_blocks_userdetails::SEEDBONUS ? 'checked' : '';
+- public/user_blocks.php:503 — $checkbox_userdetails_irc_stats = $user['blocks']['userdetails_page'] & class_blocks_userdetails::IRC_STATS ? 'checked' : '';
+- public/user_blocks.php:504 — $checkbox_userdetails_connectable = $user['blocks']['userdetails_page'] & class_blocks_userdetails::CONNECTABLE_PORT ? 'checked' : '';
+- public/user_blocks.php:505 — $checkbox_userdetails_userclass = $user['blocks']['userdetails_page'] & class_blocks_userdetails::USERCLASS ? 'checked' : '';
+- public/user_blocks.php:506 — $checkbox_userdetails_gender = $user['blocks']['userdetails_page'] & class_blocks_userdetails::GENDER ? 'checked' : '';
+- public/user_blocks.php:507 — $checkbox_userdetails_freestuffs = $user['blocks']['userdetails_page'] & class_blocks_userdetails::FREESTUFFS ? 'checked' : '';
+- public/user_blocks.php:508 — $checkbox_userdetails_torrent_comments = $user['blocks']['userdetails_page'] & class_blocks_userdetails::COMMENTS ? 'checked' : '';
+- public/user_blocks.php:509 — $checkbox_userdetails_forumposts = $user['blocks']['userdetails_page'] & class_blocks_userdetails::FORUMPOSTS ? 'checked' : '';
+- public/user_blocks.php:510 — $checkbox_userdetails_invitedby = $user['blocks']['userdetails_page'] & class_blocks_userdetails::INVITEDBY ? 'checked' : '';
+- public/user_blocks.php:511 — $checkbox_userdetails_torrents_block = $user['blocks']['userdetails_page'] & class_blocks_userdetails::TORRENTS_BLOCK ? 'checked' : '';
+- public/user_blocks.php:512 — $checkbox_userdetails_completed = $user['blocks']['userdetails_page'] & class_blocks_userdetails::COMPLETED ? 'checked' : '';
+- public/user_blocks.php:513 — $checkbox_userdetails_snatched_staff = $user['blocks']['userdetails_page'] & class_blocks_userdetails::SNATCHED_STAFF ? 'checked' : '';
+- public/user_blocks.php:514 — $checkbox_userdetails_userinfo = $user['blocks']['userdetails_page'] & class_blocks_userdetails::USERINFO ? 'checked' : '';
+- public/user_blocks.php:515 — $checkbox_userdetails_showpm = $user['blocks']['userdetails_page'] & class_blocks_userdetails::SHOWPM ? 'checked' : '';
+- public/user_blocks.php:516 — $checkbox_userdetails_report = $user['blocks']['userdetails_page'] & class_blocks_userdetails::REPORT_USER ? 'checked' : '';
+- public/user_blocks.php:517 — $checkbox_userdetails_userstatus = $user['blocks']['userdetails_page'] & class_blocks_userdetails::USERSTATUS ? 'checked' : '';
+- public/user_blocks.php:518 — $checkbox_userdetails_usercomments = $user['blocks']['userdetails_page'] & class_blocks_userdetails::USERCOMMENTS ? 'checked' : '';
+- public/user_blocks.php:519 — $checkbox_userdetails_showfriends = $user['blocks']['userdetails_page'] & class_blocks_userdetails::SHOWFRIENDS ? 'checked' : '';
+- public/user_blocks.php:524 — <form action='' method='post' enctype='multipart/form-data' accept-charset='utf-8'>
+- public/user_blocks.php:526 — <fieldset id='user_blocks_home' class='header'>
+- public/user_blocks.php:532 — if ($BLOCKS['ie_user_alert']) {
+- public/user_blocks.php:542 — if ($BLOCKS['news_on']) {
+- public/user_blocks.php:549 — <div class='w-100 has-text-centered'>" . _('Check this option if you want to enable the News Block.') . '</div>';
+- public/user_blocks.php:552 — if ($BLOCKS['ajaxchat_on']) {
+- public/user_blocks.php:562 — if ($BLOCKS['active_users_on']) {
+- public/user_blocks.php:572 — if ($BLOCKS['active_24h_users_on']) {
+- public/user_blocks.php:582 — if ($BLOCKS['cooker_on']) {
+- public/user_blocks.php:592 — if ($BLOCKS['requests_on']) {
+- public/user_blocks.php:602 — if ($BLOCKS['offers_on']) {
+- public/user_blocks.php:612 — if ($BLOCKS['active_irc_users_on']) {
+- public/user_blocks.php:622 — if ($BLOCKS['active_birthday_users_on']) {
+- public/user_blocks.php:632 — if ($BLOCKS['stats_on']) {
+- public/user_blocks.php:641 — if ($BLOCKS['trivia_on']) {
+- public/user_blocks.php:651 — if ($BLOCKS['disclaimer_on']) {
+- public/user_blocks.php:661 — if ($BLOCKS['latest_user_on']) {
+- public/user_blocks.php:671 — if ($BLOCKS['latest_comments_on']) {
+- public/user_blocks.php:681 — if ($BLOCKS['forum_posts_on']) {
+- public/user_blocks.php:683 — <div class='w-100 has-text-centered'>" . _('Enable Latest Forum Posts?') . "</div>
+- public/user_blocks.php:685 — <input type='checkbox' id='forumposts' name='forumposts' value='yes' $checkbox_index_latest_forumposts>
+- public/user_blocks.php:686 — <label for='forumposts'></label>
+- public/user_blocks.php:688 — <div class='w-100 has-text-centered'>" . _('Check this option if you want to enable latest Forum Posts.') . '</div>';
+- public/user_blocks.php:691 — if ($BLOCKS['staff_picks_on']) {
+- public/user_blocks.php:701 — if ($BLOCKS['latest_torrents_on']) {
+- public/user_blocks.php:711 — if ($BLOCKS['latest_movies_on']) {
+- public/user_blocks.php:721 — if ($BLOCKS['latest_tv_on']) {
+- public/user_blocks.php:731 — if ($BLOCKS['latest_torrents_scroll_on']) {
+- public/user_blocks.php:741 — if ($BLOCKS['latest_torrents_slider_on']) {
+- public/user_blocks.php:751 — if ($BLOCKS['announcement_on']) {
+- public/user_blocks.php:758 — <div class='w-100 has-text-centered'>" . _('Check this option if you want to enable the Announcement Block.') . '</div>';
+- public/user_blocks.php:761 — if ($BLOCKS['donation_progress_on']) {
+- public/user_blocks.php:771 — if ($BLOCKS['ads_on']) {
+- public/user_blocks.php:781 — if ($BLOCKS['torrentfreak_on']) {
+- public/user_blocks.php:791 — if ($BLOCKS['christmas_gift_on']) {
+- public/user_blocks.php:801 — if ($BLOCKS['active_poll_on']) {
+- public/user_blocks.php:803 — <div class='w-100 has-text-centered'>" . _('Enable Poll?') . "</div>
+- public/user_blocks.php:805 — <input type='checkbox' id='active_poll' name='active_poll' value='yes' $checkbox_index_active_poll>
+- public/user_blocks.php:806 — <label for='active_poll'></label>
+- public/user_blocks.php:808 — <div class='w-100 has-text-centered'>" . _('Check this option if you want to enable the Active Poll.') . '</div>';
+- public/user_blocks.php:811 — if ($BLOCKS['movie_ofthe_week_on']) {
+- public/user_blocks.php:839 — <fieldset id='user_blocks_site' class='header'>
+- public/user_blocks.php:847 — if ($BLOCKS['global_freeleech_on']) {
+- public/user_blocks.php:857 — if ($BLOCKS['global_staff_report_on']) {
+- public/user_blocks.php:867 — if ($BLOCKS['global_staff_uploadapp_on']) {
+- public/user_blocks.php:877 — if ($BLOCKS['global_demotion_on']) {
+- public/user_blocks.php:884 — <div class='w-100 has-text-centered'>" . _('Enable the global demotion alerts block in stdhead') . '</div>';
+- public/user_blocks.php:887 — if ($BLOCKS['global_staff_warn_on']) {
+- public/user_blocks.php:897 — if ($BLOCKS['global_bug_message_on']) {
+- public/user_blocks.php:908 — if ($BLOCKS['global_message_on']) {
+- public/user_blocks.php:910 — <div class='w-100 has-text-centered'>" . _('Message block?') . "</div>
+- public/user_blocks.php:918 — if ($BLOCKS['global_happyhour_on']) {
+- public/user_blocks.php:928 — if ($BLOCKS['global_crazyhour_on']) {
+- public/user_blocks.php:937 — if ($BLOCKS['global_freeleech_contribution_on']) {
+- public/user_blocks.php:939 — <div class='w-100 has-text-centered'>" . _('Karma Contributions') . "</div>
+- public/user_blocks.php:944 — <div class='w-100 has-text-centered'>" . _('Enable karma contribution status alert in stdhead') . '</div>';
+- public/user_blocks.php:964 — <fieldset id='user_blocks_user' class='header'>
+- public/user_blocks.php:973 — if ($BLOCKS['userdetails_flush_on']) {
+- public/user_blocks.php:981 — if ($BLOCKS['userdetails_joined_on']) {
+- public/user_blocks.php:989 — if ($BLOCKS['userdetails_online_time_on']) {
+- public/user_blocks.php:997 — if ($BLOCKS['userdetails_browser_on']) {
+- public/user_blocks.php:1005 — if ($BLOCKS['userdetails_reputation_on']) {
+- public/user_blocks.php:1007 — <div class='w-100 has-text-centered'>" . _('Reputation?') . "</div>
+- public/user_blocks.php:1008 — <div class='slideThree'><input type='checkbox' id='userdetails_reputation' name='userdetails_reputation' value='yes' $checkbox_userdetail...
+- public/user_blocks.php:1009 — <label for='userdetails_reputation'></label></div>
+- public/user_blocks.php:1010 — <div class='w-100 has-text-centered'>" . _('Enable add reputation link') . '</div>';
+- public/user_blocks.php:1013 — if ($BLOCKS['userdetails_profile_hits_on']) {
+- public/user_blocks.php:1021 — if ($BLOCKS['userdetails_birthday_on']) {
+- public/user_blocks.php:1029 — if ($BLOCKS['userdetails_contact_info_on']) {
+- public/user_blocks.php:1037 — if ($BLOCKS['userdetails_avatar_on']) {
+- public/user_blocks.php:1045 — if ($BLOCKS['userdetails_iphistory_on']) {
+- public/user_blocks.php:1053 — if ($BLOCKS['userdetails_traffic_on']) {
+- public/user_blocks.php:1061 — if ($BLOCKS['userdetails_share_ratio_on']) {
+- public/user_blocks.php:1069 — if ($BLOCKS['userdetails_seedtime_ratio_on']) {
+- public/user_blocks.php:1077 — if ($BLOCKS['userdetails_seedbonus_on']) {
+- public/user_blocks.php:1085 — if ($BLOCKS['userdetails_irc_stats_on']) {
+- public/user_blocks.php:1093 — if ($BLOCKS['userdetails_connectable_port_on']) {
+- public/user_blocks.php:1101 — if ($BLOCKS['userdetails_userclass_on']) {
+- public/user_blocks.php:1109 — if ($BLOCKS['userdetails_gender_on']) {
+- public/user_blocks.php:1117 — if ($BLOCKS['userdetails_freestuffs_on']) {
+- public/user_blocks.php:1125 — if ($BLOCKS['userdetails_comments_on']) {
+- public/user_blocks.php:1133 — if ($BLOCKS['userdetails_forumposts_on']) {
+- public/user_blocks.php:1135 — <div class='w-100 has-text-centered'>" . _('Forumposts?') . "</div>
+- public/user_blocks.php:1136 — <div class='slideThree'><input type='checkbox' id='userdetails_forumposts' name='userdetails_forumposts' value='yes' $checkbox_userdetail...
+- public/user_blocks.php:1137 — <label for='userdetails_forumposts'></label></div>
+- public/user_blocks.php:1138 — <div class='w-100 has-text-centered'>" . _('Enable forum posts history') . '</div>';
+- public/user_blocks.php:1141 — if ($BLOCKS['userdetails_invitedby_on']) {
+- public/user_blocks.php:1149 — if ($BLOCKS['userdetails_torrents_block_on']) {
+- public/user_blocks.php:1151 — <div class='w-100 has-text-centered'>" . _('Torrents blocks?') . "</div>
+- public/user_blocks.php:1152 — <div class='slideThree'><input type='checkbox' id='userdetails_torrents_block' name='userdetails_torrents_block' value='yes' $checkbox_us...
+- public/user_blocks.php:1153 — <label for='userdetails_torrents_block'></label></div>
+- public/user_blocks.php:1157 — if ($BLOCKS['userdetails_snatched_staff_on']) {
+- public/user_blocks.php:1165 — if ($BLOCKS['userdetails_userinfo_on']) {
+- public/user_blocks.php:1173 — if ($BLOCKS['userdetails_showpm_on']) {
+- public/user_blocks.php:1183 — if ($BLOCKS['userdetails_showfriends_on']) {
+- public/user_blocks.php:1192 — if ($BLOCKS['userdetails_report_user_on']) {
+- public/user_blocks.php:1202 — if ($BLOCKS['userdetails_user_status_on']) {
+- public/user_blocks.php:1210 — if ($BLOCKS['userdetails_user_comments_on']) {
+- public/user_blocks.php:1218 — if ($BLOCKS['news_on']) {
+- public/user_blocks.php:1251 — $title = _('User Blocks');
+- public/user_unlocks.php:28 — if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+- public/user_unlocks.php:31 — if (isset($_POST['unlock_user_moods'])) {
+- public/user_unlocks.php:32 — $setbits |= UNLOCK_MORE_MOODS; // Unlock bonus moods
+- public/user_unlocks.php:34 — $clrbits |= UNLOCK_MORE_MOODS; // lock bonus moods
+- public/user_unlocks.php:58 — $checkbox_unlock_moods = $user['perms'] & UNLOCK_MORE_MOODS ? 'checked' : '';
+- public/user_unlocks.php:59 — $checkbox_unlock_stealth = $user['perms'] & PERMS_STEALTH ? 'checked' : '';
+- public/user_unlocks.php:63 — <h1 class="has-text-centered">User Unlock Settings</h1>
+- public/user_unlocks.php:64 — <form action="" method="post" accept-charset="utf-8">
+- public/user_unlocks.php:70 — <input type="checkbox" id="unlock_user_moods" name="unlock_user_moods" value="yes" ' . $checkbox_unlock_moods . '>
+- public/user_unlocks.php:71 — <label for="unlock_user_moods"></label>
+- public/user_unlocks.php:73 — <div class="w-100">Check this option to unlock bonus mood smilies.</div>
+- public/user_unlocks.php:80 — <input type="checkbox" id="perms_stealth" name="perms_stealth" value="yes" ' . $checkbox_unlock_stealth . '>
+- public/user_unlocks.php:83 — <div class="w-100">Check this option to unlock Stealth Mode.</div>
+- public/user_unlocks.php:92 — $title = _('User Unlocks');
+- public/useragreement.php:27 — Using this site means you accept its terms. Don't be put off by the legalese, but please read these terms and conditions of use carefully...
+- public/useragreement.php:39 — RESTRICTED ACCESS: This End User License Agreement (&quot;User Agreement&quot;) grants you, personally and individually, a non-transferab...
+- public/useragreement.php:42 — CLICK TO ACCEPT: Any access to or use of this website or its Internet domain name(s) or IP address(es), torrent(s), or content, including...
+- public/useragreement.php:48 — COPYRIGHTS; NO RIGHTS CLEARANCE. The contents of this website and related e-mail and of linked websites may be subject to additional rest...
+- public/useragreement.php:51 — {$site_config['site']['name']} does not endorse external websites which should open in a new browser window. This website may be hosted b...
+- public/useragreement.php:81 — ORDERS ONLY! - Use the above link to &quot;e-mail for permission&quot; only after you have decided that you definitely will use the torre...
+- public/useragreement.php:126 — DISPUTE RESOLUTION<br> ANY AND ALL DISPUTES AND CONTROVERSIES ARISING HEREUNDER OR RELATING TO THIS WEBSITE (INCLUDING BUT NOT LIMITED TO...
+- public/useragreement.php:132 — Privacy and Security Statement<br> We do not want, ask for, or need your private information, so it is your responsibility and we are rel...
+- public/useragreement.php:138 — Spamming, as well as repetitive, harassing, threatening, intrusive, vulgar, profane, abusive, impolite, untruthful, disparaging, and/or o...
+- public/usercomment.php:15 — require_once INCL_DIR . 'function_bbcode.php';
+- public/usercomment.php:38 — if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+- public/usercomment.php:83 — <form method='post' action='usercomment.php?action=add' enctype='multipart/form-data' accept-charset='utf-8'>
+- public/usercomment.php:85 — <div>" . BBcode() . "</div>
+- public/usercomment.php:107 — if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+- public/usercomment.php:127 — if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+- public/usercomment.php:139 — $db->perform($sql, array_merge($set, ['id' => $commentid]));
+- public/usercomment.php:150 — <form method='post' action='usercomment.php?action=edit&amp;cid={$commentid}' enctype='multipart/form-data' accept-charset='utf-8'>
+- public/usercp.php:17 — require_once INCL_DIR . 'function_bbcode.php';
+- public/usercp.php:59 — <form method='post' action='{$site_config['paths']['baseurl']}/takeeditcp.php' enctype='multipart/form-data' accept-charset='utf-8'>
+- public/usercp.php:112 — <img src='{$site_config['paths']['images_baseurl']}forums/updating.svg' alt='Loading...'>
+- public/usercp.php:167 — <textarea name='info' class='w-100' rows='4'>" . format_comment((string) $user['info']) . '</textarea><br>' . _fe('Displayed on your publ...
+- public/usercp.php:227 — $HTMLOUT .= tr('<img width="16" src="' . $site_config['paths']['images_baseurl'] . 'forums/skype.png" alt="Icq" class="tooltipper right10...
+- public/usercp.php:230 — $HTMLOUT .= tr('<img src="' . $site_config['paths']['images_baseurl'] . 'forums/www.gif" alt="www" class="tooltipper right10" title="' . ...
+- public/usercp.php:438 — ' . _("All info about torrents are hidden from other members except your share ratio, join date, last seen and PM button if you accept PM...
+- public/usercp.php:466 — <p>' . _('Do you wish to have your email address visible on the forums?') . '</p>', 1);
+- public/usercp.php:557 — $split = ($user['opt2'] & class_user_options_2::SPLIT) === class_user_options_2::SPLIT;
+- public/usercp.php:558 — $HTMLOUT .= tr(_('Split Torrents by Days'), "
+- public/usercp.php:559 — <input type='checkbox' name='split' " . ($split ? 'checked' : '') . " value='yes'> (Split torrents uploaded by days)", 1);
+- public/usercp.php:600 — $HTMLOUT .= tr(_('Topics per page'), "
+- public/usercp.php:602 — $HTMLOUT .= tr(_('Posts per page'), "
+- public/usercp.php:604 — $HTMLOUT .= tr('Forum Sort Order', "
+- public/usercp.php:605 — <input type='radio' name='forum_sort' " . ($user['forum_sort'] === 'ASC' ? 'checked' : '') . " value='ASC'> " . _('At Bottom') . "
+- public/usercp.php:606 — <input type='radio' name='forum_sort' " . ($user['forum_sort'] !== 'ASC' ? 'checked' : '') . " value='DESC'> " . _('At Top<br>What order ...
+- public/usercp.php:674 — <input type='radio' name='acceptpms' " . ($user['acceptpms'] === 'yes' ? 'checked' : '') . " value='yes'> " . _('All (except blocks)') . "
+- public/usercp.php:687 — $HTMLOUT .= tr(_('Forum Subscribe PM'), "
+- public/usercp.php:689 — <input type='radio' name='subscription_pm' " . ($user['subscription_pm'] === 'no' ? 'checked' : '') . " value='no'> " . _('No') . '<br>' ...
+- public/userdetails.php:11 — require_once INCL_DIR . 'function_bbcode.php';
+- public/userdetails.php:52 — stderr(_('Error'), '<span><img src="' . $site_config['paths']['images_baseurl'] . 'smilies/tinfoilhat.gif" alt="' . _('I wear a tin-foil ...
+- public/userdetails.php:53 — ' . _('This members paranoia settings are at tinfoil hat levels!!!') . ' <img src="' . $site_config['paths']['images_baseurl'] . 'smilies...
+- public/userdetails.php:173 — $suspended .= ($user['status'] === 5 ? '  <img src="' . $site_config['paths']['images_baseurl'] . 'smilies/excl.gif" alt="' . _('Suspende...
+- public/userdetails.php:174 — $watched_user .= ($user['watched_user'] == 0 ? '' : '  <img src="' . $site_config['paths']['images_baseurl'] . 'smilies/excl.gif" alt="' ...
+- public/userdetails.php:176 — $perms .= (has_access($viewer['class'], UC_STAFF, 'coder') ? (($user['perms'] & PERMS_BYPASS_BAN) ? '  <img src="' . $site_config['paths'...
+- public/userdetails.php:177 — $stealth .= (has_access($viewer['class'], UC_STAFF, 'coder') ? (($user['perms'] & PERMS_STEALTH) ? '  <img src="' . $site_config['paths']...
+- public/userdetails.php:196 — $block = $cache->get('Blocks_' . $user['id']);
+- public/userdetails.php:197 — if ($block === false || is_null($block)) {
+- public/userdetails.php:198 — $block = $fluent->from('blocks')
+- public/userdetails.php:202 — ->where('blockid = ?', $viewer['id'])
+- public/userdetails.php:204 — $cache->set('Blocks_' . $user['id'], $block, $site_config['expires']['user_blocks']);
+- public/userdetails.php:211 — if ($block > 0) {
+- public/userdetails.php:212 — $friend_links .= "<li class='is-link margin10'><a href='{$site_config['paths']['baseurl']}/friends.php?action=delete&amp;type=block&amp;t...
+- public/userdetails.php:214 — $friend_links .= "<li class='is-link margin10'><a href='{$site_config['paths']['baseurl']}/friends.php?action=add&amp;type=block&amp;targ...
+- public/userdetails.php:233 — <img class='tooltipper right5' src='{$site_config['paths']['images_baseurl']}smilies/shit.gif' alt='Shit' class='tooltipper' title='Shit'>
+- public/userdetails.php:303 — if ($viewer['blocks']['userdetails_page'] & class_blocks_userdetails::FLUSH && $BLOCKS['userdetails_flush_on']) {
+- public/userdetails.php:304 — require_once BLOCK_DIR . 'userdetails/flush.php';
+- public/userdetails.php:332 — if ($viewer['blocks']['userdetails_page'] & class_blocks_userdetails::TRAFFIC && $BLOCKS['userdetails_traffic_on']) {
+- public/userdetails.php:333 — require_once BLOCK_DIR . 'userdetails/traffic.php';
+- public/userdetails.php:335 — if ($viewer['blocks']['userdetails_page'] & class_blocks_userdetails::SHARE_RATIO && $BLOCKS['userdetails_share_ratio_on']) {
+- public/userdetails.php:336 — require_once BLOCK_DIR . 'userdetails/shareratio.php';
+- public/userdetails.php:338 — if ($viewer['blocks']['userdetails_page'] & class_blocks_userdetails::SEEDTIME_RATIO && $BLOCKS['userdetails_seedtime_ratio_on']) {
+- public/userdetails.php:339 — require_once BLOCK_DIR . 'userdetails/seedtimeratio.php';
+- public/userdetails.php:341 — if ($viewer['blocks']['userdetails_page'] & class_blocks_userdetails::CONNECTABLE_PORT && $BLOCKS['userdetails_connectable_port_on']) {
+- public/userdetails.php:342 — require_once BLOCK_DIR . 'userdetails/connectable.php';
+- public/userdetails.php:344 — if ($viewer['blocks']['userdetails_page'] & class_blocks_userdetails::TORRENTS_BLOCK && $BLOCKS['userdetails_torrents_block_on']) {
+- public/userdetails.php:345 — require_once BLOCK_DIR . 'userdetails/torrents_block.php';
+- public/userdetails.php:347 — if ($viewer['blocks']['userdetails_page'] & class_blocks_userdetails::COMPLETED && $BLOCKS['userdetails_completed_on']) {
+- public/userdetails.php:348 — require_once BLOCK_DIR . 'userdetails/completed.php';
+- public/userdetails.php:350 — if ($viewer['blocks']['userdetails_page'] & class_blocks_userdetails::SNATCHED_STAFF && $BLOCKS['userdetails_snatched_staff_on']) {
+- public/userdetails.php:351 — require_once BLOCK_DIR . 'userdetails/snatched_staff.php';
+- public/userdetails.php:372 — <form method='post' action='ajax/member_input.php' name='notes_for_staff' enctype='multipart/form-data' accept-charset='utf-8'>
+- public/userdetails.php:395 — <form method="post" action="ajax/member_input.php" name="notes_for_staff" accept-charset="utf-8">
+- public/userdetails.php:410 — if ($viewer['blocks']['userdetails_page'] & class_blocks_userdetails::SHOWFRIENDS && $BLOCKS['userdetails_showfriends_on']) {
+- public/userdetails.php:411 — require_once BLOCK_DIR . 'userdetails/showfriends.php';
+- public/userdetails.php:413 — if ($viewer['blocks']['userdetails_page'] & class_blocks_userdetails::JOINED && $BLOCKS['userdetails_joined_on']) {
+- public/userdetails.php:414 — require_once BLOCK_DIR . 'userdetails/joined.php';
+- public/userdetails.php:416 — if ($viewer['blocks']['userdetails_page'] & class_blocks_userdetails::ONLINETIME && $BLOCKS['userdetails_online_time_on']) {
+- public/userdetails.php:417 — require_once BLOCK_DIR . 'userdetails/onlinetime.php';
+- public/userdetails.php:419 — if ($viewer['blocks']['userdetails_page'] & class_blocks_userdetails::BROWSER && $BLOCKS['userdetails_browser_on']) {
+- public/userdetails.php:420 — require_once BLOCK_DIR . 'userdetails/browser.php';
+- public/userdetails.php:422 — if ($viewer['blocks']['userdetails_page'] & class_blocks_userdetails::BIRTHDAY && $BLOCKS['userdetails_birthday_on']) {
+- public/userdetails.php:423 — require_once BLOCK_DIR . 'userdetails/birthday.php';
+- public/userdetails.php:425 — if ($viewer['blocks']['userdetails_page'] & class_blocks_userdetails::CONTACT_INFO && $BLOCKS['userdetails_contact_info_on']) {
+- public/userdetails.php:426 — require_once BLOCK_DIR . 'userdetails/contactinfo.php';
+- public/userdetails.php:428 — if ($viewer['blocks']['userdetails_page'] & class_blocks_userdetails::IPHISTORY && $BLOCKS['userdetails_iphistory_on']) {
+- public/userdetails.php:429 — require_once BLOCK_DIR . 'userdetails/iphistory.php';
+- public/userdetails.php:431 — if ($viewer['blocks']['userdetails_page'] & class_blocks_userdetails::AVATAR && $BLOCKS['userdetails_avatar_on']) {
+- public/userdetails.php:432 — require_once BLOCK_DIR . 'userdetails/avatar.php';
+- public/userdetails.php:434 — if ($viewer['blocks']['userdetails_page'] & class_blocks_userdetails::USERCLASS && $BLOCKS['userdetails_userclass_on']) {
+- public/userdetails.php:435 — require_once BLOCK_DIR . 'userdetails/userclass.php';
+- public/userdetails.php:437 — if ($viewer['blocks']['userdetails_page'] & class_blocks_userdetails::GENDER && $BLOCKS['userdetails_gender_on']) {
+- public/userdetails.php:438 — require_once BLOCK_DIR . 'userdetails/gender.php';
+- public/userdetails.php:440 — if ($viewer['blocks']['userdetails_page'] & class_blocks_userdetails::USERINFO && $BLOCKS['userdetails_userinfo_on']) {
+- public/userdetails.php:441 — require_once BLOCK_DIR . 'userdetails/userinfo.php';
+- public/userdetails.php:443 — if ($viewer['blocks']['userdetails_page'] & class_blocks_userdetails::REPORT_USER && $BLOCKS['userdetails_report_user_on']) {
+- public/userdetails.php:444 — require_once BLOCK_DIR . 'userdetails/report.php';
+- public/userdetails.php:446 — if ($viewer['blocks']['userdetails_page'] & class_blocks_userdetails::USERSTATUS && $BLOCKS['userdetails_user_status_on']) {
+- public/userdetails.php:447 — require_once BLOCK_DIR . 'userdetails/userstatus.php';
+- public/userdetails.php:449 — if ($viewer['blocks']['userdetails_page'] & class_blocks_userdetails::SHOWPM && $BLOCKS['userdetails_showpm_on']) {
+- public/userdetails.php:450 — require_once BLOCK_DIR . 'userdetails/showpm.php';
+- public/userdetails.php:465 — <img src="' . $site_config['paths']['images_baseurl'] . 'smilies/' . $moodpic . '" alt="' . $moodname . '">
+- public/userdetails.php:467 — if ($viewer['blocks']['userdetails_page'] & class_blocks_userdetails::SEEDBONUS && $BLOCKS['userdetails_seedbonus_on']) {
+- public/userdetails.php:468 — require_once BLOCK_DIR . 'userdetails/seedbonus.php';
+- public/userdetails.php:470 — if ($viewer['blocks']['userdetails_page'] & class_blocks_userdetails::IRC_STATS && $BLOCKS['userdetails_irc_stats_on']) {
+- public/userdetails.php:471 — require_once BLOCK_DIR . 'userdetails/irc.php';
+- public/userdetails.php:473 — if ($viewer['blocks']['userdetails_page'] & class_blocks_userdetails::REPUTATION && $BLOCKS['userdetails_reputation_on']) {
+- public/userdetails.php:474 — require_once BLOCK_DIR . 'userdetails/reputation.php';
+- public/userdetails.php:476 — if ($viewer['blocks']['userdetails_page'] & class_blocks_userdetails::PROFILE_HITS && $BLOCKS['userdetails_profile_hits_on']) {
+- public/userdetails.php:477 — require_once BLOCK_DIR . 'userdetails/userhits.php';
+- public/userdetails.php:479 — if ($viewer['blocks']['userdetails_page'] & class_blocks_userdetails::FREESTUFFS && $BLOCKS['userdetails_freestuffs_on']) {
+- public/userdetails.php:480 — require_once BLOCK_DIR . 'userdetails/freestuffs.php';
+- public/userdetails.php:482 — if ($viewer['blocks']['userdetails_page'] & class_blocks_userdetails::COMMENTS && $BLOCKS['userdetails_comments_on']) {
+- public/userdetails.php:483 — require_once BLOCK_DIR . 'userdetails/comments.php';
+- public/userdetails.php:485 — if ($viewer['blocks']['userdetails_page'] & class_blocks_userdetails::FORUMPOSTS && $BLOCKS['userdetails_forumposts_on']) {
+- public/userdetails.php:486 — require_once BLOCK_DIR . 'userdetails/forumposts.php';
+- public/userdetails.php:488 — if ($viewer['blocks']['userdetails_page'] & class_blocks_userdetails::INVITEDBY && $BLOCKS['userdetails_invitedby_on']) {
+- public/userdetails.php:489 — require_once BLOCK_DIR . 'userdetails/invitedby.php';
+- public/userdetails.php:493 — if ($viewer['blocks']['userdetails_page'] & class_blocks_userdetails::USERCOMMENTS && $BLOCKS['userdetails_user_comments_on']) {
+- public/userdetails.php:494 — require_once BLOCK_DIR . 'userdetails/usercomments.php';
+- public/userdetails.php:500 — <form method='post' action='./staffpanel.php?tool=modtask' enctype='multipart/form-data' accept-charset='utf-8'>
+- public/userdetails.php:612 — <input type='checkbox' name='role_forum_mod' value='1' " . ($user['roles_mask'] & Roles::FORUM_MOD ? 'checked' : '') . " class='right5'>"...
+- public/userdetails.php:984 — $HTMLOUT .= "<tr><td class='rowhead'>" . _('Karma Points') . "</td><td colspan='3' class='has-text-left'><input type='number' class='w-10...
+- public/userdetails.php:988 — $HTMLOUT .= "<tr><td class='rowhead'>" . _('Reputation Points') . "</td><td colspan='3' class='has-text-left'><input type='text' class='w...
+- public/userdetails.php:1046 — <td class='rowhead'>" . _('Forum Rights') . "</td>
+- public/userdetails.php:1049 — <input name='forum_post' value='yes' type='radio' " . ($user['forum_post'] === 'yes' ? 'checked' : '') . " class='right5'>" . _('Yes') . "
+- public/userdetails.php:1050 — <input name='forum_post' value='no' type='radio' " . ($user['forum_post'] === 'no' ? 'checked' : '') . " class='left20 right5'>" . _('No ...
+- public/userhistory.php:15 — require_once INCL_DIR . 'function_bbcode.php';
+- public/userhistory.php:39 — $from_is = 'posts AS p LEFT JOIN topics as t ON p.topic_id=t.id LEFT JOIN forums AS f ON t.forum_id=f.id';
+- public/userhistory.php:44 — $arr = mysqli_fetch_row($res) or stderr(_('Error'), _('No posts found'));
+- public/userhistory.php:52 — $from_is = 'posts AS p LEFT JOIN topics as t ON p.topic_id=t.id LEFT JOIN forums AS f ON t.forum_id=f.id LEFT JOIN read_posts as r ON p.t...
+- public/userhistory.php:57 — stderr(_('Error'), _('No posts found'));
+- public/userhistory.php:59 — $HTMLOUT .= "<h1 class='has-text-centered'>" . _('Post history for') . " $subject</h1>\n";
+- public/userhistory.php:68 — $forumid = (int) $arr['f_id'];
+- public/userhistory.php:69 — $forumname = format_comment($arr['name']);
+- public/userhistory.php:71 — $dt = TIME_NOW - $site_config['forum_config']['readpost_expiry'];
+- public/userhistory.php:78 — $added -- <b>" . _('Forum') . ": </b>
+- public/userhistory.php:79 — <a href='{$site_config['paths']['baseurl']}/forums.php?action=view_forum&amp;forum_id=$forumid'>$forumname</a>
+- public/userhistory.php:80 — -- <b>" . _('Topic') . ": </b>
+- public/userhistory.php:81 — <a href='{$site_config['paths']['baseurl']}/forums.php?action=view_topic&amp;topic_id=$topicid'>$topicname</a>
+- public/userhistory.php:82 — -- <b>" . _('Post') . ": </b>
+- public/userhistory.php:83 — <a href='{$site_config['paths']['baseurl']}/forums.php?action=view_topic&amp;topic_id=$topicid&amp;page=p$postid#$postid'>#{$postid}</a>"...
+- public/userhistory.php:107 — $title = _('Posts Histroy');
+- public/usermood.php:21 — $more = $user['perms'] & UNLOCK_MORE_MOODS ? 2 : 1;
+- public/usermood.php:25 — write_log('<b>' . _('Mood Change') . '</b> ' . $user['username'] . ' ' . htmlsafechars($rmood['name']) . '<img src="' . $site_config['pat...
+- public/usermood.php:65 — <img src="' . $site_config['paths']['images_baseurl'] . 'smilies/' . htmlsafechars($arr['image']) . '" alt="" class="bottom10">
+- public/verify.php:23 — if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+- public/verify.php:55 — <form id='site_login' class='form-inline table-wrapper' method='post' action='{$site_config['paths']['baseurl']}/verify.php' enctype='mul...
+- public/videoformats.php:14 — require_once INCL_DIR . 'function_bbcode.php';
+- public/videoformats.php:47 — <br>' . _("A pre VHS tape, sent to rental stores, and various other places for promotional use. A screener is supplied on a VHS tape, and...
+- public/videoformats.php:142 — <br>' . _("An internal release is done for several reasons. Classic DVD groups do a lot of INTERNAL releases, as they wont be dupe'd on i...
+- public/view_announce_history.php:14 — require_once INCL_DIR . 'function_bbcode.php';
+- public/viewnfo.php:15 — require_once INCL_DIR . 'function_bbcode.php';
+- public/wiki.php:19 — require_once INCL_DIR . 'function_bbcode.php';
+- public/wiki.php:57 — <form action="wiki.php" method="post" accept-charset="utf-8">
+- public/wiki.php:114 — if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+- public/wiki.php:235 — <form method='post' action='wiki.php' enctype='multipart/form-data' accept-charset='utf-8'>
+- public/wiki.php:236 — <input type='text' name='article-name' id='name' class='w-100 top10 bottom10 has-text-centered' placeholder='Article Title' minlength='3'...
+- public/wiki.php:258 — <form method='post' action='wiki.php' enctype='multipart/form-data' accept-charset='utf-8'>
+- public/wiki.php:260 — <input type='hidden' name='article-id' value='$id'> " . BBcode($result['body']) . "
+- refactor-safe-log.txt:1 — Refactored safe: /home/runner/work/Pu-239/Pu-239/forums/delete_post.php
+- refactor-safe-log.txt:2 — Refactored safe: /home/runner/work/Pu-239/Pu-239/forums/new_topic.php
+- refactor-safe-log.txt:3 — Refactored safe: /home/runner/work/Pu-239/Pu-239/forums/attachment.php
+- refactor-safe-log.txt:4 — Refactored safe: /home/runner/work/Pu-239/Pu-239/forums/undelete_post.php
+- refactor-safe-log.txt:5 — Refactored safe: /home/runner/work/Pu-239/Pu-239/forums/download_attachment.php
+- refactor-safe-log.txt:6 — Refactored safe: /home/runner/work/Pu-239/Pu-239/forums/view_topic.php
+- refactor-safe-log.txt:7 — Refactored safe: /home/runner/work/Pu-239/Pu-239/forums/view_forum.php
+- refactor-safe-log.txt:17 — Refactored safe: /home/runner/work/Pu-239/Pu-239/admin/forum_config.php
+- refactor-safe-log.txt:18 — Refactored safe: /home/runner/work/Pu-239/Pu-239/admin/over_forums.php
+- refactor-safe-log.txt:29 — Refactored safe: /home/runner/work/Pu-239/Pu-239/src/PollVoter.php
+- refactor-safe-log.txt:42 — Refactored safe: /home/runner/work/Pu-239/Pu-239/src/Forum.php
+- refactor-safe-log.txt:45 — Refactored safe: /home/runner/work/Pu-239/Pu-239/src/Post.php
+- refactor-safe-log.txt:49 — Refactored safe: /home/runner/work/Pu-239/Pu-239/src/Poll.php
+- refactor-safe-log.txt:63 — Refactored safe: /home/runner/work/Pu-239/Pu-239/public/polls_take_vote.php
+- refactor-safe-log.txt:83 — Refactored safe: /home/runner/work/Pu-239/Pu-239/public/user_blocks.php
+- refactor-safe-log.txt:91 — Refactored safe: /home/runner/work/Pu-239/Pu-239/cleanup/customsmilie_update.php
+- refactor-safe-log.txt:98 — Refactored safe: /home/runner/work/Pu-239/Pu-239/cleanup/forum_update.php
+- scripts/acp.js:17 — }('6 2="3";6 d=b 9;f e(a){c(2=="3"){4(1=0;1<a.5;1++){a[1].7=8}2="8"}g{4(1=0;1<a.5;1++){a[1].7=3}2="3"}};', 17, 17, '|i|checkflag|false|fo...
+- scripts/ajaxchat.js:4 — tinyScreenDetectElement: 'bbCodeContainer',
+- scripts/ajaxchat.js:7 — this.bindButtonToPopup('bbCodeColor', 'colorCodesContainer');
+- scripts/ajaxchat.js:18 — popupElement.style.display = 'block';
+- scripts/ajaxchat.js:78 — document.getElementById('bbCodeSetting').checked = ajaxChat.getSetting('bbCode');
+- scripts/ajaxchat.js:79 — document.getElementById('bbCodeImagesSetting').checked = ajaxChat.getSetting('bbCodeImages');
+- scripts/ajaxchat.js:80 — document.getElementById('bbCodeColorsSetting').checked = ajaxChat.getSetting('bbCodeColors');
+- scripts/autocomplete.js:18 — type: 'POST',
+- scripts/bookmarks.js:4 — type: 'POST',
+- scripts/checkports.js:10 — type: 'POST',
+- scripts/checkports.js:28 — type: 'POST',
+- scripts/cooker_notify.js:4 — type: 'POST',
+- scripts/descr.js:14 — type: 'POST',
+- scripts/dragndrop.js:67 — type: 'POST',
+- scripts/dragndrop.js:105 — '<h3 class="top20">Tag for forums or comments with Width and Height</h3>' +
+- scripts/flip_box.js:9 — document.getElementById('box_' + who).style.display = 'block';
+- scripts/flipper.js:24 — nextSibling.style.display = 'block';
+- scripts/flush_torrents.js:13 — $.post('./ajax/member_input.php', {
+- scripts/forums.js:2 — $('.poll_select').trilemma({
+- scripts/icarousel.js:22 — lock: false,
+- scripts/icarousel.js:145 — var position = options.timerPosition.toLowerCase().split('-');
+- scripts/icarousel.js:272 — ic.defs.lock = true;
+- scripts/icarousel.js:297 — ic.defs.lock = false;
+- scripts/icarousel.js:692 — if (!fastchange && ic.defs.lock) return false;
+- scripts/icarousel.js:698 — if (!fastchange && ic.defs.lock) return false;
+- scripts/icarousel.js:747 — if (!ic.defs.lock && !ic.defs.pause && ic.defs.interval === null && ic.defs.degree <= 359) {
+- scripts/ignore_images.js:4 — type: 'POST',
+- scripts/imdb.js:21 — type: 'POST',
+- scripts/isbn.js:23 — type: 'POST',
+- scripts/jquery.tabcontrol.js:44 — if (this.Tab[id].content) this.Tab[id].content.style.display = 'block';
+- scripts/jquery.thanks.js:2 — var el = document.querySelector('#thanks_holder');
+- scripts/jquery.thanks.js:3 — show_thanks(el.dataset.tid);
+- scripts/jquery.thanks.js:6 — function show_thanks(tid) {
+- scripts/jquery.thanks.js:7 — var holder = $('#thanks_holder');
+- scripts/jquery.thanks.js:9 — $.post('./ajax/thanks.php', {
+- scripts/jquery.thanks.js:15 — if (!r.hadTh) r.list += '<div class=\'top10 bottom10\'><input type=\'button\' class=\'button is-small details-button\' value=\'Say thanks...
+- scripts/jquery.thanks.js:21 — function say_thanks(tid) {
+- scripts/jquery.thanks.js:22 — $('#thanks_button').attr('value', 'Please wait...').attr('disabled', 'disabled');
+- scripts/jquery.thanks.js:23 — var holder = $('#thanks_holder');
+- scripts/jquery.thanks.js:24 — $.post('./ajax/thanks.php', {
+- scripts/navbar_show.js:4 — type: 'POST',
+- scripts/offer_notify.js:4 — type: 'POST',
+- scripts/offer_status.js:4 — type: 'POST',
+- scripts/offer_vote.js:4 — type: 'POST',
+- scripts/polls.js:1 — var open_div = 'poll-box-open';
+- scripts/polls.js:3 — var closed_div = 'poll-box-closed';
+- scripts/polls.js:5 — var stat_div = 'poll-box-stat';
+- scripts/polls.js:7 — var main_div = 'poll-box-main';
+- scripts/polls.js:23 — function poll_init_state() {
+- scripts/polls.js:36 — poll_draw_main_box();
+- scripts/polls.js:61 — function poll_draw_main_box() {
+- scripts/polls.js:64 — for (var i in poll_questions) {
+- scripts/polls.js:67 — var question = poll_questions[i];
+- scripts/polls.js:68 — var this_poll_multi = '';
+- scripts/polls.js:69 — for (var x in poll_multi) {
+- scripts/polls.js:71 — if (poll_multi[x] == 1) {
+- scripts/polls.js:72 — this_poll_multi = 'checked';
+- scripts/polls.js:76 — var inputhtml = lang_build_string(html_question_box, i, _poll_make_form_safe(question), this_poll_multi);
+- scripts/polls.js:80 — for (var c in poll_choices) {
+- scripts/polls.js:84 — votes_box = lang_build_string(html_votes_box, i, id, poll_votes[c]);
+- scripts/polls.js:86 — choices += '\n' + lang_build_string(html_choice_box, i, id, _poll_make_form_safe(poll_choices[c]), votes_box);
+- scripts/polls.js:89 — if (choices_count < max_poll_choices) {
+- scripts/polls.js:97 — if (used_questions < max_poll_questions) {
+- scripts/polls.js:101 — poll_update_state();
+- scripts/polls.js:104 — function poll_write_form_to_array() {
+- scripts/polls.js:105 — var tmp_poll_questions = {};
+- scripts/polls.js:106 — var tmp_poll_choices = {};
+- scripts/polls.js:107 — var tmp_poll_multi = {};
+- scripts/polls.js:108 — for (var i in poll_questions) {
+- scripts/polls.js:110 — tmp_poll_questions[i] = document.getElementById('question_' + i).value;
+- scripts/polls.js:114 — for (var x in poll_multi) {
+- scripts/polls.js:116 — tmp_poll_multi[x] = document.getElementById('multi_' + x).checked ? 1 : 0;
+- scripts/polls.js:120 — for (var c in poll_choices) {
+- scripts/polls.js:122 — tmp_poll_choices[c] = document.getElementById('choice_' + c).value;
+- scripts/polls.js:126 — poll_questions = tmp_poll_questions;
+- scripts/polls.js:127 — poll_choices = tmp_poll_choices;
+- scripts/polls.js:128 — poll_multi = tmp_poll_multi;
+- scripts/polls.js:131 — function poll_add_question() {
+- scripts/polls.js:133 — for (var i in poll_questions) {
+- scripts/polls.js:139 — poll_write_form_to_array();
+- scripts/polls.js:140 — poll_questions[maxid] = '';
+- scripts/polls.js:141 — poll_multi[maxid] = '';
+- scripts/polls.js:142 — poll_draw_main_box();
+- scripts/polls.js:146 — function poll_add_choice(qid) {
+- scripts/polls.js:148 — for (var c in poll_choices) {
+- scripts/polls.js:157 — poll_write_form_to_array();
+- scripts/polls.js:158 — poll_choices[qid + '_' + maxid] = '';
+- scripts/polls.js:159 — poll_votes[qid + '_' + maxid] = 0;
+- scripts/polls.js:160 — poll_draw_main_box();
+- scripts/polls.js:164 — function poll_remove_choice(mainid) {
+- scripts/polls.js:166 — delete poll_choices[mainid];
+- scripts/polls.js:167 — delete poll_votes[mainid];
+- scripts/polls.js:168 — poll_write_form_to_array();
+- scripts/polls.js:169 — poll_draw_main_box();
+- scripts/polls.js:174 — function poll_remove_question(mainid) {
+- scripts/polls.js:176 — delete poll_questions[mainid];
+- scripts/polls.js:177 — for (var c in poll_choices) {
+- scripts/polls.js:180 — delete poll_choices[c];
+- scripts/polls.js:181 — delete poll_votes[c];
+- scripts/polls.js:184 — poll_write_form_to_array();
+- scripts/polls.js:185 — poll_draw_main_box();
+- scripts/polls.js:190 — function poll_update_state() {
+- scripts/polls.js:191 — used = max_poll_questions - used_questions;
+- scripts/polls.js:192 — var tmp_lang = lang_build_string(poll_stat_lang, used, max_poll_choices);
+- scripts/polls.js:196 — function show_poll_form() {
+- scripts/polls.js:201 — function close_poll_form() {
+- scripts/polls.js:206 — function _poll_make_form_safe(t) {
+- scripts/polls.js:212 — poll_init_state();
+- scripts/replaced.js:37 — function refrClock() {
+- scripts/replaced.js:64 — document.getElementById('clock').innerHTML = h + ':' + m + ':' + s + am_pm;
+- scripts/replaced.js:65 — setTimeout('refrClock()', 1e3);
+- scripts/replaced.js:71 — type: 'POST',
+- scripts/replaced.js:89 — type: 'POST',
+- scripts/replaced.js:113 — if ($('#clock').length) {
+- scripts/replaced.js:114 — refrClock();
+- scripts/request_notify.js:4 — type: 'POST',
+- scripts/request_vote.js:4 — type: 'POST',
+- scripts/sack.js:4 — this.method = 'POST';
+- scripts/sack.js:65 — varArray = string.split(regexp);
+- scripts/sack.js:67 — urlVars = varArray[i].split('=');
+- scripts/sceditor.js:1 — var textarea = document.getElementById('bbcode-editor');
+- scripts/sceditor.js:4 — sceditor.formats.bbcode.set(
+- scripts/sceditor.js:14 — sceditor.formats.bbcode.set(
+- scripts/sceditor.js:28 — sceditor.formats.bbcode.set(
+- scripts/sceditor.js:44 — format: 'bbcode',
+- scripts/sceditor.js:49 — bbcodeTrim: true,
+- scripts/sceditor.js:62 — emoticonsRoot: 'images/smilies/',
+- scripts/sceditor.js:254 — ':locked:': 'locked.gif',
+- scripts/sceditor.js:260 — ':rblocked:': 'rblocked.gif',
+- scripts/sceditor.js:261 — ':maxlocked:': 'maxlocked.gif',
+- scripts/sceditor.js:262 — ':hslocked:': 'hslocked.gif',
+- scripts/sceditor.js:379 — ':karma:': 'karma.gif',
+- scripts/scroll_to_poll.js:3 — let target = '#poll';
+- scripts/scroll_to_poll.js:8 — location.hash = '#poll';
+- scripts/staff_picks.js:4 — type: 'POST',
+- scripts/tooltipster.js:96 — $.post('../ajax/ajax_tooltips.php', {}, function (data) {
+- scripts/trivia.js:13 — type: 'POST',
+- scripts/trivia.js:24 — initializeClock('clock_round', data['round']);
+- scripts/trivia.js:25 — initializeClock('clock_game', data['game']);
+- scripts/trivia.js:46 — function initializeClock(id, remaining) {
+- scripts/trivia.js:47 — var clock = document.getElementById(id);
+- scripts/trivia.js:51 — function updateClock() {
+- scripts/trivia.js:53 — var daysSpan = clock.querySelector('.days');
+- scripts/trivia.js:54 — var hoursSpan = clock.querySelector('.hours');
+- scripts/trivia.js:55 — var minutesSpan = clock.querySelector('.minutes');
+- scripts/trivia.js:56 — var secondsSpan = clock.querySelector('.seconds');
+- scripts/trivia.js:63 — if (id === 'clock_game') {
+- scripts/trivia.js:76 — updateClock();
+- scripts/trivia.js:77 — var timeinterval = setInterval(updateClock, 1000);
+- scripts/trivia.js:91 — type: 'POST',
+- scripts/trivia.js:104 — initializeClock('clock_round', data['round']);
+- scripts/trivia.js:105 — initializeClock('clock_game', data['game']);
+- scripts/tvmaze.js:15 — type: 'POST',
+- scripts/upload_image_from_url.js:20 — type: 'POST',
+- scripts/upload_image_from_url.js:52 — '<h3 class="top20">Tag for forums or comments with Width and Height</h3>' +
+- scripts/user_torrents.js:36 — type: 'POST',
+- scripts/usersearch.js:18 — type: 'POST',
+- src/Block.php:13 — * Class Block.
+- src/Block.php:15 — class Block
+- src/Block.php:23 — * Block constructor.
+- src/Block.php:44 — $blocks = $this->cache->get('blocks_' . $userid);
+- src/Block.php:45 — if ($blocks === false || is_null($blocks)) {
+- src/Block.php:46 — $blocks = $this->fluent->from('blocks')
+- src/Block.php:50 — $this->cache->set('blocks_' . $userid, $blocks, $this->env['expires']['user_blocks']);
+- src/BotReplies.php:67 — $result = $this->db->perform($sql, array_merge($set, ['id' => $id]));
+- src/BotTriggers.php:66 — $result = $this->db->perform($sql, array_merge($set, ['id' => $id]));
+- src/Bounty.php:98 — $id = $this->db->perform($sql, array_merge($update, ['requestid' => $requestid]));
+- src/Cache.php:92 — $adapter = new Local($this->env['files']['path'], LOCK_EX);
+- src/Casino.php:109 — $this->db->perform($sql, array_merge($set, ['userid' => $userid]));
+- src/CasinoBets.php:93 — $this->db->perform($sql, array_merge($set, ['id' => $id]));
+- src/Comment.php:94 — ->select('c.user_likes')
+- src/Comment.php:171 — $result = $this->db->perform($sql, array_merge($set, ['id' => $id]));
+- src/Forum.php:14 — * Class Forum.
+- src/Forum.php:16 — class Forum
+- src/Forum.php:38 — * @param int $forum_id
+- src/Forum.php:44 — public function delete(int $forum_id)
+- src/Forum.php:46 — $sql = "DELETE FROM forums WHERE id = :id";
+- src/Forum.php:47 — $result = $this->db->perform($sql, ['id' => $forum_id]);
+- src/Forum.php:55 — * @param int   $forum_id
+- src/Forum.php:61 — public function update(array $set, int $forum_id)
+- src/Forum.php:63 — $sql = "UPDATE forums SET /* columns */ WHERE id = :id";
+- src/Forum.php:64 — $result = $this->db->perform($sql, array_merge($set, ['id' => $forum_id]));
+- src/Forum.php:79 — $sql = "INSERT INTO forums (/* columns */) VALUES (/* values */)";
+- src/Forum.php:87 — * @param int $forum_id
+- src/Forum.php:93 — public function get_forum(int $forum_id)
+- src/Forum.php:95 — $forum = $this->fluent->from('forums')
+- src/Forum.php:96 — ->where('id = ?', $forum_id)
+- src/Forum.php:99 — return $forum;
+- src/Forum.php:109 — $count = $this->fluent->from('forums')
+- src/IP.php:219 — $users = array_merge($users, $this->get_users_by_ip($ip));
+- src/Message.php:174 — $result = $this->db->perform($sql, array_merge($set, ['id' => $id]));
+- src/Message.php:336 — ->select('b.id AS blocked')
+- src/Message.php:344 — ->leftJoin('blocks AS b ON m.receiver = b.userid AND m.sender = b.blockid')
+- src/Offer.php:176 — $result = $this->db->perform($sql, array_merge($set, ['id' => $offerid]));
+- src/Person.php:61 — $this->db->perform($sql, array_merge($update, ['imdb_id' => $imdb_id]));
+- src/Person.php:77 — $this->db->perform($sql, array_merge($update, ['photo' => $url]));
+- src/Poll.php:13 — * Class Poll.
+- src/Poll.php:15 — class Poll
+- src/Poll.php:21 — * Poll constructor.
+- src/Poll.php:33 — * @param int $poll_id
+- src/Poll.php:37 — public function delete(int $poll_id)
+- src/Poll.php:39 — $sql = "DELETE FROM polls WHERE pid = :pid";
+- src/Poll.php:40 — $this->db->perform($sql, ['pid' => $poll_id]);
+- src/Poll.php:42 — $this->cache->delete('poll_' . $poll_id);
+- src/Poll.php:43 — $this->cache->delete('polls_');
+- src/Poll.php:49 — * @param int   $poll_id
+- src/Poll.php:55 — public function update(array $set, int $poll_id)
+- src/Poll.php:57 — $sql = "UPDATE polls SET /* columns */ WHERE pid = :pid";
+- src/Poll.php:58 — $result = $this->db->perform($sql, array_merge($set, ['pid' => $poll_id]));
+- src/Poll.php:59 — $this->cache->delete('poll_' . $poll_id);
+- src/Poll.php:60 — $this->cache->delete('polls_');
+- src/Poll.php:75 — $sql = "INSERT INTO polls (/* columns */) VALUES (/* values */)";
+- src/Poll.php:76 — $poll_id = $this->db->perform($sql, $values);
+- src/Poll.php:78 — $this->cache->delete('polls_');
+- src/Poll.php:80 — return $poll_id;
+- src/Poll.php:85 — * @param int $poll_id
+- src/Poll.php:91 — public function get(int $poll_id)
+- src/Poll.php:93 — $poll = $this->cache->get('poll_' . $poll_id);
+- src/Poll.php:94 — if ($poll === false || is_null($poll)) {
+- src/Poll.php:95 — $poll = $this->fluent->from('polls')
+- src/Poll.php:96 — ->where('pid = ?', $poll_id)
+- src/Poll.php:98 — $this->cache->set('polls_' . $poll_id, $poll, 86400);
+- src/Poll.php:101 — return $poll;
+- src/Poll.php:114 — $polls = $this->cache->get('polls_');
+- src/Poll.php:115 — if ($polls === false || is_null($polls)) {
+- src/Poll.php:116 — $polls = $this->fluent->from('polls')
+- src/Poll.php:120 — if (!empty($polls)) {
+- src/Poll.php:121 — $this->cache->set('polls_', $polls, 86400);
+- src/Poll.php:123 — $this->cache->set('polls_', [], 86400);
+- src/Poll.php:127 — if (!empty($polls) && $limit > 0) {
+- src/Poll.php:128 — return $polls[0];
+- src/Poll.php:131 — return $polls;
+- src/PollVoter.php:12 — * Class PollVoter.
+- src/PollVoter.php:14 — class PollVoter
+- src/PollVoter.php:20 — protected $polls_class;
+- src/PollVoter.php:24 — * PollVoter constructor.
+- src/PollVoter.php:29 — * @param Poll     $polls_class
+- src/PollVoter.php:34 — public function __construct(Cache $cache, Database $fluent, User $users_class, Poll $polls_class, Settings $settings)
+- src/PollVoter.php:41 — $this->polls_class = $polls_class;
+- src/PollVoter.php:51 — $search = $this->fluent->from('poll_voters')
+- src/PollVoter.php:59 — * @param int $poll_id
+- src/PollVoter.php:63 — public function delete(int $poll_id)
+- src/PollVoter.php:65 — $sql = "DELETE FROM poll_voters WHERE poll_id = :poll_id";
+- src/PollVoter.php:66 — $this->db->perform($sql, ['poll_id' => $poll_id]);
+- src/PollVoter.php:77 — $this->fluent->insertInto('poll_voters', $values)
+- src/PollVoter.php:92 — $sql = "INSERT INTO poll_voters (/* columns */) VALUES (/* values */)";
+- src/PollVoter.php:106 — $this->cache->delete('poll_data_' . $id['id']);
+- src/PollVoter.php:119 — public function get_user_poll(int $userid)
+- src/PollVoter.php:121 — $poll_data = $this->cache->get('poll_data_' . $userid);
+- src/PollVoter.php:122 — if ($poll_data === false || is_null($poll_data)) {
+- src/PollVoter.php:123 — $poll_data = $this->polls_class->get_all(1);
+- src/PollVoter.php:124 — if (!empty($poll_data)) {
+- src/PollVoter.php:125 — $vote_data = $this->fluent->from('poll_voters')
+- src/PollVoter.php:130 — ->where('poll_id = ?', $poll_data['pid'])
+- src/PollVoter.php:134 — $poll_data['user_id'] = $vote_data['user_id'];
+- src/PollVoter.php:135 — $poll_data['vote_date'] = $vote_data['vote_date'];
+- src/PollVoter.php:136 — $poll_data['time'] = TIME_NOW;
+- src/PollVoter.php:139 — $this->cache->set('poll_data_' . $userid, $poll_data, $this->site_config['expires']['poll_data']);
+- src/PollVoter.php:142 — return $poll_data;
+- src/Post.php:13 — * Class Post.
+- src/Post.php:15 — class Post
+- src/Post.php:22 — * Post constructor.
+- src/Post.php:45 — $sql = "INSERT INTO posts (/* columns */) VALUES (/* values */)";
+- src/Post.php:59 — $this->fluent->delete('posts')
+- src/Post.php:73 — return $this->fluent->from('posts')
+- src/Request.php:199 — $result = $this->db->perform($sql, array_merge($set, ['id' => $requestid]));
+- src/Roles.php:25 — const FORUM_MOD = Role::MODERATOR;
+- src/Session.php:42 — $_SESSION[$prefix . $key] = array_merge($current, [$value]);
+- src/Settings.php:44 — $staff_forums = $this->get_staff_forums();
+- src/Settings.php:47 — $forums = $this->get_forum_config();
+- src/Settings.php:50 — $config = array_merge_recursive($env, $staff, $staff_forums, $site_config, $hnrs, $forums, $badwords);
+- src/Settings.php:51 — $config['site']['badwords'] = array_merge($config['badwords'], $config['site']['bad_words']);
+- src/Settings.php:92 — protected function get_staff_forums()
+- src/Settings.php:94 — $staff_forums = $this->cache->get('staff_forums_');
+- src/Settings.php:95 — if ($staff_forums === false || is_null($staff_forums)) {
+- src/Settings.php:96 — $sql = $this->fluent->from('forums')
+- src/Settings.php:104 — $staff_forums['staff_forums'] = 0;
+- src/Settings.php:107 — $staff_forums['staff_forums'][] = $res['id'];
+- src/Settings.php:111 — $this->cache->set('staff_forums_', $staff_forums, 86400);
+- src/Settings.php:114 — return $staff_forums;
+- src/Settings.php:199 — protected function get_forum_config()
+- src/Settings.php:201 — $forum_config = $this->cache->get('forum_config_');
+- src/Settings.php:202 — if ($forum_config === false || is_null($forum_config)) {
+- src/Settings.php:203 — $query = $this->fluent->from('forum_config');
+- src/Settings.php:211 — $forum_config['forum_config'][$key] = $value;
+- src/Settings.php:214 — $this->cache->set('forum_config_', $forum_config, 86400);
+- src/Settings.php:217 — return $forum_config;
+- src/Snatched.php:119 — $result = $this->db->perform($sql, array_merge($set, ['id' => $id]));
+- src/Snatched.php:185 — $snatches = array_merge($snatches, $snatched);
+- src/Topic.php:12 — * Class Topics.
+- src/Topic.php:14 — class Topic
+- src/Topic.php:39 — public function get_forum_id_from_topic_id(int $topic_id)
+- src/Topic.php:41 — $forum_id = $this->cache->get('forum_id_from_topic_id_' . $topic_id);
+- src/Topic.php:42 — if ($forum_id === false || is_null($forum_id)) {
+- src/Topic.php:43 — $forum_id = $this->fluent->from('topics')
+- src/Topic.php:45 — ->select('forum_id')
+- src/Topic.php:47 — ->fetch('forum_id');
+- src/Topic.php:49 — $this->cache->set('forum_id_from_topic_id_' . $topic_id, $forum_id, 86400);
+- src/Topic.php:52 — return $forum_id;
+- src/Topic.php:63 — return $this->fluent->from('topics')
+- src/Torrent.php:60 — ->prepare('DELETE likes, comments
+- src/Torrent.php:61 — FROM likes
+- src/Torrent.php:62 — LEFT JOIN comments ON comments.id=likes.comment_id
+- src/Torrent.php:305 — $query = $this->db->perform($sql, array_merge($set, ['id' => $tid]));
+- src/Torrent.php:381 — $this->db->perform($sql, array_merge($set, ['id' => $owner]));
+- src/Torrent.php:987 — require_once INCL_DIR . 'function_bbcode.php';
+- src/Upcoming.php:51 — $this->db->perform($sql, array_merge($set, ['id' => $id]));
+- src/Upcoming.php:152 — $result = $this->db->perform($sql, array_merge($set, ['id' => $upcomingid]));
+- src/User.php:46 — protected $userblock;
+- src/User.php:57 — * @param Userblock          $userblock
+- src/User.php:62 — public function __construct(Cache $cache, Database $fluent, Auth $auth, Session $session, Settings $settings, Usersachiev $achieve, Userb...
+- src/User.php:72 — $this->userblock = $userblock;
+- src/User.php:182 — $user['blocks'] = $this->userblock->get($userid);
+- src/User.php:312 — $this->userblock->add(['userid' => $userid]);
+- src/User.php:351 — $result = $this->db->perform($sql, array_merge($set, ['id' => $userid]));
+- src/User.php:529 — * @param array $post
+- src/User.php:542 — public function reset_password(array $post, bool $return)
+- src/User.php:545 — $this->auth->resetPassword($post['selector'], $post['token'], $post['password']);
+- src/User.php:707 — return array_merge($group1, $group2, $group3);
+- src/User.php:743 — 'poll_votes_' . $userid,
+- src/Userblock.php:12 — * Class Userblock.
+- src/Userblock.php:14 — class Userblock
+- src/Userblock.php:22 — * Userblock constructor.
+- src/Userblock.php:46 — $blocks = $this->cache->get('userblocks_' . $userid);
+- src/Userblock.php:47 — if ($blocks === false || is_null($blocks)) {
+- src/Userblock.php:48 — while (!$blocks) {
+- src/Userblock.php:49 — $blocks = $this->fluent->from('user_blocks')
+- src/Userblock.php:56 — if (!$blocks) {
+- src/Userblock.php:61 — $this->cache->set('userblocks_' . $userid, $blocks, $this->site_config['expires']['u_status']);
+- src/Userblock.php:67 — return $blocks;
+- src/Userblock.php:78 — return $this->fluent->insertInto('user_blocks')
+- src/Usersachiev.php:88 — $this->db->perform($sql, array_merge($set, ['userid' => $userid]));
+- src/Wiki.php:70 — $this->db->perform($sql, array_merge($update, ['id' => $id]));
+- templates/1/css/breadcrumbs.css:35 — display: block;
+- templates/1/css/breadcrumbs.css:42 — display: block;
+- templates/1/css/breadcrumbs.css:58 — display: block;
+- templates/1/css/cards.css:66 — display: inline-block;
+- templates/1/css/default.css:66 — display:   inline-block;
+- templates/1/css/default.css:236 — display:      block;
+- templates/1/css/default.css:352 — .sticky {
+- templates/1/css/default.css:406 — display: block;
+- templates/1/css/default.css:534 — display:       inline-block;
+- templates/1/css/default.css:568 — display:          inline-block;
+- templates/1/css/default.css:917 — display:        block;
+- templates/1/css/default.css:950 — display: block !important;
+- templates/1/css/default.css:1193 — display:    inline-block;
+- templates/1/css/default.css:1217 — display:    inline-block;
+- templates/1/css/default.css:1507 — display: inline-block;
+- templates/1/css/default.css:1521 — display: inline-block;
+- templates/1/css/default.css:1590 — display: block;
+- templates/1/css/default.css:1610 — display: inline-block;
+- templates/1/css/fontello.css:30 — display:                 inline-block;
+- templates/1/css/fontello.css:189 — .icon-clock:before {
+- templates/1/css/iCarousel.css:33 — display: block;
+- templates/1/css/navbar.css:77 — display: block;
+- templates/1/css/navbar.css:120 — display: block;
+- templates/1/css/navbar.css:142 — display: block;
+- templates/1/css/navbar.css:199 — display: inline-block;
+- templates/1/css/navbar.css:211 — display: block;
+- templates/1/css/navbar.css:220 — display: block;
+- templates/1/css/navbar.css:311 — display: block;
+- templates/1/default.scss:34 — $colors: mergeColorMaps($colors, $custom-colors);
+- templates/1/files.php:93 — case 'scroll_to_poll_js':
+- templates/1/files.php:94 — return "{$site_config['paths']['baseurl']}/js/1/scroll_to_poll_01088f95.js";
+- templates/1/files.php:103 — case 'forums_js':
+- templates/1/files.php:104 — return "{$site_config['paths']['baseurl']}/js/1/forums_b87eec63.js";
+- templates/1/files.php:105 — case 'pollsmanager_js':
+- templates/1/files.php:106 — return "{$site_config['paths']['baseurl']}/js/1/pollsmanager_5eaab6bb.js";
+- templates/1/navbar.php:23 — global $container, $CURUSER, $site_config, $BLOCKS;
+- templates/1/navbar.php:44 — </li>" . ($BLOCKS['bluray_com_api_on'] || $BLOCKS['imdb_api_on'] || $BLOCKS['tvmaze_api_on'] ? "
+- templates/1/navbar.php:47 — <ul class='ddFade ddFadeFast'>" . ($BLOCKS['bluray_com_api_on'] ? "
+- templates/1/navbar.php:49 — <li class='hide-mobile'><a href='{$site_config['paths']['baseurl']}/movies.php?list=bluray'>" . _('Bluray Releases') . '</a></li>' : '') ...
+- templates/1/navbar.php:56 — <li class='hide-mobile'><a href='{$site_config['paths']['baseurl']}/movies.php?list=upcoming'>" . _('Upcoming') . '</a></li>' : '') . ($B...
+- templates/1/navbar.php:60 — <li class='hide-mobile'><a href='{$site_config['paths']['baseurl']}/movies.php?list=tv'>" . _('TV Airing') . '</a></li>' : '') . ($BLOCKS...
+- templates/1/navbar.php:89 — <li class='hide-mobile'><a href='{$site_config['paths']['baseurl']}/mybonus.php'>" . _('Karma Store') . "</a></li>
+- templates/1/navbar.php:93 — <li class='hide-mobile'><a href='{$site_config['paths']['baseurl']}/topten.php'>" . _('Statistics') . '</a></li>' . ($BLOCKS['torrentfrea...
+- templates/1/navbar.php:120 — <li id='forum_links' class='clickable'>
+- templates/1/navbar.php:121 — <a href='#' class='has-text-weight-bold'>" . _('Forums') . "</a>
+- templates/1/navbar.php:124 — <a href='{$site_config['paths']['baseurl']}/forums.php'>" . _('Forums') . "</a>
+- templates/1/navbar.php:127 — <a href='{$site_config['paths']['baseurl']}/forums.php?action=view_unread_posts'>" . _('Unread Posts') . "</a>
+- templates/1/navbar.php:139 — </li>' : '') . ($BLOCKS['global_staff_menu_on'] ? $staff_links : (has_access($CURUSER['class'], UC_STAFF, 'coder') ? "
+- templates/1/navbar.php:181 — global $BLOCKS, $CURUSER, $container, $site_config, $db;
+- templates/1/navbar.php:186 — if ($BLOCKS['global_staff_menu_on'] && has_access($CURUSER['class'], UC_STAFF, 'coder')) {
+- templates/1/template.php:43 — require_once INCL_DIR . 'function_bbcode.php';
+- templates/1/template.php:58 — $stdhead = array_merge_recursive($stdhead, $tmp);
+- templates/1/template.php:79 — global $BLOCKS;
+- templates/1/template.php:120 — if ($curuser['blocks']['global_stdhead'] & class_blocks_stdhead::STDHEAD_REPORTS && $BLOCKS['global_staff_report_on']) {
+- templates/1/template.php:121 — require_once BLOCK_DIR . 'global/report.php';
+- templates/1/template.php:123 — if ($curuser['blocks']['global_stdhead'] & class_blocks_stdhead::STDHEAD_UPLOADAPP && $BLOCKS['global_staff_uploadapp_on']) {
+- templates/1/template.php:124 — require_once BLOCK_DIR . 'global/uploadapp.php';
+- templates/1/template.php:126 — if ($curuser['blocks']['global_stdhead'] & class_blocks_stdhead::STDHEAD_HAPPYHOUR && $BLOCKS['global_happyhour_on']) {
+- templates/1/template.php:127 — require_once BLOCK_DIR . 'global/happyhour.php';
+- templates/1/template.php:129 — if ($curuser['blocks']['global_stdhead'] & class_blocks_stdhead::STDHEAD_STAFF_MESSAGE && $BLOCKS['global_staff_warn_on']) {
+- templates/1/template.php:130 — require_once BLOCK_DIR . 'global/staffmessages.php';
+- templates/1/template.php:132 — if ($curuser['blocks']['global_stdhead'] & class_blocks_stdhead::STDHEAD_NEWPM && $BLOCKS['global_message_on']) {
+- templates/1/template.php:133 — require_once BLOCK_DIR . 'global/message.php';
+- templates/1/template.php:135 — if ($curuser['blocks']['global_stdhead'] & class_blocks_stdhead::STDHEAD_DEMOTION && $BLOCKS['global_demotion_on']) {
+- templates/1/template.php:136 — require_once BLOCK_DIR . 'global/demotion.php';
+- templates/1/template.php:138 — if ($curuser['blocks']['global_stdhead'] & class_blocks_stdhead::STDHEAD_FREELEECH && $BLOCKS['global_freeleech_on']) {
+- templates/1/template.php:139 — require_once BLOCK_DIR . 'global/freeleech.php';
+- templates/1/template.php:141 — if ($curuser['blocks']['global_stdhead'] & class_blocks_stdhead::STDHEAD_CRAZYHOUR && $BLOCKS['global_crazyhour_on']) {
+- templates/1/template.php:142 — require_once BLOCK_DIR . 'global/crazyhour.php';
+- templates/1/template.php:144 — if ($curuser['blocks']['global_stdhead'] & class_blocks_stdhead::STDHEAD_BUG_MESSAGE && $BLOCKS['global_bug_message_on']) {
+- templates/1/template.php:145 — require_once BLOCK_DIR . 'global/bugmessages.php';
+- templates/1/template.php:147 — if ($curuser['blocks']['global_stdhead'] & class_blocks_stdhead::STDHEAD_FREELEECH_CONTRIBUTION && $BLOCKS['global_freeleech_contribution...
+- templates/1/template.php:148 — require_once BLOCK_DIR . 'global/freeleech_contribution.php';
+- templates/1/template.php:150 — require_once BLOCK_DIR . 'global/lottery.php';
+- templates/1/template.php:167 — if ($BLOCKS['global_flash_messages_on']) {
+- templates/1/template.php:204 — require_once INCL_DIR . 'function_bbcode.php';
+- templates/1/template.php:431 — $StatusBar = $clock = '';
+- templates/1/template.php:435 — <div id='clock' class='pointer left10 has-text-info tooltipper' onclick='hide_by_id()' title='" . _('Click to show the background image')...
+- templates/1/template.php:503 — <li class='tooltipper has-text-info' title='" . _('Forums') . "'>
+- templates/1/template.php:504 — <a href='{$site_config['paths']['baseurl']}/forums.php'>
+- templates/1/template.php:513 — <li class='tooltipper has-text-info' title='" . _('My Blocks') . "'>
+- templates/1/template.php:514 — <a href='{$site_config['paths']['baseurl']}/user_blocks.php'>
+- tools/batch-38-apply.php:33 — // 1) Remove \Envms\FluentPDO\Exception in docblocks → \PDOException
+- tools/batch-40-apply.php:7 — * - Conservative fixes only (imports/docblocks/$fluent hints + a few admin patterns).
+- tools/batch-40-sweep.php:104 — // B) Replace FluentPDO exception in docblocks
+- tools/batch-40_3-sweep.php:13 — *     * replace FluentPDO exception in docblocks
+- tools/batch-40_3-sweep.php:104 — // B) Replace FluentPDO exception in docblocks
+- tools/batch-40_5-sweep.php:101 — // B) Replace FluentPDO exception in docblocks
+- tools/batch-43_1-apply.php:44 — // 3) Ensure $db is defined; if not, insert after header / declare / use block
+- tools/batch-43_3-admin-fix.php:70 — // Try to place after "use ..." block if any; else after declare
+- tools/batch-43_6-admin-fix-from-report.php:148 — // Insert after declare/use block
+- tools/batch-43_7-admin-rewrite.php:101 — // 3) find runtime_safe include after use-block
+- tools/batch-43_7B-admin-autofix.php:55 — // Vi kræver at hele mønstret står på én linje, så vi ikke splitter noget komplekst.
+- tools/batch-43_7B-admin-autofix.php:65 — // Split globals
+- tools/batch-43_7B-admin-autofix.php:67 — $parts = preg_split('/\s*,\s*/', $raw);
+- tools/check_platform.php:11 — * - Exits with 0 (soft) to avoid blocking PRs
+- tools/check_platform.php:75 — echo "  - If specific packages block 8.3, upgrade or replace them.\n";
+- tools/fluentpdo-refactor-safe.php:43 — '$1$db->perform($sql, array_merge($3, [\'$4\' => $5]));',
+- tools/scan_php83_blockers.php:5 — * Scan composer.lock for packages that block PHP 8.3.
+- tools/scan_php83_blockers.php:6 — * Soft exit (0) so PRs are never blocked.
+- tools/scan_php83_blockers.php:10 — $lockPath = __DIR__ . '/../composer.lock';
+- tools/scan_php83_blockers.php:11 — if (!file_exists($lockPath)) {
+- tools/scan_php83_blockers.php:12 — echo "composer.lock not found.\n";
+- tools/scan_php83_blockers.php:15 — $lock = json_decode(file_get_contents($lockPath), true);
+- tools/scan_php83_blockers.php:16 — if (!$lock) {
+- tools/scan_php83_blockers.php:17 — echo "Failed to parse composer.lock\n";
+- tools/scan_php83_blockers.php:21 — $packages = array_merge($lock['packages'] ?? [], $lock['packages-dev'] ?? []);
+- tools/scan_php83_blockers.php:27 — $blockers = [
+- tools/scan_php83_blockers.php:33 — echo "== PHP 8.3 blockers (heuristic) ==\n\n";
+- tools/scan_php83_blockers.php:35 — foreach ($blockers as $name => $note) {
+- tools/scan_php83_blockers.php:42 — echo "No known blockers found.\n";
+- tools/scan_php83_blockers.php:47 — echo "- Re-run Batch 32 locked diagnostics to verify.\n";
+
+### UI
+- CHANGELOG.md:161 — update: style view_message.php view_topic.php
+- CHANGELOG.md:385 — fix: topic/post count on main forum page not matching topic/post count on view_forum.php
+- CHANGELOG.md:554 — fix: check if empty view_topic.php
+- CHANGELOG.md:734 — update: quick reply for everyone view_topic.php
+- CHANGELOG.md:887 — fix: cleaning null view_topic.php
+- CHANGELOG.md:1700 — fix: show bbcode not getting set properly in edit_topic.php
+- CHANGELOG.md:1847 — fix: missing name in form new_topic.php
+- CHANGELOG.md:1853 — fix: error when there are topics but no posts view_forum.php
+- CHANGELOG.md:1858 — fix: values should be an array of arrays function_autopost.php
+- CHANGELOG.md:1972 — fix: db insert Post.php
+- CHANGELOG.md:2236 — fix: direct link to post view_topic.php
+- CHANGELOG.md:2524 — fix: ambiguous 'status' view_forum.php
+- CHANGELOG.md:2526 — fix: missing space in query view_topic.php
+- FORUMS_REBUILD.md:11 — | forums/clear_unread_post.php | d3065cf60691c9f4d7d4c3c19267c8d378e3c4e3 | 1079 | missing_bootstrap, missing_strict_types |
+- FORUMS_REBUILD.md:12 — | forums/delete_post.php | 04c79440a244c5a0a414b5616947b62d49d32e0f | 4635 | unclosed_brace, dangling_quote, missing_bootstrap, missing_s...
+- FORUMS_REBUILD.md:15 — | forums/edit_post.php | e0ac92f833128fca91b6239107e0f00bd5b074be | 9188 | contains_sqlesc, unclosed_brace, likely_update, missing_bootst...
+- FORUMS_REBUILD.md:21 — | forums/new_topic.php | d3a5f8c4be9d71aba65b0ebf52c626f0c5944d82 | 7653 | dangling_quote, likely_update, likely_insert, missing_bootstra...
+- FORUMS_REBUILD.md:28 — | forums/stafflock_post.php | 146a13d35af675f22224e3458a9c052e1d5fab86 | 1107 | dangling_quote, likely_select, likely_update |
+- FORUMS_REBUILD.md:30 — | forums/undelete_post.php | 368c090ab1d930f7184552e28361d0a04da1114a | 3660 | dangling_quote, likely_update, missing_bootstrap, missing_...
+- FORUMS_REBUILD.md:31 — | forums/view_forum.php | 5dfe1030717e4eb043baecbd5e72d3434f40feaf | 9201 | unclosed_brace, dangling_quote, likely_insert, missing_bootst...
+- FORUMS_REBUILD.md:34 — | forums/view_topic.php | b438bf4573aef19997906f0fab95dd9c3b0034eb | 35632 | unclosed_brace, dangling_quote, likely_update, likely_insert...
+- FORUMS_REBUILD.md:40 — - forums/clear_unread_post.php
+- FORUMS_REBUILD.md:41 — - forums/delete_post.php
+- FORUMS_REBUILD.md:44 — - forums/edit_post.php
+- FORUMS_REBUILD.md:50 — - forums/new_topic.php
+- FORUMS_REBUILD.md:57 — - forums/stafflock_post.php
+- FORUMS_REBUILD.md:59 — - forums/undelete_post.php
+- FORUMS_REBUILD.md:60 — - forums/view_forum.php
+- FORUMS_REBUILD.md:63 — - forums/view_topic.php
+- admin/modtask.php:14 — require_once INCL_DIR . 'function_autopost.php';
+- forums/clear_unread_post.php:14 — // The original file has been quarantined to forums/_quarantine/clear_unread_post.php.orig
+- forums/clear_unread_post.php:18 — echo "Reference: forums/_quarantine/clear_unread_post.php.orig\n";
+- forums/delete_post.php:14 — // The original file has been quarantined to forums/_quarantine/delete_post.php.orig
+- forums/delete_post.php:18 — echo "Reference: forums/_quarantine/delete_post.php.orig\n";
+- forums/edit_post.php:14 — // The original file has been quarantined to forums/_quarantine/edit_post.php.orig
+- forums/edit_post.php:18 — echo "Reference: forums/_quarantine/edit_post.php.orig\n";
+- forums/new_topic.php:14 — // The original file has been quarantined to forums/_quarantine/new_topic.php.orig
+- forums/new_topic.php:18 — echo "Reference: forums/_quarantine/new_topic.php.orig\n";
+- forums/stafflock_post.php:14 — // The original file has been quarantined to forums/_quarantine/stafflock_post.php.orig
+- forums/stafflock_post.php:18 — echo "Reference: forums/_quarantine/stafflock_post.php.orig\n";
+- forums/undelete_post.php:14 — // The original file has been quarantined to forums/_quarantine/undelete_post.php.orig
+- forums/undelete_post.php:18 — echo "Reference: forums/_quarantine/undelete_post.php.orig\n";
+- forums/view_forum.php:14 — // The original file has been quarantined to forums/_quarantine/view_forum.php.orig
+- forums/view_forum.php:18 — echo "Reference: forums/_quarantine/view_forum.php.orig\n";
+- forums/view_topic.php:14 — // The original file has been quarantined to forums/_quarantine/view_topic.php.orig
+- forums/view_topic.php:18 — echo "Reference: forums/_quarantine/view_topic.php.orig\n";
+- include/class/class_check.php:18 — require_once INCL_DIR . 'function_autopost.php';
+- migration-report.md:244 — - `src/Forum.php`: standardized strict typing and bootstrap order.
+- migration-report.md:260 — - `src/Post.php`: standardized strict typing and bootstrap order.
+- migration-report.md:271 — - `src/Topic.php`: standardized strict typing and bootstrap order.
+- migration-report.md:336 — - `forums/stafflock_post.php`: switched to `bootstrap_pdo.php`, added strict typing, and migrated from `sql_query`/`sqlesc` to `$db->run`...
+- migration-report.md:340 — $ rg "mysqli_|sql_query\\(|sqlesc\\(" forums/stafflock_post.php
+- public/ajax/rating.php:28 — $ref = isset($_POST['ref']) ? $_POST['ref'] : ($what === 'torrent' ? 'details.php' : 'forums/view_topic.php');
+- public/forums.php:290 — require_once FORUM_DIR . 'view_forum.php';
+- public/forums.php:295 — require_once FORUM_DIR . 'view_topic.php';
+- public/forums.php:318 — require_once FORUM_DIR . 'delete_post.php';
+- public/forums.php:322 — require_once FORUM_DIR . 'undelete_post.php';
+- public/forums.php:330 — require_once FORUM_DIR . 'new_topic.php';
+- public/forums.php:374 — require_once FORUM_DIR . 'clear_unread_post.php';
+- public/forums.php:378 — require_once FORUM_DIR . 'edit_post.php';
+- public/forums.php:401 — require_once FORUM_DIR . 'stafflock_post.php';
+- refactor-safe-log.txt:1 — Refactored safe: /home/runner/work/Pu-239/Pu-239/forums/delete_post.php
+- refactor-safe-log.txt:2 — Refactored safe: /home/runner/work/Pu-239/Pu-239/forums/new_topic.php
+- refactor-safe-log.txt:4 — Refactored safe: /home/runner/work/Pu-239/Pu-239/forums/undelete_post.php
+- refactor-safe-log.txt:6 — Refactored safe: /home/runner/work/Pu-239/Pu-239/forums/view_topic.php
+- refactor-safe-log.txt:7 — Refactored safe: /home/runner/work/Pu-239/Pu-239/forums/view_forum.php
+- refactor-safe-log.txt:42 — Refactored safe: /home/runner/work/Pu-239/Pu-239/src/Forum.php
+- refactor-safe-log.txt:45 — Refactored safe: /home/runner/work/Pu-239/Pu-239/src/Post.php
+- refactor-safe-log.txt:103 — Refactored safe: /home/runner/work/Pu-239/Pu-239/include/function_autopost.php
+
+### PERM
+- CHANGELOG.md:146 — add: FORUM_MOD role with minimal edit/delete permissions
+- CHANGELOG.md:1407 — add: index on forums.min_class_read
+- CHANGELOG.md:1894 — update: update forum_config min_delete_view_class when adding/removing classes
+- admin/forum_manage.php:27 — $min_class_read = isset($_POST['min_class_read']) ? (int) $_POST['min_class_read'] : 0;
+- admin/forum_manage.php:28 — $min_class_write = isset($_POST['min_class_write']) ? (int) $_POST['min_class_write'] : 0;
+- admin/forum_manage.php:52 — $forum_class = $container->get(Forum::class);
+- admin/forum_manage.php:59 — $forum_class->delete($id);
+- admin/forum_manage.php:75 — 'min_class_read' => $min_class_read,
+- admin/forum_manage.php:76 — 'min_class_write' => $min_class_write,
+- admin/forum_manage.php:79 — $forum_class->update($set, $id);
+- admin/forum_manage.php:94 — 'min_class_read' => $min_class_read,
+- admin/forum_manage.php:95 — 'min_class_write' => $min_class_write,
+- admin/forum_manage.php:99 — $forum_class->add($values);
+- admin/forum_manage.php:105 — $forum = $forum_class->get_forum($id);
+- admin/forum_manage.php:158 — <select name='min_class_read'>";
+- admin/forum_manage.php:161 — <option class='body' value='{$i}' " . ($forum['min_class_read'] === $i ? 'selected' : '') . '>' . get_user_class_name((int) $i) . '</opti...
+- admin/forum_manage.php:170 — <select name='min_class_write'>";
+- admin/forum_manage.php:173 — <option class='body' value='{$i}' " . ($forum['min_class_write'] === $i ? 'selected' : '') . '>' . get_user_class_name((int) $i) . '</opt...
+- admin/forum_manage.php:195 — $count = $forum_class->get_count();
+- admin/forum_manage.php:250 — <td>' . get_user_class_name((int) $row['min_class_read']) . '</td>
+- admin/forum_manage.php:251 — <td>' . get_user_class_name((int) $row['min_class_write']) . '</td>
+- admin/forum_manage.php:315 — <select name="min_class_read">';
+- admin/forum_manage.php:327 — <select name="min_class_write">';
+- admin/usersearch.php:792 — WHERE p.user_id=' . sqlesc($user['id']) . ' AND f.min_class_read <= ' . sqlesc($CURUSER['class'])) or sqlerr(__FILE__, __LINE__);
+- blocks/index/forum_posts.php:28 — f.min_class_read, f.name,
+- blocks/index/forum_posts.php:33 — WHERE f.min_class_read <= :class
+- blocks/index/forum_posts.php:108 — $staffimg = $topicarr['min_class_read'] >= UC_STAFF ? "<img src='" . $site_config['paths']['images_baseurl'] . "staff.png' alt='Staff for...
+- database/sql_updates.php:2077 — 'query' => 'ALTER TABLE `forums` ADD INDEX `min_class_read`(`min_class_read`)',
+- database/sql_updates.php:2270 — 'query' => "INSERT INTO `site_config` VALUES (1,'site','max_torrent_size','int','3145728','The maximum torrent size allowed by this track...
+- include/function_users.php:671 — 'forum_last_post_' . $post_id . '_' . $uclass,
+- public/forums.php:39 — if (!$site_config['forum_config']['online'] && !has_access($user['class'], UC_STAFF, 'coder')) {
+- public/forums.php:207 — <div id="staff_tools" ' . ((isset($_POST['poll_question']) && $_POST['poll_question'] !== '') ? '' : 'style="display:none"') . '>' . main...
+- public/forums.php:410 — ->select('ovf.min_class_view AS over_forum_min_class_view')
+- public/forums.php:420 — ->where('f.min_class_read <= ?', $user['class'])
+- public/forums.php:452 — <a href='{$_SERVER['PHP_SELF']}?action=section_view&amp;forum_id={$arr_forums['over_forum_id']}' title='" . format_comment($arr_forums['o...
+- public/forums.php:463 — $last_post_arr = $cache->get('forum_last_post_' . $forum_id . '_' . $user['class']);
+- public/forums.php:478 — } elseif ($user['class'] < $site_config['forum_config']['min_delete_view_class']) {
+- public/forums.php:487 — $cache->set('forum_last_post_' . $forum_id . '_' . $user['class'], $last_post_arr, $site_config['expires']['last_post']);
+- public/forums.php:514 — $keys['child_boards'] = 'child_boards_' . $arr_forums['real_forum_id'] . '_' . $user['class'];
+- public/forums.php:523 — ->where('min_class_read <= ?', $user['class'])
+- public/forums.php:527 — $child_boards_cache[] = '<a href="' . $site_config['paths']['baseurl'] . '/forums.php?action=view_forum&amp;forum_id=' . (int) $arr['id']...
+- public/forums.php:541 — ' . bubble('<a href="?action=view_forum&amp;forum_id=' . $arr_forums['real_forum_id'] . '">' . $forum_name . '</a>', $forum_description) ...
+- public/forums.php:672 — ->select('forums.min_class_read')
+- public/forums.php:693 — if ($user['class'] >= $arr['min_class_read']) {
+- public/index.php:131 — if (in_array('forum_posts', $available_columns) && $user['blocks']['index_page'] & class_blocks_index::FORUMPOSTS && $BLOCKS['forum_posts...
+- public/reputation.php:51 — 'SELECT posts.topic_id AS locale, posts.user_id AS userid, forums.min_class_read, posts.anonymous as anon,
+- public/userdetails.php:612 — <input type='checkbox' name='role_forum_mod' value='1' " . ($user['roles_mask'] & Roles::FORUM_MOD ? 'checked' : '') . " class='right5'>"...
+- public/userdetails.php:1049 — <input name='forum_post' value='yes' type='radio' " . ($user['forum_post'] === 'yes' ? 'checked' : '') . " class='right5'>" . _('Yes') . "
+- public/userdetails.php:1050 — <input name='forum_post' value='no' type='radio' " . ($user['forum_post'] === 'no' ? 'checked' : '') . " class='left20 right5'>" . _('No ...
+- public/userhistory.php:40 — $where_is = 'p.user_id=' . sqlesc($userid) . ' AND f.min_class_read <= ' . sqlesc($curuser['class']);
+- src/Settings.php:99 — ->where('min_class_read >= ?', UC_STAFF)
+- templates/1/navbar.php:120 — <li id='forum_links' class='clickable'>
+
+### NOTIFY
+- .github/workflows/composer-modernization.yml:54 — if: ${{ github.event_name == 'workflow_dispatch' && inputs.update_lock == 'true' }}
+- CHANGELOG.md:155 — add: notify user to Cooker
+- CHANGELOG.md:1143 — remove: event_stuffs
+- CHANGELOG.md:1684 — update: rewrite as notify owner of pending deletion deathrow.php
+- CHANGELOG.md:2334 — rename: pm_system messages
+- CHANGELOG.md:2638 — fix: format_username in pm_system
+- admin/adduser.php:78 — <div id='emailcheck'></div>" . ($site_config['signup']['email_confirm'] ? "
+- admin/block.settings.php:81 — 'userdetails_showpm_on',
+- admin/block.settings.php:538 — <div class='slideThree'><#userdetails_showpm_on#></div>
+- admin/deathrow.php:64 — function notify_owner(array $tids)
+- admin/deathrow.php:108 — $deleted = notify_owner($_POST['remove']);
+- admin/deathrow.php:273 — <input type='submit' name='submit' class='button is-small' value='" . _(' Notify') . "'>
+- admin/hnrwarn.php:45 — // Clear HnR warn and reason, notify users
+- admin/leechwarn.php:43 — // Clear leechwarn + reason and notify users
+- admin/mass_bonus_for_members.php:134 — // Notify
+- admin/mass_bonus_for_members.php:309 — $pm_drop_down = '
+- admin/mass_bonus_for_members.php:366 — <div id="div_pm" class="select_me"><br>' . $pm_drop_down . '</div>
+- admin/mega_search.php:145 — $email_search = $_POST['msg_to_analyze'];
+- admin/mega_search.php:147 — $email_to_test = [];
+- admin/mega_search.php:148 — $number_of_matches = preg_match_all($regex, $email_search, $email_to_test);
+- admin/mega_search.php:152 — foreach ($email_to_test[0] as $tested_email) {
+- admin/mega_search.php:231 — $email_to_test_like = $users = [];
+- admin/mega_search.php:232 — $number_of_matches_like = preg_match_all($regex, $email_search, $email_to_test_like);
+- admin/mega_search.php:235 — foreach ($email_to_test_like[0] as $tested_email_like) {
+- admin/mega_search.php:241 — ->where('email LIKE ?', "%{$tested_email_like}%");
+- admin/mega_search.php:246 — $email = $tested_email_like;
+- admin/mega_search.php:247 — $similar_emails .= '<tr><td><h1>' . _fe('Emails found using: {0}', $tested_email_like) . '</h1>';
+- admin/usersearch.php:37 — $HTMLOUT = $q1 = $comment_is = $comments_exc = $email_is = '';
+- admin/usersearch.php:391 — $email_is .= (!empty($email_is) ? ' OR ' : '') . 'u.email =' . sqlesc($email);
+- admin/usersearch.php:400 — $email_is .= (!empty($email_is) ? ' OR ' : '') . 'u.email LIKE ' . sqlesc($sql_email);
+- admin/usersearch.php:403 — $where_is .= $email_is . ')';
+- bin/uglify.php:242 — SCRIPTS_DIR . 'cooker_notify.js',
+- bin/uglify.php:243 — SCRIPTS_DIR . 'offer_notify.js',
+- bin/uglify.php:245 — SCRIPTS_DIR . 'request_notify.js',
+- blocks/index/cooker.php:74 — <div data-id='{$recipe['id']}' data-notified='{$recipe['notify']}' class='cooker_notify tooltipper' title='" . ($recipe['notify'] === 1 ?...
+- blocks/index/cooker.php:75 — <span id='notify_{$recipe['id']}'>" . ($recipe['notify'] === 1 ? "<i class='icon-mail icon has-text-success is-marginless' aria-hidden='t...
+- blocks/index/offers.php:82 — <div data-id='{$offer['id']}' data-notified='{$offer['notify']}' class='offer_notify tooltipper' title='" . ($offer['notify'] === 1 ? _('...
+- blocks/index/offers.php:83 — <span id='notify_{$offer['id']}'>" . ($offer['notify'] === 1 ? "<i class='icon-mail icon has-text-success is-marginless' aria-hidden='tru...
+- blocks/index/requests.php:78 — <div data-id='{$request['id']}' data-notified='{$request['notify']}' class='request_notify tooltipper' title='" . ($request['notify'] ===...
+- blocks/index/requests.php:79 — <span id='notify_{$request['id']}'>" . ($request['notify'] === 1 ? "<i class='icon-mail icon has-text-success is-marginless' aria-hidden=...
+- cache/block_settings_cache.php:81 — 'userdetails_showpm_on' => 1,
+- chat/js/chat.js:846 — var pm_count = window.parent.document.getElementById('pm_count');
+- chat/js/chat.js:853 — if (pm_count) {
+- chat/js/chat.js:854 — pm_count.textContent = '';
+- chat/js/chat.js:862 — if (pm_count) {
+- chat/js/chat.js:863 — pm_count.textContent = 'Unread PM\'s (' + pmCount + ')';
+- config/define.php:19 — define('PM_DIR', ROOT_DIR . 'messages' . DIRECTORY_SEPARATOR);
+- database/sql_updates.php:172 — 'query' => 'ALTER TABLE `users` DROP COLUMN `show_pm_avatar`',
+- database/sql_updates.php:193 — 'query' => 'ALTER TABLE `users` DROP COLUMN `pm_on_delete`',
+- database/sql_updates.php:1605 — 'query' => 'ALTER TABLE `deathrow` DROP COLUMN `notify`',
+- database/sql_updates.php:2270 — 'query' => "INSERT INTO `site_config` VALUES (1,'site','max_torrent_size','int','3145728','The maximum torrent size allowed by this track...
+- database/sql_updates.php:2506 — KEY `email_expires` (`email`,`expires`),
+- database/sql_updates.php:3124 — 'info' => 'Add notify',
+- database/sql_updates.php:3126 — 'query' => 'CREATE TABLE `notify` (
+- database/sql_updates.php:3134 — CONSTRAINT `notify_ibfk_1` FOREIGN KEY (`userid`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+- database/sql_updates.php:3135 — CONSTRAINT `notify_ibfk_2` FOREIGN KEY (`upcomingid`) REFERENCES `upcoming` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+- database/sql_updates.php:4238 — 'query' => 'RENAME TABLE `notify` TO `upcoming_notify`',
+- database/sql_updates.php:4243 — 'info' => 'Create table request_notify',
+- database/sql_updates.php:4245 — 'query' => "CREATE TABLE `request_notify` (
+- database/sql_updates.php:4253 — CONSTRAINT `request_notify_ibfk_1` FOREIGN KEY (`userid`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+- database/sql_updates.php:4254 — CONSTRAINT `request_notify_ibfk_2` FOREIGN KEY (`requestid`) REFERENCES `requests` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+- database/sql_updates.php:4260 — 'info' => 'Create table offer_notify',
+- database/sql_updates.php:4262 — 'query' => "CREATE TABLE `offer_notify` (
+- database/sql_updates.php:4270 — CONSTRAINT `offer_notify_ibfk_1` FOREIGN KEY (`userid`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+- database/sql_updates.php:4271 — CONSTRAINT `offer_notify_ibfk_2` FOREIGN KEY (`offerid`) REFERENCES `offers` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+- include/class/class_user_options_2.php:14 — const PM_ON_DELETE = 0x1; // 1 exclude
+- include/class/class_user_options_2.php:18 — const SHOW_PM_AVATAR = 0x10; // 16  exclude
+- messages/delete.php:16 — $message = $messages_class->get_by_id($pm_id);
+- messages/delete.php:19 — stderr(_('Error'), _fe('You MUST read {0}this message{1} before you delete it!', '<a class="is-link" href="' . $site_config['paths']['bas...
+- messages/delete.php:22 — $messages_class->delete($pm_id, $CURUSER['id']);
+- messages/delete.php:28 — $messages_class->update($set, $pm_id);
+- messages/delete.php:34 — $messages_class->update($set, $pm_id);
+- messages/edit_mailboxes.php:37 — $change_pm_number = isset($_POST['change_pm_number']) ? (int) $_POST['change_pm_number'] : 20;
+- messages/edit_mailboxes.php:39 — 'pms_per_page' => $change_pm_number,
+- messages/edit_mailboxes.php:114 — $change_pm_number = isset($_POST['change_pm_number']) ? (int) $_POST['change_pm_number'] : 20;
+- messages/edit_mailboxes.php:116 — if ($_POST['show_pm_avatar'] === 'yes') {
+- messages/edit_mailboxes.php:117 — $setbits |= class_user_options_2::SHOW_PM_AVATAR;
+- messages/edit_mailboxes.php:119 — $clrbits |= class_user_options_2::SHOW_PM_AVATAR;
+- messages/edit_mailboxes.php:149 — 'pms_per_page' => $change_pm_number,
+- messages/edit_mailboxes.php:204 — $per_page_drop_down = '<select name="change_pm_number">';
+- messages/edit_mailboxes.php:283 — $show_pm_avatar = ($CURUSER['opt2'] & class_user_options_2::SHOW_PM_AVATAR) === class_user_options_2::SHOW_PM_AVATAR;
+- messages/edit_mailboxes.php:297 — <select name="show_pm_avatar">
+- messages/edit_mailboxes.php:298 — <option value="yes" ' . ($show_pm_avatar ? 'selected' : '') . '>' . _('show avatars on view mailbox') . '</option>
+- messages/edit_mailboxes.php:299 — <option value="no" ' . (!$show_pm_avatar ? 'selected' : '') . '>' . _("don't show avatars on view mailbox") . '</option>
+- messages/edit_mailboxes.php:319 — <td><input type="checkbox" name="pmnotif" ' . (!empty($CURUSER['notifs']) && strpos($CURUSER['notifs'], '[pm]') !== false ? 'checked' : '...
+- messages/edit_mailboxes.php:323 — <td><input type="checkbox" name="emailnotif" ' . (!empty($CURUSER['notifs']) && strpos($CURUSER['notifs'], '[email]') !== false ? 'checke...
+- messages/forward.php:17 — $message = $messages_class->get_by_id($pm_id);
+- messages/forward.php:33 — <input type="hidden" name="id" value="' . $pm_id . '">
+- messages/forward_pm.php:19 — $message = $messages_class->get_by_id($pm_id);
+- messages/move.php:18 — $result = $messages_class->update($set, $pm_id);
+- messages/move.php:20 — stderr(_('Error'), _('Message could not be moved!') . '<br><a class="is-link" href="' . $site_config['paths']['baseurl'] . '/messages.php...
+- messages/move_or_delete_multi.php:19 — $pm_messages = is_array($_POST['pm']) ? $_POST['pm'] : [$_POST['pm']];
+- messages/move_or_delete_multi.php:26 — foreach ($pm_messages as $pm_message) {
+- messages/move_or_delete_multi.php:27 — $messages_class->update($set, (int) $pm_message);
+- messages/move_or_delete_multi.php:34 — foreach ($pm_messages as $id) {
+- messages/move_or_delete_multi.php:38 — stderr(_('Error'), _('You MUST read this message before you delete it!!!') . ' <a class="is-link" href="' . $site_config['paths']['baseur...
+- messages/new_draft.php:49 — <input type="hidden" name="id" value="' . $pm_id . '">
+- messages/save_or_edit_draft.php:45 — $result = $messages_class->update($update, $pm_id);
+- messages/save_or_edit_draft.php:54 — $message = $messages_class->get_by_id($pm_id);
+- messages/save_or_edit_draft.php:61 — <input type="hidden" name="id" value="' . $pm_id . '">
+- messages/use_draft.php:53 — $result = $messages_class->update($update, $pm_id);
+- messages/use_draft.php:89 — $message = $messages_class->get_by_id($pm_id);
+- messages/use_draft.php:96 — <input type="hidden" name="id" value="' . $pm_id . '">
+- messages/view_mailbox.php:16 — $show_pm_avatar = ($user['opt2'] & class_user_options_2::SHOW_PM_AVATAR) === class_user_options_2::SHOW_PM_AVATAR;
+- messages/view_mailbox.php:117 — $avatar = $show_pm_avatar ? get_avatar($row) : '';
+- messages/view_mailbox.php:134 — $per_page_drop_down .= '<option class="body" value="' . $link . '&amp;change_pm_number=' . $i . '"  ' . ($user['pms_per_page'] == $i ? ' ...
+- messages/view_mailbox.php:139 — $show_pm_avatar_drop_down = '
+- messages/view_mailbox.php:141 — <select name="show_pm_avatar" onchange="location=this.options[this.selectedIndex].value;">
+- messages/view_mailbox.php:142 — <option value="' . $link . '&amp;show_pm_avatar=yes" ' . ($show_pm_avatar ? 'selected' : '') . '>' . _('show avatars on view mailbox') . ...
+- messages/view_mailbox.php:143 — <option value="' . $link . '&amp;show_pm_avatar=no" ' . (!$show_pm_avatar ? 'selected' : '') . '>' . _("don't show avatars on PM list") ....
+- messages/view_mailbox.php:162 — {$show_pm_avatar_drop_down}
+- messages/view_message.php:28 — ->where('m.id = ?', $pm_id)
+- messages/view_message.php:60 — ->where('id = ?', $pm_id)
+- messages/view_message.php:164 — <input type='hidden' name='id' value='{$pm_id}'>
+- messages/view_message.php:168 — <a href='{$site_config['paths']['baseurl']}/messages.php?action=delete&amp;id={$pm_id}' class='button is-small margin10'>" . _('delete') ...
+- messages/view_message.php:169 — <a href='{$site_config['paths']['baseurl']}/messages.php?action=save_or_edit_draft&amp;id={$pm_id}' class='button is-small margin10'>" . ...
+- messages/view_message.php:170 — <a href='{$site_config['paths']['baseurl']}/messages.php?action=send_message&amp;receiver={$message['sender']}&amp;replyto={$pm_id}' clas...
+- messages/view_message.php:171 — <a href='{$site_config['paths']['baseurl']}/messages.php?action=forward&amp;id={$pm_id}' class='button is-small margin10'>" . _('fwd') . ...
+- messages/view_message.php:172 — <a href='{$site_config['paths']['baseurl']}/messages.php?action=save_or_edit_draft&amp;edit=1&amp;id={$pm_id}' class='button is-small mar...
+- messages/view_message.php:173 — <a href='{$site_config['paths']['baseurl']}/messages.php?action=use_draft&amp;send=1&amp;id={$pm_id}' class='button is-small margin10'>" ...
+- messages/view_message.php:186 — "<a href='{$site_config['paths']['baseurl']}/messages.php?action=view_message&id={$pm_id}'>" . format_comment($message['subject']) . '</a>',
+- migration-report.md:252 — - `src/Notify.php`: standardized strict typing and bootstrap order.
+- public/ajax/cooker_notify.php:17 — echo json_encode(['notify' => 'invalid']);
+- public/ajax/cooker_notify.php:23 — echo json_encode(['notify' => 'invalid']);
+- public/ajax/cooker_notify.php:29 — $fluent->deleteFrom('upcoming_notify')
+- public/ajax/cooker_notify.php:33 — echo json_encode(['notify' => 0]);
+- public/ajax/cooker_notify.php:44 — $sql = "INSERT INTO upcoming_notify (/* columns */) VALUES (/* values */)";
+- public/ajax/cooker_notify.php:45 — $notify_id = $db->perform($sql, $values);
+- public/ajax/cooker_notify.php:47 — echo json_encode(['notify' => $notify_id]);
+- public/ajax/cooker_notify.php:53 — echo json_encode(['notify' => 'invalid']);
+- public/ajax/offer_notify.php:17 — echo json_encode(['notify' => 'invalid']);
+- public/ajax/offer_notify.php:23 — echo json_encode(['notify' => 'invalid']);
+- public/ajax/offer_notify.php:29 — $fluent->deleteFrom('offer_notify')
+- public/ajax/offer_notify.php:33 — echo json_encode(['notify' => 0]);
+- public/ajax/offer_notify.php:44 — $sql = "INSERT INTO offer_notify (/* columns */) VALUES (/* values */)";
+- public/ajax/offer_notify.php:45 — $notify_id = $db->perform($sql, $values);
+- public/ajax/offer_notify.php:47 — echo json_encode(['notify' => $notify_id]);
+- public/ajax/offer_notify.php:53 — echo json_encode(['notify' => 'invalid']);
+- public/ajax/request_notify.php:17 — echo json_encode(['notify' => 'invalid']);
+- public/ajax/request_notify.php:23 — echo json_encode(['notify' => 'invalid']);
+- public/ajax/request_notify.php:29 — $fluent->deleteFrom('request_notify')
+- public/ajax/request_notify.php:33 — echo json_encode(['notify' => 0]);
+- public/ajax/request_notify.php:44 — $sql = "INSERT INTO request_notify (/* columns */) VALUES (/* values */)";
+- public/ajax/request_notify.php:45 — $notify_id = $db->perform($sql, $values);
+- public/ajax/request_notify.php:47 — echo json_encode(['notify' => $notify_id]);
+- public/ajax/request_notify.php:53 — echo json_encode(['notify' => 'invalid']);
+- public/announce.php:294 — $free = $cache->get('site_event_');
+- public/casino.php:385 — $session->set('is-success', _('Bet added, you will receive a PM notifying you of the results when someone has taken it'));
+- public/delete.php:93 — if ($user['id'] != $row['owner'] && ($user['opt2'] & class_user_options_2::PM_ON_DELETE) === class_user_options_2::PM_ON_DELETE) {
+- public/details.php:584 — <select name='pm_what'>
+- public/messages.php:63 — $change_pm_number = isset($_GET['change_pm_number']) ? (int) $_GET['change_pm_number'] : (isset($_POST['change_pm_number']) ? (int) $_POS...
+- public/messages.php:67 — $pm_id = isset($_GET['id']) ? (int) $_GET['id'] : (isset($_POST['id']) ? (int) $_POST['id'] : 0);
+- public/messages.php:95 — if (isset($_GET['change_pm_number'])) {
+- public/messages.php:96 — $change_pm_number = (isset($_GET['change_pm_number']) ? (int) $_GET['change_pm_number'] : 20);
+- public/messages.php:104 — if (isset($_GET['show_pm_avatar'])) {
+- public/messages.php:105 — if ($_GET['show_pm_avatar'] === 'yes') {
+- public/messages.php:106 — $opt2 = $user['opt2'] | class_user_options_2::SHOW_PM_AVATAR;
+- public/messages.php:108 — $opt2 = $user['opt2'] & ~class_user_options_2::SHOW_PM_AVATAR;
+- public/messages.php:115 — if (isset($_GET['edit_mail_boxes'])) {
+- public/messages.php:139 — require_once PM_DIR . 'view_mailbox.php';
+- public/messages.php:143 — require_once PM_DIR . 'view_message.php';
+- public/messages.php:147 — require_once PM_DIR . 'send_message.php';
+- public/messages.php:151 — require_once PM_DIR . 'move.php';
+- public/messages.php:155 — require_once PM_DIR . 'delete.php';
+- public/messages.php:159 — require_once PM_DIR . 'move_or_delete_multi.php';
+- public/messages.php:163 — require_once PM_DIR . 'forward.php';
+- public/messages.php:167 — require_once PM_DIR . 'forward_pm.php';
+- public/messages.php:171 — require_once PM_DIR . 'new_draft.php';
+- public/messages.php:175 — require_once PM_DIR . 'save_or_edit_draft.php';
+- public/messages.php:179 — require_once PM_DIR . 'use_draft.php';
+- public/messages.php:183 — require_once PM_DIR . 'search.php';
+- public/messages.php:187 — require_once PM_DIR . 'edit_mailboxes.php';
+- public/offers.php:444 — <div data-id='{$offer['id']}' data-notified='{$offer['notify']}' class='offer_notify tooltipper' title='" . ($offer['notify'] === 1 ? _('...
+- public/offers.php:445 — <span id='notify_{$offer['id']}'>" . ($offer['notify'] === 1 ? "<i class='icon-mail icon has-text-success is-marginless' aria-hidden='tru...
+- public/requests.php:550 — <div data-id='{$request['id']}' data-notified='{$request['notify']}' class='request_notify tooltipper' title='" . ($request['notify'] ===...
+- public/requests.php:551 — <span id='notify_{$request['id']}'>" . ($request['notify'] === 1 ? "<i class='icon-mail icon has-text-success is-marginless' aria-hidden=...
+- public/signup.php:189 — $email_form = "<input type='hidden' name='email' class='w-100' value='{$email}'>{$email}";
+- public/signup.php:191 — $email_form = "<input type='email' name='email' id='email' class='w-100' onblur='check_email();' value='{$signup_vars['email']}' autocomp...
+- public/signup.php:192 — <div id='emailcheck'></div>" . ($site_config['signup']['email_confirm'] ? "
+- public/signup.php:194 — $email_form = "<input type='email' name='email' id='email' class='w-100' onblur='check_email();' value='{$signup_vars['email']}' autocomp...
+- public/signup.php:221 — $email_form
+- public/takeeditcp.php:209 — if (isset($_POST['pm_on_delete']) && $_POST['pm_on_delete'] === 'yes') {
+- public/takeeditcp.php:210 — $setbits2 |= class_user_options_2::PM_ON_DELETE;
+- public/takeeditcp.php:211 — } elseif (isset($_POST['pm_on_delete']) && $_POST['pm_on_delete'] === 'no') {
+- public/takeeditcp.php:212 — $clrbits2 |= class_user_options_2::PM_ON_DELETE;
+- public/takereseed.php:17 — $pm_what = isset($_POST['pm_what']) && $_POST['pm_what'] === 'last10' ? 'last10' : 'owner';
+- public/takereseed.php:28 — if ($pm_what === 'last10') {
+- public/takereseed.php:38 — } elseif ($pm_what === 'owner') {
+- public/takeupload.php:487 — $recipes = $fluent->from('upcoming_notify')
+- public/takeupload.php:588 — $notify = $users_class->get_notifications($catid);
+- public/takeupload.php:589 — if (!empty($notify)) {
+- public/takeupload.php:592 — foreach ($notify as $notif) {
+- public/upcoming.php:258 — <div data-id='{$recipe['id']}' data-notified='{$recipe['notify']}' class='cooker_notify tooltipper' title='" . ($recipe['notify'] === 1 ?...
+- public/upcoming.php:259 — <span id='notify_{$recipe['id']}'>" . ($recipe['notify'] === 1 ? "<i class='icon-mail icon has-text-success is-marginless' aria-hidden='t...
+- public/user_blocks.php:1173 — if ($BLOCKS['userdetails_showpm_on']) {
+- public/useragreement.php:51 — {$site_config['site']['name']} does not endorse external websites which should open in a new browser window. This website may be hosted b...
+- public/useragreement.php:60 — In the event that you disagree with the content, opinions, or policies of this website or its author(s), your sole and exclusive remedy s...
+- public/useragreement.php:75 — Time is of the essence hereof. Non-enforcement of any provision herein does not constitute consent or waiver, and we reserve the right to...
+- public/useragreement.php:81 — ORDERS ONLY! - Use the above link to &quot;e-mail for permission&quot; only after you have decided that you definitely will use the torre...
+- public/useragreement.php:87 — LEGAL NOTICE OF INFRINGEMENT<br>Please read this Legal Notice of Infringement which applies to you only if you have violated this User Ag...
+- public/useragreement.php:111 — {$site_config['site']['name']} MAY PERIODICALLY MAKE UPDATES, CHANGES, IMPROVEMENTS, OR MODIFICATIONS, BUT MAKES NO COMMITMENT TO DO SO, ...
+- public/usercp.php:546 — <input type='checkbox' name='pmnotif' " . (!empty($user['notifs']) && strpos($user['notifs'], '[pmail]') !== false ? 'checked' : '') . " ...
+- public/usercp.php:548 — <input type='checkbox' name='emailnotif' " . (!empty($user['notifs']) && strpos($user['notifs'], '[email]') !== false ? 'checked' : '') ....
+- public/usercp.php:670 — <input type='checkbox' name='pmnotif' " . (!empty($user['notifs']) && strpos($user['notifs'], '[pm]') !== false ? 'checked' : '') . " val...
+- public/usercp.php:691 — $pm_on_delete = ($user['opt2'] & class_user_options_2::PM_ON_DELETE) === class_user_options_2::PM_ON_DELETE;
+- public/usercp.php:693 — <input type='radio' name='pm_on_delete' " . ($pm_on_delete ? 'checked' : '') . " value='yes'> " . _('Yes') . "
+- public/usercp.php:694 — <input type='radio' name='pm_on_delete' " . (!$pm_on_delete ? 'checked' : '') . " value='no'> " . _('No') . '<br>' . _('When any of your ...
+- public/userdetails.php:449 — if ($viewer['blocks']['userdetails_page'] & class_blocks_userdetails::SHOWPM && $BLOCKS['userdetails_showpm_on']) {
+- refactor-safe-log.txt:65 — Refactored safe: /home/runner/work/Pu-239/Pu-239/public/ajax/offer_notify.php
+- refactor-safe-log.txt:68 — Refactored safe: /home/runner/work/Pu-239/Pu-239/public/ajax/cooker_notify.php
+- refactor-safe-log.txt:73 — Refactored safe: /home/runner/work/Pu-239/Pu-239/public/ajax/request_notify.php
+- scripts/cooker_notify.js:1 — $('.cooker_notify').on('click', function () {
+- scripts/cooker_notify.js:3 — url: './ajax/cooker_notify.php',
+- scripts/cooker_notify.js:12 — var el = document.querySelector('#notify_' + this.dataset.id);
+- scripts/cooker_notify.js:13 — if (data['notify'] === 'invalid') {
+- scripts/cooker_notify.js:16 — } else if (data['notify'] === 'fail') {
+- scripts/cooker_notify.js:19 — } else if (data['notify'] > 0) {
+- scripts/forums.js:17 — $('#pm_open').click(function () {
+- scripts/offer_notify.js:1 — $('.offer_notify').on('click', function () {
+- scripts/offer_notify.js:3 — url: './ajax/offer_notify.php',
+- scripts/offer_notify.js:13 — var el = document.querySelector('#notify_' + this.dataset.id);
+- scripts/offer_notify.js:14 — if (data['notify'] === 'invalid') {
+- scripts/offer_notify.js:17 — } else if (data['notify'] === 'fail') {
+- scripts/offer_notify.js:20 — } else if (data['notify'] > 0) {
+- scripts/request_notify.js:1 — $('.request_notify').on('click', function () {
+- scripts/request_notify.js:3 — url: './ajax/request_notify.php',
+- scripts/request_notify.js:12 — var el = document.querySelector('#notify_' + this.dataset.id);
+- scripts/request_notify.js:13 — if (data['notify'] === 'invalid') {
+- scripts/request_notify.js:16 — } else if (data['notify'] === 'fail') {
+- scripts/request_notify.js:19 — } else if (data['notify'] > 0) {
+- src/Notify.php:12 — * Class Notify.
+- src/Notify.php:14 — class Notify
+- src/Notify.php:42 — $result = $this->fluent->deleteFrom('upcoming_notify')
+- src/Notify.php:47 — 'usernotify_' . $userid,
+- src/Notify.php:83 — $this->cache->delete('usernotify_' . $userid);
+- src/Notify.php:85 — $this->cache->delete('notify_requests_' . $upcomingid);
+- src/Notify.php:98 — $count = $this->cache->get('notify_requests_' . $upcomingid);
+- src/Notify.php:100 — $count = $this->fluent->from('upcoming_notify')
+- src/Notify.php:106 — $this->cache->set('notify_requests_' . $upcomingid, $count, 86400);
+- src/Offer.php:88 — ->select('(n.id IS NOT NULL) AS notify')
+- src/Offer.php:93 — ->leftJoin('offer_notify AS n ON r.userid = n.userid AND r.id = n.offerid')
+- src/Request.php:89 — ->select('(n.id IS NOT NULL) AS notify')
+- src/Request.php:96 — ->leftJoin('request_notify AS n ON r.userid = n.userid AND r.id = n.requestid')
+- src/Upcoming.php:179 — ->select('(n.id IS NOT NULL) AS notify')
+- src/Upcoming.php:183 — ->leftJoin('upcoming_notify AS n ON r.userid = n.userid AND r.id = n.upcomingid')
+- src/User.php:263 — if ($this->site_config['mail']['smtp_enable'] && $this->site_config['signup']['email_confirm'] && !isset($values['send_email'])) {
+- src/User.php:327 — if (!$this->site_config['signup']['email_confirm']) {
+- templates/1/css/default.css:203 — .cooker_notify,
+- templates/1/css/default.css:1633 — #pm_count {
+- templates/1/navbar.php:34 — <div id='pm_count' class='has-text-centered vertical_center'></div>
+
+## Suggested Facade Contracts
+listTopics, getTopic, createTopic, reply, editPost, deletePost, subscribe, reputationAdd, reputationRemove, thanksAdd, thanksRemove, pollVote, moderateSticky, moderateLock, moderateMove, moderateMerge, moderateSplit, search
+
+## Risk Notes
+- CHANGELOG.md:1407 enforces permission inline
+- CHANGELOG.md:146 enforces permission inline
+- CHANGELOG.md:1894 enforces permission inline
+- CHANGELOG.md:237 touches points/bonus/reputation
+- CHANGELOG.md:2608 touches points/bonus/reputation
+- CHANGELOG.md:2800 touches points/bonus/reputation
+- CHANGELOG.md:2885 touches points/bonus/reputation
+- CHANGELOG.md:312 touches points/bonus/reputation
+- CHANGELOG.md:315 touches points/bonus/reputation
+- CHANGELOG.md:700 touches points/bonus/reputation
+- CHANGELOG.md:808 touches points/bonus/reputation
+- CHANGELOG.md:977 touches points/bonus/reputation
+- FORUMS_REBUILD.md:4 touches points/bonus/reputation
+- FORUMS_REBUILD.md:79 touches points/bonus/reputation
+- TODO.md:3 touches points/bonus/reputation
+- TODO.md:33 touches points/bonus/reputation
+- admin/block.settings.php:357 touches points/bonus/reputation
+- admin/block.settings.php:359 touches points/bonus/reputation
+- admin/block.settings.php:427 touches points/bonus/reputation
+- admin/block.settings.php:428 touches points/bonus/reputation
+- admin/block.settings.php:429 touches points/bonus/reputation
+- admin/block.settings.php:59 touches points/bonus/reputation
+- admin/bonusmanage.php:78 touches points/bonus/reputation
+- admin/forum_manage.php:105 enforces permission inline
+- admin/forum_manage.php:158 enforces permission inline
+- admin/forum_manage.php:161 enforces permission inline
+- admin/forum_manage.php:170 enforces permission inline
+- admin/forum_manage.php:173 enforces permission inline
+- admin/forum_manage.php:195 enforces permission inline
+- admin/forum_manage.php:250 enforces permission inline
+- admin/forum_manage.php:251 enforces permission inline
+- admin/forum_manage.php:27 enforces permission inline
+- admin/forum_manage.php:28 enforces permission inline
+- admin/forum_manage.php:315 enforces permission inline
+- admin/forum_manage.php:327 enforces permission inline
+- admin/forum_manage.php:52 enforces permission inline
+- admin/forum_manage.php:59 enforces permission inline
+- admin/forum_manage.php:75 enforces permission inline
+- admin/forum_manage.php:76 enforces permission inline
+- admin/forum_manage.php:79 enforces permission inline
+- admin/forum_manage.php:94 enforces permission inline
+- admin/forum_manage.php:95 enforces permission inline
+- admin/forum_manage.php:99 enforces permission inline
+- admin/hit_and_run.php:124 touches points/bonus/reputation
+- admin/mass_bonus_for_members.php:145 touches points/bonus/reputation
+- admin/mass_bonus_for_members.php:146 touches points/bonus/reputation
+- admin/mass_bonus_for_members.php:147 touches points/bonus/reputation
+- admin/mass_bonus_for_members.php:156 touches points/bonus/reputation
+- admin/mass_bonus_for_members.php:159 touches points/bonus/reputation
+- admin/mass_bonus_for_members.php:162 touches points/bonus/reputation
+- admin/mass_bonus_for_members.php:163 touches points/bonus/reputation
+- admin/mass_bonus_for_members.php:166 touches points/bonus/reputation
+- admin/mass_bonus_for_members.php:277 touches points/bonus/reputation
+- admin/mass_bonus_for_members.php:278 touches points/bonus/reputation
+- admin/mass_bonus_for_members.php:279 touches points/bonus/reputation
+- admin/mass_bonus_for_members.php:282 touches points/bonus/reputation
+- admin/mass_bonus_for_members.php:285 touches points/bonus/reputation
+- admin/mass_bonus_for_members.php:331 touches points/bonus/reputation
+- admin/mass_bonus_for_members.php:340 touches points/bonus/reputation
+- admin/mass_bonus_for_members.php:347 touches points/bonus/reputation
+- admin/mass_bonus_for_members.php:363 touches points/bonus/reputation
+- admin/mass_bonus_for_members.php:43 touches points/bonus/reputation
+- admin/modtask.php:226 touches points/bonus/reputation
+- admin/modtask.php:257 touches points/bonus/reputation
+- admin/modtask.php:566 touches points/bonus/reputation
+- admin/modtask.php:571 touches points/bonus/reputation
+- admin/modtask.php:572 touches points/bonus/reputation
+- admin/modtask.php:573 touches points/bonus/reputation
+- admin/modtask.php:574 touches points/bonus/reputation
+- admin/promo.php:118 touches points/bonus/reputation
+- admin/promo.php:128 touches points/bonus/reputation
+- admin/promo.php:224 touches points/bonus/reputation
+- admin/promo.php:238 touches points/bonus/reputation
+- admin/promo.php:47 touches points/bonus/reputation
+- admin/promo.php:48 touches points/bonus/reputation
+- admin/promo.php:61 touches points/bonus/reputation
+- admin/reputation_ad.php:106 touches points/bonus/reputation
+- admin/reputation_ad.php:107 touches points/bonus/reputation
+- admin/reputation_ad.php:109 touches points/bonus/reputation
+- admin/reputation_ad.php:115 touches points/bonus/reputation
+- admin/reputation_ad.php:120 touches points/bonus/reputation
+- admin/reputation_ad.php:121 touches points/bonus/reputation
+- admin/reputation_ad.php:128 touches points/bonus/reputation
+- admin/reputation_ad.php:130 touches points/bonus/reputation
+- admin/reputation_ad.php:132 touches points/bonus/reputation
+- admin/reputation_ad.php:135 touches points/bonus/reputation
+- admin/reputation_ad.php:146 touches points/bonus/reputation
+- admin/reputation_ad.php:169 touches points/bonus/reputation
+- admin/reputation_ad.php:172 touches points/bonus/reputation
+- admin/reputation_ad.php:176 touches points/bonus/reputation
+- admin/reputation_ad.php:177 touches points/bonus/reputation
+- admin/reputation_ad.php:182 touches points/bonus/reputation
+- admin/reputation_ad.php:187 touches points/bonus/reputation
+- admin/reputation_ad.php:189 touches points/bonus/reputation
+- admin/reputation_ad.php:190 touches points/bonus/reputation
+- admin/reputation_ad.php:191 touches points/bonus/reputation
+- admin/reputation_ad.php:196 touches points/bonus/reputation
+- admin/reputation_ad.php:198 touches points/bonus/reputation
+- admin/reputation_ad.php:199 touches points/bonus/reputation
+- admin/reputation_ad.php:227 touches points/bonus/reputation
+- admin/reputation_ad.php:228 touches points/bonus/reputation
+- admin/reputation_ad.php:233 touches points/bonus/reputation
+- admin/reputation_ad.php:235 touches points/bonus/reputation
+- admin/reputation_ad.php:24 touches points/bonus/reputation
+- admin/reputation_ad.php:240 touches points/bonus/reputation
+- admin/reputation_ad.php:245 touches points/bonus/reputation
+- admin/reputation_ad.php:253 touches points/bonus/reputation
+- admin/reputation_ad.php:254 touches points/bonus/reputation
+- admin/reputation_ad.php:257 touches points/bonus/reputation
+- admin/reputation_ad.php:269 touches points/bonus/reputation
+- admin/reputation_ad.php:270 touches points/bonus/reputation
+- admin/reputation_ad.php:277 touches points/bonus/reputation
+- admin/reputation_ad.php:288 touches points/bonus/reputation
+- admin/reputation_ad.php:291 touches points/bonus/reputation
+- admin/reputation_ad.php:293 touches points/bonus/reputation
+- admin/reputation_ad.php:300 touches points/bonus/reputation
+- admin/reputation_ad.php:314 touches points/bonus/reputation
+- admin/reputation_ad.php:317 touches points/bonus/reputation
+- admin/reputation_ad.php:320 touches points/bonus/reputation
+- admin/reputation_ad.php:325 touches points/bonus/reputation
+- admin/reputation_ad.php:329 touches points/bonus/reputation
+- admin/reputation_ad.php:330 touches points/bonus/reputation
+- admin/reputation_ad.php:331 touches points/bonus/reputation
+- admin/reputation_ad.php:333 touches points/bonus/reputation
+- admin/reputation_ad.php:339 touches points/bonus/reputation
+- admin/reputation_ad.php:359 touches points/bonus/reputation
+- admin/reputation_ad.php:360 touches points/bonus/reputation
+- admin/reputation_ad.php:361 touches points/bonus/reputation
+- admin/reputation_ad.php:362 touches points/bonus/reputation
+- admin/reputation_ad.php:446 touches points/bonus/reputation
+- admin/reputation_ad.php:450 touches points/bonus/reputation
+- admin/reputation_ad.php:452 touches points/bonus/reputation
+- admin/reputation_ad.php:97 touches points/bonus/reputation
+- admin/reputation_ad.php:99 touches points/bonus/reputation
+- admin/reputation_settings.php:102 touches points/bonus/reputation
+- admin/reputation_settings.php:103 touches points/bonus/reputation
+- admin/reputation_settings.php:110 touches points/bonus/reputation
+- admin/reputation_settings.php:113 touches points/bonus/reputation
+- admin/reputation_settings.php:116 touches points/bonus/reputation
+- admin/reputation_settings.php:117 touches points/bonus/reputation
+- admin/reputation_settings.php:126 touches points/bonus/reputation
+- admin/reputation_settings.php:135 touches points/bonus/reputation
+- admin/reputation_settings.php:143 touches points/bonus/reputation
+- admin/reputation_settings.php:144 touches points/bonus/reputation
+- admin/reputation_settings.php:150 touches points/bonus/reputation
+- admin/reputation_settings.php:154 touches points/bonus/reputation
+- admin/reputation_settings.php:162 touches points/bonus/reputation
+- admin/reputation_settings.php:163 touches points/bonus/reputation
+- admin/reputation_settings.php:171 touches points/bonus/reputation
+- admin/reputation_settings.php:172 touches points/bonus/reputation
+- admin/reputation_settings.php:180 touches points/bonus/reputation
+- admin/reputation_settings.php:181 touches points/bonus/reputation
+- admin/reputation_settings.php:194 touches points/bonus/reputation
+- admin/reputation_settings.php:39 touches points/bonus/reputation
+- admin/reputation_settings.php:76 touches points/bonus/reputation
+- admin/reputation_settings.php:77 touches points/bonus/reputation
+- admin/reputation_settings.php:78 touches points/bonus/reputation
+- admin/reputation_settings.php:79 touches points/bonus/reputation
+- admin/reputation_settings.php:83 touches points/bonus/reputation
+- admin/reputation_settings.php:84 touches points/bonus/reputation
+- admin/reputation_settings.php:90 touches points/bonus/reputation
+- admin/reputation_settings.php:93 touches points/bonus/reputation
+- admin/reputation_settings.php:94 touches points/bonus/reputation
+- admin/stats_extra.php:281 touches points/bonus/reputation
+- admin/stats_extra.php:282 touches points/bonus/reputation
+- admin/stats_extra.php:284 touches points/bonus/reputation
+- admin/stats_extra.php:448 touches points/bonus/reputation
+- admin/stats_extra.php:571 touches points/bonus/reputation
+- admin/usersearch.php:792 enforces permission inline
+- blocks/global/freeleech_contribution.php:175 touches points/bonus/reputation
+- blocks/global/freeleech_contribution.php:177 touches points/bonus/reputation
+- blocks/global/freeleech_contribution.php:179 touches points/bonus/reputation
+- blocks/index/forum_posts.php:108 enforces permission inline
+- blocks/index/forum_posts.php:28 enforces permission inline
+- blocks/index/forum_posts.php:33 enforces permission inline
+- blocks/userdetails/reputation.php:13 touches points/bonus/reputation
+- blocks/userdetails/reputation.php:16 touches points/bonus/reputation
+- blocks/userdetails/reputation.php:17 touches points/bonus/reputation
+- blocks/userdetails/seedbonus.php:15 touches points/bonus/reputation
+- cache/block_settings_cache.php:59 touches points/bonus/reputation
+- cache/rep_cache.php:11 touches points/bonus/reputation
+- cache/rep_cache.php:26 touches points/bonus/reputation
+- chat/js/chat.js:1076 touches points/bonus/reputation
+- chat/js/chat.js:1077 touches points/bonus/reputation
+- chat/js/chat.js:1082 touches points/bonus/reputation
+- chat/js/config.js:525 touches points/bonus/reputation
+- chat/js/config.js:958 touches points/bonus/reputation
+- chat/js/lang/ar.js:90 touches points/bonus/reputation
+- chat/js/lang/bg.js:90 touches points/bonus/reputation
+- chat/js/lang/ca.js:90 touches points/bonus/reputation
+- chat/js/lang/cy.js:91 touches points/bonus/reputation
+- chat/js/lang/cz.js:89 touches points/bonus/reputation
+- chat/js/lang/da.js:89 touches points/bonus/reputation
+- chat/js/lang/de.js:89 touches points/bonus/reputation
+- chat/js/lang/el.js:90 touches points/bonus/reputation
+- chat/js/lang/en.js:89 touches points/bonus/reputation
+- chat/js/lang/es.js:90 touches points/bonus/reputation
+- chat/js/lang/et.js:89 touches points/bonus/reputation
+- chat/js/lang/fi.js:91 touches points/bonus/reputation
+- chat/js/lang/fr.js:88 touches points/bonus/reputation
+- chat/js/lang/gl.js:90 touches points/bonus/reputation
+- chat/js/lang/he.js:90 touches points/bonus/reputation
+- chat/js/lang/hr.js:90 touches points/bonus/reputation
+- chat/js/lang/hu.js:89 touches points/bonus/reputation
+- chat/js/lang/in.js:89 touches points/bonus/reputation
+- chat/js/lang/it.js:91 touches points/bonus/reputation
+- chat/js/lang/ja.js:89 touches points/bonus/reputation
+- chat/js/lang/ka.js:89 touches points/bonus/reputation
+- chat/js/lang/kr.js:89 touches points/bonus/reputation
+- chat/js/lang/mk.js:89 touches points/bonus/reputation
+- chat/js/lang/nl-be.js:90 touches points/bonus/reputation
+- chat/js/lang/nl.js:90 touches points/bonus/reputation
+- chat/js/lang/no.js:90 touches points/bonus/reputation
+- chat/js/lang/pl.js:90 touches points/bonus/reputation
+- chat/js/lang/pt-br.js:90 touches points/bonus/reputation
+- chat/js/lang/pt-pt.js:91 touches points/bonus/reputation
+- chat/js/lang/ro.js:90 touches points/bonus/reputation
+- chat/js/lang/ru.js:91 touches points/bonus/reputation
+- chat/js/lang/sk.js:90 touches points/bonus/reputation
+- chat/js/lang/sl.js:90 touches points/bonus/reputation
+- chat/js/lang/sr.js:90 touches points/bonus/reputation
+- chat/js/lang/sv.js:90 touches points/bonus/reputation
+- chat/js/lang/th.js:90 touches points/bonus/reputation
+- chat/js/lang/tr.js:90 touches points/bonus/reputation
+- chat/js/lang/uk.js:90 touches points/bonus/reputation
+- chat/js/lang/zh-tw.js:89 touches points/bonus/reputation
+- chat/js/lang/zh.js:90 touches points/bonus/reputation
+- chat/lib/template/loggedIn.html:125 touches points/bonus/reputation
+- chat/lib/template/loggedIn.html:129 touches points/bonus/reputation
+- cleanup/achievement_karma_update.php:180 touches points/bonus/reputation
+- cleanup/achievement_karma_update.php:21 touches points/bonus/reputation
+- cleanup/avatarpos_update.php:46 touches points/bonus/reputation
+- cleanup/chatpost_update.php:45 touches points/bonus/reputation
+- cleanup/downloadpos_update.php:45 touches points/bonus/reputation
+- cleanup/gameaccess_update.php:45 touches points/bonus/reputation
+- cleanup/karma_update.php:25 touches points/bonus/reputation
+- cleanup/karma_update.php:61 touches points/bonus/reputation
+- cleanup/karma_update.php:70 touches points/bonus/reputation
+- cleanup/karmavip_update.php:29 touches points/bonus/reputation
+- cleanup/karmavip_update.php:68 touches points/bonus/reputation
+- cleanup/karmavip_update.php:77 touches points/bonus/reputation
+- cleanup/king_update.php:45 touches points/bonus/reputation
+- cleanup/pirate_update.php:45 touches points/bonus/reputation
+- cleanup/uploadpos_update.php:46 touches points/bonus/reputation
+- config/emoticons.php:356 touches points/bonus/reputation
+- config/whereis.php:42 touches points/bonus/reputation
+- database/sql_updates.php:1535 touches points/bonus/reputation
+- database/sql_updates.php:1570 touches points/bonus/reputation
+- database/sql_updates.php:2077 enforces permission inline
+- database/sql_updates.php:2270 enforces permission inline
+- database/sql_updates.php:4629 touches points/bonus/reputation
+- include/class/class_blocks_userdetails.php:19 touches points/bonus/reputation
+- include/emoticons.php:353 touches points/bonus/reputation
+- include/function_bonus.php:346 touches points/bonus/reputation
+- include/function_bonus.php:350 touches points/bonus/reputation
+- include/function_bonus.php:353 touches points/bonus/reputation
+- include/function_bonus.php:360 touches points/bonus/reputation
+- include/function_bonus.php:367 touches points/bonus/reputation
+- include/function_bonus.php:372 touches points/bonus/reputation
+- include/function_bonus.php:375 touches points/bonus/reputation
+- include/function_bonus.php:382 touches points/bonus/reputation
+- include/function_bonus.php:392 touches points/bonus/reputation
+- include/function_bonus.php:402 touches points/bonus/reputation
+- include/function_bonus.php:409 touches points/bonus/reputation
+- include/function_bonus.php:412 touches points/bonus/reputation
+- include/function_chatbot.php:161 touches points/bonus/reputation
+- include/function_chatbot.php:162 touches points/bonus/reputation
+- include/function_chatbot.php:192 touches points/bonus/reputation
+- include/function_chatbot.php:195 touches points/bonus/reputation
+- include/function_chatbot.php:198 touches points/bonus/reputation
+- include/function_chatbot.php:200 touches points/bonus/reputation
+- include/function_chatbot.php:203 touches points/bonus/reputation
+- include/function_chatbot.php:204 touches points/bonus/reputation
+- include/function_chatbot.php:206 touches points/bonus/reputation
+- include/function_comments.php:143 touches points/bonus/reputation
+- include/function_comments.php:145 touches points/bonus/reputation
+- include/function_comments.php:147 touches points/bonus/reputation
+- include/function_comments.php:163 touches points/bonus/reputation
+- include/function_comments.php:172 touches points/bonus/reputation
+- include/function_comments.php:204 touches points/bonus/reputation
+- include/function_comments.php:213 touches points/bonus/reputation
+- include/function_users.php:102 touches points/bonus/reputation
+- include/function_users.php:137 touches points/bonus/reputation
+- include/function_users.php:140 touches points/bonus/reputation
+- include/function_users.php:142 touches points/bonus/reputation
+- include/function_users.php:144 touches points/bonus/reputation
+- include/function_users.php:151 touches points/bonus/reputation
+- include/function_users.php:157 touches points/bonus/reputation
+- include/function_users.php:468 touches points/bonus/reputation
+- include/function_users.php:671 enforces permission inline
+- include/function_users.php:68 touches points/bonus/reputation
+- include/function_users.php:77 touches points/bonus/reputation
+- include/function_users.php:78 touches points/bonus/reputation
+- include/function_users.php:82 touches points/bonus/reputation
+- include/function_users.php:83 touches points/bonus/reputation
+- include/function_users.php:84 touches points/bonus/reputation
+- include/function_users.php:86 touches points/bonus/reputation
+- include/function_users.php:88 touches points/bonus/reputation
+- include/function_users.php:89 touches points/bonus/reputation
+- include/function_users.php:94 touches points/bonus/reputation
+- include/function_users.php:96 touches points/bonus/reputation
+- include/function_users.php:98 touches points/bonus/reputation
+- include/function_users.php:99 touches points/bonus/reputation
+- messages/view_message.php:138 touches points/bonus/reputation
+- public/ajax/ajax_tooltips.php:51 touches points/bonus/reputation
+- public/ajax/ajax_tooltips.php:60 touches points/bonus/reputation
+- public/ajax/ajax_tooltips.php:61 touches points/bonus/reputation
+- public/ajax/ajax_tooltips.php:69 touches points/bonus/reputation
+- public/ajax/thanks.php:137 touches points/bonus/reputation
+- public/ajax/thanks.php:140 touches points/bonus/reputation
+- public/ajax/thanks.php:52 possible SQL concatenation
+- public/ajax/thanks.php:52 touches points/bonus/reputation
+- public/arcade.php:25 touches points/bonus/reputation
+- public/arcade_top_scores.php:22 touches points/bonus/reputation
+- public/details.php:432 touches points/bonus/reputation
+- public/details.php:434 touches points/bonus/reputation
+- public/details.php:458 touches points/bonus/reputation
+- public/details.php:511 touches points/bonus/reputation
+- public/details.php:513 touches points/bonus/reputation
+- public/details.php:514 touches points/bonus/reputation
+- public/details.php:516 touches points/bonus/reputation
+- public/download.php:61 touches points/bonus/reputation
+- public/flash.php:59 touches points/bonus/reputation
+- public/forums.php:207 enforces permission inline
+- public/forums.php:39 enforces permission inline
+- public/forums.php:410 enforces permission inline
+- public/forums.php:420 enforces permission inline
+- public/forums.php:452 enforces permission inline
+- public/forums.php:463 enforces permission inline
+- public/forums.php:478 enforces permission inline
+- public/forums.php:487 enforces permission inline
+- public/forums.php:514 enforces permission inline
+- public/forums.php:523 enforces permission inline
+- public/forums.php:527 enforces permission inline
+- public/forums.php:541 enforces permission inline
+- public/forums.php:672 enforces permission inline
+- public/forums.php:693 enforces permission inline
+- public/index.php:131 enforces permission inline
+- public/invite.php:272 touches points/bonus/reputation
+- public/mybonus.php:134 touches points/bonus/reputation
+- public/mybonus.php:150 touches points/bonus/reputation
+- public/mybonus.php:167 touches points/bonus/reputation
+- public/mybonus.php:184 touches points/bonus/reputation
+- public/mybonus.php:209 touches points/bonus/reputation
+- public/mybonus.php:212 touches points/bonus/reputation
+- public/mybonus.php:240 touches points/bonus/reputation
+- public/mybonus.php:242 touches points/bonus/reputation
+- public/mybonus.php:248 touches points/bonus/reputation
+- public/mybonus.php:251 touches points/bonus/reputation
+- public/mybonus.php:258 touches points/bonus/reputation
+- public/mybonus.php:262 touches points/bonus/reputation
+- public/mybonus.php:267 touches points/bonus/reputation
+- public/mybonus.php:270 touches points/bonus/reputation
+- public/mybonus.php:274 touches points/bonus/reputation
+- public/mybonus.php:295 touches points/bonus/reputation
+- public/mybonus.php:310 touches points/bonus/reputation
+- public/mybonus.php:313 touches points/bonus/reputation
+- public/mybonus.php:32 touches points/bonus/reputation
+- public/mybonus.php:340 touches points/bonus/reputation
+- public/mybonus.php:355 touches points/bonus/reputation
+- public/mybonus.php:371 touches points/bonus/reputation
+- public/mybonus.php:378 touches points/bonus/reputation
+- public/mybonus.php:387 touches points/bonus/reputation
+- public/mybonus.php:390 touches points/bonus/reputation
+- public/mybonus.php:397 touches points/bonus/reputation
+- public/mybonus.php:404 touches points/bonus/reputation
+- public/mybonus.php:407 touches points/bonus/reputation
+- public/mybonus.php:422 touches points/bonus/reputation
+- public/mybonus.php:441 touches points/bonus/reputation
+- public/mybonus.php:444 touches points/bonus/reputation
+- public/mybonus.php:450 touches points/bonus/reputation
+- public/mybonus.php:454 touches points/bonus/reputation
+- public/mybonus.php:456 touches points/bonus/reputation
+- public/mybonus.php:459 touches points/bonus/reputation
+- public/mybonus.php:471 touches points/bonus/reputation
+- public/mybonus.php:474 touches points/bonus/reputation
+- public/mybonus.php:486 touches points/bonus/reputation
+- public/mybonus.php:489 touches points/bonus/reputation
+- public/mybonus.php:490 touches points/bonus/reputation
+- public/mybonus.php:520 touches points/bonus/reputation
+- public/mybonus.php:533 touches points/bonus/reputation
+- public/mybonus.php:541 touches points/bonus/reputation
+- public/mybonus.php:564 touches points/bonus/reputation
+- public/mybonus.php:587 touches points/bonus/reputation
+- public/mybonus.php:590 touches points/bonus/reputation
+- public/mybonus.php:612 touches points/bonus/reputation
+- public/mybonus.php:626 touches points/bonus/reputation
+- public/mybonus.php:635 touches points/bonus/reputation
+- public/mybonus.php:65 touches points/bonus/reputation
+- public/mybonus.php:716 touches points/bonus/reputation
+- public/mybonus.php:754 touches points/bonus/reputation
+- public/mybonus.php:758 touches points/bonus/reputation
+- public/mybonus.php:761 touches points/bonus/reputation
+- public/mybonus.php:768 touches points/bonus/reputation
+- public/mybonus.php:774 touches points/bonus/reputation
+- public/mybonus.php:779 touches points/bonus/reputation
+- public/mybonus.php:781 touches points/bonus/reputation
+- public/mybonus.php:782 touches points/bonus/reputation
+- public/mybonus.php:789 touches points/bonus/reputation
+- public/mybonus.php:79 touches points/bonus/reputation
+- public/mybonus.php:801 touches points/bonus/reputation
+- public/mybonus.php:811 touches points/bonus/reputation
+- public/mybonus.php:818 touches points/bonus/reputation
+- public/mybonus.php:821 touches points/bonus/reputation
+- public/mybonus.php:830 touches points/bonus/reputation
+- public/mybonus.php:93 touches points/bonus/reputation
+- public/reputation.php:110 touches points/bonus/reputation
+- public/reputation.php:125 touches points/bonus/reputation
+- public/reputation.php:167 touches points/bonus/reputation
+- public/reputation.php:177 touches points/bonus/reputation
+- public/reputation.php:187 touches points/bonus/reputation
+- public/reputation.php:197 touches points/bonus/reputation
+- public/reputation.php:204 touches points/bonus/reputation
+- public/reputation.php:215 touches points/bonus/reputation
+- public/reputation.php:233 touches points/bonus/reputation
+- public/reputation.php:239 touches points/bonus/reputation
+- public/reputation.php:247 touches points/bonus/reputation
+- public/reputation.php:248 touches points/bonus/reputation
+- public/reputation.php:256 touches points/bonus/reputation
+- public/reputation.php:257 touches points/bonus/reputation
+- public/reputation.php:26 touches points/bonus/reputation
+- public/reputation.php:275 touches points/bonus/reputation
+- public/reputation.php:279 touches points/bonus/reputation
+- public/reputation.php:305 touches points/bonus/reputation
+- public/reputation.php:318 touches points/bonus/reputation
+- public/reputation.php:34 touches points/bonus/reputation
+- public/reputation.php:361 touches points/bonus/reputation
+- public/reputation.php:369 touches points/bonus/reputation
+- public/reputation.php:51 enforces permission inline
+- public/reputation.php:52 touches points/bonus/reputation
+- public/reputation.php:62 touches points/bonus/reputation
+- public/reputation.php:70 touches points/bonus/reputation
+- public/reputation.php:77 touches points/bonus/reputation
+- public/signup.php:112 touches points/bonus/reputation
+- public/user_blocks.php:1005 touches points/bonus/reputation
+- public/user_blocks.php:1007 touches points/bonus/reputation
+- public/user_blocks.php:1008 touches points/bonus/reputation
+- public/user_blocks.php:1009 touches points/bonus/reputation
+- public/user_blocks.php:1010 touches points/bonus/reputation
+- public/user_blocks.php:1077 touches points/bonus/reputation
+- public/user_blocks.php:260 touches points/bonus/reputation
+- public/user_blocks.php:261 touches points/bonus/reputation
+- public/user_blocks.php:263 touches points/bonus/reputation
+- public/user_blocks.php:312 touches points/bonus/reputation
+- public/user_blocks.php:314 touches points/bonus/reputation
+- public/user_blocks.php:493 touches points/bonus/reputation
+- public/user_blocks.php:502 touches points/bonus/reputation
+- public/user_blocks.php:939 touches points/bonus/reputation
+- public/user_blocks.php:944 touches points/bonus/reputation
+- public/user_unlocks.php:32 touches points/bonus/reputation
+- public/user_unlocks.php:34 touches points/bonus/reputation
+- public/user_unlocks.php:73 touches points/bonus/reputation
+- public/userdetails.php:1049 enforces permission inline
+- public/userdetails.php:1050 enforces permission inline
+- public/userdetails.php:467 touches points/bonus/reputation
+- public/userdetails.php:468 touches points/bonus/reputation
+- public/userdetails.php:473 touches points/bonus/reputation
+- public/userdetails.php:474 touches points/bonus/reputation
+- public/userdetails.php:612 enforces permission inline
+- public/userdetails.php:984 touches points/bonus/reputation
+- public/userdetails.php:988 touches points/bonus/reputation
+- public/userhistory.php:40 enforces permission inline
+- scripts/sceditor.js:379 touches points/bonus/reputation
+- src/Settings.php:99 enforces permission inline
+- templates/1/navbar.php:120 enforces permission inline
+- templates/1/navbar.php:89 touches points/bonus/reputation
