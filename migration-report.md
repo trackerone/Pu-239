@@ -58,12 +58,19 @@ No matches.
 - `admin/sysoplog.php`: migrated to `$db->fetchAll` with dynamic filters; standardized bootstrap and added strict typing.
 - `admin/watched_users.php`: replaced legacy `sql_query`/`sqlesc`/`mysqli_*` calls with `$db->run`/`fetch` and bound parameters; standardized bootstrap and added strict typing.
 - `admin/mysql_stats.php`: removed `mysqli_*` access and used `$db->fetchAll` for status/variables lookups; standardized bootstrap and added strict typing.
+- `admin/cleanup_manager.php`: enforced inline LIMIT/OFFSET with int casting, replaced `SELECT *` with explicit columns, and added missing `bootstrap_pdo.php` include.
 
 ### Verification
 ```
-$ rg "mysqli_|sql_query\(|sqlesc\(" admin/bannedemails.php admin/user_hits.php admin/acpmanage.php admin/sysoplog.php admin/watched_users.php admin/mysql_stats.php
+$ rg "mysqli_|sql_query\(|sqlesc\(" admin/bannedemails.php admin/user_hits.php admin/acpmanage.php admin/sysoplog.php admin/watched_users.php admin/mysql_stats.php admin/cleanup_manager.php
 ```
 No matches in modified files.
+
+```bash
+$ rg "LIMIT\s*:\w+" admin/cleanup_manager.php
+$ rg "SELECT \*" admin/cleanup_manager.php
+```
+No matches.
 
 ## blocks
 - `blocks/global/demotion.php`: standardized `bootstrap_pdo.php` and added strict typing.

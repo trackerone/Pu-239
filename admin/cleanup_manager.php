@@ -7,6 +7,7 @@ use Pu239\Database;
 use Pu239\Session;
 
 require_once __DIR__ . '/../include/runtime_safe.php';
+require_once __DIR__ . '/../include/bootstrap_pdo.php';
 require_once INCL_DIR . 'function_users.php';
 require_once INCL_DIR . 'function_pager.php';
 require_once CLASS_DIR . 'class_check.php';
@@ -110,7 +111,7 @@ function manualclean(array $params): void
         stderr(_('Error'), _('Invalid cleanup id.'));
     }
 
-    $row = $db->fetch('SELECT * FROM cleanup WHERE clean_id = :cid', [':cid' => (int) $cid]);
+    $row = $db->fetch('SELECT clean_file, function_name, clean_increment FROM cleanup WHERE clean_id = :cid', [':cid' => (int) $cid]);
     if (!$row) {
         stderr(_('Error'), _('Cleanup task not found.'));
     }
@@ -158,19 +159,13 @@ function cleanup_show_main(): void
     $perpage = 15;
     $pager = pager($perpage, $count, $site_config['paths']['baseurl'] . '/staffpanel.php?tool=cleanup_manager&amp;');
 
-    $limit = (int) ($pager['limit'] ?? $perpage);
-    $offset = (int) ($pager['offset'] ?? 0);
+    $limit = max(1, (int) ($pager['limit'] ?? $perpage));
+    $offset = max(0, (int) ($pager['offset'] ?? 0));
 
     $items = [];
     if ($count > 0) {
-        // Note: Some PDO drivers don't allow binding LIMIT/OFFSET as named params unless cast to int
-        $items = $db->fetchAll(
-            'SELECT * FROM cleanup ORDER BY clean_time ASC LIMIT :limit OFFSET :offset',
-            [
-                ':limit' => $limit,
-                ':offset' => $offset,
-            ]
-        );
+        $sql = 'SELECT clean_id, clean_title, clean_desc, function_name, clean_file, clean_increment, clean_time, clean_on FROM cleanup ORDER BY clean_time ASC LIMIT ' . $offset . ', ' . $limit;
+        $items = $db->fetchAll($sql);
     }
 
     $rows = '';
@@ -195,26 +190,28 @@ function cleanup_show_main(): void
             </tr>";
     }
 
+    $tbody = $rows !== '' ? $rows : "<tr><td colspan='7' class='has-text-centered'>" . _('No tasks') . '</td></tr>';
     $htmlout = "
         <ul class='level-center bg-06'>
             <li class='is-link margin10'><a href='{$site_config['paths']['baseurl']}/staffpanel.php?tool=cleanup_manager&amp;mode=new'>" . _('Add new') . "</a></li>
             <li class='is-link margin10'><a href='{$site_config['paths']['baseurl']}/staffpanel.php?tool=cleanup_manager&amp;mode=reset'>" . _('Reset Clean Time') . "</a></li>
         </ul>
-        <h1 class='has-text-centered top20'>" . _('Current Cleanup Tasks') . '</h1>' . ($count > $perpage ? $pager['pagertop'] : '') . "
-        <table class='table table-bordered table-striped bottom20'>
+        <h1 class='has-text-centered top20'>" . _('Current Cleanup Tasks') . '</h1>' . ($count > $perpage ? $pager['pagertop'] : '') . '
+        <table class="table table-bordered table-striped bottom20">
             <thead>
                 <tr>
-                    <th>" . _('Cleanup Title &amp; Description') . "</th>
-                    <th class='has-text-centered'>" . _('Runs every') . "</th>
-                    <th class='has-text-centered'>" . _('Next Clean Time') . "</th>
-                    <th class='has-text-centered'>" . _('Edit') . "</th>
-                    <th class='has-text-centered'>" . _('Delete') . "</th>
-                    <th class='has-text-centered'>" . _('Off/On') . "</th>
-                    <th class='has-text-centered'>" . _('Run now') . '</th>
+                    <th>' . _('Cleanup Title &amp; Description') . '</th>
+                    <th class="has-text-centered">' . _('Runs every') . '</th>
+                    <th class="has-text-centered">' . _('Next Clean Time') . '</th>
+                    <th class="has-text-centered">' . _('Edit') . '</th>
+                    <th class="has-text-centered">' . _('Delete') . '</th>
+                    <th class="has-text-centered">' . _('Off/On') . '</th>
+                    <th class="has-text-centered">' . _('Run now') . '</th>
                 </tr>
             </thead>
-            <tbody>" . ($rows !== '' ? $rows : "<tr><td colspan='7' class='has-text-centered'>" . _('No tasks') . '</td></tr>') . "</tbody>
-        </table>" . ($count > $perpage ? $pager['pagerbottom'] : '');
+            <tbody>' . $tbody . '</tbody>
+        </table>';
+    $htmlout .= $count > $perpage ? $pager['pagerbottom'] : '';
 
     $title = _('Cleanup Manager');
     $breadcrumbs = [
@@ -240,7 +237,7 @@ function cleanup_show_edit(): void
         stderr(_('Error'), _('Invalid cleanup id.'));
     }
 
-    $row = $db->fetch('SELECT * FROM cleanup WHERE clean_id = :cid', [':cid' => (int) $cid]);
+    $row = $db->fetch('SELECT clean_id, clean_title, clean_desc, function_name, clean_file, clean_increment, clean_log, clean_on, clean_time FROM cleanup WHERE clean_id = :cid', [':cid' => (int) $cid]);
     if (!$row) {
         stderr(_('Error'), _('Cleanup task not found.'));
     }
