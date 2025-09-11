@@ -1,17 +1,17 @@
 <?php
-$db = $container->get(Database::class);
-
-require_once __DIR__ . '/../include/runtime_safe.php';
-
-
-declare(strict_types = 1);
+declare(strict_types=1);
 
 use Delight\Auth\Auth;
-use DI\ContainerBuilder;
 use DI\DependencyException;
 use DI\NotFoundException;
 use Pu239\Cache;
 use Pu239\Database;
+
+require_once __DIR__ . '/../include/runtime_safe.php';
+require_once __DIR__ . '/../include/bootstrap_pdo.php';
+
+global $container;
+$db = $container->get(Database::class);
 
 if (empty($argv[1])) {
     app_halt("To install please run\n\nphp {$argv[0]} install\n");
@@ -85,6 +85,15 @@ if (count($argv) === 13) {
         ],
     ];
 }
+$vars['site']['name'] = trim((string) $vars['site']['name']);
+$vars['site']['email'] = trim((string) $vars['site']['email']);
+$vars['chatbot']['name'] = trim((string) $vars['chatbot']['name']);
+$vars['admin']['username'] = trim((string) $vars['admin']['username']);
+$vars['admin']['pass'] = trim((string) $vars['admin']['pass']);
+$vars['admin']['email'] = trim((string) $vars['admin']['email']);
+if ($vars['site']['name'] === '' || !filter_var($vars['site']['email'], FILTER_VALIDATE_EMAIL) || $vars['admin']['username'] === '' || $vars['admin']['pass'] === '' || !filter_var($vars['admin']['email'], FILTER_VALIDATE_EMAIL)) {
+    throw new InvalidArgumentException('Invalid install payload');
+}
 $clean = preg_replace('/[^\p{L}\p{M}\p{N}]/', '', $vars['site']['name']);
 
 $vars['mysql']['pass'] = quotemeta($vars['mysql']['pass']);
@@ -122,25 +131,10 @@ require_once CONFIG_DIR . 'classes.php';
 require_once VENDOR_DIR . 'autoload.php';
 require_once INCL_DIR . 'function_common.php';
 
-$builder = new ContainerBuilder();
-if ($production) {
-    $builder->enableCompilation(DI_CACHE_DIR);
-}
-$builder->addDefinitions(CONFIG_DIR . '/config.php');
-$builder->addDefinitions(CONFIG_DIR . '/definitions.php');
-$builder->useAutowiring(true);
-$builder->useAnnotations(false);
-try {
-    $container = $builder->build();
-} catch (Exception $e) {
-    //TODO Logger;
-}
-
 $site_config = $container->get('env');
 $site_config['files']['path'] = CACHE_DIR . 'install';
 $cache = $container->get(Cache::class);
 $auth = $container->get(Auth::class);
-$pdo = $container->get(PDO::class);
 $cache->flushDB();
 $sources = [
     'schema' => DATABASE_DIR . 'schema.sql.gz',
@@ -158,38 +152,47 @@ foreach ($sources as $name => $source) {
 }
 
 $timestamp = strtotime('today midnight');
-$query = "UPDATE cleanup SET clean_time = $timestamp WHERE clean_time > 0";
-$stmt = $pdo->query($query);
-if (!$stmt->execute()) {
-    app_halt("There was an error while working with database, at step: {$name}\n");
+try {
+    $db->run('UPDATE cleanup SET clean_time = :timestamp WHERE clean_time > 0', [
+        ':timestamp' => $timestamp,
+    ]);
+} catch (\Throwable $e) {
+    app_halt("There was an error while working with database, at step: cleanup\n");
 }
 
-foreach ($vars['site'] as $key => $value) {
-    $set = [
-        'value' => $value,
-    ];
-    update_config($set, 'site', $key);
-}
+try {
+    $db->begin();
+    foreach ($vars['site'] as $key => $value) {
+        $set = [
+            'value' => $value,
+        ];
+        update_config($set, 'site', $key);
+    }
 
-foreach ($vars['session'] as $key => $value) {
-    $set = [
-        'value' => $value,
-    ];
-    update_config($set, 'session', $key);
-}
+    foreach ($vars['session'] as $key => $value) {
+        $set = [
+            'value' => $value,
+        ];
+        update_config($set, 'session', $key);
+    }
 
-foreach ($vars['cookies'] as $key => $value) {
-    $set = [
-        'value' => $value,
-    ];
-    update_config($set, 'cookies', $key);
-}
+    foreach ($vars['cookies'] as $key => $value) {
+        $set = [
+            'value' => $value,
+        ];
+        update_config($set, 'cookies', $key);
+    }
 
-foreach ($vars['chatbot'] as $key => $value) {
-    $set = [
-        'value' => $value,
-    ];
-    update_config($set, 'chatbot', $key);
+    foreach ($vars['chatbot'] as $key => $value) {
+        $set = [
+            'value' => $value,
+        ];
+        update_config($set, 'chatbot', $key);
+    }
+    $db->commit();
+} catch (\Throwable $e) {
+    $db->rollBack();
+    throw $e;
 }
 
 $userId = $auth->registerWithUniqueUsername(strip_tags($vars['admin']['email']), strip_tags($vars['admin']['pass']), strip_tags($vars['admin']['username']));
@@ -226,16 +229,16 @@ function regex($x)
  * @throws NotFoundException
  * @throws \PDOException
  */
-function update_config(array $set, string $parent, string $name)
+function update_config(array $set, string $parent, string $name): void
 {
     global $container;
-
-    // $fluent removed — use $this->db (ExtendedPdo)
-    $fluent->update('site_config')
-           ->set($set)
-           ->where('parent = ?', $parent)
-           ->where('name = ?', $name)
-           ->execute();
+    /** @var Database $db */
+    $db = $container->get(Database::class);
+    $db->run('UPDATE site_config SET value = :value WHERE parent = :parent AND name = :name', [
+        ':value' => $set['value'],
+        ':parent' => $parent,
+        ':name' => $name,
+    ]);
 }
 
 /**
@@ -247,11 +250,12 @@ function update_config(array $set, string $parent, string $name)
  * @throws \PDOException
  * @throws Exception
  */
-function update_user(int $userid, int $class)
+function update_user(int $userid, int $class): void
 {
     global $container;
+    /** @var Database $db */
+    $db = $container->get(Database::class);
 
-    // $fluent removed — use $this->db (ExtendedPdo)
     $dt = TIME_NOW;
     $set = [
         'personal_freeleech' => get_date($dt + 14 * 86400, 'MYSQL'),
@@ -266,12 +270,28 @@ function update_user(int $userid, int $class)
         'verified' => 1,
         'roles_mask' => 288,
     ];
-    $sql = "UPDATE users SET /* columns */ WHERE id = :id";
-$db->perform($sql, array_merge($set, ['id' => $userid]));
-    $fluent->insertInto('usersachiev')
-           ->values(['userid' => $userid])
-           ->execute();
-    $fluent->insertInto('user_blocks')
-           ->values(['userid' => $userid])
-           ->execute();
+
+    try {
+        $db->begin();
+        $db->run('UPDATE users SET personal_freeleech = :pf, personal_doubleseed = :pd, torrent_pass = :tp, auth = :auth, apikey = :apikey, stylesheet = :stylesheet, last_access = :last_access, class = :class, status = :status, verified = :verified, roles_mask = :roles_mask WHERE id = :id', [
+            ':pf' => $set['personal_freeleech'],
+            ':pd' => $set['personal_doubleseed'],
+            ':tp' => $set['torrent_pass'],
+            ':auth' => $set['auth'],
+            ':apikey' => $set['apikey'],
+            ':stylesheet' => $set['stylesheet'],
+            ':last_access' => $set['last_access'],
+            ':class' => $set['class'],
+            ':status' => $set['status'],
+            ':verified' => $set['verified'],
+            ':roles_mask' => $set['roles_mask'],
+            ':id' => $userid,
+        ]);
+        $db->run('INSERT INTO usersachiev (userid) VALUES (:id)', [':id' => $userid]);
+        $db->run('INSERT INTO user_blocks (userid) VALUES (:id)', [':id' => $userid]);
+        $db->commit();
+    } catch (\Throwable $e) {
+        $db->rollBack();
+        throw $e;
+    }
 }

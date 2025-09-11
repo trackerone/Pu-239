@@ -23,6 +23,7 @@ No matches in modified files.
 - `bin/set_perms.php`: switched to `bootstrap_pdo.php`, added strict typing, and removed legacy bootstrap scaffolding.
 - `bin/resize_multi_threads.php`: switched to `bootstrap_pdo.php`, added strict typing, and removed legacy bootstrap scaffolding.
 - `bin/remove_altered_images.php`: switched to `bootstrap_pdo.php`, added strict typing, and removed legacy bootstrap scaffolding.
+- `bin/install.php`: standardized bootstrap, added input validation and transactions, and replaced direct PDO calls with `Pu239\Database` bound parameters.
 
 ### Verification
 ```
