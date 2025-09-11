@@ -305,9 +305,7 @@ No matches.
 
 ********* codex/migrate-pu239-to-aura-extendedpdo-in-batches-vu4gsh
 ## root
-- `acpmanage.php`: switched to `runtime_safe.php`/`bootstrap_pdo.php` and used `$db->fetchAll` for settings lookup.
-- `bannedemails.php`: standardized bootstrap and replaced manual `PDO` usage with `$db->fetchAll`.
-- `bonusmanage.php`: standardized bootstrap and replaced manual `PDO` usage with `$db->fetchAll`.
+- `acpmanage.php`, `bonusmanage.php`, `bannedemails.php`: standardized `runtime_safe.php`/`bootstrap_pdo.php` bootstrap, imported `Pu239\\Database`, initialized `$site_config` and `$now`, and used `$db->fetchAll` with explicit column lists.
 
 ### Verification
 ```

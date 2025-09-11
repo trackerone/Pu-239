@@ -7,8 +7,9 @@ require_once __DIR__ . '/include/bootstrap_pdo.php';
 
 use Pu239\Database;
 
-global $container;
+global $container, $site_config;
 $db = $container->get(Database::class);
+$now = defined('TIME_NOW') ? (int) TIME_NOW : time();
 
 // Example migration: list banned emails
 $emails = $db->fetchAll('SELECT id, email FROM bannedemails ORDER BY email ASC');
