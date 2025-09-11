@@ -3,10 +3,13 @@
 ## public
 - `public/tenpercent.php`: migrated from legacy mysqli/sql_query/sqlesc to `Pu239\Database` with bound parameters; switched to `bootstrap_pdo.php`; added strict typing.
 - `public/contactstaff.php`: migrated from `sql_query`/`sqlesc` to `$db->run` with bound parameters; standardized bootstrap and added strict typing.
+- `public/ajax/like.php`: replaced legacy queries with `$db->run`, added transaction handling and input validation, and standardized bootstrap.
+- `public/users.php`: migrated user search to bound parameters with explicit columns and sanitized input.
+- `public/messages.php`: standardized bootstrap and converted mailbox lookup to `$db->fetchAll` with bound parameters.
 
 ### Verification
 ```
-$ rg "mysqli_|sql_query\(|sqlesc\(" public/contactstaff.php public/tenpercent.php
+$ rg "mysqli_|sql_query\(|sqlesc\(" public/contactstaff.php public/tenpercent.php public/ajax/like.php public/users.php public/messages.php
 ```
 No matches in modified files.
 

@@ -1,8 +1,8 @@
 <?php
+declare(strict_types=1);
+
 require_once __DIR__ . '/../include/runtime_safe.php';
-
-
-declare(strict_types = 1);
+require_once __DIR__ . '/../include/bootstrap_pdo.php';
 
 use DI\DependencyException;
 use DI\NotFoundException;
@@ -10,6 +10,10 @@ use Pu239\Cache;
 use Pu239\Database;
 use Pu239\Session;
 use Pu239\User;
+
+global $container, $site_config;
+$db = $container->get(Database::class);
+$cache = $container->get(Cache::class);
 
 require_once __DIR__ . '/../include/bittorrent.php';
 require_once INCL_DIR . 'function_users.php';
@@ -30,9 +34,7 @@ $stdfoot = [
         get_file_name('user_search_js'),
     ],
 ];
-$HTMLOUT = $count2 = $other_box_info = $maxpic = $maxbox = '';
-
-global $site_config;
+ $HTMLOUT = $count2 = $other_box_info = $maxpic = $maxbox = '';
 
 $maxbox = 100 * ($user['class'] + 1);
 $maxboxes = 5 * ($user['class'] + 1);
@@ -90,12 +92,6 @@ $top_links = '
         </ul>
     </div>';
 
-global $container;
-$db = $container->get(Database::class);;
-
-$cache = $container->get(Cache::class);
-$fluent = $db; // alias
-// $fluent removed — use $this->db (ExtendedPdo)
 if (isset($_GET['change_pm_number'])) {
     $change_pm_number = (isset($_GET['change_pm_number']) ? (int) $_GET['change_pm_number'] : 20);
     $db->run(');
@@ -255,14 +251,12 @@ $db = $container->get(Database::class);, $site_config;
  */
 function insertJumpTo(int $mailbox, int $userid)
 {
-    global $container;
-$db = $container->get(Database::class);, $site_config;
+    global $cache, $db, $site_config;
 
-    $cache = $container->get(Cache::class);
     $cache->delete('insertJumpTo_' . $userid);
     $insertJumpTo = $cache->get('insertJumpTo_' . $userid);
     if ($insertJumpTo === false || is_null($insertJumpTo)) {
-        $rows = $db->fetchAll('SELECT boxnumber,name FROM pmboxes WHERE userid=' . sqlesc($userid) . ' ORDER BY boxnumber');
+        $rows = $db->fetchAll('SELECT boxnumber, name FROM pmboxes WHERE userid = :uid ORDER BY boxnumber', [':uid' => $userid]);
         $insertJumpTo = '
             <div class="has-text-centered">
                 <form action="messages.php" method="get" accept-charset="utf-8">
@@ -273,7 +267,7 @@ $db = $container->get(Database::class);, $site_config;
                         <option value="' . $site_config['paths']['baseurl'] . '/messages.php?action=view_mailbox&amp;box=-1" ' . ($mailbox === -1 ? 'selected' : '') . '>' . _('Sentbox') . '</option>
                         <option value="' . $site_config['paths']['baseurl'] . '/messages.php?action=view_mailbox&amp;box=-2" ' . ($mailbox === -2 ? 'selected' : '') . '>' . _('Drafts') . '</option>
                         <option value="' . $site_config['paths']['baseurl'] . '/messages.php?action=view_mailbox&amp;box=0" ' . ($mailbox === 0 ? 'selected' : '') . '>' . _('Deleted') . '</option>';
-        while ($row = mysqli_fetch_assoc($res)) {
+        foreach ($rows as $row) {
             $insertJumpTo .= '
                         <option value="' . $site_config['paths']['baseurl'] . '/messages.php?action=view_mailbox&amp;box=' . (int) $row['boxnumber'] . '" ' . ($mailbox === (int) $row['boxnumber'] ? 'selected' : '') . '>' . htmlsafechars($row['name']) . '</option>';
         }
