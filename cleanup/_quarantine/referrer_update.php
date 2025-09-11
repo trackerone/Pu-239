@@ -1,0 +1,41 @@
+<?php
+$db = $container->get(Database::class);
+
+require_once __DIR__ . '/../include/runtime_safe.php';
+
+require_once __DIR__ . '/../include/bootstrap_pdo.php';
+
+
+declare(strict_types = 1);
+
+use DI\DependencyException;
+use DI\NotFoundException;
+use Pu239\Database;
+
+/**
+ * @param $data
+ *
+ * @throws DependencyException
+ * @throws NotFoundException
+ * @throws \PDOException
+ */
+function referrer_update($data)
+{
+    global $container;
+
+    // $fluent removed — use $this->db (ExtendedPdo)
+    $time_start = microtime(true);
+    $days = 180 * 86400;
+    $dt = TIME_NOW - $days;
+    $fluent->deleteFrom('referrers')
+           ->where('date < ?', $dt)
+           ->execute();
+
+    $time_end = microtime(true);
+    $run_time = $time_end - $time_start;
+    $text = " Run time: $run_time seconds";
+    echo $text . "\n";
+    if ($data['clean_log']) {
+        write_log('Referrer Cleanup completed' . $text);
+    }
+}

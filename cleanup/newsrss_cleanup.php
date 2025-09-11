@@ -1,39 +1,8 @@
 <?php
-$db = $container->get(Database::class);
-
+declare(strict_types=1);
 require_once __DIR__ . '/../include/runtime_safe.php';
-
 require_once __DIR__ . '/../include/bootstrap_pdo.php';
-
-
-declare(strict_types = 1);
-
-use DI\DependencyException;
-use DI\NotFoundException;
 use Pu239\Database;
-
-/**
- * @param $data
- *
- * @throws DependencyException
- * @throws NotFoundException
- * @throws \PDOException
- */
-function newsrss_cleanup($data)
-{
-    global $container;
-
-    $time_start = microtime(true);
-    // $fluent removed — use $this->db (ExtendedPdo)
-    $fluent->deleteFrom('newsrss')
-           ->where('added < NOW() - INTERVAL 30 DAY')
-           ->execute();
-
-    $time_end = microtime(true);
-    $run_time = $time_end - $time_start;
-    $text = " Run time: $run_time seconds";
-    echo $text . "\n";
-    if ($data['clean_log']) {
-        write_log('NewsRSS Cleanup: Completed using 1 queries' . $text);
-    }
-}
+global $container;
+$db = $container->get(Database::class);
+throw new \RuntimeException('Quarantined: see cleanup/_quarantine/newsrss_cleanup.php');
