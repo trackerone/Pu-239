@@ -1,30 +1,28 @@
 <?php
-$db = $container->get(Database::class);
+
+declare(strict_types=1);
 
 require_once __DIR__ . '/../include/runtime_safe.php';
-
 require_once __DIR__ . '/../include/bootstrap_pdo.php';
-
-
-declare(strict_types = 1);
 
 use Pu239\Database;
 
-use DI\DependencyException;
-use DI\NotFoundException;
+global $container;
+$db = $container->get(Database::class);
+$now = defined('TIME_NOW') ? (int) TIME_NOW : time();
 
 /**
- * @param $data
+ * @param array $data
  *
- * @throws DependencyException
- * @throws NotFoundException
- * @throws \PDOException
+ * @throws \Throwable
  */
-function cheatclean_update($data)
+function cheatclean_update(array $data): void
 {
+    global $db, $now;
+
     $time_start = microtime(true);
-    $dt = (TIME_NOW - (30 * 86400));
-    sql_query('DELETE FROM cheaters WHERE added < ' . sqlesc($dt)) or sqlerr(__FILE__, __LINE__);
+    $dt = $now - (30 * 86400);
+    $db->run('DELETE FROM cheaters WHERE added < ?', [$dt]);
     $time_end = microtime(true);
     $run_time = $time_end - $time_start;
     $text = " Run time: $run_time seconds";
@@ -33,3 +31,4 @@ function cheatclean_update($data)
         write_log('Cheaters List Cleanup: Removed old cheater entrys. Completed' . $text);
     }
 }
+
