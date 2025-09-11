@@ -1,0 +1,353 @@
+[
+  {
+    "file": "forums/add_subscription.php",
+    "quarantined_to": "forums/_quarantine/add_subscription.php.orig",
+    "size_bytes": 585,
+    "sha1": "a044c5956d494397dbb964144866f73ce052ea78",
+    "first_200_chars": "<?php\\n$db = $container->get(Database::class);\\n\\nrequire_once __DIR__ . '/../include/runtime_safe.php';\\n\\n\\ndeclare(strict_types = 1);\\n\\nuse Pu239\\Database;\\n\\nglobal $CURUSER, $site_config;\\n\\n$topic_id = iss",
+    "detected_markers": [
+      "dangling_quote",
+      "missing_bootstrap",
+      "missing_strict_types"
+    ]
+  },
+  {
+    "file": "forums/attachment.php",
+    "quarantined_to": "forums/_quarantine/attachment.php.orig",
+    "size_bytes": 2912,
+    "sha1": "d60566b4e3fecf792024741904962f33c8649372",
+    "first_200_chars": "<?php\\n$db = $container->get(Database::class);\\n\\nrequire_once __DIR__ . '/../include/runtime_safe.php';\\n\\nrequire_once __DIR__ . '/../include/bootstrap_pdo.php';\\n\\n\\ndeclare(strict_types = 1);\\n\\nuse DI\\Depe",
+    "detected_markers": [
+      "likely_insert",
+      "missing_strict_types"
+    ]
+  },
+  {
+    "file": "forums/clear_unread_post.php",
+    "quarantined_to": "forums/_quarantine/clear_unread_post.php.orig",
+    "size_bytes": 1079,
+    "sha1": "d3065cf60691c9f4d7d4c3c19267c8d378e3c4e3",
+    "first_200_chars": "<?php\\n$db = $container->get(Database::class);\\n\\nrequire_once __DIR__ . '/../include/runtime_safe.php';\\n\\n\\ndeclare(strict_types = 1);\\n\\nuse Pu239\\Cache;\\nuse Pu239\\Database;\\n\\n$user = check_user_status();\\ng",
+    "detected_markers": [
+      "missing_bootstrap",
+      "missing_strict_types"
+    ]
+  },
+  {
+    "file": "forums/delete_post.php",
+    "quarantined_to": "forums/_quarantine/delete_post.php.orig",
+    "size_bytes": 4635,
+    "sha1": "04c79440a244c5a0a414b5616947b62d49d32e0f",
+    "first_200_chars": "<?php\\nrequire_once __DIR__ . '/../include/runtime_safe.php';\\n\\n\\ndeclare(strict_types = 1);\\n\\nuse Pu239\\Cache;\\nuse Pu239\\Database;\\n\\nglobal $container;\\n$db = $container->get(Database::class);, $site_confi",
+    "detected_markers": [
+      "unclosed_brace",
+      "dangling_quote",
+      "missing_bootstrap",
+      "missing_strict_types"
+    ]
+  },
+  {
+    "file": "forums/delete_subscription.php",
+    "quarantined_to": "forums/_quarantine/delete_subscription.php.orig",
+    "size_bytes": 762,
+    "sha1": "97e0fa437aeeaa31934e86210830dc5251720d5d",
+    "first_200_chars": "<?php\\n$db = $container->get(Database::class);\\n\\nrequire_once __DIR__ . '/../include/runtime_safe.php';\\n\\n\\ndeclare(strict_types = 1);\\n\\nuse Pu239\\Database;\\n\\n$topic_id = isset($_GET['topic_id']) ? (int) $_",
+    "detected_markers": [
+      "unclosed_brace",
+      "missing_bootstrap",
+      "missing_strict_types"
+    ]
+  },
+  {
+    "file": "forums/download_attachment.php",
+    "quarantined_to": "forums/_quarantine/download_attachment.php.orig",
+    "size_bytes": 1068,
+    "sha1": "2de4617fa58ce928d1dc9708bcab6ab72ae6dba5",
+    "first_200_chars": "<?php\\n$db = $container->get(Database::class);\\n\\nrequire_once __DIR__ . '/../include/runtime_safe.php';\\n\\nrequire_once __DIR__ . '/../include/bootstrap_pdo.php';\\n\\n\\ndeclare(strict_types = 1);\\n\\nuse Pu239\\D",
+    "detected_markers": [
+      "likely_update",
+      "missing_strict_types"
+    ]
+  },
+  {
+    "file": "forums/edit_post.php",
+    "quarantined_to": "forums/_quarantine/edit_post.php.orig",
+    "size_bytes": 9188,
+    "sha1": "e0ac92f833128fca91b6239107e0f00bd5b074be",
+    "first_200_chars": "<?php\\n$db = $container->get(Database::class);\\n\\nrequire_once __DIR__ . '/../include/runtime_safe.php';\\n\\n\\ndeclare(strict_types = 1);\\n\\nuse Pu239\\Database;\\n\\n$post_id = isset($_GET['post_id']) ? (int) $_GE",
+    "detected_markers": [
+      "contains_sqlesc",
+      "unclosed_brace",
+      "likely_update",
+      "missing_bootstrap",
+      "missing_strict_types"
+    ]
+  },
+  {
+    "file": "forums/editor.php",
+    "quarantined_to": "forums/_quarantine/editor.php.orig",
+    "size_bytes": 13248,
+    "sha1": "99c5c2b77594c5f8e214f44c566769a3d1a22533",
+    "first_200_chars": "<?php\\n$db = $container->get(Database::class);\\n\\nrequire_once __DIR__ . '/../include/runtime_safe.php';\\n\\nrequire_once __DIR__ . '/../include/bootstrap_pdo.php';\\n\\n\\ndeclare(strict_types = 1);\\n\\n$user = che",
+    "detected_markers": [
+      "missing_strict_types"
+    ]
+  },
+  {
+    "file": "forums/last_ten.php",
+    "quarantined_to": "forums/_quarantine/last_ten.php.orig",
+    "size_bytes": 2636,
+    "sha1": "22790358b4c8eec11db35217567140993c3be6fe",
+    "first_200_chars": "<?php\\n$db = $container->get(Database::class);\\n\\nrequire_once __DIR__ . '/../include/runtime_safe.php';\\n\\nrequire_once __DIR__ . '/../include/bootstrap_pdo.php';\\n\\n\\ndeclare(strict_types = 1);\\n\\nuse Pu239\\D",
+    "detected_markers": [
+      "contains_sql_query",
+      "contains_mysqli",
+      "contains_sqlesc",
+      "likely_select",
+      "missing_strict_types"
+    ]
+  },
+  {
+    "file": "forums/mark_all_as_read.php",
+    "quarantined_to": "forums/_quarantine/mark_all_as_read.php.orig",
+    "size_bytes": 3277,
+    "sha1": "6bd5c3b3d664102098c9782f72953c8823fbeccc",
+    "first_200_chars": "<?php\\n$db = $container->get(Database::class);\\n\\nrequire_once __DIR__ . '/../include/runtime_safe.php';\\n\\n\\ndeclare(strict_types = 1);\\n\\nuse DI\\DependencyException;\\nuse DI\\NotFoundException;\\nuse Pu239\\Cach",
+    "detected_markers": [
+      "missing_bootstrap",
+      "missing_strict_types"
+    ]
+  },
+  {
+    "file": "forums/member_post_history.php",
+    "quarantined_to": "forums/_quarantine/member_post_history.php.orig",
+    "size_bytes": 17836,
+    "sha1": "54592838fb3069ed372c56f74027854b2260a718",
+    "first_200_chars": "<?php\\nrequire_once __DIR__ . '/../include/runtime_safe.php';\\n\\n\\ndeclare(strict_types = 1);\\n\\nuse Pu239\\Database;\\n\\nuse Pu239\\User;\\n\\nglobal $container;\\n$db = $container->get(Database::class);, $site_confi",
+    "detected_markers": [
+      "contains_sql_query",
+      "contains_mysqli",
+      "contains_sqlesc",
+      "likely_select",
+      "missing_bootstrap",
+      "missing_strict_types"
+    ]
+  },
+  {
+    "file": "forums/new_replies.php",
+    "quarantined_to": "forums/_quarantine/new_replies.php.orig",
+    "size_bytes": 9788,
+    "sha1": "387bdce2768ca22a16b8db0991af2f46992c5812",
+    "first_200_chars": "<?php\\n$db = $container->get(Database::class);\\n\\nrequire_once __DIR__ . '/../include/runtime_safe.php';\\n\\nrequire_once __DIR__ . '/../include/bootstrap_pdo.php';\\n\\n\\ndeclare(strict_types = 1);\\n\\nuse Pu239\\D",
+    "detected_markers": [
+      "contains_sql_query",
+      "contains_mysqli",
+      "contains_sqlesc",
+      "likely_select",
+      "missing_strict_types"
+    ]
+  },
+  {
+    "file": "forums/new_topic.php",
+    "quarantined_to": "forums/_quarantine/new_topic.php.orig",
+    "size_bytes": 7653,
+    "sha1": "d3a5f8c4be9d71aba65b0ebf52c626f0c5944d82",
+    "first_200_chars": "<?php\\n$db = $container->get(Database::class);\\n\\nrequire_once __DIR__ . '/../include/runtime_safe.php';\\n\\n\\ndeclare(strict_types = 1);\\n\\nuse Pu239\\Cache;\\nuse Pu239\\Database;\\n\\nflood_limit('forums');\\n$forum_",
+    "detected_markers": [
+      "dangling_quote",
+      "likely_update",
+      "likely_insert",
+      "missing_bootstrap",
+      "missing_strict_types"
+    ]
+  },
+  {
+    "file": "forums/poll.php",
+    "quarantined_to": "forums/_quarantine/poll.php.orig",
+    "size_bytes": 12962,
+    "sha1": "76d26e1d70e9bb24a9f3c1d38b83caebe2d49211",
+    "first_200_chars": "<?php\\n$db = $container->get(Database::class);\\n\\nrequire_once __DIR__ . '/../include/runtime_safe.php';\\n\\n\\ndeclare(strict_types = 1);\\n\\nuse Pu239\\Database;\\n\\n$topic_id = isset($_GET['topic_id']) ? (int) $_",
+    "detected_markers": [
+      "contains_mysqli",
+      "contains_sqlesc",
+      "unclosed_brace",
+      "dangling_quote",
+      "likely_insert",
+      "missing_bootstrap",
+      "missing_strict_types"
+    ]
+  },
+  {
+    "file": "forums/post_reply.php",
+    "quarantined_to": "forums/_quarantine/post_reply.php.orig",
+    "size_bytes": 3523,
+    "sha1": "d8308a7cfed06ea5633995cbcb3655088fadb991",
+    "first_200_chars": "<?php\\n$db = $container->get(Database::class);\\n\\nrequire_once __DIR__ . '/../include/runtime_safe.php';\\n\\n\\ndeclare(strict_types = 1);\\n\\nuse Pu239\\Database;\\n\\nuse Pu239\\Post;\\n\\nflood_limit('forums');\\n$page =",
+    "detected_markers": [
+      "contains_mysqli",
+      "contains_sqlesc",
+      "unclosed_brace",
+      "likely_select",
+      "missing_bootstrap",
+      "missing_strict_types"
+    ]
+  },
+  {
+    "file": "forums/quick_reply.php",
+    "quarantined_to": "forums/_quarantine/quick_reply.php.orig",
+    "size_bytes": 858,
+    "sha1": "d13f6c108cc618ae2ff17c6497c9800f8012d378",
+    "first_200_chars": "<?php\\n$db = $container->get(Database::class);\\n\\nrequire_once __DIR__ . '/../include/runtime_safe.php';\\n\\nrequire_once __DIR__ . '/../include/bootstrap_pdo.php';\\n\\n\\ndeclare(strict_types = 1);\\n\\nrequire_onc",
+    "detected_markers": [
+      "missing_strict_types"
+    ]
+  },
+  {
+    "file": "forums/search.php",
+    "quarantined_to": "forums/_quarantine/search.php.orig",
+    "size_bytes": 28695,
+    "sha1": "663e15c94797b98925b45df77ff1b3967466bbf6",
+    "first_200_chars": "<?php\\n$db = $container->get(Database::class);\\n\\nrequire_once __DIR__ . '/../include/runtime_safe.php';\\n\\nrequire_once __DIR__ . '/../include/bootstrap_pdo.php';\\n\\n\\ndeclare(strict_types = 1);\\n\\nuse Pu239\\D",
+    "detected_markers": [
+      "missing_strict_types"
+    ]
+  },
+  {
+    "file": "forums/section_view.php",
+    "quarantined_to": "forums/_quarantine/section_view.php.orig",
+    "size_bytes": 9006,
+    "sha1": "65bac16e20ad66a5b3ce544beb0168952302dcbb",
+    "first_200_chars": "<?php\\nrequire_once __DIR__ . '/../include/runtime_safe.php';\\n\\nrequire_once __DIR__ . '/../include/bootstrap_pdo.php';\\n\\n\\ndeclare(strict_types = 1);\\n\\nuse Pu239\\Database;\\n\\nuse Pu239\\Cache;\\n\\n$child_boards",
+    "detected_markers": [
+      "contains_sql_query",
+      "contains_mysqli",
+      "contains_sqlesc",
+      "likely_select",
+      "missing_strict_types"
+    ]
+  },
+  {
+    "file": "forums/staff_actions.php",
+    "quarantined_to": "forums/_quarantine/staff_actions.php.orig",
+    "size_bytes": 10910,
+    "sha1": "f595cf5c7a1ba491b7f3ef0a0495c400414ceb8a",
+    "first_200_chars": "<?php\\nrequire_once __DIR__ . '/../include/runtime_safe.php';\\n\\n\\ndeclare(strict_types = 1);\\n\\nuse Pu239\\Database;\\n\\nuse Pu239\\Cache;\\nuse Pu239\\Post;\\n\\n$user = check_user_status();\\n\\n$posted_staff_action = s",
+    "detected_markers": [
+      "contains_mysqli",
+      "contains_sqlesc",
+      "unclosed_brace",
+      "dangling_quote",
+      "likely_select",
+      "likely_update",
+      "likely_insert",
+      "missing_bootstrap",
+      "missing_strict_types"
+    ]
+  },
+  {
+    "file": "forums/stafflock_post.php",
+    "quarantined_to": "forums/_quarantine/stafflock_post.php.orig",
+    "size_bytes": 1107,
+    "sha1": "146a13d35af675f22224e3458a9c052e1d5fab86",
+    "first_200_chars": "<?php\\n\\ndeclare(strict_types=1);\\n\\nrequire_once __DIR__ . '/../include/runtime_safe.php';\\nrequire_once __DIR__ . '/../include/bootstrap_pdo.php';\\n\\nuse Pu239\\Database;\\n\\n$db = $container->get(Database::cl",
+    "detected_markers": [
+      "dangling_quote",
+      "likely_select",
+      "likely_update"
+    ]
+  },
+  {
+    "file": "forums/subscriptions.php",
+    "quarantined_to": "forums/_quarantine/subscriptions.php.orig",
+    "size_bytes": 11109,
+    "sha1": "d1166103d8df47b223905f5d3bfd6906e123daa6",
+    "first_200_chars": "<?php\\nrequire_once __DIR__ . '/../include/runtime_safe.php';\\n\\nrequire_once __DIR__ . '/../include/bootstrap_pdo.php';\\n\\n\\ndeclare(strict_types = 1);\\n\\nuse Pu239\\Database;\\n\\nglobal $container;\\n$db = $conta",
+    "detected_markers": [
+      "contains_sql_query",
+      "contains_mysqli",
+      "contains_sqlesc",
+      "likely_select",
+      "missing_strict_types"
+    ]
+  },
+  {
+    "file": "forums/undelete_post.php",
+    "quarantined_to": "forums/_quarantine/undelete_post.php.orig",
+    "size_bytes": 3660,
+    "sha1": "368c090ab1d930f7184552e28361d0a04da1114a",
+    "first_200_chars": "<?php\\n$db = $container->get(Database::class);\\n\\nrequire_once __DIR__ . '/../include/runtime_safe.php';\\n\\n\\ndeclare(strict_types = 1);\\n\\nuse Pu239\\Cache;\\nuse Pu239\\Database;\\n\\nglobal $container, $site_confi",
+    "detected_markers": [
+      "dangling_quote",
+      "likely_update",
+      "missing_bootstrap",
+      "missing_strict_types"
+    ]
+  },
+  {
+    "file": "forums/view_forum.php",
+    "quarantined_to": "forums/_quarantine/view_forum.php.orig",
+    "size_bytes": 9201,
+    "sha1": "5dfe1030717e4eb043baecbd5e72d3434f40feaf",
+    "first_200_chars": "<?php\\nrequire_once __DIR__ . '/../include/runtime_safe.php';\\n\\n\\ndeclare(strict_types = 1);\\n\\nuse Pu239\\Database;\\n\\nrequire_once INCL_DIR . 'function_html.php';\\n$posts = $delete_me = $rpic = $content = $c",
+    "detected_markers": [
+      "unclosed_brace",
+      "dangling_quote",
+      "likely_insert",
+      "missing_bootstrap",
+      "missing_strict_types"
+    ]
+  },
+  {
+    "file": "forums/view_my_posts.php",
+    "quarantined_to": "forums/_quarantine/view_my_posts.php.orig",
+    "size_bytes": 11446,
+    "sha1": "70d7e7bc0f3f4d74ee85bdcf9347a2b5c35bcd27",
+    "first_200_chars": "<?php\\nrequire_once __DIR__ . '/bootstrap_pdo.php';\\n\\n\\ndeclare(strict_types = 1);\\n\\nuse Pu239\\Database;\\n\\n$colour = $post_status_image = '';\\n$ASC_DESC = ((isset($_GET['ASC_DESC']) && $_GET['ASC_DESC'] ===",
+    "detected_markers": [
+      "contains_sql_query",
+      "contains_mysqli",
+      "contains_sqlesc",
+      "likely_select",
+      "missing_bootstrap",
+      "missing_strict_types"
+    ]
+  },
+  {
+    "file": "forums/view_post_history.php",
+    "quarantined_to": "forums/_quarantine/view_post_history.php.orig",
+    "size_bytes": 3040,
+    "sha1": "fbb054570f39da379e9016535db703721f738b8b",
+    "first_200_chars": "<?php\\n$db = $container->get(Database::class);\\n\\nrequire_once __DIR__ . '/bootstrap_pdo.php';\\n\\n\\ndeclare(strict_types = 1);\\n\\nrequire_once __DIR__ . '/../include/bittorrent.php';\\n\\nuse Pu239\\Database;\\nuse ",
+    "detected_markers": [
+      "dangling_quote",
+      "missing_bootstrap",
+      "missing_strict_types"
+    ]
+  },
+  {
+    "file": "forums/view_topic.php",
+    "quarantined_to": "forums/_quarantine/view_topic.php.orig",
+    "size_bytes": 35632,
+    "sha1": "b438bf4573aef19997906f0fab95dd9c3b0034eb",
+    "first_200_chars": "<?php\\nrequire_once __DIR__ . '/bootstrap_pdo.php';\\n\\n\\ndeclare(strict_types = 1);\\nrequire_once __DIR__ . '/../include/bittorrent.php';\\nrequire_once FORUM_DIR . 'quick_reply.php';\\nrequire_once INCL_DIR .",
+    "detected_markers": [
+      "unclosed_brace",
+      "dangling_quote",
+      "likely_update",
+      "likely_insert",
+      "missing_bootstrap",
+      "missing_strict_types"
+    ]
+  },
+  {
+    "file": "forums/view_unread_posts.php",
+    "quarantined_to": "forums/_quarantine/view_unread_posts.php.orig",
+    "size_bytes": 12231,
+    "sha1": "852914e9e67975214c7ae5dcf3ef5dcb3ca30d0b",
+    "first_200_chars": "<?php\\n$db = $container->get(Database::class);\\n\\nrequire_once __DIR__ . '/bootstrap_pdo.php';\\n\\n\\ndeclare(strict_types = 1);\\n\\nuse Pu239\\Database;\\n\\n$colour = $topicpoll = $topic_status_image = '';\\n$HTMLOUT",
+    "detected_markers": [
+      "missing_bootstrap",
+      "missing_strict_types"
+    ]
+  }
+]
