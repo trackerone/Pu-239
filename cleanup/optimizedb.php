@@ -1,13 +1,13 @@
 <?php
-
 declare(strict_types=1);
-
 require_once __DIR__ . '/../include/runtime_safe.php';
 require_once __DIR__ . '/../include/bootstrap_pdo.php';
-
+use Pu239\Database;
 use DI\DependencyException;
 use DI\NotFoundException;
-use Pu239\Database;
+
+global $container;
+$db = $container->get(Database::class);
 
 /**
  * @param $data
@@ -18,9 +18,8 @@ use Pu239\Database;
  */
 function optimizedb($data)
 {
-    global $container, $site_config;
+    global $container, $site_config, $db;
 
-    $db = $container->get(Database::class);
     $time_start = microtime(true);
     $minwaste = 1024 * 1024 * 10; // 10 MB
     $rows = $db->fetchAll(
