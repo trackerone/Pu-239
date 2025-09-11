@@ -1,13 +1,16 @@
 <?php
+declare(strict_types=1);
+
 require_once __DIR__ . '/../../include/runtime_safe.php';
-
-
-declare(strict_types = 1);
+require_once __DIR__ . '/../../include/bootstrap_pdo.php';
 
 use DI\DependencyException;
 use DI\NotFoundException;
 use Pu239\Cache;
 use Pu239\Database;
+
+global $container, $site_config;
+$db = $container->get(Database::class);
 
 require_once __DIR__ . '/../../include/bittorrent.php';
 require_once INCL_DIR . 'function_users.php';
@@ -37,18 +40,20 @@ if (!empty($user) && is_array($user)) {
  */
 function comment_like_unlike(array $fields, array $user)
 {
-    global $container;
-$db = $container->get(Database::class);;
+    global $container, $site_config, $db;
 
-    $id = (int) $_POST['id'];
-    $type = $_POST['type'];
-    $current = $_POST['current'];
     header('content-type: application/json');
-    if (!array_key_exists($type, $fields)) {
+
+    $id = (int) ($_POST['id'] ?? 0);
+    $type = mb_substr(trim((string) ($_POST['type'] ?? '')), 0, 12);
+    $current = mb_substr(trim((string) ($_POST['current'] ?? '')), 0, 10);
+
+    if (!isset($fields[$type])) {
         echo json_encode(['label' => _('Invalid Data Type')]);
         app_halt('Exit called');
     }
-    if (!is_int($id)) {
+
+    if ($id <= 0) {
         echo json_encode(['label' => _('Invalid ID')]);
         app_halt('Exit called');
     }
@@ -57,53 +62,75 @@ $db = $container->get(Database::class);;
         $type = 'comment';
     }
 
-    $sql = 'SELECT COUNT(id) AS count FROM likes WHERE user_id=' . sqlesc($user['id']) . " AND {$type}_id=" . sqlesc($id);
-    $res = sql_query($sql) or sqlerr(__FILE__, __LINE__);
-    $data = mysqli_fetch_assoc($res);
-    $table = 'comments';
-    if ($type === 'topic' || $type === 'post' || $type === 'usercomment') {
-        $table = $fields[$type];
-    }
-    $cache = $container->get(Cache::class);
-    $fluent = $db; // alias
-// $fluent removed — use $this->db (ExtendedPdo)
-    if ($data['count'] == 0 && $current === 'Like') {
-        $sql = "INSERT INTO likes ({$type}_id, user_id) VALUES (" . sqlesc($id) . ', ' . sqlesc($user['id']) . ')';
-        $res = sql_query($sql) or sqlerr(__FILE__, __LINE__);
-        $sql = "UPDATE $table SET user_likes = user_likes + 1 WHERE id = " . sqlesc($id);
-        $res = sql_query($sql) or sqlerr(__FILE__, __LINE__);
-        $cache->delete("{$type}_user_likes_" . $id);
-        $cache->delete('latest_comments_');
-        $data['label'] = 'Unlike';
-        $data['list'] = 'you like this';
-    } elseif ($data['count'] == 1 && $current === 'Unlike') {
-        $sql = "DELETE FROM likes WHERE {$type}_id=" . sqlesc($id) . ' AND user_id=' . sqlesc($user['id']);
-        $res = sql_query($sql) or sqlerr(__FILE__, __LINE__);
-        $sql = "UPDATE $table SET user_likes = user_likes - 1 WHERE id = " . sqlesc($id);
-        $res = sql_query($sql) or sqlerr(__FILE__, __LINE__);
-        $cache->delete("{$type}_user_likes_" . $id);
-        $cache->delete('latest_comments_');
-        $data['label'] = 'Like';
-        $data['list'] = '';
-    } elseif ($data['count'] == 1 && $current === 'Like') {
-        $data['label'] = _('Unlike');
-        $data['list'] = _('you like this');
-    } else {
-        $data['label'] = _('you lost me');
-    }
-    $sql = $fluent->from('likes')
-                  ->select(null)
-                  ->select('user_id')
-                  ->where("{$type}_id = ?", $id)
-                  ->where('user_id != ?', $user['id']);
-    foreach ($sql as $row) {
-        $rows[] = format_username((int) $row['user_id']);
-    }
-    if (!empty($rows)) {
-        $data['list'] = implode(', ', $rows) . (!empty($data['list']) ? ' and ' . $data['list'] : ' like' . plural(count($rows)) . ' this');
-    }
-    $data['class'] = "tot-$id";
+    $table = match ($type) {
+        'post' => 'posts',
+        'comment' => 'comments',
+        'topic' => 'topics',
+        'usercomment' => 'usercomments',
+        'request' => 'requests',
+        'offer' => 'offers',
+        'torrent' => 'torrents',
+        default => throw new InvalidArgumentException('Invalid like type'),
+    };
 
-    echo json_encode($data);
+    $exists = (int) $db->run(
+        "SELECT COUNT(id) FROM likes WHERE user_id = :uid AND {$type}_id = :id",
+        [':uid' => (int) $user['id'], ':id' => $id]
+    )->fetchColumn();
+    $cache = $container->get(Cache::class);
+
+    if ($exists === 0 && $current === 'Like') {
+        try {
+            $db->beginTransaction();
+            $db->run("INSERT INTO likes ({$type}_id, user_id) VALUES (:id, :uid)", [':id' => $id, ':uid' => (int) $user['id']]);
+            $db->run("UPDATE {$table} SET user_likes = user_likes + 1 WHERE id = :id", [':id' => $id]);
+            $db->commit();
+        } catch (\PDOException $e) {
+            if ((int) ($e->errorInfo[1] ?? 0) === 1062) {
+                $db->rollBack();
+            } else {
+                $db->rollBack();
+                throw $e;
+            }
+        }
+        $cache->delete("{$type}_user_likes_" . $id);
+        $cache->delete('latest_comments_');
+        $label = 'Unlike';
+        $list = 'you like this';
+    } elseif ($exists === 1 && $current === 'Unlike') {
+        try {
+            $db->beginTransaction();
+            $db->run("DELETE FROM likes WHERE {$type}_id = :id AND user_id = :uid", [':id' => $id, ':uid' => (int) $user['id']]);
+            $db->run("UPDATE {$table} SET user_likes = user_likes - 1 WHERE id = :id", [':id' => $id]);
+            $db->commit();
+        } catch (\PDOException $e) {
+            $db->rollBack();
+            throw $e;
+        }
+        $cache->delete("{$type}_user_likes_" . $id);
+        $cache->delete('latest_comments_');
+        $label = 'Like';
+        $list = '';
+    } elseif ($exists === 1 && $current === 'Like') {
+        $label = _('Unlike');
+        $list = _('you like this');
+    } else {
+        $label = _('you lost me');
+        $list = '';
+    }
+
+    $rows = $db->fetchAll(
+        "SELECT user_id FROM likes WHERE {$type}_id = :id AND user_id != :uid",
+        [':id' => $id, ':uid' => (int) $user['id']]
+    );
+    $names = [];
+    foreach ($rows as $row) {
+        $names[] = format_username((int) $row['user_id']);
+    }
+    if (!empty($names)) {
+        $list = implode(', ', $names) . (!empty($list) ? ' and ' . $list : ' like' . plural(count($names)) . ' this');
+    }
+
+    echo json_encode(['label' => $label, 'list' => $list, 'class' => "tot-$id"]);
     app_halt('Exit called');
 }

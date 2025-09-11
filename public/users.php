@@ -1,47 +1,44 @@
 <?php
-$db = $container->get(Database::class);
+declare(strict_types=1);
 
 require_once __DIR__ . '/../include/runtime_safe.php';
-
-
-declare(strict_types = 1);
+require_once __DIR__ . '/../include/bootstrap_pdo.php';
 
 use Pu239\Database;
+
+global $container, $site_config;
+$db = $container->get(Database::class);
 
 require_once __DIR__ . '/../include/bittorrent.php';
 require_once INCL_DIR . 'function_users.php';
 require_once INCL_DIR . 'function_html.php';
 require_once INCL_DIR . 'function_pager.php';
 check_user_status();
-global $site_config;
 
-$search = isset($_GET['search']) ? strip_tags(trim($_GET['search'])) : '';
-$class = isset($_GET['class']) ? $_GET['class'] : '-';
-$letter = '';
+$search = mb_substr(trim((string) ($_GET['search'] ?? '')), 0, 64);
+$class = (int) ($_GET['class'] ?? 0);
+$letter = mb_substr(trim((string) ($_GET['letter'] ?? '')), 0, 1);
+$where = ['status = 0', 'verified = 1', 'anonymous_until = 0'];
+$params = [];
 $q1 = '';
-if ($class === '-' || !ctype_digit($class)) {
-    $class = '';
+
+if ($search !== '') {
+    $where[] = 'username LIKE :search';
+    $params[':search'] = "%{$search}%";
+    $q1 = 'search=' . urlencode($search);
+} elseif ($letter !== '' && strpos('abcdefghijklmnopqrstuvwxyz0123456789', $letter) !== false) {
+    $where[] = 'username LIKE :letter';
+    $params[':letter'] = "{$letter}%";
+    $q1 = 'letter=' . urlencode($letter);
 }
-if ($search != '' || $class) {
-    $query1 = 'username LIKE ' . sqlesc("%$search%") . ' AND status = 0 AND verified = 1 AND anonymous_until = 0';
-    if ($search) {
-        $q1 = 'search = ' . htmlsafechars($search);
-    }
-} else {
-    $letter = isset($_GET['letter']) ? trim((string) $_GET['letter']) : '';
-    if (strlen($letter) > 1) {
-        app_halt('Exit called');
-    }
-    if ($letter == '' || strpos('abcdefghijklmnopqrstuvwxyz0123456789', $letter) === false) {
-        $letter = '';
-    }
-    $query1 = "username LIKE '$letter%' AND status = 0 AND verified = 1 AND anonymous_until = 0";
-    $q1 = "letter = $letter";
-}
-if (ctype_digit($class)) {
-    $query1 .= " AND class = $class";
+
+if ($class > 0) {
+    $where[] = 'class = :class';
+    $params[':class'] = $class;
     $q1 .= ($q1 ? '&amp;' : '') . "class=$class";
 }
+
+$query1 = implode(' AND ', $where);
 
 $HTMLOUT = "
     <h1 class='has-text-centered'>Search " . _('Users') . '</h1>';
@@ -56,7 +53,7 @@ $div .= "
 for ($i = 0;; ++$i) {
     if ($c = get_user_class_name((int) $i)) {
         $div .= "
-                <option value='$i' " . (ctype_digit($class) && $class == $i ? 'selected' : '') . ">$c</option>";
+                <option value='$i' " . ($class === $i ? 'selected' : '') . ">$c</option>";
     } else {
         break;
     }
@@ -97,14 +94,18 @@ $page = isset($_GET['page']) ? (int) $_GET['page'] : 1;
 $perpage = 25;
 $browsemenu = '';
 $pagemenu = '';
-$rows = $db->fetchAll('SELECT COUNT(id) FROM users WHERE ' . $query1) or sqlerr(__FILE__, __LINE__);
-$arr = mysqli_fetch_row($res);
-$pager = pager($perpage, (int) $arr[0], "{$site_config['paths']['baseurl']}/users.php?$q1&amp;");
-if ($arr[0] > 0) {
-    if ($arr[0] > $perpage) {
+$total = (int) $db->run('SELECT COUNT(id) FROM users WHERE ' . $query1, $params)->fetchColumn();
+$pager = pager($perpage, $total, "{$site_config['paths']['baseurl']}/users.php?$q1&amp;");
+if ($total > 0) {
+    if ($total > $perpage) {
         $HTMLOUT .= $pager['pagertop'];
     }
-    $res = sql_query("SELECT users.*, countries.name, countries.flagpic FROM users LEFT JOIN countries ON country = countries.id WHERE $query1 ORDER BY username {$pager['limit']}") or sqlerr(__FILE__, __LINE__);
+    $offset = max(0, (int) ($pager['offset'] ?? 0));
+    $limit = max(1, (int) ($pager['limit'] ?? $perpage));
+    $rows = $db->fetchAll(
+        'SELECT id, username, registered, last_access, class, country FROM users WHERE ' . $query1 . ' ORDER BY username LIMIT ' . $offset . ', ' . $limit,
+        $params
+    );
     $heading = "
                 <tr>
                     <th class='has-text-centered'>" . _('User name') . "</th>
@@ -114,8 +115,8 @@ if ($arr[0] > 0) {
                     <th class='has-text-centered'>" . _('Country') . '</th>
                 </tr>';
     $body = '';
-    while ($row = mysqli_fetch_assoc($res)) {
-        $country = ($row['name'] != null) ? "<img src='{$site_config['paths']['images_baseurl']}flag/" . htmlsafechars($row['flagpic']) . "' alt='" . htmlsafechars($row['name']) . "'>" : '---';
+    foreach ($rows as $row) {
+        $country = ($row['country'] !== null) ? "<img src='{$site_config['paths']['images_baseurl']}flag/" . htmlsafechars($row['country']) . "' alt='">" : '---';
         $body .= '
                 <tr>
                     <td>' . format_username((int) $row['id']) . '</td>
@@ -123,10 +124,10 @@ if ($arr[0] > 0) {
                     <td class="has-text-centered">' . get_date((int) $row['last_access'], 'LONG') . '</td>
                     <td class="has-text-centered">' . get_user_class_name((int) $row['class']) . "</td>
                     <td class='has-text-centered'>$country</td>
-                </tr>";
+                </tr>';
     }
     $HTMLOUT .= main_table($body, $heading);
-    if ($arr[0] > $perpage) {
+    if ($total > $perpage) {
         $HTMLOUT .= $pager['pagerbottom'];
     }
 }
