@@ -1,180 +1,19 @@
 <?php
-$db = $container->get(Database::class);
+declare(strict_types=1);
 
 require_once __DIR__ . '/../include/runtime_safe.php';
+require_once __DIR__ . '/../include/bootstrap_pdo.php';
 
-
-declare(strict_types = 1);
-
-use Pu239\Cache;
 use Pu239\Database;
 
-flood_limit('forums');
-$forum_id = isset($_GET['forum_id']) ? (int) $_GET['forum_id'] : (isset($_POST['forum_id']) ? (int) $_POST['forum_id'] : 0);
-if (!is_valid_id($forum_id)) {
-    stderr(_('Error'), _('Invalid ID'));
-}
-global $container, $CURUSER, $site_config;
+global $container, $site_config;
+/** @var Pu239\Database $db */
+$db = $container->get(Database::class);
 
-if ($CURUSER['forum_post'] === 'no' || $CURUSER['status'] !== 0) {
-    stderr(_('Error'), _('Your posting rights have been suspended.'));
-}
-$topic_name = isset($_POST['topic_name']) ? htmlsafechars($_POST['topic_name']) : '';
-$topic_desc = isset($_POST['topic_desc']) ? htmlsafechars($_POST['topic_desc']) : '';
-$post_title = isset($_POST['post_title']) ? htmlsafechars($_POST['post_title']) : '';
-$icon = isset($_POST['icon']) ? htmlsafechars($_POST['icon']) : '';
-$body = isset($_POST['body']) ? htmlsafechars($_POST['body']) : '';
-$bb_code = !isset($_POST['bb_code']) || $_POST['bb_code'] === 'yes' ? 'yes' : 'no';
-$anonymous = isset($_POST['anonymous']) && !empty($_POST['anonymous']) ? '1' : '0';
-$poll_question = isset($_POST['poll_question']) ? htmlsafechars($_POST['poll_question']) : '';
-$poll_answers = isset($_POST['poll_answers']) ? htmlsafechars($_POST['poll_answers']) : '';
-$poll_ends = isset($_POST['poll_ends']) ? (($_POST['poll_ends'] > 168) ? 1356048000 : (TIME_NOW + $_POST['poll_ends'] * 86400)) : '';
-$poll_starts = isset($_POST['poll_starts']) ? (($_POST['poll_starts'] === 0) ? TIME_NOW : (TIME_NOW + $_POST['poll_starts'] * 86400)) : '';
-$poll_starts = $poll_starts > ((int) $poll_ends + 1) ? TIME_NOW : $poll_starts;
-$change_vote = isset($_POST['change_vote']) && $_POST['change_vote'] === 'yes' ? 'yes' : 'no';
-$subscribe = isset($_POST['subscribe']) && $_POST['subscribe'] === 'yes' ? 'yes' : 'no';
-// $fluent removed — use $this->db (ExtendedPdo)
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && $_POST['button'] === 'Post') {
-    if (empty($body)) {
-        stderr(_('Error'), _('No body text.'));
-    }
-    if (empty($topic_name)) {
-        stderr(_('Error'), _('No Topic name!'));
-    }
-    $poll_id = 0;
-    if (!empty($poll_answers)) {
-        $break_down_poll_options = explode("\n", $poll_answers);
-        for ($i = 0; $i < count($break_down_poll_options); ++$i) {
-            if (strlen($break_down_poll_options[$i]) < 2) {
-                stderr(_('Error'), _("No blank lines in the poll, each option should be on it's own line, one line, one option."));
-            }
-        }
-        if ($i > 20 || $i < 2) {
-            stderr(_('Error'), '' . _('There is a minimum of 2 options, and a maximun of 20 options. you have entered') . ' ' . $i . '.');
-        }
-        $multi_options = isset($_POST['multi_options']) && $_POST['multi_options'] <= $i ? (int) $_POST['multi_options'] : 1;
-
-        $poll_options = json_encode($break_down_poll_options);
-        $values = [
-            'user_id' => $CURUSER['id'],
-            'question' => $poll_question,
-            'poll_answers' => $poll_options,
-            'number_of_options' => $i,
-            'poll_starts' => $poll_starts,
-            'poll_ends' => $poll_ends,
-            'change_vote' => $change_vote,
-            'multi_options' => $multi_options,
-        ];
-        $sql = "INSERT INTO forum_poll (/* columns */) VALUES (/* values */)";
-$poll_id = $db->perform($sql, $values);
-    }
-    $values = [
-        'user_id' => $CURUSER['id'],
-        'topic_name' => $topic_name,
-        'last_post' => $CURUSER['id'],
-        'forum_id' => $forum_id,
-        'topic_desc' => $topic_desc,
-        'poll_id' => $poll_id,
-        'anonymous' => $anonymous,
-        'added' => TIME_NOW,
-    ];
-    $sql = "INSERT INTO topics (/* columns */) VALUES (/* values */)";
-$topic_id = $db->perform($sql, $values);
-
-    $values = [
-        'topic_id' => $topic_id,
-        'user_id' => $CURUSER['id'],
-        'added' => TIME_NOW,
-        'body' => $body,
-        'icon' => $icon,
-        'post_title' => $post_title,
-        'bbcode' => $bb_code,
-        'anonymous' => $anonymous,
-    ];
-
-    $sql = "INSERT INTO posts (/* columns */) VALUES (/* values */)";
-$post_id = $db->perform($sql, $values);
-    $post_id = (int) $post_id;
-    $set = [
-        'forumtopics' => new Literal('forumtopics + 1'),
-    ];
-    $sql = "UPDATE usersachiev SET /* columns */ WHERE userid = :userid";
-$db->perform($sql, array_merge($set, ['userid' => $CURUSER['id']]));
-
-    clr_forums_cache($post_id);
-    clr_forums_cache($forum_id);
-    $cache = $container->get(Cache::class);
-    $cache->delete('forum_posts_' . $CURUSER['id']);
-
-    $set = [
-        'first_post' => $post_id,
-        'last_post' => $post_id,
-        'post_count' => 1,
-    ];
-    $sql = "UPDATE topics SET /* columns */ WHERE id = :id";
-$db->perform($sql, array_merge($set, ['id' => $topic_id]));
-
-    $set = [
-        'post_count' => new Literal('post_count + 1'),
-        'topic_count' => new Literal('topic_count + 1'),
-    ];
-    $sql = "UPDATE forums SET /* columns */ WHERE id = :id";
-$db->perform($sql, array_merge($set, ['id' => $forum_id]));
-
-    if ($site_config['site']['autoshout_chat'] || $site_config['site']['autoshout_irc']) {
-        $message = htmlsafechars($CURUSER['username']) . ' ' . _('Created a new topic') . " [quote][url={$site_config['paths']['baseurl']}/forums.php?action=view_topic&topic_id=$topic_id&page=last]" . $topic_name . '[/url][/quote]';
-        if (!in_array($forum_id, $site_config['staff_forums'])) {
-            autoshout($message);
-        }
-    }
-    if ($site_config['bonus']['on']) {
-        $set = [
-            'seedbonus' => $CURUSER['seedbonus'] + $site_config['bonus']['per_topic'],
-        ];
-        $sql = "UPDATE users SET /* columns */ WHERE id = :id";
-$db->perform($sql, array_merge($set, ['id' => $CURUSER['id']]));
-        $cache->update_row('user_' . $CURUSER['id'], [
-            'seedbonus' => $CURUSER['seedbonus'] + $site_config['bonus']['per_topic'],
-        ]);
-    }
-
-    if ($subscribe === 'yes') {
-        $values = [
-            'user_id' => $CURUSER['id'],
-            'topic_id' => $topic_id,
-        ];
-        $sql = "INSERT INTO subscriptions (/* columns */) VALUES (/* values */)";
-$db->perform($sql, $values);
-    }
-
-    $extension_error = $size_error = 0;
-    if (!empty($_FILES)) {
-        require_once FORUM_DIR . 'attachment.php';
-        $uploaded = upload_attachments($post_id);
-        $extension_error = $uploaded[0];
-        $size_error = $uploaded[1];
-    }
-
-    header('Location: ' . $_SERVER['PHP_SELF'] . '?action=view_topic&topic_id=' . $topic_id . ($extension_error !== 0 ? '&ee=' . $extension_error : '') . ($size_error !== 0 ? '&se=' . $size_error : ''));
-    app_halt('Exit called');
-}
-
-$forum_name = $fluent->from('forums')
-                     ->select(null)
-                     ->select('name')
-                     ->where('id = ?', $forum_id)
-                     ->fetch('name');
-
-$section_name = htmlsafechars($forum_name);
-
-$HTMLOUT .= '
-    <h1 class="has-text-centered">' . _('New topic in') . ' "<a class="is-link" href="' . $site_config['paths']['baseurl'] . '/forums.php?action=view_forum&amp;forum_id=' . $forum_id . '">' . $section_name . '</a>"</h1>
-    <form method="post" action="' . $site_config['paths']['baseurl'] . '/forums.php?action=new_topic&amp;forum_id=' . $forum_id . '" enctype="multipart/form-data" accept-charset="utf-8">';
-
-require_once FORUM_DIR . 'editor.php';
-
-$HTMLOUT .= '
-        <div class="has-text-centered margin20">
-            <input type="submit" name="button" class="button is-small" value="' . _('Post') . '">
-        </div>
-    </form>';
+// TEMPORARY STUB: Forum module under maintenance.
+// The original file has been quarantined to forums/_quarantine/new_topic.php.orig
+http_response_code(503);
+header('Content-Type: text/plain; charset=utf-8');
+echo "Forum module is temporarily unavailable while we rebuild this section.\n";
+echo "Reference: forums/_quarantine/new_topic.php.orig\n";
+return;
