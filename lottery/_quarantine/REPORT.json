@@ -1,0 +1,48 @@
+[
+  {
+    "file": "lottery/config.php",
+    "quarantined_to": "lottery/_quarantine/config.php.orig",
+    "size_bytes": 6536,
+    "sha1": "beed9dd872f51c75a77b9d014208b2e7f675e798",
+    "first_200_chars": "<?php\\n$db = $container->get(Database::class);\\n\\nrequire_once __DIR__ . '/../include/runtime_safe.php';\\n\\n\\ndeclare(strict_types = 1);\\n\\nuse Pu239\\Database;\\n\\nuse Pu239\\Session;\\n\\nrequire_once __DIR__ . '/..",
+    "detected_markers": [
+      "likely_update",
+      "missing_bootstrap",
+      "missing_strict_types",
+      "unclosed_brace",
+      "dangling_quote",
+      "parse_error"
+    ]
+  },
+  {
+    "file": "lottery/tickets.php",
+    "quarantined_to": "lottery/_quarantine/tickets.php.orig",
+    "size_bytes": 6826,
+    "sha1": "10a3b4d2de9ea425fce811f9d7bcbea1b0ac1908",
+    "first_200_chars": "<?php\\n$db = $container->get(Database::class);\\n\\nrequire_once __DIR__ . '/../include/runtime_safe.php';\\n\\n\\ndeclare(strict_types = 1);\\n\\nuse Pu239\\Cache;\\nuse Pu239\\Database;\\nuse Pu239\\Session;\\n\\nrequire_onc",
+    "detected_markers": [
+      "contains_sql_query",
+      "contains_mysqli",
+      "likely_select",
+      "likely_update",
+      "missing_bootstrap",
+      "missing_strict_types",
+      "unclosed_brace",
+      "parse_error"
+    ]
+  },
+  {
+    "file": "lottery/viewtickets.php",
+    "quarantined_to": "lottery/_quarantine/viewtickets.php.orig",
+    "size_bytes": 2320,
+    "sha1": "75915023dd7959ed7e2f8867bc30fcefb2ee05a7",
+    "first_200_chars": "<?php\\n$db = $container->get(Database::class);\\n\\nrequire_once __DIR__ . '/../include/runtime_safe.php';\\n\\nrequire_once __DIR__ . '/../include/bootstrap_pdo.php';\\n\\n\\ndeclare(strict_types = 1);\\n\\nuse Pu239\\D",
+    "detected_markers": [
+      "contains_sql_query",
+      "contains_mysqli",
+      "likely_select",
+      "missing_strict_types",
+      "parse_error"
+    ]
+  }
+]
