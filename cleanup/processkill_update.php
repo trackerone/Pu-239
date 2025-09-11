@@ -1,35 +1,31 @@
 <?php
-$db = $container->get(Database::class);
+
+declare(strict_types=1);
 
 require_once __DIR__ . '/../include/runtime_safe.php';
-
 require_once __DIR__ . '/../include/bootstrap_pdo.php';
-
-
-declare(strict_types = 1);
 
 use Pu239\Database;
 
-use DI\DependencyException;
-use DI\NotFoundException;
+global $container;
+$db = $container->get(Database::class);
+$now = defined('TIME_NOW') ? (int) TIME_NOW : time();
 
 /**
- * @param $data
+ * @param array $data
  *
- * @throws DependencyException
- * @throws NotFoundException
- * @throws \PDOException
+ * @throws \Throwable
  */
-function processkill_update($data)
+function processkill_update(array $data): void
 {
-    global $site_config;
+    global $db, $site_config;
 
     $time_start = microtime(true);
-    $sql = sql_query('SHOW PROCESSLIST') or sqlerr(__FILE__, __LINE__);
+    $rows = $db->fetchAll('SHOW PROCESSLIST');
     $cnt = 0;
-    while ($arr = mysqli_fetch_assoc($sql)) {
+    foreach ($rows as $arr) {
         if ($arr['db'] == $site_config['db']['database'] && $arr['Command'] === 'Sleep' && $arr['Time'] > 120) {
-            sql_query("KILL {$arr['Id']}") or sqlerr(__FILE__, __LINE__);
+            $db->run('KILL ' . (int) $arr['Id']);
             ++$cnt;
         }
     }
@@ -41,3 +37,4 @@ function processkill_update($data)
         write_log('Process Kill Cleanup: Completed' . $text);
     }
 }
+

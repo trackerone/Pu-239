@@ -124,9 +124,11 @@ No matches.
 - `cleanup/optimizedb.php`: migrated from `sql_query`/`mysqli_fetch_assoc`/`sqlesc` to `Pu239\Database` with bound parameters; standardized bootstrap and strict typing.
 
 - `cleanup/announcement_update.php`: migrated from legacy `sql_query` to `Pu239\Database` with bound parameters; standardized bootstrap and strict typing.
+- `cleanup/cheatclean_update.php`: replaced `sql_query`/`sqlesc` with `$db->run` and bound parameters; standardized strict typing and bootstrap.
+- `cleanup/processkill_update.php`: switched from `sql_query`/`mysqli_fetch_assoc` to `$db->fetchAll`/`run`; standardized strict typing and bootstrap.
 ### Verification
 ```
-$ rg "mysqli_|sql_query\(|sqlesc\(" cleanup/optimizedb.php cleanup/announcement_update.php
+$ rg "mysqli_|sql_query\(|sqlesc\(" cleanup/optimizedb.php cleanup/announcement_update.php cleanup/cheatclean_update.php cleanup/processkill_update.php
 ```
 No matches.
 
