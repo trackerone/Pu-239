@@ -55,10 +55,13 @@ No matches.
 - `admin/bannedemails.php`: switched to `bootstrap_pdo.php` and migrated from legacy `sql_query`/`sqlesc` to `$db->run`/`fetchAll` with bound parameters.
 - `admin/user_hits.php`: removed `sql_query`, `mysqli_fetch_*`, and `sqlesc` in favor of `$db->fetch`/`fetchAll` with bound parameters.
 - `admin/acpmanage.php`: added `bootstrap_pdo.php` and converted bulk updates from `sql_query`/`sqlesc` to `$db->run` with named placeholders.
+- `admin/sysoplog.php`: migrated to `$db->fetchAll` with dynamic filters; standardized bootstrap and added strict typing.
+- `admin/watched_users.php`: replaced legacy `sql_query`/`sqlesc`/`mysqli_*` calls with `$db->run`/`fetch` and bound parameters; standardized bootstrap and added strict typing.
+- `admin/mysql_stats.php`: removed `mysqli_*` access and used `$db->fetchAll` for status/variables lookups; standardized bootstrap and added strict typing.
 
 ### Verification
 ```
-$ rg "mysqli_|sql_query\(|sqlesc\(" admin/bannedemails.php admin/user_hits.php admin/acpmanage.php
+$ rg "mysqli_|sql_query\(|sqlesc\(" admin/bannedemails.php admin/user_hits.php admin/acpmanage.php admin/sysoplog.php admin/watched_users.php admin/mysql_stats.php
 ```
 No matches in modified files.
 

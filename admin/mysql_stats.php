@@ -126,20 +126,17 @@ function localisedDate($timestamp = -1, $format = '')
 } // end of the 'localisedDate()' function
 ////////////////////// END FUNCTION LIST /////////////////////////////////////
 $HTMLOUT = '';
-$HTMLOUT .= "<h1 class='has-text-centered'>" . _('Mysql Server Status') . '</h1>';
-$rows = $db->fetchAll('SHOW GLOBAL STATUS');
-$serverStatus = [];
-while ($row = mysqli_fetch_row($res)) {
-    $serverStatus[$row[0]] = $row[1];
-}
-@((mysqli_free_result($res) || (is_object($res) && (get_class($res) === 'mysqli_result'))) ? true : false);
-unset($res, $row);
+ $HTMLOUT .= "<h1 class='has-text-centered'>" . _('Mysql Server Status') . '</h1>';
+ $status = $db->fetchAll('SHOW GLOBAL STATUS');
+ $variables = $db->fetchAll('SHOW GLOBAL VARIABLES');
+ $serverStatus = [];
+ foreach ($status as $row) {
+     $serverStatus[$row['Variable_name']] = $row['Value'];
+ }
+ unset($status);
 
-$rows = $db->fetchAll('SELECT UNIX_TIMESTAMP() - ' . $serverStatus['Uptime']) or sqlerr(__FILE__, __LINE__);
-$row = mysqli_fetch_row($res);
-$HTMLOUT .= "<p class='has-text-centered'>" . _fe('This MySQL server has been running for {0}. It started up on {1}', timespanFormat($serverStatus['Uptime']), localisedDate((int) $row[0])) . '</p>';
-((mysqli_free_result($res) || (is_object($res) && (get_class($res) === 'mysqli_result'))) ? true : false);
-unset($res, $row);
+ $ts = (int) $db->fetchValue('SELECT UNIX_TIMESTAMP()');
+ $HTMLOUT .= "<p class='has-text-centered'>" . _fe('This MySQL server has been running for {0}. It started up on {1}', timespanFormat((int) $serverStatus['Uptime']), localisedDate($ts - (int) $serverStatus['Uptime'])) . '</p>';
 
 //Get query statistics
 $queryStats = [];
