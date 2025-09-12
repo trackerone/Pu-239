@@ -350,3 +350,13 @@ $ rg "mysqli_|sql_query\\(|sqlesc\\(" forums/stafflock_post.php
 ```
 No matches.
 ********* master
+## include
+- `include/function_staff.php`: standardized bootstrap and replaced placeholder insert with `$db->run`/`lastInsertId` using bound parameters.
+- `include/nologip.php`: standardized bootstrap and migrated delete query to `$db->run` with bound integer parameter.
+- `include/stealth.php`: standardized bootstrap and replaced string-concatenated update with bound parameters.
+
+### Verification
+```
+$ rg "mysqli_|sql_query\\(|sqlesc\\(|mysqli_fetch|mysqli_num_rows|mysqli_insert_id" include/function_staff.php include/nologip.php include/stealth.php
+```
+No matches.

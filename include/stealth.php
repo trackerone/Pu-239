@@ -1,8 +1,7 @@
 <?php
 declare(strict_types=1);
-
-require_once __DIR__.'/runtime_safe.php';
-require_once __DIR__.'/bootstrap_pdo.php';
+require_once __DIR__ . '/../include/runtime_safe.php';
+require_once __DIR__ . '/../include/bootstrap_pdo.php';
 
 use DI\DependencyException;
 use DI\NotFoundException;
@@ -12,6 +11,9 @@ use Pu239\Database;
 use Pu239\Session;
 use Pu239\User;
 
+global $container;
+$db = $container->get(Database::class);
+
 /**
  * @throws DependencyException
  * @throws NotFoundException
@@ -20,8 +22,7 @@ use Pu239\User;
  */
 function stealth(int $userid, bool $stealth = true)
 {
-    global $container, $site_config, $CURUSER;
-    $db = $container->get(Database::class);
+    global $container, $site_config, $CURUSER, $db;
 
     $users_class = $container->get(User::class);
     $username = $users_class->get_item('username', $userid);
@@ -35,7 +36,14 @@ function stealth(int $userid, bool $stealth = true)
     }
 
     if ($setbits || $clrbits) {
-        $db->run('UPDATE users SET perms = ((perms | '.$setbits.') & ~'.$clrbits.') WHERE id = :id', [':id' => $userid]);
+        $db->run(
+            'UPDATE users SET perms = ((perms | :setbits) & ~:clrbits) WHERE id = :id',
+            [
+                ':setbits' => (int) $setbits,
+                ':clrbits' => (int) $clrbits,
+                ':id' => $userid,
+            ],
+        );
     }
     $row = $db->fetch('SELECT username, perms, modcomment FROM users WHERE id = :id', [':id' => $userid]);
     $row['perms'] = (int) $row['perms'];
