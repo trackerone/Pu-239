@@ -350,3 +350,11 @@ $ rg "mysqli_|sql_query\\(|sqlesc\\(" forums/stafflock_post.php
 ```
 No matches.
 ********* master
+## scripts
+- No PHP files found; no database migrations were necessary.
+
+### Verification
+```bash
+$ rg "mysqli_|sql_query\(|sqlesc\(|mysqli_fetch|mysqli_num_rows|mysqli_insert_id" scripts
+```
+No matches.
