@@ -15,7 +15,7 @@ $cache = $container->get(Cache::class);
 if ($site_config['alerts']['staffmsg'] && has_access($user['class'], UC_STAFF, 'coder')) {
     $answeredby = $cache->get('staff_mess_');
     if ($answeredby === false || is_null($answeredby)) {
-        $answeredby = $db->fetchValue('SELECT COUNT(id) FROM staffmessages WHERE answeredby = 0');
+        $answeredby = $db->fetchValue('SELECT COUNT(*) AS count FROM staffmessages WHERE answeredby = 0');
         $cache->set('staff_mess_', $answeredby, $site_config['expires']['alerts']);
     }
     if ($answeredby > 0) {
