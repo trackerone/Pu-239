@@ -1,10 +1,10 @@
 <?php
 declare(strict_types=1);
 
-use Pu239\Database;
-
 require_once __DIR__ . '/../include/runtime_safe.php';
 require_once __DIR__ . '/../include/bootstrap_pdo.php';
+
+use Pu239\Database;
 
 global $container;
 
@@ -14,18 +14,9 @@ if (!isset($argv[1]) || $argv[1] !== 'rehash') {
     app_halt("This script will rehash and rename all images in public/images/proxy directory\n\nTo run:\n{$argv[0]} rehash\n\n");
 }
 
-// $fluent removed — use $this->db (ExtendedPdo)
-$urls = $fluent->from('images')
-               ->select('null')
-               ->select('url')
-               ->select('type')
-               ->fetchAll();
+$urls = $db->run('SELECT url, type FROM images')->fetchAll();
 
-$photos = $fluent->from('person')
-                 ->select(null)
-                 ->select('photo AS url')
-                 ->where('photo IS NOT NULL')
-                 ->fetchAll();
+$photos = $db->run('SELECT photo AS url FROM person WHERE photo IS NOT NULL')->fetchAll();
 
 $urls = array_merge($urls, $photos);
 $i = 0;

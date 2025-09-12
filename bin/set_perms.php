@@ -5,7 +5,10 @@ require_once __DIR__ . '/../include/runtime_safe.php';
 require_once __DIR__ . '/../include/bootstrap_pdo.php';
 require_once BIN_DIR . 'functions.php';
 
-global $site_config, $BLOCKS;
+use Pu239\Database;
+
+global $container, $site_config, $BLOCKS;
+$db = $container->get(Database::class);
 
 if (empty($BLOCKS)) {
     app_halt('BLOCKS are empty');

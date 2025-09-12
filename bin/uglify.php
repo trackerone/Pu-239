@@ -1,18 +1,22 @@
 <?php
 declare(strict_types=1);
 
-use Delight\Auth\AuthError;
-use Delight\Auth\NotLoggedInException;
-use DI\DependencyException;
-use DI\NotFoundException;
-use MatthiasMullie\Scrapbook\Exception\UnbegunTransaction;
-use Spatie\Image\Exceptions\InvalidManipulation;
-
 require_once __DIR__ . '/../include/runtime_safe.php';
 require_once __DIR__ . '/../include/bootstrap_pdo.php';
 require_once INCL_DIR . 'function_users.php';
 require_once INCL_DIR . 'function_html.php';
 require_once BIN_DIR . 'functions.php';
+
+use Delight\Auth\AuthError;
+use Delight\Auth\NotLoggedInException;
+use DI\DependencyException;
+use DI\NotFoundException;
+use MatthiasMullie\Scrapbook\Exception\UnbegunTransaction;
+use Pu239\Database;
+use Spatie\Image\Exceptions\InvalidManipulation;
+
+global $container;
+$db = $container->get(Database::class);
 
 if (php_sapi_name() === 'cli') {
     toggle_site_status(true);

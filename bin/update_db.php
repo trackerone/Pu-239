@@ -1,10 +1,10 @@
 <?php
-$db = $container->get(Database::class);
+declare(strict_types=1);
 
 require_once __DIR__ . '/../include/runtime_safe.php';
-
-
-declare(strict_types = 1);
+require_once __DIR__ . '/../include/bootstrap_pdo.php';
+require_once __DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'config' . DIRECTORY_SEPARATOR . 'define.php';
+require_once INCL_DIR . 'app.php';
 
 use DI\DependencyException;
 use DI\NotFoundException;
@@ -12,9 +12,9 @@ use Pu239\Cache;
 use Pu239\Database;
 use Pu239\Settings;
 
-require_once __DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'config' . DIRECTORY_SEPARATOR . 'define.php';
-require_once INCL_DIR . 'app.php';
+global $container;
 
+$db = $container->get(Database::class);
 $env = $container->get('env');
 $settings = $container->get(Settings::class);
 $site_config = $settings->get_settings();
@@ -63,12 +63,11 @@ function update_all(array $argv, array $sql_updates)
  */
 function update_database(array $argv, array $sql_updates, bool $all)
 {
-    global $container, $site_config;
+    global $container, $site_config, $db;
 
     $cache = $container->get(Cache::class);
-    // $fluent removed — use $this->db (ExtendedPdo)
-    $qid = array_search($argv[2], array_column($sql_updates, 'id'));
-    if (empty($qid)) {
+    $qid = array_search($argv[2], array_column($sql_updates, 'id'), true);
+    if ($qid === false) {
         app_halt("{$argv[2]} is an invalid ID\n");
     }
     $id = (int) $sql_updates[$qid]['id'];
@@ -77,15 +76,12 @@ function update_database(array $argv, array $sql_updates, bool $all)
     if ($argv[1] === 'run') {
         $comment = [];
         try {
-            $query = $fluent->getPdo()
-                ->prepare($sql);
-            $query->execute();
-            $values = [
-                'id' => $id,
-                'query' => $sql,
+            $db->run($sql);
+            $insert = [
+                ':id' => $id,
+                ':query' => $sql,
             ];
-            $sql = "INSERT INTO database_updates (/* columns */) VALUES (/* values */)";
-$db->perform($sql, $values);
+            $db->run('INSERT INTO database_updates (id, query) VALUES (:id, :query)', $insert);
 
             if ($flush) {
                 $cache->flushDB();
@@ -130,12 +126,11 @@ $db->perform($sql, $values);
             echo implode("\n", $comment) . "\n";
         }
     } elseif ($argv[1] === 'ignore') {
-        $values = [
-            'id' => (int) $id,
-            'query' => $sql,
+        $insert = [
+            ':id' => $id,
+            ':query' => $sql,
         ];
-        $sql = "INSERT INTO database_updates (/* columns */) VALUES (/* values */)";
-$db->perform($sql, $values);
+        $db->run('INSERT INTO database_updates (id, query) VALUES (:id, :query)', $insert);
     }
     echo "\n\n======================================================================\n\n";
     get_updates($argv, $sql_updates, false);
@@ -155,15 +150,11 @@ $db->perform($sql, $values);
  */
 function get_updates(array $argv, array $sql_updates, bool $all)
 {
-    global $container;
+    global $db;
 
-    // $fluent removed — use $this->db (ExtendedPdo)
-
-    $results = $fluent->from('database_updates')
-        ->select(null)
-        ->select('id')
-        ->select('added')
-        ->fetchPairs('id', 'added');
+    $sql = 'SELECT id, added FROM database_updates';
+    $rows = $db->run($sql)->fetchAll();
+    $results = array_column($rows, 'added', 'id');
 
     $updates = [];
     foreach ($sql_updates as $update) {

@@ -5,7 +5,10 @@ require_once __DIR__ . '/../include/runtime_safe.php';
 require_once __DIR__ . '/../include/bootstrap_pdo.php';
 require_once BIN_DIR . 'functions.php';
 
-global $site_config;
+use Pu239\Database;
+
+global $container, $site_config;
+$db = $container->get(Database::class);
 $database = '';
 clear_di_cache();
 cleanup(get_webserver_user());
