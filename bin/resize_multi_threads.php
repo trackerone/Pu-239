@@ -1,13 +1,15 @@
 <?php
 declare(strict_types=1);
 
-use Pu239\Cache;
-
 require_once __DIR__ . '/../include/runtime_safe.php';
 require_once __DIR__ . '/../include/bootstrap_pdo.php';
 
+use Pu239\Cache;
+use Pu239\Database;
+
 global $container;
 
+$db = $container->get(Database::class);
 set_time_limit(18000);
 $start = microtime(true);
 $i = 1;
@@ -22,18 +24,10 @@ $use_cores = $cores * 2;
 $threads = $use_cores > 20 ? 20 : $use_cores;
 $limit = 50;
 $childs = [];
-// $fluent removed — use $this->db (ExtendedPdo)
-$images = $fluent->from('images')
-                 ->select(null)
-                 ->select('COUNT(url) AS count')
-                 ->where('fetched = "no"')
-                 ->fetch("count");
-$persons = $fluent->from('person')
-                  ->select(null)
-                  ->select('COUNT(photo) AS count')
-                  ->where('photo IS NOT NULL')
-                  ->where('updated + 604800 < ?', TIME_NOW)
-                  ->fetch("count");
+$sql = 'SELECT COUNT(*) AS count FROM images WHERE fetched = :fetched';
+$images = (int) $db->run($sql, [':fetched' => 'no'])->fetch()['count'];
+$sql = 'SELECT COUNT(*) AS count FROM person WHERE photo IS NOT NULL AND updated + 604800 < :time';
+$persons = (int) $db->run($sql, [':time' => TIME_NOW])->fetch()['count'];
 
 if ($images > 0 && $images < $threads * $limit) {
     $threads = (int) floor($images / $limit);
