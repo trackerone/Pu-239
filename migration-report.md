@@ -360,6 +360,21 @@ $ rg "mysqli_|sql_query\\(|sqlesc\\(" forums/stafflock_post.php
 ```
 No matches.
 ********* master
+********* codex/refactor-database-calls-to-pdo
+
+## bin
+- `bin/clear_cache.php`, `bin/functions.php`, `bin/get_timestamp.php`, `bin/import_tables.php`, `bin/install.php`, `bin/jobby.php`, `bin/mysql_drop_fks.php`, `bin/optimize_resize_images.php`, `bin/remove_altered_images.php`, `bin/remove_torrents.php`, `bin/rename_image_hashes.php`, `bin/resize_multi_threads.php`, `bin/set_perms.php`, `bin/uglify.php`, `bin/update_db.php`, `bin/usersfix.php`, `bin/validate_images.php`: standardized strict typing and bootstrap, migrated all database calls to `Pu239\Database` with bound parameters.
+- Legacy patterns (`mysqli_*`, `sql_query()`, `sqlesc()`, `mysqli_fetch_*`, `mysqli_num_rows`, `mysqli_insert_id`) – before: 0, after: 0.
+- Transactions retained in `install.php` and user update helper.
+- Replaced `rowCount` logic with `SELECT COUNT(*) AS count` in `resize_multi_threads.php`.
+- Bound `LIMIT`/`OFFSET` parameters in `optimize_resize_images.php`.
+
+### Verification
+```
+$ rg "mysqli_|sql_query\\(|sqlesc\\(|mysqli_fetch|mysqli_num_rows|mysqli_insert_id" bin
+```
+No matches.
+=======
 ********* codex/migrate-db-calls-to-pu239-database-6gts04
 ## include
 - `include/function_staff.php`: standardized bootstrap and replaced placeholder insert with `$db->run`/`lastInsertId` using bound parameters.

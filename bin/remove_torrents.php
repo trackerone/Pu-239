@@ -1,21 +1,18 @@
 <?php
 declare(strict_types=1);
 
-use Pu239\Torrent;
-
 require_once __DIR__ . '/../include/runtime_safe.php';
 require_once __DIR__ . '/../include/bootstrap_pdo.php';
 
+use Pu239\Database;
+use Pu239\Torrent;
+
 global $container;
 
+$db = $container->get(Database::class);
 $time_start = microtime(true);
-// $fluent removed — use $this->db (ExtendedPdo)
-$torrents = $fluent->from('torrents')
-                   ->select(null)
-                   ->select('id')
-                   ->select('info_hash')
-                   ->select('owner')
-                   ->orderBy('id');
+$sql = 'SELECT id, info_hash, owner FROM torrents ORDER BY id';
+$torrents = $db->run($sql)->fetchAll();
 
 $i = 0;
 $torrents_class = $container->get(Torrent::class);
@@ -24,19 +21,12 @@ foreach ($torrents as $torrent) {
     $torrents_class->remove_torrent($torrent['info_hash'], (int) $torrent['id'], (int) $torrent['owner']);
     ++$i;
 }
-$pdo = $container->get(PDO::class);
-$query = 'SET FOREIGN_KEY_CHECKS = 0';
-$pdo->exec($query);
-$query = 'TRUNCATE `torrents`';
-$pdo->exec($query);
-$query = 'TRUNCATE `snatched`';
-$pdo->exec($query);
-$query = 'TRUNCATE `peers`';
-$pdo->exec($query);
-$query = 'TRUNCATE `files`';
-$pdo->exec($query);
-$query = 'SET FOREIGN_KEY_CHECKS = 1';
-$pdo->exec($query);
+$db->run('SET FOREIGN_KEY_CHECKS = 0');
+$db->run('TRUNCATE torrents');
+$db->run('TRUNCATE snatched');
+$db->run('TRUNCATE peers');
+$db->run('TRUNCATE files');
+$db->run('SET FOREIGN_KEY_CHECKS = 1');
 
 $time_end = microtime(true);
 $run_time = $time_end - $time_start;
