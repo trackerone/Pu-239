@@ -1,20 +1,20 @@
 <?php
+declare(strict_types=1);
 require_once __DIR__ . '/../../include/runtime_safe.php';
-
-
-declare(strict_types = 1);
+require_once __DIR__ . '/../../include/bootstrap_pdo.php';
 
 use Pu239\Database;
-
+use Pu239\Cache;
 use DI\DependencyException;
 use DI\NotFoundException;
-use Pu239\Cache;
+
+global $container, $site_config;
+$db = $container->get(Database::class);
+$cache = $container->get(Cache::class);
 
 require_once __DIR__ . '/../../include/bittorrent.php';
 require_once INCL_DIR . 'function_users.php';
 $user = check_user_status();
-global $container;
-$db = $container->get(Database::class);;
 
 if (empty($_POST)) {
     stderr(_('Error'), _('Access Not Allowed'));
@@ -28,48 +28,43 @@ if (!isset($user)) {
     app_halt('Exit called');
 }
 
-$uid = $user['id'];
-$tid = isset($_POST['tid']) ? (int) $_POST['tid'] : (isset($_GET['tid']) ? (int) $_GET['tid'] : 0);
-$do = isset($_POST['action']) ? htmlsafechars($_POST['action']) : (isset($_GET['action']) ? htmlsafechars($_GET['action']) : 'list');
-$ajax = isset($_POST['ajax']) && $_POST['ajax'] == 1 ? true : false;
+$uid = (int) $user['id'];
+$tid = (int) ($_POST['tid'] ?? ($_GET['tid'] ?? 0));
+$do = htmlsafechars($_POST['action'] ?? ($_GET['action'] ?? 'list'));
+$ajax = isset($_POST['ajax']) && (int) $_POST['ajax'] === 1;
 
 /**
- *
- * @param int  $uid
- * @param int  $tid
- * @param bool $ajax
- *
  * @throws DependencyException
  * @throws NotFoundException
  * @throws \PDOException
- *
- * @return false|string
  */
 function print_list(int $uid, int $tid, bool $ajax)
 {
-    global $site_config;
+    global $db, $cache, $site_config;
 
-    $qt = sql_query('SELECT th.userid, u.username, u.seedbonus FROM thanks AS th INNER JOIN users AS u ON u.id=th.userid WHERE th.torrentid=' . sqlesc($tid) . ' ORDER BY u.class DESC') or sqlerr(__FILE__, __LINE__);
+    $rows = $db->fetchAll(
+        'SELECT th.userid, u.username, u.seedbonus FROM thanks AS th INNER JOIN users AS u ON u.id = th.userid WHERE th.torrentid = :tid ORDER BY u.class DESC',
+        [':tid' => $tid]
+    );
     $list = $ids = [];
-    $hadTh = false;
-    if (mysqli_num_rows($qt) > 0) {
-        while ($a = mysqli_fetch_assoc($qt)) {
-            $list[] = format_username((int) $a['userid']);
-            $ids[] = (int) $a['userid'];
-        }
-        $hadTh = in_array($uid, $ids) ? true : false;
+    foreach ($rows as $a) {
+        $list[] = format_username((int) $a['userid']);
+        $ids[] = (int) $a['userid'];
     }
+    $hadTh = in_array($uid, $ids, true);
+
     if ($ajax) {
         return json_encode([
             'list' => (count($list) > 0 ? implode(', ', $list) : ''),
             'hadTh' => $hadTh,
             'status' => true,
         ]);
-    } else {
-        $form = !$hadTh ? "<span class='left10'><form action='{$site_config['paths']['baseurl']}/ajax/thanks.php' method='post'><input type='submit' class='button is-small details-button' name='submit' value='Say thanks'><input type='hidden' name='torrentid' value='{$tid}'><input type='hidden' name='action' value='add'></form></span enctype='multipart/form-data' accept-charset='utf-8'>" : '';
-        $out = (count($list) > 0 ? implode(', ', $list) : '');
+    }
 
-        return <<<IFRAME
+    $form = !$hadTh ? "<span class='left10'><form action='{$site_config['paths']['baseurl']}/ajax/thanks.php' method='post'><input type='submit' class='button is-small details-button' name='submit' value='Say thanks'><input type='hidden' name='torrentid' value='{$tid}'><input type='hidden' name='action' value='add'></form></span enctype='multipart/form-data' accept-charset='utf-8'>" : '';
+    $out = (count($list) > 0 ? implode(', ', $list) : '');
+
+    return <<<IFRAME
 <!doctype html>
 <html>
 <head>
@@ -77,7 +72,7 @@ function print_list(int $uid, int $tid, bool $ajax)
     <meta http-equiv='X-UA-Compatible' content='IE=edge'>
     <meta name='viewport' content='width=device-width, initial-scale=1'>
 <style>
-body { margin:0;padding:0; 
+body { margin:0;padding:0;
        font-size:12px;
        font-family:arial,sans-serif;
        color: #fff;
@@ -88,9 +83,9 @@ a, a:link, a:visited {
   font-size:12px;
 }
 a:hover {
-  color: #fff
+  color: #fff;
   text-decoration:underline;
-  
+
 }
 .btn {
 background-color:#890537;
@@ -108,7 +103,6 @@ padding:1px 3px;
 </body>
 </html>
 IFRAME;
-    }
 }
 
 switch ($do) {
@@ -118,30 +112,44 @@ switch ($do) {
 
     case 'add':
         if ($uid > 0 && $tid > 0) {
-            $c = 'SELECT count(id) FROM thanks WHERE userid=' . sqlesc($uid) . ' AND torrentid=' . sqlesc($tid);
-            $result = sql_query($c);
-            $arr = $result->fetch_row();
-            if ($arr[0] == 0) {
-                if ($db->run('INSERT INTO thanks (userid,torrentid) VALUES (' . sqlesc($uid) . ',' . sqlesc($tid) . ')')) {
-                    echo print_list($uid, $tid, $ajax);
-                } else {
-                    $msg = 'There was an error with the query,contact the staff. Mysql error ' . ((is_object($mysqli)) ? mysqli_error($mysqli) : (($___mysqli_res = mysqli_connect_error()) ? $___mysqli_res : false));
-                    echo $ajax ? json_encode([
-                        'status' => false,
-                        'err' => $msg,
-                    ]) : $msg;
+            $arr = $db->fetch(
+                'SELECT COUNT(id) AS c FROM thanks WHERE userid = :uid AND torrentid = :tid',
+                [':uid' => $uid, ':tid' => $tid]
+            );
+            if ((int) ($arr['c'] ?? 0) === 0) {
+                try {
+                    $db->beginTransaction();
+                    $db->run(
+                        'INSERT INTO thanks (userid, torrentid) VALUES (:uid, :tid)',
+                        [':uid' => $uid, ':tid' => $tid]
+                    );
+                    if ($site_config['bonus']['on']) {
+                        $db->run(
+                            'UPDATE users SET seedbonus = seedbonus + :bonus WHERE id = :id',
+                            [
+                                ':bonus' => $site_config['bonus']['per_thanks'],
+                                ':id' => $uid,
+                            ]
+                        );
+                    }
+                    $db->commit();
+                } catch (\Throwable $e) {
+                    $db->rollBack();
+                    break;
                 }
+                if ($site_config['bonus']['on']) {
+                    $User = $db->fetch('SELECT seedbonus FROM users WHERE id = :id', [':id' => $uid]);
+                    $cache->update_row(
+                        'user_' . $uid,
+                        [
+                            'seedbonus' => (int) ($User['seedbonus'] ?? 0),
+                        ],
+                        $site_config['expires']['user_cache']
+                    );
+                }
+                echo print_list($uid, $tid, $ajax);
             }
-        }
-        if ($site_config['bonus']['on']) {
-            $db->run('UPDATE users SET seedbonus = seedbonus + ' . sqlesc($site_config['bonus']['per_thanks']) . ' WHERE id = :id', [':id' => $uid]) or sqlerr(__FILE__, __LINE__);
-            $sql = sql_query('SELECT seedbonus FROM users WHERE id=' . sqlesc($uid)) or sqlerr(__FILE__, __LINE__);
-            $User = mysqli_fetch_assoc($sql);
-            $update['seedbonus'] = ($User['seedbonus'] + $site_config['bonus']['per_thanks']);
-            $cache = $container->get(Cache::class);
-            $cache->update_row('user_' . $uid, [
-                'seedbonus' => $update['seedbonus'],
-            ], $site_config['expires']['user_cache']);
         }
         break;
 }
+

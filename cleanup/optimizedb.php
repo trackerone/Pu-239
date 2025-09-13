@@ -23,7 +23,7 @@ function optimizedb($data)
     $time_start = microtime(true);
     $minwaste = 1024 * 1024 * 10; // 10 MB
     $rows = $db->fetchAll(
-        'SHOW TABLE STATUS FROM ' . $site_config['db']['database'] . ' WHERE Data_free > :minwaste',
+        "SHOW TABLE STATUS FROM {$site_config['db']['database']} WHERE Data_free > :minwaste",
         ['minwaste' => $minwaste]
     );
     $oht = '';
@@ -35,7 +35,7 @@ function optimizedb($data)
     }
     $oht = rtrim($oht, ',');
     foreach ($tables as $table) {
-        $db->run('OPTIMIZE TABLE ' . $table);
+        $db->run("OPTIMIZE TABLE `{$table}`");
     }
     if ($data['clean_log']) {
         write_log('Auto Optimize DB Cleanup: Completed');
