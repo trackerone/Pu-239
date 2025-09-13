@@ -6,10 +6,20 @@
 - `public/ajax/like.php`: replaced legacy queries with `$db->run`, added transaction handling and input validation, and standardized bootstrap.
 - `public/users.php`: migrated user search to bound parameters with explicit columns and sanitized input.
 - `public/messages.php`: standardized bootstrap and converted mailbox lookup to `$db->fetchAll` with bound parameters.
+- `public/ajax/rating.php`: migrated from legacy queries to `$db->run` with transactions and bound parameters; standardized bootstrap.
+- `public/ajax/thanks.php`: migrated from `sql_query`/`sqlesc` to `$db->run` with transactions and bound parameters; standardized bootstrap.
+
+### public/ajax summary
+- Files changed: 2 (`public/ajax/rating.php`, `public/ajax/thanks.php`)
+- Legacy patterns removed: `sql_query` (3), `sqlesc` (5), `mysqli_*` (4)
+- Transactions added in: `public/ajax/rating.php`, `public/ajax/thanks.php`
+- `SELECT COUNT(*)` introduced: `public/ajax/thanks.php`
+- Bound parameters applied to all inputs; no IN/LIKE/LIMIT patterns in this batch
+- Verification: 0 legacy pattern matches in `public/ajax`
 
 ### Verification
 ```
-$ rg "mysqli_|sql_query\(|sqlesc\(" public/contactstaff.php public/tenpercent.php public/ajax/like.php public/users.php public/messages.php
+$ rg "mysqli_|sql_query\(|sqlesc\(" public/contactstaff.php public/tenpercent.php public/ajax/like.php public/users.php public/messages.php public/ajax/rating.php public/ajax/thanks.php
 ```
 No matches in modified files.
 
@@ -350,6 +360,7 @@ $ rg "mysqli_|sql_query\\(|sqlesc\\(" forums/stafflock_post.php
 ```
 No matches.
 ********* master
+********* codex/refactor-database-calls-to-pdo
 
 ## bin
 - `bin/clear_cache.php`, `bin/functions.php`, `bin/get_timestamp.php`, `bin/import_tables.php`, `bin/install.php`, `bin/jobby.php`, `bin/mysql_drop_fks.php`, `bin/optimize_resize_images.php`, `bin/remove_altered_images.php`, `bin/remove_torrents.php`, `bin/rename_image_hashes.php`, `bin/resize_multi_threads.php`, `bin/set_perms.php`, `bin/uglify.php`, `bin/update_db.php`, `bin/usersfix.php`, `bin/validate_images.php`: standardized strict typing and bootstrap, migrated all database calls to `Pu239\Database` with bound parameters.
@@ -363,3 +374,38 @@ No matches.
 $ rg "mysqli_|sql_query\\(|sqlesc\\(|mysqli_fetch|mysqli_num_rows|mysqli_insert_id" bin
 ```
 No matches.
+=======
+********* codex/migrate-db-calls-to-pu239-database-6gts04
+## include
+- `include/function_staff.php`: standardized bootstrap and replaced placeholder insert with `$db->run`/`lastInsertId` using bound parameters.
+- `include/nologip.php`: standardized bootstrap and migrated delete query to `$db->run` with bound integer parameter.
+- `include/stealth.php`: standardized bootstrap and replaced string-concatenated update with bound parameters.
+
+### Verification
+```
+$ rg "mysqli_|sql_query\\(|sqlesc\\(|mysqli_fetch|mysqli_num_rows|mysqli_insert_id" include/function_staff.php include/nologip.php include/stealth.php
+```
+No matches.
+=======
+********* codex/migrate-db-calls-to-pu239-database-ebjefk
+## scripts
+- No PHP files found; no database migrations were necessary.
+
+### Verification
+```bash
+$ rg "mysqli_|sql_query\(|sqlesc\(|mysqli_fetch|mysqli_num_rows|mysqli_insert_id" scripts
+```
+No matches.
+=======
+
+## public
+- 1 file updated: `public/achievementlist.php`.
+- Legacy patterns removed: `mysqli_num_rows` (1 → 0).
+
+### Verification
+```bash
+$ rg "mysqli_|sql_query\\(|sqlesc\\(" public/achievementlist.php
+```
+No matches.
+
+********* master

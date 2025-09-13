@@ -25,7 +25,7 @@ function processkill_update(array $data): void
     $cnt = 0;
     foreach ($rows as $arr) {
         if ($arr['db'] == $site_config['db']['database'] && $arr['Command'] === 'Sleep' && $arr['Time'] > 120) {
-            $db->run('KILL ' . (int) $arr['Id']);
+            $db->run('KILL :id', ['id' => (int) $arr['Id']]);
             ++$cnt;
         }
     }
