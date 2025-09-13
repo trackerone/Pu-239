@@ -350,3 +350,14 @@ $ rg "mysqli_|sql_query\\(|sqlesc\\(" forums/stafflock_post.php
 ```
 No matches.
 ********* master
+
+## public
+- 1 file updated: `public/achievementlist.php`.
+- Legacy patterns removed: `mysqli_num_rows` (1 → 0).
+
+### Verification
+```bash
+$ rg "mysqli_|sql_query\\(|sqlesc\\(" public/achievementlist.php
+```
+No matches.
+
