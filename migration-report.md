@@ -360,6 +360,16 @@ $ rg "mysqli_|sql_query\\(|sqlesc\\(" forums/stafflock_post.php
 ```
 No matches.
 ********* master
+********* codex/migrate-db-calls-to-pu239-database-ebjefk
+## scripts
+- No PHP files found; no database migrations were necessary.
+
+### Verification
+```bash
+$ rg "mysqli_|sql_query\(|sqlesc\(|mysqli_fetch|mysqli_num_rows|mysqli_insert_id" scripts
+```
+No matches.
+=======
 
 ## public
 - 1 file updated: `public/achievementlist.php`.
@@ -371,3 +381,4 @@ $ rg "mysqli_|sql_query\\(|sqlesc\\(" public/achievementlist.php
 ```
 No matches.
 
+********* master
