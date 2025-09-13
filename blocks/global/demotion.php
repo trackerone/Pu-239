@@ -7,7 +7,7 @@ require_once __DIR__ . '/../../include/bootstrap_pdo.php';
 use Pu239\Database;
 
 $user = check_user_status();
-global $site_config;
+global $container, $site_config;
 
 $db = $container->get(Database::class);
 

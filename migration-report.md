@@ -360,6 +360,24 @@ $ rg "mysqli_|sql_query\\(|sqlesc\\(" forums/stafflock_post.php
 ```
 No matches.
 ********* master
+********* codex/migrate-db-calls-to-pu239-database-4xrkki
+
+## blocks/global (PDO cleanup)
+- `blocks/global/bugmessages.php`: replaced `COUNT(id)` with `COUNT(*)`.
+- `blocks/global/demotion.php`: added missing `$container` bootstrap.
+- `blocks/global/happyhour.php`: added missing `$container` bootstrap.
+- `blocks/global/report.php`: replaced `COUNT(id)` with `COUNT(*)`.
+- `blocks/global/uploadapp.php`: replaced `COUNT(id)` with `COUNT(*)`.
+- `blocks/global/staffmessages.php`: replaced `COUNT(id)` with `COUNT(*)`.
+
+Replaced 4 occurrences of `COUNT(id)` with `COUNT(*)` for accurate counting.
+
+### Verification
+```bash
+$ rg "mysqli_|sql_query\(|sqlesc\(" blocks/global
+```
+No matches.
+=======
 ********* codex/refactor-database-calls-to-pdo
 
 ## bin

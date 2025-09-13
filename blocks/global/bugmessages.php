@@ -15,7 +15,7 @@ $cache = $container->get(Cache::class);
 if ($site_config['alerts']['bug'] && has_access($user['class'], UC_STAFF, 'coder')) {
     $bug_count = $cache->get('bug_mess_');
     if ($bug_count === false || is_null($bug_count)) {
-        $bug_count = $db->fetchValue('SELECT COUNT(id) FROM bugs WHERE status = ?', ['na']);
+        $bug_count = $db->fetchValue('SELECT COUNT(*) AS count FROM bugs WHERE status = ?', ['na']);
         $cache->set('bug_mess_', $bug_count, $site_config['expires']['alerts']);
     }
     if ($bug_count > 0) {
