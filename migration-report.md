@@ -481,6 +481,15 @@ No matches.
 * COUNT(*) replacements: none
 * Bound parameters added for LIMIT: `blocks/index/news.php`
 ********* master
+********* codex/migrate-db-calls-to-pu239-database-2a37zj
+
+## config (bootstrap refinement)
+- `config/ann_config.php`, `config/classes.php`, `config/config_example.php`, `config/define.php`, `config/definitions.php`, `config/emoticons.php`, `config/functions.php`, `config/session.php`, `config/subtitles.php`, `config/whereis.php`, `config/database.php.example`: added missing `global $container` to complete the standardized PDO bootstrap.
+
+### Verification
+```
+$ rg -n -e 'mysqli_' -e 'sql_query\(' -e 'sqlesc\(' -e 'mysqli_fetch' -e 'mysqli_num_rows' -e 'mysqli_insert_id' config
+=======
 ## chat
 - Standardized runtime bootstrap, strict typing, and `$db` initialization across 49 files:
 - `chat/lib/class/AJAXChatEncoding.php`
@@ -541,5 +550,6 @@ No matches.
 - Verification
 ```bash
 $ rg "mysqli_|sql_query\\(|sqlesc\\(" chat
+********* master
 ```
 No matches.
