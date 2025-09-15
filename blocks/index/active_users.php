@@ -16,9 +16,9 @@ if ($active === false || is_null($active)) {
     $list = [];
     $dt = TIME_NOW - 900;
     $query = $db->fetchAll('SELECT id FROM users WHERE last_access > :dt AND perms < :perms AND anonymous_until < :now AND id != 2 ORDER BY username', [
-        ':dt' => $dt,
-        ':perms' => PERMS_STEALTH,
-        ':now' => TIME_NOW,
+        ':dt' => (int) $dt,
+        ':perms' => (int) PERMS_STEALTH,
+        ':now' => (int) TIME_NOW,
     ]);
 
     $count = count($query);

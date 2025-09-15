@@ -9,6 +9,7 @@ use DI\DependencyException;
 use DI\NotFoundException;
 use Spatie\Image\Exceptions\InvalidManipulation;
 
+global $container;
 $db = $container->get(Database::class);
 
 $user = check_user_status();

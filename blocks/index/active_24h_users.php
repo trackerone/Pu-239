@@ -18,9 +18,9 @@ if ($active24 === false || is_null($active24)) {
 
     $dt = TIME_NOW - 86400;
     $query = $db->fetchAll('SELECT id FROM users WHERE last_access > :dt AND anonymous_until < :now AND perms < :perms AND id != 2 ORDER BY username', [
-        ':dt' => $dt,
-        ':now' => TIME_NOW,
-        ':perms' => PERMS_STEALTH,
+        ':dt' => (int) $dt,
+        ':now' => (int) TIME_NOW,
+        ':perms' => (int) PERMS_STEALTH,
     ]);
 
     $count = count($query);
@@ -44,9 +44,9 @@ if ($active24 === false || is_null($active24)) {
     $active24['record'] = get_date((int) $record['value_u'], '');
     if ($count > $record['value_i']) {
         $db->run('UPDATE avps SET value_s = :value_s, value_i = :value_i, value_u = :value_u WHERE arg = :arg', [
-            ':value_s' => 0,
-            ':value_i' => $count,
-            ':value_u' => TIME_NOW,
+            ':value_s' => '0',
+            ':value_i' => (int) $count,
+            ':value_u' => (int) TIME_NOW,
             ':arg' => 'last24',
         ]);
     }
