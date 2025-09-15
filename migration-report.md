@@ -462,6 +462,22 @@ $ rg "mysqli_|sql_query\\(|sqlesc\\(" public/achievementlist.php
 ```
 No matches.
 
+********* codex/migrate-db-calls-to-pu239-database-4hihvu
+=======
+********* codex/migrate-db-calls-to-pu239-database-p7l0ra
+## partials
+- Files changed: 4 (`partials/categories.php`, `partials/free_details.php`, `partials/genres.php`, `partials/torrent_table.php`)
+- Legacy patterns removed: none
+- Transactions added: none
+- SELECT COUNT(*) introduced: none
+- IN/LIKE/LIMIT bindings: none
+### Verification
+```bash
+$ rg "mysqli_|sql_query\\(|sqlesc\\(|mysqli_fetch|mysqli_num_rows|mysqli_insert_id" partials
+```
+No matches.
+
+=======
 ## database
 - Files changed: 1 (`database/sql_updates.php`).
 - Legacy patterns removed: none (0 occurrences of `mysqli_`, `sql_query`, or `sqlesc`).
