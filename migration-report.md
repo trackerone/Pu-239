@@ -426,4 +426,16 @@ $ rg "mysqli_|sql_query\\(|sqlesc\\(" public/achievementlist.php
 ```
 No matches.
 
+=======
+## chat
+- `chat/lib/config.php`, `chat/lib/custom.php`, `chat/lib/classes.php`: standardized strict typing and `bootstrap_pdo.php` bootstrap; imported `Pu239\\Database` and initialized `$db`.
+- Legacy patterns removed: `mysqli_*`, `sql_query`, `sqlesc` (0 → 0).
+- No transactions, `COUNT(*)` conversions, or IN/LIKE/LIMIT bindings required.
+
+### Verification
+```bash
+$ rg "mysqli_|sql_query\\(|sqlesc\\(|mysqli_fetch|mysqli_num_rows|mysqli_insert_id" chat
+```
+No matches.
+
 ********* master
