@@ -481,3 +481,65 @@ No matches.
 * COUNT(*) replacements: none
 * Bound parameters added for LIMIT: `blocks/index/news.php`
 ********* master
+## chat
+- Standardized runtime bootstrap, strict typing, and `$db` initialization across 49 files:
+- `chat/lib/class/AJAXChatEncoding.php`
+- `chat/lib/class/AJAXChatFileSystem.php`
+- `chat/lib/class/AJAXChatHTTPHeader.php`
+- `chat/lib/class/AJAXChatLanguage.php`
+- `chat/lib/class/AJAXChatString.php`
+- `chat/lib/class/AJAXChatTemplate.php`
+- `chat/lib/class/CustomAJAXChat.php`
+- `chat/lib/class/CustomAJAXChatInterface.php`
+- `chat/lib/classes.php`
+- `chat/lib/config.php`
+- `chat/lib/custom.php`
+- `chat/lib/data/channels.php`
+- `chat/lib/data/users.php`
+- `chat/lib/lang/ar.php`
+- `chat/lib/lang/bg.php`
+- `chat/lib/lang/ca.php`
+- `chat/lib/lang/cy.php`
+- `chat/lib/lang/cz.php`
+- `chat/lib/lang/da.php`
+- `chat/lib/lang/de.php`
+- `chat/lib/lang/el.php`
+- `chat/lib/lang/en.php`
+- `chat/lib/lang/es.php`
+- `chat/lib/lang/et.php`
+- `chat/lib/lang/fa.php`
+- `chat/lib/lang/fi.php`
+- `chat/lib/lang/fr.php`
+- `chat/lib/lang/gl.php`
+- `chat/lib/lang/he.php`
+- `chat/lib/lang/hr.php`
+- `chat/lib/lang/hu.php`
+- `chat/lib/lang/in.php`
+- `chat/lib/lang/it.php`
+- `chat/lib/lang/ja.php`
+- `chat/lib/lang/ka.php`
+- `chat/lib/lang/kr.php`
+- `chat/lib/lang/mk.php`
+- `chat/lib/lang/nl-be.php`
+- `chat/lib/lang/nl.php`
+- `chat/lib/lang/no.php`
+- `chat/lib/lang/pl.php`
+- `chat/lib/lang/pt-br.php`
+- `chat/lib/lang/pt-pt.php`
+- `chat/lib/lang/ro.php`
+- `chat/lib/lang/ru.php`
+- `chat/lib/lang/sk.php`
+- `chat/lib/lang/sl.php`
+- `chat/lib/lang/sr.php`
+- `chat/lib/lang/sv.php`
+
+### Legacy cleanup
+- Legacy patterns removed (mysqli_*, sql_query(), sqlesc()): 0 → 0
+- Transactions introduced: none
+- COUNT(*) replacements: none
+- Bound IN/LIKE/LIMIT parameters: none
+- Verification
+```bash
+$ rg "mysqli_|sql_query\\(|sqlesc\\(" chat
+```
+No matches.
