@@ -1,19 +1,14 @@
 <?php
+declare(strict_types=1);
 require_once __DIR__ . '/../include/runtime_safe.php';
-
 require_once __DIR__ . '/../include/bootstrap_pdo.php';
-
-
-declare(strict_types = 1);
-
 use Pu239\Database;
-
+global $container, $site_config;
+$db = $container->get(Database::class);
 require_once __DIR__ . '/../include/bittorrent.php';
 require_once INCL_DIR . 'function_users.php';
 require_once INCL_DIR . 'function_html.php';
 $user = check_user_status();
-global $container;
-$db = $container->get(Database::class);, $site_config;
 
 $HTMLOUT = '';
 if ($user['class'] < $site_config['allowed']['play']) {
@@ -25,12 +20,13 @@ if ($user['class'] < $site_config['allowed']['play']) {
 $width = 100 / 3;
 $color1 = $color2 = $color3 = $color4 = $color5 = $color6 = $color7 = $color8 = $color9 = 'has-text-danger';
 
-$sql = "SELECT game_id FROM blackjack WHERE status = 'waiting' ORDER BY game_id";
-$res = sql_query($sql) or sqlerr(__FILE__, __LINE__);
-while ($count = mysqli_fetch_array($res)) {
-    $game_id = $count['game_id'];
-    ${'color' . $game_id} = 'has-text-success';
-}
+ $rows = $db->fetchAll('SELECT game_id FROM blackjack WHERE status = :status ORDER BY game_id', [
+     ':status' => 'waiting',
+ ]);
+ foreach ($rows as $count) {
+     $game_id = $count['game_id'];
+     ${'color' . $game_id} = 'has-text-success';
+ }
 
 // Casino
 $fluent = $db; // alias

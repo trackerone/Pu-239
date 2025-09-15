@@ -654,3 +654,16 @@ $ rg "mysqli_|sql_query\\(|sqlesc\\(|mysqli_fetch|mysqli_num_rows|mysqli_insert_
 / master
 ```
 No matches.
+
+## public
+- Files modified: 1
+    - `public/games.php`: migrated from legacy `sql_query`/`mysqli_fetch_array` to `$db->fetchAll` with bound parameters; standardized bootstrap and strict typing.
+- Legacy patterns removed: `sql_query` (1→0), `mysqli_fetch_*` (1→0)
+- Transactions introduced: none
+- COUNT(*) replacements: none
+- Bound IN/LIKE/LIMIT clauses: none
+- Verification
+```bash
+$ rg "mysqli_|sql_query\\(|sqlesc\\(" public/games.php
+```
+No matches.
