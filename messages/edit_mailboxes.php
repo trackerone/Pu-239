@@ -17,7 +17,6 @@ $db = $container->get(Database::class);
 $all_my_boxes = $user_cache = $categories = '';
 $users_class = $container->get(User::class);
 $messages_class = $container->get(Message::class);
-// $fluent removed — use $this->db (ExtendedPdo)
 $cache = $container->get(Cache::class);
 if (isset($_POST['action2'])) {
     $good_actions = [
@@ -46,23 +45,21 @@ if (isset($_POST['action2'])) {
             if ($_POST['new'] === '') {
                 stderr(_('Error'), _('to add new PM boxes you MUST enter at least one PM box name!'));
             }
-            $boxnumber = $fluent->from('pmboxes')
-                                ->select(null)
-                                ->select('MAX(boxnumber) AS boxnumber')
-                                ->fetch('boxnumber');
-            $box = $boxnumber < 2 ? 2 : $boxnumber++;
+            $row = $db->fetch('SELECT MAX(boxnumber) AS boxnumber FROM pmboxes');
+            $boxnumber = isset($row['boxnumber']) ? (int) $row['boxnumber'] : 0;
+            $box = $boxnumber < 2 ? 2 : $boxnumber;
             $new_box = preg_replace('/[^\da-z\-_]/i', '', $_POST['new']);
             foreach ($new_box as $key => $add_it) {
                 $add_it = preg_replace('/[^\da-z\-_]/i', '', $add_it);
                 if (!empty($add_it)) {
                     $name = htmlsafechars($add_it);
                     $values = [
-                        'userid' => $CURUSER['id'],
+                        'userid' => (int) $CURUSER['id'],
                         'name' => $name,
-                        'boxnumber' => $box,
+                        'boxnumber' => (int) $box,
                     ];
-                    $sql = "INSERT INTO pmboxes (/* columns */) VALUES (/* values */)";
-$db->perform($sql, $values);
+                    $sql = 'INSERT INTO pmboxes (userid, name, boxnumber) VALUES (:userid, :name, :boxnumber)';
+                    $db->run($sql, $values);
                     $cache->delete('get_all_boxes_' . $CURUSER['id']);
                     $cache->delete('insertJumpTo_' . $CURUSER['id']);
                 }
@@ -74,9 +71,9 @@ $db->perform($sql, $values);
             break;
 
         case 'edit_boxes':
-            $boxes = $fluent->from('pmboxes')
-                            ->where('userid = ?', $CURUSER['id'])
-                            ->fetchAll();
+            $boxes = $db->fetchAll('SELECT id, name, boxnumber FROM pmboxes WHERE userid = :userid', [
+                'userid' => (int) $CURUSER['id'],
+            ]);
 
             if (empty($boxes)) {
                 stderr(_('Error'), _('No Mailboxes to edit'));
@@ -87,8 +84,8 @@ $db->perform($sql, $values);
                     $set = [
                         'name' => $name,
                     ];
-                    $sql = "UPDATE pmboxes SET /* columns */ WHERE id = :id";
-$db->perform($sql, array_merge($set, ['id' => $row['id']]));
+                    $sql = 'UPDATE pmboxes SET name = :name WHERE id = :id';
+                    $db->run($sql, array_merge($set, ['id' => (int) $row['id']]));
                     $cache->delete('get_all_boxes_' . $CURUSER['id']);
                     $cache->delete('insertJumpTo_' . $CURUSER['id']);
                     $worked = '&name=1';
@@ -97,9 +94,9 @@ $db->perform($sql, array_merge($set, ['id' => $row['id']]));
                         'location' => 1,
                     ];
                     $messages_class->update_location($set, (int) $row['boxnumber'], $CURUSER['id']);
-                    $fluent->delete('pmboxes')
-                           ->where('id = ?', $row['id'])
-                           ->execute();
+                    $db->run('DELETE FROM pmboxes WHERE id = :id', [
+                        'id' => (int) $row['id'],
+                    ]);
                     $cache->delete('get_all_boxes_' . $CURUSER['id']);
                     $cache->delete('insertJumpTo_' . $CURUSER['id']);
                     $deleted = '&box_delete=1';
@@ -125,10 +122,7 @@ $db->perform($sql, array_merge($set, ['id' => $row['id']]));
             $emailnotif = isset($_POST['emailnotif']) ? $_POST['emailnotif'] : '';
             $notifs = $pmnotif == 'yes' ? '[pm]' : '';
             $notifs .= $emailnotif == 'yes' ? '[email]' : '';
-            $category_ids = $fluent->from('categories')
-                                   ->select(null)
-                                   ->select('id')
-                                   ->fetchAll();
+            $category_ids = $db->fetchAll('SELECT id FROM categories');
 
             $rows = count($category_ids);
             for ($i = 0; $i < $rows; ++$i) {
@@ -160,10 +154,9 @@ $db->perform($sql, array_merge($set, ['id' => $row['id']]));
     }
 }
 
-$boxes = $fluent->from('pmboxes')
-                ->where('userid = ?', $CURUSER['id'])
-                ->orderBy('boxnumber')
-                ->fetchAll();
+$boxes = $db->fetchAll('SELECT id, name, boxnumber FROM pmboxes WHERE userid = :userid ORDER BY boxnumber', [
+    'userid' => (int) $CURUSER['id'],
+]);
 $count_boxes = !empty($boxes) ? count($boxes) : 0;
 
 if (!empty($boxes)) {

@@ -17,7 +17,6 @@ $db = $container->get(Database::class);
 flood_limit('messages');
 $messages_class = $container->get(Message::class);
 $message = $messages_class->get_by_id($pm_id);
-// $fluent removed — use $this->db (ExtendedPdo)
 if (empty($message)) {
     stderr(_('Error'), _('Message Not Found!'));
 }
@@ -45,22 +44,18 @@ if (!has_access($CURUSER['class'], UC_STAFF, '')) {
     if ($to_user['acceptpms'] === 'no') {
         stderr(_('Error'), _("This user dosen't accept PMs."));
     }
-    $blocked = $fluent->from('blocks')
-                      ->select(null)
-                      ->select('id')
-                      ->where('userid = ?', $to_user['id'])
-                      ->where('blockid = ?', $CURUSER['id'])
-                      ->fetch();
+    $blocked = $db->fetch('SELECT id FROM blocks WHERE userid = :userid AND blockid = :blockid', [
+        'userid' => (int) $to_user['id'],
+        'blockid' => (int) $CURUSER['id'],
+    ]);
     if (!$blocked) {
         stderr(_('Refused'), _('This member has blocked PMs from you.'));
     }
     if ($to_user['acceptpms'] === 'friends') {
-        $friend = $fluent->from('friends')
-                         ->select(null)
-                         ->select('id')
-                         ->where('userid = ?', $to_user['id'])
-                         ->where('friendid = ?', $CURUSER['id'])
-                         ->fetch();
+        $friend = $db->fetch('SELECT id FROM friends WHERE userid = :userid AND friendid = :friendid', [
+            'userid' => (int) $to_user['id'],
+            'friendid' => (int) $CURUSER['id'],
+        ]);
         if (!$friend) {
             stderr(_('Refused'), _('This member only accepts PMs from members on their friends list.'));
         }
