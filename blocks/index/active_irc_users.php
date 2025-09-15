@@ -16,8 +16,8 @@ if ($irc === false || is_null($irc)) {
     $irc = $list = [];
     $query = $db->fetchAll('SELECT id FROM users WHERE onirc = :onirc AND perms < :perms AND anonymous_until < :now AND id != 2 ORDER BY username', [
         ':onirc' => 'yes',
-        ':perms' => PERMS_STEALTH,
-        ':now' => TIME_NOW,
+        ':perms' => (int) PERMS_STEALTH,
+        ':now' => (int) TIME_NOW,
     ]);
 
     $count = count($query);
