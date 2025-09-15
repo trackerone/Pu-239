@@ -7,13 +7,11 @@ require_once __DIR__ . '/../include/bootstrap_pdo.php';
 use Delight\Cookie\Session;
 use Pu239\Database;
 use Pu239\Settings;
-
+global $container;
 $db = $container->get(Database::class);
 
 require_once INCL_DIR . 'function_common.php';
 require_once CONFIG_DIR . 'functions.php';
-
-global $container;
 // Override the settings in php.ini
 ini_set('memory_limit', '1024M');
 ini_set('zlib.output_compression', 'Off');

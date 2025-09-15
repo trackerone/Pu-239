@@ -13,7 +13,7 @@ use Pu239\Database;
 use Psr\Container\ContainerInterface;
 use Rakit\Validation\Validator;
 use Scriptotek\GoogleBooks\GoogleBooks;
-
+global $container;
 $db = $container->get(Database::class);
 return [
     Auth::class => DI\factory(function (ContainerInterface $c) {
