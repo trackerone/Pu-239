@@ -14,6 +14,7 @@ use Pu239\Database;
 use Pu239\Session;
 use Spatie\Image\Exceptions\InvalidManipulation;
 
+global $container;
 $db = $container->get(Database::class);
 
 /**
@@ -454,7 +455,7 @@ function platform_menu()
 
     $templates = $cache->get('templates_' . $CURUSER['class']);
     if ($templates === false || is_null($templates)) {
-        $sql = 'SELECT * FROM stylesheets WHERE min_class_to_view <= :class ORDER BY id';
+        $sql = 'SELECT id, name FROM stylesheets WHERE min_class_to_view <= :class ORDER BY id';
         $templates = $db->fetchAll($sql, [':class' => $CURUSER['class']]);
 
         $cache->set('templates_' . $CURUSER['class'], $templates, 0);

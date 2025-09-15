@@ -11,6 +11,7 @@ use Pu239\Cache;
 use Pu239\Database;
 use Pu239\Roles;
 
+global $container;
 $db = $container->get(Database::class);
 
 /**
@@ -187,7 +188,7 @@ function staff_panel()
         $user_class = $CURUSER['class'] >= UC_STAFF ? $CURUSER['class'] : UC_MAX;
         $staff_panel = $cache->get('staff_panels_' . $user_class);
         if ($staff_panel === false || is_null($staff_panel)) {
-            $sql = 'SELECT * FROM staffpanel WHERE navbar = 1 AND av_class <= :class ORDER BY page_name';
+            $sql = 'SELECT page_name, file_name, type, av_class FROM staffpanel WHERE navbar = 1 AND av_class <= :class ORDER BY page_name';
             $staff_panel = $db->fetchAll($sql, [':class' => $user_class]);
 
             $cache->set('staff_panels_' . $user_class, $staff_panel, 0);

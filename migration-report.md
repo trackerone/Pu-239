@@ -690,5 +690,23 @@ No matches.
 - Verification: `rg -n -e 'mysqli_' -e 'sql_query\\s*\\(' -e 'sqlesc\\s*\\(' -e 'mysqli_fetch' -e 'mysqli_num_rows' -e 'mysqli_insert_id' src` → no matches
 =======
 - Verification: `rg "mysqli_|sql_query\\s*\(|sqlesc\\s*\(|mysqli_fetch|mysqli_num_rows|mysqli_insert_id" partials` → no matches
-/ master
+/ codex/migrate-db-calls-to-pu239-database-vaainv
 
+## templates/1
+- `templates/1/navbar.php`: added missing `$container` bootstrap and restricted staff panel query to explicit columns.
+- `templates/1/files.php`: added missing `$container` bootstrap.
+- `templates/1/template.php`: added missing `$container` bootstrap and limited stylesheet query to `id` and `name` fields.
+
+### Verification
+```
+$ rg -n -e 'mysqli_' -e 'sql_query\(' -e 'sqlesc\(' -e 'mysqli_fetch' -e 'mysqli_num_rows' -e 'mysqli_insert_id' templates/1
+```
+No matches.
+
+- Files changed: 3 (`templates/1/navbar.php`, `templates/1/files.php`, `templates/1/template.php`)
+- Legacy patterns removed: before=0, after=0
+- Transactions added: none
+- `SELECT COUNT(*)` replacements: none
+- IN/LIKE/LIMIT binding: none
+=======
+/ master
