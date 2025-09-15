@@ -1,11 +1,21 @@
 <?php
 declare(strict_types=1);
 
-$db = $container->get(Database::class);
-require_once __DIR__ . '/runtime_safe.php';
-
 use Pu239\Database;
 use Pu239\Support\Config;
+
+require_once __DIR__ . '/runtime_safe.php';
+
+global $container;
+
+$db = null;
+if (isset($container)) {
+    try {
+        $db = $container->get(Database::class);
+    } catch (\Throwable $e) {
+        $db = db();
+    }
+}
 
 static $__db_instance = null;
 
