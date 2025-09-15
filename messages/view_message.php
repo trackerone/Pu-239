@@ -14,31 +14,25 @@ global $container, $site_config;
 $db = $container->get(Database::class);
 
 $subject = $friends = '';
-// $fluent removed — use $this->db (ExtendedPdo)
-$message = $fluent->from('messages AS m')
-                  ->select('f.id AS friend')
-                  ->select('b.id AS blocked')
-                  ->select('a.id AS attachment')
-                  ->select('u.title')
-                  ->select('u.last_access')
-                  ->select('u.show_email')
-                  ->select('u.email')
-                  ->select('u.website')
-                  ->select('u.seedbonus')
-                  ->where('m.id = ?', $pm_id)
-                  ->leftJoin('friends AS f ON f.userid = ? AND f.friendid = m.sender', $user['id'])
-                  ->leftJoin('blocks AS b ON b.userid = ? AND b.blockid = m.sender', $user['id'])
-                  ->leftJoin('attachments AS a ON m.added = a.post_id')
-                  ->leftJoin('users AS u ON m.sender = u.id')
-                  ->fetch();
+$message = $db->fetch(
+    'SELECT m.id, m.sender, m.receiver, m.added, m.msg, m.subject, m.location, m.draft, m.unread, m.urgent, f.id AS friend, b.id AS blocked, a.id AS attachment, u.title, u.last_access, u.show_email, u.email, u.website, u.seedbonus FROM messages AS m LEFT JOIN friends AS f ON f.userid = :uid AND f.friendid = m.sender LEFT JOIN blocks AS b ON b.userid = :bid AND b.blockid = m.sender LEFT JOIN attachments AS a ON m.added = a.post_id LEFT JOIN users AS u ON m.sender = u.id WHERE m.id = :mid',
+    [
+        ':uid' => (int) $user['id'],
+        ':bid' => (int) $user['id'],
+        ':mid' => (int) $pm_id,
+    ],
+);
 if (empty($message) || ($message['receiver'] != $user['id'] && $message['sender'] != $user['id'])) {
     stderr(_('Error'), _('You do not have permission to view this message.'));
 }
 $attachment = '';
 if (!empty($message['attachment'])) {
-    $attachments = $fluent->from('attachments')
-                          ->where('post_id = ?', $message['added'])
-                          ->fetchAll();
+    $attachments = $db->fetchAll(
+        'SELECT id, file_name, size FROM attachments WHERE post_id = :pid',
+        [
+            ':pid' => (int) $message['added'],
+        ],
+    );
     $i = 0;
     foreach ($attachments as $file) {
         ++$i;
@@ -53,13 +47,14 @@ $users_class = $container->get(User::class);
 $arr_user_stuff = $users_class->getUserFromId((int) $message['sender'] === $user['id'] ? (int) $message['receiver'] : (int) $message['sender']);
 $id = $arr_user_stuff['id'];
 $update = [
-    'unread' => 'no',
+    ':unread' => 'no',
+    ':id' => (int) $pm_id,
+    ':receiver' => (int) $user['id'],
 ];
-$fluent->update('messages')
-       ->set($update)
-       ->where('id = ?', $pm_id)
-       ->where('receiver = ?', $user['id'])
-       ->execute();
+$db->run(
+    'UPDATE messages SET unread = :unread WHERE id = :id AND receiver = :receiver',
+    $update,
+);
 $cache->decrement('inbox_' . $user['id']);
 if ($message['friend'] > 0) {
     $friends = '
@@ -88,16 +83,17 @@ if (($message['receiver'] != $user['id'] || $message['sender'] === $user['id']) 
     $mailbox = $message['location'];
 }
 if ($message['location'] > 1) {
-    $name = $fluent->from('pmboxes')
-                   ->select(null)
-                   ->select('name')
-                   ->where('userid = ?', $user['id'])
-                   ->where('boxnumber = ?', $mailbox)
-                   ->fetch('name');
-    if (empty($name)) {
+    $name = $db->fetch(
+        'SELECT name FROM pmboxes WHERE userid = :uid AND boxnumber = :box',
+        [
+            ':uid' => (int) $user['id'],
+            ':box' => (int) $mailbox,
+        ],
+    );
+    if (empty($name['name'])) {
         stderr(_('Error'), _('Invalid mailbox'));
     }
-    $mailbox_name = htmlsafechars($name);
+    $mailbox_name = htmlsafechars($name['name']);
     $other_box_info = '
         <div class="has-text-centered top20">
             <span class="has-text-danger">***</span>

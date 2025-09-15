@@ -1,5 +1,19 @@
 # Migration Report
 
+## messages
+- `messages/edit_mailboxes.php`: replaced FluentPDO queries with `$db->fetch`, `$db->fetchAll`, and `$db->run` using bound parameters for inserts, updates, deletes, and mailbox retrievals.
+- `messages/forward_pm.php`: migrated block and friend lookups to `$db->fetch` with integer casts and parameter binding.
+- `messages/view_mailbox.php`: converted mailbox name lookup from FluentPDO to `$db->fetch` with bound parameters.
+- `messages/view_message.php`: moved message retrieval, attachment listing, update, and mailbox lookup to `$db->fetch`, `$db->fetchAll`, and `$db->run` with bound parameters.
+
+### messages summary
+- Files changed: 4 (`messages/edit_mailboxes.php`, `messages/forward_pm.php`, `messages/view_mailbox.php`, `messages/view_message.php`)
+- Legacy patterns removed: FluentPDO (9)
+- Transactions added: none
+- `SELECT COUNT(*)` introduced: none
+- IN/LIKE/LIMIT binding: none
+- Verification: `rg "mysqli_|sql_query\s*\(|sqlesc\s*\(|mysqli_fetch|mysqli_num_rows|mysqli_insert_id" messages` → no matches
+
 ## public
 - `public/tenpercent.php`: migrated from legacy mysqli/sql_query/sqlesc to `Pu239\Database` with bound parameters; switched to `bootstrap_pdo.php`; added strict typing.
 - `public/contactstaff.php`: migrated from `sql_query`/`sqlesc` to `$db->run` with bound parameters; standardized bootstrap and added strict typing.

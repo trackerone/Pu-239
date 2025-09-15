@@ -15,18 +15,18 @@ $db = $container->get(Database::class);
 
 $show_pm_avatar = ($user['opt2'] & class_user_options_2::SHOW_PM_AVATAR) === class_user_options_2::SHOW_PM_AVATAR;
 $message_class = $container->get(Message::class);
-// $fluent removed — use $this->db (ExtendedPdo)
 if ($mailbox > 1) {
-    $arr_box_name = $fluent->from('pmboxes')
-                           ->select(null)
-                           ->select('name')
-                           ->where('userid = ?', $user['id'])
-                           ->where('boxnumber = ?', $mailbox)
-                           ->fetch('name');
-    if (empty($arr_box_name)) {
+    $arr_box_name = $db->fetch(
+        'SELECT name FROM pmboxes WHERE userid = :uid AND boxnumber = :box',
+        [
+            ':uid' => (int) $user['id'],
+            ':box' => (int) $mailbox,
+        ],
+    );
+    if (empty($arr_box_name['name'])) {
         stderr(_('Error'), _('Invalid mailbox'));
     }
-    $mailbox_name = format_comment($arr_box_name);
+    $mailbox_name = format_comment($arr_box_name['name']);
     $other_box_info = '
         <div class="has-text-centered top20">
             <span class="has-text-danger">***</span>
