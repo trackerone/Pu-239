@@ -655,6 +655,7 @@ $ rg "mysqli_|sql_query\\(|sqlesc\\(|mysqli_fetch|mysqli_num_rows|mysqli_insert_
 ```
 No matches.
 
+/ codex/migrate-db-calls-to-pu239-database-9eixvk
 ## public
 - Files modified: 1
     - `public/games.php`: migrated from legacy `sql_query`/`mysqli_fetch_array` to `$db->fetchAll` with bound parameters; standardized bootstrap and strict typing.
@@ -667,3 +668,15 @@ No matches.
 $ rg "mysqli_|sql_query\\(|sqlesc\\(" public/games.php
 ```
 No matches.
+=======
+## partials
+- `partials/categories.php`, `partials/free_details.php`, `partials/genres.php`, `partials/torrent_table.php`: standardized PDO bootstrap and strict typing; no legacy DB calls present.
+
+### partials summary
+- Files changed: 4 (`partials/categories.php`, `partials/free_details.php`, `partials/genres.php`, `partials/torrent_table.php`)
+- Legacy patterns removed: 0
+- Transactions added: none
+- `SELECT COUNT(*)` introduced: none
+- IN/LIKE/LIMIT binding: none
+- Verification: `rg "mysqli_|sql_query\\s*\(|sqlesc\\s*\(|mysqli_fetch|mysqli_num_rows|mysqli_insert_id" partials` → no matches
+/ master
