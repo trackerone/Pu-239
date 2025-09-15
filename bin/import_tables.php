@@ -1,17 +1,14 @@
 <?php
-$db = $container->get(Database::class);
+declare(strict_types=1);
 
 require_once __DIR__ . '/../include/runtime_safe.php';
-
 require_once __DIR__ . '/../include/bootstrap_pdo.php';
-
-
-declare(strict_types = 1);
-
 require_once __DIR__ . '/../include/app.php';
-global $container;
 
-$pdo = $container->get(PDO::class);
+use Pu239\Database;
+
+global $container;
+$db = $container->get(Database::class);
 
 $tables = [
     DATABASE_DIR . 'trivia.sql.gz',
@@ -29,7 +26,7 @@ if (empty($argv[1])) {
             } else {
                 $source = file_get_contents($table);
             }
-            $pdo->exec($source);
+            $db->exec($source);
         }
     }
 } else {
@@ -44,7 +41,7 @@ if (empty($argv[1])) {
             } else {
                 $source = file_get_contents($table);
             }
-            $pdo->exec($source);
+            $db->exec($source);
         }
     }
 }

@@ -1,12 +1,14 @@
 <?php
 declare(strict_types=1);
 
-use Jobby\Jobby;
-
 require_once __DIR__ . '/../include/runtime_safe.php';
 require_once __DIR__ . '/../include/bootstrap_pdo.php';
 
+use Jobby\Jobby;
+use Pu239\Database;
+
 global $container, $site_config;
+$db = $container->get(Database::class);
 
 $jobby = $container->get(Jobby::class);
 $jobby->add('Cron Controller', [

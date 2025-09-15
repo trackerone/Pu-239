@@ -15,7 +15,7 @@ if ($site_config['alerts']['uploadapp'] && has_access($user['class'], UC_STAFF, 
     $cache = $container->get(Cache::class);
     $newapp = $cache->get('new_uploadapp_');
     if ($newapp === false || is_null($newapp)) {
-        $newapp = $db->fetchValue('SELECT COUNT(id) FROM uploadapp WHERE status = ?', ['pending']);
+        $newapp = $db->fetchValue('SELECT COUNT(*) AS count FROM uploadapp WHERE status = ?', ['pending']);
         $cache->set('new_uploadapp_', $newapp, $site_config['expires']['alerts']);
     }
     if ($newapp > 0) {

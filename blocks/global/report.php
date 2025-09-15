@@ -15,7 +15,7 @@ $cache = $container->get(Cache::class);
 if ($site_config['alerts']['report'] && has_access($user['class'], UC_STAFF, 'coder')) {
     $delt_with = $cache->get('new_report_');
     if ($delt_with === false || is_null($delt_with)) {
-        $delt_with = $db->fetchValue('SELECT COUNT(id) FROM reports WHERE delt_with = 0');
+        $delt_with = $db->fetchValue('SELECT COUNT(*) AS count FROM reports WHERE delt_with = 0');
         $cache->set('new_report_', $delt_with, $site_config['expires']['alerts']);
     }
     if ($delt_with > 0) {

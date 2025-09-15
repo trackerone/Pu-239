@@ -1,6 +1,9 @@
 <?php
 declare(strict_types=1);
 
+require_once __DIR__ . '/../include/runtime_safe.php';
+require_once __DIR__ . '/../include/bootstrap_pdo.php';
+
 use DI\DependencyException;
 use DI\NotFoundException;
 use Pu239\Database;
@@ -9,39 +12,30 @@ use Pu239\ImageProxy;
 use Pu239\Person;
 use Spatie\Image\Exceptions\InvalidManipulation;
 
-require_once __DIR__ . '/../include/runtime_safe.php';
-require_once __DIR__ . '/../include/bootstrap_pdo.php';
-
 global $container;
 
 $db = $container->get(Database::class);
 
-$limit = isset($argv[1]) && is_numeric($argv[1]) ? $argv[1] : 500;
-$offset = isset($argv[2]) && is_numeric($argv[2]) ? $argv[2] : 0;
+$limit = isset($argv[1]) && is_numeric($argv[1]) ? (int) $argv[1] : 500;
+$offset = isset($argv[2]) && is_numeric($argv[2]) ? (int) $argv[2] : 0;
 $count = 0;
 set_time_limit(18000);
 $image_proxy = $container->get(ImageProxy::class);
 $path = IMAGES_DIR . 'proxy/';
-// $fluent removed — use $this->db (ExtendedPdo)
-$images = $fluent->from('images')
-                 ->select(null)
-                 ->select('url')
-                 ->select('type')
-                 ->where('fetched = "no"')
-                 ->orderBy('added DESC')
-                 ->limit($limit)
-                 ->offset($offset)
-                 ->fetchAll();
+$sql = 'SELECT url, type FROM images WHERE fetched = :fetched ORDER BY added DESC LIMIT :limit OFFSET :offset';
+$images = $db->run($sql, [
+    ':fetched' => 'no',
+    ':limit' => $limit,
+    ':offset' => $offset,
+])->fetchAll();
 $count += process_images($images, 'images');
 
-$photos = $fluent->from('person')
-                 ->select(null)
-                 ->select('photo AS url')
-                 ->where('photo IS NOT NULL')
-                 ->where('updated + 604800 < ?', TIME_NOW)
-                 ->limit($limit)
-                 ->offset($offset)
-                 ->fetchAll();
+$sql = 'SELECT photo AS url FROM person WHERE photo IS NOT NULL AND updated + 604800 < :time LIMIT :limit OFFSET :offset';
+$photos = $db->run($sql, [
+    ':time' => TIME_NOW,
+    ':limit' => $limit,
+    ':offset' => $offset,
+])->fetchAll();
 
 $count += process_images($photos, 'person');
 

@@ -1,22 +1,17 @@
 <?php
+declare(strict_types=1);
 require_once __DIR__ . '/../include/runtime_safe.php';
-
 require_once __DIR__ . '/../include/bootstrap_pdo.php';
-
-
-declare(strict_types = 1);
-
 use Pu239\Database;
-
 use Pu239\Achievementlist;
+global $container, $site_config;
+$db = $container->get(Database::class);
 
 require_once __DIR__ . '/../include/bittorrent.php';
 require_once INCL_DIR . 'function_users.php';
 require_once INCL_DIR . 'function_html.php';
-$user = check_user_status();
-global $container;
-$db = $container->get(Database::class);, $site_config;
 
+$user = check_user_status();
 $achievementlist = $container->get(Achievementlist::class);
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && $user['class'] >= UC_MAX) {
     $values = [
@@ -29,7 +24,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && $user['class'] >= UC_MAX) {
 }
 $rows = $db->fetchAll('SELECT a1.*, (SELECT COUNT(a2.id) FROM achievements AS a2 WHERE a2.achievement = a1.achievename) AS count FROM achievementlist AS a1 ORDER BY a1.id');
 $HTMLOUT .= '<h1>' . _('Achievements List') . '</h1>';
-if (mysqli_num_rows($res) === 0) {
+if (count($rows) === 0) {
     $HTMLOUT .= main_div('<div class="has-text-centered padding20">' . _('There are currently no achievements added to the list!<br>The staff has been slacking') . '!</div>', 'bottom20');
 } else {
     $heading = '

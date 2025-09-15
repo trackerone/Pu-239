@@ -1,16 +1,14 @@
 <?php
 declare(strict_types=1);
-
-$db = $container->get(Database::class);
-
-require_once __DIR__ . '/runtime_safe.php';
-
-require_once __DIR__ . '/bootstrap_pdo.php';
-
+require_once __DIR__ . '/../include/runtime_safe.php';
+require_once __DIR__ . '/../include/bootstrap_pdo.php';
 
 use DI\DependencyException;
 use DI\NotFoundException;
 use Pu239\Database;
+
+global $container;
+$db = $container->get(Database::class);
 
 /**
  * @param $text
@@ -23,14 +21,14 @@ use Pu239\Database;
  */
 function write_info($text)
 {
+    global $db;
+
     $values = [
-        'added' => TIME_NOW,
-        'txt' => $text,
+        ':added' => TIME_NOW,
+        ':txt' => $text,
     ];
-    global $container;
-    // $fluent removed — use $this->db (ExtendedPdo)
-    $sql = "INSERT INTO infolog (/* columns */) VALUES (/* values */)";
-$id = $db->perform($sql, $values);
+    $db->run('INSERT INTO infolog (added, txt) VALUES (:added, :txt)', $values);
+    $id = (int) $db->lastInsertId();
 
     return $id;
 }

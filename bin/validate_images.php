@@ -1,11 +1,11 @@
 <?php
 declare(strict_types=1);
 
-use Pu239\Database;
-use Pu239\ImageProxy;
-
 require_once __DIR__ . '/../include/runtime_safe.php';
 require_once __DIR__ . '/../include/bootstrap_pdo.php';
+
+use Pu239\Database;
+use Pu239\ImageProxy;
 
 global $container, $site_config;
 
@@ -21,17 +21,8 @@ foreach ($argv as $arg) {
     $validate = $arg === 'validate' ? true : false;
 }
 if ($purge) {
-    // $fluent removed — use $this->db (ExtendedPdo)
-    $images = $fluent->from('images')
-                     ->select('null')
-                     ->select('url')
-                     ->select('type')
-                     ->fetchAll();
-    $photos = $fluent->from('person')
-                     ->select('null')
-                     ->select('photo AS url')
-                     ->where('photo IS NOT null')
-                     ->fetchAll();
+    $images = $db->run('SELECT url, type FROM images')->fetchAll();
+    $photos = $db->run('SELECT photo AS url FROM person WHERE photo IS NOT null')->fetchAll();
     $hashes = [];
     $urls = array_merge($images, $photos);
     foreach ($urls as $url) {
