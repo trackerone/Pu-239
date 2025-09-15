@@ -462,6 +462,26 @@ $ rg "mysqli_|sql_query\\(|sqlesc\\(" public/achievementlist.php
 ```
 No matches.
 
+/ codex/migrate-db-calls-to-pu239-database-f8wbuj
+## messages
+- `messages/forward_pm.php`: replaced `$fluent` checks with `$db->fetch` and bound parameters.
+- `messages/view_mailbox.php`: converted mailbox name lookup to `$db->fetch`.
+- `messages/edit_mailboxes.php`: switched `$fluent` selects/inserts/deletes to `$db->fetch`/`fetchAll`/`run` with bound parameters.
+- `messages/view_message.php`: migrated multiple `$fluent` queries to `$db`, added cache bootstrap.
+
+### messages summary
+- Files changed: 4
+- Legacy patterns removed: `$fluent` (12 → 0); no `mysqli_*`, `sql_query`, or `sqlesc`
+- Transactions added: none
+- `SELECT COUNT(*)` introduced: none
+- Bound parameters applied to all inputs; no IN/LIKE/LIMIT patterns in this batch
+- Verification: 0 legacy pattern matches in `messages`
+```bash
+$ rg "mysqli_|sql_query\\(|sqlesc\\(|mysqli_fetch|mysqli_num_rows|mysqli_insert_id" messages
+```
+No matches.
+
+=======
 / codex/migrate-db-calls-to-pu239-database-r73uj0
 =======
 ## chat

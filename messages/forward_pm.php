@@ -44,6 +44,20 @@ if (!has_access($CURUSER['class'], UC_STAFF, '')) {
     if ($to_user['acceptpms'] === 'no') {
         stderr(_('Error'), _("This user dosen't accept PMs."));
     }
+/ codex/migrate-db-calls-to-pu239-database-f8wbuj
+    $blocked = $db->fetch('SELECT id FROM blocks WHERE userid = :userid AND blockid = :blockid', [
+        'userid' => (int) $to_user['id'],
+        'blockid' => (int) $CURUSER['id'],
+    ]);
+    if (!$blocked) {
+        stderr(_('Refused'), _('This member has blocked PMs from you.'));
+    }
+    if ($to_user['acceptpms'] === 'friends') {
+        $friend = $db->fetch('SELECT id FROM friends WHERE userid = :userid AND friendid = :friendid', [
+            'userid' => (int) $to_user['id'],
+            'friendid' => (int) $CURUSER['id'],
+        ]);
+=======
     $blocked = $db->fetch(
         'SELECT id FROM blocks WHERE userid = :uid AND blockid = :bid',
         [
@@ -62,6 +76,7 @@ if (!has_access($CURUSER['class'], UC_STAFF, '')) {
                 ':fid' => (int) $CURUSER['id'],
             ],
         );
+/ master
         if (!$friend) {
             stderr(_('Refused'), _('This member only accepts PMs from members on their friends list.'));
         }
