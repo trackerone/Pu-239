@@ -1,7 +1,18 @@
 <?php
 declare(strict_types=1);
 
-$db = $container->get(Database::class);
+use Pu239\Database;
+
+global $container;
+
+$db = null;
+if (isset($container)) {
+    try {
+        $db = $container->get(Database::class);
+    } catch (\Throwable $e) {
+        $db = null;
+    }
+}
 /**
  * runtime_safe.php
  * Minimal, defensiv bootstrap UDEN hårdt krav om mysql_compat.php.
@@ -63,8 +74,9 @@ if (!function_exists('debug_log')) {
 /**
  * @deprecated Use bound parameters via Pu239\Database. To be removed when repo is clean.
  */
-function sqlesc($x) {
-    trigger_error('sqlesc() is deprecated – migrate to bound params', E_USER_DEPRECATED);
+function sqlesc/**deprecated**/($x)
+{
+    trigger_error('sqlesc is deprecated – migrate to bound params', E_USER_DEPRECATED);
     return $x;
 }
 

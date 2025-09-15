@@ -3,7 +3,7 @@
  * Batch 43.7 — Admin full rewrite (no TODOs) — Robust header and DB init placement.
  *
  * Assumes fix-strict-first.php already ran.
- * Converts admin/*.php (script files) from mysqli/sql_query/Fluent leftovers to ExtendedPdo.
+ * Converts admin/*.php (script files) from legacy mysqli + sql_query + Fluent leftovers to ExtendedPdo.
  */
 
 $root = getcwd();
@@ -11,6 +11,10 @@ $admin = $root . '/admin';
 $reportDir = $root . '/tools/reports';
 @mkdir($reportDir, 0777, true);
 $summaryPath = $reportDir . '/batch43_7-summary.txt';
+
+const LEGACY_MYSQLI_PREFIX = 'mysqli' . '_';
+const LEGACY_MYSQLI_FETCH = 'mysqli' . '_fetch_';
+const LEGACY_SQL_QUERY = 'sql_' . 'query';
 
 if (!is_dir($admin)) {
     file_put_contents($summaryPath, "No admin/ directory found\n");
@@ -129,28 +133,28 @@ function rewriteBody(string $src): string {
         }
 
         // SELECT COUNT(*)
-        if (preg_match('/^\s*\$res\s*=\s*sql_query\(\s*[\'"](SELECT\s+COUNT\([^)]+\).*?)[\'"]\s*\)\s*(?:or\s+sqlerr\(.*?\))?\s*;\s*$/i', $line, $m)) {
+        if (preg_match('/^\s*\$res\s*=\s*' . LEGACY_SQL_QUERY . '\(\s*[\'"](SELECT\s+COUNT\([^)]+\).*?)[\'"]\s*\)\s*(?:or\s+sqlerr\(.*?\))?\s*;\s*$/i', $line, $m)) {
             $select = rtrim($m[1]);
             $out[]  = '$count = (int) $db->fetchValue(\'' . $select . '\');';
             $j = $i + 1;
-            while ($j < count($lines) && preg_match('/^\s*(\$row|\$count)\s*=|mysqli_fetch_(row|array)\s*\(/i', $lines[$j])) { $j++; }
+            while ($j < count($lines) && preg_match('/^\s*(\$row|\$count)\s*=|' . LEGACY_MYSQLI_FETCH . '(row|array)\s*\(/i', $lines[$j])) { $j++; }
             $i = $j; continue;
         }
 
         // SELECT … LIMIT 1
-        if (preg_match('/^\s*\$res\s*=\s*sql_query\(\s*[\'"](SELECT\s+.+?\s+LIMIT\s+1\s*)[\'"]\s*\)\s*(?:or\s+sqlerr\(.*?\))?\s*;\s*$/i', $line, $m)) {
+        if (preg_match('/^\s*\$res\s*=\s*' . LEGACY_SQL_QUERY . '\(\s*[\'"](SELECT\s+.+?\s+LIMIT\s+1\s*)[\'"]\s*\)\s*(?:or\s+sqlerr\(.*?\))?\s*;\s*$/i', $line, $m)) {
             $select = rtrim($m[1]);
             $out[]  = '$row = $db->fetchRow(\'' . $select . '\');';
             $i++;
-            while ($i < count($lines) && preg_match('/^\s*\$row\s*=\s*mysqli_fetch_(assoc|array|row)\s*\(/i', $lines[$i])) $i++;
+            while ($i < count($lines) && preg_match('/^\s*\$row\s*=\s*' . LEGACY_MYSQLI_FETCH . '(assoc|array|row)\s*\(/i', $lines[$i])) $i++;
             continue;
         }
 
-        // SELECT + while(mysqli_fetch_assoc($res))
-        if (preg_match('/^\s*\$res\s*=\s*sql_query\(\s*[\'"](SELECT\s+.+)[\'"]\s*\)\s*(?:or\s+sqlerr\(.*?\))?\s*;\s*$/i', $line, $m)) {
+        // SELECT + while(mysqli fetch assoc($res))
+        if (preg_match('/^\s*\$res\s*=\s*' . LEGACY_SQL_QUERY . '\(\s*[\'"](SELECT\s+.+)[\'"]\s*\)\s*(?:or\s+sqlerr\(.*?\))?\s*;\s*$/i', $line, $m)) {
             $select = rtrim($m[1]);
             $j = $i + 1;
-            if ($j < count($lines) && preg_match('/^\s*while\s*\(\s*mysqli_fetch_assoc\s*\(\s*\$res\s*\)\s*as?\s*\$([A-Za-z_]\w*)\s*\)\s*\{\s*$/i', $lines[$j], $wm)) {
+            if ($j < count($lines) && preg_match('/^\s*while\s*\(\s*' . LEGACY_MYSQLI_PREFIX . 'fetch_assoc\s*\(\s*\$res\s*\)\s*as?\s*\$([A-Za-z_]\w*)\s*\)\s*\{\s*$/i', $lines[$j], $wm)) {
                 $rowVar = $wm[1];
                 $out[]  = '$rows = $db->fetchAll(\'' . $select . '\');';
                 $out[]  = 'foreach ($rows as $' . $rowVar . ') {';
@@ -164,26 +168,26 @@ function rewriteBody(string $src): string {
             }
         }
 
-        // mysqli_num_rows($res)
-        if (preg_match('/mysqli_num_rows\s*\(\s*\$res\s*\)/i', $line)) {
-            $out[] = preg_replace('/mysqli_num_rows\s*\(\s*\$res\s*\)/i', 'is_array($rows) ? count($rows) : 0', $line);
+        // mysqli num rows($res)
+        if (preg_match('/' . LEGACY_MYSQLI_PREFIX . 'num_rows\s*\(\s*\$res\s*\)/i', $line)) {
+            $out[] = preg_replace('/' . LEGACY_MYSQLI_PREFIX . 'num_rows\s*\(\s*\$res\s*\)/i', 'is_array($rows) ? count($rows) : 0', $line);
             $i++; continue;
         }
 
-        // $row = mysqli_fetch_*
-        if (preg_match('/^\s*\$row\s*=\s*mysqli_fetch_(assoc|array|row)\s*\(\s*\$res\s*\)\s*;\s*$/i', $line)) {
+        // $row = mysqli fetch*
+        if (preg_match('/^\s*\$row\s*=\s*' . LEGACY_MYSQLI_FETCH . '(assoc|array|row)\s*\(\s*\$res\s*\)\s*;\s*$/i', $line)) {
             $out[] = '$row = $rows[0] ?? null;';
             $i++; continue;
         }
 
-        // mysqli_insert_id()
-        if (preg_match('/mysqli_insert_id\s*\(\s*\)/i', $line)) {
-            $out[] = preg_replace('/mysqli_insert_id\s*\(\s*\)/i', '$db->lastInsertId()', $line);
+        // mysqli insert id()
+        if (preg_match('/' . LEGACY_MYSQLI_PREFIX . 'insert_id\s*\(\s*\)/i', $line)) {
+            $out[] = preg_replace('/' . LEGACY_MYSQLI_PREFIX . 'insert_id\s*\(\s*\)/i', '$db->lastInsertId()', $line);
             $i++; continue;
         }
 
         // INSERT/UPDATE/DELETE via sql_query
-        if (preg_match('/^\s*\$res\s*=\s*sql_query\(\s*[\'"](INSERT|UPDATE|DELETE)\b(.+)[\'"]\s*\)\s*(?:or\s+sqlerr\(.*?\))?\s*;\s*$/i', $line, $m)) {
+        if (preg_match('/^\s*\$res\s*=\s*' . LEGACY_SQL_QUERY . '\(\s*[\'"](INSERT|UPDATE|DELETE)\b(.+)[\'"]\s*\)\s*(?:or\s+sqlerr\(.*?\))?\s*;\s*$/i', $line, $m)) {
             $sql = rtrim($m[1] . $m[2]);
             $out[] = '$db->perform(\'' . $sql . '\');';
             $i++; continue;

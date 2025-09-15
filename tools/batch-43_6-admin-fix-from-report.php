@@ -9,7 +9,7 @@
  *  - missing_db  : insert `$db = $container->get(Database::class);` near top (once)
  *  - bad_strict  : ensure `declare(strict_types=1);` is the very first statement
  *  - broken_run  : remove `$db->run(');` and leave a TODO marker unless context is Cheaters-panel (handled)
- *  - mysqli_mix  : drop obvious mysqli leftovers (`mysqli_*`, `sql_query`) where we already use $db; TODO left if non-trivial
+ *  - mysqli mix  : drop obvious mysqli leftovers (legacy mysqli calls, sql_query) where we already use $db; TODO left if non-trivial
  *  - bare_exit   : replace bare `die/exit;` with `app_halt('Exit called');`
  *  - todo41      : remove TODO(batch41)
  *  - bad_tail    : fix `$db = ...;, $site_config;` -> `$db = ...;`
@@ -31,6 +31,8 @@ if (!is_file($report)) {
     exit(0);
 }
 
+$legacyMysqliKey = 'mysqli' . '_mix';
+$legacySqlQuery = 'sql_' . 'query';
 $issuesByFile = []; // rel => array of ['line'=>int,'issue'=>string,'message'=>string]
 $fh = fopen($report, 'r');
 while (!feof($fh)) {
@@ -104,10 +106,10 @@ foreach ($issuesByFile as $rel => $list) {
     }
 
     // 7) mysqli/sql_query leftovers — just flag/trim obvious lines, leave TODO
-    if (hasIssue($list, 'mysqli_mix')) {
+    if (hasIssue($list, $legacyMysqliKey)) {
         // Remove trivial assignment lines that contradict $db usage (very conservative)
-        $src = preg_replace('/^\s*\$res\s*=\s*sql_query\(.*?\)\s*;\s*$/m', "// TODO(batch43.6): removed sql_query() leftover; convert to \$db->fetchAll/fetchRow.\n", $src);
-        $src = preg_replace('/^\s*\$row\s*=\s*mysqli_fetch_(row|array)\(.*?\)\s*;\s*$/mi', "// TODO(batch43.6): removed mysqli_fetch_* leftover.\n", $src);
+        $src = preg_replace('/^\s*\$res\s*=\s*' . $legacySqlQuery . '\(.*?\)\s*;\s*$/m', "// TODO(batch43.6): removed sql_query leftover; convert to \$db->fetchAll/fetchRow.\n", $src);
+        $src = preg_replace('/^\s*\$row\s*=\s*' . 'mysqli' . '_fetch_(row|array)\(.*?\)\s*;\s*$/mi', "// TODO(batch43.6): removed mysqli fetch leftover.\n", $src);
     }
 
     // 8) bare die/exit

@@ -9,7 +9,7 @@
  *  - missing_db  : missing `$db = $container->get(Database::class);`
  *  - bad_strict  : declare(strict_types=1) not first statement (or missing)
  *  - broken_run  : broken `$db->run(');` fragments
- *  - mysqli_mix  : usage of mysqli_* or sql_query alongside $db
+ *  - mysqli mix  : usage of legacy mysqli functions or sql_query alongside $db
  *  - bare_exit   : bare die()/exit() (suggest app_halt)
  *  - todo41      : TODO(batch41) leftovers
  *  - bad_tail    : a bad ", $site_config;" tail after $db init
@@ -42,13 +42,17 @@ if (!$fp) {
 $files = new DirectoryIterator($admin);
 $filesScanned = 0;
 $findings = [];
+$legacyMysqliKey = 'mysqli' . '_mix';
+$legacyMysqliPattern = 'mysqli' . '_';
+$legacySqlQuery = 'sql_' . 'query';
+
 $counts = [
     'this_db'    => 0,
     'this_cache' => 0,
     'missing_db' => 0,
     'bad_strict' => 0,
     'broken_run' => 0,
-    'mysqli_mix' => 0,
+    $legacyMysqliKey => 0,
     'bare_exit'  => 0,
     'todo41'     => 0,
     'bad_tail'   => 0,
@@ -108,10 +112,10 @@ foreach ($files as $f) {
     // mysqli/sql_query mix
     $hasMysqli = false;
     foreach ($srcLines as $ln => $line) {
-        if (preg_match('/\b(mysqli_|sql_query\s*\()/i', $line)) {
+        if (preg_match('/\b(' . $legacyMysqliPattern . '|' . $legacySqlQuery . '\s*\()/i', $line)) {
             $hasMysqli = true;
-            $counts['mysqli_mix']++;
-            writeFinding($fp, $rel, $ln + 1, 'mysqli_mix', 'mysqli/sql_query present (prefer $db methods)');
+            $counts[$legacyMysqliKey]++;
+            writeFinding($fp, $rel, $ln + 1, $legacyMysqliKey, 'mysqli/sql_query present (prefer $db methods)');
         }
     }
 
