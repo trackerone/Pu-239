@@ -14,7 +14,13 @@ $cache = $container->get(Cache::class);
 $news = $cache->get('latest_news_');
 if ($news === false || is_null($news)) {
     $dt = TIME_NOW - (86400 * 45);
-    $news = $db->fetchAll('SELECT * FROM news WHERE (added > :dt AND sticky = "no") OR sticky = "yes" ORDER BY sticky, added DESC LIMIT 10', [':dt' => $dt]);
+    $news = $db->fetchAll(
+        'SELECT id, userid, anonymous, title, added, body, sticky FROM news WHERE (added > :dt AND sticky = "no") OR sticky = "yes" ORDER BY sticky, added DESC LIMIT :limit',
+        [
+            ':dt' => (int) $dt,
+            ':limit' => (int) 10,
+        ]
+    );
     $cache->set('latest_news_', $news, $site_config['expires']['latest_news']);
 }
 
