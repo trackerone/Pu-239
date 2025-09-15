@@ -449,6 +449,17 @@ $ rg "mysqli_|sql_query\\(|sqlesc\\(" public/achievementlist.php
 No matches.
 
 ********* master
+********* codex/migrate-db-calls-to-pu239-database-i4txmq
+
+## cache
+- `cache/bans_cache.php`, `cache/block_settings_cache.php`, `cache/categorie_icons.php`, `cache/countries.php`, `cache/country.php`, `cache/free_cache.php`, `cache/rep_cache.php`, `cache/rep_settings_cache.php`, `cache/timezones.php`: standardized `runtime_safe.php`/`bootstrap_pdo.php` bootstrap, imported `Pu239\\Database`, initialized `$db`, and enforced strict typing.
+
+### Verification
+```
+$ rg "mysqli_|sql_query\\(|sqlesc\\(" cache
+```
+No matches in modified files.
+=======
 ## blocks/index (pdo cleanup)
 - `blocks/index/active_24h_users.php`: cast integer parameters and sanitized update bindings.
 - `blocks/index/active_birthday_users.php`: cast integer parameters.
@@ -469,3 +480,4 @@ No matches.
 * Transactions added: none
 * COUNT(*) replacements: none
 * Bound parameters added for LIMIT: `blocks/index/news.php`
+********* master
