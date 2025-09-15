@@ -426,4 +426,18 @@ $ rg "mysqli_|sql_query\\(|sqlesc\\(" public/achievementlist.php
 ```
 No matches.
 
+## database
+- Files changed: 1 (`database/sql_updates.php`).
+- Legacy patterns removed: none (0 occurrences of `mysqli_`, `sql_query`, or `sqlesc`).
+- Transactions added: none.
+- SELECT COUNT(*) replacements: none.
+- IN/LIKE/LIMIT bindings: none.
+- Verification: 0 legacy pattern matches.
+
+### Verification
+```bash
+$ rg "mysqli_|sql_query\\s*\\(|sqlesc\\s*\\(|mysqli_fetch|mysqli_num_rows|mysqli_insert_id" database
+```
+No matches.
+
 ********* master
