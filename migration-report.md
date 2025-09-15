@@ -654,3 +654,11 @@ $ rg "mysqli_|sql_query\\(|sqlesc\\(|mysqli_fetch|mysqli_num_rows|mysqli_insert_
 / master
 ```
 No matches.
+## src
+- No database calls required migration; directory already uses `Pu239\\Database` with standardized bootstrap.
+- Files changed: 0
+- Legacy patterns removed: 0
+- Transactions added: none
+- `SELECT COUNT(*)` introduced: none
+- IN/LIKE/LIMIT binding: none
+- Verification: `rg -n -e 'mysqli_' -e 'sql_query\\s*\\(' -e 'sqlesc\\s*\\(' -e 'mysqli_fetch' -e 'mysqli_num_rows' -e 'mysqli_insert_id' src` → no matches
