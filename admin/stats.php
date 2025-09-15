@@ -3,196 +3,154 @@ declare(strict_types=1);
 
 require_once __DIR__ . '/../include/runtime_safe.php';
 require_once __DIR__ . '/../include/bootstrap_pdo.php';
+require_once CLASS_DIR . 'class_check.php';
 
 use Pu239\Database;
-use Pu239\Roles;
+use Pu239\StatsService;
 
 global $container, $site_config;
 
-require_once INCL_DIR . 'function_users.php';
-require_once INCL_DIR . 'function_html.php';
-require_once INCL_DIR . 'function_pager.php';
-require_once CLASS_DIR . 'class_check.php';
-
-$db = $container->get(Database::class);
-
+/** adgangskontrol */
 $class = get_access(basename($_SERVER['REQUEST_URI']));
 class_check($class);
 
-$uporder = $_GET['uporder'] ?? '';
-$catorder = $_GET['catorder'] ?? '';
+/** @var Database $db */
+$db = $container->get(Database::class);
+/** @var StatsService $stats */
+$stats = $container->get(StatsService::class);
 
+/** pagination (uden function_pager) */
+$perpage = max(10, (int)($_GET['pp'] ?? 20));
+$page    = max(1,  (int)($_GET['p']  ?? 1));
+$offset  = ($page - 1) * $perpage;
 
-$baseurl = $site_config['paths']['baseurl'];
-$torrent_count_row = $db->fetch('SELECT COUNT(id) AS c FROM torrents');
-$n_tor = isset($torrent_count_row['c']) ? (int) $torrent_count_row['c'] : 0;
-$peer_count_row = $db->fetch('SELECT COUNT(id) AS c FROM peers');
-$n_peers = isset($peer_count_row['c']) ? (int) $peer_count_row['c'] : 0;
+/** data */
+$users   = $stats->getUserCounts();
+$torr    = $stats->getTorrentCounts();
+$peers   = $stats->getPeerCounts();
+$traf    = $stats->getTraffic24h();
+$totalUploaders = $stats->countUploaders();
+$rows    = $stats->getUploaders($perpage, $offset);
 
-$HTMLOUT = '';
-$perpage = 25;
+/** helper */
+$bn = function (float|int $n): string {
+    return number_format((float)$n, 0, ',', '.');
+};
 
-$uploader_order_map = [
-    'lastul' => 'last DESC, name',
-    'torrents' => 'n_t DESC, name',
-    'peers' => 'n_p DESC, name',
-    'uploader' => 'name',
-];
-$uploader_order = $uploader_order_map[$uporder] ?? 'name';
+/** hvis projektet stadig har stdhead/stdfoot/wrapper, så brug dem;
+    ellers rendér minimal HTML (hardcore-mode uden legacy helpers). */
+$have_legacy_layout = function_exists('stdhead') && function_exists('stdfoot');
 
-$uploader_count_row = $db->fetch(
-    'SELECT COUNT(*) AS c
-        FROM (
-            SELECT u.id
-            FROM users AS u
-            WHERE (u.roles_mask & :role) != 0
-            GROUP BY u.id
-        ) AS uploaders',
-    [
-        ':role' => Roles::UPLOADER,
-    ]
-);
-$uploader_count = isset($uploader_count_row['c']) ? (int) $uploader_count_row['c'] : 0;
+$title = 'Stats';
+$base  = $site_config['paths']['baseurl'] ?? '';
+$self  = htmlspecialchars((string)($_SERVER['PHP_SELF'] ?? ''), ENT_QUOTES);
 
-$pager = pager($perpage, $uploader_count, "{$site_config['paths']['baseurl']}/staffpanel.php?tool=stats&amp;");
-
-if ($uploader_count === 0) {
-    $HTMLOUT .= stdmsg(_('Error'), _('No uploaders.'));
-} else {
-    if ($uploader_count > $perpage) {
-        $HTMLOUT .= $pager['pagertop'];
+/** simple pager */
+$totalPages = max(1, (int)ceil($totalUploaders / $perpage));
+$pagerHtml  = '';
+if ($totalPages > 1) {
+    $pagerHtml .= '<nav class="pager">';
+    for ($i = 1; $i <= $totalPages; $i++) {
+        $active = $i === $page ? ' style="font-weight:bold"' : '';
+        $pagerHtml .= '<a href="' . $self . '?p=' . $i . '&pp=' . $perpage . '"'.$active.'>' . $i . '</a> ';
     }
-
-    $uploader_sql = "SELECT
-            u.id,
-            u.username AS name,
-            MAX(t.added) AS last,
-            COUNT(DISTINCT t.id) AS n_t,
-            COUNT(p.id) AS n_p
-        FROM users AS u
-        LEFT JOIN torrents AS t ON u.id = t.owner
-        LEFT JOIN peers AS p ON t.id = p.torrent
-        WHERE (u.roles_mask & :role) != 0
-        GROUP BY u.id, u.username
-        ORDER BY {$uploader_order}
-        LIMIT :limit OFFSET :offset";
-
-    $uploader_stmt = $db->run($uploader_sql, [
-        ':role' => Roles::UPLOADER,
-        ':limit' => (int) $pager['pdo']['limit'],
-        ':offset' => (int) $pager['pdo']['offset'],
-    ]);
-    $uploaders = $uploader_stmt->fetchAll();
-
-    $catorder_link = htmlsafechars($catorder);
-    $heading = "
-    <tr>
-        <th><a href='{$baseurl}/staffpanel.php?tool=stats&amp;action=stats&amp;uporder=uploader&amp;catorder={$catorder_link}' class='colheadlink'>" . _('Uploader') . "</a></th>
-        <th><a href='{$baseurl}/staffpanel.php?tool=stats&amp;action=stats&amp;uporder=lastul&amp;catorder={$catorder_link}' class='colheadlink'>" . _('Last upload') . "</a></th>
-        <th><a href='{$baseurl}/staffpanel.php?tool=stats&amp;action=stats&amp;uporder=torrents&amp;catorder={$catorder_link}' class='colheadlink'>" . _('Torrents') . "</a></th>
-        <th>Perc.</th>
-        <th><a href='{$baseurl}/staffpanel.php?tool=stats&amp;action=stats&amp;uporder=peers&amp;catorder={$catorder_link}' class='colheadlink'>" . _('Peers') . "</a></th>
-        <th>Perc.</th>
-    </tr>";
-
-    $body = '';
-    foreach ($uploaders as $uploader) {
-        $user_id = (int) $uploader['id'];
-        $torrent_total = (int) $uploader['n_t'];
-        $peer_total = (int) $uploader['n_p'];
-        $last_added = isset($uploader['last']) ? (int) $uploader['last'] : 0;
-        $last_cell = $last_added > 0
-            ? '>' . get_date($last_added, '') . ' (' . get_date($last_added, '', 0, 1) . ')'
-            : "align='center'>---";
-        $torrent_percent = $n_tor > 0 ? number_format(100 * $torrent_total / $n_tor, 1) . '%' : '---';
-        $peer_percent = $n_peers > 0 ? number_format(100 * $peer_total / $n_peers, 1) . '%' : '---';
-
-        $body .= '
-    <tr>
-        <td>' . format_username($user_id) . '</td>
-        <td ' . $last_cell . '</td>
-        <td>' . $torrent_total . '</td>
-        <td>' . $torrent_percent . '</td>
-        <td>' . $peer_total . '</td>
-        <td>' . $peer_percent . '</td>
-    </tr>';
-    }
-
-    $HTMLOUT .= main_table($body, $heading);
-
-    if ($uploader_count > $perpage) {
-        $HTMLOUT .= $pager['pagerbottom'];
-    }
+    $pagerHtml .= '</nav>';
 }
 
-if ($n_tor === 0) {
-    $HTMLOUT .= stdmsg(_('Error'), _('No categories defined!'));
-} else {
-    $category_order_map = [
-        'lastul' => 'last DESC, c.name',
-        'torrents' => 'n_t DESC, c.name',
-        'peers' => 'n_p DESC, c.name',
-        'category' => 'c.name',
+/** content (ren HTML, ingen function_html) */
+ob_start();
+?>
+<?php if (!$have_legacy_layout): ?>
+<!doctype html>
+<html lang="da"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title><?= htmlspecialchars($title) ?></title>
+<style>
+  :root { --gap:12px; --bd:#e5e7eb; --muted:#6b7280; }
+  body{font-family:system-ui,Segoe UI,Arial,sans-serif;margin:20px}
+  h1{margin:0 0 16px}
+  .grid{display:grid;gap:var(--gap);grid-template-columns:repeat(auto-fit,minmax(240px,1fr))}
+  .card{border:1px solid var(--bd);border-radius:12px;padding:16px}
+  .k{color:var(--muted);font-size:.9rem}
+  table{width:100%;border-collapse:collapse;margin-top:8px}
+  th,td{padding:8px;border-bottom:1px solid var(--bd);text-align:left}
+  .pager a{display:inline-block;margin-right:6px;text-decoration:none}
+</style>
+</head><body>
+<?php endif; ?>
+
+<h1>Systemstatus</h1>
+<div class="grid">
+  <div class="card">
+    <div class="k">Brugere</div>
+    <div>Total: <?= $bn($users['total'] ?? 0) ?></div>
+    <div>Aktiverede: <?= $bn($users['enabled'] ?? 0) ?></div>
+  </div>
+  <div class="card">
+    <div class="k">Torrents</div>
+    <div>Total: <?= $bn($torr['total'] ?? 0) ?></div>
+  </div>
+  <div class="card">
+    <div class="k">Peers</div>
+    <div>Seeders: <?= $bn($peers['seeders'] ?? 0) ?></div>
+    <div>Leechers: <?= $bn($peers['leechers'] ?? 0) ?></div>
+  </div>
+  <div class="card">
+    <div class="k">Seneste 24 timer</div>
+    <div>Upload: <?= $bn($traf['up'] ?? 0) ?></div>
+    <div>Download: <?= $bn($traf['down'] ?? 0) ?></div>
+  </div>
+</div>
+
+<div class="card" style="margin-top:16px">
+  <div class="k">Uploadere</div>
+  <?= $pagerHtml ?>
+  <?php if (!$rows): ?>
+    <p>Ingen uploadere fundet.</p>
+  <?php else: ?>
+    <table>
+      <thead><tr>
+        <th>#</th>
+        <th>Bruger</th>
+        <th>Antal torrents</th>
+        <th>Sidst</th>
+      </tr></thead>
+      <tbody>
+      <?php
+      $i = $offset + 1;
+      foreach ($rows as $r):
+          $name = htmlspecialchars((string)($r['name'] ?? ''), ENT_QUOTES);
+          $uid  = (int)($r['id'] ?? 0);
+          $nt   = (int)($r['n_t'] ?? 0);
+          $last = $r['last'] ?? null;
+          $lastTxt = $last ? date('Y-m-d H:i', is_numeric($last) ? (int)$last : strtotime((string)$last)) : '—';
+      ?>
+        <tr>
+          <td><?= $bn($i++) ?></td>
+          <td><a href="<?= $base ?>/userdetails.php?id=<?= $uid ?>"><?= $name ?></a></td>
+          <td><?= $bn($nt) ?></td>
+          <td><?= $lastTxt ?></td>
+        </tr>
+      <?php endforeach; ?>
+      </tbody>
+    </table>
+    <?= $pagerHtml ?>
+  <?php endif; ?>
+</div>
+
+<?php if (!$have_legacy_layout): ?>
+</body></html>
+<?php endif; ?>
+<?php
+$html = ob_get_clean();
+
+if ($have_legacy_layout) {
+    $breadcrumbs = [
+        "<a href='{$base}/staffpanel.php'>Staff Panel</a>",
+        "<a href='{$self}'>" . htmlspecialchars($title) . '</a>',
     ];
-    $category_order = $category_order_map[$catorder] ?? 'c.name';
-
-    $category_sql = "SELECT
-            c.name,
-            MAX(t.added) AS last,
-            COUNT(DISTINCT t.id) AS n_t,
-            COUNT(p.id) AS n_p
-        FROM categories AS c
-        LEFT JOIN torrents AS t ON t.category = c.id
-        LEFT JOIN peers AS p ON t.id = p.torrent
-        GROUP BY c.id, c.name
-        ORDER BY {$category_order}";
-
-    $categories = $db->fetchAll($category_sql);
-
-    if (empty($categories)) {
-        $HTMLOUT .= stdmsg(_('Error'), _('No categories defined!'));
-    } else {
-        $uporder_link = htmlsafechars($uporder);
-        $heading = "
-        <tr>
-            <th><a href='{$baseurl}/staffpanel.php?tool=stats&amp;action=stats&amp;uporder={$uporder_link}&amp;catorder=category' class='colheadlink'>" . _('Category') . "</a></th>
-            <th><a href='{$baseurl}/staffpanel.php?tool=stats&amp;action=stats&amp;uporder={$uporder_link}&amp;catorder=lastul' class='colheadlink'>" . _('Last upload') . "</a></th>
-            <th><a href='{$baseurl}/staffpanel.php?tool=stats&amp;action=stats&amp;uporder={$uporder_link}&amp;catorder=torrents' class='colheadlink'>" . _('Torrents') . "</a></th>
-            <th>Perc.</th>
-            <th><a href='{$baseurl}/staffpanel.php?tool=stats&amp;action=stats&amp;uporder={$uporder_link}&amp;catorder=peers' class='colheadlink'>" . _('Peers') . "</a></th>
-            <th>Perc.</th>
-        </tr>";
-
-        $body = '';
-        foreach ($categories as $category) {
-            $category_name = htmlsafechars($category['name']);
-            $category_torrents = (int) $category['n_t'];
-            $category_peers = (int) $category['n_p'];
-            $last_added = isset($category['last']) ? (int) $category['last'] : 0;
-            $last_cell = $last_added > 0
-                ? '>' . get_date($last_added, '') . ' (' . get_date($last_added, '', 0, 1) . ')'
-                : "align='center'>---";
-            $torrent_percent = $n_tor > 0 ? number_format(100 * $category_torrents / $n_tor, 1) . '%' : '---';
-            $peer_percent = $n_peers > 0 ? number_format(100 * $category_peers / $n_peers, 1) . '%' : '---';
-
-            $body .= '
-        <tr>
-            <td>' . $category_name . '</td>
-            <td ' . $last_cell . '</td>
-            <td>' . $category_torrents . '</td>
-            <td>' . $torrent_percent . '</td>
-            <td>' . $category_peers . '</td>
-            <td>' . $peer_percent . '</td>
-        </tr>';
-        }
-
-        $HTMLOUT .= main_table($body, $heading, null, 'top20');
-    }
+    echo stdhead($title, [], 'page-wrapper', $breadcrumbs) . wrapper($html) . stdfoot();
+} else {
+    echo $html;
 }
-
-$title = _('Stats');
-$breadcrumbs = [
-    "<a href='{$site_config['paths']['baseurl']}/staffpanel.php'>" . _('Staff Panel') . '</a>',
-    "<a href='{$_SERVER['PHP_SELF']}'>$title</a>",
-];
-echo stdhead($title, [], 'page-wrapper', $breadcrumbs) . wrapper($HTMLOUT) . stdfoot();
