@@ -1,7 +1,10 @@
 name: Composer Platform Alignment (Soft)
 
 on:
-  pull_request:
+  workflow_dispatch:
+# (optional)
+#  schedule:
+#    - cron: '0 6 * * 1'
     branches: [ main, develop ]
   workflow_dispatch:
 
