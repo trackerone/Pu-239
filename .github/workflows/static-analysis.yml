@@ -1,42 +1,72 @@
-name: Static Analysis (soft)
+name: Static Analysis (PHP 8.3 + PHPStan)
 
 on:
   pull_request:
-    branches: [ main, develop ]
-  workflow_dispatch:
+    paths:
+      - '**/*.php'
+      - 'composer.json'
+      - 'composer.lock'
+      - '!vendor/**'
+      - '!node_modules/**'
+      - '!_quarantine/**'
+  push:
+    branches: [ main ]
+    paths:
+      - '**/*.php'
+      - 'composer.json'
+      - 'composer.lock'
+      - '!vendor/**'
+      - '!node_modules/**'
+      - '!_quarantine/**'
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
 
 jobs:
-  analyze:
+  php-analysis:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout
+        uses: actions/checkout@v4
 
-      - uses: shivammathur/setup-php@v2
+      - name: Setup PHP 8.3
+        uses: shivammathur/setup-php@v2
         with:
           php-version: '8.3'
-          tools: composer:v2, phpstan
+          extensions: mbstring, intl, pdo_mysql
           coverage: none
+          tools: composer:v2
 
-      - name: Composer (no-dev, ignore platform)
-        run: |
-          composer install --no-interaction --no-progress --prefer-dist             --no-dev --no-scripts --no-plugins --ignore-platform-reqs
-
-      - name: Install QA tools globally
-        run: |
-          composer global require laravel/pint:^1.17 nunomaduro/larastan:^2.9 --no-interaction --no-progress
-          echo "$HOME/.composer/vendor/bin" >> $GITHUB_PATH
-
-      - name: Pint (non-blocking)
-        continue-on-error: true
-        run: pint --test
-
-      - name: PHPStan (non-blocking)
-        continue-on-error: true
-        run: phpstan analyse --configuration=phpstan.neon --memory-limit=1G
-
-      - name: Upload logs
-        if: failure()
-        uses: actions/upload-artifact@v4
+      - name: Cache Composer
+        uses: actions/cache@v4
         with:
-          name: static-analysis-artifacts
-          path: storage/logs
+          path: |
+            ~/.composer/cache
+            vendor
+          key: composer-${{ hashFiles('**/composer.lock') }}
+          restore-keys: |
+            composer-
+
+      - name: Install dependencies
+        run: composer install --no-interaction --prefer-dist --no-progress
+
+      - name: PHP lint (parallel)
+        run: |
+          find . -type f -name "*.php" \
+            -not -path "./vendor/*" \
+            -not -path "./node_modules/*" \
+            -not -path "./_quarantine/*" \
+            -print0 | xargs -0 -n1 -P4 php -l
+
+      - name: Ensure PHPStan (CI fallback)
+        run: |
+          if [ ! -x "vendor/bin/phpstan" ]; then
+            composer require --dev phpstan/phpstan:^1 --no-interaction --no-progress
+          fi
+
+      - name: PHPStan analyse
+        run: vendor/bin/phpstan analyse --no-progress
