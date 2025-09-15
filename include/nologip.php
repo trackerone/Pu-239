@@ -1,19 +1,18 @@
 <?php
 declare(strict_types=1);
-
-$db = $container->get(Database::class);
-
-require_once __DIR__ . '/runtime_safe.php';
-
+require_once __DIR__ . '/../include/runtime_safe.php';
+require_once __DIR__ . '/../include/bootstrap_pdo.php';
 
 use DI\DependencyException;
 use DI\NotFoundException;
-
 use MatthiasMullie\Scrapbook\Exception\UnbegunTransaction;
 use Pu239\Cache;
 use Pu239\Database;
 use Pu239\Session;
 use Pu239\User;
+
+global $container;
+$db = $container->get(Database::class);
 
 /**
  * @param int  $userid
@@ -26,7 +25,7 @@ use Pu239\User;
  */
 function nologip(int $userid, bool $nologip = true)
 {
-    global $container, $CURUSER;
+    global $container, $CURUSER, $db;
 
     $users_class = $container->get(User::class);
     $user = $users_class->getUserFromId($userid);
@@ -45,9 +44,7 @@ function nologip(int $userid, bool $nologip = true)
         ];
         $users_class->update($update, $userid, false);
     }
-    // $fluent removed — use $this->db (ExtendedPdo)
-    $sql = "DELETE FROM ips WHERE userid = :userid";
-$db->perform($sql, ['userid' => $userid]);
+    $db->run('DELETE FROM ips WHERE userid = :userid', [':userid' => (int) $userid]);
     $cache = $container->get(Cache::class);
     $cache->delete('ip_history_' . $userid);
     write_log('Member [b][url=userdetails.php?id=' . $userid . ']' . (htmlsafechars($user['username'])) . '[/url][/b] is ' . $display . ' Logging IP thanks to [b]' . $CURUSER['username'] . '[/b]');

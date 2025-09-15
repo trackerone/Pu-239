@@ -34,8 +34,8 @@ if ($topics === false || is_null($topics)) {
             ORDER BY t.last_post DESC
             LIMIT :limit',
         [
-            ':class' => $CURUSER['class'],
-            ':limit' => $site_config['latest']['posts_limit'],
+            ':class' => (int) $CURUSER['class'],
+            ':limit' => (int) $site_config['latest']['posts_limit'],
         ]
     );
     if (!empty($topics)) {
