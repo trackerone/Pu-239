@@ -1,16 +1,17 @@
 <?php
-$db = $container->get(Database::class);
+declare(strict_types=1);
 
 require_once __DIR__ . '/../include/runtime_safe.php';
-
-
-declare(strict_types = 1);
+require_once __DIR__ . '/../include/bootstrap_pdo.php';
 
 use DI\DependencyException;
 use DI\NotFoundException;
 use Pu239\Cache;
 use Pu239\Database;
 use Pu239\Session;
+
+global $container;
+$db = $container->get(Database::class);
 
 /**
  * @throws NotFoundException
@@ -19,26 +20,17 @@ use Pu239\Session;
  *
  * @return array
  */
-function get_styles()
+function get_styles(): array
 {
-    global $container;
+    global $db;
 
-    // $fluent removed — use $this->db (ExtendedPdo)
-    $query = $fluent->from('stylesheets')
-                    ->select(null)
-                    ->select('id')
-                    ->select('uri');
+    $sql = 'SELECT id FROM stylesheets';
+    $rows = $db->run($sql)->fetchAll();
 
-    $styles = [];
-    foreach ($query as $style) {
-        $styles[] = $style['id'];
-    }
-
-    return $styles;
+    return array_column($rows, 'id');
 }
 
 /**
- *
  * @param array $styles
  * @param bool  $create
  *
@@ -48,23 +40,14 @@ function get_styles()
  *
  * @return array
  */
-function get_classes(array $styles, bool $create)
+function get_classes(array $styles, bool $create): array
 {
-    global $container;
+    global $db;
 
-    // $fluent removed — use $this->db (ExtendedPdo)
     $all_classes = [];
     foreach ($styles as $style) {
-        $classes = $fluent->from('class_config')
-                          ->select(null)
-                          ->select('name')
-                          ->select('value')
-                          ->select('classname')
-                          ->select('classcolor')
-                          ->select('classpic')
-                          ->orderBy('value')
-                          ->where('template = ?', $style)
-                          ->fetchAll();
+        $sql = 'SELECT name, value, classname, classcolor, classpic FROM class_config WHERE template = :template ORDER BY value';
+        $classes = $db->run($sql, [':template' => $style])->fetchAll();
 
         if (empty($classes)) {
             if (!$create) {
@@ -72,8 +55,8 @@ function get_classes(array $styles, bool $create)
             } else {
                 foreach ($all_classes[0] as $values) {
                     $values['template'] = $style;
-                    $sql = "INSERT INTO class_config (/* columns */) VALUES (/* values */)";
-$db->perform($sql, $values);
+                    $sql = 'INSERT INTO class_config (/* columns */) VALUES (/* values */)';
+                    $db->run($sql, $values);
                 }
                 app_halt("Classes added for template {$style}\n");
             }
@@ -87,7 +70,7 @@ $db->perform($sql, $values);
 /**
  * @return string
  */
-function get_webserver_user()
+function get_webserver_user(): string
 {
     global $site_config;
 
@@ -135,7 +118,7 @@ function get_username()
 /**
  * @param string $group
  */
-function cleanup(string $group)
+function cleanup(string $group): void
 {
     global $site_config;
 
@@ -158,49 +141,3 @@ function cleanup(string $group)
     }
 }
 
-/**
- *
- * @param bool $before
- *
- * @throws NotFoundException
- * @throws \PDOException
- * @throws DependencyException
- *
- * @return int
- */
-function toggle_site_status(bool $before)
-{
-    global $container;
-
-    // $fluent removed — use $this->db (ExtendedPdo)
-    $cache = $container->get(Cache::class);
-    $online = $fluent->from('site_config')
-                     ->select(null)
-                     ->select('value')
-                     ->where('parent = "site"')
-                     ->where('name = "online"')
-                     ->fetch('value');
-    $online = (bool) $online;
-    $disabled = $online ? 0 : 1;
-    $set = [
-        'value' => $disabled,
-    ];
-    if ($before) {
-        clear_di_cache();
-    }
-    $fluent->update('site_config')
-           ->set($set)
-           ->where('parent = "site"')
-           ->where('name = "online"')
-           ->execute();
-    if (!$before) {
-        clear_di_cache();
-    }
-    if (!$online) {
-        $session = $container->get(Session::class);
-        $session->unset('is-danger');
-    }
-    $cache->set('site_settings_', false);
-
-    return $disabled;
-}
