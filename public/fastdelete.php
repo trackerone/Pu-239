@@ -1,22 +1,19 @@
 <?php
+declare(strict_types=1);
 require_once __DIR__ . '/../include/runtime_safe.php';
-
 require_once __DIR__ . '/../include/bootstrap_pdo.php';
-
-
-declare(strict_types = 1);
-
 use Pu239\Cache;
 use Pu239\Database;
 use Pu239\Session;
 use Pu239\Torrent;
+global $container;
+$db = $container->get(Database::class);
 
 require_once __DIR__ . '/../include/bittorrent.php';
 require_once INCL_DIR . 'function_users.php';
 require_once INCL_DIR . 'function_html.php';
+global $site_config;
 $user = check_user_status();
-global $container;
-$db = $container->get(Database::class);, $site_config;
 
 if ($user['class'] < UC_STAFF) {
     stderr(_('Error'), _('You do not have permission to do this.'));
@@ -27,19 +24,13 @@ if (!isset($_GET['id']) || !is_valid_id((int) $_GET['id'])) {
 }
 
 $id = (int) $_GET['id'];
-$fluent = $db; // alias
-// $fluent removed — use $this->db (ExtendedPdo)
-$tid = $fluent->from('torrents AS t')
-              ->select(null)
-              ->select('t.id')
-              ->select('t.info_hash')
-              ->select('t.owner')
-              ->select('t.name')
-              ->select('t.added')
-              ->select('u.seedbonus')
-              ->leftJoin('users AS u ON u.id=t.owner')
-              ->where('t.id = ?', $id)
-              ->fetch();
+$tid = $db->fetch(
+    'SELECT t.id, t.info_hash, t.owner, t.name, t.added, u.seedbonus
+        FROM torrents AS t
+        LEFT JOIN users AS u ON u.id = t.owner
+        WHERE t.id = :id',
+    [':id' => $id]
+);
 
 if (!$tid) {
     stderr(_('Error'), _('Something went wrong!'));
@@ -55,21 +46,29 @@ $torrents_class = $container->get(Torrent::class);
 $torrents_class->remove_torrent($tid['info_hash']);
 $torrents_class->delete_by_id($tid['id']);
 if ($user['id'] != $tid['owner']) {
-    $msg = sqlesc(_fe('Your upload {0} has been deleted by {1}', "[b]{$tid['name']}[/b]", $user['username']));
-    sql_query('INSERT INTO messages (sender, receiver, added, msg) VALUES (2, ' . sqlesc($tid['owner']) . ', ' . TIME_NOW . ", {$msg})") or sqlerr(__FILE__, __LINE__);
+    $msg = _fe('Your upload {0} has been deleted by {1}', "[b]{$tid['name']}[/b]", $user['username']);
+    $db->run(
+        'INSERT INTO messages (sender, receiver, added, msg) VALUES (2, :receiver, :added, :msg)',
+        [
+            ':receiver' => (int) $tid['owner'],
+            ':added' => TIME_NOW,
+            ':msg' => $msg,
+        ]
+    );
 }
 write_log(_fe('Torrent {0} was deleted by {1}', $tid['name'], $user['username']));
 $cache = $container->get(Cache::class);
 if ($site_config['bonus']['on']) {
-    $dt = sqlesc(TIME_NOW - (14 * 86400));
+    $dt = TIME_NOW - (14 * 86400);
     if ($tid['added'] > $dt) {
         $sb = $tid['seedbonus'] - $site_config['bonus']['per_delete'];
-        $set = [
-            'seedbonus' => $sb,
-        ];
-        $sql = "UPDATE users SET /* columns */ WHERE id = :id";
-$db->perform($sql, array_merge($set, ['id' => $tid['owner']]));
-
+        $db->run(
+            'UPDATE users SET seedbonus = :seedbonus WHERE id = :id',
+            [
+                ':seedbonus' => $sb,
+                ':id' => (int) $tid['owner'],
+            ]
+        );
         $cache->update_row('user_' . $tid['owner'], [
             'seedbonus' => $sb,
         ], $site_config['expires']['user_cache']);

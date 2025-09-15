@@ -1,42 +1,51 @@
 <?php
-$db = $container->get(Database::class);
-
+declare(strict_types=1);
 require_once __DIR__ . '/../include/runtime_safe.php';
-
 require_once __DIR__ . '/../include/bootstrap_pdo.php';
-
-
-declare(strict_types = 1);
-
 use Pu239\Database;
+global $container;
+$db = $container->get(Database::class);
 
 require_once __DIR__ . '/../include/bittorrent.php';
 require_once INCL_DIR . 'function_users.php';
 require_once INCL_DIR . 'function_html.php';
 check_user_status();
-$sql = 'SELECT gamenum, IFNULL(unix_timestamp(finished), 0) AS ended, IFNULL(unix_timestamp(started), 0) AS started FROM triviasettings GROUP BY gamenum, finished, started ORDER BY gamenum DESC LIMIT 10';
-$res = sql_query($sql) or sqlerr(__FILE__, __LINE__);
+
+$games = $db->fetchAll(
+    'SELECT gamenum, IFNULL(UNIX_TIMESTAMP(finished), 0) AS ended, IFNULL(UNIX_TIMESTAMP(started), 0) AS started
+        FROM triviasettings
+        GROUP BY gamenum, finished, started
+        ORDER BY gamenum DESC
+        LIMIT :limit',
+    [':limit' => 10]
+);
 $table = "
             <div class='portlet'>";
-while ($result = mysqli_fetch_assoc($res)) {
+$div = '';
+foreach ($games as $result) {
     $gamenum = (int) $result['gamenum'];
     $ended = $result['ended'] >= 1 ? get_date((int) $result['ended'], 'LONG') : 0;
     $started = $result['started'] >= 1 ? get_date((int) $result['started'], 'LONG') : 0;
-    $sql = 'SELECT t.gamenum, t.user_id, COUNT(t.correct) AS correct,
-                (SELECT COUNT(correct) AS incorrect FROM triviausers WHERE correct = 0 AND user_id = t.user_id AND gamenum = ' . sqlesc($gamenum) . ') AS incorrect,
+    $players = $db->fetchAll(
+        'SELECT t.gamenum, t.user_id, COUNT(t.correct) AS correct,
+                (SELECT COUNT(correct) FROM triviausers WHERE correct = 0 AND user_id = t.user_id AND gamenum = :gamenum) AS incorrect,
                 u.username, u.modcomment
             FROM triviausers AS t
             INNER JOIN users AS u ON u.id=t.user_id
             INNER JOIN triviasettings AS s ON s.gamenum = t.gamenum
-            WHERE t.correct = 1 AND t.gamenum = ' . sqlesc($gamenum) . '
+            WHERE t.correct = 1 AND t.gamenum = :gamenum
             GROUP BY t.user_id
             ORDER BY correct DESC, incorrect
-            LIMIT 10';
-    $query = sql_query($sql) or sqlerr(__FILE__, __LINE__);
-    if (mysqli_num_rows($query) > 0) {
+            LIMIT :limit',
+        [
+            ':gamenum' => $gamenum,
+            ':limit' => 10,
+        ]
+    );
+    if (!empty($players)) {
         $i = 0;
         $date = $result['ended'] >= 1 ? "Ended: $ended" : "Started: $started";
-        $div = "
+        $div .= "
                 <div class='bg-02 has-text-centered top20 round5'>
                     <div class='padtop20'>
                         <h1>Game #{$gamenum} $date</h1>
@@ -52,16 +61,16 @@ while ($result = mysqli_fetch_assoc($res)) {
                         </thead>
                         <tbody>";
 
-        while ($player = mysqli_fetch_assoc($query)) {
-            $correct = $player['correct'];
-            $incorrect = $player['incorrect'];
+        foreach ($players as $player) {
+            $correct = (int) $player['correct'];
+            $incorrect = (int) $player['incorrect'];
             $div .= '
                         <tr>
                             <td>' . format_username((int) $player['user_id']) . '</td>
-                            <td>' . sprintf('%.2f%%', $correct / ($correct + $incorrect) * 100) . "</td>
-                            <td>$correct</td>
-                            <td>$incorrect</td>
-                        </tr>";
+                            <td>' . sprintf('%.2f%%', $correct / ($correct + $incorrect) * 100) . '</td>
+                            <td>' . $correct . '</td>
+                            <td>' . $incorrect . '</td>
+                        </tr>';
         }
         $div .= '
                         </tbody>
@@ -72,8 +81,8 @@ while ($result = mysqli_fetch_assoc($res)) {
 if (empty($div)) {
     $div = main_div('No Trivia Results', 'has-text-centered', 'padding20');
 }
-$table .= $div . '
-            </div>';
+$table .= $div . "
+            </div>";
 $title = _('Trivia');
 $breadcrumbs = [
     "<a href='{$_SERVER['PHP_SELF']}'>$title</a>",
