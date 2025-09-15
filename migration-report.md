@@ -22,6 +22,8 @@
 - `public/messages.php`: standardized bootstrap and converted mailbox lookup to `$db->fetchAll` with bound parameters.
 - `public/ajax/rating.php`: migrated from legacy queries to `$db->run` with transactions and bound parameters; standardized bootstrap.
 - `public/ajax/thanks.php`: migrated from `sql_query`/`sqlesc` to `$db->run` with transactions and bound parameters; standardized bootstrap.
+- `public/trivia_results.php`: replaced legacy `sql_query`, `mysqli_fetch_*`, `mysqli_num_rows`, and `sqlesc` with `$db->fetchAll` and bound parameters; bound `LIMIT` and standardized bootstrap.
+- `public/fastdelete.php`: removed `sql_query`/`sqlesc` and FluentPDO usage in favor of `$db->fetch`/`run` with bound parameters and standardized bootstrap.
 
 ### public/ajax summary
 - Files changed: 2 (`public/ajax/rating.php`, `public/ajax/thanks.php`)
@@ -33,7 +35,7 @@
 
 ### Verification
 ```
-$ rg "mysqli_|sql_query\(|sqlesc\(" public/contactstaff.php public/tenpercent.php public/ajax/like.php public/users.php public/messages.php public/ajax/rating.php public/ajax/thanks.php
+$ rg "mysqli_|sql_query\(|sqlesc\(" public/contactstaff.php public/tenpercent.php public/ajax/like.php public/users.php public/messages.php public/ajax/rating.php public/ajax/thanks.php public/trivia_results.php public/fastdelete.php
 ```
 No matches in modified files.
 
