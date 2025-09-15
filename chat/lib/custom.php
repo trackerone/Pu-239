@@ -1,12 +1,34 @@
 <?php
-$db = $container->get(Database::class);
+declare(strict_types=1);
+/ codex/migrate-db-calls-to-pu239-database-r73uj0
 
 require_once __DIR__ . '/../../include/runtime_safe.php';
-
 require_once __DIR__ . '/../../include/bootstrap_pdo.php';
+=======
+require_once __DIR__ . '/../../include/runtime_safe.php';
+require_once __DIR__ . '/../../include/bootstrap_pdo.php';
+use Pu239\Database;
+
+global $container;
+$db = $container->get(Database::class);
 
 
-declare(strict_types = 1);
+/ master
+
+use Pu239\Database;
+
+/ codex/migrate-db-calls-to-pu239-database-r73uj0
+global $container;
+$db = $container->get(Database::class);
+=======
+
+
+
+
+
+
+
+/ master
 /*
  * @package AJAX_Chat
  * @author Sebastian Tschan

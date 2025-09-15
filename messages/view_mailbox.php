@@ -16,11 +16,22 @@ $db = $container->get(Database::class);
 $show_pm_avatar = ($user['opt2'] & class_user_options_2::SHOW_PM_AVATAR) === class_user_options_2::SHOW_PM_AVATAR;
 $message_class = $container->get(Message::class);
 if ($mailbox > 1) {
+/ codex/migrate-db-calls-to-pu239-database-f8wbuj
     $arr_box_name = $db->fetch('SELECT name FROM pmboxes WHERE userid = :userid AND boxnumber = :boxnumber', [
         'userid' => (int) $user['id'],
         'boxnumber' => (int) $mailbox,
     ]);
     if (empty($arr_box_name)) {
+=======
+    $arr_box_name = $db->fetch(
+        'SELECT name FROM pmboxes WHERE userid = :uid AND boxnumber = :box',
+        [
+            ':uid' => (int) $user['id'],
+            ':box' => (int) $mailbox,
+        ],
+    );
+    if (empty($arr_box_name['name'])) {
+/ master
         stderr(_('Error'), _('Invalid mailbox'));
     }
     $mailbox_name = format_comment($arr_box_name['name']);

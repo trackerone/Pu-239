@@ -16,10 +16,10 @@ if ($birthday === false || is_null($birthday)) {
     $birthday = $list = [];
     $current_date = getdate();
     $query = $db->fetchAll('SELECT id FROM users WHERE MONTH(birthday) = :mon AND DAYOFMONTH(birthday) = :day AND perms < :perms AND anonymous_until < :now ORDER BY username', [
-        ':mon' => $current_date['mon'],
-        ':day' => $current_date['mday'],
-        ':perms' => PERMS_STEALTH,
-        ':now' => TIME_NOW,
+        ':mon' => (int) $current_date['mon'],
+        ':day' => (int) $current_date['mday'],
+        ':perms' => (int) PERMS_STEALTH,
+        ':now' => (int) TIME_NOW,
     ]);
 
     $count = count($query);

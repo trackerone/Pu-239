@@ -45,14 +45,21 @@ if (isset($_POST['action2'])) {
             if ($_POST['new'] === '') {
                 stderr(_('Error'), _('to add new PM boxes you MUST enter at least one PM box name!'));
             }
+/ codex/migrate-db-calls-to-pu239-database-f8wbuj
             $row = $db->fetch('SELECT MAX(boxnumber) AS boxnumber FROM pmboxes');
             $boxnumber = isset($row['boxnumber']) ? (int) $row['boxnumber'] : 0;
             $box = $boxnumber < 2 ? 2 : $boxnumber;
+=======
+            $box_row = $db->fetch('SELECT MAX(boxnumber) AS boxnumber FROM pmboxes');
+            $boxnumber = (int) ($box_row['boxnumber'] ?? 0);
+            $box = $boxnumber < 2 ? 2 : $boxnumber++;
+/ master
             $new_box = preg_replace('/[^\da-z\-_]/i', '', $_POST['new']);
             foreach ($new_box as $key => $add_it) {
                 $add_it = preg_replace('/[^\da-z\-_]/i', '', $add_it);
                 if (!empty($add_it)) {
                     $name = htmlsafechars($add_it);
+/ codex/migrate-db-calls-to-pu239-database-f8wbuj
                     $values = [
                         'userid' => (int) $CURUSER['id'],
                         'name' => $name,
@@ -60,6 +67,14 @@ if (isset($_POST['action2'])) {
                     ];
                     $sql = 'INSERT INTO pmboxes (userid, name, boxnumber) VALUES (:userid, :name, :boxnumber)';
                     $db->run($sql, $values);
+=======
+                    $sql = 'INSERT INTO pmboxes (userid, name, boxnumber) VALUES (:userid, :name, :boxnumber)';
+                    $db->run($sql, [
+                        ':userid' => (int) $CURUSER['id'],
+                        ':name' => $name,
+                        ':boxnumber' => (int) $box,
+                    ]);
+/ master
                     $cache->delete('get_all_boxes_' . $CURUSER['id']);
                     $cache->delete('insertJumpTo_' . $CURUSER['id']);
                 }
@@ -71,9 +86,18 @@ if (isset($_POST['action2'])) {
             break;
 
         case 'edit_boxes':
+/ codex/migrate-db-calls-to-pu239-database-f8wbuj
             $boxes = $db->fetchAll('SELECT id, name, boxnumber FROM pmboxes WHERE userid = :userid', [
                 'userid' => (int) $CURUSER['id'],
             ]);
+=======
+            $boxes = $db->fetchAll(
+                'SELECT id, name, boxnumber FROM pmboxes WHERE userid = :uid',
+                [
+                    ':uid' => (int) $CURUSER['id'],
+                ],
+            );
+/ master
 
             if (empty($boxes)) {
                 stderr(_('Error'), _('No Mailboxes to edit'));
@@ -81,11 +105,19 @@ if (isset($_POST['action2'])) {
             foreach ($boxes as $row) {
                 $name = htmlsafechars(preg_replace('/[^\da-z\-_]/i', '', $_POST['edit' . $row['id']]));
                 if (!empty($name) && $name !== $row['name']) {
+/ codex/migrate-db-calls-to-pu239-database-f8wbuj
                     $set = [
                         'name' => $name,
                     ];
                     $sql = 'UPDATE pmboxes SET name = :name WHERE id = :id';
                     $db->run($sql, array_merge($set, ['id' => (int) $row['id']]));
+=======
+                    $sql = 'UPDATE pmboxes SET name = :name WHERE id = :id';
+                    $db->run($sql, [
+                        ':name' => $name,
+                        ':id' => (int) $row['id'],
+                    ]);
+/ master
                     $cache->delete('get_all_boxes_' . $CURUSER['id']);
                     $cache->delete('insertJumpTo_' . $CURUSER['id']);
                     $worked = '&name=1';
@@ -94,9 +126,13 @@ if (isset($_POST['action2'])) {
                         'location' => 1,
                     ];
                     $messages_class->update_location($set, (int) $row['boxnumber'], $CURUSER['id']);
+/ codex/migrate-db-calls-to-pu239-database-f8wbuj
                     $db->run('DELETE FROM pmboxes WHERE id = :id', [
                         'id' => (int) $row['id'],
                     ]);
+=======
+                    $db->run('DELETE FROM pmboxes WHERE id = :id', [':id' => (int) $row['id']]);
+/ master
                     $cache->delete('get_all_boxes_' . $CURUSER['id']);
                     $cache->delete('insertJumpTo_' . $CURUSER['id']);
                     $deleted = '&box_delete=1';
@@ -154,9 +190,18 @@ if (isset($_POST['action2'])) {
     }
 }
 
+/ codex/migrate-db-calls-to-pu239-database-f8wbuj
 $boxes = $db->fetchAll('SELECT id, name, boxnumber FROM pmboxes WHERE userid = :userid ORDER BY boxnumber', [
     'userid' => (int) $CURUSER['id'],
 ]);
+=======
+$boxes = $db->fetchAll(
+    'SELECT id, name, boxnumber FROM pmboxes WHERE userid = :uid ORDER BY boxnumber',
+    [
+        ':uid' => (int) $CURUSER['id'],
+    ],
+);
+/ master
 $count_boxes = !empty($boxes) ? count($boxes) : 0;
 
 if (!empty($boxes)) {

@@ -1,5 +1,19 @@
 # Migration Report
 
+## messages
+- `messages/edit_mailboxes.php`: replaced FluentPDO queries with `$db->fetch`, `$db->fetchAll`, and `$db->run` using bound parameters for inserts, updates, deletes, and mailbox retrievals.
+- `messages/forward_pm.php`: migrated block and friend lookups to `$db->fetch` with integer casts and parameter binding.
+- `messages/view_mailbox.php`: converted mailbox name lookup from FluentPDO to `$db->fetch` with bound parameters.
+- `messages/view_message.php`: moved message retrieval, attachment listing, update, and mailbox lookup to `$db->fetch`, `$db->fetchAll`, and `$db->run` with bound parameters.
+
+### messages summary
+- Files changed: 4 (`messages/edit_mailboxes.php`, `messages/forward_pm.php`, `messages/view_mailbox.php`, `messages/view_message.php`)
+- Legacy patterns removed: FluentPDO (9)
+- Transactions added: none
+- `SELECT COUNT(*)` introduced: none
+- IN/LIKE/LIMIT binding: none
+- Verification: `rg "mysqli_|sql_query\s*\(|sqlesc\s*\(|mysqli_fetch|mysqli_num_rows|mysqli_insert_id" messages` → no matches
+
 ## public
 - `public/tenpercent.php`: migrated from legacy mysqli/sql_query/sqlesc to `Pu239\Database` with bound parameters; switched to `bootstrap_pdo.php`; added strict typing.
 - `public/contactstaff.php`: migrated from `sql_query`/`sqlesc` to `$db->run` with bound parameters; standardized bootstrap and added strict typing.
@@ -358,8 +372,30 @@ $ rg "mysqli_|sql_query\\(|sqlesc\\(" forums/stafflock_post.php
 ******* master
 ********* master
 ```
+ No matches.
+********* messages master
+<<<<<< codex/migrate-db-calls-to-pu239-database-542hjz
+## blocks/index (pdo cleanup)
+- `blocks/index/active_24h_users.php`: cast integer parameters and sanitized update bindings.
+- `blocks/index/active_birthday_users.php`: cast integer parameters.
+- `blocks/index/active_irc_users.php`: cast integer parameters.
+- `blocks/index/active_users.php`: cast integer parameters.
+- `blocks/index/forum_posts.php`: cast class and limit parameters.
+- `blocks/index/gift.php`: added missing `$container` to global bootstrap.
+- `blocks/index/news.php`: replaced `SELECT *` with explicit columns, bound `LIMIT`, and cast integer parameters.
+
+### Verification
+```
+$ rg "mysqli_|sql_query\(|sqlesc\(" blocks/index
+```
 No matches.
-********* master
+
+* Files modified: 7
+* Legacy patterns removed: before=0, after=0
+* Transactions added: none
+* COUNT(*) replacements: none
+* Bound parameters added for LIMIT: `blocks/index/news.php`
+=======
 ********* codex/migrate-db-calls-to-pu239-database-4xrkki
 
 ## blocks/global (PDO cleanup)
@@ -426,6 +462,7 @@ $ rg "mysqli_|sql_query\\(|sqlesc\\(" public/achievementlist.php
 ```
 No matches.
 
+/ codex/migrate-db-calls-to-pu239-database-f8wbuj
 ## messages
 - `messages/forward_pm.php`: replaced `$fluent` checks with `$db->fetch` and bound parameters.
 - `messages/view_mailbox.php`: converted mailbox name lookup to `$db->fetch`.
@@ -444,4 +481,176 @@ $ rg "mysqli_|sql_query\\(|sqlesc\\(|mysqli_fetch|mysqli_num_rows|mysqli_insert_
 ```
 No matches.
 
+=======
+/ codex/migrate-db-calls-to-pu239-database-r73uj0
+=======
+## chat
+- `chat/lib/config.php`, `chat/lib/custom.php`, `chat/lib/classes.php`: standardized strict typing and `bootstrap_pdo.php` bootstrap; imported `Pu239\\Database` and initialized `$db`.
+- Legacy patterns removed: `mysqli_*`, `sql_query`, `sqlesc` (0 → 0).
+- No transactions, `COUNT(*)` conversions, or IN/LIKE/LIMIT bindings required.
+
+### Verification
+```bash
+$ rg "mysqli_|sql_query\\(|sqlesc\\(|mysqli_fetch|mysqli_num_rows|mysqli_insert_id" chat
+```
+No matches.
+
+=======
+********* codex/migrate-db-calls-to-pu239-database-4hihvu
+=======
+********* codex/migrate-db-calls-to-pu239-database-p7l0ra
+## partials
+- Files changed: 4 (`partials/categories.php`, `partials/free_details.php`, `partials/genres.php`, `partials/torrent_table.php`)
+- Legacy patterns removed: none
+- Transactions added: none
+- SELECT COUNT(*) introduced: none
+- IN/LIKE/LIMIT bindings: none
+### Verification
+```bash
+$ rg "mysqli_|sql_query\\(|sqlesc\\(|mysqli_fetch|mysqli_num_rows|mysqli_insert_id" partials
+```
+No matches.
+
+=======
+## database
+- Files changed: 1 (`database/sql_updates.php`).
+- Legacy patterns removed: none (0 occurrences of `mysqli_`, `sql_query`, or `sqlesc`).
+- Transactions added: none.
+- SELECT COUNT(*) replacements: none.
+- IN/LIKE/LIMIT bindings: none.
+- Verification: 0 legacy pattern matches.
+
+### Verification
+```bash
+$ rg "mysqli_|sql_query\\s*\\(|sqlesc\\s*\\(|mysqli_fetch|mysqli_num_rows|mysqli_insert_id" database
+```
+No matches.
+
+/ master
+/ codex/migrate-db-calls-to-pu239-database-2lkgkn
+
+## lottery
+- `lottery/config.php`, `lottery/tickets.php`, `lottery/viewtickets.php`: standardized bootstrap with `bootstrap_pdo.php`, added strict typing, and removed legacy references.
+- Removed obsolete `lottery/_quarantine` directory containing legacy mysqli code.
+
+### Verification
+```bash
+$ rg "mysqli_|sql_query\(|sqlesc\(|mysqli_fetch|mysqli_num_rows|mysqli_insert_id" lottery
+=======
+********* codex/migrate-db-calls-to-pu239-database-i4txmq
+
+## cache
+- `cache/bans_cache.php`, `cache/block_settings_cache.php`, `cache/categorie_icons.php`, `cache/countries.php`, `cache/country.php`, `cache/free_cache.php`, `cache/rep_cache.php`, `cache/rep_settings_cache.php`, `cache/timezones.php`: standardized `runtime_safe.php`/`bootstrap_pdo.php` bootstrap, imported `Pu239\\Database`, initialized `$db`, and enforced strict typing.
+
+### Verification
+```
+$ rg "mysqli_|sql_query\\(|sqlesc\\(" cache
+```
+No matches in modified files.
+=======
+## blocks/index (pdo cleanup)
+- `blocks/index/active_24h_users.php`: cast integer parameters and sanitized update bindings.
+- `blocks/index/active_birthday_users.php`: cast integer parameters.
+- `blocks/index/active_irc_users.php`: cast integer parameters.
+- `blocks/index/active_users.php`: cast integer parameters.
+- `blocks/index/forum_posts.php`: cast class and limit parameters.
+- `blocks/index/gift.php`: added missing `$container` to global bootstrap.
+- `blocks/index/news.php`: replaced `SELECT *` with explicit columns, bound `LIMIT`, and cast integer parameters.
+
+### Verification
+```
+$ rg "mysqli_|sql_query\(|sqlesc\(" blocks/index
+```
+No matches.
+
+* Files modified: 7
+* Legacy patterns removed: before=0, after=0
+* Transactions added: none
+* COUNT(*) replacements: none
+* Bound parameters added for LIMIT: `blocks/index/news.php`
+/ master
 ********* master
+********* codex/migrate-db-calls-to-pu239-database-2a37zj
+
+## config (bootstrap refinement)
+- `config/ann_config.php`, `config/classes.php`, `config/config_example.php`, `config/define.php`, `config/definitions.php`, `config/emoticons.php`, `config/functions.php`, `config/session.php`, `config/subtitles.php`, `config/whereis.php`, `config/database.php.example`: added missing `global $container` to complete the standardized PDO bootstrap.
+
+### Verification
+```
+$ rg -n -e 'mysqli_' -e 'sql_query\(' -e 'sqlesc\(' -e 'mysqli_fetch' -e 'mysqli_num_rows' -e 'mysqli_insert_id' config
+=======
+## chat
+- Standardized runtime bootstrap, strict typing, and `$db` initialization across 49 files:
+- `chat/lib/class/AJAXChatEncoding.php`
+- `chat/lib/class/AJAXChatFileSystem.php`
+- `chat/lib/class/AJAXChatHTTPHeader.php`
+- `chat/lib/class/AJAXChatLanguage.php`
+- `chat/lib/class/AJAXChatString.php`
+- `chat/lib/class/AJAXChatTemplate.php`
+- `chat/lib/class/CustomAJAXChat.php`
+- `chat/lib/class/CustomAJAXChatInterface.php`
+- `chat/lib/classes.php`
+- `chat/lib/config.php`
+- `chat/lib/custom.php`
+- `chat/lib/data/channels.php`
+- `chat/lib/data/users.php`
+- `chat/lib/lang/ar.php`
+- `chat/lib/lang/bg.php`
+- `chat/lib/lang/ca.php`
+- `chat/lib/lang/cy.php`
+- `chat/lib/lang/cz.php`
+- `chat/lib/lang/da.php`
+- `chat/lib/lang/de.php`
+- `chat/lib/lang/el.php`
+- `chat/lib/lang/en.php`
+- `chat/lib/lang/es.php`
+- `chat/lib/lang/et.php`
+- `chat/lib/lang/fa.php`
+- `chat/lib/lang/fi.php`
+- `chat/lib/lang/fr.php`
+- `chat/lib/lang/gl.php`
+- `chat/lib/lang/he.php`
+- `chat/lib/lang/hr.php`
+- `chat/lib/lang/hu.php`
+- `chat/lib/lang/in.php`
+- `chat/lib/lang/it.php`
+- `chat/lib/lang/ja.php`
+- `chat/lib/lang/ka.php`
+- `chat/lib/lang/kr.php`
+- `chat/lib/lang/mk.php`
+- `chat/lib/lang/nl-be.php`
+- `chat/lib/lang/nl.php`
+- `chat/lib/lang/no.php`
+- `chat/lib/lang/pl.php`
+- `chat/lib/lang/pt-br.php`
+- `chat/lib/lang/pt-pt.php`
+- `chat/lib/lang/ro.php`
+- `chat/lib/lang/ru.php`
+- `chat/lib/lang/sk.php`
+- `chat/lib/lang/sl.php`
+- `chat/lib/lang/sr.php`
+- `chat/lib/lang/sv.php`
+
+### Legacy cleanup
+- Legacy patterns removed (mysqli_*, sql_query(), sqlesc()): 0 → 0
+- Transactions introduced: none
+- COUNT(*) replacements: none
+- Bound IN/LIKE/LIMIT parameters: none
+- Verification
+```bash
+$ rg "mysqli_|sql_query\\(|sqlesc\\(" chat
+********* master
+/ codex/migrate-db-calls-to-pu239-database-29onak
+## plugins
+- `plugins/database-hide.php`, `plugins/dump-bz2.php`, `plugins/dump-date.php`, `plugins/dump-zip.php`, `plugins/enum_types.php`, `plugins/file-upload.php`, `plugins/frames.php`, `plugins/plugin.php`, `plugins/readable-dates.php`, `plugins/tables-filter.php`, `plugins/version-noverify.php`: standardized bootstrap with `$container` initialization and strict typing.
+- Legacy patterns removed: `mysqli_*` (0 → 0), `sql_query` (0 → 0), `sqlesc` (0 → 0)
+- Transactions introduced: none
+- `SELECT COUNT(*)` replacements: none
+- Bound `IN`/`LIKE`/`LIMIT` clauses: none
+- Verification:
+```bash
+$ rg "mysqli_|sql_query\\(|sqlesc\\(|mysqli_fetch|mysqli_num_rows|mysqli_insert_id" plugins
+=======
+/ master
+```
+No matches.
