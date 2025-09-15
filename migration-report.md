@@ -350,3 +350,23 @@ $ rg "mysqli_|sql_query\\(|sqlesc\\(" forums/stafflock_post.php
 ```
 No matches.
 ********* master
+## blocks/index (pdo cleanup)
+- `blocks/index/active_24h_users.php`: cast integer parameters and sanitized update bindings.
+- `blocks/index/active_birthday_users.php`: cast integer parameters.
+- `blocks/index/active_irc_users.php`: cast integer parameters.
+- `blocks/index/active_users.php`: cast integer parameters.
+- `blocks/index/forum_posts.php`: cast class and limit parameters.
+- `blocks/index/gift.php`: added missing `$container` to global bootstrap.
+- `blocks/index/news.php`: replaced `SELECT *` with explicit columns, bound `LIMIT`, and cast integer parameters.
+
+### Verification
+```
+$ rg "mysqli_|sql_query\(|sqlesc\(" blocks/index
+```
+No matches.
+
+* Files modified: 7
+* Legacy patterns removed: before=0, after=0
+* Transactions added: none
+* COUNT(*) replacements: none
+* Bound parameters added for LIMIT: `blocks/index/news.php`
