@@ -22,6 +22,8 @@
 - `public/messages.php`: standardized bootstrap and converted mailbox lookup to `$db->fetchAll` with bound parameters.
 - `public/ajax/rating.php`: migrated from legacy queries to `$db->run` with transactions and bound parameters; standardized bootstrap.
 - `public/ajax/thanks.php`: migrated from `sql_query`/`sqlesc` to `$db->run` with transactions and bound parameters; standardized bootstrap.
+- `public/trivia_results.php`: replaced legacy `sql_query`, `mysqli_fetch_*`, `mysqli_num_rows`, and `sqlesc` with `$db->fetchAll` and bound parameters; bound `LIMIT` and standardized bootstrap.
+- `public/fastdelete.php`: removed `sql_query`/`sqlesc` and FluentPDO usage in favor of `$db->fetch`/`run` with bound parameters and standardized bootstrap.
 
 ### public/ajax summary
 - Files changed: 2 (`public/ajax/rating.php`, `public/ajax/thanks.php`)
@@ -33,7 +35,7 @@
 
 ### Verification
 ```
-$ rg "mysqli_|sql_query\(|sqlesc\(" public/contactstaff.php public/tenpercent.php public/ajax/like.php public/users.php public/messages.php public/ajax/rating.php public/ajax/thanks.php
+$ rg "mysqli_|sql_query\(|sqlesc\(" public/contactstaff.php public/tenpercent.php public/ajax/like.php public/users.php public/messages.php public/ajax/rating.php public/ajax/thanks.php public/trivia_results.php public/fastdelete.php
 ```
 No matches in modified files.
 
@@ -654,17 +656,41 @@ $ rg "mysqli_|sql_query\\(|sqlesc\\(|mysqli_fetch|mysqli_num_rows|mysqli_insert_
 / master
 ```
 No matches.
+/ codex/migrate-db-calls-to-pu239-database-xihtf7
+## src
+- No database calls required migration; directory already uses `Pu239\\Database` with standardized bootstrap.
+- Files changed: 0
+=======
 
+/ codex/migrate-db-calls-to-pu239-database-9eixvk
+## public
+- Files modified: 1
+    - `public/games.php`: migrated from legacy `sql_query`/`mysqli_fetch_array` to `$db->fetchAll` with bound parameters; standardized bootstrap and strict typing.
+- Legacy patterns removed: `sql_query` (1→0), `mysqli_fetch_*` (1→0)
+- Transactions introduced: none
+- COUNT(*) replacements: none
+- Bound IN/LIKE/LIMIT clauses: none
+- Verification
+```bash
+$ rg "mysqli_|sql_query\\(|sqlesc\\(" public/games.php
+```
+No matches.
+=======
 ## partials
 - `partials/categories.php`, `partials/free_details.php`, `partials/genres.php`, `partials/torrent_table.php`: standardized PDO bootstrap and strict typing; no legacy DB calls present.
 
 ### partials summary
 - Files changed: 4 (`partials/categories.php`, `partials/free_details.php`, `partials/genres.php`, `partials/torrent_table.php`)
+/ master
 - Legacy patterns removed: 0
 - Transactions added: none
 - `SELECT COUNT(*)` introduced: none
 - IN/LIKE/LIMIT binding: none
+/ codex/migrate-db-calls-to-pu239-database-xihtf7
+- Verification: `rg -n -e 'mysqli_' -e 'sql_query\\s*\\(' -e 'sqlesc\\s*\\(' -e 'mysqli_fetch' -e 'mysqli_num_rows' -e 'mysqli_insert_id' src` → no matches
+=======
 - Verification: `rg "mysqli_|sql_query\\s*\(|sqlesc\\s*\(|mysqli_fetch|mysqli_num_rows|mysqli_insert_id" partials` → no matches
+/ codex/migrate-db-calls-to-pu239-database-vaainv
 
 ## templates/1
 - `templates/1/navbar.php`: added missing `$container` bootstrap and restricted staff panel query to explicit columns.
@@ -682,3 +708,5 @@ No matches.
 - Transactions added: none
 - `SELECT COUNT(*)` replacements: none
 - IN/LIKE/LIMIT binding: none
+=======
+/ master
