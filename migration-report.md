@@ -427,3 +427,13 @@ $ rg "mysqli_|sql_query\\(|sqlesc\\(" public/achievementlist.php
 No matches.
 
 ********* master
+
+## lottery
+- `lottery/config.php`, `lottery/tickets.php`, `lottery/viewtickets.php`: standardized bootstrap with `bootstrap_pdo.php`, added strict typing, and removed legacy references.
+- Removed obsolete `lottery/_quarantine` directory containing legacy mysqli code.
+
+### Verification
+```bash
+$ rg "mysqli_|sql_query\(|sqlesc\(|mysqli_fetch|mysqli_num_rows|mysqli_insert_id" lottery
+```
+No matches.
