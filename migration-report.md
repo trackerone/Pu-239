@@ -350,3 +350,12 @@ $ rg "mysqli_|sql_query\\(|sqlesc\\(" forums/stafflock_post.php
 ```
 No matches.
 ********* master
+
+## cache
+- `cache/bans_cache.php`, `cache/block_settings_cache.php`, `cache/categorie_icons.php`, `cache/countries.php`, `cache/country.php`, `cache/free_cache.php`, `cache/rep_cache.php`, `cache/rep_settings_cache.php`, `cache/timezones.php`: standardized `runtime_safe.php`/`bootstrap_pdo.php` bootstrap, imported `Pu239\\Database`, initialized `$db`, and enforced strict typing.
+
+### Verification
+```
+$ rg "mysqli_|sql_query\\(|sqlesc\\(" cache
+```
+No matches in modified files.
