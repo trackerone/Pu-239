@@ -622,3 +622,14 @@ $ rg "mysqli_|sql_query\\(|sqlesc\\(" chat
 ********* master
 ```
 No matches.
+
+## partials
+- `partials/categories.php`, `partials/free_details.php`, `partials/genres.php`, `partials/torrent_table.php`: standardized PDO bootstrap and strict typing; no legacy DB calls present.
+
+### partials summary
+- Files changed: 4 (`partials/categories.php`, `partials/free_details.php`, `partials/genres.php`, `partials/torrent_table.php`)
+- Legacy patterns removed: 0
+- Transactions added: none
+- `SELECT COUNT(*)` introduced: none
+- IN/LIKE/LIMIT binding: none
+- Verification: `rg "mysqli_|sql_query\\s*\(|sqlesc\\s*\(|mysqli_fetch|mysqli_num_rows|mysqli_insert_id" partials` → no matches
