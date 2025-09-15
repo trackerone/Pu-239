@@ -9,6 +9,7 @@ use Rakit\Validation\Validator;
 
 require_once __DIR__ . '/../include/runtime_safe.php';
 require_once INCL_DIR . 'function_users.php';
+
 require_once INCL_DIR . 'function_html.php';
 require_once INCL_DIR . 'function_password.php';
 require_once CLASS_DIR . 'class_check.php';
