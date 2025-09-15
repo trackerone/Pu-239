@@ -620,5 +620,17 @@ $ rg -n -e 'mysqli_' -e 'sql_query\(' -e 'sqlesc\(' -e 'mysqli_fetch' -e 'mysqli
 ```bash
 $ rg "mysqli_|sql_query\\(|sqlesc\\(" chat
 ********* master
+/ codex/migrate-db-calls-to-pu239-database-29onak
+## plugins
+- `plugins/database-hide.php`, `plugins/dump-bz2.php`, `plugins/dump-date.php`, `plugins/dump-zip.php`, `plugins/enum_types.php`, `plugins/file-upload.php`, `plugins/frames.php`, `plugins/plugin.php`, `plugins/readable-dates.php`, `plugins/tables-filter.php`, `plugins/version-noverify.php`: standardized bootstrap with `$container` initialization and strict typing.
+- Legacy patterns removed: `mysqli_*` (0 → 0), `sql_query` (0 → 0), `sqlesc` (0 → 0)
+- Transactions introduced: none
+- `SELECT COUNT(*)` replacements: none
+- Bound `IN`/`LIKE`/`LIMIT` clauses: none
+- Verification:
+```bash
+$ rg "mysqli_|sql_query\\(|sqlesc\\(|mysqli_fetch|mysqli_num_rows|mysqli_insert_id" plugins
+=======
+/ master
 ```
 No matches.
