@@ -1,25 +1,42 @@
 name: Static Guard (strict)
 
 on:
-  push:
   pull_request:
-  workflow_dispatch:
+    paths:
+      - '**/*.php'
+      - 'composer.json'
+      - 'composer.lock'
+      - 'tools/legacy_guard.sh'
+      - '!vendor/**'
+      - '!node_modules/**'
+      - '!_quarantine/**'
+  push:
+    branches: [ main ]
+    paths:
+      - '**/*.php'
+      - 'composer.json'
+      - 'composer.lock'
+      - 'tools/legacy_guard.sh'
+      - '!vendor/**'
+      - '!node_modules/**'
+      - '!_quarantine/**'
 
-permissions:
-  contents: read
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
   guard:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - name: Set up PHP
-        uses: shivammathur/setup-php@v2
-        with:
-          php-version: '8.2'
-      - name: Run static guard (strict rules)
-        env:
-          GUARD_MODE: fail
-          GUARD_EXCLUDE: admin/adminer.php,tools/static_guard.php
-          GUARD_FAIL_ON: merge_conflict_marker,short_open_tag,eval_usage,terminate_calls,debug_calls,deprecated_mysql
-        run: php tools/static_guard.php
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Ensure ripgrep
+        run: sudo apt-get update && sudo apt-get install -y ripgrep
+
+      - name: Make guard executable
+        run: chmod +x tools/legacy_guard.sh
+
+      - name: Run legacy/static guard
+        run: tools/legacy_guard.sh
