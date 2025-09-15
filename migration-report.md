@@ -462,6 +462,20 @@ $ rg "mysqli_|sql_query\\(|sqlesc\\(" public/achievementlist.php
 ```
 No matches.
 
+/ codex/migrate-db-calls-to-pu239-database-r73uj0
+=======
+## chat
+- `chat/lib/config.php`, `chat/lib/custom.php`, `chat/lib/classes.php`: standardized strict typing and `bootstrap_pdo.php` bootstrap; imported `Pu239\\Database` and initialized `$db`.
+- Legacy patterns removed: `mysqli_*`, `sql_query`, `sqlesc` (0 → 0).
+- No transactions, `COUNT(*)` conversions, or IN/LIKE/LIMIT bindings required.
+
+### Verification
+```bash
+$ rg "mysqli_|sql_query\\(|sqlesc\\(|mysqli_fetch|mysqli_num_rows|mysqli_insert_id" chat
+```
+No matches.
+
+=======
 ********* codex/migrate-db-calls-to-pu239-database-4hihvu
 =======
 ********* codex/migrate-db-calls-to-pu239-database-p7l0ra
@@ -492,8 +506,8 @@ $ rg "mysqli_|sql_query\\s*\\(|sqlesc\\s*\\(|mysqli_fetch|mysqli_num_rows|mysqli
 ```
 No matches.
 
-********* master
-********* codex/migrate-db-calls-to-pu239-database-2lkgkn
+/ master
+/ codex/migrate-db-calls-to-pu239-database-2lkgkn
 
 ## lottery
 - `lottery/config.php`, `lottery/tickets.php`, `lottery/viewtickets.php`: standardized bootstrap with `bootstrap_pdo.php`, added strict typing, and removed legacy references.
@@ -534,6 +548,7 @@ No matches.
 * Transactions added: none
 * COUNT(*) replacements: none
 * Bound parameters added for LIMIT: `blocks/index/news.php`
+/ master
 ********* master
 ********* codex/migrate-db-calls-to-pu239-database-2a37zj
 
