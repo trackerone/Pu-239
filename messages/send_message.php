@@ -2,20 +2,15 @@
 
 declare(strict_types=1);
 
-require_once __DIR__ . '/../include/runtime_safe.php';
-require_once __DIR__ . '/../include/bootstrap_pdo.php';
-
-use Pu239\Database;
-
-require_once INCL_DIR . 'function_users.php';
-require_once INCL_DIR . 'function_html.php';
+require_once dirname(__DIR__) . '/bootstrap.php';
 
 use Pu239\Message;
 use Pu239\User;
 
 $subject = $msg = '';
 global $container, $CURUSER, $site_config;
-$db = $container->get(Database::class);
+
+// TODO(2025): csrf
 
 $messages_class = $container->get(Message::class);
 $users_class = $container->get(User::class);

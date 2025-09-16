@@ -2,36 +2,27 @@
 
 declare(strict_types=1);
 
-require_once __DIR__ . '/../include/runtime_safe.php';
-require_once __DIR__ . '/../include/bootstrap_pdo.php';
+require_once dirname(__DIR__) . '/bootstrap.php';
 
 use Pu239\Database;
 use Pu239\Message;
 
 $user = check_user_status();
-require_once INCL_DIR . 'function_users.php';
 global $container, $site_config;
+/** @var Database $db */
 $db = $container->get(Database::class);
 
 $show_pm_avatar = ($user['opt2'] & class_user_options_2::SHOW_PM_AVATAR) === class_user_options_2::SHOW_PM_AVATAR;
 $message_class = $container->get(Message::class);
 if ($mailbox > 1) {
-/ codex/migrate-db-calls-to-pu239-database-f8wbuj
-    $arr_box_name = $db->fetch('SELECT name FROM pmboxes WHERE userid = :userid AND boxnumber = :boxnumber', [
-        'userid' => (int) $user['id'],
-        'boxnumber' => (int) $mailbox,
-    ]);
-    if (empty($arr_box_name)) {
-=======
     $arr_box_name = $db->fetch(
-        'SELECT name FROM pmboxes WHERE userid = :uid AND boxnumber = :box',
+        'SELECT name FROM pmboxes WHERE userid = :userid AND boxnumber = :boxnumber',
         [
-            ':uid' => (int) $user['id'],
-            ':box' => (int) $mailbox,
+            'userid' => (int) $user['id'],
+            'boxnumber' => (int) $mailbox,
         ],
     );
-    if (empty($arr_box_name['name'])) {
-/ master
+    if (empty($arr_box_name) || empty($arr_box_name['name'])) {
         stderr(_('Error'), _('Invalid mailbox'));
     }
     $mailbox_name = format_comment($arr_box_name['name']);
