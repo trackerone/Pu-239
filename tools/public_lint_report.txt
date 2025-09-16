@@ -103,9 +103,6 @@ Parse error: syntax error, unexpected token ",", expecting end of file in public
 Errors parsing public/reputation.php
 No syntax errors detected in public/requests.php
 No syntax errors detected in public/restoreclass.php
-Parse error: syntax error, unexpected token "<", expecting end of file in public/rss.php on line 6
-Errors parsing public/rss.php
-No syntax errors detected in public/rss_pdo_demo.php
 No syntax errors detected in public/rsstfreak.php
 No syntax errors detected in public/rules.php
 No syntax errors detected in public/scrape.php
@@ -175,3 +172,5 @@ No syntax errors detected in public/view_announce_history.php
 No syntax errors detected in public/view_sql.php
 No syntax errors detected in public/viewnfo.php
 No syntax errors detected in public/wiki.php
+No syntax errors detected in public/rss.php
+No syntax errors detected in public/rss_pdo_demo.php

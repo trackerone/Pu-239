@@ -15,18 +15,18 @@ $channelDesc  = 'Demo feed without short open tags';
 function e(string $s): string {
     return htmlspecialchars($s, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
 }
-?>
-<rss version="2.0">
-  <channel>
-    <title><?php echo e($channelTitle); ?></title>
-    <link><?php echo e($channelLink); ?></link>
-    <description><?php echo e($channelDesc); ?></description>
-    <item>
-      <title>Demo item</title>
-      <link>https://example.com/demo</link>
-      <guid isPermaLink="false">demo-1</guid>
-      <pubDate><?php echo gmdate('D, d M Y H:i:s') . ' GMT'; ?></pubDate>
-      <description>Minimal RSS item for Static Guard compliance.</description>
-    </item>
-  </channel>
-</rss>
+
+echo "<rss version=\"2.0\">\n";
+echo "  <channel>\n";
+echo '    <title>' . e($channelTitle) . "</title>\n";
+echo '    <link>' . e($channelLink) . "</link>\n";
+echo '    <description>' . e($channelDesc) . "</description>\n";
+echo "    <item>\n";
+echo "      <title>Demo item</title>\n";
+echo "      <link>https://example.com/demo</link>\n";
+echo "      <guid isPermaLink=\"false\">demo-1</guid>\n";
+echo '      <pubDate>' . gmdate('D, d M Y H:i:s') . " GMT</pubDate>\n";
+echo "      <description>Minimal RSS item for Static Guard compliance.</description>\n";
+echo "    </item>\n";
+echo "  </channel>\n";
+echo "</rss>\n";
