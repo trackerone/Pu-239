@@ -1,5 +1,4 @@
-name: Fix lockfile (isbn + permissions-handler)
-
+name: Fix Composer Lock (no version bump)
 on:
   workflow_dispatch:
 
@@ -7,21 +6,40 @@ jobs:
   fix-lock:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout
+        uses: actions/checkout@v4
 
-      - uses: shivammathur/setup-php@v2
+      - name: Setup PHP with required extensions
+        uses: shivammathur/setup-php@v2
         with:
           php-version: '8.3'
-          tools: composer:v2
+          coverage: none
+          extensions: >
+            bz2, ctype, curl, dom, exif, fileinfo, gd, gettext,
+            iconv, imagick, intl, json, libxml, mbstring, mysqli,
+            pcntl, pdo, posix, readline, simplexml, sockets, xml,
+            opcache, zip, zlib
 
-      - name: Update and remove blockers
-        run: |
-          composer update biblys/isbn --with-all-dependencies
-          composer remove umpirsky/composer-permissions-handler
+      - name: Validate composer.json
+        run: composer validate --no-check-publish
 
-      - name: Commit lockfile changes
+      - name: Install (no scripts)
+        run: composer install --no-interaction --no-progress --prefer-dist --no-scripts
+
+      - name: Refresh lockfile only
+        run: composer update --lock --no-interaction --no-progress
+
+      - name: Commit lockfile
         uses: stefanzweifel/git-auto-commit-action@v5
         with:
-          commit_message: "chore: bump isbn to 3.x and remove permissions-handler"
-          branch: php83-fixes
-          create_branch: true
+          commit_message: "chore(composer): refresh composer.lock (no version bump)"
+          branch: composer/fix-lock
+
+      - name: Create PR
+        uses: peter-evans/create-pull-request@v6
+        with:
+          branch: composer/fix-lock
+          title: "chore: Refresh composer.lock (no version bump)"
+          body: "Automated lock refresh to keep metadata current."
+          commit-message: "chore(composer): refresh composer.lock"
+          delete-branch: true
