@@ -21,8 +21,11 @@ $cache            = $container->get(Cache::class);
 if (isset($_POST['delcloud'])) {
     $seachcloud_class->delete($_POST['delcloud']);
     $cache->delete('searchcloud_');
-    header('Refresh: 3; url=staffpanel.php?tool=cloudview&action=cloudview');
-    stderr(_('Success'), _('The obscene terms where successfully deleted!'));
+    stderr(
+        _('Success'),
+        _('The obscene terms were successfully deleted!<br><br>You will be redirected shortly.')
+        . '<meta http-equiv="refresh" content="3;url=staffpanel.php?tool=cloudview&action=cloudview">'
+    );
 }
 $count = $seachcloud_class->get_count();
 $perpage = 15;
