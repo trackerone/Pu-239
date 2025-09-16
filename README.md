@@ -1,7 +1,7 @@
 # Pu-239 v0.7.0
 
 ##### Note from 2020:
-I am no longer developing this code. But, if there are enough people willing to contribute their time and energy to help with this source, I would be willing to get active again.* — darkalchemy
+I am no longer developing this code. But, if there are enough people willing to contribute their time and energy to help with this source, I would be willing to get active again. — darkalchemy
 ---
 ### 2025 update
 We continue the great work that darkalchemy built up until 2020.  
