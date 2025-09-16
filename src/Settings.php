@@ -52,6 +52,12 @@ class Settings
         unset($config['badwords'], $config['site']['bad_words']);
         $this->recursive_ksort($config);
 
+        $cachePath = realpath(__DIR__ . '/../storage/cache') ?: (__DIR__ . '/../storage/cache');
+        if (!isset($config['paths']) || !is_array($config['paths'])) {
+            $config['paths'] = [];
+        }
+        $config['paths']['cache'] = $cachePath;
+
         return $config;
     }
 

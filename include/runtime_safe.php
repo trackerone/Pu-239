@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 use Pu239\Database;
 
-global $container;
+global $container, $site_config;
 
 $db = null;
 if (isset($container)) {
@@ -13,6 +13,10 @@ if (isset($container)) {
         $db = null;
     }
 }
+
+$site_config = is_array($site_config ?? null) ? $site_config : [];
+$site_config['paths'] = isset($site_config['paths']) && is_array($site_config['paths']) ? $site_config['paths'] : [];
+$site_config['paths']['cache'] = realpath(__DIR__ . '/../storage/cache') ?: (__DIR__ . '/../storage/cache');
 /**
  * runtime_safe.php
  * Minimal, defensiv bootstrap UDEN hårdt krav om mysql_compat.php.

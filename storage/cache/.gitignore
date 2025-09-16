@@ -1,0 +1,9 @@
+*
+!.gitignore
+!README.md
+!imdb/
+imdb/*
+!imdb/.gitignore
+!url/
+url/*
+!url/.gitignore
