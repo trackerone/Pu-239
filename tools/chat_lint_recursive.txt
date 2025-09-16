@@ -1,0 +1,74 @@
+No syntax errors detected in chat/lib/lang/ro.php
+No syntax errors detected in chat/lib/lang/ka.php
+No syntax errors detected in chat/lib/lang/sl.php
+No syntax errors detected in chat/lib/lang/et.php
+No syntax errors detected in chat/lib/lang/bg.php
+No syntax errors detected in chat/lib/lang/ar.php
+No syntax errors detected in chat/lib/lang/es.php
+
+Fatal error: strict_types declaration must be the very first statement in the script in chat/lib/lang/tr.php on line 5
+Errors parsing chat/lib/lang/tr.php
+No syntax errors detected in chat/lib/lang/fi.php
+
+Fatal error: strict_types declaration must be the very first statement in the script in chat/lib/lang/uk.php on line 5
+Errors parsing chat/lib/lang/uk.php
+No syntax errors detected in chat/lib/lang/fr.php
+No syntax errors detected in chat/lib/lang/hr.php
+
+Fatal error: strict_types declaration must be the very first statement in the script in chat/lib/lang/th.php on line 5
+Errors parsing chat/lib/lang/th.php
+No syntax errors detected in chat/lib/lang/it.php
+
+Fatal error: strict_types declaration must be the very first statement in the script in chat/lib/lang/zh-tw.php on line 5
+Errors parsing chat/lib/lang/zh-tw.php
+No syntax errors detected in chat/lib/lang/da.php
+No syntax errors detected in chat/lib/lang/pt-br.php
+No syntax errors detected in chat/lib/lang/pl.php
+No syntax errors detected in chat/lib/lang/sv.php
+No syntax errors detected in chat/lib/lang/gl.php
+No syntax errors detected in chat/lib/lang/hu.php
+No syntax errors detected in chat/lib/lang/sk.php
+No syntax errors detected in chat/lib/lang/en.php
+No syntax errors detected in chat/lib/lang/nl-be.php
+No syntax errors detected in chat/lib/lang/fa.php
+No syntax errors detected in chat/lib/lang/nl.php
+No syntax errors detected in chat/lib/lang/no.php
+No syntax errors detected in chat/lib/lang/mk.php
+No syntax errors detected in chat/lib/lang/ja.php
+
+Fatal error: strict_types declaration must be the very first statement in the script in chat/lib/lang/zh.php on line 5
+Errors parsing chat/lib/lang/zh.php
+No syntax errors detected in chat/lib/lang/ca.php
+No syntax errors detected in chat/lib/lang/cz.php
+No syntax errors detected in chat/lib/lang/he.php
+No syntax errors detected in chat/lib/lang/de.php
+No syntax errors detected in chat/lib/lang/kr.php
+No syntax errors detected in chat/lib/lang/sr.php
+No syntax errors detected in chat/lib/lang/pt-pt.php
+No syntax errors detected in chat/lib/lang/in.php
+No syntax errors detected in chat/lib/lang/ru.php
+No syntax errors detected in chat/lib/lang/cy.php
+No syntax errors detected in chat/lib/lang/el.php
+No syntax errors detected in chat/lib/class/AJAXChatLanguage.php
+No syntax errors detected in chat/lib/class/AJAXChatEncoding.php
+No syntax errors detected in chat/lib/class/AJAXChatString.php
+No syntax errors detected in chat/lib/class/CustomAJAXChatInterface.php
+No syntax errors detected in chat/lib/class/CustomAJAXChat.php
+No syntax errors detected in chat/lib/class/AJAXChatTemplate.php
+No syntax errors detected in chat/lib/class/AJAXChatHTTPHeader.php
+
+Warning: The use statement with non-compound name 'JsonException' has no effect in chat/lib/class/AJAXChatDataBase.php on line 5
+
+Warning: The use statement with non-compound name 'PDO' has no effect in chat/lib/class/AJAXChatDataBase.php on line 6
+
+Warning: The use statement with non-compound name 'PDOStatement' has no effect in chat/lib/class/AJAXChatDataBase.php on line 7
+
+Warning: The use statement with non-compound name 'Throwable' has no effect in chat/lib/class/AJAXChatDataBase.php on line 9
+No syntax errors detected in chat/lib/class/AJAXChatDataBase.php
+No syntax errors detected in chat/lib/class/AJAXChatFileSystem.php
+No syntax errors detected in chat/lib/class/AJAXChat.php
+No syntax errors detected in chat/lib/custom.php
+No syntax errors detected in chat/lib/classes.php
+No syntax errors detected in chat/lib/config.php
+No syntax errors detected in chat/lib/data/users.php
+No syntax errors detected in chat/lib/data/channels.php

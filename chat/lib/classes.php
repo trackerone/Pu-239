@@ -1,34 +1,13 @@
 <?php
 declare(strict_types=1);
-/ codex/migrate-db-calls-to-pu239-database-r73uj0
-
-require_once __DIR__ . '/../../include/runtime_safe.php';
-require_once __DIR__ . '/../../include/bootstrap_pdo.php';
-=======
-require_once __DIR__ . '/../../include/runtime_safe.php';
-require_once __DIR__ . '/../../include/bootstrap_pdo.php';
-use Pu239\Database;
-
-global $container;
-$db = $container->get(Database::class);
-
-
-/ master
+require_once dirname(__DIR__, 2) . '/bootstrap.php';
 
 use Pu239\Database;
 
-/ codex/migrate-db-calls-to-pu239-database-r73uj0
 global $container;
+/** @var Database $db */
 $db = $container->get(Database::class);
-=======
 
-
-
-
-
-
-
-/ master
 /*
  * @package AJAX_Chat
  * @author Sebastian Tschan
@@ -38,6 +17,7 @@ $db = $container->get(Database::class);
  */
 
 // Include Class libraries:
+require_once AJAX_CHAT_PATH . 'lib' . DIRECTORY_SEPARATOR . 'class' . DIRECTORY_SEPARATOR . 'AJAXChatDataBase.php';
 require_once AJAX_CHAT_PATH . 'lib' . DIRECTORY_SEPARATOR . 'class' . DIRECTORY_SEPARATOR . 'AJAXChat.php';
 require_once AJAX_CHAT_PATH . 'lib' . DIRECTORY_SEPARATOR . 'class' . DIRECTORY_SEPARATOR . 'AJAXChatEncoding.php';
 require_once AJAX_CHAT_PATH . 'lib' . DIRECTORY_SEPARATOR . 'class' . DIRECTORY_SEPARATOR . 'AJAXChatString.php';
