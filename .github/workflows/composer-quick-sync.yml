@@ -1,0 +1,50 @@
+name: Composer Quick Sync
+on:
+  workflow_dispatch:
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup PHP 8.3 + ext
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.3'
+          coverage: none
+          tools: composer:v2
+          extensions: >
+            bz2, ctype, curl, dom, exif, fileinfo, gd, gettext,
+            iconv, imagick, intl, json, libxml, mbstring, mysqli,
+            pcntl, pdo, posix, readline, simplexml, sockets, xml,
+            opcache, zip, zlib
+
+      - name: Validate JSON syntax
+        run: composer validate --no-check-publish
+
+      - name: Install (no scripts)
+        run: composer install --no-interaction --no-progress --prefer-dist --no-scripts
+
+      # Få "umpirsky/composer-permissions-handler" ind i lock
+      - name: Require missing package into lock
+        run: composer require umpirsky/composer-permissions-handler:^1.6 --no-scripts --no-progress
+
+      # Sikr at lock følger biblys/isbn ^3.2
+      - name: Update biblys/isbn to match constraint
+        run: composer update biblys/isbn --with-all-dependencies --no-progress --no-scripts
+
+      - name: Commit lockfile
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "chore(composer): sync lock with composer.json (biblys + umpirsky)"
+          branch: composer/quick-sync
+
+      - name: Create PR
+        uses: peter-evans/create-pull-request@v6
+        with:
+          branch: composer/quick-sync
+          title: "chore: Sync composer.lock with composer.json"
+          body: "Fixes validate errors (biblys constraint + missing umpirsky)."
+          commit-message: "chore(composer): sync lock with composer.json"
+          delete-branch: true
