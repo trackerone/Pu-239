@@ -1,18 +1,15 @@
 <?php
 declare(strict_types=1);
+require_once dirname(__DIR__) . '/bootstrap.php';
 
 use Pu239\Ban;
 use Pu239\Database;
 use Pu239\IP;
 use Pu239\User;
 
-require_once __DIR__ . '/../include/runtime_safe.php';
-require_once __DIR__ . '/../include/bootstrap_pdo.php';
-require_once INCL_DIR . 'function_users.php';
 require_once INCL_DIR . 'geoip.inc';
 require_once INCL_DIR . 'geoipcity.inc';
 require_once INCL_DIR . 'geoipregionvars.php';
-require_once CLASS_DIR . 'class_check.php';
 
 global $container, $site_config, $CURUSER;
 

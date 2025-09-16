@@ -1,16 +1,12 @@
 <?php
 declare(strict_types=1);
+require_once dirname(__DIR__) . '/bootstrap.php';
 
 use DI\DependencyException;
 use DI\NotFoundException;
 use Pu239\Database;
 use Pu239\Session;
 
-require_once __DIR__ . '/../include/runtime_safe.php';
-require_once __DIR__ . '/../include/bootstrap_pdo.php';
-require_once INCL_DIR . 'function_users.php';
-require_once INCL_DIR . 'function_pager.php';
-require_once CLASS_DIR . 'class_check.php';
 
 global $container, $site_config;
 

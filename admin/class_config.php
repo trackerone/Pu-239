@@ -1,10 +1,6 @@
 <?php
 declare(strict_types=1);
-
-require_once __DIR__ . '/../include/runtime_safe.php';
-require_once INCL_DIR . 'function_users.php';
-require_once INCL_DIR . 'function_html.php';
-require_once CLASS_DIR . 'class_check.php';
+require_once dirname(__DIR__) . '/bootstrap.php';
 
 use Pu239\Database;
 

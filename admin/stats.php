@@ -1,156 +1,140 @@
 <?php
 declare(strict_types=1);
-
-require_once __DIR__ . '/../include/runtime_safe.php';
-require_once __DIR__ . '/../include/bootstrap_pdo.php';
-require_once CLASS_DIR . 'class_check.php';
+require_once dirname(__DIR__) . '/bootstrap.php';
 
 use Pu239\Database;
-use Pu239\StatsService;
+use Pu239\Roles;
+
 
 global $container, $site_config;
 
-/** adgangskontrol */
+$db = $container->get(Database::class);
+
 $class = get_access(basename($_SERVER['REQUEST_URI']));
 class_check($class);
 
-/** @var Database $db */
-$db = $container->get(Database::class);
-/** @var StatsService $stats */
-$stats = $container->get(StatsService::class);
-
-/** pagination (uden function_pager) */
-$perpage = max(10, (int)($_GET['pp'] ?? 20));
-$page    = max(1,  (int)($_GET['p']  ?? 1));
-$offset  = ($page - 1) * $perpage;
-
-/** data */
-$users   = $stats->getUserCounts();
-$torr    = $stats->getTorrentCounts();
-$peers   = $stats->getPeerCounts();
-$traf    = $stats->getTraffic24h();
-$totalUploaders = $stats->countUploaders();
-$rows    = $stats->getUploaders($perpage, $offset);
-
-/** helper */
-$bn = function (float|int $n): string {
-    return number_format((float)$n, 0, ',', '.');
-};
-
-/** hvis projektet stadig har stdhead/stdfoot/wrapper, så brug dem;
-    ellers rendér minimal HTML (hardcore-mode uden legacy helpers). */
-$have_legacy_layout = function_exists('stdhead') && function_exists('stdfoot');
-
-$title = 'Stats';
-$base  = $site_config['paths']['baseurl'] ?? '';
-$self  = htmlspecialchars((string)($_SERVER['PHP_SELF'] ?? ''), ENT_QUOTES);
-
-/** simple pager */
-$totalPages = max(1, (int)ceil($totalUploaders / $perpage));
-$pagerHtml  = '';
-if ($totalPages > 1) {
-    $pagerHtml .= '<nav class="pager">';
-    for ($i = 1; $i <= $totalPages; $i++) {
-        $active = $i === $page ? ' style="font-weight:bold"' : '';
-        $pagerHtml .= '<a href="' . $self . '?p=' . $i . '&pp=' . $perpage . '"'.$active.'>' . $i . '</a> ';
-    }
-    $pagerHtml .= '</nav>';
-}
-
-/** content (ren HTML, ingen function_html) */
-ob_start();
-?>
-<?php if (!$have_legacy_layout): ?>
-<!doctype html>
-<html lang="da"><head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title><?= htmlspecialchars($title) ?></title>
-<style>
-  :root { --gap:12px; --bd:#e5e7eb; --muted:#6b7280; }
-  body{font-family:system-ui,Segoe UI,Arial,sans-serif;margin:20px}
-  h1{margin:0 0 16px}
-  .grid{display:grid;gap:var(--gap);grid-template-columns:repeat(auto-fit,minmax(240px,1fr))}
-  .card{border:1px solid var(--bd);border-radius:12px;padding:16px}
-  .k{color:var(--muted);font-size:.9rem}
-  table{width:100%;border-collapse:collapse;margin-top:8px}
-  th,td{padding:8px;border-bottom:1px solid var(--bd);text-align:left}
-  .pager a{display:inline-block;margin-right:6px;text-decoration:none}
-</style>
-</head><body>
-<?php endif; ?>
-
-<h1>Systemstatus</h1>
-<div class="grid">
-  <div class="card">
-    <div class="k">Brugere</div>
-    <div>Total: <?= $bn($users['total'] ?? 0) ?></div>
-    <div>Aktiverede: <?= $bn($users['enabled'] ?? 0) ?></div>
-  </div>
-  <div class="card">
-    <div class="k">Torrents</div>
-    <div>Total: <?= $bn($torr['total'] ?? 0) ?></div>
-  </div>
-  <div class="card">
-    <div class="k">Peers</div>
-    <div>Seeders: <?= $bn($peers['seeders'] ?? 0) ?></div>
-    <div>Leechers: <?= $bn($peers['leechers'] ?? 0) ?></div>
-  </div>
-  <div class="card">
-    <div class="k">Seneste 24 timer</div>
-    <div>Upload: <?= $bn($traf['up'] ?? 0) ?></div>
-    <div>Download: <?= $bn($traf['down'] ?? 0) ?></div>
-  </div>
-</div>
-
-<div class="card" style="margin-top:16px">
-  <div class="k">Uploadere</div>
-  <?= $pagerHtml ?>
-  <?php if (!$rows): ?>
-    <p>Ingen uploadere fundet.</p>
-  <?php else: ?>
-    <table>
-      <thead><tr>
-        <th>#</th>
-        <th>Bruger</th>
-        <th>Antal torrents</th>
-        <th>Sidst</th>
-      </tr></thead>
-      <tbody>
-      <?php
-      $i = $offset + 1;
-      foreach ($rows as $r):
-          $name = htmlspecialchars((string)($r['name'] ?? ''), ENT_QUOTES);
-          $uid  = (int)($r['id'] ?? 0);
-          $nt   = (int)($r['n_t'] ?? 0);
-          $last = $r['last'] ?? null;
-          $lastTxt = $last ? date('Y-m-d H:i', is_numeric($last) ? (int)$last : strtotime((string)$last)) : '—';
-      ?>
-        <tr>
-          <td><?= $bn($i++) ?></td>
-          <td><a href="<?= $base ?>/userdetails.php?id=<?= $uid ?>"><?= $name ?></a></td>
-          <td><?= $bn($nt) ?></td>
-          <td><?= $lastTxt ?></td>
-        </tr>
-      <?php endforeach; ?>
-      </tbody>
-    </table>
-    <?= $pagerHtml ?>
-  <?php endif; ?>
-</div>
-
-<?php if (!$have_legacy_layout): ?>
-</body></html>
-<?php endif; ?>
-<?php
-$html = ob_get_clean();
-
-if ($have_legacy_layout) {
-    $breadcrumbs = [
-        "<a href='{$base}/staffpanel.php'>Staff Panel</a>",
-        "<a href='{$self}'>" . htmlspecialchars($title) . '</a>',
-    ];
-    echo stdhead($title, [], 'page-wrapper', $breadcrumbs) . wrapper($html) . stdfoot();
+$HTMLOUT = '';
+//$HTMLOUT .= begin_main_frame();
+$rows = $db->fetchAll('SELECT COUNT(id) FROM torrents');
+$n = mysqli_fetch_row($res);
+$n_tor = $n[0];
+$rows = $db->fetchAll('SELECT COUNT(id) FROM peers');
+$n = mysqli_fetch_row($res);
+$n_peers = $n[0];
+$uporder = isset($_GET['uporder']) ? $_GET['uporder'] : '';
+$catorder = isset($_GET['catorder']) ? $_GET['catorder'] : '';
+if ($uporder === 'lastul') {
+    $orderby = 'last DESC, name';
+} elseif ($uporder === 'torrents') {
+    $orderby = 'n_t DESC, name';
+} elseif ($uporder === 'peers') {
+    $orderby = 'n_p DESC, name';
 } else {
-    echo $html;
+    $orderby = 'name';
 }
+$query = 'SELECT u.id, u.username AS name, MAX(t.added) AS last, COUNT(DISTINCT t.id) AS n_t, COUNT(p.id) as n_p FROM users as u
+        LEFT JOIN torrents as t ON u.id = t.owner
+        LEFT JOIN peers as p ON t.id = p.torrent
+        WHERE u.roles_mask & ' . Roles::UPLOADER . '
+        GROUP BY u.id
+        UNION SELECT u.id, u.username AS name, MAX(t.added) AS last, COUNT(DISTINCT t.id) AS n_t, COUNT(p.id) as n_p FROM users as u
+        LEFT JOIN torrents as t ON u.id = t.owner
+        LEFT JOIN peers as p ON t.id = p.torrent
+        WHERE u.roles_mask & ' . Roles::UPLOADER . "
+        GROUP BY u.id
+        ORDER BY $orderby";
+$res = sql_query($query) or sqlerr(__FILE__, __LINE__);
+$perpage = 25;
+$count = mysqli_num_rows($res);
+$pager = pager($perpage, $count, "{$site_config['paths']['baseurl']}/staffpanel.php?tool=stats&amp;");
+if ($count > $perpage) {
+    $query = 'SELECT u.id, u.username AS name, MAX(t.added) AS last, COUNT(DISTINCT t.id) AS n_t, COUNT(p.id) as n_p FROM users as u
+        LEFT JOIN torrents as t ON u.id = t.owner
+        LEFT JOIN peers as p ON t.id = p.torrent
+        WHERE u.roles_mask & ' . Roles::UPLOADER . '
+        GROUP BY u.id
+        UNION SELECT u.id, u.username AS name, MAX(t.added) AS last, COUNT(DISTINCT t.id) AS n_t, COUNT(p.id) as n_p FROM users as u
+        LEFT JOIN torrents as t ON u.id = t.owner
+        LEFT JOIN peers as p ON t.id = p.torrent
+        WHERE u.roles_mask & ' . Roles::UPLOADER . "
+        GROUP BY u.id
+        ORDER BY $orderby
+        {$pager['limit']}";
+    $res = sql_query($query) or sqlerr(__FILE__, __LINE__);
+}
+if ($count === 0) {
+    stdmsg(_('Error'), _('No uploaders.'));
+} else {
+    if ($count > $perpage) {
+        $HTMLOUT .= $pager['pagertop'];
+    }
+    $heading = "
+    <tr>
+        <th><a href='{$site_config['paths']['baseurl']}/staffpanel.php?tool=stats&amp;action=stats&amp;uporder=uploader&amp;catorder=$catorder' class='colheadlink'>" . _('Uploader') . "</a></th>
+        <th><a href='{$site_config['paths']['baseurl']}/staffpanel.php?tool=stats&amp;action=stats&amp;uporder=lastul&amp;catorder=$catorder' class='colheadlink'>" . _('Last upload') . "</a></th>
+        <th><a href='{$site_config['paths']['baseurl']}/staffpanel.php?tool=stats&amp;action=stats&amp;uporder=torrents&amp;catorder=$catorder' class='colheadlink'>" . _('Torrents') . "</a></th>
+        <th>Perc.</th>
+        <th><a href='{$site_config['paths']['baseurl']}/staffpanel.php?tool=stats&amp;action=stats&amp;uporder=peers&amp;catorder=$catorder' class='colheadlink'>" . _('Peers') . '</a></th>
+        <th>Perc.</th>
+    </tr>';
+    $body = '';
+    while ($uper = mysqli_fetch_assoc($res)) {
+        $body .= '
+    <tr>
+        <td>' . format_username((int) $uper['id']) . '</td>
+        <td ' . ($uper['last'] ? ('>' . get_date((int) $uper['last'], '') . ' (' . get_date((int) $uper['last'], '', 0, 1) . ')') : "align='center'>---") . "</td>
+        <td>{$uper['n_t']}</td>
+        <td>" . ($n_tor > 0 ? number_format(100 * $uper['n_t'] / $n_tor, 1) . '%' : '---') . '</td>
+        <td>' . $uper['n_p'] . '</td>
+        <td>' . ($n_peers > 0 ? number_format(100 * $uper['n_p'] / $n_peers, 1) . '%' : '---') . '</td>
+    </tr>';
+    }
+    $HTMLOUT .= main_table($body, $heading);
+    if ($count > $perpage) {
+        $HTMLOUT .= $pager['pagertop'];
+    }
+}
+if ($n_tor == 0) {
+    stdmsg(_('Error'), _('No categories defined!'));
+} else {
+    if ($catorder === 'lastul') {
+        $orderby = 'last DESC, c.name';
+    } elseif ($catorder === 'torrents') {
+        $orderby = 'n_t DESC, c.name';
+    } elseif ($catorder === 'peers') {
+        $orderby = 'n_p DESC, name';
+    } else {
+        $orderby = 'c.name';
+    }
+    $rows = $db->fetchAll("SELECT c.name, MAX(t.added) AS last, COUNT(DISTINCT t.id) AS n_t, COUNT(p.id) AS n_p
+      FROM categories as c LEFT JOIN torrents as t ON t.category = c.id LEFT JOIN peers as p
+      ON t.id=p.torrent GROUP BY c.id ORDER BY $orderby");
+    $heading = "
+    <tr>
+        <th><a href='{$site_config['paths']['baseurl']}/staffpanel.php?tool=stats&amp;action=stats&amp;uporder=$uporder&amp;catorder=category' class='colheadlink'>" . _('Category') . "</a></th>
+        <th><a href='{$site_config['paths']['baseurl']}/staffpanel.php?tool=stats&amp;action=stats&amp;uporder=$uporder&amp;catorder=lastul' class='colheadlink'>" . _('Last upload') . "</a></th>
+        <th><a href='{$site_config['paths']['baseurl']}/staffpanel.php?tool=stats&amp;action=stats&amp;uporder=$uporder&amp;catorder=torrents' class='colheadlink'>" . _('Torrents') . "</a></th>
+        <th>Perc.</th>
+        <th><a href='{$site_config['paths']['baseurl']}/staffpanel.php?tool=stats&amp;action=stats&amp;uporder=$uporder&amp;catorder=peers' class='colheadlink'>" . _('Peers') . '</a></th>
+        <th>Perc.</th>
+    </tr>';
+    $body = '';
+    while ($cat = mysqli_fetch_assoc($res)) {
+        $body .= '
+    <tr>
+        <td>' . htmlsafechars($cat['name']) . '</td>
+        <td ' . ($cat['last'] ? ('>' . get_date((int) $cat['last'], '') . ' (' . get_date((int) $cat['last'], '', 0, 1) . ')') : "align='center'>---") . "</td>
+        <td>{$cat['n_t']}</td>
+        <td>" . number_format(100 * $cat['n_t'] / $n_tor, 1) . "%</td>
+        <td>{$cat['n_p']}</td>
+        <td>" . ($n_peers > 0 ? number_format(100 * $cat['n_p'] / $n_peers, 1) . '%' : '---') . '</td>
+    </tr>';
+    }
+    $HTMLOUT .= main_table($body, $heading, null, 'top20');
+}
+$title = _('Stats');
+$breadcrumbs = [
+    "<a href='{$site_config['paths']['baseurl']}/staffpanel.php'>" . _('Staff Panel') . '</a>',
+    "<a href='{$_SERVER['PHP_SELF']}'>$title</a>",
+];
+echo stdhead($title, [], 'page-wrapper', $breadcrumbs) . wrapper($HTMLOUT) . stdfoot();
