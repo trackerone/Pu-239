@@ -55,8 +55,8 @@
     }
   },
   "config": {
-    "sort-packages": true
-    "platform": { "php": "8.3.0" }
+    "sort-packages": true,
+    "platform": {}
   },
   "scripts": {
     "cleanup": [
