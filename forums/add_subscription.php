@@ -1,19 +1,13 @@
 <?php
 declare(strict_types=1);
-
-require_once __DIR__ . '/../include/runtime_safe.php';
-require_once __DIR__ . '/../include/bootstrap_pdo.php';
-
+require_once dirname(__DIR__) . '/bootstrap.php';
 use Pu239\Database;
 
-global $container, $site_config;
-/** @var Pu239\Database $db */
 $db = $container->get(Database::class);
+global $CURUSER, $site_config;
 
-// TEMPORARY STUB: Forum module under maintenance.
-// The original file has been quarantined to forums/_quarantine/add_subscription.php.orig
-http_response_code(503);
-header('Content-Type: text/plain; charset=utf-8');
-echo "Forum module is temporarily unavailable while we rebuild this section.\n";
-echo "Reference: forums/_quarantine/add_subscription.php.orig\n";
-return;
+$topic_id = isset($_GET['topic_id']) ? (int) $_GET['topic_id'] : (isset($_POST['topic_id']) ? (int) $_POST['topic_id'] : 0);
+$forum_id = isset($_GET['forum_id']) ? (int) $_GET['forum_id'] : (isset($_POST['forum_id']) ? (int) $_POST['forum_id'] : 0);
+$norty_res = $db->run(');
+header('Location: ' . $_SERVER['PHP_SELF'] . '?action=view_topic&topic_id=' . $topic_id . '&s=1');
+app_halt('Exit called');

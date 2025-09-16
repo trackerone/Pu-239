@@ -1,19 +1,116 @@
 <?php
 declare(strict_types=1);
-
-require_once __DIR__ . '/../include/runtime_safe.php';
-require_once __DIR__ . '/../include/bootstrap_pdo.php';
-
+require_once dirname(__DIR__) . '/bootstrap.php';
+use DI\DependencyException;
+use DI\NotFoundException;
+use Pu239\Cache;
 use Pu239\Database;
 
-global $container, $site_config;
-/** @var Pu239\Database $db */
 $db = $container->get(Database::class);
+$user = check_user_status();
+if ($_GET['action'] === 'mark_all_as_read') {
+    mark_as_read($user);
+    redirect();
+} elseif ($_GET['action'] === 'mark_all_as_unread') {
+    mark_as_unread($user);
+    redirect();
+}
 
-// TEMPORARY STUB: Forum module under maintenance.
-// The original file has been quarantined to forums/_quarantine/mark_all_as_read.php.orig
-http_response_code(503);
-header('Content-Type: text/plain; charset=utf-8');
-echo "Forum module is temporarily unavailable while we rebuild this section.\n";
-echo "Reference: forums/_quarantine/mark_all_as_read.php.orig\n";
-return;
+function redirect()
+{
+    $url = !empty($_SERVER['HTTP_REFERER']) ? get_return_to($_SERVER['HTTP_REFERER']) : get_return_to($_SERVER['QUERY_STRING']);
+    if (!empty($url)) {
+        header('Location: ' . $url);
+    } else {
+        header('Location: ' . $_SERVER['PHP_SELF'] . '?m=1');
+    }
+    app_halt('Exit called');
+}
+
+/**
+ * @param array $user
+ *
+ * @throws DependencyException
+ * @throws NotFoundException
+ * @throws \PDOException
+ */
+function mark_as_read(array $user)
+{
+    global $container;
+
+    // $fluent removed — use $this->db (ExtendedPdo)
+    $cache = $container->get(Cache::class);
+    $query = get_topics();
+    foreach ($query as $topic) {
+        $values = [
+            'user_id' => $user['id'],
+            'topic_id' => $topic['id'],
+            'last_post_read' => $topic['last_post'],
+        ];
+        $update = [
+            'last_post_read' => $topic['last_post'],
+        ];
+        $fluent->insertInto('read_posts', $values)
+               ->onDuplicateKeyUpdate($update)
+               ->execute();
+        $cache->delete('last_read_post_' . $topic['id'] . '_' . $user['id']);
+        $cache->delete('sv_last_read_post_' . $topic['id'] . '_' . $user['id']);
+    }
+}
+
+/**
+ * @param array $user
+ *
+ * @throws DependencyException
+ * @throws NotFoundException
+ * @throws \PDOException
+ */
+function mark_as_unread(array $user)
+{
+    global $container;
+
+    // $fluent removed — use $this->db (ExtendedPdo)
+    $cache = $container->get(Cache::class);
+    $query = get_topics();
+    foreach ($query as $topic) {
+        $values = [
+            'user_id' => $user['id'],
+            'topic_id' => $topic['id'],
+            'last_post_read' => $topic['first_post'],
+        ];
+        $update = [
+            'last_post_read' => $topic['first_post'],
+        ];
+        $fluent->insertInto('read_posts', $values)
+               ->onDuplicateKeyUpdate($update)
+               ->execute();
+
+        $cache->delete('last_read_post_' . $topic['id'] . '_' . $user['id']);
+        $cache->delete('sv_last_read_post_' . $topic['id'] . '_' . $user['id']);
+    }
+}
+
+/**
+ * @throws DependencyException
+ * @throws NotFoundException
+ * @throws \PDOException
+ *
+ * @return mixed
+ */
+function get_topics()
+{
+    global $container, $site_config;
+
+    $dt = TIME_NOW - ($site_config['forum_config']['readpost_expiry'] * 86400);
+    // $fluent removed — use $this->db (ExtendedPdo)
+    $query = $fluent->from('topics AS t')
+                    ->select(null)
+                    ->select('t.id')
+                    ->select('t.last_post')
+                    ->select('t.first_post - 1 AS first_post')
+                    ->leftJoin('posts AS p ON t.last_post = p.id')
+                    ->where('p.added > ?', $dt)
+                    ->fetchAll();
+
+    return $query;
+}

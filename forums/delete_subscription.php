@@ -1,19 +1,24 @@
 <?php
 declare(strict_types=1);
-
-require_once __DIR__ . '/../include/runtime_safe.php';
-require_once __DIR__ . '/../include/bootstrap_pdo.php';
-
+require_once dirname(__DIR__) . '/bootstrap.php';
 use Pu239\Database;
 
-global $container, $site_config;
-/** @var Pu239\Database $db */
 $db = $container->get(Database::class);
+$topic_id = isset($_GET['topic_id']) ? (int) $_GET['topic_id'] : (isset($_POST['topic_id']) ? (int) $_POST['topic_id'] : 0);
+global $site_config, $CURUSER;
 
-// TEMPORARY STUB: Forum module under maintenance.
-// The original file has been quarantined to forums/_quarantine/delete_subscription.php.orig
-http_response_code(503);
-header('Content-Type: text/plain; charset=utf-8');
-echo "Forum module is temporarily unavailable while we rebuild this section.\n";
-echo "Reference: forums/_quarantine/delete_subscription.php.orig\n";
-return;
+if ($topic_id > 0) {
+    $db->run(');
+    app_halt('Exit called');
+}
+if (isset($_POST['remove'])) {
+    $_POST['remove'] = isset($_POST['remove']) ? $_POST['remove'] : [];
+    $post_delete = [];
+    foreach ($_POST['remove'] as $somevar) {
+        $post_delete[] = intval($somevar);
+    }
+    $post_delete = array_unique($post_delete);
+    $delete_count = count($post_delete);
+    if ($delete_count > 0) {
+        $db->run(');
+app_halt('Exit called');

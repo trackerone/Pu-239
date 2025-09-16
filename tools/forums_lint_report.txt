@@ -1,0 +1,98 @@
+PHP lint results for forums/
+
+PASS: forums/_scaffold/__template.php
+    No syntax errors detected in forums/_scaffold/__template.php
+
+FAIL: forums/add_subscription.php
+    Parse error: syntax error, unexpected identifier "Location", expecting ")" in forums/add_subscription.php on line 12
+    Errors parsing forums/add_subscription.php
+
+PASS: forums/attachment.php
+    No syntax errors detected in forums/attachment.php
+
+PASS: forums/clear_unread_post.php
+    No syntax errors detected in forums/clear_unread_post.php
+
+FAIL: forums/delete_post.php
+    Parse error: syntax error, unexpected token ",", expecting end of file in forums/delete_post.php on line 8
+    Errors parsing forums/delete_post.php
+
+FAIL: forums/delete_subscription.php
+    Parse error: syntax error, unexpected token "exit", expecting ")" in forums/delete_subscription.php on line 12
+    Errors parsing forums/delete_subscription.php
+
+PASS: forums/download_attachment.php
+    No syntax errors detected in forums/download_attachment.php
+
+FAIL: forums/edit_post.php
+    Parse error: syntax error, unexpected token "class", expecting ")" in forums/edit_post.php on line 14
+    Errors parsing forums/edit_post.php
+
+PASS: forums/editor.php
+    No syntax errors detected in forums/editor.php
+
+PASS: forums/last_ten.php
+    No syntax errors detected in forums/last_ten.php
+
+PASS: forums/mark_all_as_read.php
+    No syntax errors detected in forums/mark_all_as_read.php
+
+FAIL: forums/member_post_history.php
+    Parse error: syntax error, unexpected token ",", expecting end of file in forums/member_post_history.php on line 8
+    Errors parsing forums/member_post_history.php
+
+PASS: forums/new_replies.php
+    No syntax errors detected in forums/new_replies.php
+
+PASS: forums/new_topic.php
+    No syntax errors detected in forums/new_topic.php
+
+FAIL: forums/poll.php
+    Parse error: syntax error, unexpected identifier "Location", expecting ")" in forums/poll.php on line 49
+    Errors parsing forums/poll.php
+
+FAIL: forums/post_reply.php
+    Parse error: syntax error, unexpected identifier "no", expecting ")" in forums/post_reply.php on line 39
+    Errors parsing forums/post_reply.php
+
+PASS: forums/quick_reply.php
+    No syntax errors detected in forums/quick_reply.php
+
+PASS: forums/search.php
+    No syntax errors detected in forums/search.php
+
+FAIL: forums/section_view.php
+    Parse error: syntax error, unexpected token ",", expecting end of file in forums/section_view.php on line 16
+    Errors parsing forums/section_view.php
+
+FAIL: forums/staff_actions.php
+    Parse error: syntax error, unexpected token ",", expecting end of file in forums/staff_actions.php on line 32
+    Errors parsing forums/staff_actions.php
+
+PASS: forums/stafflock_post.php
+    No syntax errors detected in forums/stafflock_post.php
+
+FAIL: forums/subscriptions.php
+    Parse error: syntax error, unexpected token ",", expecting end of file in forums/subscriptions.php on line 7
+    Errors parsing forums/subscriptions.php
+
+PASS: forums/undelete_post.php
+    No syntax errors detected in forums/undelete_post.php
+
+FAIL: forums/view_forum.php
+    Parse error: syntax error, unexpected token ",", expecting end of file in forums/view_forum.php on line 9
+    Errors parsing forums/view_forum.php
+
+FAIL: forums/view_my_posts.php
+    Parse error: syntax error, unexpected token ",", expecting end of file in forums/view_my_posts.php on line 9
+    Errors parsing forums/view_my_posts.php
+
+PASS: forums/view_post_history.php
+    No syntax errors detected in forums/view_post_history.php
+
+FAIL: forums/view_topic.php
+    Parse error: syntax error, unexpected token ",", expecting end of file in forums/view_topic.php on line 24
+    Errors parsing forums/view_topic.php
+
+PASS: forums/view_unread_posts.php
+    No syntax errors detected in forums/view_unread_posts.php
