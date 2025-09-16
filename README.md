@@ -1,8 +1,14 @@
 # Pu-239 v0.7.0
 
-##### I am no longer developing this code. But, if there are enough people willing to contribute their time and energy to help with this source, I would be willing to get active again.  
+##### Note from 2020:
+*I am no longer developing this code. But, if there are enough people willing to contribute their time and energy to help with this source, I would be willing to get active again.* — darkalchemy
+---
+### 2025 update
+We continue the great work that darkalchemy built up until 2020.  
+It’s easy to understand why the project was left to “rest” back then — but in 2025 we are pushing the codebase forward again, modernizing it step by step while keeping the original spirit alive.
 
-![GitHub commits since tagged version](https://img.shields.io/github/commits-since/darkalchemy/Pu-239/0.7.0)
+
+![GitHub commits since tagged version](https://img.shields.io/github/commits-since/darkalchemy/Pu-239/master)
 [![GitHub license](https://img.shields.io/github/license/darkalchemy/Pu-239.svg)](https://github.com/darkalchemy/Pu-239/blob/master/LICENSE)
 [![Commitizen friendly](https://img.shields.io/badge/commitizen-friendly-brightgreen.svg)](http://commitizen.github.io/cz-cli/)
 
@@ -30,21 +36,38 @@ The primary goal of this project is to give the site owner a means to create a c
 ##### I am using Ubuntu 20.04 LTS, PHP 7.4, Percona MySQL 8.0, nginx 1.18.0 for developing this code. You may need to adjust the instructions below to fit you current server setup. 
 
 ### Goals:
-1. Update to PHP 7.4 - default settings
-2. Error free with MySQL 8.0 strict mode - default settings - Mostly Done
-3. Remove merged bootstrap
-4. Update jquery
-5. Update all javascript files to remove jquery dependency
-6. Merge, minify and gzip css/js files to reduce size and requests(not as important if http2 is enabled)
-7. Replace manual concat/gzip of css/js file with uglifyjs
-8. Optimize all images for web
-9. Remove js from head and relocate to body - Mostly done
-10. Remove Simple Captcha
-11. Fully responsive and mobile ready
-12. Drag and Drop Image Upload
-13. Allow use of unix sockets for all local server connections
-14. Proper validation of user input - In progress
-15. Replace mysql with PDO/FluentPDO - In progress
+### Goals (2020 vs. 2025 status)
+
+1. ~~Update to PHP 7.4 - default settings~~  
+   → We now target PHP 8.3 with PSR-12, strict_types, Rector, PHPStan, and CI/CD gates.
+2. Error free with MySQL 8.0 strict mode - default settings — Mostly done  
+   → Legacy SQL is quarantined; active code uses prepared statements. Full sweep/tests remaining.
+3. Remove merged bootstrap  
+   → Partially done: new DI-based bootstrap is in place; old merged patterns remain only in quarantine.
+4. Update jQuery  
+   → Being phased out, not just updated.
+5. ~~Update all JavaScript files to remove jQuery dependency~~  
+   → We go further: **no jQuery at all**. New frontend uses modern JS with Vite/esbuild.
+6. Merge, minify and gzip CSS/JS files to reduce size and requests (less important if HTTP/2 is enabled)  
+   → Replaced by Vite/esbuild bundling with content hashing.
+7. ~~Replace manual concat/gzip of CSS/JS with uglifyjs~~  
+   → Surpassed by the Vite/esbuild pipeline (no manual concat).
+8. Optimize all images for the web  
+   → Not implemented systematically yet (suggest: imagemin/Sharp + WebP/AVIF).
+9. Remove JS from `<head>` and relocate to body — Mostly done  
+   → Using `defer` via bundler loader; a few older views to double-check.
+10. Remove Simple Captcha  
+    → Not verified yet — recommended to remove.
+11. Fully responsive and mobile-ready  
+    → Partially: new modules are responsive; older templates need a pass.
+12. Drag & Drop image upload  
+    → Not (re)implemented yet.
+13. Allow use of UNIX sockets for all local server connections  
+    → Supported via DSN in Aura/ExtendedPDO.
+14. Proper validation of user input — In progress  
+    → CSRF TODOs marked; more forms still need validation.
+15. ~~Replace mysql with PDO/FluentPDO — In progress~~  
+    → Surpassed: migrated to **Aura/ExtendedPDO** with DI container, prepared statements, and CI gates blocking `mysqli`/`sql_query`/`sqlesc`.
 
 This is a fork of U-232 V4.  
 PHP 7.3+ is required.  
