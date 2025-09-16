@@ -1,10 +1,11 @@
 <?php
+declare(strict_types=1);
+require_once dirname(__DIR__) . '/bootstrap.php';
+
 $db = $container->get(Database::class);
 
-require_once __DIR__ . '/../../include/runtime_safe.php';
 
 
-declare(strict_types = 1);
 
 use Pu239\Cache;
 use Pu239\Database;

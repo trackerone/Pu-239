@@ -1,24 +1,16 @@
 <?php
+declare(strict_types=1);
+require_once dirname(__DIR__) . '/bootstrap.php';
+
 $db = $container->get(Database::class);
 
-require_once __DIR__ . '/../include/runtime_safe.php';
-
-require_once __DIR__ . '/../include/bootstrap_pdo.php';
 
 
-declare(strict_types = 1);
+
 
 use Pu239\Cache;
 
 require_once __DIR__ . '/../include/bittorrent.php';
-require_once INCL_DIR . 'function_users.php';
-require_once INCL_DIR . 'function_bbcode.php';
-require_once INCL_DIR . 'function_html.php';
-require_once INCL_DIR . 'function_imdb.php';
-require_once INCL_DIR . 'function_tmdb.php';
-require_once INCL_DIR . 'function_tvmaze.php';
-require_once INCL_DIR . 'function_bluray.php';
-require_once INCL_DIR . 'function_fanart.php';
 $user = check_user_status();
 $image = placeholder_image();
 global $site_config, $container;

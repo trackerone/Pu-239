@@ -1,8 +1,6 @@
 <?php
-require_once __DIR__ . '/../include/runtime_safe.php';
-
-
-declare(strict_types = 1);
+declare(strict_types=1);
+require_once dirname(__DIR__) . '/bootstrap.php';
 
 use Pu239\Database;
 
@@ -12,12 +10,7 @@ use Pu239\User;
 require_once __DIR__ . '/../include/bittorrent.php';
 require_once CLASS_DIR . 'class_user_options.php';
 require_once CLASS_DIR . 'class_user_options_2.php';
-require_once INCL_DIR . 'function_users.php';
-require_once INCL_DIR . 'function_html.php';
-require_once INCL_DIR . 'function_bbcode.php';
-require_once INCL_DIR . 'function_password.php';
 require_once CACHE_DIR . 'timezones.php';
-require_once INCL_DIR . 'function_categories.php';
 
 $user = check_user_status();
 $stdhead = [

@@ -1,8 +1,6 @@
 <?php
 declare(strict_types=1);
-
-require_once __DIR__ . '/../include/runtime_safe.php';
-require_once __DIR__ . '/../include/bootstrap_pdo.php';
+require_once dirname(__DIR__) . '/bootstrap.php';
 
 use Pu239\Database;
 
@@ -10,9 +8,6 @@ global $container, $site_config;
 $db = $container->get(Database::class);
 
 require_once __DIR__ . '/../include/bittorrent.php';
-require_once INCL_DIR . 'function_users.php';
-require_once INCL_DIR . 'function_html.php';
-require_once INCL_DIR . 'function_pager.php';
 check_user_status();
 
 $search = mb_substr(trim((string) ($_GET['search'] ?? '')), 0, 64);

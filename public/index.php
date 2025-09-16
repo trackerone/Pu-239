@@ -1,12 +1,12 @@
 <?php
+declare(strict_types=1);
+require_once dirname(__DIR__) . '/bootstrap.php';
+
 $db = $container->get(Database::class);
 
-require_once __DIR__ . '/../include/runtime_safe.php';
-
-require_once __DIR__ . '/../include/bootstrap_pdo.php';
 
 
-declare(strict_types = 1);
+
 
 use Pu239\Message;
 use Pu239\PollVoter;
@@ -14,13 +14,8 @@ use Pu239\Session;
 use Pu239\Torrent;
 
 require_once __DIR__ . '/../include/bittorrent.php';
-require_once INCL_DIR . 'function_users.php';
-require_once INCL_DIR . 'function_html.php';
-require_once INCL_DIR . 'function_bbcode.php';
-require_once INCL_DIR . 'function_polls.php';
 require_once CLASS_DIR . 'class_user_options.php';
 require_once CLASS_DIR . 'class_user_options_2.php';
-require_once INCL_DIR . 'function_torrent_hover.php';
 $user = check_user_status();
 $stdhead = [
     'css' => [
