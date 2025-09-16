@@ -236,16 +236,17 @@ $heading = "
 
 $body = "
         <tr>
-            <td>
-                <select name='name'>";
 $maxclass = UC_STAFF;
+$body .= "
+    <td>
+        <select name='name'>";
 for ($i = 1; $i < $maxclass; ++$i) {
     $body .= "
-                    <option value='" . (int) $i . "'>" . get_user_class_name((int) $i) . '</option>';
+            <option value='" . (int) $i . "'>" . get_user_class_name((int) $i) . "</option>";
 }
 $body .= "
-                </select>
-            </td>
+        </select>
+    </td>";
             <td><input type='text' name='min_ratio' value='' class='w-100'></td>
             <td><input type='text' name='uploaded' value='' class='w-100'></td>
             <td><input type='text' name='time' value='' class='w-100'></td>
