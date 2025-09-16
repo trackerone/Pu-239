@@ -1,10 +1,11 @@
 <?php
+declare(strict_types=1);
+require_once dirname(__DIR__) . '/bootstrap.php';
+
 $db = $container->get(Database::class);
 
-require_once __DIR__ . '/../include/runtime_safe.php';
 
 
-declare(strict_types = 1);
 
 use Delight\Auth\Auth;
 
@@ -15,7 +16,6 @@ use Pu239\User;
 use Rakit\Validation\Validator;
 
 require_once __DIR__ . '/../include/bittorrent.php';
-require_once INCL_DIR . 'function_html.php';
 global $container, $site_config;
 
 $title = 'Join ' . $site_config['site']['name'];

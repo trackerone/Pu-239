@@ -1,6 +1,6 @@
 <?php
 declare(strict_types=1);
-
+require_once dirname(__DIR__) . '/bootstrap.php';
 
 $db = $container->get(Database::class);
 header('Content-Type: application/rss+xml; charset=UTF-8');

@@ -1,8 +1,6 @@
 <?php
-require_once __DIR__ . '/../include/runtime_safe.php';
-
-
-declare(strict_types = 1);
+declare(strict_types=1);
+require_once dirname(__DIR__) . '/bootstrap.php';
 
 use Pu239\Cache;
 use Pu239\Database;
@@ -10,10 +8,6 @@ use Pu239\Message;
 use Pu239\Session;
 
 require_once __DIR__ . '/../include/bittorrent.php';
-require_once INCL_DIR . 'function_users.php';
-require_once INCL_DIR . 'function_bbcode.php';
-require_once INCL_DIR . 'function_pager.php';
-require_once INCL_DIR . 'function_html.php';
 $user = check_user_status();
 global $container;
 $db = $container->get(Database::class);, $site_config;

@@ -1,18 +1,17 @@
 <?php
+declare(strict_types=1);
+require_once dirname(__DIR__) . '/bootstrap.php';
+
 $db = $container->get(Database::class);
 
-require_once __DIR__ . '/../include/runtime_safe.php';
-
-require_once __DIR__ . '/../include/bootstrap_pdo.php';
 
 
-declare(strict_types = 1);
+
 
 use Pu239\Torrent;
 use Pu239\User;
 
 require_once __DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'config' . DIRECTORY_SEPARATOR . 'ann_config.php';
-require_once INCL_DIR . 'function_announce.php';
 if (empty($_SERVER['QUERY_STRING'])) {
     err('Invalid request');
 }

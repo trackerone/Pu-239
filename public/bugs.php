@@ -1,10 +1,11 @@
 <?php
+declare(strict_types=1);
+require_once dirname(__DIR__) . '/bootstrap.php';
+
 $db = $container->get(Database::class);
 
-require_once __DIR__ . '/../include/runtime_safe.php';
 
 
-declare(strict_types = 1);
 
 use Delight\Auth\AuthError;
 use Delight\Auth\NotLoggedInException;
@@ -19,10 +20,6 @@ use Pu239\User;
 use Spatie\Image\Exceptions\InvalidManipulation;
 
 require_once __DIR__ . '/../include/bittorrent.php';
-require_once INCL_DIR . 'function_users.php';
-require_once INCL_DIR . 'function_html.php';
-require_once INCL_DIR . 'function_pager.php';
-require_once INCL_DIR . 'function_bbcode.php';
 $curuser = check_user_status();
 $HTMLOUT = '';
 global $container, $site_config;

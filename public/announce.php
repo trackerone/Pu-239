@@ -1,10 +1,11 @@
 <?php
+declare(strict_types=1);
+require_once dirname(__DIR__) . '/bootstrap.php';
+
 $db = $container->get(Database::class);
 
-require_once __DIR__ . '/../include/runtime_safe.php';
 
 
-declare(strict_types = 1);
 
 use Pu239\Cache;
 use Pu239\IP;
@@ -14,8 +15,6 @@ use Pu239\Torrent;
 use Pu239\User;
 
 require_once __DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'config' . DIRECTORY_SEPARATOR . 'ann_config.php';
-require_once INCL_DIR . 'function_announce.php';
-require_once INCL_DIR . 'function_common.php';
 
 if (PRODUCTION && (isset($_SERVER['HTTP_ACCEPT_LANGUAGE']) || isset($_SERVER['HTTP_ACCEPT_CHARSET']))) {
     app_halt("It takes 46 muscles to frown but only 4 to flip 'em the bird.");

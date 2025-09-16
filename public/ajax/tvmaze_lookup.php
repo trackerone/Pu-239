@@ -1,16 +1,15 @@
 <?php
+declare(strict_types=1);
+require_once dirname(__DIR__) . '/bootstrap.php';
+
 $db = $container->get(Database::class);
 
-require_once __DIR__ . '/../../include/runtime_safe.php';
 
 
-declare(strict_types = 1);
 
 use Pu239\Torrent;
 
 require_once __DIR__ . '/../../include/bittorrent.php';
-require_once INCL_DIR . 'function_tvmaze.php';
-require_once INCL_DIR . 'function_get_images.php';
 check_user_status();
 $tvmazeid = !empty($_POST['tvmazeid']) ? (int) strip_tags($_POST['tvmazeid']) : 0;
 $tid = !empty($_POST['tid']) ? (int) strip_tags($_POST['tid']) : 0;

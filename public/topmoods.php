@@ -1,17 +1,16 @@
 <?php
+declare(strict_types=1);
+require_once dirname(__DIR__) . '/bootstrap.php';
+
 $db = $container->get(Database::class);
 
-require_once __DIR__ . '/../include/runtime_safe.php';
-
-require_once __DIR__ . '/../include/bootstrap_pdo.php';
 
 
-declare(strict_types = 1);
+
 
 use Pu239\Database;
 
 require_once __DIR__ . '/../include/bittorrent.php';
-require_once INCL_DIR . 'function_users.php';
 check_user_status();
 $HTMLOUT = '';
 global $site_config;

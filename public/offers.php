@@ -1,10 +1,11 @@
 <?php
+declare(strict_types=1);
+require_once dirname(__DIR__) . '/bootstrap.php';
+
 $db = $container->get(Database::class);
 
-require_once __DIR__ . '/../include/runtime_safe.php';
 
 
-declare(strict_types = 1);
 
 use Pu239\Comment;
 use Pu239\Image;
@@ -14,13 +15,6 @@ use Pu239\Torrent;
 use Rakit\Validation\Validator;
 
 require_once __DIR__ . '/../include/bittorrent.php';
-require_once INCL_DIR . 'function_pager.php';
-require_once INCL_DIR . 'function_html.php';
-require_once INCL_DIR . 'function_torrent_hover.php';
-require_once INCL_DIR . 'function_categories.php';
-require_once INCL_DIR . 'function_bbcode.php';
-require_once INCL_DIR . 'function_imdb.php';
-require_once INCL_DIR . 'function_comments.php';
 $user = check_user_status();
 global $container, $site_config;
 

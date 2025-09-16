@@ -1,13 +1,8 @@
 <?php
-require_once __DIR__ . '/../../include/runtime_safe.php';
-
-require_once __DIR__ . '/../../include/bootstrap_pdo.php';
-
-
-declare(strict_types = 1);
+declare(strict_types=1);
+require_once dirname(__DIR__) . '/bootstrap.php';
 
 require_once __DIR__ . '/../../include/bittorrent.php';
-require_once CLASS_DIR . 'class_check.php';
 $user = check_user_status();
 class_check(UC_MAX);
 

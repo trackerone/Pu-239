@@ -1,18 +1,15 @@
 <?php
+declare(strict_types=1);
+require_once dirname(__DIR__) . '/bootstrap.php';
+
 $db = $container->get(Database::class);
 
-require_once __DIR__ . '/../../include/runtime_safe.php';
 
 
-declare(strict_types = 1);
 
 use Pu239\ImageProxy;
 
 require_once __DIR__ . '/../../include/bittorrent.php';
-require_once INCL_DIR . 'function_users.php';
-require_once INCL_DIR . 'function_bbcode.php';
-require_once INCL_DIR . 'function_password.php';
-require_once INCL_DIR . 'function_bitbucket.php';
 $user = check_user_status();
 global $container, $site_config;
 

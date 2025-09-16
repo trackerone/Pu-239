@@ -1,12 +1,12 @@
 <?php
+declare(strict_types=1);
+require_once dirname(__DIR__) . '/bootstrap.php';
+
 $db = $container->get(Database::class);
 
-require_once __DIR__ . '/../include/runtime_safe.php';
-
-require_once __DIR__ . '/../include/bootstrap_pdo.php';
 
 
-declare(strict_types = 1);
+
 
 use DI\DependencyException;
 use DI\NotFoundException;
@@ -14,11 +14,6 @@ use Pu239\Database;
 use Pu239\User;
 
 require_once __DIR__ . '/../include/bittorrent.php';
-require_once INCL_DIR . 'function_users.php';
-require_once INCL_DIR . 'function_torrenttable.php';
-require_once INCL_DIR . 'function_pager.php';
-require_once INCL_DIR . 'function_html.php';
-require_once INCL_DIR . 'function_categories.php';
 $user = check_user_status();
 $stdfoot = [
     'js' => [

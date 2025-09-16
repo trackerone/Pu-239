@@ -1,10 +1,11 @@
 <?php
+declare(strict_types=1);
+require_once dirname(__DIR__) . '/bootstrap.php';
+
 $db = $container->get(Database::class);
 
-require_once __DIR__ . '/../include/runtime_safe.php';
 
 
-declare(strict_types = 1);
 
 use Pu239\Cache;
 use Pu239\Coin;
@@ -15,14 +16,6 @@ use Pu239\User;
 
 $time_start = microtime(true);
 require_once __DIR__ . '/../include/bittorrent.php';
-require_once INCL_DIR . 'function_users.php';
-require_once INCL_DIR . 'function_bbcode.php';
-require_once INCL_DIR . 'function_comments.php';
-require_once INCL_DIR . 'function_html.php';
-require_once INCL_DIR . 'function_rating.php';
-require_once INCL_DIR . 'function_details.php';
-require_once INCL_DIR . 'function_categories.php';
-require_once INCL_DIR . 'function_event.php';
 $user = check_user_status();
 global $container, $site_config, $BLOCKS;
 
