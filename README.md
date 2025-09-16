@@ -1,14 +1,14 @@
 # Pu-239 v0.7.0
 
 ##### Note from 2020:
-*I am no longer developing this code. But, if there are enough people willing to contribute their time and energy to help with this source, I would be willing to get active again.* — darkalchemy
+I am no longer developing this code. But, if there are enough people willing to contribute their time and energy to help with this source, I would be willing to get active again.* — darkalchemy
 ---
 ### 2025 update
 We continue the great work that darkalchemy built up until 2020.  
 It’s easy to understand why the project was left to “rest” back then — but in 2025 we are pushing the codebase forward again, modernizing it step by step while keeping the original spirit alive.
 
 
-![GitHub commits since tagged version](https://img.shields.io/github/commits-since/darkalchemy/Pu-239/master)
+![GitHub commits since tagged version](https://img.shields.io/github/commits-since/darkalchemy/Pu-239/0.7.0)
 [![GitHub license](https://img.shields.io/github/license/darkalchemy/Pu-239.svg)](https://github.com/darkalchemy/Pu-239/blob/master/LICENSE)
 [![Commitizen friendly](https://img.shields.io/badge/commitizen-friendly-brightgreen.svg)](http://commitizen.github.io/cz-cli/)
 
