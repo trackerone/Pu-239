@@ -1,5 +1,6 @@
 <?php
 declare(strict_types=1);
+require_once dirname(__DIR__) . '/bootstrap.php';
 
 use Pu239\Cache;
 use Pu239\Database;
@@ -8,16 +9,8 @@ use Pu239\Roles;
 use Pu239\Session;
 use Pu239\User;
 
-require_once __DIR__ . '/../include/runtime_safe.php';
-require_once __DIR__ . '/../include/bootstrap_pdo.php';
-require_once INCL_DIR . 'function_users.php';
-require_once INCL_DIR . 'function_autopost.php';
-require_once INCL_DIR . 'function_html.php';
-require_once INCL_DIR . 'function_staff.php';
-require_once INCL_DIR . 'function_password.php';
 require_once CLASS_DIR . 'class_user_options.php';
 require_once CLASS_DIR . 'class_user_options_2.php';
-require_once CLASS_DIR . 'class_check.php';
 
 global $container, $CURUSER, $site_config;
 

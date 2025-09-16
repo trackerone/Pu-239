@@ -1,0 +1,92 @@
+admin/acpmanage.php: No syntax errors detected in admin/acpmanage.php
+admin/adduser.php: No syntax errors detected in admin/adduser.php
+admin/allagents.php: No syntax errors detected in admin/allagents.php
+admin/backup.php: No syntax errors detected in admin/backup.php
+admin/banclient.php: No syntax errors detected in admin/banclient.php
+admin/bannedemails.php: No syntax errors detected in admin/bannedemails.php
+admin/bans.php: No syntax errors detected in admin/bans.php
+admin/block.settings.php: No syntax errors detected in admin/block.settings.php
+admin/bonusmanage.php: No syntax errors detected in admin/bonusmanage.php
+admin/categories.php: No syntax errors detected in admin/categories.php
+admin/changelog.php: No syntax errors detected in admin/changelog.php
+admin/cheaters.php: No syntax errors detected in admin/cheaters.php
+admin/class_config.php: No syntax errors detected in admin/class_config.php
+admin/class_promo.php: Parse error: syntax error, unexpected identifier "name" in admin/class_promo.php on line 240
+Errors parsing admin/class_promo.php
+admin/cleanup_manager.php: No syntax errors detected in admin/cleanup_manager.php
+admin/cloudview.php: No syntax errors detected in admin/cloudview.php
+admin/comments.php: Parse error: syntax error, unexpected identifier "allComments" in admin/comments.php on line 25
+Errors parsing admin/comments.php
+admin/datareset.php: No syntax errors detected in admin/datareset.php
+admin/deathrow.php: No syntax errors detected in admin/deathrow.php
+admin/delacct.php: No syntax errors detected in admin/delacct.php
+admin/donations.php: No syntax errors detected in admin/donations.php
+admin/doubleusers.php: No syntax errors detected in admin/doubleusers.php
+admin/edit_moods.php: No syntax errors detected in admin/edit_moods.php
+admin/editlog.php: No syntax errors detected in admin/editlog.php
+admin/findnotconnectable.php: No syntax errors detected in admin/findnotconnectable.php
+admin/floodlimit.php: No syntax errors detected in admin/floodlimit.php
+admin/flush.php: No syntax errors detected in admin/flush.php
+admin/forum_config.php: No syntax errors detected in admin/forum_config.php
+admin/forum_manage.php: No syntax errors detected in admin/forum_manage.php
+admin/freeleech.php: No syntax errors detected in admin/freeleech.php
+admin/freeusers.php: No syntax errors detected in admin/freeusers.php
+admin/goaccess.php: No syntax errors detected in admin/goaccess.php
+admin/grouppm.php: No syntax errors detected in admin/grouppm.php
+admin/hit_and_run.php: No syntax errors detected in admin/hit_and_run.php
+admin/hit_and_run_settings.php: No syntax errors detected in admin/hit_and_run_settings.php
+admin/hnrwarn.php: No syntax errors detected in admin/hnrwarn.php
+admin/inactive.php: No syntax errors detected in admin/inactive.php
+admin/invite_tree.php: No syntax errors detected in admin/invite_tree.php
+admin/ipcheck.php: No syntax errors detected in admin/ipcheck.php
+admin/iphistory.php: No syntax errors detected in admin/iphistory.php
+admin/ipsearch.php: No syntax errors detected in admin/ipsearch.php
+admin/leechwarn.php: No syntax errors detected in admin/leechwarn.php
+admin/load.php: No syntax errors detected in admin/load.php
+admin/log_viewer.php: No syntax errors detected in admin/log_viewer.php
+admin/manage_images.php: No syntax errors detected in admin/manage_images.php
+admin/mass_bonus_for_members.php: No syntax errors detected in admin/mass_bonus_for_members.php
+admin/mega_search.php: No syntax errors detected in admin/mega_search.php
+admin/memcache.php: No syntax errors detected in admin/memcache.php
+admin/modded_torrents.php: No syntax errors detected in admin/modded_torrents.php
+admin/modtask.php: No syntax errors detected in admin/modtask.php
+admin/mysql_overview.php: No syntax errors detected in admin/mysql_overview.php
+admin/mysql_stats.php: No syntax errors detected in admin/mysql_stats.php
+admin/namechanger.php: Parse error: syntax error, unexpected token "{", expecting ")" in admin/namechanger.php on line 30
+Errors parsing admin/namechanger.php
+admin/news.php: No syntax errors detected in admin/news.php
+admin/op.php: No syntax errors detected in admin/op.php
+admin/over_forums.php: No syntax errors detected in admin/over_forums.php
+admin/polls_manager.php: No syntax errors detected in admin/polls_manager.php
+admin/promo.php: No syntax errors detected in admin/promo.php
+admin/referrers.php: No syntax errors detected in admin/referrers.php
+admin/reports.php: Parse error: syntax error, unexpected end of file in admin/reports.php on line 120
+Errors parsing admin/reports.php
+admin/reputation_ad.php: Parse error: syntax error, unexpected token "else", expecting end of file in admin/reputation_ad.php on line 253
+Errors parsing admin/reputation_ad.php
+admin/reputation_settings.php: No syntax errors detected in admin/reputation_settings.php
+admin/reset.php: No syntax errors detected in admin/reset.php
+admin/shit_list.php: Parse error: syntax error, unexpected identifier "shit_list_", expecting ")" in admin/shit_list.php on line 41
+Errors parsing admin/shit_list.php
+admin/site_settings.php: No syntax errors detected in admin/site_settings.php
+admin/sitelog.php: Parse error: syntax error, unexpected identifier "SELECT", expecting ")" in admin/sitelog.php on line 27
+Errors parsing admin/sitelog.php
+admin/snatched_torrents.php: No syntax errors detected in admin/snatched_torrents.php
+admin/stats.php: No syntax errors detected in admin/stats.php
+admin/stats_extra.php: No syntax errors detected in admin/stats_extra.php
+admin/sysoplog.php: No syntax errors detected in admin/sysoplog.php
+admin/system_view.php: Parse error: syntax error, unexpected fully qualified name "\n", expecting ")" in admin/system_view.php on line 92
+Errors parsing admin/system_view.php
+admin/themes.php: No syntax errors detected in admin/themes.php
+admin/todo.php: No syntax errors detected in admin/todo.php
+admin/traceroute.php: No syntax errors detected in admin/traceroute.php
+admin/trivia_config.php: No syntax errors detected in admin/trivia_config.php
+admin/upgrade_database.php: No syntax errors detected in admin/upgrade_database.php
+admin/uploadapps.php: No syntax errors detected in admin/uploadapps.php
+admin/uploader_info.php: No syntax errors detected in admin/uploader_info.php
+admin/user_hits.php: No syntax errors detected in admin/user_hits.php
+admin/usersearch.php: No syntax errors detected in admin/usersearch.php
+admin/view_peers.php: No syntax errors detected in admin/view_peers.php
+admin/warn.php: Parse error: syntax error, unexpected identifier "Hey", expecting ")" in admin/warn.php on line 55
+Errors parsing admin/warn.php
+admin/watched_users.php: No syntax errors detected in admin/watched_users.php
