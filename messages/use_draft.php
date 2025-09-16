@@ -2,20 +2,17 @@
 
 declare(strict_types=1);
 
-require_once __DIR__ . '/../include/runtime_safe.php';
-require_once __DIR__ . '/../include/bootstrap_pdo.php';
+require_once dirname(__DIR__) . '/bootstrap.php';
 
-use Pu239\Database;
 use Pu239\Message;
 use Pu239\User;
-
-require_once INCL_DIR . 'function_html.php';
 
 $save_or_edit = (isset($_POST['edit']) ? 'edit' : (isset($_GET['edit']) ? 'edit' : 'save'));
 $save_or_edit = (isset($_POST['send']) ? 'send' : (isset($_GET['send']) ? 'send' : $save_or_edit));
 
 global $container, $site_config, $CURUSER;
-$db = $container->get(Database::class);
+
+// TODO(2025): csrf
 $messages_class = $container->get(Message::class);
 $users_class = $container->get(User::class);
 

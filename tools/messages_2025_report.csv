@@ -1,0 +1,14 @@
+file,legacy_found(mysqli|sql_query|sqlesc|function_*),select_star,csrf_todo,manual_review_notes
+messages/delete.php,false,false,false,
+messages/edit_mailboxes.php,false,false,true,"Box numbering now scoped per-user; verify expected ordering."
+messages/forward.php,false,false,false,
+messages/forward_pm.php,false,false,true,
+messages/move.php,false,false,true,
+messages/move_or_delete_multi.php,false,false,true,"Return action restricted to alpha underscores."
+messages/new_draft.php,false,false,true,
+messages/save_or_edit_draft.php,false,false,true,
+messages/search.php,false,false,true,"Search rebuilt with LIKE filters; confirm legacy criteria alignment."
+messages/send_message.php,false,false,true,
+messages/use_draft.php,false,false,true,
+messages/view_mailbox.php,false,false,false,
+messages/view_message.php,false,false,false,

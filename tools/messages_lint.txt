@@ -1,0 +1,13 @@
+No syntax errors detected in messages/delete.php
+No syntax errors detected in messages/edit_mailboxes.php
+No syntax errors detected in messages/forward.php
+No syntax errors detected in messages/forward_pm.php
+No syntax errors detected in messages/move.php
+No syntax errors detected in messages/move_or_delete_multi.php
+No syntax errors detected in messages/new_draft.php
+No syntax errors detected in messages/save_or_edit_draft.php
+No syntax errors detected in messages/search.php
+No syntax errors detected in messages/send_message.php
+No syntax errors detected in messages/use_draft.php
+No syntax errors detected in messages/view_mailbox.php
+No syntax errors detected in messages/view_message.php

@@ -2,17 +2,17 @@
 
 declare(strict_types=1);
 
-require_once __DIR__ . '/../include/runtime_safe.php';
-require_once __DIR__ . '/../include/bootstrap_pdo.php';
-
-require_once INCL_DIR . 'function_html.php';
+require_once dirname(__DIR__) . '/bootstrap.php';
 
 use Pu239\Database;
 use Pu239\Message;
 use Pu239\User;
 
 global $container, $CURUSER, $site_config;
+/** @var Database $db */
 $db = $container->get(Database::class);
+
+// TODO(2025): csrf
 
 flood_limit('messages');
 $messages_class = $container->get(Message::class);
@@ -24,7 +24,8 @@ if ($message['receiver'] == $CURUSER['id'] && $message['sender'] == $CURUSER['id
     stderr(_('Error'), _('He be as good a gentleman as the devil is, as Lucifer and Beelzebub himself.'));
 }
 $users_class = $container->get(User::class);
-$to_user = $users_class->getUserFromId((int) $users_class->getUserIdFromName((string) $_POST['to']));
+$to_name = isset($_POST['to']) ? trim((string) $_POST['to']) : '';
+$to_user = $users_class->getUserFromId((int) $users_class->getUserIdFromName($to_name));
 if (empty($to_user)) {
     stderr(_('Error'), _('Sorry, there is no member with that username.'));
 }
@@ -44,25 +45,11 @@ if (!has_access($CURUSER['class'], UC_STAFF, '')) {
     if ($to_user['acceptpms'] === 'no') {
         stderr(_('Error'), _("This user dosen't accept PMs."));
     }
-/ codex/migrate-db-calls-to-pu239-database-f8wbuj
-    $blocked = $db->fetch('SELECT id FROM blocks WHERE userid = :userid AND blockid = :blockid', [
-        'userid' => (int) $to_user['id'],
-        'blockid' => (int) $CURUSER['id'],
-    ]);
-    if (!$blocked) {
-        stderr(_('Refused'), _('This member has blocked PMs from you.'));
-    }
-    if ($to_user['acceptpms'] === 'friends') {
-        $friend = $db->fetch('SELECT id FROM friends WHERE userid = :userid AND friendid = :friendid', [
-            'userid' => (int) $to_user['id'],
-            'friendid' => (int) $CURUSER['id'],
-        ]);
-=======
     $blocked = $db->fetch(
-        'SELECT id FROM blocks WHERE userid = :uid AND blockid = :bid',
+        'SELECT id FROM blocks WHERE userid = :userid AND blockid = :blockid',
         [
-            ':uid' => (int) $to_user['id'],
-            ':bid' => (int) $CURUSER['id'],
+            'userid' => (int) $to_user['id'],
+            'blockid' => (int) $CURUSER['id'],
         ],
     );
     if ($blocked) {
@@ -70,22 +57,23 @@ if (!has_access($CURUSER['class'], UC_STAFF, '')) {
     }
     if ($to_user['acceptpms'] === 'friends') {
         $friend = $db->fetch(
-            'SELECT id FROM friends WHERE userid = :uid AND friendid = :fid',
+            'SELECT id FROM friends WHERE userid = :userid AND friendid = :friendid',
             [
-                ':uid' => (int) $to_user['id'],
-                ':fid' => (int) $CURUSER['id'],
+                'userid' => (int) $to_user['id'],
+                'friendid' => (int) $CURUSER['id'],
             ],
         );
-/ master
         if (!$friend) {
             stderr(_('Refused'), _('This member only accepts PMs from members on their friends list.'));
         }
     }
 }
 
-$subject = htmlsafechars($_POST['subject']);
-$first_from = valid_username($_POST['first_from']) ? htmlsafechars($_POST['first_from']) : '';
-$msg = "\n\n" . $_POST['body'] . "\n\n" . _fe("-------- Original Message from [b]{0} :: [/b]{1}\n{3}", $first_from, htmlsafechars($message['subject']), $message['msg']);
+$subject = isset($_POST['subject']) ? htmlsafechars((string) $_POST['subject']) : '';
+$first_from_input = isset($_POST['first_from']) ? (string) $_POST['first_from'] : '';
+$first_from = valid_username($first_from_input) ? htmlsafechars($first_from_input) : '';
+$body_content = isset($_POST['body']) ? (string) $_POST['body'] : '';
+$msg = "\n\n" . $body_content . "\n\n" . _fe("-------- Original Message from [b]{0} :: [/b]{1}\n{3}", $first_from, htmlsafechars($message['subject']), $message['msg']);
 
 $msgs_buffer[] = [
     'sender' => $CURUSER['id'],
