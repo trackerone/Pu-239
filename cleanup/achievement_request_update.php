@@ -1,8 +1,5 @@
 <?php
 declare(strict_types=1);
-require_once __DIR__ . '/../include/runtime_safe.php';
-require_once __DIR__ . '/../include/bootstrap_pdo.php';
-use Pu239\Database;
-global $container;
-$db = $container->get(Database::class);
-throw new \RuntimeException('Quarantined: see cleanup/_quarantine/achievement_request_update.php');
+require_once dirname(__DIR__) . '/bootstrap.php';
+
+throw new RuntimeException('Cleanup script quarantined: see _quarantine/cleanup/achievement_request_update.php for the preserved source. Refer to tools/cleanup_quarantine_manifest.csv.');
