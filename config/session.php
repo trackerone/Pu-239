@@ -1,44 +1,39 @@
 <?php
 declare(strict_types=1);
+// This file MUST return an associative array and have no side effects.
 
-require_once __DIR__ . '/../include/runtime_safe.php';
-require_once __DIR__ . '/../include/bootstrap_pdo.php';
+$secureFlag = filter_var(getenv('SESSION_COOKIE_SECURE'), FILTER_VALIDATE_BOOL, FILTER_NULL_ON_FAILURE);
+$httpOnlyFlag = filter_var(getenv('SESSION_COOKIE_HTTPONLY'), FILTER_VALIDATE_BOOL, FILTER_NULL_ON_FAILURE);
+$useCookiesFlag = filter_var(getenv('SESSION_USE_COOKIES'), FILTER_VALIDATE_BOOL, FILTER_NULL_ON_FAILURE);
+$useOnlyCookiesFlag = filter_var(getenv('SESSION_USE_ONLY_COOKIES'), FILTER_VALIDATE_BOOL, FILTER_NULL_ON_FAILURE);
+$useStrictFlag = filter_var(getenv('SESSION_USE_STRICT_MODE'), FILTER_VALIDATE_BOOL, FILTER_NULL_ON_FAILURE);
+$lazyWriteFlag = filter_var(getenv('SESSION_LAZY_WRITE'), FILTER_VALIDATE_BOOL, FILTER_NULL_ON_FAILURE);
 
-use Delight\Cookie\Session;
-use Pu239\Database;
-use Pu239\Settings;
-global $container;
-$db = $container->get(Database::class);
-
-require_once INCL_DIR . 'function_common.php';
-require_once CONFIG_DIR . 'functions.php';
-// Override the settings in php.ini
-ini_set('memory_limit', '1024M');
-ini_set('zlib.output_compression', 'Off');
-ini_set('display_errors', 'Off');
-ini_set('log_errors', 'On');
-ini_set('ignore_repeated_errors', 'On');
-//ini_set('error_reporting', 'E_ALL');
-ini_set('error_log', PHPERROR_LOGS_DIR . 'error.log');
-
-// Set seession and cookies values
-$settings = $container->get(Settings::class);
-$site_config = $settings->get_settings();
-if (ini_get('session.save_handler') != 'files') {
-    ini_set('session.sid_length', '256');
-} else {
-    ini_set('session.sid_length', '128');
-}
-ini_set('default_charset', 'utf-8');
-ini_set('session.name', $site_config['session']['name']);
-ini_set('session.use_strict_mode', '1');
-ini_set('session.use_cookies', '1');
-ini_set('session.cookie_secure', (get_scheme() === 'https' ? '1' : '0'));
-ini_set('session.use_only_cookies', '1');
-ini_set('session.use_trans_sid', '0');
-ini_set('session.lazy_write', '0');
-ini_set('session.cookie_httponly', '1');
-ini_set('max_execution_time', '300');
-ini_set('session.cookie_domain', '');
-
-Session::start('Strict');
+return [
+    'session' => [
+        'name' => getenv('SESSION_NAME') ?: 'PU239SESSID',
+        'handler' => getenv('SESSION_SAVE_HANDLER') ?: 'files',
+        'cookie_domain' => getenv('SESSION_COOKIE_DOMAIN') ?: '',
+        'cookie_path' => getenv('SESSION_COOKIE_PATH') ?: '/',
+        'cookie_secure' => $secureFlag ?? false,
+        'cookie_httponly' => $httpOnlyFlag ?? true,
+        'use_cookies' => $useCookiesFlag ?? true,
+        'use_only_cookies' => $useOnlyCookiesFlag ?? true,
+        'use_strict_mode' => $useStrictFlag ?? true,
+        'use_trans_sid' => false,
+        'sid_length' => (int) (getenv('SESSION_SID_LENGTH') ?: 128),
+        'lazy_write' => $lazyWriteFlag ?? false,
+        'gc_maxlifetime' => (int) (getenv('SESSION_GC_MAXLIFETIME') ?: 1440),
+        'start_mode' => getenv('SESSION_START_MODE') ?: 'Strict',
+        'ini' => [
+            'memory_limit' => getenv('PHP_MEMORY_LIMIT') ?: '1024M',
+            'zlib.output_compression' => 'Off',
+            'display_errors' => getenv('PHP_DISPLAY_ERRORS') ?: 'Off',
+            'log_errors' => getenv('PHP_LOG_ERRORS') ?: 'On',
+            'ignore_repeated_errors' => 'On',
+            'error_log' => getenv('PHP_ERROR_LOG') ?: '',
+            'default_charset' => getenv('DEFAULT_CHARSET') ?: 'utf-8',
+            'max_execution_time' => (int) (getenv('PHP_MAX_EXECUTION_TIME') ?: 300),
+        ],
+    ],
+];

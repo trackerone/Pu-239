@@ -1,0 +1,36 @@
+No syntax errors detected in config/app.dist.php
+No syntax errors detected in config/app.php
+No syntax errors detected in config/cache.dist.php
+No syntax errors detected in config/cache.php
+No syntax errors detected in config/classes.dist.php
+No syntax errors detected in config/classes.php
+No syntax errors detected in config/database.dist.php
+No syntax errors detected in config/database.php
+
+Warning: The use statement with non-compound name 'Memcached' has no effect in config/definitions.php on line 9
+
+Warning: The use statement with non-compound name 'PDO' has no effect in config/definitions.php on line 10
+
+Warning: The use statement with non-compound name 'Redis' has no effect in config/definitions.php on line 15
+No syntax errors detected in config/definitions.php
+No syntax errors detected in config/emoticons.php
+No syntax errors detected in config/localization.dist.php
+No syntax errors detected in config/localization.php
+No syntax errors detected in config/mail.dist.php
+No syntax errors detected in config/mail.php
+No syntax errors detected in config/paths.dist.php
+No syntax errors detected in config/paths.php
+No syntax errors detected in config/permissions.dist.php
+No syntax errors detected in config/permissions.php
+No syntax errors detected in config/services.dist.php
+No syntax errors detected in config/services.php
+No syntax errors detected in config/session.dist.php
+No syntax errors detected in config/session.php
+No syntax errors detected in config/storage.dist.php
+No syntax errors detected in config/storage.php
+No syntax errors detected in config/subtitles.php
+No syntax errors detected in config/system.dist.php
+No syntax errors detected in config/system.php
+No syntax errors detected in config/tracker.dist.php
+No syntax errors detected in config/tracker.php
+No syntax errors detected in config/whereis.php

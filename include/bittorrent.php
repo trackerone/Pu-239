@@ -1,8 +1,9 @@
 <?php
 declare(strict_types=1);
 
-require_once __DIR__.'/runtime_safe.php';
-require_once __DIR__.'/bootstrap_pdo.php';
+if (!defined('APP_BOOTSTRAPPED')) {
+    require_once dirname(__DIR__) . '/bootstrap.php';
+}
 
 use Delight\Auth\Auth;
 use Delight\Auth\AuthError;
@@ -25,8 +26,6 @@ use Rakit\Validation\Validator;
 use Spatie\Image\Exceptions\InvalidManipulation;
 
 $starttime = \microtime(true);
-require_once __DIR__.DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR.'config'.DIRECTORY_SEPARATOR.'define.php';
-require_once INCL_DIR.'app.php';
 global $container;
 $db = $container->get(Database::class);
 $env = $container->get('env');
