@@ -11,7 +11,6 @@ $db = $container->get(Database::class);
 use Pu239\Torrent;
 use Pu239\User;
 
-require_once __DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'config' . DIRECTORY_SEPARATOR . 'ann_config.php';
 if (empty($_SERVER['QUERY_STRING'])) {
     err('Invalid request');
 }

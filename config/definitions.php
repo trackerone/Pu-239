@@ -1,119 +1,142 @@
 <?php
 declare(strict_types=1);
-
-require_once __DIR__ . '/../include/runtime_safe.php';
-require_once __DIR__ . '/../include/bootstrap_pdo.php';
+// This file MUST return an associative array and have no side effects.
 
 use Aura\Sql\ExtendedPdo;
 use Delight\Auth\Auth;
 use Delight\I18n\I18n;
-use Imdb\Config;
+use Imdb\Config as ImdbConfig;
+use Memcached;
+use PDO;
 use PHPMailer\PHPMailer\PHPMailer;
-use Pu239\Database;
+use PU239\Config\ConfigRepository;
 use Psr\Container\ContainerInterface;
 use Rakit\Validation\Validator;
+use Redis;
 use Scriptotek\GoogleBooks\GoogleBooks;
-global $container;
-$db = $container->get(Database::class);
-return [
-    Auth::class => DI\factory(function (ContainerInterface $c) {
-        $pdo = $c->get(PDO::class);
-        return new Auth($pdo, null, null, PRODUCTION);
-    }),
-    PDO::class => DI\factory(function (ContainerInterface $c) {
-        $env = $c->get('env');
-        $dsn = !$env['db']['use_socket'] ? "{$env['db']['type']}:host={$env['db']['host']};port={$env['db']['port']};dbname={$env['db']['database']};charset={$env['db']['charset']}" : "{$env['db']['type']}:unix_socket={$env['db']['socket']};dbname={$env['db']['database']};charset={$env['db']['charset']}";
-        $username = $env['db']['username'];
-        $password = $env['db']['password'];
-        $attributes = $env['db']['attributes'];
-        return new ExtendedPdo($dsn, $username, $password, $attributes);
-    }),
-    mysqli::class => DI\factory(function (ContainerInterface $c) {
-        $env = $c->get('env');
-        if ($env['db']['use_socket']) {
-            $mysqli = new mysqli($env['db']['host'], $env['db']['username'], $env['db']['password'], $env['db']['database'], 0, $env['db']['socket']);
-        } else {
-            $mysqli = new mysqli($env['db']['host'], $env['db']['username'], $env['db']['password'], $env['db']['database'], $env['db']['port']);
-        }
-        if ($mysqli->connect_error) {
-            app_halt('Connect Error (' . $mysqli->connect_errno . ') ' . $mysqli->connect_error);
-        }
 
-        return $mysqli;
+use function DI\factory;
+
+return [
+    Auth::class => factory(function (ContainerInterface $container): Auth {
+        /** @var ConfigRepository $config */
+        $config = $container->get(ConfigRepository::class);
+        $pdo = $container->get(PDO::class);
+
+        return new Auth($pdo, null, null, (bool) $config->get('app.production', false));
     }),
-    Redis::class => DI\factory(function (ContainerInterface $c) {
+    PDO::class => factory(function (ContainerInterface $container): ExtendedPdo {
+        /** @var ConfigRepository $config */
+        $config = $container->get(ConfigRepository::class);
+        /** @var array<string, mixed> $database */
+        $database = $config->get('database', []);
+        $dsn = (string) ($database['dsn'] ?? '');
+        $username = (string) ($database['user'] ?? '');
+        $password = (string) ($database['pass'] ?? '');
+        $options = is_array($database['options'] ?? null) ? $database['options'] : [];
+
+        return new ExtendedPdo($dsn, $username, $password, $options);
+    }),
+    Redis::class => factory(function (ContainerInterface $container): Redis {
+        /** @var ConfigRepository $config */
+        $config = $container->get(ConfigRepository::class);
+        /** @var array<string, mixed> $redisConfig */
+        $redisConfig = $config->get('cache.redis', []);
+
         $client = new Redis();
-        $env = $c->get('env');
-        if (!$env['redis']['use_socket']) {
-            $client->connect($env['redis']['host'], $env['redis']['port']);
+        if (!($redisConfig['use_socket'] ?? false)) {
+            $client->connect((string) ($redisConfig['host'] ?? '127.0.0.1'), (int) ($redisConfig['port'] ?? 6379));
         } else {
-            $client->connect($env['redis']['socket']);
+            $client->connect((string) ($redisConfig['socket'] ?? '/tmp/redis.sock'));
         }
-        $client->select($env['redis']['database']);
+        if (!empty($redisConfig['password'])) {
+            $client->auth((string) $redisConfig['password']);
+        }
+        $client->select((int) ($redisConfig['database'] ?? 1));
 
         return $client;
     }),
-    Memcached::class => DI\factory(function (ContainerInterface $c) {
+    Memcached::class => factory(function (ContainerInterface $container): Memcached {
+        /** @var ConfigRepository $config */
+        $config = $container->get(ConfigRepository::class);
+        /** @var array<string, mixed> $memcachedConfig */
+        $memcachedConfig = $config->get('cache.memcached', []);
+
         $client = new Memcached();
-        $env = $c->get('env');
         if (!count($client->getServerList())) {
-            if (!$env['memcached']['use_socket']) {
-                $client->addServer($env['memcached']['host'], $env['memcached']['port']);
+            if (!($memcachedConfig['use_socket'] ?? false)) {
+                $client->addServer((string) ($memcachedConfig['host'] ?? '127.0.0.1'), (int) ($memcachedConfig['port'] ?? 11211));
             } else {
-                $client->addServer($env['memcached']['socket'], 0);
+                $client->addServer((string) ($memcachedConfig['socket'] ?? '/tmp/memcached.sock'), 0);
             }
         }
 
         return $client;
     }),
-    GoogleBooks::class => DI\factory(function (ContainerInterface $c) {
-        $env = $c->get('env');
-        if (!empty($env['api']['google'])) {
-            $books = new GoogleBooks([
-                'key' => $env['api']['google'],
-                'country' => 'US',
+    GoogleBooks::class => factory(function (ContainerInterface $container): GoogleBooks {
+        /** @var ConfigRepository $config */
+        $config = $container->get(ConfigRepository::class);
+        $service = $config->get('services.google_books', []);
+        $apiKey = $service['api_key'] ?? null;
+        $country = $service['country'] ?? 'US';
+
+        if (!empty($apiKey)) {
+            return new GoogleBooks([
+                'key' => (string) $apiKey,
+                'country' => (string) $country,
             ]);
-        } else {
-            $books = new GoogleBooks(['country' => 'US']);
         }
 
-        return $books;
+        return new GoogleBooks([
+            'country' => (string) $country,
+        ]);
     }),
-    Config::class => DI\factory(function (ContainerInterface $c) {
-        $env = $c->get('env');
-        $config = new Config();
-        $config->usecache = true;
-        $config->usezip = true;
-        $config->language = $env['language']['imdb'];
-        $config->cachedir = IMDB_CACHE_DIR;
-        $config->throwHttpExceptions = 0;
-        $config->default_agent = get_random_useragent();
-
-        return $config;
-    }),
-    PHPMailer::class => DI\factory(function (ContainerInterface $c) {
-        $env = $c->get('env');
-        if ($env['mail']['smtp_enable']) {
-            $mail = new PHPMailer(true);
-            $mail->SMTPDebug = 0;
-            $mail->isSMTP();
-            $mail->Host = $env['mail']['smtp_host'];
-            $mail->SMTPAuth = $env['mail']['smtp_auth'];
-            $mail->Username = $env['mail']['smtp_username'];
-            $mail->Password = $env['mail']['smtp_password'];
-            $mail->SMTPSecure = $env['mail']['smtp_secure'];
-            $mail->Port = $env['mail']['smtp_port'];
-
-            return $mail;
+    ImdbConfig::class => factory(function (ContainerInterface $container): ImdbConfig {
+        /** @var ConfigRepository $config */
+        $config = $container->get(ConfigRepository::class);
+        $imdb = new ImdbConfig();
+        $imdb->usecache = true;
+        $imdb->usezip = true;
+        $imdb->language = (string) $config->get('language.imdb', 'en-US');
+        $imdb->cachedir = (string) $config->get('paths.imdb_cache');
+        $imdb->throwHttpExceptions = 0;
+        if (function_exists('get_random_useragent')) {
+            $imdb->default_agent = get_random_useragent();
         }
 
-        return null;
+        return $imdb;
     }),
-    Validator::class => DI\factory(function () {
+    PHPMailer::class => factory(function (ContainerInterface $container): ?PHPMailer {
+        /** @var ConfigRepository $config */
+        $config = $container->get(ConfigRepository::class);
+        /** @var array<string, mixed> $mail */
+        $mail = $config->get('mail', []);
+        /** @var array<string, mixed> $smtp */
+        $smtp = $mail['smtp'] ?? [];
+        if (!($smtp['enabled'] ?? false)) {
+            return null;
+        }
+
+        $mailer = new PHPMailer(true);
+        $mailer->SMTPDebug = 0;
+        $mailer->isSMTP();
+        $mailer->Host = (string) ($smtp['host'] ?? 'smtp.gmail.com');
+        $mailer->SMTPAuth = (bool) ($smtp['auth'] ?? true);
+        $mailer->Username = (string) ($smtp['username'] ?? 'username@example.com');
+        $mailer->Password = (string) ($smtp['password'] ?? '');
+        $mailer->SMTPSecure = (string) ($smtp['secure'] ?? 'tls');
+        $mailer->Port = (int) ($smtp['port'] ?? 587);
+
+        return $mailer;
+    }),
+    Validator::class => factory(function (): Validator {
         return new Validator();
     }),
-    I18n::class => DI\factory(function (ContainerInterface $c) {
-        $env = $c->get('env');
-        return new I18n($env['available_languages']);
+    I18n::class => factory(function (ContainerInterface $container): I18n {
+        /** @var ConfigRepository $config */
+        $config = $container->get(ConfigRepository::class);
+        $available = $config->get('language.available', ['en_US']);
+
+        return new I18n(is_array($available) ? $available : ['en_US']);
     }),
 ];
