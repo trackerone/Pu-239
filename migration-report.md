@@ -710,3 +710,13 @@ No matches.
 - IN/LIKE/LIMIT binding: none
 =======
 / master
+
+## cleanup
+- Restored historical cleanup scripts from quarantine for analysis, but every file either failed syntax checks or still contained placeholder SQL/Fluent scaffolding.
+- Re-isolated all 78 cleanup scripts under `_quarantine/cleanup` and recorded reasons + suggested fixes in `tools/cleanup_quarantine_manifest.csv`.
+- Produced `tools/cleanup_2025_recursive_report.csv` summarising legacy pattern hits and quarantine status, plus `tools/cleanup_lint_recursive.txt` documenting the lint sweep (no active PHP files remain).
+
+### cleanup summary
+- Files moved: 78 (all re-quarantined for safety; no executable cleanup scripts remain active).
+- Legacy patterns detected: `mysqli`, `sql_query`, `sqlesc`, and Fluent placeholders captured in the manifest for future remediation.
+- Verification: `find cleanup -name '*.php'` → no active PHP scripts; `_quarantine/cleanup` holds the full backlog awaiting manual rebuild.
