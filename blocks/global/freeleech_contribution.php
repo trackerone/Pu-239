@@ -1,225 +1,171 @@
 <?php
 declare(strict_types=1);
 
-require_once __DIR__ . '/../../include/runtime_safe.php';
-require_once __DIR__ . '/../../include/bootstrap_pdo.php';
+require_once dirname(__DIR__) . '/bootstrap.php';
 
 use Pu239\Database;
+use Psr\SimpleCache\CacheInterface as Cache;
 
 global $container, $site_config;
 
+$getActiveEvent = static function (Database $db, Cache $cache): array {
+    $event = $cache->get('site_events_details_');
+    if ($event === null) {
+        $event = $db->fetch(
+            'SELECT modifier, begin, expires FROM events WHERE expires > :now ORDER BY id DESC LIMIT 1',
+            ['now' => TIME_NOW],
+        );
+
+        if (empty($event)) {
+            $event = [
+                'modifier' => 0,
+                'begin' => 0,
+                'expires' => 0,
+            ];
+        }
+
+        $ttl = max(0, (int) ($event['expires'] ?? 0) - TIME_NOW);
+        $cache->set('site_events_details_', $event, $ttl);
+    }
+
+    return [
+        'modifier' => (int) ($event['modifier'] ?? 0),
+        'begin' => (int) ($event['begin'] ?? 0),
+        'expires' => (int) ($event['expires'] ?? 0),
+    ];
+};
+
+$getBonusProgress = static function (Cache $cache, Database $db, string $cacheKey, int $bonusId): array {
+    $progress = $cache->get($cacheKey);
+    if ($progress === null) {
+        $progress = $db->fetch(
+            'SELECT pointspool / points * 100 AS percent, enabled FROM bonus WHERE id = :id',
+            ['id' => $bonusId],
+        );
+
+        if (empty($progress)) {
+            $progress = [
+                'percent' => 0.0,
+                'enabled' => 'no',
+            ];
+        }
+
+        $cache->set($cacheKey, $progress, 300);
+    }
+
+    return [
+        'percent' => (float) ($progress['percent'] ?? 0),
+        'enabled' => (string) ($progress['enabled'] ?? 'no'),
+    ];
+};
+
+$getPercentClass = static function (float $percent): string {
+    return match (true) {
+        $percent >= 90 => 'is-success',
+        $percent >= 80 => 'is-lightgreen',
+        $percent >= 70 => 'is-jade',
+        $percent >= 50 => 'is-turquoise',
+        $percent >= 40 => 'has-text-lghtblue',
+        $percent >= 30 => 'is-gold',
+        $percent >= 20 => 'has-text-oragne',
+        default => 'has-text-danger',
+    };
+};
+
+/** @var Database $db */
 $db = $container->get(Database::class);
+/** @var Cache $cache */
+$cache = $container->get(Cache::class);
 
-require_once INCL_DIR . 'function_event.php';
-$free = get_event(false);
-$freeleech_enabled = $double_upload_enabled = $half_down_enabled = false;
-$freeleech_start_time = $freeleech_end_time = $double_upload_start_time = $double_upload_end_time = $half_down_start_time = $half_down_end_time = 0;
-if (!empty($free) && $free['modifier'] != 0) {
-    $begin = $free['begin'];
-    $expires = $free['expires'];
-    if ($free['modifier'] === 1) {
-        $freeleech_start_time = $free['begin'];
-        $freeleech_end_time = $free['expires'];
-        $freeleech_enabled = true;
-    } elseif ($free['modifier'] === 2) {
-        $double_upload_start_time = $free['begin'];
-        $double_upload_end_time = $free['expires'];
-        $double_upload_enabled = true;
-    } elseif ($free['modifier'] === 3) {
-        $freeleech_start_time = $free['begin'];
-        $freeleech_end_time = $free['expires'];
-        $freeleech_enabled = true;
-        $double_upload_start_time = $free['begin'];
-        $double_upload_end_time = $free['expires'];
-        $double_upload_enabled = true;
-    } elseif ($free['modifier'] === 4) {
-        $half_down_start_time = $free['begin'];
-        $half_down_end_time = $free['expires'];
-        $half_down_enabled = true;
-    }
+$event = $getActiveEvent($db, $cache);
+$modifier = $event['modifier'];
+
+$freeleechEnabled = $modifier === 1 || $modifier === 3;
+$doubleUploadEnabled = $modifier === 2 || $modifier === 3;
+$halfDownloadEnabled = $modifier === 4;
+
+$freeleechWindow = $freeleechEnabled ? [$event['begin'], $event['expires']] : [0, 0];
+$doubleUploadWindow = $doubleUploadEnabled ? [$event['begin'], $event['expires']] : [0, 0];
+$halfDownloadWindow = $halfDownloadEnabled ? [$event['begin'], $event['expires']] : [0, 0];
+
+$freeleech = $getBonusProgress($cache, $db, 'freeleech_alerts_', 11);
+$doubleUpload = $getBonusProgress($cache, $db, 'doubleupload_alerts_', 12);
+$halfDownload = $getBonusProgress($cache, $db, 'halfdownload_alerts_', 13);
+
+if (
+    $freeleech['enabled'] !== 'yes'
+    && $doubleUpload['enabled'] !== 'yes'
+    && $halfDownload['enabled'] !== 'yes'
+) {
+    return '';
 }
 
-$freeleech = $cache->get('freeleech_alerts_');
-if ($freeleech === false || is_null($freeleech)) {
-    $freeleech = $db->fetch('SELECT pointspool / points * 100 AS percent, enabled FROM bonus WHERE id = :id', [':id' => 11]);
-    $cache->set('freeleech_alerts_', $freeleech, 0);
-}
+$esc = static fn($value): string => htmlspecialchars((string) $value, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
+$baseurl = $esc($site_config['paths']['baseurl'] ?? '');
 
-$percent_fl = number_format((float) $freeleech['percent'], 2);
-if ($freeleech['enabled'] === 'yes') {
-    switch ($percent_fl) {
-        case $percent_fl >= 90:
-            $font_color_fl = "<span class='is-success'> {$percent_fl}%</span>";
-            break;
-        case $percent_fl >= 80:
-            $font_color_fl = "<span class='is-lightgreen'> {$percent_fl}%</span>";
-            break;
-        case $percent_fl >= 70:
-            $font_color_fl = "<span class='is-jade'> {$percent_fl}%</span>";
-            break;
-        case $percent_fl >= 50:
-            $font_color_fl = "<span class='is-turquoise'> {$percent_fl}%</span>";
-            break;
-        case $percent_fl >= 40:
-            $font_color_fl = "<span class='has-text-lghtblue'> {$percent_fl}%</span>";
-            break;
-        case $percent_fl >= 30:
-            $font_color_fl = "<span class='is-gold'> {$percent_fl}%</span>";
-            break;
-        case $percent_fl >= 20:
-            $font_color_fl = "<span class='has-text-oragne'> {$percent_fl}%</span>";
-            break;
-        case $percent_fl < 20:
-            $font_color_fl = "<span class='has-text-danger'> {$percent_fl}%</span>";
-            break;
-    }
-}
+$percentFl = number_format($freeleech['percent'], 2);
+$percentDu = number_format($doubleUpload['percent'], 2);
+$percentHd = number_format($halfDownload['percent'], 2);
 
-$doubleupload = $cache->get('doubleupload_alerts_');
-if ($doubleupload === false || is_null($doubleupload)) {
-    $doubleupload = $db->fetch('SELECT pointspool / points * 100 AS percent, enabled FROM bonus WHERE id = :id', [':id' => 12]);
-    $cache->set('doubleupload_alerts_', $doubleupload, 0);
-}
+$freeleechClass = $getPercentClass((float) $percentFl);
+$doubleUploadClass = $getPercentClass((float) $percentDu);
+$halfDownloadClass = $getPercentClass((float) $percentHd);
 
-$percent_du = number_format((float) $doubleupload['percent'], 2);
-if ($doubleupload['enabled'] === 'yes') {
-    switch ($percent_du) {
-        case $percent_du >= 90:
-            $font_color_du = "<span class='is-success'> {$percent_du}%</span>";
-            break;
-        case $percent_du >= 80:
-            $font_color_du = "<span class='is-lightgreen'> {$percent_du}%</span>";
-            break;
-        case $percent_du >= 70:
-            $font_color_du = "<span class='is-jade'> {$percent_du}%</span>";
-            break;
-        case $percent_du >= 50:
-            $font_color_du = "<span class='is-turquoise'> {$percent_du}%</span>";
-            break;
-        case $percent_du >= 40:
-            $font_color_du = "<span class='has-text-lghtblue'> {$percent_du}%</span>";
-            break;
-        case $percent_du >= 30:
-            $font_color_du = "<span class='is-gold'> {$percent_du}%</span>";
-            break;
-        case $percent_du >= 20:
-            $font_color_du = "<span class='has-text-oragne'> {$percent_du}%</span>";
-            break;
-        case $percent_du < 20:
-            $font_color_du = "<span class='has-text-danger'> {$percent_du}%</span>";
-            break;
-    }
-}
-
-$halfdownload = $cache->get('halfdownload_alerts_');
-if ($halfdownload === false || is_null($halfdownload)) {
-    $halfdownload = $db->fetch('SELECT pointspool / points * 100 AS percent, enabled FROM bonus WHERE id = :id', [':id' => 13]);
-    $cache->set('halfdownload_alerts_', $halfdownload, 0);
-}
-
-$percent_hd = number_format((float) $halfdownload['percent'], 2);
-if ($halfdownload['enabled'] === 'yes') {
-    switch ($percent_hd) {
-        case $percent_hd >= 90:
-            $font_color_hd = "<span class='is-success'> {$percent_hd}%</span>";
-            break;
-        case $percent_hd >= 80:
-            $font_color_hd = "<span class='is-lightgreen'> {$percent_hd}%</span>";
-            break;
-        case $percent_hd >= 70:
-            $font_color_hd = "<span class='is-jade'> {$percent_hd}%</span>";
-            break;
-        case $percent_hd >= 50:
-            $font_color_hd = "<span class='is-turquoise'> {$percent_hd}%</span>";
-            break;
-        case $percent_hd >= 40:
-            $font_color_hd = "<span class='has-text-lghtblue'> {$percent_hd}%</span>";
-            break;
-        case $percent_hd >= 30:
-            $font_color_hd = "<span class='is-gold'> {$percent_hd}%</span>";
-            break;
-        case $percent_hd >= 20:
-            $font_color_hd = "<span class='has-text-oragne'> {$percent_hd}%</span>";
-            break;
-        case $percent_hd < 20:
-            $font_color_hd = "<span class='has-text-danger'> {$percent_hd}%</span>";
-            break;
-    }
-}
-
-if ($freeleech['enabled'] === 'yes') {
-    if ($freeleech_enabled) {
-        $fstatus = "<span class='is-success'> " . _('ON') . ' </span>';
-    } else {
-        $fstatus = $font_color_fl . '';
-    }
-}
-if ($doubleupload['enabled'] === 'yes') {
-    if ($double_upload_enabled) {
-        $dstatus = "<span class='is-success'> " . _('ON') . ' </span>';
-    } else {
-        $dstatus = $font_color_du . '';
-    }
-}
-if ($halfdownload['enabled'] === 'yes') {
-    if ($half_down_enabled) {
-        $hstatus = "<span class='is-success'> " . _('ON') . ' </span>';
-    } else {
-        $hstatus = $font_color_hd . '';
-    }
-}
-if ($freeleech['enabled'] === 'yes' || $halfdownload['enabled'] === 'yes' || $doubleupload['enabled'] === 'yes') {
-    $htmlout .= "
-        <li>
-            <a href='{$site_config['paths']['baseurl']}/mybonus.php'>
-                <span class='button tag is-success dt-tooltipper-large' data-tooltip-content='#karma_tooltip'>" . _("Karma Contribution's") . "</span>
-                <div class='tooltip_templates'>
-                    <div id='karma_tooltip' class='margin20'>
-                        <div class='size_6 has-text-centered has-text-success has-text-weight-bold bottom10'>
-                            " . _("Karma Contribution's") . '
-                        </div>';
-    if ($freeleech['enabled'] === 'yes') {
-        $htmlout .= "
-                        <div class='level is-marginless'>
-                            <span>" . _('Freeleech') . "</span><span class='left10'> [ ";
-        if ($freeleech_enabled) {
-            $htmlout .= "<span class='has-text-success'> " . _('ON') . ' </span>' . get_date((int) $freeleech_start_time, 'DATE') . ' - ' . get_date((int) $freeleech_end_time, 'DATE');
-        } else {
-            $htmlout .= $fstatus;
-        }
-        $htmlout .= ' ]
-                            </span>
-                        </div>';
-    }
-    if ($doubleupload['enabled'] === 'yes') {
-        $htmlout .= "
-                        <div class='level is-marginless'>
-                            <span>" . _('Doubleupload') . "</span><span class='left10'> [ ";
-        if ($double_upload_enabled) {
-            $htmlout .= "<span class='has-text-success'> " . _('ON') . ' </span>' . get_date((int) $double_upload_start_time, 'DATE') . ' - ' . get_date((int) $double_upload_end_time, 'DATE');
-        } else {
-            $htmlout .= $dstatus;
-        }
-        $htmlout .= ' ]
-                            </span>
-                        </div>';
-    }
-    if ($halfdownload['enabled'] === 'yes') {
-        $htmlout .= "
-                        <div class='level is-marginless'>
-                            <span>" . _('Half Download') . "</span><span class='left10'> [ ";
-        if ($half_down_enabled) {
-            $htmlout .= "<span class='has-text-success'> " . _('ON') . ' </span>' . get_date((int) $half_down_start_time, 'DATE') . ' - ' . get_date((int) $half_down_end_time, 'DATE');
-        } else {
-            $htmlout .= $hstatus;
-        }
-        $htmlout .= ' ]
-                            </span>
-                        </div>';
-    }
-    $htmlout .= '
-                    </div>
+ob_start();
+?>
+<li>
+    <a href="<?= $baseurl ?>/mybonus.php">
+        <span class="button tag is-success dt-tooltipper-large" data-tooltip-content="#karma_tooltip">
+            <?= $esc(_("Karma Contribution's")) ?>
+        </span>
+        <div class="tooltip_templates">
+            <div id="karma_tooltip" class="margin20">
+                <div class="size_6 has-text-centered has-text-success has-text-weight-bold bottom10">
+                    <?= $esc(_("Karma Contribution's")) ?>
                 </div>
-            </a>
-        </li>';
-}
+                <?php if ($freeleech['enabled'] === 'yes') { ?>
+                    <div class="level is-marginless">
+                        <span><?= $esc(_('Freeleech')) ?></span>
+                        <span class="left10">[
+                            <?php if ($freeleechEnabled) { ?>
+                                <span class="has-text-success"> <?= $esc(_('ON')) ?> </span>
+                                <?= $esc(get_date($freeleechWindow[0], 'DATE')) ?> - <?= $esc(get_date($freeleechWindow[1], 'DATE')) ?>
+                            <?php } else { ?>
+                                <span class="<?= $esc($freeleechClass) ?>"> <?= $esc($percentFl) ?>%</span>
+                            <?php } ?>
+                        ]</span>
+                    </div>
+                <?php } ?>
+                <?php if ($doubleUpload['enabled'] === 'yes') { ?>
+                    <div class="level is-marginless">
+                        <span><?= $esc(_('Doubleupload')) ?></span>
+                        <span class="left10">[
+                            <?php if ($doubleUploadEnabled) { ?>
+                                <span class="has-text-success"> <?= $esc(_('ON')) ?> </span>
+                                <?= $esc(get_date($doubleUploadWindow[0], 'DATE')) ?> - <?= $esc(get_date($doubleUploadWindow[1], 'DATE')) ?>
+                            <?php } else { ?>
+                                <span class="<?= $esc($doubleUploadClass) ?>"> <?= $esc($percentDu) ?>%</span>
+                            <?php } ?>
+                        ]</span>
+                    </div>
+                <?php } ?>
+                <?php if ($halfDownload['enabled'] === 'yes') { ?>
+                    <div class="level is-marginless">
+                        <span><?= $esc(_('Half Download')) ?></span>
+                        <span class="left10">[
+                            <?php if ($halfDownloadEnabled) { ?>
+                                <span class="has-text-success"> <?= $esc(_('ON')) ?> </span>
+                                <?= $esc(get_date($halfDownloadWindow[0], 'DATE')) ?> - <?= $esc(get_date($halfDownloadWindow[1], 'DATE')) ?>
+                            <?php } else { ?>
+                                <span class="<?= $esc($halfDownloadClass) ?>"> <?= $esc($percentHd) ?>%</span>
+                            <?php } ?>
+                        ]</span>
+                    </div>
+                <?php } ?>
+            </div>
+        </div>
+    </a>
+</li>
+<?php
+
+return (string) ob_get_clean();

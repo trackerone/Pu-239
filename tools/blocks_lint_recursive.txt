@@ -1,0 +1,9 @@
+No syntax errors detected in blocks/bootstrap.php
+No syntax errors detected in blocks/global/bugmessages.php
+No syntax errors detected in blocks/global/crazyhour.php
+No syntax errors detected in blocks/global/demotion.php
+No syntax errors detected in blocks/global/freeleech.php
+No syntax errors detected in blocks/global/freeleech_contribution.php
+No syntax errors detected in blocks/global/happyhour.php
+No syntax errors detected in blocks/global/lottery.php
+No syntax errors detected in blocks/global/message.php
