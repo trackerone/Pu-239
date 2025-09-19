@@ -1,0 +1,9 @@
+file,legacy_found,select_star,cache_psr16,csrf_todo,output_escaped,buffer_return,json_mode,manual_review_notes
+blocks/global/bugmessages.php,none,false,true,false,true,true,false,
+blocks/global/crazyhour.php,none,false,true,false,true,true,false,
+blocks/global/demotion.php,none,false,false,false,true,true,false,
+blocks/global/freeleech.php,none,false,true,false,true,true,false,
+blocks/global/freeleech_contribution.php,function_event,false,true,false,true,true,false,
+blocks/global/happyhour.php,function_happyhour,false,false,false,true,true,false,
+blocks/global/lottery.php,none,false,true,false,true,true,false,
+blocks/global/message.php,none,false,false,false,true,true,false,
