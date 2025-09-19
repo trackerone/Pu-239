@@ -1,6 +1,6 @@
 <?php
 declare(strict_types=1);
-require_once dirname(__DIR__) . '/bootstrap.php';
+require_once dirname(__DIR__) . '/bootstrap_web.php';
 
 use Delight\Auth\AuthError;
 use Delight\Auth\NotLoggedInException;

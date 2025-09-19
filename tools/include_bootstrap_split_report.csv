@@ -1,0 +1,3 @@
+file,removed_bootstrap_require,legacy_found(mysqli|sql_query|sqlesc|function_*),select_star,exits_removed,side_effects_removed,moved_to_psr4,shims_touched,notes
+include/app.php,true,false,false,false,true,false,false,"Container build moved to bootstrap_core; file now returns existing container"
+include/bittorrent.php,true,false,false,false,false,false,false,"Added direct-access guard"
