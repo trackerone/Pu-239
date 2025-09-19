@@ -1,0 +1,2 @@
+file,legacy_found(mysqli|sql_query|sqlesc|function_*),select_star,in_clause_refactored,limit_bind_ok,tx_used,exits_removed,manual_review_notes
+database/sql_updates.php,false,true,false,true,false,true,"Static SQL migration list; now returns array; TODO comments flag SELECT *."

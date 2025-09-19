@@ -19,7 +19,8 @@ $env = $container->get('env');
 $settings = $container->get(Settings::class);
 $site_config = $settings->get_settings();
 
-require_once DATABASE_DIR . 'sql_updates.php';
+/** @var array<int, array<string, mixed>> $sql_updates */
+$sql_updates = require DATABASE_DIR . 'sql_updates.php';
 if (!empty($argv[1]) && $argv[1] === 'complete') {
     update_all($argv, $sql_updates);
 } elseif (!empty($argv[1]) && !empty($argv[2])) {
