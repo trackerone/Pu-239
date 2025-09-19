@@ -14,7 +14,8 @@ $db = $container->get(Database::class);
 $class = get_access(basename($_SERVER['REQUEST_URI']));
 class_check($class);
 
-require_once DATABASE_DIR . 'sql_updates.php';
+/** @var array<int, array<string, mixed>> $sql_updates */
+$sql_updates = require DATABASE_DIR . 'sql_updates.php';
 
 // $fluent removed — use $this->db (ExtendedPdo)
 $cache = $container->get(Cache::class);

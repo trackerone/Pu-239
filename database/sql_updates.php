@@ -1,12 +1,9 @@
 <?php
 declare(strict_types=1);
-require_once __DIR__ . '/../include/runtime_safe.php';
-require_once __DIR__ . '/../include/bootstrap_pdo.php';
-use Pu239\Database;
-global $container;
-$db = $container->get(Database::class);
 
-$sql_updates = [
+require_once dirname(__DIR__) . '/bootstrap.php';
+
+return [
     [
         'id' => 1530957741,
         'info' => 'Truncate database_updates table',
@@ -3264,6 +3261,7 @@ KEY `expires` (`expires`)
         'id' => 1562887740,
         'info' => 'Copy table',
         'date' => '11 Jul, 2019',
+        // TODO(2025): explicit columns
         'query' => 'CREATE TABLE tmp_data SELECT * FROM `freeslots`',
         'flush' => false,
     ],
@@ -3285,6 +3283,7 @@ KEY `expires` (`expires`)
         'id' => 1562887743,
         'info' => 'Copy data back',
         'date' => '11 Jul, 2019',
+        // TODO(2025): explicit columns
         'query' => 'INSERT IGNORE INTO `freeslots` SELECT * from `tmp_data`',
         'flush' => false,
     ],
@@ -4638,6 +4637,7 @@ KEY `expires` (`expires`)
         'id' => 1570683702,
         'info' => 'Cleanup friends',
         'date' => '10 Oct, 2018',
+        // TODO(2025): explicit columns
         'query' => 'CREATE TABLE `tmp_data` SELECT * FROM `friends`',
         'flush' => false,
     ],
@@ -4659,6 +4659,7 @@ KEY `expires` (`expires`)
         'id' => 1570683705,
         'info' => 'Cleanup friends',
         'date' => '10 Oct, 2018',
+        // TODO(2025): explicit columns
         'query' => 'INSERT IGNORE INTO `friends` SELECT * FROM `tmp_data`',
         'flush' => false,
     ],
@@ -4680,6 +4681,7 @@ KEY `expires` (`expires`)
         'id' => 1570683712,
         'info' => 'Cleanup blocks',
         'date' => '10 Oct, 2018',
+        // TODO(2025): explicit columns
         'query' => 'CREATE TABLE `tmp_data` SELECT * FROM `blocks`',
         'flush' => false,
     ],
@@ -4701,6 +4703,7 @@ KEY `expires` (`expires`)
         'id' => 1570683715,
         'info' => 'Cleanup blocks',
         'date' => '10 Oct, 2018',
+        // TODO(2025): explicit columns
         'query' => 'INSERT IGNORE INTO `blocks` SELECT * FROM `tmp_data`',
         'flush' => false,
     ],
@@ -4729,6 +4732,7 @@ KEY `expires` (`expires`)
         'id' => 1570683722,
         'info' => 'Cleanup achievements',
         'date' => '10 Oct, 2018',
+        // TODO(2025): explicit columns
         'query' => 'CREATE TABLE `tmp_data` SELECT * FROM `achievements`',
         'flush' => false,
     ],
@@ -4750,6 +4754,7 @@ KEY `expires` (`expires`)
         'id' => 1570683725,
         'info' => 'Cleanup achievements',
         'date' => '10 Oct, 2018',
+        // TODO(2025): explicit columns
         'query' => 'INSERT IGNORE INTO `achievements` SELECT * FROM `tmp_data`',
         'flush' => false,
     ],
