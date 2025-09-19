@@ -1,0 +1,2 @@
+offender_file,removed_bin_require,service_injected,cli_guard,legacy_removed,manual_notes
+public/staffpanel.php,true,true,true,true,"Added UglifyService injection with sanitized messaging"

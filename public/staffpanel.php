@@ -7,13 +7,14 @@ $db = $container->get(Database::class);
 
 
 
+use Monolog\Logger;
 use Pu239\Cache;
 use Pu239\Database;
 use Pu239\Radiance;
 use Pu239\Session;
+use Pu239\Uglify\UglifyService;
 
 require_once __DIR__ . '/../include/bittorrent.php';
-require_once BIN_DIR . 'uglify.php';
 require_once BIN_DIR . 'functions.php';
 $user = check_user_status();
 global $container, $site_config;
@@ -27,6 +28,10 @@ if (isset($_SERVER['QUERY_STRING']) && $_SERVER['QUERY_STRING'] === 'reset=1') {
 }
 $session = $container->get(Session::class);
 $radiance = $container->get(Radiance::class);
+/** @var Logger $logger */
+$logger = $container->get(Logger::class);
+$uglifyService = new UglifyService($logger);
+$sanitize = static fn(mixed $value): string => htmlspecialchars((string) $value, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
 class_check(UC_STAFF);
 if (!$site_config['site']['staffpanel_online']) {
     stderr(_('Information'), _('The staffpanel is currently offline for maintenance work'));
@@ -138,14 +143,20 @@ $result = $db->perform($sql, ['id' => $id]);
         app_halt('Exit called');
     } elseif ($action === 'uglify' && has_access($user['class'], UC_SYSOP, 'coder')) {
         toggle_site_status(true);
-        $result = run_uglify();
+        $result = $uglifyService->run();
         toggle_site_status(false);
-        if ($result) {
+        if ($result['ok'] ?? false) {
             $session->set('is-success', _('All CSS and Javascript files processed'));
+            if (!empty($result['messages'])) {
+                $info = implode('<br>', array_map($sanitize, $result['messages']));
+                $session->set('is-info', $info);
+            }
             $cache->flushDB();
             $session->set('is-success', _fe('You flushed the {0} cache', ucfirst($site_config['cache']['driver'])));
         } else {
-            $session->set('is-warning', _('uglify.php failed'));
+            $errors = $result['errors'] ?? [];
+            $message = empty($errors) ? _('uglify.php failed') : _fe('uglify.php failed: {0}', $sanitize($errors[0]));
+            $session->set('is-warning', $message);
         }
         header('Location: ' . $_SERVER['PHP_SELF']);
         app_halt('Exit called');
