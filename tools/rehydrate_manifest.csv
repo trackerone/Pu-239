@@ -1,0 +1,17 @@
+file,rehydrated,re_quarantined,source_quarantine_path,reason
+admin/namechanger.php,false,true,,missing_sql_no_source
+admin/reputation_ad.php,false,true,,missing_sql_no_source
+admin/shit_list.php,false,true,,missing_sql_no_source
+admin/warn.php,false,true,,missing_sql_no_source
+public/coins.php,false,true,,missing_sql_no_source
+public/credits.php,false,true,,missing_sql_no_source
+public/friends.php,false,true,,missing_sql_no_source
+public/gift.php,false,true,,missing_sql_no_source
+public/invite.php,false,true,,missing_sql_no_source
+public/messages.php,false,true,,missing_sql_no_source
+public/reputation.php,false,true,,missing_sql_no_source
+public/staffbox.php,false,true,,missing_sql_no_source
+public/takeedit.php,false,true,,missing_sql_no_source
+public/takeeditcp.php,false,true,,missing_sql_no_source
+public/usercp.php,false,true,,missing_sql_no_source
+public/usermood.php,false,true,,missing_sql_no_source
