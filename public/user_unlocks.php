@@ -3,6 +3,7 @@ declare(strict_types=1);
 require_once dirname(__DIR__) . '/bootstrap_web.php';
 
 use Pu239\Database;
+use Pu239\Config\ConfigRepository;
 
 use Pu239\Cache;
 
@@ -10,7 +11,9 @@ require_once __DIR__ . '/../include/bittorrent.php';
 require_once CLASS_DIR . 'class_user_options_2.php';
 $user = check_user_status();
 global $container;
-$db = $container->get(Database::class);, $site_config;
+/** @var ConfigRepository $config */
+$config = $container->get(ConfigRepository::class);
+$db = $container->get(Database::class);
 
 $id = (isset($_GET['id']) ? $_GET['id'] : $user['id']);
 if (!is_valid_id($id) || $user['class'] < UC_STAFF) {

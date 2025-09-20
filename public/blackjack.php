@@ -3,6 +3,7 @@ declare(strict_types=1);
 require_once dirname(__DIR__) . '/bootstrap_web.php';
 
 use Pu239\Database;
+use Pu239\Config\ConfigRepository;
 
 use DI\DependencyException;
 use DI\NotFoundException;
@@ -13,9 +14,12 @@ use Pu239\User;
 require_once __DIR__ . '/../include/bittorrent.php';
 $user = check_user_status();
 global $container;
-$db = $container->get(Database::class);, $site_config;
+/** @var ConfigRepository $config */
+$config = $container->get(ConfigRepository::class);
+$db = $container->get(Database::class);
 
 $HTMLOUT = $debugout = '';
+// TODO(2025): replace with $config->get(...) for site configuration lookups.
 if ($user['class'] < $site_config['allowed']['play']) {
     stderr(_('Error'), _fe('Sorry, you must be a {0} to play blackjack!', $site_config['class_names'][$site_config['allowed']['play']]), 'bottom20');
 } elseif ($user['game_access'] !== 1 || $user['status'] !== 0) {

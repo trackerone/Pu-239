@@ -5,6 +5,7 @@ require_once dirname(__DIR__) . '/bootstrap_web.php';
 use DI\DependencyException;
 use DI\NotFoundException;
 use Pu239\Cache;
+use Pu239\Config\ConfigRepository;
 use Pu239\Database;
 use Spatie\Image\Exceptions\InvalidManipulation;
 
@@ -12,7 +13,9 @@ require_once __DIR__ . '/../include/bittorrent.php';
 require_once CLASS_DIR . 'class_user_options.php';
 $user = check_user_status();
 global $container;
-$db = $container->get(Database::class);, $site_config;
+/** @var ConfigRepository $config */
+$config = $container->get(ConfigRepository::class);
+$db = $container->get(Database::class);
 
 $image = placeholder_image();
 $stdhead = [
@@ -27,6 +30,7 @@ $stdfoot = [
     ],
 ];
 $over_forum_id = $count = $now_viewing = $child_boards = '';
+// TODO(2025): replace with $config->get(...) for site configuration lookups.
 if (!$site_config['forum_config']['online'] && !has_access($user['class'], UC_STAFF, 'coder')) {
     stderr(_('Information'), _('The forums are currently offline for maintainance work'));
 }
@@ -647,8 +651,8 @@ function ratingpic_forums($num)
  */
 function insert_quick_jump_menu($current_forum = 0, $staff = false)
 {
-    global $container;
-$db = $container->get(Database::class);, $site_config, $user;
+    global $container, $site_config, $user;
+    $db = $container->get(Database::class);
 
     $cache = $container->get(Cache::class);
     $cachename = 'f_insertJumpTo_' . $user['id'] . ($staff ? '' : '_staff' === false);

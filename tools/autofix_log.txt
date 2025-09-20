@@ -8,3 +8,26 @@
 [2025-09-20T07:08:57+00:00] admin/system_view.php: moved incomplete migration to _quarantine/rebroken and installed safety stub.
 [2025-09-20T07:08:57+00:00] admin/warn.php: standardized stub message to modernization placeholder.
 [2025-09-20T07:08:57+00:00] include/function_account_delete.php: moved incomplete migration to _quarantine/rebroken and installed safety stub.
+******* codex/apply-code-formatting-hygiene-xecqd7
+[2025-09-20T07:19:25+00:00] public/blackjack.php: patched stray site_config usage and added ConfigRepository bootstrap helper.
+[2025-09-20T07:19:25+00:00] public/coins.php: standardized modernization stub referencing _quarantine/rebroken/public/coins.php.
+[2025-09-20T07:19:25+00:00] public/comment.php: standardized modernization stub referencing _quarantine/rebroken/public/comment.php.
+[2025-09-20T07:19:25+00:00] public/credits.php: standardized modernization stub referencing _quarantine/rebroken/public/credits.php.
+[2025-09-20T07:19:25+00:00] public/forums.php: patched stray site_config usage and corrected quick-jump globals plus ConfigRepository bootstrap.
+[2025-09-20T07:19:25+00:00] public/friends.php: standardized modernization stub referencing _quarantine/rebroken/public/friends.php.
+[2025-09-20T07:19:25+00:00] public/gift.php: standardized modernization stub referencing _quarantine/rebroken/public/gift.php.
+[2025-09-20T07:19:25+00:00] public/invite.php: standardized modernization stub referencing _quarantine/rebroken/public/invite.php.
+[2025-09-20T07:19:25+00:00] public/messages.php: standardized modernization stub referencing _quarantine/rebroken/public/messages.php.
+[2025-09-20T07:19:25+00:00] public/reputation.php: standardized modernization stub referencing _quarantine/rebroken/public/reputation.php.
+[2025-09-20T07:19:25+00:00] public/staffbox.php: standardized modernization stub referencing _quarantine/rebroken/public/staffbox.php.
+[2025-09-20T07:19:25+00:00] public/takeedit.php: standardized modernization stub referencing _quarantine/rebroken/public/takeedit.php.
+[2025-09-20T07:19:25+00:00] public/takeeditcp.php: standardized modernization stub referencing _quarantine/rebroken/public/takeeditcp.php.
+[2025-09-20T07:19:25+00:00] public/takereseed.php: patched stray site_config usage and added ConfigRepository bootstrap helper.
+[2025-09-20T07:19:25+00:00] public/topten.php: patched stray site_config usage and added ConfigRepository bootstrap helper.
+[2025-09-20T07:19:25+00:00] public/user_unlocks.php: patched stray site_config usage and added ConfigRepository bootstrap helper.
+[2025-09-20T07:19:25+00:00] public/usercp.php: standardized modernization stub referencing _quarantine/rebroken/public/usercp.php.
+[2025-09-20T07:19:25+00:00] public/userhistory.php: patched stray site_config usage and added ConfigRepository bootstrap helper.
+[2025-09-20T07:19:25+00:00] public/usermood.php: standardized modernization stub referencing _quarantine/rebroken/public/usermood.php.
+[2025-09-20T07:19:25+00:00] public/users.php: inspection only; already using PDO patterns.
+=======
+******** master

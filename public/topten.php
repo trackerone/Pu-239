@@ -3,12 +3,16 @@ declare(strict_types=1);
 require_once dirname(__DIR__) . '/bootstrap_web.php';
 
 use Pu239\Database;
+use Pu239\Config\ConfigRepository;
 
 require_once __DIR__ . '/../include/bittorrent.php';
 check_user_status();
 global $container;
-$db = $container->get(Database::class);, $site_config;
+/** @var ConfigRepository $config */
+$config = $container->get(ConfigRepository::class);
+$db = $container->get(Database::class);
 
+// TODO(2025): replace with $config->get(...) for site configuration lookups.
 $fluent = $db; // alias
 $fluent = $container->get(Database::class);
 

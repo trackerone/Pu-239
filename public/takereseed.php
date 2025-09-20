@@ -3,6 +3,7 @@ declare(strict_types=1);
 require_once dirname(__DIR__) . '/bootstrap_web.php';
 
 use Pu239\Database;
+use Pu239\Config\ConfigRepository;
 
 use Pu239\Cache;
 use Pu239\Message;
@@ -15,11 +16,14 @@ $reseedid = (int) $_POST['reseedid'];
 $uploader = (int) $_POST['uploader'];
 $name = $_POST['name'];
 global $container;
-$db = $container->get(Database::class);, $site_config;
+/** @var ConfigRepository $config */
+$config = $container->get(ConfigRepository::class);
+$db = $container->get(Database::class);
 
 $dt = TIME_NOW;
 $subject = 'Request reseed!';
 $msg = "@{$user['username']} asked for a reseed on [url={$site_config['paths']['baseurl']}/details.php?id={$reseedid}][class=has-text-success]{$name}[/class][/url]![br][br]Thank You!";
+// TODO(2025): replace with $config->get(...) for site configuration lookups.
 $msgs_buffer = [];
 if ($pm_what === 'last10') {
     $rows = $db->fetchAll('SELECT s.userid, s.torrentid FROM snatched AS s WHERE s.torrentid =' . sqlesc($reseedid) . " AND s.seeder = 'yes' LIMIT 10") or sqlerr(__FILE__, __LINE__);

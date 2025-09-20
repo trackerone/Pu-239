@@ -3,13 +3,16 @@ declare(strict_types=1);
 require_once dirname(__DIR__) . '/bootstrap_web.php';
 
 use Pu239\Database;
+use Pu239\Config\ConfigRepository;
 
 use Pu239\User;
 
 require_once __DIR__ . '/../include/bittorrent.php';
 $curuser = check_user_status();
 global $container;
-$db = $container->get(Database::class);, $site_config, $curuser;
+/** @var ConfigRepository $config */
+$config = $container->get(ConfigRepository::class);
+$db = $container->get(Database::class);
 
 $userid = !empty($_GET['id']) ? (int) $_GET['id'] : $curuser['id'];
 if ($userid != $curuser['id']) {
@@ -26,6 +29,7 @@ $page = isset($_GET['page']) ? $_GET['page'] : '';
 $action = isset($_GET['action']) ? htmlsafechars($_GET['action']) : 'viewposts';
 $perpage = 25;
 $HTMLOUT = '';
+// TODO(2025): replace with $config->get(...) for site configuration lookups.
 if ($action === 'viewposts') {
     $select_is = 'COUNT(DISTINCT p.id)';
     $from_is = 'posts AS p LEFT JOIN topics as t ON p.topic_id=t.id LEFT JOIN forums AS f ON t.forum_id=f.id';
