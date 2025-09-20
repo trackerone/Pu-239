@@ -160,6 +160,16 @@ $ rg "mysqli_|sql_query\(|sqlesc\(" blocks
 ```
 No matches.
 
+## staffpanel
+- `staffpanel/index.php`: relocated the staff panel controller from `public/`, replaced FluentPDO lookups with `$db->fetchAll`, `$db->run`, and `$db->insert` using bound parameters, and standardized cache resets.
+- `public/staffpanel.php`: now requires the new `staffpanel/index.php` controller to maintain the legacy entrypoint.
+
+### Verification
+```
+$ rg "mysqli_|sql_query\(|sqlesc\(" staffpanel
+```
+No matches.
+
 ## cleanup
 - (Rehydrated v3) `cleanup/announcement_update.php`, `cleanup/cheatclean_update.php`, `cleanup/funds_table_update.php`, `cleanup/hitrun_update.php`, `cleanup/tvmaze_schedule_update.php`: restored the shared `$db` bootstrap wiring and converted remaining deletes/truncates to named parameter bindings.
 - `cleanup/optimizedb.php`: migrated from `sql_query`/`mysqli_fetch_assoc`/`sqlesc` to `Pu239\Database` with bound parameters; standardized bootstrap and strict typing.
