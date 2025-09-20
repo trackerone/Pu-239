@@ -1,3 +1,8 @@
+*** codex/refactor-legacy-config-to-configrepository-w5o2m3
+chat/lib/class/AJAXChatTemplate.php
+chat/lib/template/loggedIn.html
+chat/lib/template/logs.html
+=======
 *** codex/refactor-legacy-config-to-configrepository-l20m0t
 chat/lib/class/AJAXChatTemplate.php
 chat/lib/template/loggedIn.html
@@ -302,5 +307,6 @@ src/PollVoter.php
 src/Torrent.php
 src/Radiance.php
 src/Comment.php
+*** master
 *** master
 *** master
