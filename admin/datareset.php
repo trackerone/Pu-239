@@ -2,14 +2,16 @@
 declare(strict_types=1);
 require_once dirname(__DIR__) . '/bootstrap_web.php';
 
+use PU239\Config\ConfigRepository;
 use Pu239\Database;
 use Pu239\Message;
 use Pu239\Torrent;
 use Pu239\User;
 
 
-global $container, $CURUSER, $site_config;
-
+global $container, $CURUSER;
+/** @var ConfigRepository $config */
+$config = $container->get(ConfigRepository::class);
 $db = $container->get(Database::class);
 
 $class = get_access(basename($_SERVER['REQUEST_URI']));
@@ -60,12 +62,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $msg .= _fe('So you downloaded {0} your new download will be {1}', mksize($a['sd']), mksize($newd)) . "\n";
             if ($a['owner'] === $a['uid']) {
                 $update = [
-                    'seedbonus' => $a['seedbonus'] - $site_config['bonus']['per_delete'],
+                    'seedbonus' => $a['seedbonus'] - $config->get('bonus.per_delete'),
                     'uploaded' => $a['uu'] > 0 && $a['uu'] > $a['su'] ? $a['uu'] - $a['su'] : 0,
                 ];
             } else {
                 $update = [
-                    'seedbonus' => $a['seedbonus'] + $site_config['bonus']['per_download'],
+                    'seedbonus' => $a['seedbonus'] + $config->get('bonus.per_download'),
                     'downloaded' => $newd,
                 ];
             }
@@ -88,7 +90,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     write_log(_fe('Torrent {0} was deleted by {1} and all users were Re-Paid Download credit.', $tname, htmlsafechars($CURUSER['username'])));
     header('Refresh: 3; url=staffpanel.php?tool=datareset');
-    stderr(_('Success'), _fe('It worked! Long live {0} - Please wait while you are re-directed!', $site_config['site']['name']));
+    stderr(_('Success'), _fe('It worked! Long live {0} - Please wait while you are re-directed!', $config->get('site.name')));
 } else {
     $form = "
     <form action='{$_SERVER['PHP_SELF']}?tool=datareset&amp;action=datareset' method='post' enctype='multipart/form-data' accept-charset='utf-8'>
@@ -110,7 +112,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $HTMLOUT .= main_div($form);
     $title = _('Data Reset Manager');
     $breadcrumbs = [
-        "<a href='{$site_config['paths']['baseurl']}/staffpanel.php'>" . _('Staff Panel') . '</a>',
+        "<a href='{$config->get('paths.baseurl')}/staffpanel.php'>" . _('Staff Panel') . '</a>',
         "<a href='{$_SERVER['PHP_SELF']}'>$title</a>",
     ];
     echo stdhead($title, [], 'page-wrapper', $breadcrumbs) . wrapper($HTMLOUT) . stdfoot();

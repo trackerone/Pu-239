@@ -1,0 +1,3 @@
+chat/lib/class/AJAXChatTemplate.php
+chat/lib/template/loggedIn.html
+chat/lib/template/logs.html

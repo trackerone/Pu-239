@@ -8,11 +8,13 @@ $db = $container->get(Database::class);
 
 
 
+use PU239\Config\ConfigRepository;
 use Delight\Auth\Auth;
 
 require_once __DIR__ . '/../include/bittorrent.php';
-global $container, $site_config;
-
+global $container;
+/** @var ConfigRepository $config */
+$config = $container->get(ConfigRepository::class);
 $auth = $container->get(Auth::class);
 if (!$auth->isLoggedIn()) {
     get_template();
@@ -20,19 +22,19 @@ if (!$auth->isLoggedIn()) {
 } else {
     $user = check_user_status();
 }
-$site_name = "<span class='has-text-weight-bold'>{$site_config['site']['name']}</span>";
+$site_name = "<span class='has-text-weight-bold'>{$config->get('site.name')}</span>";
 $HTMLOUT = "
             <div class='bordered'>
                 <div class='alt_bordered bg-00 padding20'>
                     <h1 class='has-text-centered'>" . _fe('Welcome to {0}!', $site_name) . '</h1>
-                    <p>' . _fe('Our goal is not to become another IPTorrents or Suprnova (not dissing either of them though). The goal is to provide the absolutely latest stuff. Therefore, only specially authorised users have permission to upload torrents. If you have access to 0-day stuff do not hesitate to {0}contact{1} us!', "<a href='{$site_config['paths']['baseurl']}/staff.php'>", '</a>') . '</p>
-                    <p>' . _fe('This is a private tracker, and you have to register before you can get full access to the site. Before you do anything here at <b>{0}</b> we suggest you read the {1}rules{2}! There are only a few rules to abide by, but we do enforce them!', $site_config['site']['name'], "<a href='{$site_config['paths']['baseurl']}/rules.php'>", '</a>') . '</p>
-                    <p>' . _fe('Before you go any further you should read the {0} {1}user agreement{2}.', $site_name, " <a href='{$site_config['paths']['baseurl']}/useragreement.php'>", '</a>') . "</p>
+                    <p>' . _fe('Our goal is not to become another IPTorrents or Suprnova (not dissing either of them though). The goal is to provide the absolutely latest stuff. Therefore, only specially authorised users have permission to upload torrents. If you have access to 0-day stuff do not hesitate to {0}contact{1} us!', "<a href='{$config->get('paths.baseurl')}/staff.php'>", '</a>') . '</p>
+                    <p>' . _fe('This is a private tracker, and you have to register before you can get full access to the site. Before you do anything here at <b>{0}</b> we suggest you read the {1}rules{2}! There are only a few rules to abide by, but we do enforce them!', $config->get('site.name'), "<a href='{$config->get('paths.baseurl')}/rules.php'>", '</a>') . '</p>
+                    <p>' . _fe('Before you go any further you should read the {0} {1}user agreement{2}.', $site_name, " <a href='{$config->get('paths.baseurl')}/useragreement.php'>", '</a>') . "</p>
                 </div>
             </div>
             <fieldset id='rules'>
                 <legend class='level-center-center padding20 size_7'>
-                    <img src='{$site_config['paths']['images_baseurl']}info.png' alt='' class='tooltipper right10 icon' title='" . _('Guidelines') . "'>" . _('Contents') . "
+                    <img src='{$config->get('paths.images_baseurl')}info.png' alt='' class='tooltipper right10 icon' title='" . _('Guidelines') . "'>" . _('Contents') . "
                 </legend>
                 <div class='bordered'>
                     <div class='alt_bordered bg-00'>
@@ -175,7 +177,7 @@ $HTMLOUT .= main_div("
                             <div class='top20 bg-02 padding20 round10'>
                                 <a id='site2'></a>
                                 <p>" . _('Where does the donated money go?') . '</p>
-                                <p>' . _fe('{0} is situated on a dedicated server in the Hinterlands. For the moment we have monthly running costs of approximately &#36;{1}.', $site_config['site']['name'], 125.00) . "</p>
+                                <p>' . _fe('{0} is situated on a dedicated server in the Hinterlands. For the moment we have monthly running costs of approximately &#36;{1}.', $config->get('site.name'), 125.00) . "</p>
                             </div>
                             <div class='top20 bg-02 padding20 round10'>
                                 <a id='site4'></a>
@@ -195,7 +197,7 @@ $HTMLOUT .= main_div("
                             <div class='top20 bg-02 padding20 round10'>
                                 <a id='user2'></a>
                                 <p>" . _("I've lost my user name or password! Can you send it to me?") . '</p>
-                                <p>' . _fe('Please use {0}this form{1} to have the reset details emailed to you.', "<a href='{$site_config['paths']['baseurl']}/recover.php'>", '</a>') . "</p>
+                                <p>' . _fe('Please use {0}this form{1} to have the reset details emailed to you.', "<a href='{$config->get('paths.baseurl')}/recover.php'>", '</a>') . "</p>
                             </div>
                             <div class='top20 bg-02 padding20 round10'>
                                 <a id='user3'></a>
@@ -210,7 +212,7 @@ $HTMLOUT .= main_div("
                             <div class='top20 bg-02 padding20 round10'>
                                 <a id='userb'></a>
                                 <p>" . _("So, what's MY ratio?") . '</p>
-                                <p>' . _fe('Click on your {0}profile{1}, then on your user name (at the top).', "<a href='{$site_config['paths']['baseurl']}/usercp.php?action=default'>", '</a>') . '</p>
+                                <p>' . _fe('Click on your {0}profile{1}, then on your user name (at the top).', "<a href='{$config->get('paths.baseurl')}/usercp.php?action=default'>", '</a>') . '</p>
                                 <p>' . _("It's important to distinguish between your overall ratio and the individual ratio on each torrent you may be seeding or leeching. The overall ratio takes into account the total uploaded and downloaded from your account since you joined the site. The individual ratio takes into account those values for each torrent.") . '</p>
                                 <p>' . _("You may see two symbols instead of a number: 'Inf.', which is just an abbreviation for Infinity, and means that you have downloaded 0 bytes while uploading a non-zero amount (ul/dl becomes infinity); '---', which should be read as 'non-available', and shows up when you have both downloaded and uploaded 0 bytes (ul/dl = 0/0 which is an indeterminate amount).") . "</p>
                             </div>
@@ -304,7 +306,7 @@ $HTMLOUT .= main_div("
                                             </tr>
                                             <tr>
                                                 <td class='rowhead'><img src='./images/star.png' alt='" . _('Star') . "'></td>
-                                                <td class='rowhead'>" . _fe('Just donate, and send the {0}Staff{1} the details.', "<a href='{$site_config['paths']['baseurl']}/contactstaff.php'>", '</a>') . "</td>
+                                                <td class='rowhead'>" . _fe('Just donate, and send the {0}Staff{1} the details.', "<a href='{$config->get('paths.baseurl')}/contactstaff.php'>", '</a>') . "</td>
                                             </tr>
                                             <tr>
                                                 <td class='rowhead'><span class='vip'>" . _('VIP') . "</span></td>
@@ -332,12 +334,12 @@ $HTMLOUT .= main_div("
                                 <div class='top20 bg-02 padding20 round10'>
                                     <a id='userc'></a>
                                     <p>" . _("Why can't my friend become a member?") . '</p>
-                                    <p>' . _fe("There is a {0} users limit. When that number is reached we stop accepting new members. Accounts inactive for more than 42 days are automatically deleted, so keep trying. (There is no reservation or queuing system, don't ask for that.)", $site_config['site']['maxusers']) . "</p>
+                                    <p>' . _fe("There is a {0} users limit. When that number is reached we stop accepting new members. Accounts inactive for more than 42 days are automatically deleted, so keep trying. (There is no reservation or queuing system, don't ask for that.)", $config->get('site.maxusers')) . "</p>
                                 </div>
                                 <div class='top20 bg-02 padding20 round10'>
                                     <a id='userd'></a>
                                     <p>" . _('How do I add an avatar to my profile?') . '</p>
-                                    <p>' . _fe('First, find an image that you like, and that is within the {0}Rules{1}. Then you will have to find a place to host it, such as our own {2}BitBucket{3}. (Other popular choices are {4}Photobucket{5}, {6}Upload-It!{7} or {8}ImageShack{9}). All that is left to do is copy the URL you were given when uploading it to the avatar field in your {10}profile{11}', "<a href='{$site_config['paths']['baseurl']}/rules.php'>", '</a>', "<a href='{$site_config['paths']['baseurl']}/bitbucket.php'>", '</a>', "<a href='" . url_proxy('https://photobucket.com/', false) . "'>", '</a>', "<a href='" . url_proxy('https://uploadit.org/', false) . "'>", '</a>', "<a href='" . url_proxy('https://www.imageshack.us/', false) . "'>", '</a>', "<a href='{$site_config['paths']['baseurl']}/usercp.php?action=default'>", '</a>') . '</a>.</p>
+                                    <p>' . _fe('First, find an image that you like, and that is within the {0}Rules{1}. Then you will have to find a place to host it, such as our own {2}BitBucket{3}. (Other popular choices are {4}Photobucket{5}, {6}Upload-It!{7} or {8}ImageShack{9}). All that is left to do is copy the URL you were given when uploading it to the avatar field in your {10}profile{11}', "<a href='{$config->get('paths.baseurl')}/rules.php'>", '</a>', "<a href='{$config->get('paths.baseurl')}/bitbucket.php'>", '</a>', "<a href='" . url_proxy('https://photobucket.com/', false) . "'>", '</a>', "<a href='" . url_proxy('https://uploadit.org/', false) . "'>", '</a>', "<a href='" . url_proxy('https://www.imageshack.us/', false) . "'>", '</a>', "<a href='{$config->get('paths.baseurl')}/usercp.php?action=default'>", '</a>') . '</a>.</p>
                                     <p>' . _fe("Please do not make a post just to test your avatar. If everything is allright you'll see it in your profile {0}details page{1}.", "<a class='is-link' href='userdetails.php?id={$user['id']}'>", '</a>') . '</p>
                                 </div>
                             </div>
@@ -422,7 +424,7 @@ $HTMLOUT .= main_div("
                             <div class='top20 bg-02 padding20 round10'>
                                 <a id='stats9'></a>
                                 <p>" . _('For those of you who are interested...') . '</p>
-                                <p>' . _fe("Some {0}info{1} about the 'Anatomy of a torrent session'.", "<a href='<a href='{$site_config['paths']['baseurl']}/anatomy.php'>", '</a>') . '</p>
+                                <p>' . _fe("Some {0}info{1} about the 'Anatomy of a torrent session'.", "<a href='<a href='{$config->get('paths.baseurl')}/anatomy.php'>", '</a>') . '</p>
                             </div>
                         </div>', 'top20');
 
@@ -456,7 +458,7 @@ $HTMLOUT .= main_div("
                                     </li>
                                 </ul>
                                 <p>' . _('Also, you should have at least 2MBit upload bandwith.') . '</p>
-                                <p>' . _fe('If you think you can match these criteria do not hesitate to {0}contact{1} one of the administrators.', "<a href='{$site_config['paths']['baseurl']}/staff.php'>", '</a>') . '</p>
+                                <p>' . _fe('If you think you can match these criteria do not hesitate to {0}contact{1} one of the administrators.', "<a href='{$config->get('paths.baseurl')}/staff.php'>", '</a>') . '</p>
                                 <p>' . _("Remember! Write your application carefully! Be sure to include your UL speed and what kind of stuff you're planning to upload.") . '</p>
                                 <p>' . _('Only well written letters with serious intent will be considered.') . "</p>
                             </div>
@@ -487,7 +489,7 @@ $next_para = "
                                 <p>" . _('Why did an active torrent suddenly disappear?') . '</p>
                                 <p>' . _('There may be three reasons for this:') . "</p>
                                 <ol class='decimal left20'>
-                                    <li class='padding10'>" . _fe('The torrent may have been out-of-sync with the site {0}rules{1}.', "<a href='{$site_config['paths']['baseurl']}/rules.php'>", '</a>') . "</li>
+                                    <li class='padding10'>" . _fe('The torrent may have been out-of-sync with the site {0}rules{1}.', "<a href='{$config->get('paths.baseurl')}/rules.php'>", '</a>') . "</li>
                                     <li class='padding10'>" . _('The uploader may have deleted it because it was a bad release. A replacement will probably be uploaded to take its place.') . "</li>
                                     <li class='padding10'>" . _('Torrents are automatically deleted after 28 days.') . "</li>
                                 </ol>
@@ -602,7 +604,7 @@ if ($user['class'] < UC_VIP) {
         $wait = 0;
     }
 }
-$next_para .= "<div class='top20 bg-02 padding20 round10'>" . _fe('In {0}your{1} particular case, ', "<a class='is-link' href='{$site_config['paths']['baseurl']}/userdetails.php?id={$user['id']}'>", '</a>');
+$next_para .= "<div class='top20 bg-02 padding20 round10'>" . _fe('In {0}your{1} particular case, ', "<a class='is-link' href='{$config->get('paths.baseurl')}/userdetails.php?id={$user['id']}'>", '</a>');
 if (isset($wait)) {
     $byboth = $byratio && $byul;
     if ($byboth) {
@@ -728,7 +730,7 @@ $HTMLOUT .= main_div("
                                 <a id='prox4'></a>
                                 <p>" . _("Can I bypass my ISP's proxy?") . '</p>
                                 <p>' . _fe('If your ISP only allows HTTP traffic through port 80 or blocks the usual proxy ports then you would need to use something like {0}socks{1} and that is outside the scope of this FAQ.', "<a href='" . url_proxy('https://www.socks.permeo.com', false) . "'>", '</a') . '</p>
-                                <p>' . _fe('The site accepts connections on port 81 besides the usual 80, and using them may be enough to fool some proxies. So the first thing to try should be connecting to {0}. Note that even if this works your bt client will still try to connect to port 80 unless you edit the announce url in the .torrent file.', "{$site_config['paths']['baseurl']}:81") . '</p>
+                                <p>' . _fe('The site accepts connections on port 81 besides the usual 80, and using them may be enough to fool some proxies. So the first thing to try should be connecting to {0}. Note that even if this works your bt client will still try to connect to port 80 unless you edit the announce url in the .torrent file.', "{$config->get('paths.baseurl')}:81") . '</p>
                                 <p>' . _('Otherwise you may try the following:') . "</p>
                                 <ul class='disc left20'>
                                     <li class='padding10'>
@@ -786,8 +788,8 @@ $HTMLOUT .= main_div("
                             <h2 class='has-text-centered'>" . _('Alternate port (81)') . "</h2>
                             <div class='top20 bg-02 padding20 round10'>
                                 <a id='conn4'></a>
-                                <p>" . _fe('Some of our torrents use ports other than the usual HTTP port 80. This may cause problems for some users, for instance those behind some firewall or proxy configurations. You can easily solve this by editing the .torrent file yourself with any torrent editor, e.g. {0}MakeTorrent{1}, and replacing the announce url {2} with {3} or just {4}.', "<a href='" . url_proxy('https://sourceforge.net/projects/burst/', false) . "'>", '</a>', $site_config['paths']['baseurl'] . ':81', $site_config['paths']['baseurl'] . ':80', $site_config['paths']['baseurl']) . '</p>
-                                <p>' . _fe("Editing the .torrent with Notepad is not recommended. It may look like a text file, but it is in fact a bencoded file. If for some reason you must use a plain text editor, change the announce url to {0}, not {1}. (If you're thinking about changing the number before the announce url instead, you know too much to be reading this.)", $site_config['paths']['baseurl'] . ':80', $site_config['paths']['baseurl']) . '</p>
+                                <p>" . _fe('Some of our torrents use ports other than the usual HTTP port 80. This may cause problems for some users, for instance those behind some firewall or proxy configurations. You can easily solve this by editing the .torrent file yourself with any torrent editor, e.g. {0}MakeTorrent{1}, and replacing the announce url {2} with {3} or just {4}.', "<a href='" . url_proxy('https://sourceforge.net/projects/burst/', false) . "'>", '</a>', $config->get('paths.baseurl') . ':81', $config->get('paths.baseurl') . ':80', $config->get('paths.baseurl')) . '</p>
+                                <p>' . _fe("Editing the .torrent with Notepad is not recommended. It may look like a text file, but it is in fact a bencoded file. If for some reason you must use a plain text editor, change the announce url to {0}, not {1}. (If you're thinking about changing the number before the announce url instead, you know too much to be reading this.)", $config->get('paths.baseurl') . ':80', $config->get('paths.baseurl')) . '</p>
                             </div>
                         </div>', 'top20');
 
@@ -795,7 +797,7 @@ $HTMLOUT .= main_div("
                         <h2 class='has-text-centered padtop10' id='answer_9'>" . _("What if I can't find the answer to my problem here?") . "</h2>
                         <div id='answer_9_text'>
                             <div class='top20 bg-02 padding20 round10'>
-                                <p>" . _fe("Post in the {0}Forums{1}, by all means. You'll find they are usually a friendly and helpful place, provided you follow a few basic guidelines:", "<a href='{$site_config['paths']['baseurl']}/forums.php'>", '</a>') . "</p>
+                                <p>" . _fe("Post in the {0}Forums{1}, by all means. You'll find they are usually a friendly and helpful place, provided you follow a few basic guidelines:", "<a href='{$config->get('paths.baseurl')}/forums.php'>", '</a>') . "</p>
                                 <ul class='disc left20'>
                                     <li class='padding10'>
                                         " . _("Make sure your problem is not really in this FAQ. There's no point in posting just to be sent back here.") . "

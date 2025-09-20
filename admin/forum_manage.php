@@ -2,12 +2,14 @@
 declare(strict_types=1);
 require_once dirname(__DIR__) . '/bootstrap_web.php';
 
+use PU239\Config\ConfigRepository;
 use Pu239\Database;
 use Pu239\Forum;
 
 
-global $container, $site_config, $CURUSER;
-
+global $container, $CURUSER;
+/** @var ConfigRepository $config */
+$config = $container->get(ConfigRepository::class);
 $db = $container->get(Database::class);
 
 $class = get_access(basename($_SERVER['REQUEST_URI']));
@@ -29,10 +31,10 @@ $main_links = "
             <div class='bottom20'>
                 <ul class='level-center bg-06'>
                     <li class='is-link margin10'>
-                        <a href='{$site_config['paths']['baseurl']}/staffpanel.php?tool=over_forums&amp;action=over_forums'>" . _('Over Forums') . "</a>
+                        <a href='{$config->get('paths.baseurl')}/staffpanel.php?tool=over_forums&amp;action=over_forums'>" . _('Over Forums') . "</a>
                     </li>
                     <li class='is-link margin10'>
-                        <a href='{$site_config['paths']['baseurl']}/staffpanel.php?tool=forum_config&amp;action=forum_config'>" . _('Configure Forums') . "</a>
+                        <a href='{$config->get('paths.baseurl')}/staffpanel.php?tool=forum_config&amp;action=forum_config'>" . _('Configure Forums') . "</a>
                     </li>
                 </ul>
             </div>
@@ -239,7 +241,7 @@ foreach ($forums as $row) {
     $subforum_name = !empty($row['subforum_name']) ? htmlsafechars($row['subforum_name']) : '';
     $body .= '
         <tr>
-            <td><a class="is-link" href="' . $site_config['paths']['baseurl'] . '/forums.php?action=view_forum&amp;forum_id=' . (int) $row['id'] . '">
+            <td><a class="is-link" href="' . $config->get('paths.baseurl') . '/forums.php?action=view_forum&amp;forum_id=' . (int) $row['id'] . '">
                 <span>' . htmlsafechars($row['name']) . '</span></a><br>
                     ' . htmlsafechars($row['description']) . '
             </td>
@@ -251,7 +253,7 @@ foreach ($forums as $row) {
             <td class="has-text-centered">
                 <span class="level-center">
                     <span class="left10 tooltipper" title="Edit">
-                        <a href="' . $site_config['paths']['baseurl'] . '/staffpanel.php?tool=forum_manage&amp;action=forum_manage&amp;action2=edit_forum_page&amp;id=' . (int) $row['id'] . '">
+                        <a href="' . $config->get('paths.baseurl') . '/staffpanel.php?tool=forum_manage&amp;action=forum_manage&amp;action2=edit_forum_page&amp;id=' . (int) $row['id'] . '">
                             <i class="icon-edit icon has-text-info" aria-hidden="true"></i>
                         </a>
                     </span>
@@ -379,7 +381,7 @@ $HTMLOUT .= main_table($body) . '
     </script>';
 $title = _('Forum Manager');
 $breadcrumbs = [
-    "<a href='{$site_config['paths']['baseurl']}/staffpanel.php'>" . _('Staff Panel') . '</a>',
+    "<a href='{$config->get('paths.baseurl')}/staffpanel.php'>" . _('Staff Panel') . '</a>',
     "<a href='{$_SERVER['PHP_SELF']}'>$title</a>",
 ];
 echo stdhead($title, [], 'page-wrapper', $breadcrumbs) . wrapper($HTMLOUT) . stdfoot();

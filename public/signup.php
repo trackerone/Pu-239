@@ -7,6 +7,7 @@ $db = $container->get(Database::class);
 
 
 
+use PU239\Config\ConfigRepository;
 use Delight\Auth\Auth;
 
 use Pu239\Database;
@@ -16,16 +17,17 @@ use Pu239\User;
 use Rakit\Validation\Validator;
 
 require_once __DIR__ . '/../include/bittorrent.php';
-global $container, $site_config;
-
-$title = 'Join ' . $site_config['site']['name'];
+global $container;
+/** @var ConfigRepository $config */
+$config = $container->get(ConfigRepository::class);
+$title = 'Join ' . $config->get('site.name');
 $session = $container->get(Session::class);
 // $fluent removed — use $this->db (ExtendedPdo)
 $auth = $container->get(Auth::class);
 if ($auth->isLoggedIn()) {
     $auth->logOutEverywhere();
     $auth->destroySession();
-    header('Location: ' . $site_config['paths']['baseurl'] . $_SERVER['REQUEST_URI']);
+    header('Location: ' . $config->get('paths.baseurl') . $_SERVER['REQUEST_URI']);
     app_halt('Exit called');
 }
 get_template();
@@ -64,7 +66,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
     if (!empty($userid)) {
-        if ($site_config['site']['ip_logging']) {
+        if ($config->get('site.ip_logging')) {
             insert_update_ip('register', $userid);
         }
         $invite_id = !empty($post['invite_id']) ? (int) $post['invite_id'] : 0;
@@ -130,7 +132,7 @@ $db->perform($sql, array_merge($set, ['link' => $valid['link']]));
                ->execute();
     }
     $session->unset('signup_variables');
-    header("Location: {$site_config['paths']['baseurl']}/login.php");
+    header("Location: {$config->get('paths.baseurl')}/login.php");
     app_halt('Exit called');
 }
 $invite = $email = '';
@@ -156,10 +158,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
             <input type='hidden' name='invite_code' value='$invite_code'>";
     }
 }
-if (!$site_config['openreg']['open'] && !$site_config['openreg']['invites_only']) {
+if (!$config->get('openreg.open') && !$config->get('openreg.invites_only')) {
     stderr(_('Error'), _('Signups are presently closed'));
 }
-if ((!$site_config['openreg']['open'] || $site_config['openreg']['invites_only']) && empty($email) && empty($promo)) {
+if ((!$config->get('openreg.open') || $config->get('openreg.invites_only')) && empty($email) && empty($promo)) {
     stderr(_('Error'), _('Signups are Invite Only'));
 }
 
@@ -181,7 +183,7 @@ if (!empty($signup_vars)) {
 }
 
 $HTMLOUT = "
-    <form method='post' action='{$site_config['paths']['baseurl']}/signup.php' enctype='multipart/form-data' accept-charset='utf-8'>";
+    <form method='post' action='{$config->get('paths.baseurl')}/signup.php' enctype='multipart/form-data' accept-charset='utf-8'>";
 
 $disabled = !empty($email) ? 'disabled' : 'required';
 
@@ -189,7 +191,7 @@ if (!empty($email)) {
     $email_form = "<input type='hidden' name='email' class='w-100' value='{$email}'>{$email}";
 } else {
     $email_form = "<input type='email' name='email' id='email' class='w-100' onblur='check_email();' value='{$signup_vars['email']}' autocomplete='on' required>
-                   <div id='emailcheck'></div>" . ($site_config['signup']['email_confirm'] ? "
+                   <div id='emailcheck'></div>" . ($config->get('signup.email_confirm') ? "
                    <div class='alt_bordered top10 padding10'>" . _('Username') . '</div>' : '');
     $email_form = "<input type='email' name='email' id='email' class='w-100' onblur='check_email();' value='{$signup_vars['email']}' autocomplete='on' required>";
 }

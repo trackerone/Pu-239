@@ -5,12 +5,15 @@ declare(strict_types=1);
 require_once dirname(__DIR__) . '/bootstrap.php';
 
 use Envms\FluentPDO\Literal;
+use PU239\Config\ConfigRepository;
 use Pu239\Cache;
 use Pu239\Database;
 use Pu239\Message;
 use Pu239\User;
 
-global $container, $CURUSER, $site_config;
+global $container, $CURUSER;
+/** @var ConfigRepository $config */
+$config = $container->get(ConfigRepository::class);
 /** @var Database $db */
 $db = $container->get(Database::class);
 
@@ -201,7 +204,7 @@ if (!empty($boxes)) {
                         <td colspan="2"><span>' . _('Please note!') . '</span>
                         <ul>
                             <li>' . _('If you delete the name of one or more boxes, all messages in that directory will be sent to your inbox!') . '</li>
-                            <li>' . _fe('If you wish to delete the messages as well, you can do that from the {0}main page{1}.', '<a class="is-link" href="' . $site_config['paths']['baseurl'] . '/messages.php?action=view_mailbox">', '</a>') . '</li>
+                            <li>' . _fe('If you wish to delete the messages as well, you can do that from the {0}main page{1}.', '<a class="is-link" href="' . $config->get('paths.baseurl') . '/messages.php?action=view_mailbox">', '</a>') . '</li>
                         </ul></td>
                     </tr>
                     <tr>
@@ -232,8 +235,8 @@ if (!empty($category_set)) {
         if ($a['parent_id'] != 0) {
             $image = !empty($a['image']) && $CURUSER['opt2'] & class_user_options_2::BROWSE_ICONS ? "
                     <span class='left10'>
-                        <a href='{$site_config['paths']['baseurl']}/browse.php?c{$a['id']}'>
-                            <img class='caticon' src='{$site_config['paths']['images_baseurl']}caticons/{$CURUSER['categorie_icon']}/" . format_comment($a['image']) . "' alt='" . format_comment($a['name']) . "'>
+                        <a href='{$config->get('paths.baseurl')}/browse.php?c{$a['id']}'>
+                            <img class='caticon' src='{$config->get('paths.images_baseurl')}caticons/{$CURUSER['categorie_icon']}/" . format_comment($a['image']) . "' alt='" . format_comment($a['name']) . "'>
                         </a>
                     </span>" : "
                     <span class='left10'>" . format_comment($a['name']) . '</span>';
@@ -288,7 +291,7 @@ $body .= '
 $HTMLOUT .= main_table($body);
 $HTMLOUT .= '<h2 class="top20 has-text-centered">' . _('Edit / Delete Mail Boxes') . '</h2>';
 $HTMLOUT .= '
-        <form action="' . $site_config['paths']['baseurl'] . '/messages.php" method="post" accept-charset="utf-8">
+        <form action="' . $config->get('paths.baseurl') . '/messages.php" method="post" accept-charset="utf-8">
         <input type="hidden" name="action" value="edit_mailboxes">
         <input type="hidden" name="action2" value="edit_boxes">';
 $HTMLOUT .= main_table($all_my_boxes);

@@ -4,10 +4,12 @@ declare(strict_types=1);
 require_once __DIR__ . '/../../include/runtime_safe.php';
 require_once __DIR__ . '/../../include/bootstrap_pdo.php';
 
+use PU239\Config\ConfigRepository;
 use Pu239\Database;
 
-global $container, $site_config, $viewer;
-
+global $container, $viewer;
+/** @var ConfigRepository $config */
+$config = $container->get(ConfigRepository::class);
 $db = $container->get(Database::class);
 
 $type = !empty($user['join_type']) ? $user['join_type'] : 'open';
@@ -27,7 +29,7 @@ if ($invite_by > 0 && $type === 'invite') {
     $HTMLOUT .= '
         <tr>
             <td class="rowhead">' . _('Invited By') . '</td>
-            <td><a href="' . $site_config['paths']['baseurl'] . '/promo.php">Promo: ' . $name . '</a></td>
+            <td><a href="' . $config->get('paths.baseurl') . '/promo.php">Promo: ' . $name . '</a></td>
         </tr>';
 } else {
     $HTMLOUT .= '
@@ -53,7 +55,7 @@ if (empty($invited)) {
         <tr>
             <th><b>' . _('Username') . '</b></th>
             <th><b>' . _('Email') . '</b></th>
-            <th><b>' . _('Uploaded') . '</b></th>' . ($site_config['site']['ratio_free'] ? '' : '
+            <th><b>' . _('Uploaded') . '</b></th>' . ($config->get('site.ratio_free') ? '' : '
             <th><b>' . _('Downloaded') . '</b></th>') . '
             <th><b>' . _('Ratio') . '</b></th>
             <th><b>' . _('Status') . '</b></th>
@@ -64,7 +66,7 @@ if (empty($invited)) {
         <tr>
             <td>' . ($arr_invited['status'] === 'Pending' ? format_comment($arr_invited['username']) : format_username($arr_invited['id']) . '<br>') . '</td>
             <td>' . format_comment($arr_invited['email']) . '</td>
-            <td>' . mksize($arr_invited['uploaded']) . '</td>' . ($site_config['site']['ratio_free'] ? '' : '
+            <td>' . mksize($arr_invited['uploaded']) . '</td>' . ($config->get('site.ratio_free') ? '' : '
             <td>' . mksize($arr_invited['downloaded']) . '</td>') . '
             <td>' . member_ratio((float) $arr_invited['uploaded'], (float) $arr_invited['downloaded']) . '</td>
             <td>' . ($arr_invited['status'] === 'Confirmed' ? '
@@ -78,6 +80,6 @@ if (empty($invited)) {
     $inviteted_by_this_member = main_table($body, $heading);
 }
 
-$the_flip_box_5 = '[ <a id="invites"></a><a class="is-link" href="#invites" onclick="flipBox(\'5\')" id="b_5" title="' . _('Open / Close Members Invites') . '">' . _('view ') . '<img onclick="flipBox(\'5\')" src="' . $site_config['paths']['images_baseurl'] . 'panel_on.gif" id="b_5" style="vertical-align:middle;"  width="8" height="8" alt="' . _('Open / Close Members Invitees') . '" title="' . _('Open / Close Members Invitees') . '" /></a> ] [ <a class="is-link" href="' . $site_config['paths']['baseurl'] . '/staffpanel.php?tool=invite_tree&amp;action=invite_tree&amp;id=' . $viewer['id'] . '" title="' . _('Click to view members invite tree') . '">' . _('view invite tree') . '</a> ]';
+$the_flip_box_5 = '[ <a id="invites"></a><a class="is-link" href="#invites" onclick="flipBox(\'5\')" id="b_5" title="' . _('Open / Close Members Invites') . '">' . _('view ') . '<img onclick="flipBox(\'5\')" src="' . $config->get('paths.images_baseurl') . 'panel_on.gif" id="b_5" style="vertical-align:middle;"  width="8" height="8" alt="' . _('Open / Close Members Invitees') . '" title="' . _('Open / Close Members Invitees') . '" /></a> ] [ <a class="is-link" href="' . $config->get('paths.baseurl') . '/staffpanel.php?tool=invite_tree&amp;action=invite_tree&amp;id=' . $viewer['id'] . '" title="' . _('Click to view members invite tree') . '">' . _('view invite tree') . '</a> ]';
 $HTMLOUT .= '<tr><td class="rowhead">' . _('Invitees') . '</td><td>' . (!empty($invited) ? $the_flip_box_5 . '<div id="box_5" style="display: none">
     <br>' . $inviteted_by_this_member . '</div>' : _('No invitees yet.')) . '</td></tr>';

@@ -4,11 +4,13 @@ declare(strict_types=1);
 require_once __DIR__ . '/../../include/runtime_safe.php';
 require_once __DIR__ . '/../../include/bootstrap_pdo.php';
 
+use PU239\Config\ConfigRepository;
 use Pu239\Cache;
 use Pu239\Database;
 
-global $container, $site_config, $CURUSER;
-
+global $container, $CURUSER;
+/** @var ConfigRepository $config */
+$config = $container->get(ConfigRepository::class);
 $db = $container->get(Database::class);
 
 $cache = $container->get(Cache::class);
@@ -18,7 +20,7 @@ if ($forumposts === false || is_null($forumposts)) {
         'SELECT COUNT(id) FROM posts WHERE user_id = ?',
         [$user['id']]
     );
-    $cache->set('forum_posts_' . $id, $forumposts, $site_config['expires']['forum_posts']);
+    $cache->set('forum_posts_' . $id, $forumposts, $config->get('expires.forum_posts'));
 }
 if ($user['paranoia'] < 2 || $CURUSER['id'] == $id || $CURUSER['class'] >= UC_STAFF) {
     $HTMLOUT .= "<tr><td class='rowhead'>" . _('Forum Posts') . '</td>';

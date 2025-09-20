@@ -4,13 +4,16 @@ declare(strict_types=1);
 
 require_once dirname(__DIR__) . '/bootstrap.php';
 
+use PU239\Config\ConfigRepository;
 use Pu239\Cache;
 use Pu239\Database;
 use Pu239\User;
 
 $user = check_user_status();
 $image = placeholder_image();
-global $container, $site_config;
+global $container;
+/** @var ConfigRepository $config */
+$config = $container->get(ConfigRepository::class);
 /** @var Database $db */
 $db = $container->get(Database::class);
 $cache = $container->get(Cache::class);
@@ -46,7 +49,7 @@ if (!empty($message['attachment'])) {
         ++$i;
         $attachment .= "
         <span>
-            <a class='is-link tooltipper' href='{$site_config['paths']['baseurl']}/forums.php?action=download_attachment&amp;id={$file['id']}' title='" . _('Download Attachment') . " #{$i}' target='_blank'>" . htmlsafechars($file['file_name']) . "</a>
+            <a class='is-link tooltipper' href='{$config->get('paths.baseurl')}/forums.php?action=download_attachment&amp;id={$file['id']}' title='" . _('Download Attachment') . " #{$i}' target='_blank'>" . htmlsafechars($file['file_name']) . "</a>
             <span class='has-text-weight-bold size_2'>[" . mksize($file['size']) . ']</span>
         </span>';
     }
@@ -66,20 +69,20 @@ $db->run(
 $cache->decrement('inbox_' . $user['id']);
 if ($message['friend'] > 0) {
     $friends = '
-                    <a href="' . $site_config['paths']['baseurl'] . '/friends.php?action=delete&amp;type=friend&amp;targetid=' . (int) $message['id'] . '">
+                    <a href="' . $config->get('paths.baseurl') . '/friends.php?action=delete&amp;type=friend&amp;targetid=' . (int) $message['id'] . '">
                         <small><i class="icon-minus has-text-danger tooltipper" title="' . _('remove from friends') . '"></i></small>
                     </a>';
 } elseif ($message['blocked'] > 0) {
     $friends = '
-                    <a href="' . $site_config['paths']['baseurl'] . '/friends.php?action=delete&amp;type=block&amp;targetid=' . (int) $message['id'] . '">
+                    <a href="' . $config->get('paths.baseurl') . '/friends.php?action=delete&amp;type=block&amp;targetid=' . (int) $message['id'] . '">
                         <small><i class="icon-minus has-text-danger tooltipper" title="' . _('remove from blocks') . '"></i></small>
                     </a>';
 } else {
     $friends = '
-                    <a href="' . $site_config['paths']['baseurl'] . '/friends.php?action=add&amp;type=friend&amp;targetid=' . (int) $message['id'] . '">
+                    <a href="' . $config->get('paths.baseurl') . '/friends.php?action=add&amp;type=friend&amp;targetid=' . (int) $message['id'] . '">
                         <small><i class="icon-user-plus icon has-text-success tooltipper" title="' . _('add to friends') . '"></i></small>
                     </a>
-                    <a href="' . $site_config['paths']['baseurl'] . '/friends.php?action=add&amp;type=block&amp;targetid=' . (int) $message['id'] . '">
+                    <a href="' . $config->get('paths.baseurl') . '/friends.php?action=add&amp;type=block&amp;targetid=' . (int) $message['id'] . '">
                         <small><i class="icon-user-times icon has-text-danger tooltipper" title="' . _('add to blocks') . '"></i></small>
                     </a>';
 }
@@ -109,7 +112,7 @@ if ($message['location'] > 1) {
             <span class="has-text-danger">***</span>
         </div>';
 } else {
-    $mailbox_name = ($mailbox === $site_config['pm']['inbox'] ? _('Inbox') : ($mailbox === $site_config['pm']['sent'] ? _('Sentbox') : ($mailbox === $site_config['pm']['deleted'] ? _('Deleted') : _('Drafts'))));
+    $mailbox_name = ($mailbox === $config->get('pm.inbox') ? _('Inbox') : ($mailbox === $config->get('pm.sent') ? _('Sentbox') : ($mailbox === $config->get('pm.deleted') ? _('Deleted') : _('Drafts'))));
 }
 
 $HTMLOUT .= "
@@ -137,12 +140,12 @@ $body = "
                         <div class='column round10 bg-02 is-2-desktop is-3-tablet is-12-mobile has-text-centered'>
                             {$avatar}<br>" . format_username($message['sender']) . (empty($message['title']) ? '' : "
                             <div class='size_3'>[" . format_comment($message['title']) . ']</div>') . ($message['last_access'] > TIME_NOW - 300 ? "
-                            <div class='level-center-center'><img src='{$image}' data-src='{$site_config['paths']['images_baseurl']}forums/online.gif' alt='" . _('Online') . "' title='" . _('Online') . "' class='tooltipper icon is-small lazy'>" . _('Online') . '</div>' : "
-                            <div class='level-center-center'><img src='{$image}' data-src='{$site_config['paths']['images_baseurl']}forums/offline.gif' alt='" . _('Offline') . "' title='" . _('Offline') . "' class='tooltipper icon is-small lazy'>" . _('Offline') . '</div>') . '
+                            <div class='level-center-center'><img src='{$image}' data-src='{$config->get('paths.images_baseurl')}forums/online.gif' alt='" . _('Online') . "' title='" . _('Online') . "' class='tooltipper icon is-small lazy'>" . _('Online') . '</div>' : "
+                            <div class='level-center-center'><img src='{$image}' data-src='{$config->get('paths.images_baseurl')}forums/offline.gif' alt='" . _('Offline') . "' title='" . _('Offline') . "' class='tooltipper icon is-small lazy'>" . _('Offline') . '</div>') . '
                             <div>' . _('Karma') . ': ' . number_format((float) $message['seedbonus']) . '</div>' . (!empty($message['website']) ? "
                             <div>
                                 <a href='" . format_comment($message['website']) . "' target='_blank' title='" . _('click to go to website') . "'>
-                                    <img src='{$image}' data-src='{$site_config['paths']['images_baseurl']}forums/website.gif' alt='website' class='tooltipper emoticon lazy'>
+                                    <img src='{$image}' data-src='{$config->get('paths.images_baseurl')}forums/website.gif' alt='website' class='tooltipper emoticon lazy'>
                                 </a>
                             </div>" : '') . ($message['show_email'] === 'yes' ? "
                             <div>
@@ -164,17 +167,17 @@ $body = "
             <tr class='no_hover'>
                 <td colspan='2'>
                     <div class='level-center-center has-text-centered'>
-                        <form action='{$site_config['paths']['baseurl']}/messages.php' method='post' enctype='multipart/form-data' accept-charset='utf-8'>
+                        <form action='{$config->get('paths.baseurl')}/messages.php' method='post' enctype='multipart/form-data' accept-charset='utf-8'>
                             <input type='hidden' name='id' value='{$pm_id}'>
                             <input type='hidden' name='action' value='move'>
                             " . get_all_boxes((int) $message['location'], $user['id']) . "
                             <input type='submit' class='button is-small margin10' value='" . _('move') . "'>
-                            <a href='{$site_config['paths']['baseurl']}/messages.php?action=delete&amp;id={$pm_id}' class='button is-small margin10'>" . _('delete') . '</a>' . ($message['draft'] === 'no' ? "
-                            <a href='{$site_config['paths']['baseurl']}/messages.php?action=save_or_edit_draft&amp;id={$pm_id}' class='button is-small margin10'>" . _('save as draft') . '</a>' . (($id < 1 || $message['sender'] === $user['id']) ? '' : "
-                            <a href='{$site_config['paths']['baseurl']}/messages.php?action=send_message&amp;receiver={$message['sender']}&amp;replyto={$pm_id}' class='button is-small margin10'>" . _('reply') . "</a>
-                            <a href='{$site_config['paths']['baseurl']}/messages.php?action=forward&amp;id={$pm_id}' class='button is-small margin10'>" . _('fwd') . '</a>') : "
-                            <a href='{$site_config['paths']['baseurl']}/messages.php?action=save_or_edit_draft&amp;edit=1&amp;id={$pm_id}' class='button is-small margin10'>" . _('edit draft') . "</a>
-                            <a href='{$site_config['paths']['baseurl']}/messages.php?action=use_draft&amp;send=1&amp;id={$pm_id}' class='button is-small margin10'>" . _('use draft') . '</a>') . '
+                            <a href='{$config->get('paths.baseurl')}/messages.php?action=delete&amp;id={$pm_id}' class='button is-small margin10'>" . _('delete') . '</a>' . ($message['draft'] === 'no' ? "
+                            <a href='{$config->get('paths.baseurl')}/messages.php?action=save_or_edit_draft&amp;id={$pm_id}' class='button is-small margin10'>" . _('save as draft') . '</a>' . (($id < 1 || $message['sender'] === $user['id']) ? '' : "
+                            <a href='{$config->get('paths.baseurl')}/messages.php?action=send_message&amp;receiver={$message['sender']}&amp;replyto={$pm_id}' class='button is-small margin10'>" . _('reply') . "</a>
+                            <a href='{$config->get('paths.baseurl')}/messages.php?action=forward&amp;id={$pm_id}' class='button is-small margin10'>" . _('fwd') . '</a>') : "
+                            <a href='{$config->get('paths.baseurl')}/messages.php?action=save_or_edit_draft&amp;edit=1&amp;id={$pm_id}' class='button is-small margin10'>" . _('edit draft') . "</a>
+                            <a href='{$config->get('paths.baseurl')}/messages.php?action=use_draft&amp;send=1&amp;id={$pm_id}' class='button is-small margin10'>" . _('use draft') . '</a>') . '
                         </form>
                     </div>
                 </td>
@@ -185,7 +188,7 @@ $HTMLOUT .= main_table($body) . "
         </div>
     </div>';
 $breadcrumbs = [
-    "<a href='{$site_config['paths']['baseurl']}/messages.php'>" . _('Private Messages') . '</a>',
-    "<a href='{$site_config['paths']['baseurl']}/messages.php?action=view_mailbox&box={$mailbox}'>{$mailbox_name}</a>",
-    "<a href='{$site_config['paths']['baseurl']}/messages.php?action=view_message&id={$pm_id}'>" . format_comment($message['subject']) . '</a>',
+    "<a href='{$config->get('paths.baseurl')}/messages.php'>" . _('Private Messages') . '</a>',
+    "<a href='{$config->get('paths.baseurl')}/messages.php?action=view_mailbox&box={$mailbox}'>{$mailbox_name}</a>",
+    "<a href='{$config->get('paths.baseurl')}/messages.php?action=view_message&id={$pm_id}'>" . format_comment($message['subject']) . '</a>',
 ];

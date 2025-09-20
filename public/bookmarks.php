@@ -8,14 +8,16 @@ $db = $container->get(Database::class);
 
 
 
+use PU239\Config\ConfigRepository;
 use DI\DependencyException;
 use DI\NotFoundException;
 use Pu239\Database;
 
 require_once __DIR__ . '/../include/bittorrent.php';
 $user = check_user_status();
-global $container, $site_config;
-
+global $container;
+/** @var ConfigRepository $config */
+$config = $container->get(ConfigRepository::class);
 $stdfoot = [
     'js' => [
         get_file_name('bookmarks_js'),
@@ -37,7 +39,7 @@ $HTMLOUT = '';
  */
 function bookmarktable($res, $userid, $variant = 'index')
 {
-    global $container, $site_config;
+    global $container;
 
     $HTMLOUT = "
     <div class='has-text-centered bottom20'>
@@ -94,9 +96,9 @@ function bookmarktable($res, $userid, $variant = 'index')
                     <tr>
                         <td class='has-text-centered'>";
         if (isset($row['cat_name'])) {
-            $body .= '<a href="' . $site_config['paths']['baseurl'] . '/browse.php?cat=' . (int) $row['category'] . '">';
+            $body .= '<a href="' . $config->get('paths.baseurl') . '/browse.php?cat=' . (int) $row['category'] . '">';
             if (isset($row['cat_pic']) && $row['cat_pic'] != '') {
-                $body .= "<img src='{$site_config['paths']['images_baseurl']}caticons/" . get_category_icons() . '/' . htmlsafechars($row['cat_pic']) . "' alt='" . htmlsafechars($row['cat_name']) . "' class='tooltipper' title='" . htmlsafechars($row['cat_name']) . "'>";
+                $body .= "<img src='{$config->get('paths.images_baseurl')}caticons/" . get_category_icons() . '/' . htmlsafechars($row['cat_pic']) . "' alt='" . htmlsafechars($row['cat_name']) . "' class='tooltipper' title='" . htmlsafechars($row['cat_name']) . "'>";
             } else {
                 $body .= htmlsafechars($row['cat_name']);
             }
@@ -109,7 +111,7 @@ function bookmarktable($res, $userid, $variant = 'index')
         $dispname = htmlsafechars($row['name']);
         $body .= "
                         <td class='has-text-left'>
-                            <a href='{$site_config['paths']['baseurl']}/details.php?";
+                            <a href='{$config->get('paths.baseurl')}/details.php?";
         if ($variant === 'mytorrents') {
             $body .= 'returnto=' . urlencode($_SERVER['REQUEST_URI']) . '&amp;';
         }
@@ -127,7 +129,7 @@ function bookmarktable($res, $userid, $variant = 'index')
                         </td>" : '');
         $body .= ($variant === 'index' ? "
                         <td class='has-text-centered'>
-                            <a href='{$site_config['paths']['baseurl']}/download.php?torrent={$id}' class='tooltipper' title='" . _('Download Bookmark!') . "'>
+                            <a href='{$config->get('paths.baseurl')}/download.php?torrent={$id}' class='tooltipper' title='" . _('Download Bookmark!') . "'>
                                 <i class='icon-download icon'></i>
                             </a>
                         </td>" : '');
@@ -154,7 +156,7 @@ function bookmarktable($res, $userid, $variant = 'index')
             $body .= "
                         </td>
                         <td class='has-text-centered'>
-                            <a href='{$site_config['paths']['baseurl']}/edit.php?returnto=" . urlencode($_SERVER['REQUEST_URI']) . '&amp;id=' . (int) $row['id'] . "'>" . _('Edit') . '</a>';
+                            <a href='{$config->get('paths.baseurl')}/edit.php?returnto=" . urlencode($_SERVER['REQUEST_URI']) . '&amp;id=' . (int) $row['id'] . "'>" . _('Edit') . '</a>';
         }
         if ($variant === 'mytorrents') {
             $body .= "
@@ -169,10 +171,10 @@ function bookmarktable($res, $userid, $variant = 'index')
         }
         if ($variant === 'index') {
             $body .= "
-                        <td class='has-text-right'><b><a href='{$site_config['paths']['baseurl']}/filelist.php?id=$id'>" . (int) $row['numfiles'] . '</a></b></td>';
+                        <td class='has-text-right'><b><a href='{$config->get('paths.baseurl')}/filelist.php?id=$id'>" . (int) $row['numfiles'] . '</a></b></td>';
         } else {
             $body .= "
-                        <td class='has-text-right'><b><a href='{$site_config['paths']['baseurl']}/filelist.php?id=$id'>" . (int) $row['numfiles'] . '</a></b></td>';
+                        <td class='has-text-right'><b><a href='{$config->get('paths.baseurl')}/filelist.php?id=$id'>" . (int) $row['numfiles'] . '</a></b></td>';
         }
         if (!$row['comments']) {
             $body .= "
@@ -180,17 +182,17 @@ function bookmarktable($res, $userid, $variant = 'index')
         } else {
             if ($variant === 'index') {
                 $body .= "
-                        <td class='has-text-right'><b><a href='{$site_config['paths']['baseurl']}/details.php?id=$id&amp;hit=1&amp;tocomm=1'>" . (int) $row['comments'] . '</a></b></td>';
+                        <td class='has-text-right'><b><a href='{$config->get('paths.baseurl')}/details.php?id=$id&amp;hit=1&amp;tocomm=1'>" . (int) $row['comments'] . '</a></b></td>';
             } else {
                 $body .= "
-                        <td class='has-text-right'><b><a href='{$site_config['paths']['baseurl']}/details.php?id=$id&amp;page=0#startcomments'>" . (int) $row['comments'] . '</a></b></td>';
+                        <td class='has-text-right'><b><a href='{$config->get('paths.baseurl')}/details.php?id=$id&amp;page=0#startcomments'>" . (int) $row['comments'] . '</a></b></td>';
             }
         }
         $body .= "
                         <td class='has-text-centered'><span>" . str_replace(',', '<br>', get_date((int) $row['added'], '')) . "</span></td>
                         <td class='has-text-centered'>" . str_replace(' ', '<br>', mksize($row['size'])) . '</td>';
         $body .= "
-                        <td class='has-text-centered'><a href='{$site_config['paths']['baseurl']}/snatches.php?id=$id'>" . _pfe('{0} time', '{0} times', $row['times_completed']) . '</a></td>';
+                        <td class='has-text-centered'><a href='{$config->get('paths.baseurl')}/snatches.php?id=$id'>" . _pfe('{0} time', '{0} times', $row['times_completed']) . '</a></td>';
         if ((int) $row['seeders']) {
             if ($variant === 'index') {
                 if ($row['leechers']) {
@@ -199,10 +201,10 @@ function bookmarktable($res, $userid, $variant = 'index')
                     $ratio = 1;
                 }
                 $body .= "
-                        <td class='has-text-right'><b><a href='{$site_config['paths']['baseurl']}/peerlist.php?id=$id#seeders'><span style='color: " . get_slr_color($ratio) . ";'>" . (int) $row['seeders'] . '</span></a></b></td>';
+                        <td class='has-text-right'><b><a href='{$config->get('paths.baseurl')}/peerlist.php?id=$id#seeders'><span style='color: " . get_slr_color($ratio) . ";'>" . (int) $row['seeders'] . '</span></a></b></td>';
             } else {
                 $body .= "
-                        <td class='has-text-right'><b><a class='" . linkcolor($row['seeders']) . "' href='{$site_config['paths']['baseurl']}/peerlist.php?id=$id#seeders'>" . (int) $row['seeders'] . '</a></b></td>';
+                        <td class='has-text-right'><b><a class='" . linkcolor($row['seeders']) . "' href='{$config->get('paths.baseurl')}/peerlist.php?id=$id#seeders'>" . (int) $row['seeders'] . '</a></b></td>';
             }
         } else {
             $body .= "
@@ -211,10 +213,10 @@ function bookmarktable($res, $userid, $variant = 'index')
         if ((int) $row['leechers']) {
             if ($variant === 'index') {
                 $body .= "
-                        <td class='has-text-right'><b><a href='{$site_config['paths']['baseurl']}/peerlist.php?id=$id#leechers'>" . number_format($row['leechers']) . '</a></b></td>';
+                        <td class='has-text-right'><b><a href='{$config->get('paths.baseurl')}/peerlist.php?id=$id#leechers'>" . number_format($row['leechers']) . '</a></b></td>';
             } else {
                 $body .= "
-                        <td class='has-text-right'><b><a class='" . linkcolor($row['leechers']) . "' href='{$site_config['paths']['baseurl']}/peerlist.php?id=$id#leechers'>" . (int) $row['leechers'] . '</a></b></td>';
+                        <td class='has-text-right'><b><a class='" . linkcolor($row['leechers']) . "' href='{$config->get('paths.baseurl')}/peerlist.php?id=$id#leechers'>" . (int) $row['leechers'] . '</a></b></td>';
             }
         } else {
             $body .= "
@@ -237,14 +239,14 @@ if (!is_valid_id($userid)) {
     stderr(_('Error'), _('Invalid ID'));
 }
 if ($userid != $user['id']) {
-    stderr(_('Error'), _('Access denied. Try ') . "<a href='{$site_config['paths']['baseurl']}/sharemarks.php?id={$userid}'>" . _('Here') . '</a>');
+    stderr(_('Error'), _('Access denied. Try ') . "<a href='{$config->get('paths.baseurl')}/sharemarks.php?id={$userid}'>" . _('Here') . '</a>');
 }
 $HTMLOUT .= '
     <div class="has-text-centered bottom20">
         <h1>' . _('My Bookmarks') . '</h1>
         <div class="tabs is-centered">
             <ul>
-                <li><a href="' . $site_config['paths']['baseurl'] . '/sharemarks.php?id=' . $userid . '" class="is-link">' . _('My Sharemarks') . '</a></li>
+                <li><a href="' . $config->get('paths.baseurl') . '/sharemarks.php?id=' . $userid . '" class="is-link">' . _('My Sharemarks') . '</a></li>
             </ul>
         </div>
     </div>';

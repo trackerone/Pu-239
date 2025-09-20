@@ -8,6 +8,7 @@ $db = $container->get(Database::class);
 
 
 
+use PU239\Config\ConfigRepository;
 use Pu239\Database;
 use Pu239\Image;
 
@@ -20,13 +21,14 @@ $valid_search = [
     'srs',
     'sre',
 ];
-global $container, $site_config;
-
+global $container;
+/** @var ConfigRepository $config */
+$config = $container->get(ConfigRepository::class);
 // $fluent removed — use $this->db (ExtendedPdo)
 $count = $fluent->from('torrents AS t')
                 ->select(null)
                 ->select('COUNT(t.id) AS count')
-                ->where('t.category', $site_config['categories']['tv']);
+                ->where('t.category', $config->get('categories.tv'));
 
 $select = $fluent->from('torrents AS t')
                  ->select(null)
@@ -38,7 +40,7 @@ $select = $fluent->from('torrents AS t')
                  ->select('t.leechers')
                  ->select('t.year')
                  ->select('t.rating')
-                 ->where('t.category', $site_config['categories']['tv'])
+                 ->where('t.category', $config->get('categories.tv'))
                  ->groupBy('t.imdb_id, t.id');
 if ($user['hidden'] === 0) {
     $count->leftJoin('categories AS c ON t.category = c.id')
@@ -84,7 +86,7 @@ if (!empty($_GET['sre'])) {
 $count = $count->fetch("count");
 $perpage = 25;
 $addparam = !empty($addparam) ? '?' . implode('&amp;', $addparam) . '&amp;' : '?';
-$pager = pager($perpage, $count, "{$site_config['paths']['baseurl']}/tmovies.php{$addparam}");
+$pager = pager($perpage, $count, "{$config->get('paths.baseurl')}/tmovies.php{$addparam}");
 $select->limit($pager['pdo']['limit'])
        ->offset($pager['pdo']['offset'])
        ->orderBy('t.added DESC');
@@ -112,10 +114,10 @@ foreach ($select as $torrent) {
     $casts[] = $cast;
     $people = [];
     foreach ($cast as $person) {
-        $people[] = "<div class='size_2'><a href='{$site_config['paths']['baseurl']}/browse.php?sp=" . urlencode(htmlsafechars($person['name'])) . "'>" . format_comment($person['name']) . '</a></div>';
+        $people[] = "<div class='size_2'><a href='{$config->get('paths.baseurl')}/browse.php?sp=" . urlencode(htmlsafechars($person['name'])) . "'>" . format_comment($person['name']) . '</a></div>';
     }
 
-    $name = "<a href='{$site_config['paths']['baseurl']}/browse.php?si={$torrent['imdb_id']}'>" . format_comment($torrent['name']) . '</a>';
+    $name = "<a href='{$config->get('paths.baseurl')}/browse.php?si={$torrent['imdb_id']}'>" . format_comment($torrent['name']) . '</a>';
     if (empty($torrent['poster'])) {
         if (!empty($torrent['imdb_id'])) {
             $image = $images_class->find_images($torrent['imdb_id'], 'poster');
@@ -123,14 +125,14 @@ foreach ($select as $torrent) {
         if (!empty($image)) {
             $image = url_proxy($image, true);
         } else {
-            $image = $site_config['paths']['images_baseurl'] . 'noposter.png';
+            $image = $config->get('paths.images_baseurl') . 'noposter.png';
         }
     } else {
         $image = url_proxy($torrent['poster'], true);
     }
     $percent = $torrent['rating'] * 10;
     $rating = "
-                <a href='{$site_config['paths']['baseurl']}/browse.php?srs={$torrent['rating']}&amp;sre={$torrent['rating']}'>
+                <a href='{$config->get('paths.baseurl')}/browse.php?srs={$torrent['rating']}&amp;sre={$torrent['rating']}'>
                     <div>
                         <div class='level-left size_3'>
                             <div class='right5'>{$percent}%</div>
@@ -142,9 +144,9 @@ foreach ($select as $torrent) {
                     </div>
                 </a>";
 
-    $seeders = "<a href='{$site_config['paths']['baseurl']}/peerlist.php?id={$torrent['seeders']}#seeders'>{$torrent['seeders']}</a>";
-    $leechers = "<a href='{$site_config['paths']['baseurl']}/peerlist.php?id={$torrent['leechers']}#leechers'>{$torrent['leechers']}</a>";
-    $year = "<a href='{$site_config['paths']['baseurl']}/browse.php?sys={$torrent['year']}&amp;sye={$torrent['year']}'>{$torrent['year']}</a>";
+    $seeders = "<a href='{$config->get('paths.baseurl')}/peerlist.php?id={$torrent['seeders']}#seeders'>{$torrent['seeders']}</a>";
+    $leechers = "<a href='{$config->get('paths.baseurl')}/peerlist.php?id={$torrent['leechers']}#leechers'>{$torrent['leechers']}</a>";
+    $year = "<a href='{$config->get('paths.baseurl')}/browse.php?sys={$torrent['year']}&amp;sye={$torrent['year']}'>{$torrent['year']}</a>";
     $body .= "
                 <div class='masonry-item padding10 bg-04 round10'>
                     <div class='columns'>
@@ -166,7 +168,7 @@ $body .= '
         </div>';
 
 $HTMLOUT .= main_div("
-            <form id='test1' method='get' action='{$site_config['paths']['baseurl']}/tmovies.php' enctype='multipart/form-data' accept-charset='utf-8'>
+            <form id='test1' method='get' action='{$config->get('paths.baseurl')}/tmovies.php' enctype='multipart/form-data' accept-charset='utf-8'>
                 <div class='padding20'>
                     <div class='padding10 w-100'>
                         <div class='columns'>
@@ -210,7 +212,7 @@ $HTMLOUT .= "<div class='top20'>" . ($count > $perpage ? $pager['pagertop'] : ''
 
 $title = _('Search TV Shows');
 $breadcrumbs = [
-    "<a href='{$site_config['paths']['baseurl']}/browse.php'>" . _('Browse Torrents') . '</a>',
+    "<a href='{$config->get('paths.baseurl')}/browse.php'>" . _('Browse Torrents') . '</a>',
     "<a href='{$_SERVER['PHP_SELF']}'>$title</a>",
 ];
 echo stdhead($title, [], 'page-wrapper', $breadcrumbs) . wrapper($HTMLOUT) . stdfoot();
