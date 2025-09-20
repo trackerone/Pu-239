@@ -1,6 +1,6 @@
 <?php
 declare(strict_types=1);
-require_once dirname(__DIR__, 2) . '/bootstrap_web.php';
+require_once dirname(__DIR__) . '/bootstrap_web.php';
 
 use Pu239\Database;
 use Pu239\Cache;

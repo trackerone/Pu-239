@@ -1,16 +1,12 @@
 #!/usr/bin/env php
 <?php
 declare(strict_types=1);
+require_once dirname(__DIR__) . '/bootstrap_cli.php';
 
 use Monolog\Logger;
 use Pu239\Uglify\UglifyService;
 
-require_once dirname(__DIR__) . '/bootstrap.php';
 
-if (PHP_SAPI !== 'cli') {
-    fwrite(STDERR, "This script must be run from CLI.\n");
-    exit(1);
-}
 
 # NOTE: set executable bit via git attributes/PR; online editor may not persist chmod.
 
