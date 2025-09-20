@@ -2,6 +2,7 @@
 declare(strict_types=1);
 require_once dirname(__DIR__) . '/bootstrap_web.php';
 
+use PU239\Config\ConfigRepository;
 use Pu239\Cache;
 use Pu239\Database;
 use Pu239\Message;
@@ -10,7 +11,9 @@ use Pu239\Session;
 use Pu239\User;
 
 
-global $container, $site_config, $CURUSER;
+global $container, $CURUSER;
+/** @var ConfigRepository $config */
+$config = $container->get(ConfigRepository::class);
 
 $db      = $container->get(Database::class);
 $session = $container->get(Session::class);
@@ -69,8 +72,8 @@ if ($action === 'takeappdelete') {
 
     $note = htmlsafechars($_POST['note']);
     $subject = _('Uploader Promotion');
-    $msg = _fe('Congratulations, your uploader application has been accepted! You have been given  to Uploader Role and you are now able to upload torrents. Please make sure you have read the {0}guidelines on uploading{1} before you do.', "[url={$site_config['paths']['baseurl']}/rules.php]", '[/url]') . "\n\n" . _('Note: ') . " $note";
-    $msg1 = '' . _('User') . " [url={$site_config['paths']['baseurl']}/userdetails.php?id=" . (int) $arr['uid'] . "][b]{$arr['username']}[/b][/url] " . _('has been promoted to Uploader by') . " {$CURUSER['username']}.";
+    $msg = _fe('Congratulations, your uploader application has been accepted! You have been given  to Uploader Role and you are now able to upload torrents. Please make sure you have read the {0}guidelines on uploading{1} before you do.', "[url={$config->get('paths.baseurl')}/rules.php]", '[/url]') . "\n\n" . _('Note: ') . " $note";
+    $msg1 = '' . _('User') . " [url={$config->get('paths.baseurl')}/userdetails.php?id=" . (int) $arr['uid'] . "][b]{$arr['username']}[/b][/url] " . _('has been promoted to Uploader by') . " {$CURUSER['username']}.";
     $modcomment = get_date((int) $dt, 'DATE', 1) . ' - ' . _fe("Promoted to 'Uploader' by {0}.", $CURUSER['username']) . ($arr['modcomment'] != '' ? "\n" : '') . "{$arr['modcomment']}";
     $update = [
         'status' => 'accepted',
@@ -94,7 +97,7 @@ $db->perform($sql, array_merge($update, ['id' => $id]));
         'msg' => $msg,
         'subject' => $subject,
     ];
-    foreach ($site_config['is_staff'] as $staff) {
+    foreach ((array) $config->get('is_staff') as $staff) {
         $msgs_buffer[] = [
             'poster' => $CURUSER['id'],
             'receiver' => $staff,
@@ -147,7 +150,7 @@ $db->perform($sql, array_merge($update, ['id' => $id]));
 
 if ($action === 'app' || $action === 'show') {
     if ($action === 'show') {
-        $hide = "<a href='{$site_config['paths']['baseurl']}/staffpanel.php?tool=uploadapps&amp;action=app'>" . _('Hide accepted/rejected') . '</a>';
+        $hide = "<a href='{$config->get('paths.baseurl')}/staffpanel.php?tool=uploadapps&amp;action=app'>" . _('Hide accepted/rejected') . '</a>';
         $res = $fluent->from('uploadapp AS a')
                       ->select('u.uploaded')
                       ->select('u.downloaded')
@@ -157,7 +160,7 @@ if ($action === 'app' || $action === 'show') {
                       ->where('a.status != "pending"')
                       ->fetchAll();
     } else {
-        $hide = "<a href='{$site_config['paths']['baseurl']}/staffpanel.php?tool=uploadapps&amp;action=show'>" . _('Show accepted/rejected') . '</a>';
+        $hide = "<a href='{$config->get('paths.baseurl')}/staffpanel.php?tool=uploadapps&amp;action=show'>" . _('Show accepted/rejected') . '</a>';
         $res = $fluent->from('uploadapp AS a')
                       ->select('u.uploaded')
                       ->select('u.downloaded')
@@ -170,7 +173,7 @@ if ($action === 'app' || $action === 'show') {
 
     $count = count($res);
     $perpage = 15;
-    $pager = pager($perpage, $count, $site_config['paths']['baseurl'] . '/staffpanel.php?tool=uploadapps&amp;');
+    $pager = pager($perpage, $count, $config->get('paths.baseurl') . '/staffpanel.php?tool=uploadapps&amp;');
     $HTMLOUT .= "
         <div class='bottom20'>
             <ul class='level-center bg-06'>
@@ -212,7 +215,7 @@ if ($action === 'app' || $action === 'show') {
             $body .= "
             <tr>
                 <td>{$elapsed}</td>
-                <td><a href='{$site_config['paths']['baseurl']}/staffpanel.php?tool=uploadapps&amp;action=viewapp&amp;id=" . (int) $arr['id'] . "'>" . _('View application') . '</a></td>
+                <td><a href='{$config->get('paths.baseurl')}/staffpanel.php?tool=uploadapps&amp;action=viewapp&amp;id=" . (int) $arr['id'] . "'>" . _('View application') . '</a></td>
                 <td>' . format_username((int) $arr['userid']) . "</td>
                 <td>{$membertime}</td>
                 <td>" . get_user_class_name((int) $arr['class']) . '</td>
@@ -259,7 +262,7 @@ if ($action === 'app' || $action === 'show') {
         <tr>
             <td>' . _('My upload amount is') . '</td>
             <td>' . htmlsafechars(mksize($arr['uploaded'])) . '</td>
-        </tr>' . ($site_config['site']['ratio_free'] ? '' : '
+        </tr>' . ($config->get('site.ratio_free') ? '' : '
         <tr>
             <td>' . _('My download amount is') . '</td>
             <td>' . htmlsafechars(mksize($arr['downloaded'])) . '</td>
@@ -344,14 +347,14 @@ if ($action === 'app' || $action === 'show') {
             </td>
         </tr>
         <div>
-            <a href='{$site_config['paths']['baseurl']}/staffpanel.php?tool=uploadapps&amp;action=app'>" . _('Return to uploader applications page') . '</a>
+            <a href='{$config->get('paths.baseurl')}/staffpanel.php?tool=uploadapps&amp;action=app'>" . _('Return to uploader applications page') . '</a>
         </div>';
         $HTMLOUT .= main_table($table);
     }
 }
 $title = _('Uploader Application');
 $breadcrumbs = [
-    "<a href='{$site_config['paths']['baseurl']}/staffpanel.php'>" . _('Staff Panel') . '</a>',
+    "<a href='{$config->get('paths.baseurl')}/staffpanel.php'>" . _('Staff Panel') . '</a>',
     "<a href='{$_SERVER['PHP_SELF']}'>$title</a>",
 ];
 echo stdhead($title, [], 'page-wrapper', $breadcrumbs) . wrapper($HTMLOUT) . stdfoot();

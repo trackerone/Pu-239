@@ -2,17 +2,18 @@
 declare(strict_types=1);
 require_once dirname(__DIR__) . '/bootstrap_web.php';
 
-$db = $container->get(Database::class);
-
-
-
-
+use PU239\Config\ConfigRepository;
+use Pu239\Database;
 use Pu239\Nfo2Png;
 use Pu239\Torrent;
 
+global $container;
+/** @var ConfigRepository $config */
+$config = $container->get(ConfigRepository::class);
+$db = $container->get(Database::class);
+
 require_once __DIR__ . '/../include/bittorrent.php';
 $user = check_user_status();
-global $container, $site_config;
 
 $id = (int) $_GET['id'];
 if ($user['class'] === UC_MIN) {
@@ -31,15 +32,15 @@ if (empty($nfo) || empty($nfo['nfo'])) {
 }
 
 $HTMLOUT = "
-        <h1 class='has-text-centered'>" . _('NFO for') . " <a href='{$site_config['paths']['baseurl']}/details.php?id=$id'>" . format_comment($nfo['name']) . '</a></h1>';
+        <h1 class='has-text-centered'>" . _('NFO for') . " <a href='{$config->get('paths.baseurl')}/details.php?id=$id'>" . format_comment($nfo['name']) . '</a></h1>';
 
-if ($site_config['nfo']['as_image']) {
+if ((bool) $config->get('nfo.as_image')) {
     $nfo2png = $container->get(Nfo2Png::class);
     $image = $nfo2png->nfo2png_ttf($nfo['nfo'], $nfo['id'], '000', '0f0');
     if (!empty($image)) {
         $HTMLOUT .= main_div("
         <div class='has-text-centered w-50 min-600'>
-            <img src='{$site_config['paths']['nfos_baseurl']}$image' alt='{$nfo['name']}' class='round10 w-100 top20 bottom20'>
+            <img src='{$config->get('paths.nfos_baseurl')}$image' alt='{$nfo['name']}' class='round10 w-100 top20 bottom20'>
         </div>");
     }
 }

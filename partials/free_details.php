@@ -2,16 +2,19 @@
 declare(strict_types=1);
 require_once __DIR__ . '/../include/runtime_safe.php';
 require_once __DIR__ . '/../include/bootstrap_pdo.php';
+use PU239\Config\ConfigRepository;
 use Pu239\Database;
 global $container;
+/** @var ConfigRepository $config */
+$config = $container->get(ConfigRepository::class);
 $db = $container->get(Database::class);
 
-global $site_config, $CURUSER;
+global $CURUSER;
 
 $is = $fl = '';
 $isfree['yep'] = $isfree['expires'] = 0;
-$freeimg = '<img src="' . $site_config['paths']['images_baseurl'] . 'freedownload.gif" alt="Free download" class="tooltipper icon" title="Free download">';
-$silverimg = '<img src="' . $site_config['paths']['images_baseurl'] . 'silverdownload.gif" alt="Silver Torrent" class="tooltipper icon" title="Silver Torrent">';
+$freeimg = '<img src="' . (string) $config->get('paths.images_baseurl') . 'freedownload.gif" alt="Free download" class="tooltipper icon" title="Free download">';
+$silverimg = '<img src="' . (string) $config->get('paths.images_baseurl') . 'silverdownload.gif" alt="Silver Torrent" class="tooltipper icon" title="Silver Torrent">';
 $fl = [
     'modifier' => 0,
     'expires' => 0,

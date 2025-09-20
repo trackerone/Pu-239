@@ -4,10 +4,12 @@ declare(strict_types=1);
 require_once __DIR__ . '/../../include/runtime_safe.php';
 require_once __DIR__ . '/../../include/bootstrap_pdo.php';
 
+use PU239\Config\ConfigRepository;
 use Pu239\Database;
 
-global $container, $user, $site_config;
-
+global $container, $user;
+/** @var ConfigRepository $config */
+$config = $container->get(ConfigRepository::class);
 $db = $container->get(Database::class);
 
 /**
@@ -28,7 +30,7 @@ function calctime($val)
 }
 
 if ($user['onirc'] === 'yes') {
-    $ircbonus = (!empty($user['irctotal']) ? number_format($user['irctotal'] / $site_config['irc']['autoclean_interval'], 1) : '0.0');
+    $ircbonus = (!empty($user['irctotal']) ? number_format($user['irctotal'] / $config->get('irc.autoclean_interval'), 1) : '0.0');
     $HTMLOUT .= "<tr><td class='rowhead'>" . _('Irc Bonus') . "</td><td>{$ircbonus}</td></tr>";
     $irctotal = (!empty($user['irctotal']) ? calctime($user['irctotal']) : htmlsafechars($user['username']) . _(' has never been on IRC!'));
     $HTMLOUT .= "<tr><td class='rowhead'>" . _('Irc Idle Time') . "</td><td>{$irctotal}</td></tr>";

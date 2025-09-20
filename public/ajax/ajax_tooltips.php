@@ -1,17 +1,26 @@
 <?php
-
 declare(strict_types=1);
 
+use PU239\Config\ConfigRepository;
 use Pu239\Database;
 use Pu239\Peer;
 
 require_once dirname(__DIR__) . '/bootstrap_web.php';
 
+$baseurl = '';
+$images_baseurl = '';
+$ratio_free = false;
+global $container;
+/** @var ConfigRepository $config */
+$config = $container->get(ConfigRepository::class);
 $db = $container->get(Database::class);
 
 require_once __DIR__ . '/../../include/bittorrent.php';
 require_once CLASS_DIR . 'class_user_options_2.php';
 $user = check_user_status();
+$baseurl = (string) $config->get('paths.baseurl');
+$images_baseurl = (string) $config->get('paths.images_baseurl');
+$ratio_free = (bool) $config->get('site.ratio_free');
 
 header('Content-Type: application/json');
 if (!empty($user) && is_array($user)) {
@@ -23,11 +32,11 @@ if (!empty($user) && is_array($user)) {
     if (!empty($seed['conn'])) {
         switch ($seed['conn']) {
             case 1:
-                $connectable = "<img src='{$site_config['paths']['images_baseurl']}notcon.png' alt='" . _('Not Connectable') . "' class='tooltipper' title='" . _('Not Connectable') . "'>";
+                $connectable = "<img src='{$images_baseurl}notcon.png' alt='" . _('Not Connectable') . "' class='tooltipper' title='" . _('Not Connectable') . "'>";
                 break;
 
             case 2:
-                $connectable = "<img src='{$site_config['paths']['images_baseurl']}yescon.png' alt='" . _('Connectable') . "' class='tooltipper' title='" . _('Connectable') . "'>";
+                $connectable = "<img src='{$images_baseurl}yescon.png' alt='" . _('Connectable') . "' class='tooltipper' title='" . _('Connectable') . "'>";
                 break;
 
             default:
@@ -38,9 +47,9 @@ if (!empty($user) && is_array($user)) {
     }
 
     if ($user['override_class'] != 255) {
-        $usrclass = " <a href='{$site_config['paths']['baseurl']}/restoreclass.php' class='tooltipper' title='" . _('Restore Your User Class') . "'><b>" . get_user_class_name($user['override_class']) . '</b></a>';
+        $usrclass = " <a href='{$baseurl}/restoreclass.php' class='tooltipper' title='" . _('Restore Your User Class') . "'><b>" . get_user_class_name($user['override_class']) . '</b></a>';
     } elseif ($user['class'] >= UC_STAFF) {
-        $usrclass = " <a href='{$site_config['paths']['baseurl']}/setclass.php' class='tooltipper' title='" . _('Temporarily Change User Class') . "'><b>" . get_user_class_name($user['class']) . '</b></a>';
+        $usrclass = " <a href='{$baseurl}/setclass.php' class='tooltipper' title='" . _('Temporarily Change User Class') . "'><b>" . get_user_class_name($user['class']) . '</b></a>';
     } else {
         $usrclass = get_user_class_name($user['class']);
     }
@@ -59,15 +68,15 @@ if (!empty($user) && is_array($user)) {
 
     <span class='level is-marginless'>
         <span class='navbar-start'>" . _('Invites') . "</span>
-        <span><a href='{$site_config['paths']['baseurl']}/invite.php'>{$user['invites']}</a></span>
+        <span><a href='{$baseurl}/invite.php'>{$user['invites']}</a></span>
     </span>
     <span class='level is-marginless'>
         <span class='navbar-start'>" . _('Karma Store') . "</span>
-        <span><a href='{$site_config['paths']['baseurl']}/mybonus.php'>" . number_format((float) $user['seedbonus']) . "</a></span>
+        <span><a href='{$baseurl}/mybonus.php'>" . number_format((float) $user['seedbonus']) . "</a></span>
     </span>
     <span class='level is-marginless'>
         <span class='navbar-start'>" . _('Achievements') . "</span>
-        <span><a href='{$site_config['paths']['baseurl']}/achievementhistory.php?id={$user['id']}'>" . $user['achpoints'] . "</a></span>
+        <span><a href='{$baseurl}/achievementhistory.php?id={$user['id']}'>" . $user['achpoints'] . "</a></span>
     </span>
     <br>
     <span class='navbar-start' id='hide_html'>:: " . _('Torrent Stats') . "</span>
@@ -76,7 +85,7 @@ if (!empty($user) && is_array($user)) {
         <span>' . member_ratio($user['uploaded'], $user['downloaded']) . '</span>
     </span>';
 
-    if ($site_config['site']['ratio_free']) {
+    if ($ratio_free) {
         $StatusBar .= "
     <span class='level is-marginless'>
         <span class='navbar-start'>" . _('Uploaded') . "</span>
@@ -113,12 +122,12 @@ if (!empty($user) && is_array($user)) {
     <span class='navbar-start'>:: " . _('User Blocks') . "</span>
     <span class='level is-marginless'>
         <span class='navbar-start'>" . _('My Blocks') . "</span>
-        <span><a href='{$site_config['paths']['baseurl']}/user_blocks.php'>" . _('Click here') . '</a></span>' : '') . '
+        <span><a href='{$baseurl}/user_blocks.php'>" . _('Click here') . '</a></span>' : '') . '
     </span>
     ' . ($user['class'] >= UC_STAFF || $got_moods ? "
     <span class='level is-marginless'>
         <span class='navbar-start'>" . _('My Unlocks') . "</span>
-        <span><a href='{$site_config['paths']['baseurl']}/user_unlocks.php'>" . _('Click here') . '</a></span>' : '') . '
+        <span><a href='{$baseurl}/user_unlocks.php'>" . _('Click here') . '</a></span>' : '') . '
     </span>';
 
     echo json_encode($StatusBar);

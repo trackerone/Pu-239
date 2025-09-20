@@ -4,11 +4,14 @@ declare(strict_types=1);
 
 require_once dirname(__DIR__) . '/bootstrap.php';
 
+use PU239\Config\ConfigRepository;
 use Pu239\Database;
 use Pu239\Message;
 
 $user = check_user_status();
-global $container, $site_config;
+global $container;
+/** @var ConfigRepository $config */
+$config = $container->get(ConfigRepository::class);
 /** @var Database $db */
 $db = $container->get(Database::class);
 
@@ -38,7 +41,7 @@ $total_count = $message_class->get_total_count($user['id']);
 $filled = $total_count > 0 ? ($total_count / $maxbox) * 100 : 0;
 $mailbox_pic = get_percent_completed_image(round($filled), $maxpic);
 $num_messages = number_format($filled, 0);
-$link = $site_config['paths']['baseurl'] . '/messages.php?action=view_mailbox&amp;box=' . $mailbox . '&amp;order_by=' . $order_by . $desc_asc . '&amp;';
+$link = $config->get('paths.baseurl') . '/messages.php?action=view_mailbox&amp;box=' . $mailbox . '&amp;order_by=' . $order_by . $desc_asc . '&amp;';
 $count = $message_class->get_count($user['id'], $mailbox, false);
 $pager = pager($perpage, $count, $link);
 
@@ -52,7 +55,7 @@ $HTMLOUT .= "
             <span class='size_2'>" . _fe('[ {0}% full ]', $num_messages) . "</span>
          </div>
         <div class='margin20 has-text-centered'>$mailbox_pic</div>" . insertJumpTo($mailbox, $user['id']) . $other_box_info . ($count > $perpage ? $pager['pagertop'] : '') . "
-        <form action='{$site_config['paths']['baseurl']}/messages.php' method='post' name='checkme' enctype='multipart/form-data' accept-charset='utf-8'>
+        <form action='{$config->get('paths.baseurl')}/messages.php' method='post' name='checkme' enctype='multipart/form-data' accept-charset='utf-8'>
             <div class='table-wrapper'>
             <table class='table table-bordered table-striped top20'>
                 <thead>
@@ -62,15 +65,15 @@ $HTMLOUT .= "
                             Mailbox
                         </th>
                         <th class='min-150'>
-                            <a href='{$site_config['paths']['baseurl']}/messages.php?action=view_mailbox&amp;box={$mailbox}" . ($perpage == 20 ? '' : '&amp;perpage=' . $perpage) . ($perpage < $count ? '&amp;page=' . $page : '') . "&amp;order_by=subject{$desc_asc}#pm' class='tooltipper' title='" . _('order by subject ') . "{$desc_asc_2}'>" . _('Subject') . "
+                            <a href='{$config->get('paths.baseurl')}/messages.php?action=view_mailbox&amp;box={$mailbox}" . ($perpage == 20 ? '' : '&amp;perpage=' . $perpage) . ($perpage < $count ? '&amp;page=' . $page : '') . "&amp;order_by=subject{$desc_asc}#pm' class='tooltipper' title='" . _('order by subject ') . "{$desc_asc_2}'>" . _('Subject') . "
                             </a>
                         </th>
                         <th class='has-text-centered'>
-                            <a href='{$site_config['paths']['baseurl']}/messages.php?action=view_mailbox&amp;box={$mailbox}" . ($perpage == 20 ? '' : '&amp;perpage=' . $perpage) . ($perpage < $count ? '&amp;page=' . $page : '') . "&amp;order_by=username{$desc_asc}#pm' class='tooltipper' title='" . _('order by member name ') . "{$desc_asc_2}'>" . ($mailbox === $site_config['pm']['sent'] ? _('Sent to') : _('Sender')) . "
+                            <a href='{$config->get('paths.baseurl')}/messages.php?action=view_mailbox&amp;box={$mailbox}" . ($perpage == 20 ? '' : '&amp;perpage=' . $perpage) . ($perpage < $count ? '&amp;page=' . $page : '') . "&amp;order_by=username{$desc_asc}#pm' class='tooltipper' title='" . _('order by member name ') . "{$desc_asc_2}'>" . ($mailbox === $config->get('pm.sent') ? _('Sent to') : _('Sender')) . "
                             </a>
                         </th>
                         <th class='has-text-centered'>
-                            <a href='{$site_config['paths']['baseurl']}/messages.php?action=view_mailbox&amp;box={$mailbox}" . ($perpage == 20 ? '' : '&amp;perpage=' . $perpage) . ($perpage < $count ? '&amp;page=' . $page : '') . "&amp;order_by=added{$desc_asc}#pm' class='tooltipper' title='" . _('order by date') . " {$desc_asc_2}'>" . _('Date') . "
+                            <a href='{$config->get('paths.baseurl')}/messages.php?action=view_mailbox&amp;box={$mailbox}" . ($perpage == 20 ? '' : '&amp;perpage=' . $perpage) . ($perpage < $count ? '&amp;page=' . $page : '') . "&amp;order_by=added{$desc_asc}#pm' class='tooltipper' title='" . _('order by date') . " {$desc_asc_2}'>" . _('Date') . "
                             </a>
                         </th>
                         <th class='has-text-centered w-1'><input type='checkbox' id='checkThemAll' class='tooltipper' title='Select All'></th>
@@ -86,38 +89,38 @@ if (empty($messages)) {
         </tr>";
 } else {
     foreach ($messages as $row) {
-        if ($mailbox === $site_config['pm']['drafts'] || $row['id'] === 0 || $row['sender'] === $user['id'] || $row['poster'] === $user['id']) {
+        if ($mailbox === $config->get('pm.drafts') || $row['id'] === 0 || $row['sender'] === $user['id'] || $row['poster'] === $user['id']) {
             $friends = '';
         } else {
             if ($row['friend'] > 0) {
                 $friends = '
-                    <a href="' . $site_config['paths']['baseurl'] . '/friends.php?action=delete&amp;type=friend&amp;targetid=' . $row['id'] . '">
+                    <a href="' . $config->get('paths.baseurl') . '/friends.php?action=delete&amp;type=friend&amp;targetid=' . $row['id'] . '">
                         <small><i class="icon-minus has-text-danger tooltipper" title="' . _('remove from friends') . '"></i></small>
                     </a>';
             } elseif ($row['blocked'] > 0) {
                 $friends = '
-                    <a href="' . $site_config['paths']['baseurl'] . '/friends.php?action=delete&amp;type=block&amp;targetid=' . $row['id'] . '">
+                    <a href="' . $config->get('paths.baseurl') . '/friends.php?action=delete&amp;type=block&amp;targetid=' . $row['id'] . '">
                         <small><i class="icon-minus has-text-danger tooltipper" title="' . _('remove from blocks') . '"></i></small>
                     </a>';
             } else {
                 $friends = '
-                    <a href="' . $site_config['paths']['baseurl'] . '/friends.php?action=add&amp;type=friend&amp;targetid=' . $row['id'] . '">
+                    <a href="' . $config->get('paths.baseurl') . '/friends.php?action=add&amp;type=friend&amp;targetid=' . $row['id'] . '">
                         <small><i class="icon-user-plus icon has-text-success tooltipper" title="' . _('add to friends') . '"></i></small>
                     </a>
-                    <a href="' . $site_config['paths']['baseurl'] . '/friends.php?action=add&amp;type=block&amp;targetid=' . $row['id'] . '">
+                    <a href="' . $config->get('paths.baseurl') . '/friends.php?action=add&amp;type=block&amp;targetid=' . $row['id'] . '">
                         <small><i class="icon-user-times icon has-text-danger tooltipper" title="' . _('add to blocks') . '"></i></small>
                     </a>';
             }
         }
         $subject = !empty($row['subject']) ? format_comment($row['subject']) : _('No Subject');
         $who_sent_it = $row['id'] === 0 || $row['id'] === 2 ? '<span style="font-weight: bold;">' . _('System') . '</span>' : format_username((int) $row['id']) . $friends;
-        $read_unread = $row['unread'] === 'yes' ? '<img src="' . $site_config['paths']['images_baseurl'] . 'pn_inboxnew.gif" title="' . _('Unread Message') . '" alt="' . _('Unread') . '">' : '<img src="' . $site_config['paths']['images_baseurl'] . 'pn_inbox.gif" title="' . _('Read Message') . '" alt="' . _('Read') . '">';
+        $read_unread = $row['unread'] === 'yes' ? '<img src="' . $config->get('paths.images_baseurl') . 'pn_inboxnew.gif" title="' . _('Unread Message') . '" alt="' . _('Unread') . '">' : '<img src="' . $config->get('paths.images_baseurl') . 'pn_inbox.gif" title="' . _('Read Message') . '" alt="' . _('Read') . '">';
         $extra = ($row['unread'] === 'yes' ? '[ <span style="color: red;">' . _('Unread') . '</span> ]' : '') . ($row['urgent'] === 'yes' ? '<span style="color: red;">' . _('URGENT!') . '</span>' : '');
         $avatar = $show_pm_avatar ? get_avatar($row) : '';
         $HTMLOUT .= '
                 <tr>
                     <td class="has-text-centered">' . $read_unread . '</td>
-                    <td class="min-350"><a class="is-link"  href="' . $site_config['paths']['baseurl'] . '/messages.php?action=view_message&amp;id=' . $row['message_id'] . '">' . $subject . '</a> ' . $extra . '</td>
+                    <td class="min-350"><a class="is-link"  href="' . $config->get('paths.baseurl') . '/messages.php?action=view_message&amp;id=' . $row['message_id'] . '">' . $subject . '</a> ' . $extra . '</td>
                     <td class="has-text-centered w-15 mw-150">' . $avatar . $who_sent_it . ($user['class'] >= UC_STAFF && $row['sender'] == 0 && $row['poster'] != 0 && $row['poster'] != $user['id'] ? ' [' . format_username((int) $row['poster']) . ']' : '') . '</td>
                     <td class="has-text-centered w-15 mw-150">' . get_date((int) $row['added'], '') . '</td>
                     <td class="has-text-centered">
@@ -127,7 +130,7 @@ if (empty($messages)) {
     }
 }
 
-$per_page_drop_down = '<form action="' . $site_config['paths']['baseurl'] . '/messages.php" method="post"><select name="amount_per_page" onchange\"location=this.options[this.selectedIndex].value;\" accept-charset="utf-8">';
+$per_page_drop_down = '<form action="' . $config->get('paths.baseurl') . '/messages.php" method="post"><select name="amount_per_page" onchange\"location=this.options[this.selectedIndex].value;\" accept-charset="utf-8">';
 $i = 20;
 while ($i <= ($maxbox > 200 ? 200 : $maxbox)) {
     $per_page_drop_down .= '<option class="body" value="' . $link . '&amp;change_pm_number=' . $i . '"  ' . ($user['pms_per_page'] == $i ? ' selected' : '') . '>' . $i . _(' PMs per page') . '</option>';
@@ -155,8 +158,8 @@ $HTMLOUT .= (!empty($messages) ? "
     <tr>
         <td colspan='5'>
             <div class='level-center'>
-                <span><img src='{$site_config['paths']['images_baseurl']}pn_inboxnew.gif' title='" . _('Unread Message') . "' alt='" . _('Unread') . "'>" . _(' Unread Messages.') . "</span>
-                <span><img src='{$site_config['paths']['images_baseurl']}pn_inbox.gif' title='" . _('Read Message') . "' alt='" . _('Read') . "'>'" . _(' Read Messages.') . "</span>
+                <span><img src='{$config->get('paths.images_baseurl')}pn_inboxnew.gif' title='" . _('Unread Message') . "' alt='" . _('Unread') . "'>" . _(' Unread Messages.') . "</span>
+                <span><img src='{$config->get('paths.images_baseurl')}pn_inbox.gif' title='" . _('Read Message') . "' alt='" . _('Read') . "'>'" . _(' Read Messages.') . "</span>
                 {$per_page_drop_down}
                 {$show_pm_avatar_drop_down}
             </div>
@@ -167,6 +170,6 @@ $HTMLOUT .= (!empty($messages) ? "
         ' . ($count > $perpage ? $pager['pagerbottom'] . '<br>' : '') . '
     </form>';
 $breadcrumbs = [
-    "<a href='{$site_config['paths']['baseurl']}/messages.php'>" . _('Private Messages') . '</a>',
-    "<a href='{$site_config['paths']['baseurl']}/messages.php'>{$mailbox_name}</a>",
+    "<a href='{$config->get('paths.baseurl')}/messages.php'>" . _('Private Messages') . '</a>',
+    "<a href='{$config->get('paths.baseurl')}/messages.php'>{$mailbox_name}</a>",
 ];

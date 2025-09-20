@@ -4,10 +4,13 @@ declare(strict_types=1);
 
 require_once dirname(__DIR__) . '/bootstrap.php';
 
+use PU239\Config\ConfigRepository;
 use Pu239\Database;
 
 $user = check_user_status();
-global $container, $site_config, $top_links, $mailbox, $HTMLOUT;
+global $container, $top_links, $mailbox, $HTMLOUT;
+/** @var ConfigRepository $config */
+$config = $container->get(ConfigRepository::class);
 /** @var Database $db */
 $db = $container->get(Database::class);
 
@@ -37,8 +40,8 @@ if ($search_performed) {
     if ($searchAllBoxes) {
         $conditions[] = '(m.receiver = :user_id OR m.sender = :user_id)';
     } else {
-        $sentBox = $site_config['pm']['sent'] ?? -1;
-        $inboxLocation = $site_config['pm']['inbox'] ?? 1;
+        $sentBox = $config->get('pm.sent') ?? -1;
+        $inboxLocation = $config->get('pm.inbox') ?? 1;
         if ($selected_box === $sentBox) {
             $conditions[] = 'm.sender = :user_id';
             $conditions[] = 'm.location = :sent_location';
@@ -68,7 +71,7 @@ if ($search_performed) {
             if ($searchAllBoxes) {
                 $conditions[] = '(m.sender = :member_id OR m.receiver = :member_id)';
             } else {
-                $sentBox = $site_config['pm']['sent'] ?? -1;
+                $sentBox = $config->get('pm.sent') ?? -1;
                 if ($selected_box === $sentBox) {
                     $conditions[] = 'm.receiver = :member_id';
                 } else {
@@ -120,7 +123,7 @@ if ($search_performed) {
     $results = $member_notice === '' ? $db->fetchAll($sql, $params) : [];
 }
 
-$form_action = $site_config['paths']['baseurl'] . '/messages.php?action=search';
+$form_action = $config->get('paths.baseurl') . '/messages.php?action=search';
 $keyword_value = htmlsafechars($keywords);
 $subject_value = htmlsafechars($subjectFilter);
 $text_value = htmlsafechars($textFilter);
@@ -228,7 +231,7 @@ if ($search_performed) {
                 <tbody>";
         foreach ($results as $row) {
             $subject_text = $row['subject'] !== '' ? htmlsafechars($row['subject']) : _('No Subject');
-            $view_url = $site_config['paths']['baseurl'] . '/messages.php?action=view_message&id=' . (int) $row['id'];
+            $view_url = $config->get('paths.baseurl') . '/messages.php?action=view_message&id=' . (int) $row['id'];
             $from_display = (int) $row['sender'] === 0 ? _('System') : format_username((int) $row['sender']);
             $to_display = (int) $row['receiver'] === 0 ? _('System') : format_username((int) $row['receiver']);
             $date_display = get_date((int) $row['added'], '');

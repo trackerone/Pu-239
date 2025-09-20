@@ -1,0 +1,6 @@
+offset=0,batch_size=50,processed=3,replacements=0
+offset=50,batch_size=50,processed=50,replacements=577
+offset=100,batch_size=25,processed=25,replacements=149
+offset=125,batch_size=25,processed=0,replacements=0
+offset=150,batch_size=10,processed=0,replacements=0
+offset=160,batch_size=10,processed=9,replacements=31

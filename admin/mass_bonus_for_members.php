@@ -2,13 +2,15 @@
 declare(strict_types=1);
 require_once dirname(__DIR__) . '/bootstrap_web.php';
 
+use PU239\Config\ConfigRepository;
 use Pu239\Database;
 use Pu239\Message;
 use Pu239\User;
 
 
-global $container, $site_config, $CURUSER;
-
+global $container, $CURUSER;
+/** @var ConfigRepository $config */
+$config = $container->get(ConfigRepository::class);
 /** @var Database $db */
 $db = $container->get(Database::class);
 /** @var User $users_class */
@@ -338,7 +340,7 @@ $h1_thingie .= (isset($_GET['freeslots']) && (int) $_GET['freeslots'] === 1) ? '
 $h1_thingie .= (isset($_GET['invites']) && (int) $_GET['invites'] === 1) ? '<h2>' . _('Bonus invites added to selected member classes') . '</h2>' : '';
 $h1_thingie .= (isset($_GET['pm']) && (int) $_GET['pm'] === 1) ? '<h2>' . _('Mass pm sent to selected member classes') . '</h2>' : '';
 
-$HTMLOUT .= '<h1 class="has-text-centered">' . $site_config['site']['name'] . ' ' . _('Mass Bonus') . '</h1>' . $h1_thingie;
+$HTMLOUT .= '<h1 class="has-text-centered">' . $config->get('site.name') . ' ' . _('Mass Bonus') . '</h1>' . $h1_thingie;
 $HTMLOUT .= '
     <form name="inputform" method="post" action="' . $_SERVER['PHP_SELF'] . '?tool=mass_bonus_for_members&amp;action=mass_bonus_for_members" enctype="multipart/form-data" accept-charset="utf-8">';
 
@@ -376,7 +378,7 @@ $HTMLOUT .= main_table($body_html) . '
 
 $title = _('Bonus Manager');
 $breadcrumbs = [
-    "<a href='{$site_config['paths']['baseurl']}/staffpanel.php'>" . _('Staff Panel') . '</a>',
+    "<a href='{$config->get('paths.baseurl')}/staffpanel.php'>" . _('Staff Panel') . '</a>',
     "<a href='{$_SERVER['PHP_SELF']}'>$title</a>",
 ];
 echo stdhead($title, $stdhead, 'page-wrapper', $breadcrumbs) . wrapper($HTMLOUT) . stdfoot($stdfoot);

@@ -2,6 +2,7 @@
 declare(strict_types=1);
 require_once dirname(__DIR__) . '/bootstrap_web.php';
 
+use PU239\Config\ConfigRepository;
 use Pu239\Ban;
 use Pu239\Database;
 use Pu239\IP;
@@ -11,8 +12,9 @@ require_once INCL_DIR . 'geoip.inc';
 require_once INCL_DIR . 'geoipcity.inc';
 require_once INCL_DIR . 'geoipregionvars.php';
 
-global $container, $site_config, $CURUSER;
-
+global $container, $CURUSER;
+/** @var ConfigRepository $config */
+$config = $container->get(ConfigRepository::class);
 $db = $container->get(Database::class);
 
 $class = get_access(basename($_SERVER['REQUEST_URI']));
@@ -78,12 +80,12 @@ foreach ($resip as $iphistory) {
     $count = $bans_class->get_count($iphistory['ip']);
     if ($count === 0) {
         if ($ipcount > 1) {
-            $ipshow = "<b><a class='is-link' href='{$site_config['paths']['baseurl']}/staffpanel.php?tool=ipsearch&amp;action=ipsearch&amp;ip=" . htmlsafechars($iphistory['ip']) . "'><span class='has-text-success'>" . htmlsafechars($iphistory['ip']) . ' </span></a></b>';
+            $ipshow = "<b><a class='is-link' href='{$config->get('paths.baseurl')}/staffpanel.php?tool=ipsearch&amp;action=ipsearch&amp;ip=" . htmlsafechars($iphistory['ip']) . "'><span class='has-text-success'>" . htmlsafechars($iphistory['ip']) . ' </span></a></b>';
         } else {
-            $ipshow = "<a class='is-link' href='{$site_config['paths']['baseurl']}/staffpanel.php?tool=ipsearch&amp;action=ipsearch&amp;ip=" . htmlsafechars($iphistory['ip']) . "'><b><span class='is-blue'>" . htmlsafechars($iphistory['ip']) . ' </span></b></a>';
+            $ipshow = "<a class='is-link' href='{$config->get('paths.baseurl')}/staffpanel.php?tool=ipsearch&amp;action=ipsearch&amp;ip=" . htmlsafechars($iphistory['ip']) . "'><b><span class='is-blue'>" . htmlsafechars($iphistory['ip']) . ' </span></b></a>';
         }
     } else {
-        $ipshow = "<a class='is-link' href='{$site_config['paths']['baseurl']}/staffpanel.php?tool=testip&amp;action=testip&amp;ip=" . htmlsafechars($iphistory['ip']) . "'><span class='has-text-danger'><b>" . htmlsafechars($iphistory['ip']) . ' </b></span></a>';
+        $ipshow = "<a class='is-link' href='{$config->get('paths.baseurl')}/staffpanel.php?tool=testip&amp;action=testip&amp;ip=" . htmlsafechars($iphistory['ip']) . "'><span class='has-text-danger'><b>" . htmlsafechars($iphistory['ip']) . ' </b></span></a>';
     }
     // User IP listed for GeoIP tracing
     $gi = geoip_open(ROOT_DIR . 'GeoIP' . DIRECTORY_SEPARATOR . 'GeoIP.dat', GEOIP_STANDARD);
@@ -105,8 +107,8 @@ foreach ($resip as $iphistory) {
             <td>$host</td>
             <td>$listcity, $listregion<br>$listcountry</td>
             <td>$iptype</td>
-            <td><a href='{$site_config['paths']['baseurl']}/staffpanel.php?tool=iphistory&amp;id=$id&amp;remove=" . urlencode($iphistory['ip']) . "&amp;type={$iptype}'><b>" . _('Delete') . "</b></a></td>
-            <td><a href='{$site_config['paths']['baseurl']}/staffpanel.php?tool=iphistory&amp;id=$id&amp;banthisuser=$username&amp;banthisip=$userip'><b>" . _('Ban') . '</b></a></td>
+            <td><a href='{$config->get('paths.baseurl')}/staffpanel.php?tool=iphistory&amp;id=$id&amp;remove=" . urlencode($iphistory['ip']) . "&amp;type={$iptype}'><b>" . _('Delete') . "</b></a></td>
+            <td><a href='{$config->get('paths.baseurl')}/staffpanel.php?tool=iphistory&amp;id=$id&amp;banthisuser=$username&amp;banthisip=$userip'><b>" . _('Ban') . '</b></a></td>
         </tr>';
 }
 
@@ -117,7 +119,7 @@ if (!empty($body)) {
 }
 $title = _('IP History');
 $breadcrumbs = [
-    "<a href='{$site_config['paths']['baseurl']}/staffpanel.php'>" . _('Staff Panel') . '</a>',
+    "<a href='{$config->get('paths.baseurl')}/staffpanel.php'>" . _('Staff Panel') . '</a>',
     "<a href='{$_SERVER['PHP_SELF']}'>$title</a>",
 ];
 echo stdhead($title, [], 'page-wrapper', $breadcrumbs) . wrapper($HTMLOUT) . stdfoot();

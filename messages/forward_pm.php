@@ -4,11 +4,14 @@ declare(strict_types=1);
 
 require_once dirname(__DIR__) . '/bootstrap.php';
 
+use PU239\Config\ConfigRepository;
 use Pu239\Database;
 use Pu239\Message;
 use Pu239\User;
 
-global $container, $CURUSER, $site_config;
+global $container, $CURUSER;
+/** @var ConfigRepository $config */
+$config = $container->get(ConfigRepository::class);
 /** @var Database $db */
 $db = $container->get(Database::class);
 
@@ -92,14 +95,14 @@ if (!$result) {
 
 if (strpos($to_user['notifs'], '[pm]') !== false) {
     $username = htmlsafechars($CURUSER['username']);
-    $title = $site_config['site']['name'];
+    $title = (string) $config->get('site.name');
     $body = doc_head("{$title} PM received") . '
 </head>
 <body>
 <p>' . _fe('You have received a PM from %s!', $username) . '</p>
 <p>' . _('You can use the URL below to view the message (you may have to login).') . "</p>
-<p>{$site_config['paths']['baseurl']}/messages.php</p>
-<p>--{$site_config['site']['name']}</p>
+<p>{$config->get('paths.baseurl')}/messages.php</p>
+<p>--{$config->get('site.name')}</p>
 </body>
 </html>";
 

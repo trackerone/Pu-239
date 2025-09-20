@@ -1,0 +1,88 @@
+chat/lib/class/AJAXChatTemplate.php: OK
+admin/datareset.php: OK
+blocks/userdetails/traffic.php: OK
+admin/mysql_overview.php: OK
+admin/log_viewer.php: OK
+public/faq.php: OK
+admin/load.php: OK
+blocks/userdetails/showfriends.php: OK
+admin/mass_bonus_for_members.php: OK
+blocks/userdetails/comments.php: OK
+admin/changelog.php: OK
+blocks/userdetails/shareratio.php: OK
+admin/promo.php: OK
+public/lottery.php: OK
+admin/watched_users.php: OK
+public/uploadapp.php: OK
+blocks/userdetails/invitedby.php: OK
+public/signup.php: OK
+blocks/userdetails/seedtimeratio.php: OK
+public/download_multi.php: OK
+admin/over_forums.php: OK
+public/hnrs.php: OK
+blocks/userdetails/forumposts.php: OK
+admin/adduser.php: OK
+public/bookmarks.php: OK
+blocks/userdetails/iphistory.php: OK
+admin/reputation_settings.php: OK
+public/tenpercent.php: OK
+admin/hit_and_run_settings.php: OK
+blocks/userdetails/contactinfo.php: OK
+public/bitbucket.php: OK
+admin/ipsearch.php: OK
+admin/doubleusers.php: OK
+blocks/userdetails/connectable.php: OK
+admin/editlog.php: OK
+blocks/userdetails/irc.php: OK
+public/index.php: OK
+blocks/userdetails/usercomments.php: OK
+admin/stats.php: OK
+public/tvshows.php: OK
+admin/reset.php: OK
+public/useragreement.php: OK
+admin/backup.php: OK
+public/report.php: OK
+admin/acpmanage.php: OK
+admin/donations.php: OK
+public/tmovies.php: OK
+public/rss.php: OK
+admin/stats_extra.php: OK
+admin/memcache.php: OK
+public/blackjack.php: OK
+No syntax errors detected in admin/upgrade_database.php
+No syntax errors detected in public/viewnfo.php
+No syntax errors detected in admin/manage_images.php
+No syntax errors detected in public/rules.php
+No syntax errors detected in admin/iphistory.php
+No syntax errors detected in public/bot_triggers.php
+No syntax errors detected in admin/traceroute.php
+No syntax errors detected in public/upcoming.php
+No syntax errors detected in admin/block.settings.php
+No syntax errors detected in admin/todo.php
+No syntax errors detected in public/userhistory.php
+No syntax errors detected in admin/referrers.php
+No syntax errors detected in admin/deathrow.php
+No syntax errors detected in admin/forum_manage.php
+No syntax errors detected in admin/invite_tree.php
+No syntax errors detected in messages/forward_pm.php
+No syntax errors detected in admin/usersearch.php
+No syntax errors detected in messages/view_mailbox.php
+No syntax errors detected in admin/uploadapps.php
+No syntax errors detected in messages/use_draft.php
+No syntax errors detected in messages/forward.php
+No syntax errors detected in messages/edit_mailboxes.php
+No syntax errors detected in messages/view_message.php
+No syntax errors detected in messages/delete.php
+No syntax errors detected in messages/search.php
+No syntax errors detected in include/stealth.php
+No syntax errors detected in messages/move.php
+No syntax errors detected in messages/move_or_delete_multi.php
+No syntax errors detected in messages/send_message.php
+No syntax errors detected in partials/categories.php
+No syntax errors detected in partials/free_details.php
+No syntax errors detected in public/achievementbonus.php
+No syntax errors detected in public/achievementhistory.php
+No syntax errors detected in public/achievementlist.php
+No syntax errors detected in public/ajax/ajax_tooltips.php
+No syntax errors detected in public/ajax/autocomplete.php
+No syntax errors detected in public/ajax/member_input.php

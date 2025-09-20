@@ -1,7 +1,7 @@
 <?php
-
 declare(strict_types=1);
 
+use PU239\Config\ConfigRepository;
 use Pu239\Achievement;
 use Pu239\Database;
 use Pu239\Post;
@@ -11,6 +11,11 @@ use Pu239\Usersachiev;
 
 require_once dirname(__DIR__) . '/bootstrap_web.php';
 
+$baseurl = '';
+$images_baseurl = '';
+global $container;
+/** @var ConfigRepository $config */
+$config = $container->get(ConfigRepository::class);
 $db = $container->get(Database::class);
 
 require_once __DIR__ . '/../include/bittorrent.php';
@@ -41,11 +46,13 @@ $count = (int) $achievement->get_achievements_count($id);
 $perpage = 15;
 $pager = pager($perpage, $count, "?id=$id&amp;");
 
+$baseurl = (string) $config->get('paths.baseurl');
+$images_baseurl = (string) $config->get('paths.images_baseurl');
 $HTMLOUT = "
     <div class='w-100'>
         <ul class='level-center bg-06'>
             <li class='is-link margin10'>
-                <a href='{$site_config['paths']['baseurl']}/achievementlist.php'>" . _('Achievements List') . '</a>
+                <a href='" . $baseurl . "/achievementlist.php'>" . _('Achievements List') . '</a>
             </li>
         </ul>
     </div>';
@@ -61,7 +68,7 @@ $HTMLOUT .= "
 if ($id === $user['id'] && $arr['achpoints'] > 0) {
     $HTMLOUT .= "
         <div>
-            <a href='{$site_config['paths']['baseurl']}/achievementbonus.php' class='button is-small bottom20 tooltipper' title='" . _('Trade your achievement points for random gifts.') . "'>" . _('Spend those Points') . '</a>
+            <a href='" . $baseurl . "/achievementbonus.php' class='button is-small bottom20 tooltipper' title='" . _('Trade your achievement points for random gifts.') . "'>" . _('Spend those Points') . '</a>
         </div>';
 }
 $HTMLOUT .= '
@@ -83,7 +90,7 @@ if ($count === 0) {
         $body .= "
                     <tr>
                         <td class='has-text-centered'>
-                            <img src='{$site_config['paths']['images_baseurl']}achievements/" . format_comment($arr['icon']) . "' alt='" . format_comment($arr['achievement']) . "' class='tooltipper icon' title='" . format_comment($arr['achievement']) . "'>
+                            <img src='" . $images_baseurl . "achievements/" . format_comment($arr['icon']) . "' alt='" . format_comment($arr['achievement']) . "' class='tooltipper icon' title='" . format_comment($arr['achievement']) . "'>
                         </td>
                         <td>" . format_comment($arr['description']) . '</td>
                         <td>' . get_date((int) $arr['date'], '') . '</td>
