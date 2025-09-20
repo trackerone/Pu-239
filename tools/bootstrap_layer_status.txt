@@ -1,0 +1,4 @@
+Web files requiring bootstrap_web.php: 225
+CLI files requiring bootstrap_cli.php: 17
+Include files without bootstrap requires: 67
+Timestamp: 2025-09-20T05:16:24Z UTC
