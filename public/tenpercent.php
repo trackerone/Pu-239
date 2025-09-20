@@ -2,13 +2,16 @@
 declare(strict_types=1);
 require_once dirname(__DIR__) . '/bootstrap_web.php';
 
+use PU239\Config\ConfigRepository;
 use Pu239\Cache;
 use Pu239\Database;
 use Pu239\Message;
 
 
 $user = check_user_status();
-global $container, $site_config;
+global $container;
+/** @var ConfigRepository $config */
+$config = $container->get(ConfigRepository::class);
 $db = $container->get(Database::class);
 $cache = $container->get(Cache::class);
 $message_class = $container->get(Message::class);
@@ -41,7 +44,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $cache->update_row('user_' . $user['id'], [
         'tenpercent' => 'yes',
         'uploaded' => $update['uploaded'],
-    ], $site_config['expires']['user_cache']);
+    ], $config->get('expires.user_cache'));
     $messages = [
         'receiver' => $user['id'],
         'added' => $dt,

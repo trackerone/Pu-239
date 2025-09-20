@@ -4,15 +4,17 @@ declare(strict_types=1);
 require_once __DIR__ . '/../../include/runtime_safe.php';
 require_once __DIR__ . '/../../include/bootstrap_pdo.php';
 
+use PU239\Config\ConfigRepository;
 use Pu239\Database;
 
-global $container, $CURUSER, $user, $site_config;
-
+global $container, $CURUSER, $user;
+/** @var ConfigRepository $config */
+$config = $container->get(ConfigRepository::class);
 $db = $container->get(Database::class);
 
 if ($user['paranoia'] < 2 || $CURUSER['id'] == $id || $CURUSER['class'] >= UC_STAFF) {
     $days = round((TIME_NOW - $user['registered']) / 86400);
-    if ($site_config['site']['ratio_free']) {
+    if ($config->get('site.ratio_free')) {
         $table_data .= "
         <tr>
             <td class='rowhead'>" . _('Happy days') . '</td>

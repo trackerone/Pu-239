@@ -2,6 +2,7 @@
 declare(strict_types=1);
 require_once dirname(__DIR__) . '/bootstrap_web.php';
 
+use PU239\Config\ConfigRepository;
 use Pu239\Cache;
 use Pu239\Database;
 use Pu239\Session;
@@ -10,8 +11,9 @@ use Rakit\Validation\Validator;
 
 
 
-global $container, $site_config;
-
+global $container;
+/** @var ConfigRepository $config */
+$config = $container->get(ConfigRepository::class);
 $db    = $container->get(Database::class);
 $cache = $container->get(Cache::class);
 
@@ -59,7 +61,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 $HTMLOUT = '
     <h1 class="has-text-centered">' . _('Add User') . '</h1>
-    <form method="post" action="' . $site_config['paths']['baseurl'] . '/staffpanel.php?tool=adduser&amp;action=adduser" accept-charset="utf-8">';
+    <form method="post" action="' . $config->get('paths.baseurl') . '/staffpanel.php?tool=adduser&amp;action=adduser" accept-charset="utf-8">';
 $body = "
         <div class='columns'>                    
             <div class='column is-one-quarter'>" . _('Username') . "</div>
@@ -72,7 +74,7 @@ $body = "
             <div class='column is-one-quarter'>" . _('Email') . "</div>
             <div class='column'>
                 <input type='email' name='email' id='email' class='w-100' onblur='check_email();' autocomplete='on' required>
-                <div id='emailcheck'></div>" . ($site_config['signup']['email_confirm'] ? "
+                <div id='emailcheck'></div>" . ($config->get('signup.email_confirm') ? "
                 <div class='alt_bordered top10 padding10'>" . _("The email address must be valid. You will receive a confirmation email which you need to respond to. The email address won't be publicly shown anywhere.") . '</div>' : '') . "
             </div>
         </div>
@@ -84,7 +86,7 @@ $body = "
 $HTMLOUT .= main_div($body, '', 'padding20');
 $title = _('Add User');
 $breadcrumbs = [
-    "<a href='{$site_config['paths']['baseurl']}/staffpanel.php'>" . _('Staff Panel') . '</a>',
+    "<a href='{$config->get('paths.baseurl')}/staffpanel.php'>" . _('Staff Panel') . '</a>',
     "<a href='{$_SERVER['PHP_SELF']}'>$title</a>",
 ];
 echo stdhead($title, [], 'page-wrapper', $breadcrumbs) . wrapper($HTMLOUT) . stdfoot($stdfoot);

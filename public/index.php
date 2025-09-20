@@ -8,6 +8,7 @@ $db = $container->get(Database::class);
 
 
 
+use PU239\Config\ConfigRepository;
 use Pu239\Message;
 use Pu239\PollVoter;
 use Pu239\Session;
@@ -32,22 +33,23 @@ if ((isset($_GET['act']) && $_GET['act'] === 'Arcade' && isset($_POST['gname']))
     include_once INCL_DIR . 'arcade.php';
 }
 $HTMLOUT = '';
-global $container, $site_config;
-
+global $container;
+/** @var ConfigRepository $config */
+$config = $container->get(ConfigRepository::class);
 $messages_class = $container->get(Message::class);
-$unread = $messages_class->get_count($user['id'], $site_config['pm']['inbox'], true);
+$unread = $messages_class->get_count($user['id'], $config->get('pm.inbox'), true);
 
 if ($unread >= 1) {
     $session = $container->get(Session::class);
     $session->set('is-link', [
         'message' => _pfe('You have {0} unread message in your inbox', 'You have {0} unread messages in your inbox', $unread),
-        'link' => "{$site_config['paths']['baseurl']}/messages.php",
+        'link' => "{$config->get('paths.baseurl')}/messages.php",
     ]);
 }
 
 $pollvoter_class = $container->get(PollVoter::class);
 $poll_data = $pollvoter_class->get_user_poll($user['id']);
-if ($site_config['poll']['forced'] && !empty($poll_data['pid']) && empty($poll_data['user_id'])) {
+if ($config->get('poll.forced') && !empty($poll_data['pid']) && empty($poll_data['user_id'])) {
     $stdfoot['js'] = array_merge($stdfoot['js'], [
         get_file_name('scroll_to_poll_js'),
     ]);
@@ -91,7 +93,7 @@ $right_column = [
 $christmas_gift = $posted_comments = $advertise = $active_users = $active_users_irc = $birthday_users = $active_users_24 = $forum_posts = $staffpicks = $disclaimer = $trivia = $glide = $ajaxchat = '';
 $tfreak_feed = $torrents_top = $site_stats = $site_poll = $site_news = $torrents_mow = $latest_user = $torrents_scroller = $latest_torrents = $latest_movies = $latest_tv = $cooker = $requests = $offers = '';
 $available_columns = array_merge($above_columns, $left_column, $center_column, $right_column, $below_columns);
-$remove_columns = $user['class'] < UC_STAFF ? $site_config['site']['staff_blocks'] : [];
+$remove_columns = $user['class'] < UC_STAFF ? $config->get('site.staff_blocks') : [];
 $torrents_class = $container->get(Torrent::class);
 $available_columns = $user['status'] === 0 ? array_diff($available_columns, $remove_columns) : [];
 $dir = BLOCK_DIR . 'index' . DIRECTORY_SEPARATOR;
@@ -260,7 +262,7 @@ if (in_array('torrents_mow', $available_columns) && $user['blocks']['index_page'
     $remove_columns[] = 'torrents_mow';
 }
 
-if (in_array('tfreak_feed', $available_columns) && $user['blocks']['index_page'] & class_blocks_index::TORRENTFREAK && $BLOCKS['torrentfreak_on'] && $site_config['newsrss']['tfreak']) {
+if (in_array('tfreak_feed', $available_columns) && $user['blocks']['index_page'] & class_blocks_index::TORRENTFREAK && $BLOCKS['torrentfreak_on'] && $config->get('newsrss.tfreak')) {
     include_once $dir . 'torrentfreak.php';
 } else {
     $remove_columns[] = 'tfreak_feed';
