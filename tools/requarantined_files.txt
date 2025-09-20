@@ -1,21 +1,5 @@
-file,rehydrated,re_quarantined,fixed_stray_config,function_includes_removed,notes,source_quarantine
-admin/class_promo.php,false,true,false,false,Re-quarantined corrupted file and installed runtime stub (source preserved at _quarantine/rebroken/admin/class_promo.php).,_quarantine/rebroken/admin/class_promo.php
-admin/comments.php,false,true,false,false,Re-quarantined corrupted file and installed runtime stub (source preserved at _quarantine/rebroken/admin/comments.php).,_quarantine/rebroken/admin/comments.php
-admin/reports.php,false,true,false,false,Re-quarantined corrupted file and installed runtime stub (source preserved at _quarantine/rebroken/admin/reports.php).,_quarantine/rebroken/admin/reports.php
-admin/sitelog.php,false,true,false,false,Re-quarantined incomplete migration stubbed for safety.,_quarantine/rebroken/admin/sitelog.php
-admin/system_view.php,false,true,false,false,Re-quarantined incomplete migration stubbed for safety.,_quarantine/rebroken/admin/system_view.php
-include/function_account_delete.php,false,true,false,false,Re-quarantined incomplete migration stubbed for safety.,_quarantine/rebroken/include/function_account_delete.php
-public/coins.php,false,true,false,false,Standardized modernization stub pending SQL restore.,_quarantine/rebroken/public/coins.php
-public/comment.php,false,true,false,false,Standardized modernization stub pending SQL restore.,_quarantine/rebroken/public/comment.php
-public/credits.php,false,true,false,false,Standardized modernization stub pending SQL restore.,_quarantine/rebroken/public/credits.php
-public/friends.php,false,true,false,false,Standardized modernization stub pending SQL restore.,_quarantine/rebroken/public/friends.php
-public/gift.php,false,true,false,false,Standardized modernization stub pending SQL restore.,_quarantine/rebroken/public/gift.php
-public/invite.php,false,true,false,false,Standardized modernization stub pending SQL restore.,_quarantine/rebroken/public/invite.php
-public/messages.php,false,true,false,false,Standardized modernization stub pending SQL restore.,_quarantine/rebroken/public/messages.php
-public/reputation.php,false,true,false,false,Standardized modernization stub pending SQL restore.,_quarantine/rebroken/public/reputation.php
-public/staffbox.php,false,true,false,false,Standardized modernization stub pending SQL restore.,_quarantine/rebroken/public/staffbox.php
-public/takeedit.php,false,true,false,false,Standardized modernization stub pending SQL restore.,_quarantine/rebroken/public/takeedit.php
-public/takeeditcp.php,false,true,false,false,Standardized modernization stub pending SQL restore.,_quarantine/rebroken/public/takeeditcp.php
-public/usercp.php,false,true,false,false,Standardized modernization stub pending SQL restore.,_quarantine/rebroken/public/usercp.php
-public/usermood.php,false,true,false,false,Standardized modernization stub pending SQL restore.,_quarantine/rebroken/public/usermood.php
-public/users.php,false,true,false,false,Re-quarantined corrupted file and installed runtime stub (source preserved at _quarantine/rebroken/public/users.php).,_quarantine/rebroken/public/users.php
+# Re-quarantined files (latest state from tools/autofix_manifest.csv)
+admin/class_promo.php -> _quarantine/rebroken/admin/class_promo.php
+admin/comments.php -> _quarantine/rebroken/admin/comments.php
+admin/reports.php -> _quarantine/rebroken/admin/reports.php
+public/users.php -> _quarantine/rebroken/public/users.php
