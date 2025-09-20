@@ -2,6 +2,14 @@ file,replaced,todos,notes
 chat/lib/class/AJAXChatTemplate.php,none,0,no legacy config usage detected
 chat/lib/template/loggedIn.html,none,0,no legacy config usage detected (template placeholder only)
 chat/lib/template/logs.html,none,0,no legacy config usage detected (template placeholder only)
+*** codex/refactor-legacy-config-to-configrepository-w5o2m3
+=======
+*** codex/refactor-legacy-config-to-configrepository-l20m0t
+=======
+*** codex/refactor-legacy-config-to-configrepository-xyf5zu
+=======
+*** master
+*** master
 admin/datareset.php,site_config(5),0,Replaced legacy config access with ConfigRepository
 blocks/userdetails/traffic.php,site_config(2),0,Replaced legacy config access with ConfigRepository
 admin/mysql_overview.php,site_config(3),0,Replaced legacy config access with ConfigRepository
@@ -52,6 +60,10 @@ public/rss.php,site_config(19),0,Replaced legacy config access with ConfigReposi
 admin/stats_extra.php,site_config(24),0,Replaced legacy config access with ConfigRepository
 admin/memcache.php,site_config(23),0,Replaced legacy config access with ConfigRepository
 public/blackjack.php,site_config(40),0,Replaced legacy config access with ConfigRepository
+*** codex/refactor-legacy-config-to-configrepository-w5o2m3
+=======
+*** codex/refactor-legacy-config-to-configrepository-l20m0t
+*** master
 admin/upgrade_database.php,site_config(3),0,Replaced legacy config access with ConfigRepository
 public/viewnfo.php,site_config(4),0,Replaced legacy config access with ConfigRepository
 admin/manage_images.php,site_config(4),0,Replaced legacy config access with ConfigRepository
@@ -77,3 +89,9 @@ messages/edit_mailboxes.php,site_config(5),0,Replaced legacy config access with 
 messages/view_message.php,site_config(20),0,Replaced legacy config access with ConfigRepository
 messages/delete.php,site_config(4),0,Replaced legacy config access with ConfigRepository
 messages/search.php,site_config(6),0,Replaced legacy config access with ConfigRepository
+*** codex/refactor-legacy-config-to-configrepository-w5o2m3
+=======
+=======
+*** master
+*** master
+*** master
