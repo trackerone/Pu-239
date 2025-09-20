@@ -1,0 +1,386 @@
+No syntax errors detected in admin/acpmanage.php
+No syntax errors detected in admin/adduser.php
+No syntax errors detected in admin/allagents.php
+No syntax errors detected in admin/backup.php
+No syntax errors detected in admin/banclient.php
+No syntax errors detected in admin/bannedemails.php
+No syntax errors detected in admin/bans.php
+No syntax errors detected in admin/block.settings.php
+No syntax errors detected in admin/bonusmanage.php
+No syntax errors detected in admin/categories.php
+No syntax errors detected in admin/changelog.php
+No syntax errors detected in admin/cheaters.php
+No syntax errors detected in admin/class_config.php
+
+Parse error: syntax error, unexpected identifier "name" in admin/class_promo.php on line 242
+Errors parsing admin/class_promo.php
+No syntax errors detected in admin/cleanup_manager.php
+No syntax errors detected in admin/cloudview.php
+
+Parse error: syntax error, unexpected identifier "allComments" in admin/comments.php on line 25
+Errors parsing admin/comments.php
+No syntax errors detected in admin/datareset.php
+No syntax errors detected in admin/deathrow.php
+No syntax errors detected in admin/delacct.php
+No syntax errors detected in admin/donations.php
+No syntax errors detected in admin/doubleusers.php
+No syntax errors detected in admin/edit_moods.php
+No syntax errors detected in admin/editlog.php
+No syntax errors detected in admin/findnotconnectable.php
+No syntax errors detected in admin/floodlimit.php
+No syntax errors detected in admin/flush.php
+No syntax errors detected in admin/forum_config.php
+No syntax errors detected in admin/forum_manage.php
+No syntax errors detected in admin/freeleech.php
+No syntax errors detected in admin/freeusers.php
+No syntax errors detected in admin/goaccess.php
+No syntax errors detected in admin/grouppm.php
+No syntax errors detected in admin/hit_and_run.php
+No syntax errors detected in admin/hit_and_run_settings.php
+No syntax errors detected in admin/hnrwarn.php
+No syntax errors detected in admin/inactive.php
+No syntax errors detected in admin/invite_tree.php
+No syntax errors detected in admin/ipcheck.php
+No syntax errors detected in admin/iphistory.php
+No syntax errors detected in admin/ipsearch.php
+No syntax errors detected in admin/leechwarn.php
+No syntax errors detected in admin/load.php
+No syntax errors detected in admin/log_viewer.php
+No syntax errors detected in admin/manage_images.php
+No syntax errors detected in admin/mass_bonus_for_members.php
+No syntax errors detected in admin/mega_search.php
+No syntax errors detected in admin/memcache.php
+No syntax errors detected in admin/modded_torrents.php
+No syntax errors detected in admin/modtask.php
+No syntax errors detected in admin/mysql_overview.php
+No syntax errors detected in admin/mysql_stats.php
+
+Parse error: syntax error, unexpected token "{", expecting ")" in admin/namechanger.php on line 30
+Errors parsing admin/namechanger.php
+No syntax errors detected in admin/news.php
+No syntax errors detected in admin/op.php
+No syntax errors detected in admin/over_forums.php
+No syntax errors detected in admin/polls_manager.php
+No syntax errors detected in admin/promo.php
+No syntax errors detected in admin/referrers.php
+
+Parse error: syntax error, unexpected end of file in admin/reports.php on line 120
+Errors parsing admin/reports.php
+
+Parse error: syntax error, unexpected token "else", expecting end of file in admin/reputation_ad.php on line 253
+Errors parsing admin/reputation_ad.php
+No syntax errors detected in admin/reputation_settings.php
+No syntax errors detected in admin/reset.php
+
+Parse error: syntax error, unexpected identifier "shit_list_", expecting ")" in admin/shit_list.php on line 41
+Errors parsing admin/shit_list.php
+No syntax errors detected in admin/site_settings.php
+
+Parse error: syntax error, unexpected identifier "SELECT", expecting ")" in admin/sitelog.php on line 27
+Errors parsing admin/sitelog.php
+No syntax errors detected in admin/snatched_torrents.php
+No syntax errors detected in admin/stats.php
+No syntax errors detected in admin/stats_extra.php
+No syntax errors detected in admin/sysoplog.php
+
+Parse error: syntax error, unexpected fully qualified name "\n", expecting ")" in admin/system_view.php on line 92
+Errors parsing admin/system_view.php
+No syntax errors detected in admin/themes.php
+No syntax errors detected in admin/todo.php
+No syntax errors detected in admin/traceroute.php
+No syntax errors detected in admin/trivia_config.php
+No syntax errors detected in admin/upgrade_database.php
+No syntax errors detected in admin/uploadapps.php
+No syntax errors detected in admin/uploader_info.php
+No syntax errors detected in admin/user_hits.php
+No syntax errors detected in admin/usersearch.php
+No syntax errors detected in admin/view_peers.php
+
+Parse error: syntax error, unexpected identifier "Hey", expecting ")" in admin/warn.php on line 55
+Errors parsing admin/warn.php
+No syntax errors detected in admin/watched_users.php
+No syntax errors detected in bin/clear_cache.php
+No syntax errors detected in bin/functions.php
+No syntax errors detected in bin/get_timestamp.php
+No syntax errors detected in bin/import_tables.php
+No syntax errors detected in bin/install.php
+No syntax errors detected in bin/jobby.php
+No syntax errors detected in bin/mysql_drop_fks.php
+No syntax errors detected in bin/optimize_resize_images.php
+No syntax errors detected in bin/remove_altered_images.php
+No syntax errors detected in bin/remove_torrents.php
+No syntax errors detected in bin/rename_image_hashes.php
+No syntax errors detected in bin/resize_multi_threads.php
+No syntax errors detected in bin/set_perms.php
+No syntax errors detected in bin/uglify.php
+No syntax errors detected in bin/update_db.php
+No syntax errors detected in bin/usersfix.php
+No syntax errors detected in bin/validate_images.php
+No syntax errors detected in include/DB.php
+No syntax errors detected in include/app.php
+No syntax errors detected in include/arcade.php
+No syntax errors detected in include/bittorrent.php
+No syntax errors detected in include/bootstrap_pdo.php
+No syntax errors detected in include/class/class.bencdec.php
+No syntax errors detected in include/class/class.chmod.php
+No syntax errors detected in include/class/class_blocks_apis.php
+No syntax errors detected in include/class/class_blocks_index.php
+No syntax errors detected in include/class/class_blocks_stdhead.php
+No syntax errors detected in include/class/class_blocks_userdetails.php
+No syntax errors detected in include/class/class_browser.php
+No syntax errors detected in include/class/class_check.php
+No syntax errors detected in include/class/class_user_options.php
+No syntax errors detected in include/class/class_user_options_2.php
+No syntax errors detected in include/config_compat.php
+No syntax errors detected in include/cron_controller.php
+No syntax errors detected in include/database.php
+No syntax errors detected in include/emoticons.php
+
+Parse error: Unclosed '(' on line 42 in include/function_account_delete.php on line 46
+Errors parsing include/function_account_delete.php
+No syntax errors detected in include/function_announce.php
+No syntax errors detected in include/function_async.php
+No syntax errors detected in include/function_autopost.php
+No syntax errors detected in include/function_bbcode.php
+No syntax errors detected in include/function_bemail.php
+No syntax errors detected in include/function_bitbucket.php
+No syntax errors detected in include/function_bluray.php
+No syntax errors detected in include/function_bonus.php
+No syntax errors detected in include/function_books.php
+No syntax errors detected in include/function_breadcrumbs.php
+No syntax errors detected in include/function_bt_client.php
+No syntax errors detected in include/function_categories.php
+No syntax errors detected in include/function_chatbot.php
+No syntax errors detected in include/function_comments.php
+No syntax errors detected in include/function_common.php
+No syntax errors detected in include/function_details.php
+No syntax errors detected in include/function_event.php
+No syntax errors detected in include/function_fanart.php
+No syntax errors detected in include/function_get_images.php
+No syntax errors detected in include/function_happyhour.php
+No syntax errors detected in include/function_html.php
+No syntax errors detected in include/function_imdb.php
+No syntax errors detected in include/function_ircbot.php
+No syntax errors detected in include/function_newsrss.php
+No syntax errors detected in include/function_onlinetime.php
+No syntax errors detected in include/function_pager.php
+No syntax errors detected in include/function_password.php
+No syntax errors detected in include/function_polls.php
+No syntax errors detected in include/function_rating.php
+No syntax errors detected in include/function_returnto.php
+No syntax errors detected in include/function_searchcloud.php
+No syntax errors detected in include/function_staff.php
+No syntax errors detected in include/function_tfreak.php
+No syntax errors detected in include/function_tmdb.php
+No syntax errors detected in include/function_torrent_hover.php
+No syntax errors detected in include/function_torrenttable.php
+No syntax errors detected in include/function_translate.php
+No syntax errors detected in include/function_trivia.php
+No syntax errors detected in include/function_tvmaze.php
+No syntax errors detected in include/function_users.php
+No syntax errors detected in include/geoipregionvars.php
+No syntax errors detected in include/images_update.php
+No syntax errors detected in include/invincible.php
+No syntax errors detected in include/nologip.php
+No syntax errors detected in include/runtime_safe.php
+No syntax errors detected in include/session_bootstrap.php
+No syntax errors detected in include/stealth.php
+No syntax errors detected in include/timezone.php
+No syntax errors detected in public/achievementbonus.php
+No syntax errors detected in public/achievementhistory.php
+No syntax errors detected in public/achievementlist.php
+No syntax errors detected in public/ajax/ajax_tooltips.php
+No syntax errors detected in public/ajax/autocomplete.php
+No syntax errors detected in public/ajax/bookmarks.php
+No syntax errors detected in public/ajax/checkport.php
+No syntax errors detected in public/ajax/checkports.php
+No syntax errors detected in public/ajax/cooker_notify.php
+No syntax errors detected in public/ajax/descr_format.php
+No syntax errors detected in public/ajax/ebook_lookup.php
+No syntax errors detected in public/ajax/emailcheck.php
+No syntax errors detected in public/ajax/imdb_lookup.php
+No syntax errors detected in public/ajax/isbn_lookup.php
+No syntax errors detected in public/ajax/like.php
+No syntax errors detected in public/ajax/member_input.php
+No syntax errors detected in public/ajax/namecheck.php
+No syntax errors detected in public/ajax/offer_notify.php
+No syntax errors detected in public/ajax/offer_status.php
+No syntax errors detected in public/ajax/offer_vote.php
+No syntax errors detected in public/ajax/rating.php
+No syntax errors detected in public/ajax/request_notify.php
+No syntax errors detected in public/ajax/request_vote.php
+No syntax errors detected in public/ajax/show_in_navbar.php
+No syntax errors detected in public/ajax/staff_picks.php
+No syntax errors detected in public/ajax/take_upload.php
+No syntax errors detected in public/ajax/take_url_upload.php
+No syntax errors detected in public/ajax/thanks.php
+No syntax errors detected in public/ajax/torrents_lookup.php
+No syntax errors detected in public/ajax/trivia_answers.php
+No syntax errors detected in public/ajax/trivia_lookup.php
+No syntax errors detected in public/ajax/tvmaze_lookup.php
+No syntax errors detected in public/ajax/usersearch.php
+No syntax errors detected in public/ajax/view_sql.php
+No syntax errors detected in public/ajaxchat.php
+No syntax errors detected in public/allsmiles.php
+No syntax errors detected in public/anatomy.php
+No syntax errors detected in public/announce.php
+No syntax errors detected in public/announcement.php
+No syntax errors detected in public/arcade.php
+No syntax errors detected in public/arcade_top_scores.php
+No syntax errors detected in public/bitbucket.php
+No syntax errors detected in public/bjstats.php
+
+Parse error: syntax error, unexpected token ",", expecting end of file in public/blackjack.php on line 16
+Errors parsing public/blackjack.php
+No syntax errors detected in public/bookmarks.php
+No syntax errors detected in public/bootstrap_web.php
+No syntax errors detected in public/bot_triggers.php
+No syntax errors detected in public/browse.php
+No syntax errors detected in public/bugs.php
+No syntax errors detected in public/casino.php
+No syntax errors detected in public/catalog.php
+No syntax errors detected in public/categoryids.php
+No syntax errors detected in public/chat.php
+No syntax errors detected in public/clear_announcement.php
+
+Parse error: syntax error, unexpected token ",", expecting end of file in public/coins.php on line 14
+Errors parsing public/coins.php
+
+Parse error: syntax error, unexpected token ",", expecting end of file in public/comment.php on line 16
+Errors parsing public/comment.php
+No syntax errors detected in public/contactstaff.php
+
+Parse error: syntax error, unexpected token ",", expecting end of file in public/credits.php on line 10
+Errors parsing public/credits.php
+No syntax errors detected in public/delete.php
+No syntax errors detected in public/details.php
+No syntax errors detected in public/download.php
+No syntax errors detected in public/download_multi.php
+No syntax errors detected in public/downloadsub.php
+No syntax errors detected in public/edit.php
+No syntax errors detected in public/faq.php
+No syntax errors detected in public/fastdelete.php
+No syntax errors detected in public/filelist.php
+No syntax errors detected in public/flash.php
+
+Parse error: syntax error, unexpected token ",", expecting end of file in public/forums.php on line 15
+Errors parsing public/forums.php
+
+Parse error: syntax error, unexpected token ",", expecting end of file in public/friends.php on line 13
+Errors parsing public/friends.php
+No syntax errors detected in public/games.php
+No syntax errors detected in public/getrss.php
+
+Parse error: syntax error, unexpected token ",", expecting end of file in public/gift.php on line 12
+Errors parsing public/gift.php
+No syntax errors detected in public/happylog.php
+No syntax errors detected in public/hnrs.php
+No syntax errors detected in public/img.php
+No syntax errors detected in public/index.php
+
+Parse error: syntax error, unexpected token ",", expecting end of file in public/invite.php on line 12
+Errors parsing public/invite.php
+No syntax errors detected in public/login.php
+No syntax errors detected in public/logout.php
+No syntax errors detected in public/lottery.php
+
+Parse error: syntax error, unexpected identifier "Location", expecting ")" in public/messages.php on line 93
+Errors parsing public/messages.php
+No syntax errors detected in public/movies.php
+No syntax errors detected in public/mybonus.php
+No syntax errors detected in public/mytorrents.php
+No syntax errors detected in public/needseed.php
+No syntax errors detected in public/new_announcement.php
+No syntax errors detected in public/offers.php
+No syntax errors detected in public/peerlist.php
+No syntax errors detected in public/polls_take_vote.php
+No syntax errors detected in public/port_check.php
+No syntax errors detected in public/recover.php
+No syntax errors detected in public/report.php
+
+Parse error: syntax error, unexpected token ",", expecting end of file in public/reputation.php on line 14
+Errors parsing public/reputation.php
+No syntax errors detected in public/requests.php
+No syntax errors detected in public/restoreclass.php
+No syntax errors detected in public/rss.php
+No syntax errors detected in public/rss_pdo_demo.php
+No syntax errors detected in public/rsstfreak.php
+No syntax errors detected in public/rules.php
+No syntax errors detected in public/scrape.php
+No syntax errors detected in public/search.php
+No syntax errors detected in public/setclass.php
+No syntax errors detected in public/sharemarks.php
+No syntax errors detected in public/signup.php
+No syntax errors detected in public/snatches.php
+No syntax errors detected in public/staff.php
+
+Parse error: syntax error, unexpected token ",", expecting end of file in public/staffbox.php on line 13
+Errors parsing public/staffbox.php
+No syntax errors detected in public/staffpanel.php
+No syntax errors detected in public/subtitles.php
+No syntax errors detected in public/tags.php
+No syntax errors detected in public/take_theme.php
+
+Parse error: syntax error, unexpected token ",", expecting end of file in public/takeedit.php on line 14
+Errors parsing public/takeedit.php
+
+Parse error: syntax error, unexpected token ",", expecting end of file in public/takeeditcp.php on line 27
+Errors parsing public/takeeditcp.php
+
+Parse error: syntax error, unexpected token ",", expecting end of file in public/takereseed.php on line 18
+Errors parsing public/takereseed.php
+No syntax errors detected in public/takethankyou.php
+No syntax errors detected in public/takeupload.php
+No syntax errors detected in public/tenpercent.php
+No syntax errors detected in public/tmovies.php
+No syntax errors detected in public/topmoods.php
+
+Parse error: syntax error, unexpected token ",", expecting end of file in public/topten.php on line 10
+Errors parsing public/topten.php
+No syntax errors detected in public/trivia_results.php
+No syntax errors detected in public/tvshows.php
+No syntax errors detected in public/upcoming.php
+No syntax errors detected in public/upload.php
+No syntax errors detected in public/uploadapp.php
+No syntax errors detected in public/user_blocks.php
+
+Parse error: syntax error, unexpected token ",", expecting end of file in public/user_unlocks.php on line 13
+Errors parsing public/user_unlocks.php
+No syntax errors detected in public/useragreement.php
+No syntax errors detected in public/usercomment.php
+
+Parse error: syntax error, unexpected token ",", expecting end of file in public/usercp.php on line 28
+Errors parsing public/usercp.php
+
+Deprecated: Using ${var} in strings is deprecated, use {$var} instead in public/userdetails.php on line 203
+
+Deprecated: Using ${var} in strings is deprecated, use {$var} instead in public/userdetails.php on line 205
+
+Deprecated: Using ${var} in strings is deprecated, use {$var} instead in public/userdetails.php on line 208
+
+Deprecated: Using ${var} in strings is deprecated, use {$var} instead in public/userdetails.php on line 210
+
+Deprecated: Using ${var} in strings is deprecated, use {$var} instead in public/userdetails.php on line 254
+
+Deprecated: Using ${var} in strings is deprecated, use {$var} instead in public/userdetails.php on line 309
+
+Deprecated: Using ${var} in strings is deprecated, use {$var} instead in public/userdetails.php on line 312
+
+Deprecated: Using ${var} in strings is deprecated, use {$var} instead in public/userdetails.php on line 499
+No syntax errors detected in public/userdetails.php
+
+Parse error: syntax error, unexpected token ",", expecting end of file in public/userhistory.php on line 12
+Errors parsing public/userhistory.php
+
+Parse error: syntax error, unexpected token ",", expecting end of file in public/usermood.php on line 12
+Errors parsing public/usermood.php
+
+Parse error: syntax error, unexpected string content "", expecting "-" or identifier or variable or number in public/users.php on line 117
+Errors parsing public/users.php
+No syntax errors detected in public/verify.php
+No syntax errors detected in public/verify_email.php
+No syntax errors detected in public/videoformats.php
+No syntax errors detected in public/view_announce_history.php
+No syntax errors detected in public/view_sql.php
+No syntax errors detected in public/viewnfo.php
+No syntax errors detected in public/wiki.php
