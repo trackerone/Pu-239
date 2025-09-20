@@ -9,6 +9,7 @@ admin/sitelog.php,false,true,false,false,"Re-quarantined incomplete migration st
 admin/system_view.php,false,true,false,false,"Re-quarantined incomplete migration stubbed for safety.","_quarantine/rebroken/admin/system_view.php"
 admin/warn.php,false,false,false,false,"Standardized existing stub message.",""
 include/function_account_delete.php,false,true,false,false,"Re-quarantined incomplete migration stubbed for safety.","_quarantine/rebroken/include/function_account_delete.php"
+******* codex/apply-code-formatting-hygiene-xecqd7
 public/blackjack.php,false,false,true,false,"Repaired stray site_config placeholder and wired ConfigRepository helper.",""
 public/coins.php,false,true,false,false,"Standardized modernization stub pending SQL restore.","_quarantine/rebroken/public/coins.php"
 public/comment.php,false,true,false,false,"Standardized modernization stub pending SQL restore.","_quarantine/rebroken/public/comment.php"
@@ -29,3 +30,5 @@ public/usercp.php,false,true,false,false,"Standardized modernization stub pendin
 public/userhistory.php,false,false,true,false,"Repaired stray site_config placeholder and wired ConfigRepository helper.",""
 public/usermood.php,false,true,false,false,"Standardized modernization stub pending SQL restore.","_quarantine/rebroken/public/usermood.php"
 public/users.php,false,false,false,false,"No action required; file already uses PDO patterns.",""
+=======
+******* master
