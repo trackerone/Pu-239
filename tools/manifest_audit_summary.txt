@@ -1,4 +1,30 @@
-Audit Timestamp: 2025-09-20T09:00:14.637243+00:00
-Rehydrated files: 0
-Re-quarantined files: 20
-Unknown entries: 53
+Autofix manifest audit summary
+
+Total unique files reviewed: 30
+Rehydrated entries with files present: 0
+Rehydrated entries missing on disk: 0
+Re-quarantined entries: 20
+
+No rehydrated files with confirmed on-disk copies were found in this audit pass.
+
+Re-quarantined files:
+  - admin/class_promo.php (source: _quarantine/rebroken/admin/class_promo.php)
+  - admin/comments.php (source: _quarantine/rebroken/admin/comments.php)
+  - admin/reports.php (source: _quarantine/rebroken/admin/reports.php)
+  - admin/sitelog.php (source: _quarantine/rebroken/admin/sitelog.php)
+  - admin/system_view.php (source: _quarantine/rebroken/admin/system_view.php)
+  - include/function_account_delete.php (source: _quarantine/rebroken/include/function_account_delete.php)
+  - public/coins.php (source: _quarantine/rebroken/public/coins.php)
+  - public/comment.php (source: _quarantine/rebroken/public/comment.php)
+  - public/credits.php (source: _quarantine/rebroken/public/credits.php)
+  - public/friends.php (source: _quarantine/rebroken/public/friends.php)
+  - public/gift.php (source: _quarantine/rebroken/public/gift.php)
+  - public/invite.php (source: _quarantine/rebroken/public/invite.php)
+  - public/messages.php (source: _quarantine/rebroken/public/messages.php)
+  - public/reputation.php (source: _quarantine/rebroken/public/reputation.php)
+  - public/staffbox.php (source: _quarantine/rebroken/public/staffbox.php)
+  - public/takeedit.php (source: _quarantine/rebroken/public/takeedit.php)
+  - public/takeeditcp.php (source: _quarantine/rebroken/public/takeeditcp.php)
+  - public/usercp.php (source: _quarantine/rebroken/public/usercp.php)
+  - public/usermood.php (source: _quarantine/rebroken/public/usermood.php)
+  - public/users.php (source: _quarantine/rebroken/public/users.php)
