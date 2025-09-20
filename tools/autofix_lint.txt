@@ -1,0 +1,7 @@
+No syntax errors detected in admin/namechanger.php
+No syntax errors detected in admin/reputation_ad.php
+No syntax errors detected in admin/shit_list.php
+No syntax errors detected in admin/sitelog.php
+No syntax errors detected in admin/system_view.php
+No syntax errors detected in admin/warn.php
+No syntax errors detected in include/function_account_delete.php
