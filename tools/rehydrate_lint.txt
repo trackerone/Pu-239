@@ -1,0 +1,16 @@
+No syntax errors detected in admin/namechanger.php
+No syntax errors detected in admin/reputation_ad.php
+No syntax errors detected in admin/shit_list.php
+No syntax errors detected in admin/warn.php
+No syntax errors detected in public/coins.php
+No syntax errors detected in public/credits.php
+No syntax errors detected in public/friends.php
+No syntax errors detected in public/gift.php
+No syntax errors detected in public/invite.php
+No syntax errors detected in public/messages.php
+No syntax errors detected in public/reputation.php
+No syntax errors detected in public/staffbox.php
+No syntax errors detected in public/takeedit.php
+No syntax errors detected in public/takeeditcp.php
+No syntax errors detected in public/usercp.php
+No syntax errors detected in public/usermood.php

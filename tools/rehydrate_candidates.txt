@@ -1,0 +1,16 @@
+admin/namechanger.php
+admin/reputation_ad.php
+admin/shit_list.php
+admin/warn.php
+public/coins.php
+public/credits.php
+public/friends.php
+public/gift.php
+public/invite.php
+public/messages.php
+public/reputation.php
+public/staffbox.php
+public/takeedit.php
+public/takeeditcp.php
+public/usercp.php
+public/usermood.php
