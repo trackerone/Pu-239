@@ -1,61 +1,57 @@
 <?php
+
 declare(strict_types=1);
-require_once dirname(__DIR__) . '/bootstrap_web.php';
-
-$db = $container->get(Database::class);
-
-
-
-
 
 use Pu239\Cache;
 use Pu239\Database;
 
+require_once dirname(__DIR__) . '/bootstrap_web.php';
+
+$cache = $container->get(Cache::class);
+$db = $container->get(Database::class);
+
 require_once __DIR__ . '/../../include/bittorrent.php';
 check_user_status();
-global $container;
 
-if (isset($_POST['id'])) {
-    $id = $_POST['id'];
-}
-
-if (!isset($_POST['keyword']) || strlen($_POST['keyword']) < 2) {
+// TODO(2025): csrf on POST where missing
+$keyword = trim((string) ($_POST['keyword'] ?? ''));
+if ($keyword === '' || mb_strlen($keyword) < 2) {
     return false;
 }
-$keyword = htmlsafechars(strtolower(strip_tags($_POST['keyword'])));
-$hash = 'suggest_torrents_' . hash('sha256', $keyword);
 
-$results = $cache->get($hash);
-if ($results === false || is_null($results)) {
-    // $fluent removed — use $this->db (ExtendedPdo)
-    $results = $fluent->from('torrents')
-                      ->select(null)
-                      ->select('id')
-                      ->select('name')
-                      ->select('seeders')
-                      ->select('leechers')
-                      ->select('visible')
-                      ->where('name LIKE ?', "%$keyword%")
-                      ->fetchAll();
-    $cache = $container->get(Cache::class);
-    $cache->set($hash, $results, 0);
+$keywordLower = strtolower($keyword);
+$keywordSafe = htmlsafechars($keywordLower);
+$cacheKey = 'suggest_torrents_' . hash('sha256', $keywordLower);
+
+$results = $cache->get($cacheKey);
+if ($results === false || $results === null) {
+    $sql = <<<SQL
+        SELECT id, name, seeders, leechers, visible
+        FROM torrents
+        WHERE LOWER(name) LIKE :name
+        ORDER BY id DESC
+        LIMIT 25
+    SQL;
+    $results = $db->toArray($sql, ['name' => '%' . $keywordLower . '%']);
+    $cache->set($cacheKey, $results, 300);
+
     $hashes = $cache->get('suggest_torrents_hashes_');
-    if (empty($hashes)) {
+    if (!is_array($hashes)) {
         $hashes = [];
     }
-    if (!in_array($hash, $hashes)) {
-        $hashes[] = $hash;
+    if (!in_array($cacheKey, $hashes, true)) {
+        $hashes[] = $cacheKey;
         $cache->set('suggest_torrents_hashes_', $hashes, 300);
     }
 }
 
-$temp = "
+$template = "
         <ul>
-            <li class='has-text-centered'>" . _fe("No results. Try refining your search for '{0}'.", $keyword) . '</li>
+            <li class='has-text-centered'>" . _fe("No results. Try refining your search for '{0}'.", $keywordSafe) . '</li>
         </ul>';
 
-if (!empty($results)) {
-    $temp = "
+if ($results !== []) {
+    $template = "
         <ul class='columns has-text-wight-bold'>
             <li class='column is-three-fifth'>
                 <span class='size_5 is-bold'>" . _('Name') . "</span>
@@ -67,25 +63,32 @@ if (!empty($results)) {
                 <span class='size_5 is-bold'>" . _('Leechers') . '</span>
             </li>
         </ul>';
-    $i = 1;
+
+    $rowIndex = 0;
     foreach ($results as $result) {
+        $rowIndex++;
         $color = $result['visible'] === 'yes' ? 'is-success' : 'has-text-danger';
-        $background = $i++ % 2 === 0 ? 'bg-04' : 'bg-03';
-        $temp .= "
-        <ul class='columns $background round10'>
+        $background = $rowIndex % 2 === 0 ? 'bg-04' : 'bg-03';
+        $name = htmlsafechars($result['name']);
+        $seeders = (int) $result['seeders'];
+        $leechers = (int) $result['leechers'];
+        $torrentId = (int) $result['id'];
+
+        $template .= "
+        <ul class='columns {$background} round10'>
             <li class='column is-three-fifth'>
-                <a href='{$site_config['paths']['baseurl']}/details.php?id={$result['id']}&amp;hit=1'>
-                    <span class='$color'>{$result['name']}</span>
+                <a href='{$site_config['paths']['baseurl']}/details.php?id={$torrentId}&amp;hit=1'>
+                    <span class='{$color}'>{$name}</span>
                 </a>
             </li>
             <li class='column is-one-fifth has-text-centered'>
-                <span class='$color'>{$result['seeders']}</span>
+                <span class='{$color}'>{$seeders}</span>
             </li>
             <li class='column is-one-fifth has-text-centered'>
-                <span class='$color'>{$result['leechers']}</span>
+                <span class='{$color}'>{$leechers}</span>
             </li>
         </ul>";
     }
 }
 
-echo $temp;
+echo $template;

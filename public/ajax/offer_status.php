@@ -1,47 +1,45 @@
 <?php
+
 declare(strict_types=1);
+
+use Pu239\Database;
+
 require_once dirname(__DIR__) . '/bootstrap_web.php';
 
 $db = $container->get(Database::class);
 
-
-
-
-use Pu239\Database;
-
 require_once __DIR__ . '/../../include/bittorrent.php';
 $user = check_user_status();
+
 header('content-type: application/json');
-global $container;
 
-if (empty($user) || !has_access($user['class'], UC_STAFF, '')) {
+if ($user === false || !has_access($user['class'], UC_STAFF, '')) {
     echo json_encode(['status' => 'invalid']);
     app_halt('Exit called');
 }
-$id = (int) $_POST['id'];
-$status = $_POST['status'];
-if (empty($id) || !isset($status)) {
+
+// TODO(2025): csrf on POST where missing
+$offerId = (int) ($_POST['id'] ?? 0);
+$currentStatus = $_POST['status'] ?? '';
+
+if ($offerId <= 0 || $currentStatus === '') {
     echo json_encode(['status' => 'invalid']);
     app_halt('Exit called');
 }
-$fluent = $container->get(Database::class);
-$to_status = 'pending';
-if ($status === 'pending') {
-    $to_status = 'approved';
-} elseif ($status === 'approved') {
-    $to_status = 'denied';
-}
-$update = [
-    'status' => $to_status,
-];
-try {
-    $sql = "UPDATE offers SET /* columns */ WHERE id = :id";
-$db->perform($sql, array_merge($update, ['id' => $id]));
-    echo json_encode(['status' => $to_status]);
-    app_halt('Exit called');
-} catch (Exception $e) {
-    //TODO
-}
 
-echo json_encode(['voted' => 'invalid']);
+$nextStatus = match ($currentStatus) {
+    'pending' => 'approved',
+    'approved' => 'denied',
+    default => 'pending',
+};
+
+$db->run(
+    'UPDATE offers SET status = :status WHERE id = :id',
+    [
+        'status' => $nextStatus,
+        'id' => $offerId,
+    ]
+);
+
+echo json_encode(['status' => $nextStatus]);
 app_halt('Exit called');

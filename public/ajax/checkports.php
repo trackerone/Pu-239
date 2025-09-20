@@ -1,56 +1,59 @@
 <?php
+
 declare(strict_types=1);
+
+use Pu239\Database;
+
 require_once dirname(__DIR__) . '/bootstrap_web.php';
 
 $db = $container->get(Database::class);
 
-
-
-
-
-use Pu239\Database;
-
 require_once __DIR__ . '/../../include/bittorrent.php';
 $user = check_user_status();
-if (empty($_POST['uid'])) {
+
+// TODO(2025): csrf on POST where missing
+$requestedUserId = (int) ($_POST['uid'] ?? 0);
+if ($requestedUserId <= 0) {
     return false;
 }
-global $container;
 
-$uid = has_access($user['class'], UC_STAFF, '') ? (int) $_POST['uid'] : $user['id'];
-// $fluent removed — use $this->db (ExtendedPdo)
-$ips = $fluent->from('peers')
-    ->select(null)
-    ->select('INET6_NTOA(ip) AS ip')
-    ->select('port')
-    ->select('agent')
-    ->where('userid = ?', $uid)
-    ->fetchAll();
+$uid = has_access($user['class'], UC_STAFF, '') ? $requestedUserId : (int) $user['id'];
+
+$sql = <<<SQL
+    SELECT INET6_NTOA(ip) AS ip, port, agent
+    FROM peers
+    WHERE userid = :uid
+SQL;
+$ips = $db->toArray($sql, ['uid' => $uid]);
+
 $out = '';
-$used_ips = [];
-foreach ($ips as $curip) {
-    $uip = $curip['ip'];
-    $uport = $curip['port'];
-    $uagent = $curip['agent'];
-    if (in_array($uip . $uport, $used_ips)) {
+$used = [];
+foreach ($ips as $peer) {
+    $ip = $peer['ip'];
+    $port = (int) $peer['port'];
+    $agent = htmlsafechars($peer['agent']);
+
+    if (in_array($ip . $port, $used, true)) {
         continue;
     }
-    $used_ips[] = $uip . $uport;
-    $connection = fsockopen($uip, $uport, $errno, $errstr, 10);
+    $used[] = $ip . $port;
+
+    $connection = @fsockopen($ip, $port, $errno, $errstr, 10.0);
     if (is_resource($connection)) {
-        $msg = "<span class='has-text-success'>" . _('OPEN') . '</span>';
+        $message = "<span class='has-text-success'>" . _('OPEN') . '</span>';
         fclose($connection);
     } else {
-        $msg = "<span class='has-text-danger'>" . _fe('CLOSED => {0}', $errstr) . '</span>';
+        $message = "<span class='has-text-danger'>" . _fe('CLOSED => {0}', $errstr) . '</span>';
     }
+
     $out .= "
     <div class='columns is-multiline is-gapless padding10'>
-        <span class='column is-2 padding5'>{$uip}</span>
-        <span class='column is-1 padding5'>{$uport}</span>
-        <span class='column is-2 padding5'>{$uagent}</span>
-        <span class='column padding5 has-text-left'>$msg</span>
+        <span class='column is-2 padding5'>{$ip}</span>
+        <span class='column is-1 padding5'>{$port}</span>
+        <span class='column is-2 padding5'>{$agent}</span>
+        <span class='column padding5 has-text-left'>{$message}</span>
     </div>";
 }
-$status = ['data' => $out];
+
 header('content-type: application/json');
-echo json_encode($status);
+echo json_encode(['data' => $out]);

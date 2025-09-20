@@ -1,20 +1,17 @@
 <?php
+
 declare(strict_types=1);
+
+use Pu239\Database;
+use Pu239\Peer;
+
 require_once dirname(__DIR__) . '/bootstrap_web.php';
 
 $db = $container->get(Database::class);
 
-
-
-
-
-use Pu239\Peer;
-
 require_once __DIR__ . '/../../include/bittorrent.php';
 require_once CLASS_DIR . 'class_user_options_2.php';
 $user = check_user_status();
-
-global $container, $site_config;
 
 header('Content-Type: application/json');
 if (!empty($user) && is_array($user)) {

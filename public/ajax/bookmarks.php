@@ -1,101 +1,106 @@
 <?php
+
 declare(strict_types=1);
-require_once dirname(__DIR__) . '/bootstrap_web.php';
-
-$db = $container->get(Database::class);
-
-
-
 
 use Pu239\Cache;
 use Pu239\Database;
 
+require_once dirname(__DIR__) . '/bootstrap_web.php';
+
+$cache = $container->get(Cache::class);
+$db = $container->get(Database::class);
+
 require_once __DIR__ . '/../../include/bittorrent.php';
 $user = check_user_status();
-global $container;
 
-$private = $_POST['private'];
-$remove = $_POST['remove'];
-$tid = $_POST['tid'];
 header('content-type: application/json');
-if (empty($tid)) {
-    echo json_encode(['fail' => 'invalid']);
-    app_halt('Exit called');
-}
-if (empty($user)) {
+
+if ($user === false) {
     echo json_encode(['fail' => 'csrf']);
     app_halt('Exit called');
 }
-// $fluent removed — use $this->db (ExtendedPdo)
-$cache = $container->get(Cache::class);
-if ($private === 'true') {
-    $bookmark = $fluent->from('bookmarks')
-                       ->select(null)
-                       ->select('private')
-                       ->where('torrentid = ?', $tid)
-                       ->where('userid = ?', $user['id'])
-                       ->fetch('private');
 
-    if ($bookmark === 'yes') {
-        $private = 'no';
-        $text = _('Mark Bookmark Private!');
-    } else {
-        $private = 'yes';
-        $text = _('Mark Bookmark Public!');
+// TODO(2025): csrf on POST where missing
+$torrentId = (int) ($_POST['tid'] ?? 0);
+$togglePrivate = ($_POST['private'] ?? '') === 'true';
+$remove = $_POST['remove'] ?? 'false';
+
+if ($torrentId <= 0) {
+    echo json_encode(['fail' => 'invalid']);
+    app_halt('Exit called');
+}
+
+$bindings = [
+    'torrentId' => $torrentId,
+    'userId' => (int) $user['id'],
+];
+
+if ($togglePrivate) {
+    $bookmark = $db->row(
+        'SELECT private FROM bookmarks WHERE torrentid = :torrentId AND userid = :userId',
+        $bindings
+    );
+
+    if ($bookmark === null) {
+        echo json_encode(['fail' => 'missing']);
+        app_halt('Exit called');
     }
-    $set = [
-        'private' => $private,
-    ];
 
-    $fluent->update('bookmarks')
-           ->set($set)
-           ->where('torrentid = ?', $tid)
-           ->where('userid = ?', $user['id'])
-           ->execute();
+    $current = $bookmark['private'] === 'yes';
+    $nextValue = $current ? 'no' : 'yes';
+    $label = $current ? _('Mark Bookmark Private!') : _('Mark Bookmark Public!');
+
+    $db->run(
+        'UPDATE bookmarks SET private = :private WHERE torrentid = :torrentId AND userid = :userId',
+        $bindings + ['private' => $nextValue]
+    );
 
     $cache->delete('bookmarks_' . $user['id']);
+
     echo json_encode([
-        'bookmark' => $private,
+        'bookmark' => $nextValue,
         'content' => 'private',
-        'text' => $text,
-        'tid' => $tid,
+        'text' => $label,
+        'tid' => $torrentId,
         'remove' => 'false',
     ]);
     app_halt('Exit called');
 }
 
-$bookmark = $fluent->from('bookmarks')
-                   ->select(null)
-                   ->select('id')
-                   ->where('torrentid = ?', $tid)
-                   ->where('userid = ?', $user['id'])
-                   ->fetch('id');
+$bookmark = $db->row(
+    'SELECT id FROM bookmarks WHERE torrentid = :torrentId AND userid = :userId',
+    $bindings
+);
 
-if (!empty($bookmark)) {
-    $fluent->delete('bookmarks')
-           ->where('id = ?', $bookmark)
-           ->execute();
+if ($bookmark !== null) {
+    $db->run('DELETE FROM bookmarks WHERE id = :id', ['id' => (int) $bookmark['id']]);
     $cache->delete('bookmarks_' . $user['id']);
+
     echo json_encode([
         'content' => 'deleted',
         'text' => _('Add Bookmark'),
-        'tid' => $tid,
-        'remove' => $remove,
-    ]);
-    app_halt('Exit called');
-} else {
-    $values = [
-        'userid' => $user['id'],
-        'torrentid' => $tid,
-    ];
-    $sql = "INSERT INTO bookmarks (/* columns */) VALUES (/* values */)";
-$db->perform($sql, $values);
-    $cache->delete('bookmarks_' . $user['id']);
-    echo json_encode([
-        'content' => 'added',
-        'text' => _('Delete Bookmark'),
-        'tid' => $tid,
+        'tid' => $torrentId,
         'remove' => $remove,
     ]);
     app_halt('Exit called');
 }
+
+$db->run(
+    'INSERT INTO bookmarks (userid, torrentid, private, added) VALUES (:userId, :torrentId, :private, :added)',
+    [
+        'userId' => (int) $user['id'],
+        'torrentId' => $torrentId,
+        'private' => 'no',
+        'added' => [TIME_NOW, \PDO::PARAM_INT],
+    ]
+);
+
+$cache->delete('bookmarks_' . $user['id']);
+
+echo json_encode([
+    'content' => 'added',
+    'text' => _('Delete Bookmark'),
+    'tid' => $torrentId,
+    'remove' => $remove,
+]);
+app_halt('Exit called');

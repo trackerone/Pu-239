@@ -1,21 +1,21 @@
 <?php
+
 declare(strict_types=1);
+
+use Pu239\Database;
+use Pu239\Image;
+
 require_once dirname(__DIR__) . '/bootstrap_web.php';
 
 $db = $container->get(Database::class);
 
-
-
-
-use Pu239\Image;
-
 require_once __DIR__ . '/../../include/bittorrent.php';
 check_user_status();
-$url = htmlsafechars($_POST['url']);
+$url = htmlsafechars((string) ($_POST['url'] ?? ''));
 $tid = !empty($_POST['tid']) ? (int) htmlsafechars($_POST['tid']) : null;
 $image = !empty($_POST['image']) ? htmlsafechars($_POST['image']) : null;
+// TODO(2025): csrf on POST where missing
 header('content-type: application/json');
-global $container;
 
 $imdb = '';
 if (!empty($url)) {
