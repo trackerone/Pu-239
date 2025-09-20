@@ -1,8 +1,13 @@
 <?php
 declare(strict_types=1);
+use PU239\Config\ConfigRepository;
+
+global $container;
+/** @var ConfigRepository $config */
+$config = $container->get(ConfigRepository::class);
 require_once dirname(__DIR__) . '/bootstrap_web.php';
 
-global $site_config;
+
 $db = $container->get(Database::class);
 
 $class = get_access(basename($_SERVER['REQUEST_URI']));
@@ -72,7 +77,7 @@ if (!empty($_GET['action']) && $_GET['action'] === 'view') {
     if (!empty($contents)) {
         $contents = array_reverse($contents);
         $count = count($contents);
-        $pager = pager($perpage, $count, "{$site_config['paths']['baseurl']}/staffpanel.php?tool=log_viewer&action=view&file=" . htmlsafechars($file) . '&amp;');
+        $pager = pager($perpage, $count, "{$config->get('paths.baseurl')}/staffpanel.php?tool=log_viewer&action=view&file=" . htmlsafechars($file) . '&amp;');
     }
     $i = 0;
     $content = [];
@@ -95,7 +100,7 @@ if (!empty($_GET['action']) && $_GET['action'] === 'view') {
         </div>", 'bottom20');
 }
 
-$paths = array_merge($site_config['paths']['log_viewer'], [LOGS_DIR]);
+$paths = array_merge($config->get('paths.log_viewer'), [LOGS_DIR]);
 $files = [];
 foreach ($paths as $path) {
     if (file_exists($path) && is_readable($path)) {
@@ -156,7 +161,7 @@ if (!empty($files)) {
 
 $title = _('Log Files');
 $breadcrumbs = [
-    "<a href='{$site_config['paths']['baseurl']}/staffpanel.php'>" . _('Staff Panel') . '</a>',
+    "<a href='{$config->get('paths.baseurl')}/staffpanel.php'>" . _('Staff Panel') . '</a>',
     "<a href='{$_SERVER['PHP_SELF']}'>$title</a>",
 ];
 echo stdhead($title, [], 'page-wrapper', $breadcrumbs) . wrapper($HTMLOUT) . stdfoot();

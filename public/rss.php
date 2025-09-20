@@ -1,7 +1,9 @@
 <?php
+declare(strict_types=1);
 
 declare(strict_types = 1);
 
+use PU239\Config\ConfigRepository;
 use DI\DependencyException;
 use DI\NotFoundException;
 use Pu239\Cache;
@@ -12,8 +14,9 @@ use Spatie\Image\Exceptions\InvalidManipulation;
 
 require_once __DIR__ . '/../include/bittorrent.php';
 require_once INCL_DIR . 'function_bbcode.php';
-global $container, $site_config;
-
+global $container;
+/** @var ConfigRepository $config */
+$config = $container->get(ConfigRepository::class);
 $validator = $container->get(Validator::class);
 $validation = $validator->validate($_GET, [
     'torrent_pass' => 'required|alpha_num:between:64,64',
@@ -27,7 +30,7 @@ if ($validation->fails()) {
     if (!isset($_GET['torrent_pass'])) {
         format_rss(_("Your link doesn't have a torrent pass"), null);
     } elseif (strlen($_GET['torrent_pass']) != 64) {
-        format_rss(_fe('Your torrent pass is not long enough! Go to {0} and reset your passkey', $site_config['site']['name']), null);
+        format_rss(_fe('Your torrent pass is not long enough! Go to {0} and reset your passkey', $config->get('site.name')), null);
     } else {
         format_rss(_("Your link isn't a valid rss link."), null);
     }
@@ -36,7 +39,7 @@ if ($validation->fails()) {
     $torrent_pass = $_GET['torrent_pass'];
     $user = $users_class->get_user_from_torrent_pass($torrent_pass);
     if (!$user) {
-        format_rss(_fe('Your torrent pass is invlaid! Go to {0} and reset your passkey', $site_config['site']['name']), null);
+        format_rss(_fe('Your torrent pass is invlaid! Go to {0} and reset your passkey', $config->get('site.name')), null);
     } elseif ($user['status'] === 2) {
         format_rss(_("Permission denied, you're account is disabled"), null);
     } elseif ($user['status'] === 1) {
@@ -124,14 +127,14 @@ format_rss($data, $torrent_pass);
  */
 function format_rss($data, ?string $torrent_pass)
 {
-    global $site_config;
+    global $config;
 
-    $rssdescr = $site_config['site']['name'] . ' RSS Feed - Please Donate';
+    $rssdescr = $config->get('site.name') . ' RSS Feed - Please Donate';
     $feed = isset($_GET['type']) && $_GET['type'] === 'dl' ? 'dl' : 'web';
-    $url = urlencode($site_config['paths']['baseurl'] . $_SERVER['REQUEST_URI']);
+    $url = urlencode($config->get('paths.baseurl') . $_SERVER['REQUEST_URI']);
     $date = date(DATE_RSS, TIME_NOW);
     $rss = '<?xml version="1.0" encoding="UTF-8"?>
-<?xml-stylesheet type="text/css" href="' . $site_config['paths']['baseurl'] . '/css/rss.css"?>
+<?xml-stylesheet type="text/css" href="' . $config->get('paths.baseurl') . '/css/rss.css"?>
 <rss version="2.0"
     xmlns:content="http://purl.org/rss/1.0/modules/content/"
     xmlns:wfw="http://wellformedweb.org/CommentAPI/"
@@ -140,19 +143,19 @@ function format_rss($data, ?string $torrent_pass)
     xmlns:sy="http://purl.org/rss/1.0/modules/syndication/"
     xmlns:slash="http://purl.org/rss/1.0/modules/slash/">
     <channel>
-        <title>' . $site_config['site']['name'] . '</title>
+        <title>' . $config->get('site.name') . '</title>
         <atom:link href="' . $url . '" rel="self" type="application/rss+xml" />
-        <link>' . $site_config['paths']['baseurl'] . '</link>
+        <link>' . $config->get('paths.baseurl') . '</link>
         <description>' . $rssdescr . '</description>
         <language>en-us</language>
-        <copyright>Copyright © ' . date('Y') . ' ' . $site_config['site']['name'] . '</copyright>
-        <webMaster>' . $site_config['site']['email'] . '(' . $site_config['site']['name'] . ')</webMaster>
+        <copyright>Copyright © ' . date('Y') . ' ' . $config->get('site.name') . '</copyright>
+        <webMaster>' . $config->get('site.email') . '(' . $config->get('site.name') . ')</webMaster>
         <lastBuildDate>' . $date . '</lastBuildDate>
         <ttl>5</ttl>
         <image>
-            <title>' . $site_config['site']['name'] . '</title>
-            <url>' . $site_config['paths']['baseurl'] . '/favicon-16x16.png</url>
-            <link>' . $site_config['paths']['baseurl'] . '</link>
+            <title>' . $config->get('site.name') . '</title>
+            <url>' . $config->get('paths.baseurl') . '/favicon-16x16.png</url>
+            <link>' . $config->get('paths.baseurl') . '</link>
             <width>16</width>
             <height>16</height>
             <description>' . $rssdescr . '</description>
@@ -169,8 +172,8 @@ function format_rss($data, ?string $torrent_pass)
             $added = get_date((int) $a['added'], 'DATE');
             $descr = htmlsafechars(substr(format_comment_no_bbcode($a['descr'], true), 0, 450));
             $date = date(DATE_RSS, $a['added']);
-            $link = $site_config['paths']['baseurl'] . ($feed === 'dl' ? '/download.php?torrent=' . $id . '&amp;torrent_pass=' . $torrent_pass : '/details.php?id=' . $id . '&amp;hit=1');
-            $guidlink = $site_config['paths']['baseurl'] . '/details.php?id=' . $id;
+            $link = $config->get('paths.baseurl') . ($feed === 'dl' ? '/download.php?torrent=' . $id . '&amp;torrent_pass=' . $torrent_pass : '/details.php?id=' . $id . '&amp;hit=1');
+            $guidlink = $config->get('paths.baseurl') . '/details.php?id=' . $id;
             $rss .= '
         <item>
             <title>' . $name . '</title>
@@ -191,9 +194,9 @@ function format_rss($data, ?string $torrent_pass)
         $rss .= '
         <item>
             <title>' . _('Empty Results') . '</title>
-            <link>' . $site_config['paths']['baseurl'] . '/getrss.php</link>
+            <link>' . $config->get('paths.baseurl') . '/getrss.php</link>
             <description>' . $data . '</description>
-            <guid>' . $site_config['paths']['baseurl'] . '/getrss.php</guid>
+            <guid>' . $config->get('paths.baseurl') . '/getrss.php</guid>
             <pubDate>' . $date . '</pubDate>
         </item>';
     }

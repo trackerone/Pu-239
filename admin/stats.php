@@ -2,12 +2,14 @@
 declare(strict_types=1);
 require_once dirname(__DIR__) . '/bootstrap_web.php';
 
+use PU239\Config\ConfigRepository;
 use Pu239\Database;
 use Pu239\Roles;
 
 
-global $container, $site_config;
-
+global $container;
+/** @var ConfigRepository $config */
+$config = $container->get(ConfigRepository::class);
 $db = $container->get(Database::class);
 
 $class = get_access(basename($_SERVER['REQUEST_URI']));
@@ -46,7 +48,7 @@ $query = 'SELECT u.id, u.username AS name, MAX(t.added) AS last, COUNT(DISTINCT 
 $res = sql_query($query) or sqlerr(__FILE__, __LINE__);
 $perpage = 25;
 $count = mysqli_num_rows($res);
-$pager = pager($perpage, $count, "{$site_config['paths']['baseurl']}/staffpanel.php?tool=stats&amp;");
+$pager = pager($perpage, $count, "{$config->get('paths.baseurl')}/staffpanel.php?tool=stats&amp;");
 if ($count > $perpage) {
     $query = 'SELECT u.id, u.username AS name, MAX(t.added) AS last, COUNT(DISTINCT t.id) AS n_t, COUNT(p.id) as n_p FROM users as u
         LEFT JOIN torrents as t ON u.id = t.owner
@@ -70,11 +72,11 @@ if ($count === 0) {
     }
     $heading = "
     <tr>
-        <th><a href='{$site_config['paths']['baseurl']}/staffpanel.php?tool=stats&amp;action=stats&amp;uporder=uploader&amp;catorder=$catorder' class='colheadlink'>" . _('Uploader') . "</a></th>
-        <th><a href='{$site_config['paths']['baseurl']}/staffpanel.php?tool=stats&amp;action=stats&amp;uporder=lastul&amp;catorder=$catorder' class='colheadlink'>" . _('Last upload') . "</a></th>
-        <th><a href='{$site_config['paths']['baseurl']}/staffpanel.php?tool=stats&amp;action=stats&amp;uporder=torrents&amp;catorder=$catorder' class='colheadlink'>" . _('Torrents') . "</a></th>
+        <th><a href='{$config->get('paths.baseurl')}/staffpanel.php?tool=stats&amp;action=stats&amp;uporder=uploader&amp;catorder=$catorder' class='colheadlink'>" . _('Uploader') . "</a></th>
+        <th><a href='{$config->get('paths.baseurl')}/staffpanel.php?tool=stats&amp;action=stats&amp;uporder=lastul&amp;catorder=$catorder' class='colheadlink'>" . _('Last upload') . "</a></th>
+        <th><a href='{$config->get('paths.baseurl')}/staffpanel.php?tool=stats&amp;action=stats&amp;uporder=torrents&amp;catorder=$catorder' class='colheadlink'>" . _('Torrents') . "</a></th>
         <th>Perc.</th>
-        <th><a href='{$site_config['paths']['baseurl']}/staffpanel.php?tool=stats&amp;action=stats&amp;uporder=peers&amp;catorder=$catorder' class='colheadlink'>" . _('Peers') . '</a></th>
+        <th><a href='{$config->get('paths.baseurl')}/staffpanel.php?tool=stats&amp;action=stats&amp;uporder=peers&amp;catorder=$catorder' class='colheadlink'>" . _('Peers') . '</a></th>
         <th>Perc.</th>
     </tr>';
     $body = '';
@@ -111,11 +113,11 @@ if ($n_tor == 0) {
       ON t.id=p.torrent GROUP BY c.id ORDER BY $orderby");
     $heading = "
     <tr>
-        <th><a href='{$site_config['paths']['baseurl']}/staffpanel.php?tool=stats&amp;action=stats&amp;uporder=$uporder&amp;catorder=category' class='colheadlink'>" . _('Category') . "</a></th>
-        <th><a href='{$site_config['paths']['baseurl']}/staffpanel.php?tool=stats&amp;action=stats&amp;uporder=$uporder&amp;catorder=lastul' class='colheadlink'>" . _('Last upload') . "</a></th>
-        <th><a href='{$site_config['paths']['baseurl']}/staffpanel.php?tool=stats&amp;action=stats&amp;uporder=$uporder&amp;catorder=torrents' class='colheadlink'>" . _('Torrents') . "</a></th>
+        <th><a href='{$config->get('paths.baseurl')}/staffpanel.php?tool=stats&amp;action=stats&amp;uporder=$uporder&amp;catorder=category' class='colheadlink'>" . _('Category') . "</a></th>
+        <th><a href='{$config->get('paths.baseurl')}/staffpanel.php?tool=stats&amp;action=stats&amp;uporder=$uporder&amp;catorder=lastul' class='colheadlink'>" . _('Last upload') . "</a></th>
+        <th><a href='{$config->get('paths.baseurl')}/staffpanel.php?tool=stats&amp;action=stats&amp;uporder=$uporder&amp;catorder=torrents' class='colheadlink'>" . _('Torrents') . "</a></th>
         <th>Perc.</th>
-        <th><a href='{$site_config['paths']['baseurl']}/staffpanel.php?tool=stats&amp;action=stats&amp;uporder=$uporder&amp;catorder=peers' class='colheadlink'>" . _('Peers') . '</a></th>
+        <th><a href='{$config->get('paths.baseurl')}/staffpanel.php?tool=stats&amp;action=stats&amp;uporder=$uporder&amp;catorder=peers' class='colheadlink'>" . _('Peers') . '</a></th>
         <th>Perc.</th>
     </tr>';
     $body = '';
@@ -134,7 +136,7 @@ if ($n_tor == 0) {
 }
 $title = _('Stats');
 $breadcrumbs = [
-    "<a href='{$site_config['paths']['baseurl']}/staffpanel.php'>" . _('Staff Panel') . '</a>',
+    "<a href='{$config->get('paths.baseurl')}/staffpanel.php'>" . _('Staff Panel') . '</a>',
     "<a href='{$_SERVER['PHP_SELF']}'>$title</a>",
 ];
 echo stdhead($title, [], 'page-wrapper', $breadcrumbs) . wrapper($HTMLOUT) . stdfoot();

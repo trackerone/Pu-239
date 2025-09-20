@@ -2,13 +2,15 @@
 declare(strict_types=1);
 require_once dirname(__DIR__) . '/bootstrap_web.php';
 
+use PU239\Config\ConfigRepository;
 use Pu239\Database;
 use Pu239\Image;
 use Pu239\Session;
 
 
-global $container, $site_config;
-
+global $container;
+/** @var ConfigRepository $config */
+$config = $container->get(ConfigRepository::class);
 $db = $container->get(Database::class);
 
 $class = get_access(basename($_SERVER['REQUEST_URI']));
@@ -45,7 +47,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && !empty($_POST['terms'])) {
     $terms = strip_tags($_POST['terms']);
     $search = '&amp;search=' . urlencode($terms);
     $count = (int) $image->count_search_images($terms);
-    $pager = pager($perpage, $count, "{$site_config['paths']['baseurl']}/staffpanel.php?tool=manage_images{$search}&amp;");
+    $pager = pager($perpage, $count, "{$config->get('paths.baseurl')}/staffpanel.php?tool=manage_images{$search}&amp;");
     $images = $image->search_images($terms, $pager['pdo']['limit'], $pager['pdo']['offset']);
 } else {
     $terms = !empty($_GET['search']) ? strip_tags($_GET['search']) : '';
@@ -55,7 +57,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && !empty($_POST['terms'])) {
     } else {
         $count = (int) $image->count_search_images($terms);
     }
-    $pager = pager($perpage, $count, "{$site_config['paths']['baseurl']}/staffpanel.php?tool=manage_images{$search}&amp;");
+    $pager = pager($perpage, $count, "{$config->get('paths.baseurl')}/staffpanel.php?tool=manage_images{$search}&amp;");
     if (empty($terms)) {
         $images = $image->get_images($pager['pdo']['limit'], $pager['pdo']['offset']);
     } else {
@@ -129,7 +131,7 @@ if (!empty($images)) {
 }
 $title = _('Images Manager');
 $breadcrumbs = [
-    "<a href='{$site_config['paths']['baseurl']}/staffpanel.php'>" . _('Staff Panel') . '</a>',
+    "<a href='{$config->get('paths.baseurl')}/staffpanel.php'>" . _('Staff Panel') . '</a>',
     "<a href='{$_SERVER['PHP_SELF']}'>$title</a>",
 ];
 echo stdhead($title, [], 'page-wrapper', $breadcrumbs) . wrapper($HTMLOUT) . stdfoot();

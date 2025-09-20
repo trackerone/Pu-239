@@ -2,9 +2,8 @@
 declare(strict_types=1);
 require_once dirname(__DIR__) . '/bootstrap_web.php';
 
+use PU239\Config\ConfigRepository;
 use Pu239\Database;
-use Pu239\Config\ConfigRepository;
-
 use DI\DependencyException;
 use DI\NotFoundException;
 use Pu239\Cache;
@@ -19,9 +18,8 @@ $config = $container->get(ConfigRepository::class);
 $db = $container->get(Database::class);
 
 $HTMLOUT = $debugout = '';
-// TODO(2025): replace with $config->get(...) for site configuration lookups.
-if ($user['class'] < $site_config['allowed']['play']) {
-    stderr(_('Error'), _fe('Sorry, you must be a {0} to play blackjack!', $site_config['class_names'][$site_config['allowed']['play']]), 'bottom20');
+if ($user['class'] < $config->get('allowed.play')) {
+    stderr(_('Error'), _fe('Sorry, you must be a {0} to play blackjack!', $config->get('class_names')[$config->get('allowed.play')]), 'bottom20');
 } elseif ($user['game_access'] !== 1 || $user['status'] !== 0) {
     stderr(_('Error'), _('Your gaming rights have been disabled.'), 'bottom20');
 }
@@ -107,17 +105,17 @@ $deadcards = explode(' ', $cardsa);
 $doubleddown = !empty($nick['ddown']) && $nick['ddown'] === 'yes' ? true : false;
 
 if ($user['id'] == $nick['userid'] && $nick['status'] === 'waiting') {
-    stderr(_('Error'), _fe("Sorry {0}, you'll have to wait until another player plays your last game before you can play a new one.<br>You have {1}.<br>{2}Back{3}", format_username($user['id']), $nick['points'], "<a href='{$site_config['paths']['baseurl']}/games.php' class='button is-small margin20'>", '</a>'));
+    stderr(_('Error'), _fe("Sorry {0}, you'll have to wait until another player plays your last game before you can play a new one.<br>You have {1}.<br>{2}Back{3}", format_username($user['id']), $nick['points'], "<a href='{$config->get('paths.baseurl')}/games.php' class='button is-small margin20'>", '</a>'));
 }
 if ($user['id'] != $nick['userid'] && $nick['gameover'] === 'no') {
-    stderr(_('Error'), _fe("Sorry {0}, you'll have to wait until {1} finishes {2} game before you can play a new one.<br>{3}Back{4}", format_username($user['id']), format_username((int) $nick['id']), $gender, "<a href='{$site_config['paths']['baseurl']}/games.php' class='button is-small margin20'>", '</a>'));
+    stderr(_('Error'), _fe("Sorry {0}, you'll have to wait until {1} finishes {2} game before you can play a new one.<br>{3}Back{4}", format_username($user['id']), format_username((int) $nick['id']), $gender, "<a href='{$config->get('paths.baseurl')}/games.php' class='button is-small margin20'>", '</a>'));
 }
 $opponent = isset($nick['username']) ? '<h3>' . _fe('Your Opponent is: {0}', format_username((int) $nick['id'])) . '</h3>' : '';
 $required_ratio = 1.0;
 
 $blackjack['mb'] = $blackjack['mib'] * $blackjack['mib'] * $blackjack['mib'] * $blackjack['modifier'];
 $game_size = mksize($blackjack['mb']);
-$link = '[url=' . $site_config['paths']['baseurl'] . '/blackjack.php?id=' . $id . ']Blackjack ' . $game_size . '[/url]';
+$link = '[url=' . $config->get('paths.baseurl') . '/blackjack.php?id=' . $id . ']Blackjack ' . $game_size . '[/url]';
 $dt = TIME_NOW;
 $game = isset($_POST['game']) ? htmlsafechars($_POST['game']) : '';
 $start_ = isset($_POST['start_']) ? htmlsafechars($_POST['start_']) : '';
@@ -133,7 +131,7 @@ if (!empty($list) && count($list) > 0) {
         if ($card != $player_cards[0]) {
             $player_showcards .= "<div class='card {$arr['pic']}'></div>";
         } else {
-            $player_showcards .= "<img src='{$site_config['paths']['images_baseurl']}back.png' width='71' height='97' alt='' alt='" . _('Cards') . "' title='" . _('Cards') . "' class='tooltipper tooltipper_img'>";
+            $player_showcards .= "<img src='{$config->get('paths.images_baseurl')}back.png' width='71' height='97' alt='' alt='" . _('Cards') . "' title='" . _('Cards') . "' class='tooltipper tooltipper_img'>";
         }
         $player_showcards_end .= "<div class='card {$arr['pic']}'></div>";
     }
@@ -150,7 +148,7 @@ if (!empty($list) && count($list) > 0) {
             if ($card != $dealer_cards[0]) {
                 $player_showcards .= "<div class='card {$arr['pic']}'></div>";
             } else {
-                $player_showcards .= "<img src='{$site_config['paths']['images_baseurl']}back.png' width='71' height='97' alt='' alt='" . _('Cards') . "' title='" . _('Cards') . "' class='tooltipper tooltipper_img'>";
+                $player_showcards .= "<img src='{$config->get('paths.images_baseurl')}back.png' width='71' height='97' alt='' alt='" . _('Cards') . "' title='" . _('Cards') . "' class='tooltipper tooltipper_img'>";
             }
         }
         $player_showcards_end = $player_showcards;
@@ -219,7 +217,7 @@ if ($game) {
             } else {
                 $ratio = 0;
             }
-            if (!$site_config['site']['ratio_free'] && $ratio < $required_ratio) {
+            if (!$config->get('site.ratio_free') && $ratio < $required_ratio) {
                 stderr(_('Error') . _fe('Sorry {0}, your ratio is lower than the requirement of {1}%', format_username($user['id']), $required_ratio), 'bottom20');
             }
             $sql = 'SELECT * FROM blackjack WHERE userid = ' . sqlesc($user['id']) . ' AND game_id = ' . sqlesc($blackjack['gameid']);
@@ -249,7 +247,7 @@ if ($game) {
                 $dealer_card = getCard($cardcount, $blackjack['gameid'], false);
                 $dealer_cardids[] = $dealer_card;
                 $player_showcards .= "
-                    <img src='{$site_config['paths']['images_baseurl']}back.png' width='71' height='97' alt='' alt='" . _('Cards') . "' title='" . _('Cards') . "' class='tooltipper tooltipper_img'>";
+                    <img src='{$config->get('paths.images_baseurl')}back.png' width='71' height='97' alt='' alt='" . _('Cards') . "' title='" . _('Cards') . "' class='tooltipper tooltipper_img'>";
                 // player card 2
                 $card = getCard($cardcount, $blackjack['gameid'], false);
                 $cardids[] = $card;
@@ -463,12 +461,12 @@ if ($game) {
                     $cache->update_row('user_' . $user['id'], [
                         'uploaded' => $update['uploaded'],
                         'bjwins' => $update['bjwins'],
-                    ], $site_config['expires']['user_cache']);
+                    ], $config->get('expires.user_cache'));
                     // loser $a
                     $cache->update_row('user_' . $a['userid'], [
                         'uploaded' => $update['uploaded_loser'],
                         'bjlosses' => $update['bjlosses'],
-                    ], $site_config['expires']['user_cache']);
+                    ], $config->get('expires.user_cache'));
 
                     $lost_str = str_replace('10GB', mksize($blackjack['mb']), _('You lost 10GB to'));
                     $msg = _fe("Blackjack {0}: {1} {2} (You had {3} point, {4} had {6} points\n", $game_size, $lost_str, $user['username'], $a['points'], $user['username'], 21);
@@ -488,7 +486,7 @@ if ($game) {
                 ];
                 $messages_class->insert($msgs_buffer);
 
-                if ($site_config['site']['autoshout_chat'] || $site_config['site']['autoshout_irc']) {
+                if ($config->get('site.autoshout_chat') || $config->get('site.autoshout_irc')) {
                     $classColor = get_user_class_color($user['class']);
                     $opponent = get_user_class_color((int) $a['class']);
                     $msg = "[color=#$classColor]" . format_comment($user['username']) . "[/color] has just played [color=#$opponent]" . format_comment($a['username']) . "[/color] $outcome ($points to {$a['points']}) $link.";
@@ -506,13 +504,13 @@ if ($game) {
                             " . _('Your opponent was') . ' ' . format_username((int) $a['id']) . ", $gender had $points_text, $winorlose.
                         </div>
                         <p class='has-text-centered top20'>
-                            <a href='{$site_config['paths']['baseurl']}/blackjack.php?id=$id' class='button is-small right10'>" . _('Play again') . "</a>
-                            <a href='{$site_config['paths']['baseurl']}/games.php' class='button is-small'>Games</a>
+                            <a href='{$config->get('paths.baseurl')}/blackjack.php?id=$id' class='button is-small right10'>" . _('Play again') . "</a>
+                            <a href='{$config->get('paths.baseurl')}/games.php' class='button is-small'>Games</a>
                         </p>";
             } else {
                 $sql = "UPDATE blackjack SET $update_ddown, status = 'waiting', date = " . $dt . ", gameover = 'yes' WHERE game_id=" . sqlesc($blackjack['gameid']) . ' AND userid=' . sqlesc($user['id']);
                 sql_query($sql) or sqlerr(__FILE__, __LINE__);
-                if ($site_config['site']['autoshout_chat'] || $site_config['site']['autoshout_irc']) {
+                if ($config->get('site.autoshout_chat') || $config->get('site.autoshout_irc')) {
                     $classColor = get_user_class_color($user['class']);
                     $msg = "[color=#$classColor]" . format_comment($user['username']) . "[/color] has just played $link.";
                     autoshout($msg);
@@ -520,7 +518,7 @@ if ($game) {
                 $HTMLOUT .= "
                         <div class='has-text-centered top20'>
                             " . _("There are no other players, so you'll have to wait until someone plays against you.<br>You will receive a PM with the game results.") . "<br>
-                            <a href='{$site_config['paths']['baseurl']}/games.php' class='button is-small top20'>" . _('Back') . '</a>
+                            <a href='{$config->get('paths.baseurl')}/games.php' class='button is-small top20'>" . _('Back') . '</a>
                         </div>';
             }
             $HTMLOUT .= '
@@ -572,13 +570,13 @@ if ($game) {
                     $cache->update_row('user_' . $a['userid'], [
                         'uploaded' => $update['uploaded'],
                         'bjwins' => $update['bjwins'],
-                    ], $site_config['expires']['user_cache']);
+                    ], $config->get('expires.user_cache'));
 
                     // loser $user
                     $cache->update_row('user_' . $user['id'], [
                         'uploaded' => $update['uploaded_loser'],
                         'bjlosses' => $update['bjlosses'],
-                    ], $site_config['expires']['user_cache']);
+                    ], $config->get('expires.user_cache'));
 
                     $won_str = str_replace('10GB', mksize($blackjack['mb']), _('You won 10GB and beat'));
                     $msg = "Blackjack $game_size: $won_str " . $user['username'] . ' (' . _('You had') . ' ' . $a['points'] . ' ' . _('points') . ', ' . $user['username'] . " had $points points).\n\n";
@@ -592,7 +590,7 @@ if ($game) {
                 ];
                 $messages_class->insert($msgs_buffer);
 
-                if ($site_config['site']['autoshout_chat'] || $site_config['site']['autoshout_irc']) {
+                if ($config->get('site.autoshout_chat') || $config->get('site.autoshout_irc')) {
                     $classColor = get_user_class_color($user['class']);
                     $opponent = get_user_class_color((int) $a['class']);
                     $msg = "[color=#$classColor]" . format_comment($user['username']) . "[/color] has just played [color=#$opponent]" . format_comment($a['username']) . "[/color] $outcome ($points to {$a['points']}) $link.";
@@ -611,14 +609,14 @@ if ($game) {
                             " . _('Your opponent was') . ' ' . format_username((int) $a['id']) . ", $gender had $points_text, $winorlose.
                         </div>
                         <p class='has-text-centered top20'>
-                            <a href='{$site_config['paths']['baseurl']}/blackjack.php?id=$id' class='button is-small right10'>" . _('Play again') . "</a>
-                            <a href='{$site_config['paths']['baseurl']}/games.php' class='button is-small'>Games</a>
+                            <a href='{$config->get('paths.baseurl')}/blackjack.php?id=$id' class='button is-small right10'>" . _('Play again') . "</a>
+                            <a href='{$config->get('paths.baseurl')}/games.php' class='button is-small'>Games</a>
                         </p>";
             } else {
                 $sql = "UPDATE blackjack SET $update_ddown, status = 'waiting', date = " . $dt . ", gameover = 'yes' WHERE game_id=" . sqlesc($blackjack['gameid']) . ' AND userid=' . sqlesc($user['id']);
                 sql_query($sql) or sqlerr(__FILE__, __LINE__);
 
-                if ($site_config['site']['autoshout_chat'] || $site_config['site']['autoshout_irc']) {
+                if ($config->get('site.autoshout_chat') || $config->get('site.autoshout_irc')) {
                     $classColor = get_user_class_color($user['class']);
                     $msg = "[color=#$classColor]" . format_comment($user['username']) . "[/color] has just played $link.";
                     autoshout($msg);
@@ -626,7 +624,7 @@ if ($game) {
                 $HTMLOUT .= "
                         <div class='has-text-centered top20'>
                             " . _("There are no other players, so you'll have to wait until someone plays against you.<br>You will receive a PM with the game results.") . "<br>
-                            <a href='{$site_config['paths']['baseurl']}/games.php' class='button is-small top20'>" . _('Back') . '</a>
+                            <a href='{$config->get('paths.baseurl')}/games.php' class='button is-small top20'>" . _('Back') . '</a>
                         </div>';
             }
             $HTMLOUT .= '
@@ -811,12 +809,12 @@ if ($game) {
                 $cache->update_row('user_' . $update['winnerid'], [
                     'uploaded' => $update['uploaded'],
                     'bjwins' => $update['bjwins'],
-                ], $site_config['expires']['user_cache']);
+                ], $config->get('expires.user_cache'));
 
                 $cache->update_row('user_' . $update['loserid'], [
                     'uploaded' => $update['uploaded_loser'],
                     'bjlosses' => $update['bjlosses'],
-                ], $site_config['expires']['user_cache']);
+                ], $config->get('expires.user_cache'));
             }
 
             $msgs_buffer[] = [
@@ -827,7 +825,7 @@ if ($game) {
             ];
             $messages_class->insert($msgs_buffer);
 
-            if ($site_config['site']['autoshout_chat'] || $site_config['site']['autoshout_irc']) {
+            if ($config->get('site.autoshout_chat') || $config->get('site.autoshout_irc')) {
                 $classColor = get_user_class_color($user['class']);
                 $opponent = get_user_class_color((int) $a['class']);
                 $msg = "[color=#$classColor]" . format_comment($user['username']) . "[/color] has just played [color=#$opponent]" . format_comment($a['username']) . "[/color] $outcome ({$playerarr['points']} to {$a['points']}) $link.";
@@ -848,14 +846,14 @@ if ($game) {
                             " . _('Your opponent was') . ' ' . format_username((int) $a['id']) . ", $gender had $points_text, $winorlose.
                         </div>
                         <p class='has-text-centered top20'>
-                            <a href='{$site_config['paths']['baseurl']}/blackjack.php?id=$id' class='button is-small right10'>" . _('Play again') . "</a>
-                            <a href='{$site_config['paths']['baseurl']}/games.php' class='button is-small'>Games</a>
+                            <a href='{$config->get('paths.baseurl')}/blackjack.php?id=$id' class='button is-small right10'>" . _('Play again') . "</a>
+                            <a href='{$config->get('paths.baseurl')}/games.php' class='button is-small'>Games</a>
                         </p>";
         } else {
             $sql = "UPDATE blackjack SET $update_ddown, status = 'waiting', date = " . $dt . ", gameover = 'yes' WHERE game_id=" . sqlesc($blackjack['gameid']) . ' AND userid=' . sqlesc($user['id']);
             sql_query($sql) or sqlerr(__FILE__, __LINE__);
 
-            if ($site_config['site']['autoshout_chat'] || $site_config['site']['autoshout_irc']) {
+            if ($config->get('site.autoshout_chat') || $config->get('site.autoshout_irc')) {
                 $classColor = get_user_class_color($user['class']);
                 $msg = "[color=#$classColor]" . format_comment($user['username']) . "[/color] has just played $link.";
                 autoshout($msg);
@@ -863,7 +861,7 @@ if ($game) {
             $HTMLOUT .= "
                         <div class='has-text-centered'>
                             " . _("There are no other players, so you'll have to wait until someone plays against you.<br>You will receive a PM with the game results.") . "<br>
-                            <a href='{$site_config['paths']['baseurl']}/games.php' class='button is-small top20'>" . _('Back') . '</a>
+                            <a href='{$config->get('paths.baseurl')}/games.php' class='button is-small top20'>" . _('Back') . '</a>
                         </div>';
         }
         $HTMLOUT .= '
@@ -901,7 +899,7 @@ if ($game) {
 
     $HTMLOUT .= "
                 <a id='blackjack-hash'></a>
-                <h2><a href='{$site_config['paths']['baseurl']}/games.php' title='" . _('Return to the Games') . "' class='tooltipper'>{$blackjack['title']}</a></h2>
+                <h2><a href='{$config->get('paths.baseurl')}/games.php' title='" . _('Return to the Games') . "' class='tooltipper'>{$blackjack['title']}</a></h2>
                 $opponent
                 <table class='table table-bordered table-striped top20 bottom20'>
                     <tr class='no_hover'>
@@ -1204,7 +1202,7 @@ function getCard($cardcount, $gameid, $deal = false)
  */
 function output($blackjack, $HTMLOUT, $debugout)
 {
-    global $site_config, $user;
+    global $config, $user;
 
     $debugout = "
                 <table id='last10List' class='table table-bordered table-striped top20 bottom20'>
@@ -1228,7 +1226,7 @@ function output($blackjack, $HTMLOUT, $debugout)
 
     $title = $blackjack['title'];
     $breadcrumbs = [
-        "<a href='{$site_config['paths']['baseurl']}/games.php'>" . _('Games') . '</a>',
+        "<a href='{$config->get('paths.baseurl')}/games.php'>" . _('Games') . '</a>',
         "<a href='{$_SERVER['PHP_SELF']}'>$title</a>",
     ];
     echo stdhead($title, [], 'page-wrapper', $breadcrumbs) . wrapper($HTMLOUT) . stdfoot();

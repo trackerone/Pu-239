@@ -2,11 +2,13 @@
 declare(strict_types=1);
 require_once dirname(__DIR__) . '/bootstrap_web.php';
 
+use PU239\Config\ConfigRepository;
 use Pu239\Database;
 
 
-global $container, $site_config;
-
+global $container;
+/** @var ConfigRepository $config */
+$config = $container->get(ConfigRepository::class);
 $db = $container->get(Database::class);
 
 $class = get_access(basename($_SERVER['REQUEST_URI']));
@@ -39,15 +41,15 @@ if ($count > 0) {
             ++$i;
             $http_agent = htmlsafechars($data['browser']);
             if (strstr($http_agent, 'Opera')) {
-                $browser = "<img src='{$site_config['paths']['images_baseurl']}referrers/opera.png' alt='Opera' title='Opera' width='25' height='25'>&#160;&#160;Opera";
+                $browser = "<img src='{$config->get('paths.images_baseurl')}referrers/opera.png' alt='Opera' title='Opera' width='25' height='25'>&#160;&#160;Opera";
             } elseif (strstr($http_agent, 'Konqueror')) {
-                $browser = "<img src='{$site_config['paths']['images_baseurl']}referrers/konqueror.png' alt='konqueror' title='konqueror' width='25' height='25'>&#160;&#160;konqueror";
+                $browser = "<img src='{$config->get('paths.images_baseurl')}referrers/konqueror.png' alt='konqueror' title='konqueror' width='25' height='25'>&#160;&#160;konqueror";
             } elseif (strstr($http_agent, 'MSIE')) {
-                $browser = "<img src='{$site_config['paths']['images_baseurl']}referrers/ie.png' alt='IE' title='IE' width='25' height='25'>&#160;&#160;IE";
+                $browser = "<img src='{$config->get('paths.images_baseurl')}referrers/ie.png' alt='IE' title='IE' width='25' height='25'>&#160;&#160;IE";
             } elseif (strstr($http_agent, 'Chrome')) {
-                $browser = "<img src='{$site_config['paths']['images_baseurl']}referrers/chrome.png' alt='Chrome' title='Chrome' width='25' height='25'>&#160;&#160;Chrome";
+                $browser = "<img src='{$config->get('paths.images_baseurl')}referrers/chrome.png' alt='Chrome' title='Chrome' width='25' height='25'>&#160;&#160;Chrome";
             } elseif ((strstr($http_agent, 'Nav')) || (strstr($http_agent, 'Gold')) || (strstr($http_agent, 'X11')) || (strstr($http_agent, 'Mozilla')) || (strstr($http_agent, 'Netscape'))) {
-                $browser = "<img src='{$site_config['paths']['images_baseurl']}referrers/firefox.png' alt='FireFox' title='FireFox' width='25' height='25'>&#160;&#160;Mozilla";
+                $browser = "<img src='{$config->get('paths.images_baseurl')}referrers/firefox.png' alt='FireFox' title='FireFox' width='25' height='25'>&#160;&#160;Mozilla";
             } else {
                 $browser = _('Unknow Browser');
             }
@@ -71,7 +73,7 @@ if ($count > 0) {
 }
 $title = _('Referers');
 $breadcrumbs = [
-    "<a href='{$site_config['paths']['baseurl']}/staffpanel.php'>" . _('Staff Panel') . '</a>',
+    "<a href='{$config->get('paths.baseurl')}/staffpanel.php'>" . _('Staff Panel') . '</a>',
     "<a href='{$_SERVER['PHP_SELF']}'>$title</a>",
 ];
 echo stdhead($title, [], 'page-wrapper', $breadcrumbs) . wrapper($HTMLOUT) . stdfoot();
