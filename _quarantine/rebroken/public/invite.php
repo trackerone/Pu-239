@@ -1,5 +1,6 @@
 <?php
 declare(strict_types=1);
+
 require_once dirname(__DIR__) . '/bootstrap_web.php';
 
 use Pu239\Cache;
@@ -259,12 +260,12 @@ $db->perform($sql, array_merge($set, ['id' => $user['id']]));
 
     $msg = sqlesc(_fe("Hey there {0}
 Welcome to {1}!
-We have made many changes to the site, and we hope you enjoy them! 
+We have made many changes to the site, and we hope you enjoy them!
 We have been working hard to make {1} somethin' special!
 {2} has a strong community (just check out forums), and is a feature rich site. We hope you'll join in on all the fun!
 Be sure to read the {3}Rules{4}[/url] and {5}FAQ{6} before you start using the site.
 We are a strong friendly community here :D {7} is so much more then just torrents.
-Just for kicks, we've started you out with 200.0 Karma Bonus Points, and a couple of bonus GB to get ya started! 
+Just for kicks, we've started you out with 200.0 Karma Bonus Points, and a couple of bonus GB to get ya started!
 so, enjoy
 cheers,
 {8} Staff.", ':wave:', $site_config['site']['name'], $site_config['site']['name'], $site_config['site']['name'], "[url={$site_config['paths']['baseurl']}/rules.php]", '[/url]', "[url={$site_config['paths']['baseurl']}/faq.php]", '[/url]', $site_config['site']['name'], $site_config['site']['name']));

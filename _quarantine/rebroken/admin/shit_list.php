@@ -1,5 +1,6 @@
 <?php
 declare(strict_types=1);
+
 require_once dirname(__DIR__) . '/bootstrap_web.php';
 
 use Pu239\Database;
@@ -85,7 +86,7 @@ if (empty($rows)) {
       [ ' . get_date((int) $shit_list['added'], '', 0, 1) . ' ]
       <b>' . _('added to shit list: ') . '</b> ' . get_date((int) $shit_list['shit_list_added'], '') . '
       [ ' . get_date((int) $shit_list['shit_list_added'], '', 0, 1) . ' ]
-      <b>last seen:</b> ' . get_date((int) $shit_list['last_access'], '') . ' 
+      <b>last seen:</b> ' . get_date((int) $shit_list['last_access'], '') . '
       [ ' . get_date((int) $shit_list['last_access'], '', 0, 1) . ' ]<hr>
       ' . format_comment($shit_list['text']) . '</td>' . (($i % 2 == 0) ? '</tr><tr><td class="colhead" colspan="4"></td></tr>' : '');
         ++$i;

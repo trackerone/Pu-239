@@ -1,5 +1,6 @@
 <?php
 declare(strict_types=1);
+
 require_once dirname(__DIR__) . '/bootstrap_web.php';
 
 use Pu239\Database;
@@ -458,8 +459,8 @@ if ($action === 'avatar') {
                                         <input type="radio" name="show_email" ' . ($user['show_email'] === 'no' ? 'checked' : '') . ' value="no"> ' . _('No') . '
                                         <p>' . _('Do you wish to have your email address visible on the forums?') . '</p>', 1);
     $HTMLOUT .= tr(_('Change password'), "
-                                        <input type='password' name='password' id='password' class='w-100' autocomplete='on' minlength='8' placeholder='" . _('New Password') . "'> 
-                                        <input type='password' name='confirm_password' id='confirm_password' class='w-100 top10' autocomplete='on' minlength='8' placeholder='" . _('New Password Again') . "'> 
+                                        <input type='password' name='password' id='password' class='w-100' autocomplete='on' minlength='8' placeholder='" . _('New Password') . "'>
+                                        <input type='password' name='confirm_password' id='confirm_password' class='w-100 top10' autocomplete='on' minlength='8' placeholder='" . _('New Password Again') . "'>
                                         <p class='top20 bottom10'>" . _('You must enter your current password.') . "</p>
                                         <input type='password' name='current_pass' class='w-100' placeholder='" . _('Current Password') . "'>", 1);
     $HTMLOUT .= "
