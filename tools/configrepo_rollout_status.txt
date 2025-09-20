@@ -1,0 +1,1 @@
+offset=0,batch_size=50,processed=3,replacements=0

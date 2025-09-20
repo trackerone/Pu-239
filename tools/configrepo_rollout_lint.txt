@@ -1,0 +1,1 @@
+chat/lib/class/AJAXChatTemplate.php: OK

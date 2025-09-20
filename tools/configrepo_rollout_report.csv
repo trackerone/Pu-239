@@ -1,0 +1,4 @@
+file,replaced,todos,notes
+chat/lib/class/AJAXChatTemplate.php,none,0,no legacy config usage detected
+chat/lib/template/loggedIn.html,none,0,no legacy config usage detected (template placeholder only)
+chat/lib/template/logs.html,none,0,no legacy config usage detected (template placeholder only)
