@@ -1,0 +1,11 @@
+file,rehydrated,re_quarantined,fixed_stray_config,function_includes_removed,notes,source_quarantine
+admin/class_promo.php,false,false,false,false,"Already PDO-ready; no action taken.",""
+admin/comments.php,false,false,false,false,"Already PDO-ready; no action taken.",""
+admin/namechanger.php,false,false,false,false,"Standardized existing stub message.",""
+admin/reports.php,false,false,false,false,"Already PDO-ready; no action taken.",""
+admin/reputation_ad.php,false,false,false,false,"Standardized existing stub message.",""
+admin/shit_list.php,false,false,false,false,"Standardized existing stub message.",""
+admin/sitelog.php,false,true,false,false,"Re-quarantined incomplete migration stubbed for safety.","_quarantine/rebroken/admin/sitelog.php"
+admin/system_view.php,false,true,false,false,"Re-quarantined incomplete migration stubbed for safety.","_quarantine/rebroken/admin/system_view.php"
+admin/warn.php,false,false,false,false,"Standardized existing stub message.",""
+include/function_account_delete.php,false,true,false,false,"Re-quarantined incomplete migration stubbed for safety.","_quarantine/rebroken/include/function_account_delete.php"

@@ -1,0 +1,10 @@
+[2025-09-20T07:08:57+00:00] admin/class_promo.php: no action required; file already PDO-ready.
+[2025-09-20T07:08:57+00:00] admin/comments.php: no action required; file already PDO-ready.
+[2025-09-20T07:08:57+00:00] admin/namechanger.php: standardized stub message to modernization placeholder.
+[2025-09-20T07:08:57+00:00] admin/reports.php: no action required; file already PDO-ready.
+[2025-09-20T07:08:57+00:00] admin/reputation_ad.php: standardized stub message to modernization placeholder.
+[2025-09-20T07:08:57+00:00] admin/shit_list.php: standardized stub message to modernization placeholder.
+[2025-09-20T07:08:57+00:00] admin/sitelog.php: moved incomplete migration to _quarantine/rebroken and installed safety stub.
+[2025-09-20T07:08:57+00:00] admin/system_view.php: moved incomplete migration to _quarantine/rebroken and installed safety stub.
+[2025-09-20T07:08:57+00:00] admin/warn.php: standardized stub message to modernization placeholder.
+[2025-09-20T07:08:57+00:00] include/function_account_delete.php: moved incomplete migration to _quarantine/rebroken and installed safety stub.
