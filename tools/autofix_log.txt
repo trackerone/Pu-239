@@ -8,6 +8,10 @@
 [2025-09-20T07:08:57+00:00] admin/system_view.php: moved incomplete migration to _quarantine/rebroken and installed safety stub.
 [2025-09-20T07:08:57+00:00] admin/warn.php: standardized stub message to modernization placeholder.
 [2025-09-20T07:08:57+00:00] include/function_account_delete.php: moved incomplete migration to _quarantine/rebroken and installed safety stub.
+********* codex/apply-code-formatting-hygiene-cn1gnd
+=======
+******* codex/apply-code-formatting-hygiene-xecqd7
+********* master
 [2025-09-20T07:19:25+00:00] public/blackjack.php: patched stray site_config usage and added ConfigRepository bootstrap helper.
 [2025-09-20T07:19:25+00:00] public/coins.php: standardized modernization stub referencing _quarantine/rebroken/public/coins.php.
 [2025-09-20T07:19:25+00:00] public/comment.php: standardized modernization stub referencing _quarantine/rebroken/public/comment.php.
@@ -28,3 +32,8 @@
 [2025-09-20T07:19:25+00:00] public/userhistory.php: patched stray site_config usage and added ConfigRepository bootstrap helper.
 [2025-09-20T07:19:25+00:00] public/usermood.php: standardized modernization stub referencing _quarantine/rebroken/public/usermood.php.
 [2025-09-20T07:19:25+00:00] public/users.php: inspection only; already using PDO patterns.
+********* codex/apply-code-formatting-hygiene-cn1gnd
+=======
+=======
+******** master
+********* master
