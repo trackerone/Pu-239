@@ -1,12 +1,16 @@
 <?php
-
 declare(strict_types=1);
 
+use PU239\Config\ConfigRepository;
 use Pu239\Achievementlist;
 use Pu239\Database;
 
 require_once dirname(__DIR__) . '/bootstrap_web.php';
 
+$images_baseurl = '';
+global $container;
+/** @var ConfigRepository $config */
+$config = $container->get(ConfigRepository::class);
 $db = $container->get(Database::class);
 
 require_once __DIR__ . '/../include/bittorrent.php';
@@ -58,12 +62,13 @@ if ($rows === []) {
                 <th>' . _('Earned') . '</th>
             </tr>';
     $body = '';
+    $images_baseurl = (string) $config->get('paths.images_baseurl');
     foreach ($rows as $arr) {
         $notes = htmlsafechars($arr['notes']);
         $count = (int) $arr['count'];
         $clienticon = '';
         if ($arr['clienticon'] !== '') {
-            $clienticon = "<img src='{$site_config['paths']['images_baseurl']}achievements/" .
+            $clienticon = "<img src='" . $images_baseurl . "achievements/" .
                 htmlsafechars($arr['clienticon']) .
                 "' class='tooltipper' title='" . htmlsafechars($arr['achievename']) .
                 "' alt='" . htmlsafechars($arr['achievename']) . "'>";

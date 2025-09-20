@@ -1,4 +1,6 @@
 chat/lib/class/AJAXChatTemplate.php: OK
+*** codex/refactor-legacy-config-to-configrepository-f601es
+=======
 *** codex/refactor-legacy-config-to-configrepository-406qd1
 =======
 *** codex/refactor-legacy-config-to-configrepository-w5o2m3
@@ -7,6 +9,7 @@ chat/lib/class/AJAXChatTemplate.php: OK
 =======
 *** codex/refactor-legacy-config-to-configrepository-xyf5zu
 =======
+*** master
 *** master
 *** master
 *** master
@@ -60,11 +63,14 @@ public/rss.php: OK
 admin/stats_extra.php: OK
 admin/memcache.php: OK
 public/blackjack.php: OK
+*** codex/refactor-legacy-config-to-configrepository-f601es
+=======
 *** codex/refactor-legacy-config-to-configrepository-406qd1
 =======
 *** codex/refactor-legacy-config-to-configrepository-w5o2m3
 =======
 *** codex/refactor-legacy-config-to-configrepository-l20m0t
+*** master
 *** master
 *** master
 No syntax errors detected in admin/upgrade_database.php
@@ -92,11 +98,26 @@ No syntax errors detected in messages/edit_mailboxes.php
 No syntax errors detected in messages/view_message.php
 No syntax errors detected in messages/delete.php
 No syntax errors detected in messages/search.php
+*** codex/refactor-legacy-config-to-configrepository-f601es
+No syntax errors detected in include/stealth.php
+No syntax errors detected in messages/move.php
+No syntax errors detected in messages/move_or_delete_multi.php
+No syntax errors detected in messages/send_message.php
+No syntax errors detected in partials/categories.php
+No syntax errors detected in partials/free_details.php
+No syntax errors detected in public/achievementbonus.php
+No syntax errors detected in public/achievementhistory.php
+No syntax errors detected in public/achievementlist.php
+No syntax errors detected in public/ajax/ajax_tooltips.php
+No syntax errors detected in public/ajax/autocomplete.php
+No syntax errors detected in public/ajax/member_input.php
+=======
 *** codex/refactor-legacy-config-to-configrepository-406qd1
 =======
 *** codex/refactor-legacy-config-to-configrepository-w5o2m3
 =======
 =======
+*** master
 *** master
 *** master
 *** master
