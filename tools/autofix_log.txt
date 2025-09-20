@@ -37,3 +37,38 @@
 =======
 ******** master
 ********* master
+
+[2025-09-20T07:46:35+00:00] admin/class_promo.php: Re-verified current implementation; no additional fixes required in this batch.
+[2025-09-20T07:46:35+00:00] admin/comments.php: Re-verified current implementation; no additional fixes required in this batch.
+[2025-09-20T07:46:35+00:00] admin/namechanger.php: Existing modernization stub retained; upstream remains at _quarantine/rebroken/admin/namechanger.php.
+[2025-09-20T07:46:35+00:00] admin/reports.php: Re-verified current implementation; no additional fixes required in this batch.
+[2025-09-20T07:46:35+00:00] admin/reputation_ad.php: Existing modernization stub retained; upstream remains at _quarantine/rebroken/admin/reputation_ad.php.
+[2025-09-20T07:46:35+00:00] admin/shit_list.php: Existing modernization stub retained; upstream remains at _quarantine/rebroken/admin/shit_list.php.
+[2025-09-20T07:46:35+00:00] admin/sitelog.php: Existing modernization stub retained; upstream remains at _quarantine/rebroken/admin/sitelog.php.
+[2025-09-20T07:46:35+00:00] admin/system_view.php: Existing modernization stub retained; upstream remains at _quarantine/rebroken/admin/system_view.php.
+[2025-09-20T07:46:35+00:00] admin/warn.php: Existing modernization stub retained; upstream remains at _quarantine/rebroken/admin/warn.php.
+[2025-09-20T07:46:35+00:00] include/function_account_delete.php: Existing modernization stub retained; upstream remains at _quarantine/rebroken/include/function_account_delete.php.
+[2025-09-20T07:46:35+00:00] public/blackjack.php: Re-verified current implementation; no additional fixes required in this batch.
+[2025-09-20T07:46:35+00:00] public/coins.php: Existing modernization stub retained; upstream remains at _quarantine/rebroken/public/coins.php.
+[2025-09-20T07:46:35+00:00] public/comment.php: Existing modernization stub retained; upstream remains at _quarantine/rebroken/public/comment.php.
+[2025-09-20T07:46:35+00:00] public/credits.php: Existing modernization stub retained; upstream remains at _quarantine/rebroken/public/credits.php.
+[2025-09-20T07:46:35+00:00] public/forums.php: Re-verified current implementation; no additional fixes required in this batch.
+[2025-09-20T07:46:35+00:00] public/friends.php: Existing modernization stub retained; upstream remains at _quarantine/rebroken/public/friends.php.
+[2025-09-20T07:46:35+00:00] public/gift.php: Existing modernization stub retained; upstream remains at _quarantine/rebroken/public/gift.php.
+[2025-09-20T07:46:35+00:00] public/invite.php: Existing modernization stub retained; upstream remains at _quarantine/rebroken/public/invite.php.
+[2025-09-20T07:46:35+00:00] public/messages.php: Existing modernization stub retained; upstream remains at _quarantine/rebroken/public/messages.php.
+[2025-09-20T07:46:35+00:00] public/reputation.php: Existing modernization stub retained; upstream remains at _quarantine/rebroken/public/reputation.php.
+[2025-09-20T07:46:35+00:00] public/staffbox.php: Existing modernization stub retained; upstream remains at _quarantine/rebroken/public/staffbox.php.
+[2025-09-20T07:46:35+00:00] public/takeedit.php: Existing modernization stub retained; upstream remains at _quarantine/rebroken/public/takeedit.php.
+[2025-09-20T07:46:35+00:00] public/takeeditcp.php: Existing modernization stub retained; upstream remains at _quarantine/rebroken/public/takeeditcp.php.
+[2025-09-20T07:46:35+00:00] public/takereseed.php: Re-verified current implementation; no additional fixes required in this batch.
+[2025-09-20T07:46:35+00:00] public/topten.php: Re-verified current implementation; no additional fixes required in this batch.
+[2025-09-20T07:46:35+00:00] public/user_unlocks.php: Re-verified current implementation; no additional fixes required in this batch.
+[2025-09-20T07:46:35+00:00] public/usercp.php: Existing modernization stub retained; upstream remains at _quarantine/rebroken/public/usercp.php.
+[2025-09-20T07:46:35+00:00] public/userhistory.php: Re-verified current implementation; no additional fixes required in this batch.
+[2025-09-20T07:46:35+00:00] public/usermood.php: Existing modernization stub retained; upstream remains at _quarantine/rebroken/public/usermood.php.
+[2025-09-20T07:46:35+00:00] public/users.php: Re-verified current implementation; no additional fixes required in this batch.
+[2025-09-20T07:54:22+00:00] admin/class_promo.php: Re-quarantined corrupted file and installed runtime stub (source preserved at _quarantine/rebroken/admin/class_promo.php).
+[2025-09-20T07:54:22+00:00] admin/comments.php: Re-quarantined corrupted file and installed runtime stub (source preserved at _quarantine/rebroken/admin/comments.php).
+[2025-09-20T07:54:22+00:00] admin/reports.php: Re-quarantined corrupted file and installed runtime stub (source preserved at _quarantine/rebroken/admin/reports.php).
+[2025-09-20T07:54:22+00:00] public/users.php: Re-quarantined corrupted file and installed runtime stub (source preserved at _quarantine/rebroken/public/users.php).
