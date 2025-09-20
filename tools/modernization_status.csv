@@ -1,0 +1,12 @@
+metric,value,notes
+rehydrated_count,5,Files successfully upgraded out of quarantine.
+re_quarantined_count,82,Files returned to quarantine due to parse or marker blockers.
+pending_review_count,15,Files neither rehydrated nor re-quarantined yet.
+quarantine_active_candidates,102,Entries tracked in quarantine inventory.
+quarantine_with_sql,87,Quarantined files still containing SQL markers.
+legacy_db_files_remaining,97,Quarantine entries still awaiting PDO migration (includes re-quarantined + pending).
+frozen_modules_count,0,Modules explicitly frozen from modernization.
+lint_logs_with_errors,6,Lint reports that still flag syntax errors.
+lint_error_paths,43,Unique file paths with parse failures across lint logs.
+repo_lint_issue_count,30,Errors surfaced in repo-wide lint sweep.
+db_purge_rehydrated_v3_updates,5,Recently modernized scripts in db_purge v3 report.
