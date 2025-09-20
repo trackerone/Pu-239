@@ -2,13 +2,15 @@
 declare(strict_types=1);
 require_once dirname(__DIR__) . '/bootstrap_web.php';
 
+use PU239\Config\ConfigRepository;
 use Pu239\Cache;
 use Pu239\Database;
 use Pu239\Session;
 
 
-global $container, $site_config;
-
+global $container;
+/** @var ConfigRepository $config */
+$config = $container->get(ConfigRepository::class);
 $db = $container->get(Database::class);
 
 $class = get_access(basename($_SERVER['REQUEST_URI']));
@@ -43,7 +45,7 @@ $db->perform($sql, $values);
 
                 if ($flush) {
                     $cache->flushDB();
-                    $session->set('is-success', 'You flushed the ' . ucfirst($site_config['cache']['driver']) . ' cache');
+                    $session->set('is-success', 'You flushed the ' . ucfirst((string) $config->get('cache.driver')) . ' cache');
                 } elseif (!$flush) {
                     // do nothing
                 } else {
@@ -162,7 +164,7 @@ if (file_exists(DATABASE_DIR)) {
 $HTMLOUT = wrapper(main_table($body, $heading));
 $title = _('Update Database');
 $breadcrumbs = [
-    "<a href='{$site_config['paths']['baseurl']}/staffpanel.php'>" . _('Staff Panel') . '</a>',
+    "<a href='{$config->get('paths.baseurl')}/staffpanel.php'>" . _('Staff Panel') . '</a>',
     "<a href='{$_SERVER['PHP_SELF']}'>$title</a>",
 ];
 echo stdhead($title, [], 'page-wrapper', $breadcrumbs) . wrapper($HTMLOUT) . stdfoot();

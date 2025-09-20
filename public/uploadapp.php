@@ -8,6 +8,7 @@ $db = $container->get(Database::class);
 
 
 
+use PU239\Config\ConfigRepository;
 use Delight\Auth\Auth;
 use Pu239\Cache;
 use Pu239\Database;
@@ -17,8 +18,9 @@ use Rakit\Validation\Validator;
 
 require_once __DIR__ . '/../include/bittorrent.php';
 $user = check_user_status();
-global $container, $site_config;
-
+global $container;
+/** @var ConfigRepository $config */
+$config = $container->get(ConfigRepository::class);
 $HTMLOUT = '';
 
 // $fluent removed — use $this->db (ExtendedPdo)
@@ -53,7 +55,7 @@ check_status($fluent, $user['id']);
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (!is_valid_id((int) $_POST['userid'])) {
-        stderr(_('Error'), _fe('It appears something went wrong while sending your application. Please {0}try again{1}', "<a href='{$site_config['paths']['baseurl']}/uploadapp.php'>", '</a>'));
+        stderr(_('Error'), _fe('It appears something went wrong while sending your application. Please {0}try again{1}', "<a href='{$config->get('paths.baseurl')}/uploadapp.php'>", '</a>'));
     }
     if (!$_POST['speed']) {
         stderr(_('Error'), _('It appears you have left the field with your upload speed blank.'));
@@ -102,10 +104,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 $res = $db->perform($sql, $values);
     $cache->delete('new_uploadapp_');
     if (!$res) {
-        stderr(_('Error'), _fe('It appears something went wrong while sending your application. Please {0}try again{1}', "<a href='{$site_config['paths']['baseurl']}/uploadapp.php'>", '</a>'));
+        stderr(_('Error'), _fe('It appears something went wrong while sending your application. Please {0}try again{1}', "<a href='{$config->get('paths.baseurl')}/uploadapp.php'>", '</a>'));
     } else {
         $subject = 'Uploader application';
-        $msg = "An uploader application has just been filled in by [url={$site_config['paths']['baseurl']}/userdetails.php?id=" . (int) $user['id'] . "][b]{$user['username']}[/b][/url]. Click [url={$site_config['paths']['baseurl']}/staffpanel.php?tool=uploadapps&action=app][b]Here[/b][/url] to go to the uploader applications page.";
+        $msg = "An uploader application has just been filled in by [url={$config->get('paths.baseurl')}/userdetails.php?id=" . (int) $user['id'] . "][b]{$user['username']}[/b][/url]. Click [url={$config->get('paths.baseurl')}/staffpanel.php?tool=uploadapps&action=app][b]Here[/b][/url] to go to the uploader applications page.";
         $dt = TIME_NOW;
         $subres = $fluent->from('users')
             ->select(null)

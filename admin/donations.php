@@ -2,11 +2,13 @@
 declare(strict_types=1);
 require_once dirname(__DIR__) . '/bootstrap_web.php';
 
+use PU239\Config\ConfigRepository;
 use Pu239\Database;
 
 
-global $container, $site_config;
-
+global $container;
+/** @var ConfigRepository $config */
+$config = $container->get(ConfigRepository::class);
 $db = $container->get(Database::class);
 
 $class = get_access(basename($_SERVER['REQUEST_URI']));
@@ -27,7 +29,7 @@ if (isset($_GET['total_donors'])) {
                     ->where('status = 0')
                     ->fetch("count");
     $perpage = 15;
-    $pager = pager($perpage, $count, $site_config['paths']['baseurl'] . '/staffpanel.php?tool=donations&amp;action=donations&amp;');
+    $pager = pager($perpage, $count, $config->get('paths.baseurl') . '/staffpanel.php?tool=donations&amp;action=donations&amp;');
     $sql = $fluent->from('users')
                   ->select(null)
                   ->select('id')
@@ -51,7 +53,7 @@ if (isset($_GET['total_donors'])) {
                     ->where('status = 0')
                     ->fetch("count");
     $perpage = 15;
-    $pager = pager($perpage, $count, $site_config['paths']['baseurl'] . '/staffpanel.php?tool=donations&amp;action=donations&amp;');
+    $pager = pager($perpage, $count, $config->get('paths.baseurl') . '/staffpanel.php?tool=donations&amp;action=donations&amp;');
     $sql = $fluent->from('users')
                   ->select(null)
                   ->select('id')
@@ -75,10 +77,10 @@ if ($count > $perpage) {
 $HTMLOUT .= "
     <ul class='level-center bg-06'>
         <li class='is-link margin10'>
-            <a href='{$site_config['paths']['baseurl']}/staffpanel.php?tool=donations&amp;action=donations'>" . _('Current Donors') . "</a>
+            <a href='{$config->get('paths.baseurl')}/staffpanel.php?tool=donations&amp;action=donations'>" . _('Current Donors') . "</a>
         </li>
         <li class='is-link margin10'>
-            <a href='{$site_config['paths']['baseurl']}/staffpanel.php?tool=donations&amp;action=donations&amp;total_donors=1'>" . _('All Donations') . "</a>
+            <a href='{$config->get('paths.baseurl')}/staffpanel.php?tool=donations&amp;action=donations&amp;total_donors=1'>" . _('All Donations') . "</a>
         </li>
     </ul>
     <h1 class='has-text-centered'>Site Donations</h1>";
@@ -114,7 +116,7 @@ foreach ($sql as $arr) {
         <td><b>' . money_format('%.2n', (float) $arr['donated']) . '</td>
         <td><b>' . money_format('%.2n', (float) $arr['total_donated']) . "</td>
         <td>
-            <a class='is-link' href='{$site_config['paths']['baseurl']}/messages.php?action=send_message&amp;receiver=" . (int) $arr['id'] . "'>" . _('PM') . '</a>
+            <a class='is-link' href='{$config->get('paths.baseurl')}/messages.php?action=send_message&amp;receiver=" . (int) $arr['id'] . "'>" . _('PM') . '</a>
         </td>
     </tr>';
 }
@@ -128,7 +130,7 @@ if ($count > $perpage) {
 
 $title = _('Donations');
 $breadcrumbs = [
-    "<a href='{$site_config['paths']['baseurl']}/staffpanel.php'>" . _('Staff Panel') . '</a>',
+    "<a href='{$config->get('paths.baseurl')}/staffpanel.php'>" . _('Staff Panel') . '</a>',
     "<a href='{$_SERVER['PHP_SELF']}'>$title</a>",
 ];
 echo stdhead($title, [], 'page-wrapper', $breadcrumbs) . wrapper($HTMLOUT) . stdfoot();

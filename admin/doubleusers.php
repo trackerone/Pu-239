@@ -2,13 +2,15 @@
 declare(strict_types=1);
 require_once dirname(__DIR__) . '/bootstrap_web.php';
 
+use PU239\Config\ConfigRepository;
 use Pu239\Database;
 use Pu239\Cache;
 use Pu239\Message;
 
 
-global $container, $site_config, $CURUSER;
-
+global $container, $CURUSER;
+/** @var ConfigRepository $config */
+$config = $container->get(ConfigRepository::class);
 /** @var Database $db */
 $db = $container->get(Database::class);
 
@@ -72,7 +74,7 @@ $countRow = $db->fetch('SELECT COUNT(id) AS count FROM users WHERE personal_doub
 $count = (int) ($countRow['count'] ?? 0);
 
 $perpage = 25;
-$pager = pager($perpage, $count, "{$site_config['paths']['baseurl']}/staffpanel.php?tool=doubleusers&amp;");
+$pager = pager($perpage, $count, "{$config->get('paths.baseurl')}/staffpanel.php?tool=doubleusers&amp;");
 
 $rows = [];
 if ($count > 0) {
@@ -114,7 +116,7 @@ if ($count === 0) {
         } else {
             $body .= '</td>
             <td>' . _fe('Until {0} ({1}) to go.', get_date($personal_doubleseed, 'DATE'), mkprettytime($personal_doubleseed - $dt)) . "</td>
-            <td><a href='{$site_config['paths']['baseurl']}/staffpanel.php?tool=doubleusers&amp;remove=" . (int) $arr2['id'] . "' onclick=\"return confirm('" . _('Are you sure you want to remove this users DoubleSeed Status?') . "')\">" . _('Remove') . '</a></td>
+            <td><a href='{$config->get('paths.baseurl')}/staffpanel.php?tool=doubleusers&amp;remove=" . (int) $arr2['id'] . "' onclick=\"return confirm('" . _('Are you sure you want to remove this users DoubleSeed Status?') . "')\">" . _('Remove') . '</a></td>
         </tr>';
         }
     }
@@ -124,7 +126,7 @@ if ($count === 0) {
 
 $title = _('DoubleSeed Manager');
 $breadcrumbs = [
-    "<a href='{$site_config['paths']['baseurl']}/staffpanel.php'>" . _('Staff Panel') . '</a>',
+    "<a href='{$config->get('paths.baseurl')}/staffpanel.php'>" . _('Staff Panel') . '</a>',
     "<a href='{$_SERVER['PHP_SELF']}'>$title</a>",
 ];
 

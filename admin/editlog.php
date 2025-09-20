@@ -2,12 +2,14 @@
 declare(strict_types=1);
 require_once dirname(__DIR__) . '/bootstrap_web.php';
 
+use PU239\Config\ConfigRepository;
 use Pu239\Database;
 use Pu239\Session;
 
 
-global $container, $site_config, $CURUSER;
-
+global $container, $CURUSER;
+/** @var ConfigRepository $config */
+$config = $container->get(ConfigRepository::class);
 $db = $container->get(Database::class);
 
 $class = get_access(basename($_SERVER['REQUEST_URI']));
@@ -24,7 +26,7 @@ if (file_exists($file_data)) {
 $fetch_set = [];
 $i = 0;
 $directories = [ROOT_DIR];
-$included_extentions = $site_config['coders']['log_allowed_ext'];
+$included_extentions = $config->get('coders.log_allowed_ext');
 foreach ($directories as $path) {
     $objects = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($path, RecursiveDirectoryIterator::SKIP_DOTS), RecursiveIteratorIterator::SELF_FIRST);
     foreach ($objects as $name => $object) {
@@ -81,7 +83,7 @@ $HTMLOUT .= "
         <h1 class='has-text-centered top20'>Coder's Log</h1>
         <div class='bordered bottom20'>
             <div class='alt_bordered bg-00 padding20'>
-                <div class='has-text-centered'>Tracking " . implode(', ', $site_config['coders']['log_allowed_ext']) . " files only!</div>
+                <div class='has-text-centered'>Tracking " . implode(', ', $config->get('coders.log_allowed_ext')) . " files only!</div>
                 <div class='has-text-centered'>" . number_format(count($current)) . ' files have been added, modifed or deleted since your last update of the ' . number_format($i) . " files being tracked.</div>
             </div>
         </div>
@@ -186,7 +188,7 @@ $HTMLOUT .= "
         </form>";
 $title = _('File Edit Log');
 $breadcrumbs = [
-    "<a href='{$site_config['paths']['baseurl']}/staffpanel.php'>" . _('Staff Panel') . '</a>',
+    "<a href='{$config->get('paths.baseurl')}/staffpanel.php'>" . _('Staff Panel') . '</a>',
     "<a href='{$_SERVER['PHP_SELF']}'>$title</a>",
 ];
 echo stdhead($title, [], 'page-wrapper', $breadcrumbs) . wrapper($HTMLOUT) . stdfoot();

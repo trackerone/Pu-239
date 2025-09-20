@@ -7,14 +7,16 @@ $db = $container->get(Database::class);
 
 
 
+use PU239\Config\ConfigRepository;
 use Pu239\Cache;
 use Pu239\Database;
 use Pu239\Session;
 
 require_once __DIR__ . '/../include/bittorrent.php';
 $user = check_user_status();
-global $container, $site_config;
-
+global $container;
+/** @var ConfigRepository $config */
+$config = $container->get(ConfigRepository::class);
 $stdhead = [
     'css' => [
         get_file_name('sceditor_css'),
@@ -27,7 +29,7 @@ $stdfoot = [
 ];
 $HTMLOUT = $id_2 = '';
 
-if (!$site_config['staff']['reports']) {
+if (!$config->get('staff.reports')) {
     stderr(_('Error'), _('The report system is offline'));
 }
 $id = !empty($_GET['id']) ? (int) $_GET['id'] : (!empty($_POST['id']) ? (int) $_POST['id'] : 0);
@@ -89,14 +91,14 @@ $db->perform($sql, $values);
     $cache->delete('new_report_');
     $session = $container->get(Session::class);
     $session->set('is-success', _fe('{0} with id: {1} report sent.', str_replace('_', ' ', $type), $id));
-    header("Location: {$site_config['paths']['baseurl']}");
+    header("Location: {$config->get('paths.baseurl')}");
     app_halt('Exit called');
 }
 
 $HTMLOUT .= main_div("
-    <form method='post' action='{$site_config['paths']['baseurl']}/report.php' enctype='multipart/form-data' accept-charset='utf-8'>
+    <form method='post' action='{$config->get('paths.baseurl')}/report.php' enctype='multipart/form-data' accept-charset='utf-8'>
     <h1>" . _('Report') . ': ' . str_replace('_', ' ', $type) . '</h1>
-        ' . _fe('Are you sure you would like to report {0} with id {1} to the Staff for violation of the {2}rules{3}?', str_replace('_', ' ', $type), $id, "<a class='is-link' href='{$site_config['paths']['baseurl']}/rules.php' target='_blank'>", '</a>') . "</td></tr>
+        ' . _fe('Are you sure you would like to report {0} with id {1} to the Staff for violation of the {2}rules{3}?', str_replace('_', ' ', $type), $id, "<a class='is-link' href='{$config->get('paths.baseurl')}/rules.php' target='_blank'>", '</a>') . "</td></tr>
         <p class='top10'><b>" . _('Reason') . ': </b></p>' . BBcode('', 'w-100', 200) . "
         <input type='hidden' name='id' value='$id'>
         <input type='hidden' name='type' value='$type'>

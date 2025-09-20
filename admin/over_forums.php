@@ -2,11 +2,13 @@
 declare(strict_types=1);
 require_once dirname(__DIR__) . '/bootstrap_web.php';
 
+use PU239\Config\ConfigRepository;
 use Pu239\Database;
 
 
-global $container, $site_config, $CURUSER;
-
+global $container, $CURUSER;
+/** @var ConfigRepository $config */
+$config = $container->get(ConfigRepository::class);
 $db = $container->get(Database::class);
 
 $class = get_access(basename($_SERVER['REQUEST_URI']));
@@ -17,10 +19,10 @@ $main_links = "
             <div class='bottom20'>
                 <ul class='level-center bg-06'>
                     <li class='is-link margin10'>
-                        <a href='{$site_config['paths']['baseurl']}/staffpanel.php?tool=forum_config&amp;action=forum_config'>" . _('Configure Forum') . "</a>
+                        <a href='{$config->get('paths.baseurl')}/staffpanel.php?tool=forum_config&amp;action=forum_config'>" . _('Configure Forum') . "</a>
                     </li>
                     <li class='is-link margin10'>
-                        <a href='{$site_config['paths']['baseurl']}/staffpanel.php?tool=forum_manage&amp;action=forum_manage'>" . _('Forum Manager') . "</a>
+                        <a href='{$config->get('paths.baseurl')}/staffpanel.php?tool=forum_manage&amp;action=forum_manage'>" . _('Forum Manager') . "</a>
                     </li>
                 </ul>
             </div>
@@ -171,14 +173,14 @@ $db->perform($sql, $values);
             <tr>
                 <td class="has-text-centered">' . (int) $row['sort'] . '</td>
             <td>
-                <a class="is-link" href="' . $site_config['paths']['baseurl'] . '/forums.php?action=forum_view&amp;fourm_id=' . $row['id'] . '">' . htmlsafechars($row['name']) . '</a><br>
+                <a class="is-link" href="' . $config->get('paths.baseurl') . '/forums.php?action=forum_view&amp;fourm_id=' . $row['id'] . '">' . htmlsafechars($row['name']) . '</a><br>
                 ' . htmlsafechars($row['description']) . '
             </td>
             <td class="has-text-centered">' . get_user_class_name((int) $row['min_class_view']) . '</td>
             <td class="has-text-centered">
                 <span class="level-center">
                     <span class="left10">
-                        <a href="' . $site_config['paths']['baseurl'] . '/staffpanel.php?tool=over_forums&amp;action=over_forums&amp;action2=edit_forum_page&amp;id=' . $row['id'] . '">
+                        <a href="' . $config->get('paths.baseurl') . '/staffpanel.php?tool=over_forums&amp;action=over_forums&amp;action2=edit_forum_page&amp;id=' . $row['id'] . '">
                             <i class="icon-edit icon has-text-info" aria-hidden="true"></i>
                         </a>
                     </span>
@@ -258,7 +260,7 @@ $HTMLOUT .= '<script>
     </script>';
 $title = _('Over Forum Manager');
 $breadcrumbs = [
-    "<a href='{$site_config['paths']['baseurl']}/staffpanel.php'>" . _('Staff Panel') . '</a>',
+    "<a href='{$config->get('paths.baseurl')}/staffpanel.php'>" . _('Staff Panel') . '</a>',
     "<a href='{$_SERVER['PHP_SELF']}'>$title</a>",
 ];
 echo stdhead($title, [], 'page-wrapper', $breadcrumbs) . wrapper($HTMLOUT) . stdfoot();
