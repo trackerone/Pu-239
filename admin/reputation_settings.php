@@ -2,11 +2,13 @@
 declare(strict_types=1);
 require_once dirname(__DIR__) . '/bootstrap_web.php';
 
+use PU239\Config\ConfigRepository;
 use Pu239\Database;
 
 
-global $container, $site_config;
-
+global $container;
+/** @var ConfigRepository $config */
+$config = $container->get(ConfigRepository::class);
 $db = $container->get(Database::class);
 
 $class = get_access(basename($_SERVER['REQUEST_URI']));
@@ -22,7 +24,7 @@ app_halt('Exit called');
 
 function rep_cache()
 {
-    global $site_config;
+    global $config;
 
     $rep_out = '<' . "?php\n\ndeclare(strict_types=1);\n\nglobal \$CURUSER;\n\n\$GVARS=array(\n";
     foreach ($_POST as $k => $v) {
@@ -33,7 +35,7 @@ function rep_cache()
     $rep_out .= "\t'g_rep_use' => \$CURUSER['class']>UC_MIN ? true : false\n";
     $rep_out .= "\n);";
     file_put_contents(CACHE_DIR . 'rep_settings_cache.php', $rep_out);
-    redirect($site_config['paths']['baseurl'] . '/staffpanel.php?tool=reputation_settings', _('Reputation Settings Have Been Updated!'), 3);
+    redirect($config->get('paths.baseurl') . '/staffpanel.php?tool=reputation_settings', _('Reputation Settings Have Been Updated!'), 3);
 }
 
 /**
@@ -190,7 +192,7 @@ $HTMLOUT .= main_table($body) . '
 $HTMLOUT = preg_replace_callback(' |<#(.*?)#>|', 'template_out', $HTMLOUT);
 $title = _('Reputation Manager');
 $breadcrumbs = [
-    "<a href='{$site_config['paths']['baseurl']}/staffpanel.php'>" . _('Staff Panel') . '</a>',
+    "<a href='{$config->get('paths.baseurl')}/staffpanel.php'>" . _('Staff Panel') . '</a>',
     "<a href='{$_SERVER['PHP_SELF']}'>$title</a>",
 ];
 echo stdhead($title, [], 'page-wrapper', $breadcrumbs) . wrapper($HTMLOUT) . stdfoot();
@@ -218,7 +220,7 @@ function template_out(array $matches)
  */
 function redirect($url, $text, $time = 2)
 {
-    global $site_config;
+    global $config;
 
     $html = doc_head(_('Admin Rep Redirection')) . "
 <link rel='stylesheet' href='" . get_file_name('css') . "'>
@@ -230,7 +232,7 @@ function redirect($url, $text, $time = 2)
                 <div style='font-size: 12px;'>$text
                 <br>
                 <br>
-                <a href='{$site_config['paths']['baseurl']}/{$url}'>" . _('Click here if not redirected...') . '</a>
+                <a href='{$config->get('paths.baseurl')}/{$url}'>" . _('Click here if not redirected...') . '</a>
             </div>
         </div>
     </div>

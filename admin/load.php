@@ -1,8 +1,13 @@
 <?php
 declare(strict_types=1);
+use PU239\Config\ConfigRepository;
+
+global $container;
+/** @var ConfigRepository $config */
+$config = $container->get(ConfigRepository::class);
 require_once dirname(__DIR__) . '/bootstrap_web.php';
 
-global $site_config;
+
 $db = $container->get(Database::class);
 
 $class = get_access(basename($_SERVER['REQUEST_URI']));
@@ -102,7 +107,7 @@ $HTMLOUT = "
     <h1 class='has-text-centered'>" . _('Server Load') . '</h1>';
 $body = "
     <div id='load' class='padding20'>
-        <div style='width: 100%; height: 15px; background: url({$site_config['paths']['images_baseurl']}/loadbarbg.gif) repeat-x;' class='bottom20 round5'>";
+        <div style='width: 100%; height: 15px; background: url({$config->get('paths.images_baseurl')}/loadbarbg.gif) repeat-x;' class='bottom20 round5'>";
 $percent = min(100, round(exec('ps ax | grep -c apache') / 256 * 100));
 if ($percent <= 70) {
     $pic = 'loadbargreen.gif';
@@ -112,7 +117,7 @@ if ($percent <= 70) {
     $pic = 'loadbarred.gif';
 }
 $body .= "
-            <img id='load_image' style='height: 15px; width: 1px;' src='{$site_config['paths']['images_baseurl']}{$pic}' alt='$percent&#37;' class='round5'>
+            <img id='load_image' style='height: 15px; width: 1px;' src='{$config->get('paths.images_baseurl')}{$pic}' alt='$percent&#37;' class='round5'>
         </div>
         <div class='padding20'>
             <span class='columns bg-02 round10'>
@@ -156,7 +161,7 @@ $HTMLOUT .= main_div($body) . "
     </script>";
 $title = _('Server Load');
 $breadcrumbs = [
-    "<a href='{$site_config['paths']['baseurl']}/staffpanel.php'>" . _('Staff Panel') . '</a>',
+    "<a href='{$config->get('paths.baseurl')}/staffpanel.php'>" . _('Staff Panel') . '</a>',
     "<a href='{$_SERVER['PHP_SELF']}'>$title</a>",
 ];
 echo stdhead($title, [], 'page-wrapper', $breadcrumbs) . wrapper($HTMLOUT) . stdfoot();

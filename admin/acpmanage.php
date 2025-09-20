@@ -2,11 +2,13 @@
 declare(strict_types=1);
 require_once dirname(__DIR__) . '/bootstrap_web.php';
 
+use PU239\Config\ConfigRepository;
 use Pu239\Database;
 
 
-global $container, $CURUSER, $site_config;
-
+global $container, $CURUSER;
+/** @var ConfigRepository $config */
+$config = $container->get(ConfigRepository::class);
 $db     = $container->get(Database::class);
 $fluent = $db;
 
@@ -40,7 +42,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['ids'])) {
         foreach ($ids as $id) {
             $cache->update_row('user_' . $id, [
                 'status' => 0,
-            ], $site_config['expires']['user_cache']);
+            ], $config->get('expires.user_cache'));
         }
     } elseif ($do == 'confirm') {
         $placeholders = [];
@@ -53,7 +55,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['ids'])) {
         foreach ($ids as $id) {
             $cache->update_row('user_' . $id, [
                 'status' => 'confirmed',
-            ], $site_config['expires']['user_cache']);
+            ], $config->get('expires.user_cache'));
         }
     } elseif ($do == 'delete' && ($CURUSER['class'] >= UC_MAX)) {
         foreach ($ids as $id) {
@@ -153,7 +155,7 @@ if (!empty($rows)) {
 }
 $title = _('Account Manager');
 $breadcrumbs = [
-    "<a href='{$site_config['paths']['baseurl']}/staffpanel.php'>" . _('Staff Panel') . '</a>',
+    "<a href='{$config->get('paths.baseurl')}/staffpanel.php'>" . _('Staff Panel') . '</a>',
     "<a href='{$_SERVER['PHP_SELF']}'>$title</a>",
 ];
 echo stdhead($title, [], 'page-wrapper', $breadcrumbs) . wrapper($HTMLOUT) . stdfoot();

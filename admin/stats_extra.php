@@ -2,6 +2,7 @@
 declare(strict_types=1);
 require_once dirname(__DIR__) . '/bootstrap_web.php';
 
+use PU239\Config\ConfigRepository;
 use DI\DependencyException;
 use DI\NotFoundException;
 use Pu239\Cache;
@@ -10,7 +11,8 @@ use Spatie\Image\Exceptions\InvalidManipulation;
 
 
 global $container;
-
+/** @var ConfigRepository $config */
+$config = $container->get(ConfigRepository::class);
 $db = $container->get(Database::class);
 
 $class = get_access(basename($_SERVER['REQUEST_URI']));
@@ -114,7 +116,7 @@ switch ($inbound['mode']) {
  */
 function show_views(array $inbound, array $month_names)
 {
-    global $container, $site_config;
+    global $container;
 
     $page_title = _('Statistic Center Results');
     $from_time = strtotime("MIDNIGHT {$inbound['olddate']}");
@@ -134,7 +136,7 @@ function show_views(array $inbound, array $month_names)
     $count = !empty($count) ? count($count) : 0;
     $parsed_url = http_build_query($inbound);
     $perpage = 15;
-    $pager = pager($perpage, $count, "{$site_config['paths']['baseurl']}/staffpanel.php?{$parsed_url}&amp;");
+    $pager = pager($perpage, $count, "{$config->get('paths.baseurl')}/staffpanel.php?{$parsed_url}&amp;");
     $pagertop = $count > $perpage ? $pager['pagertop'] : '';
     $pagerbottom = $count > $perpage ? $pager['pagerbottom'] : '';
     $query = $fluent->from('topics AS t')
@@ -191,9 +193,9 @@ function show_views(array $inbound, array $month_names)
                 <td>{$data['result_name']}</td>
                 <td>
                     <div class='tooltipper' title='{$data['result_count']} of $running_total'>
-                        <img src='{$site_config['paths']['images_baseurl']}bar_left.gif' width='4' alt='' class='bar'>
-                        <img src='{$site_config['paths']['images_baseurl']}bar.gif' width='$img_width' alt='' class='bar'>
-                        <img src='{$site_config['paths']['images_baseurl']}bar_right.gif' width='4' alt='' class='bar'>
+                        <img src='{$config->get('paths.images_baseurl')}bar_left.gif' width='4' alt='' class='bar'>
+                        <img src='{$config->get('paths.images_baseurl')}bar.gif' width='$img_width' alt='' class='bar'>
+                        <img src='{$config->get('paths.images_baseurl')}bar_right.gif' width='4' alt='' class='bar'>
                     </div>
                 </td>
                 <td class='has-text-centered'>{$data['result_count']}</td>
@@ -215,7 +217,7 @@ function show_views(array $inbound, array $month_names)
     }
     $htmlout .= $pagertop . main_table($body, $table_heading) . $pagerbottom;
     $breadcrumbs = [
-        "<a href='{$site_config['paths']['baseurl']}/staffpanel.php'>" . _('Staff Panel') . '</a>',
+        "<a href='{$config->get('paths.baseurl')}/staffpanel.php'>" . _('Staff Panel') . '</a>',
         "<a href='{$_SERVER['PHP_SELF']}'>$page_title</a>",
     ];
     echo stdhead($page_title, [], 'page-wrapper', $breadcrumbs) . wrapper($htmlout) . stdfoot();
@@ -234,7 +236,7 @@ function show_views(array $inbound, array $month_names)
  */
 function result_screen(string $mode, array $inbound, array $month_names)
 {
-    global $container, $site_config;
+    global $container;
 
     $page_title = _('Statistic Center Results');
     $table = $page_detail = $sql_table = $sql_field = '';
@@ -307,7 +309,7 @@ function result_screen(string $mode, array $inbound, array $month_names)
     $count = !empty($count) ? count($count) : 0;
     $parsed_url = http_build_query($inbound);
     $perpage = 15;
-    $pager = pager($perpage, $count, "{$site_config['paths']['baseurl']}/staffpanel.php?{$parsed_url}&amp;");
+    $pager = pager($perpage, $count, "{$config->get('paths.baseurl')}/staffpanel.php?{$parsed_url}&amp;");
     $pagertop = $count > $perpage ? $pager['pagertop'] : '';
     $pagerbottom = $count > $perpage ? $pager['pagerbottom'] : '';
 
@@ -371,9 +373,9 @@ function result_screen(string $mode, array $inbound, array $month_names)
                 <td>$date</td>
                 <td>
                     <div class='tooltipper' title='{$data['result_count']} of $running_total'>
-                        <img src='{$site_config['paths']['images_baseurl']}bar_left.gif' width='4' alt='' class='bar'>
-                        <img src='{$site_config['paths']['images_baseurl']}bar.gif' width='$img_width' alt='' class='bar'>
-                        <img src='{$site_config['paths']['images_baseurl']}bar_right.gif' width='4' alt='' class='bar'>
+                        <img src='{$config->get('paths.images_baseurl')}bar_left.gif' width='4' alt='' class='bar'>
+                        <img src='{$config->get('paths.images_baseurl')}bar.gif' width='$img_width' alt='' class='bar'>
+                        <img src='{$config->get('paths.images_baseurl')}bar_right.gif' width='4' alt='' class='bar'>
                     </div>
                 </td>
                 <td class='has-text-centered'>{$data['result_count']}</td>
@@ -395,7 +397,7 @@ function result_screen(string $mode, array $inbound, array $month_names)
     }
     $htmlout .= $pagertop . main_table($body, $table_heading) . $pagerbottom;
     $breadcrumbs = [
-        "<a href='{$site_config['paths']['baseurl']}/staffpanel.php'>" . _('Staff Panel') . '</a>',
+        "<a href='{$config->get('paths.baseurl')}/staffpanel.php'>" . _('Staff Panel') . '</a>',
         "<a href='{$_SERVER['PHP_SELF']}'>$page_title</a>",
     ];
     echo stdhead($page_title, [], 'page-wrapper', $breadcrumbs) . wrapper($htmlout) . stdfoot();
@@ -412,7 +414,7 @@ function result_screen(string $mode, array $inbound, array $month_names)
  */
 function main_screen($mode)
 {
-    global $container, $site_config;
+    global $container;
 
     $form_code = $table = '';
     $page_title = _('Statistics Center');
@@ -459,7 +461,7 @@ function main_screen($mode)
     $menu = make_side_menu();
     $htmlout = $menu . "
         <h1 class='has-text-centered'>" . _('Statistics Center') . "</h1>
-        <form action='{$site_config['paths']['baseurl']}/staffpanel.php' method='get' name='StatsForm' enctype='multipart/form-data' accept-charset='utf-8'>
+        <form action='{$config->get('paths.baseurl')}/staffpanel.php' method='get' name='StatsForm' enctype='multipart/form-data' accept-charset='utf-8'>
             <div class='has-text-centered'>
                 <input name='tool' value='stats_extra' type='hidden'>
                 <input name='mode' value='{$form_code}' type='hidden'>
@@ -515,7 +517,7 @@ function main_screen($mode)
             </div>
         </form>";
     $breadcrumbs = [
-        "<a href='{$site_config['paths']['baseurl']}/staffpanel.php'>" . _('Staff Panel') . '</a>',
+        "<a href='{$config->get('paths.baseurl')}/staffpanel.php'>" . _('Staff Panel') . '</a>',
         "<a href='{$_SERVER['PHP_SELF']}'>$page_title</a>",
     ];
     echo stdhead($page_title, [], 'page-wrapper', $breadcrumbs) . wrapper($htmlout) . stdfoot();
@@ -552,18 +554,18 @@ function make_select($name, $in = [], $default = '')
  */
 function make_side_menu()
 {
-    global $site_config;
+    global $config;
 
     $htmlout = "
     <ul class='level-center bg-06'>
-        <li class='margin10'><a href='{$site_config['paths']['baseurl']}/staffpanel.php?tool=stats_extra&amp;mode=reg'>" . _('Registration Stats') . "</a></li>
-        <li class='margin10'><a href='{$site_config['paths']['baseurl']}/staffpanel.php?tool=stats_extra&amp;mode=topic'>" . _('New Topic Stats') . "</a></li>
-        <li class='margin10'><a href='{$site_config['paths']['baseurl']}/staffpanel.php?tool=stats_extra&amp;mode=post'>" . _('Post Stats') . "</a></li>
-        <li class='margin10'><a href='{$site_config['paths']['baseurl']}/staffpanel.php?tool=stats_extra&amp;mode=msg'>" . _('Personal Message') . "</a></li>
-        <li class='margin10'><a href='{$site_config['paths']['baseurl']}/staffpanel.php?tool=stats_extra&amp;mode=views'>" . _('Topic Views') . "</a></li>
-        <li class='margin10'><a href='{$site_config['paths']['baseurl']}/staffpanel.php?tool=stats_extra&amp;mode=comms'>" . _('Comment Stats') . "</a></li>
-        <li class='margin10'><a href='{$site_config['paths']['baseurl']}/staffpanel.php?tool=stats_extra&amp;mode=torrents'>" . _('Torrents Stats') . "</a></li>
-        <li class='margin10'><a href='{$site_config['paths']['baseurl']}/staffpanel.php?tool=stats_extra&amp;mode=reps'>" . _('Reputation Stats') . '</a></li>
+        <li class='margin10'><a href='{$config->get('paths.baseurl')}/staffpanel.php?tool=stats_extra&amp;mode=reg'>" . _('Registration Stats') . "</a></li>
+        <li class='margin10'><a href='{$config->get('paths.baseurl')}/staffpanel.php?tool=stats_extra&amp;mode=topic'>" . _('New Topic Stats') . "</a></li>
+        <li class='margin10'><a href='{$config->get('paths.baseurl')}/staffpanel.php?tool=stats_extra&amp;mode=post'>" . _('Post Stats') . "</a></li>
+        <li class='margin10'><a href='{$config->get('paths.baseurl')}/staffpanel.php?tool=stats_extra&amp;mode=msg'>" . _('Personal Message') . "</a></li>
+        <li class='margin10'><a href='{$config->get('paths.baseurl')}/staffpanel.php?tool=stats_extra&amp;mode=views'>" . _('Topic Views') . "</a></li>
+        <li class='margin10'><a href='{$config->get('paths.baseurl')}/staffpanel.php?tool=stats_extra&amp;mode=comms'>" . _('Comment Stats') . "</a></li>
+        <li class='margin10'><a href='{$config->get('paths.baseurl')}/staffpanel.php?tool=stats_extra&amp;mode=torrents'>" . _('Torrents Stats') . "</a></li>
+        <li class='margin10'><a href='{$config->get('paths.baseurl')}/staffpanel.php?tool=stats_extra&amp;mode=reps'>" . _('Reputation Stats') . '</a></li>
     </ul>';
 
     return $htmlout;
