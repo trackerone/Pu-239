@@ -1,20 +1,19 @@
 <?php
 declare(strict_types=1);
 
-$db = $container->get(Database::class);
-
-
-
-
-
 use DI\DependencyException;
 use DI\NotFoundException;
 use Pu239\Cache;
+use Pu239\Database;
 use Pu239\Image;
 use Spatie\Image\Exceptions\InvalidManipulation;
 
+global $container;
+/** @var Database $db */
+$db = $container->get(Database::class);
+
 /**
- * @param $data
+ * @param mixed $data
  *
  * @throws InvalidManipulation
  * @throws DependencyException
@@ -22,7 +21,7 @@ use Spatie\Image\Exceptions\InvalidManipulation;
  * @throws \PDOException
  * @throws Exception
  */
-function tvmaze_schedule_update($data)
+function tvmaze_schedule_update($data): void
 {
     global $container, $BLOCKS;
 
