@@ -2,11 +2,13 @@
 declare(strict_types=1);
 require_once dirname(__DIR__) . '/bootstrap_web.php';
 
+use PU239\Config\ConfigRepository;
 use Pu239\Database;
 
 
-global $container, $site_config;
-
+global $container;
+/** @var ConfigRepository $config */
+$config = $container->get(ConfigRepository::class);
 $db = $container->get(Database::class);
 
 $class = get_access(basename($_SERVER['REQUEST_URI']));
@@ -22,7 +24,7 @@ if ($ip) {
         $HTMLOUT .= end_main_frame();
         $title = _('IP Search');
         $breadcrumbs = [
-            "<a href='{$site_config['paths']['baseurl']}/staffpanel.php'>" . _('Staff Panel') . '</a>',
+            "<a href='{$config->get('paths.baseurl')}/staffpanel.php'>" . _('Staff Panel') . '</a>',
             "<a href='{$_SERVER['PHP_SELF']}'>$title</a>",
         ];
         echo stdhead($title, [], 'page-wrapper', $breadcrumbs) . wrapper($HTMLOUT) . stdfoot();
@@ -45,7 +47,7 @@ if ($ip) {
                 $HTMLOUT .= end_main_frame();
                 $title = _('IP Search');
                 $breadcrumbs = [
-                    "<a href='{$site_config['paths']['baseurl']}/staffpanel.php'>" . _('Staff Panel') . '</a>',
+                    "<a href='{$config->get('paths.baseurl')}/staffpanel.php'>" . _('Staff Panel') . '</a>',
                     "<a href='{$_SERVER['PHP_SELF']}'>$title</a>",
                 ];
                 echo stdhead($title, [], 'page-wrapper', $breadcrumbs) . wrapper($HTMLOUT) . stdfoot();
@@ -57,7 +59,7 @@ if ($ip) {
             $HTMLOUT .= end_main_frame();
             $title = _('IP Search');
             $breadcrumbs = [
-                "<a href='{$site_config['paths']['baseurl']}/staffpanel.php'>" . _('Staff Panel') . '</a>',
+                "<a href='{$config->get('paths.baseurl')}/staffpanel.php'>" . _('Staff Panel') . '</a>',
                 "<a href='{$_SERVER['PHP_SELF']}'>$title</a>",
             ];
             echo stdhead($title, [], 'page-wrapper', $breadcrumbs) . wrapper($HTMLOUT) . stdfoot();
@@ -80,7 +82,7 @@ if ($ip) {
         $HTMLOUT .= end_main_frame();
         $title = _('IP Search');
         $breadcrumbs = [
-            "<a href='{$site_config['paths']['baseurl']}/staffpanel.php'>" . _('Staff Panel') . '</a>',
+            "<a href='{$config->get('paths.baseurl')}/staffpanel.php'>" . _('Staff Panel') . '</a>',
             "<a href='{$_SERVER['PHP_SELF']}'>$title</a>",
         ];
         echo stdhead($title, [], 'page-wrapper', $breadcrumbs) . wrapper($HTMLOUT) . stdfoot();
@@ -121,7 +123,7 @@ if ($ip) {
     }
     $HTMLOUT .= "<table>\n";
     $HTMLOUT .= "<tr>
-      <td class='colhead'><a href='{$site_config['paths']['baseurl']}/staffpanel.php?tool=ipsearch&amp;action=ipsearch&amp;ip=$ip&amp;mask=$mask&amp;order=username'>" . _('Username') . '</a></td>' . "<td class='colhead'>" . _('Ratio') . '</td>' . "<td class='colhead'><a href='{$site_config['paths']['baseurl']}/staffpanel.php?tool=ipsearch&amp;action=ipsearch&amp;ip=$ip&amp;mask=$mask&amp;order=email'>" . _('Email') . '</a></td>' . "<td class='colhead'><a href='{$site_config['paths']['baseurl']}/staffpanel.php?tool=ipsearch&amp;action=ipsearch&amp;ip=$ip&amp;mask=$mask&amp;order=last_ip'>" . _('Last IP') . '</a></td>' . "<td class='colhead'><a href='{$site_config['paths']['baseurl']}/staffpanel.php?tool=ipsearch&amp;action=ipsearch&amp;ip=$ip&amp;mask=$mask&amp;order=last_access'>" . _('Last access') . '</a></td>' . "<td class='colhead'>" . _("Num of IP's") . '</td>' . "<td class='colhead'><a href='{$site_config['paths']['baseurl']}/staffpanel.php?tool=ipsearch&amp;action=ipsearch&amp;ip=$ip&amp;mask=$mask'>" . _('Last access') . ' on <br>' . format_comment($ip) . '</a></td>' . "<td class='colhead'><a href='{$site_config['paths']['baseurl']}/staffpanel.php?tool=ipsearch&amp;action=ipsearch&amp;ip=$ip&amp;mask=$mask&amp;order=added'>" . _('Added') . '</a></td>' . "<td class='colhead'>" . _('Invited by') . '</td></tr>';
+      <td class='colhead'><a href='{$config->get('paths.baseurl')}/staffpanel.php?tool=ipsearch&amp;action=ipsearch&amp;ip=$ip&amp;mask=$mask&amp;order=username'>" . _('Username') . '</a></td>' . "<td class='colhead'>" . _('Ratio') . '</td>' . "<td class='colhead'><a href='{$config->get('paths.baseurl')}/staffpanel.php?tool=ipsearch&amp;action=ipsearch&amp;ip=$ip&amp;mask=$mask&amp;order=email'>" . _('Email') . '</a></td>' . "<td class='colhead'><a href='{$config->get('paths.baseurl')}/staffpanel.php?tool=ipsearch&amp;action=ipsearch&amp;ip=$ip&amp;mask=$mask&amp;order=last_ip'>" . _('Last IP') . '</a></td>' . "<td class='colhead'><a href='{$config->get('paths.baseurl')}/staffpanel.php?tool=ipsearch&amp;action=ipsearch&amp;ip=$ip&amp;mask=$mask&amp;order=last_access'>" . _('Last access') . '</a></td>' . "<td class='colhead'>" . _("Num of IP's") . '</td>' . "<td class='colhead'><a href='{$config->get('paths.baseurl')}/staffpanel.php?tool=ipsearch&amp;action=ipsearch&amp;ip=$ip&amp;mask=$mask'>" . _('Last access') . ' on <br>' . format_comment($ip) . '</a></td>' . "<td class='colhead'><a href='{$config->get('paths.baseurl')}/staffpanel.php?tool=ipsearch&amp;action=ipsearch&amp;ip=$ip&amp;mask=$mask&amp;order=added'>" . _('Added') . '</a></td>' . "<td class='colhead'>" . _('Invited by') . '</td></tr>';
     while ($user = mysqli_fetch_assoc($res)) {
         if ($user['registered'] == '0') {
             $user['registered'] = '---';
@@ -140,7 +142,7 @@ if ($ip) {
             if ($count == 0) {
                 $ipstr = $user['last_ip'];
             } else {
-                $ipstr = "<a href='{$site_config['paths']['baseurl']}/staffpanel.php?tool=testip&amp;action=testip&amp;ip=" . htmlsafechars($user['last_ip']) . "'><span style='color: #FF0000;'><b>" . format_comment($user['last_ip']) . '</b></span></a>';
+                $ipstr = "<a href='{$config->get('paths.baseurl')}/staffpanel.php?tool=testip&amp;action=testip&amp;ip=" . htmlsafechars($user['last_ip']) . "'><span style='color: #FF0000;'><b>" . format_comment($user['last_ip']) . '</b></span></a>';
             }
         } else {
             $ipstr = '---';
@@ -163,7 +165,7 @@ if ($ip) {
            <td>' . format_username((int) $user['id']) . '</td>' . '<td>' . member_ratio((float) $user['uploaded'], (float) $user['downloaded']) . '</td>
           <td>' . $user['email'] . '</td><td>' . $ipstr . '</td>
           <td><div>' . get_date((int) $user['last_access'], 'DATE', 1, 0) . "</div></td>
-          <td><div><b><a href='{$site_config['paths']['baseurl']}/staffpanel.php?tool=iphistory&amp;action=iphistory&amp;id=" . (int) $user['id'] . "'>$iphistory</a></b></div></td>
+          <td><div><b><a href='{$config->get('paths.baseurl')}/staffpanel.php?tool=iphistory&amp;action=iphistory&amp;id=" . (int) $user['id'] . "'>$iphistory</a></b></div></td>
           <td><div>" . get_date((int) $user['access'], 'DATE', 1, 0) . '</div></td>
           <td><div>' . get_date((int) $user['registered'], 'DATE', 1, 0) . '</div></td>
           <td><div>' . $invitedby . "</div></td>
@@ -178,7 +180,7 @@ if ($ip) {
 $HTMLOUT .= end_main_frame();
 $title = _('IP Search');
 $breadcrumbs = [
-    "<a href='{$site_config['paths']['baseurl']}/staffpanel.php'>" . _('Staff Panel') . '</a>',
+    "<a href='{$config->get('paths.baseurl')}/staffpanel.php'>" . _('Staff Panel') . '</a>',
     "<a href='{$_SERVER['PHP_SELF']}'>$title</a>",
 ];
 echo stdhead($title, [], 'page-wrapper', $breadcrumbs) . wrapper($HTMLOUT) . stdfoot();

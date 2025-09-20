@@ -1,0 +1,54 @@
+file,replaced,todos,notes
+chat/lib/class/AJAXChatTemplate.php,none,0,no legacy config usage detected
+chat/lib/template/loggedIn.html,none,0,no legacy config usage detected (template placeholder only)
+chat/lib/template/logs.html,none,0,no legacy config usage detected (template placeholder only)
+admin/datareset.php,site_config(5),0,Replaced legacy config access with ConfigRepository
+blocks/userdetails/traffic.php,site_config(2),0,Replaced legacy config access with ConfigRepository
+admin/mysql_overview.php,site_config(3),0,Replaced legacy config access with ConfigRepository
+admin/log_viewer.php,site_config(4),0,Replaced legacy config access with ConfigRepository
+public/faq.php,site_config(26),0,Replaced legacy config access with ConfigRepository
+admin/load.php,site_config(4),0,Replaced legacy config access with ConfigRepository
+blocks/userdetails/showfriends.php,site_config(4),0,Replaced legacy config access with ConfigRepository
+admin/mass_bonus_for_members.php,site_config(3),0,Replaced legacy config access with ConfigRepository
+blocks/userdetails/comments.php,site_config(3),0,Replaced legacy config access with ConfigRepository
+admin/changelog.php,site_config(1),0,Replaced legacy config access with ConfigRepository
+blocks/userdetails/shareratio.php,site_config(1),0,Replaced legacy config access with ConfigRepository
+admin/promo.php,site_config(5),0,Replaced legacy config access with ConfigRepository
+public/lottery.php,site_config(8),0,Replaced legacy config access with ConfigRepository
+admin/watched_users.php,site_config(8),0,Replaced legacy config access with ConfigRepository
+public/uploadapp.php,site_config(5),0,Replaced legacy config access with ConfigRepository
+blocks/userdetails/invitedby.php,site_config(6),0,Replaced legacy config access with ConfigRepository
+public/signup.php,site_config(11),0,Replaced legacy config access with ConfigRepository
+blocks/userdetails/seedtimeratio.php,site_config(2),0,Replaced legacy config access with ConfigRepository
+public/download_multi.php,site_config(11),0,Replaced legacy config access with ConfigRepository
+admin/over_forums.php,site_config(6),0,Replaced legacy config access with ConfigRepository
+public/hnrs.php,site_config(31),0,Replaced legacy config access with ConfigRepository
+blocks/userdetails/forumposts.php,site_config(2),0,Replaced legacy config access with ConfigRepository
+admin/adduser.php,site_config(4),0,Replaced legacy config access with ConfigRepository
+public/bookmarks.php,site_config(18),0,Replaced legacy config access with ConfigRepository
+blocks/userdetails/iphistory.php,site_config(6),0,Replaced legacy config access with ConfigRepository
+admin/reputation_settings.php,site_config(6),0,Replaced legacy config access with ConfigRepository
+public/tenpercent.php,site_config(2),0,Replaced legacy config access with ConfigRepository
+admin/hit_and_run_settings.php,site_config(24),0,Replaced legacy config access with ConfigRepository
+blocks/userdetails/contactinfo.php,site_config(3),0,Replaced legacy config access with ConfigRepository
+public/bitbucket.php,site_config(32),0,Replaced legacy config access with ConfigRepository
+admin/ipsearch.php,site_config(14),0,Replaced legacy config access with ConfigRepository
+admin/doubleusers.php,site_config(4),0,Replaced legacy config access with ConfigRepository
+blocks/userdetails/connectable.php,site_config(2),0,Replaced legacy config access with ConfigRepository
+admin/editlog.php,site_config(4),0,Replaced legacy config access with ConfigRepository
+blocks/userdetails/irc.php,site_config(2),0,Replaced legacy config access with ConfigRepository
+public/index.php,site_config(6),0,Replaced legacy config access with ConfigRepository
+blocks/userdetails/usercomments.php,site_config(3),0,Replaced legacy config access with ConfigRepository
+admin/stats.php,site_config(11),0,Replaced legacy config access with ConfigRepository
+public/tvshows.php,site_config(13),0,Replaced legacy config access with ConfigRepository
+admin/reset.php,site_config(2),0,Replaced legacy config access with ConfigRepository
+public/useragreement.php,site_config(123),0,Replaced legacy config access with ConfigRepository
+admin/backup.php,site_config(12),0,Replaced legacy config access with ConfigRepository
+public/report.php,site_config(5),0,Replaced legacy config access with ConfigRepository
+admin/acpmanage.php,site_config(4),0,Replaced legacy config access with ConfigRepository
+admin/donations.php,site_config(7),0,Replaced legacy config access with ConfigRepository
+public/tmovies.php,site_config(13),0,Replaced legacy config access with ConfigRepository
+public/rss.php,site_config(19),0,Replaced legacy config access with ConfigRepository
+admin/stats_extra.php,site_config(24),0,Replaced legacy config access with ConfigRepository
+admin/memcache.php,site_config(23),0,Replaced legacy config access with ConfigRepository
+public/blackjack.php,site_config(40),0,Replaced legacy config access with ConfigRepository
