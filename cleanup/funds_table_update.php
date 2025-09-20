@@ -1,31 +1,28 @@
 <?php
 declare(strict_types=1);
 
-$db = $container->get(Database::class);
-
-
-
-
-
 use DI\DependencyException;
 use DI\NotFoundException;
 use Pu239\Cache;
+use Pu239\Database;
+
+global $container;
+/** @var Database $db */
+$db = $container->get(Database::class);
 
 /**
- * @param $data
+ * @param mixed $data
  *
  * @throws DependencyException
  * @throws NotFoundException
  * @throws \PDOException
  */
-function funds_table_update($data)
+function funds_table_update($data): void
 {
-    global $container;
+    global $container, $db;
 
     $time_start = microtime(true);
-    $pdo = $container->get(PDO::class);
-    $stmt = $pdo->prepare('TRUNCATE table funds');
-    $stmt->execute();
+    $db->run('TRUNCATE TABLE funds');
     $cache = $container->get(Cache::class);
     $cache->delete('totalfunds_');
     if ($data['clean_log']) {

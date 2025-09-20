@@ -1,27 +1,26 @@
 <?php
 declare(strict_types=1);
 
-$db = $container->get(Database::class);
-
-
-
-
-
 use DI\DependencyException;
 use DI\NotFoundException;
 use MatthiasMullie\Scrapbook\Exception\UnbegunTransaction;
+use Pu239\Database;
 use Pu239\Snatched;
 use Pu239\User;
 
+global $container;
+/** @var Database $db */
+$db = $container->get(Database::class);
+
 /**
- * @param $data
+ * @param mixed $data
  *
  * @throws DependencyException
  * @throws NotFoundException
  * @throws \PDOException
  * @throws UnbegunTransaction
  */
-function hitrun_update($data)
+function hitrun_update($data): void
 {
     global $container, $site_config;
 

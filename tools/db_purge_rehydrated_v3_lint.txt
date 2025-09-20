@@ -1,0 +1,15 @@
+php -l cleanup/announcement_update.php
+No syntax errors detected in cleanup/announcement_update.php
+
+php -l cleanup/cheatclean_update.php
+No syntax errors detected in cleanup/cheatclean_update.php
+
+php -l cleanup/funds_table_update.php
+No syntax errors detected in cleanup/funds_table_update.php
+
+php -l cleanup/hitrun_update.php
+No syntax errors detected in cleanup/hitrun_update.php
+
+php -l cleanup/tvmaze_schedule_update.php
+No syntax errors detected in cleanup/tvmaze_schedule_update.php
+

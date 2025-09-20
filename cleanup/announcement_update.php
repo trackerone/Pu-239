@@ -1,11 +1,12 @@
 <?php
 declare(strict_types=1);
 
-use Pu239\Database;
 use DI\DependencyException;
 use DI\NotFoundException;
+use Pu239\Database;
 
 global $container;
+/** @var Database $db */
 $db = $container->get(Database::class);
 
 /**
@@ -15,12 +16,12 @@ $db = $container->get(Database::class);
  * @throws NotFoundException
  * @throws \PDOException
  */
-function announcement_update($data)
+function announcement_update($data): void
 {
-    global $container, $db;
+    global $db;
 
     $time_start = microtime(true);
-    $db->run('DELETE FROM announcement_main WHERE expires < ?', [TIME_NOW]);
+    $db->run('DELETE FROM announcement_main WHERE expires < :expires', [':expires' => TIME_NOW]);
 
     $time_end = microtime(true);
     $run_time = $time_end - $time_start;

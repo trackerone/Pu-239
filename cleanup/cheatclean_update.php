@@ -1,11 +1,10 @@
 <?php
 declare(strict_types=1);
 
-
-
 use Pu239\Database;
 
 global $container;
+/** @var Database $db */
 $db = $container->get(Database::class);
 $now = defined('TIME_NOW') ? (int) TIME_NOW : time();
 
@@ -20,7 +19,7 @@ function cheatclean_update(array $data): void
 
     $time_start = microtime(true);
     $dt = $now - (30 * 86400);
-    $db->run('DELETE FROM cheaters WHERE added < ?', [$dt]);
+    $db->run('DELETE FROM cheaters WHERE added < :added', [':added' => $dt]);
     $time_end = microtime(true);
     $run_time = $time_end - $time_start;
     $text = " Run time: $run_time seconds";

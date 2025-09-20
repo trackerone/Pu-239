@@ -1,0 +1,6 @@
+file,replaced_patterns,in_clause_used,limit_bind_ok,select_star_flag,notes
+cleanup/announcement_update.php,DELETE placeholder → named param,false,n/a,false,Ensured shared $db bootstrap and TIME_NOW binding.
+cleanup/cheatclean_update.php,DELETE placeholder → named param,false,n/a,false,Converted cleanup delete to named binding.
+cleanup/funds_table_update.php,PDO::prepare → $db->run,false,n/a,false,Replaced direct PDO truncate with database service.
+cleanup/hitrun_update.php,Bootstrap restored,false,n/a,false,Rehydrated shared $db wiring; logic unchanged.
+cleanup/tvmaze_schedule_update.php,Bootstrap restored,false,n/a,false,Aligned with Database service bootstrap.
