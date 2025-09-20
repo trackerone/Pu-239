@@ -1,0 +1,45 @@
+<?php
+declare(strict_types=1);
+
+$db = $container->get(Database::class);
+
+
+
+
+
+use DI\DependencyException;
+use DI\NotFoundException;
+use Pu239\Database;
+
+/**
+ * @param $data
+ *
+ * @throws DependencyException
+ * @throws NotFoundException
+ * @throws \PDOException
+ */
+function visible_update($data)
+{
+    global $container, $site_config;
+
+    // $fluent removed — use $this->db (ExtendedPdo)
+
+    $time_start = microtime(true);
+    $deadtime_tor = get_date(TIME_NOW - $site_config['site']['max_dead_torrent_time'], 'MYSQL', 1, 0);
+    $set = [
+        'visible' => 'no',
+    ];
+    $fluent->update('torrents')
+           ->set($set)
+           ->where('visible = "yes"')
+           ->where('last_action < ?', $deadtime_tor)
+           ->execute();
+
+    $time_end = microtime(true);
+    $run_time = $time_end - $time_start;
+    $text = " Run time: $run_time seconds";
+    echo $text . "\n";
+    if ($data['clean_log']) {
+        write_log('Torrent Visible Cleanup completed' . $text);
+    }
+}

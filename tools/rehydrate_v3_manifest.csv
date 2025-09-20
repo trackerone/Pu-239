@@ -1,0 +1,103 @@
+file,rehydrated,re_quarantined,source_quarantine,notes
+cleanup/achievement_avatar_update.php,false,true,_quarantine/cleanup/achievement_avatar_update.php,"stubbed due to markers: $db->run(');; php -l failed: Parse error: syntax error, unexpected token "","" in cleanup/achievement_avatar_update.php on line 21 | Errors parsing cleanup/achievement_avatar_update.php"
+cleanup/achievement_bday_update.php,false,true,_quarantine/cleanup/achievement_bday_update.php,"stubbed due to markers: $db->run("");, $db->run(');; php -l failed: Parse error: syntax error, unexpected identifier ""clean_log"", expecting "")"" in cleanup/achievement_bday_update.php on line 89 | Errors parsing cleanup/achievement_bday_update.php"
+cleanup/achievement_corrupt_update.php,false,true,_quarantine/cleanup/achievement_corrupt_update.php,"stubbed due to markers: $db->run(');; php -l failed: Parse error: syntax error, unexpected token "","" in cleanup/achievement_corrupt_update.php on line 21 | Errors parsing cleanup/achievement_corrupt_update.php"
+cleanup/achievement_fpost_update.php,false,true,_quarantine/cleanup/achievement_fpost_update.php,"stubbed due to markers: $db->run("");, $db->run(');; php -l failed: Parse error: syntax error, unexpected token "","" in cleanup/achievement_fpost_update.php on line 21 | Errors parsing cleanup/achievement_fpost_update.php"
+cleanup/achievement_ftopics_update.php,false,true,_quarantine/cleanup/achievement_ftopics_update.php,"stubbed due to markers: $db->run("");, $db->run(');; php -l failed: Parse error: syntax error, unexpected token "","" in cleanup/achievement_ftopics_update.php on line 21 | Errors parsing cleanup/achievement_ftopics_update.php"
+cleanup/achievement_invite_update.php,false,true,_quarantine/cleanup/achievement_invite_update.php,"stubbed due to markers: $db->run("");, $db->run(');; php -l failed: Parse error: syntax error, unexpected token "","" in cleanup/achievement_invite_update.php on line 21 | Errors parsing cleanup/achievement_invite_update.php"
+cleanup/achievement_karma_update.php,false,true,_quarantine/cleanup/achievement_karma_update.php,"php -l failed: Parse error: syntax error, unexpected token "","" in cleanup/achievement_karma_update.php on line 23 | Errors parsing cleanup/achievement_karma_update.php"
+cleanup/achievement_request_update.php,false,true,_quarantine/cleanup/achievement_request_update.php,"stubbed due to markers: $db->run("");, $db->run(');; php -l failed: Parse error: syntax error, unexpected token "","" in cleanup/achievement_request_update.php on line 21 | Errors parsing cleanup/achievement_request_update.php"
+cleanup/achievement_seedtime_update.php,false,true,_quarantine/cleanup/achievement_seedtime_update.php,"stubbed due to markers: $db->run("");, $db->run(');; php -l failed: Parse error: syntax error, unexpected token "","" in cleanup/achievement_seedtime_update.php on line 20 | Errors parsing cleanup/achievement_seedtime_update.php"
+cleanup/achievement_sheep_update.php,false,true,_quarantine/cleanup/achievement_sheep_update.php,"stubbed due to markers: $db->run(');; php -l failed: Parse error: syntax error, unexpected token "","" in cleanup/achievement_sheep_update.php on line 21 | Errors parsing cleanup/achievement_sheep_update.php"
+cleanup/achievement_shouts_update.php,false,true,_quarantine/cleanup/achievement_shouts_update.php,"stubbed due to markers: $db->run("");, $db->run(');; php -l failed: Parse error: syntax error, unexpected token "","" in cleanup/achievement_shouts_update.php on line 21 | Errors parsing cleanup/achievement_shouts_update.php"
+cleanup/achievement_sig_update.php,false,true,_quarantine/cleanup/achievement_sig_update.php,"stubbed due to markers: $db->run(');; php -l failed: Parse error: syntax error, unexpected token "","" in cleanup/achievement_sig_update.php on line 21 | Errors parsing cleanup/achievement_sig_update.php"
+cleanup/achievement_sreset_update.php,false,false,_quarantine/cleanup/achievement_sreset_update.php,has_sql false; kept stub
+cleanup/achievement_sticky_update.php,false,true,_quarantine/cleanup/achievement_sticky_update.php,"stubbed due to markers: $db->run("");, $db->run(');; php -l failed: Parse error: syntax error, unexpected token "","" in cleanup/achievement_sticky_update.php on line 21 | Errors parsing cleanup/achievement_sticky_update.php"
+cleanup/achievement_up_update.php,false,true,_quarantine/cleanup/achievement_up_update.php,"stubbed due to markers: $db->run(');; php -l failed: Parse error: syntax error, unexpected token "","" in cleanup/achievement_up_update.php on line 21 | Errors parsing cleanup/achievement_up_update.php"
+cleanup/ajax_chat_cleanup.php,false,true,_quarantine/cleanup/ajax_chat_cleanup.php,"stubbed due to markers: $db->run("");; php -l failed: Parse error: syntax error, unexpected identifier ""Run"", expecting "")"" in cleanup/ajax_chat_cleanup.php on line 41 | Errors parsing cleanup/ajax_chat_cleanup.php"
+cleanup/anime_title_update.php,false,true,_quarantine/cleanup/anime_title_update.php,stubbed due to markers: $fluent
+cleanup/announcement_update.php,true,false,_quarantine/cleanup/announcement_update.php,
+cleanup/anonymous_update.php,false,true,_quarantine/cleanup/anonymous_update.php,"stubbed due to markers: $fluent, /* columns */"
+cleanup/autoinvite_update.php,false,true,_quarantine/cleanup/autoinvite_update.php,"stubbed due to markers: $db->run(');; php -l failed: Parse error: syntax error, unexpected token "","" in cleanup/autoinvite_update.php on line 31 | Errors parsing cleanup/autoinvite_update.php"
+cleanup/avatarpos_update.php,false,true,_quarantine/cleanup/avatarpos_update.php,"stubbed due to markers: $fluent, /* columns */"
+cleanup/backup_update.php,false,false,_quarantine/cleanup/backup_update.php,has_sql false; kept stub
+cleanup/backupdb.php,false,true,_quarantine/cleanup/backupdb.php,"stubbed due to markers: $fluent, /* columns */"
+cleanup/birthday_update.php,false,true,_quarantine/cleanup/birthday_update.php,stubbed due to markers: $fluent
+cleanup/bounties_update.php,false,true,_quarantine/cleanup/bounties_update.php,stubbed due to markers: $fluent
+cleanup/bugs_update.php,false,false,_quarantine/cleanup/bugs_update.php,has_sql false; kept stub
+cleanup/chatpost_update.php,false,true,_quarantine/cleanup/chatpost_update.php,"stubbed due to markers: $fluent, /* columns */"
+cleanup/cheatclean_update.php,true,false,_quarantine/cleanup/cheatclean_update.php,
+cleanup/customsmilie_update.php,false,true,_quarantine/cleanup/customsmilie_update.php,"stubbed due to markers: $fluent, /* columns */"
+cleanup/delete_torrents_update.php,false,true,_quarantine/cleanup/delete_torrents_update.php,stubbed due to markers: $fluent
+cleanup/downloadpos_update.php,false,true,_quarantine/cleanup/downloadpos_update.php,"stubbed due to markers: $fluent, /* columns */"
+cleanup/expired_signup_update.php,false,true,_quarantine/cleanup/expired_signup_update.php,"php -l failed: Parse error: syntax error, unexpected token "","" in cleanup/expired_signup_update.php on line 24 | Errors parsing cleanup/expired_signup_update.php"
+cleanup/forum_update.php,false,true,_quarantine/cleanup/forum_update.php,"stubbed due to markers: $fluent, /* columns */"
+cleanup/freeslot_update.php,false,false,_quarantine/cleanup/freeslot_update.php,has_sql false; kept stub
+cleanup/freetorrents_update.php,false,true,_quarantine/cleanup/freetorrents_update.php,"stubbed due to markers: $fluent, /* columns */"
+cleanup/funds_table_update.php,true,false,_quarantine/cleanup/funds_table_update.php,
+cleanup/funds_update.php,false,true,_quarantine/cleanup/funds_update.php,stubbed due to markers: $fluent
+cleanup/gameaccess_update.php,false,true,_quarantine/cleanup/gameaccess_update.php,"stubbed due to markers: $fluent, /* columns */"
+cleanup/gift_update.php,false,true,_quarantine/cleanup/gift_update.php,stubbed due to markers: $fluent
+cleanup/goaccess_update.php,false,false,_quarantine/cleanup/goaccess_update.php,has_sql false; kept stub
+cleanup/happyhour_update.php,false,false,_quarantine/cleanup/happyhour_update.php,has_sql false; kept stub
+cleanup/hitrun_update.php,true,false,_quarantine/cleanup/hitrun_update.php,
+cleanup/immunity_update.php,false,true,_quarantine/cleanup/immunity_update.php,"stubbed due to markers: $fluent, /* columns */"
+cleanup/inactive_update.php,false,false,_quarantine/cleanup/inactive_update.php,has_sql false; kept stub
+cleanup/ip_update.php,false,false,_quarantine/cleanup/ip_update.php,has_sql false; kept stub
+cleanup/irc_update.php,false,true,_quarantine/cleanup/irc_update.php,"stubbed due to markers: $db->run(');; php -l failed: Parse error: syntax error, unexpected token "","" in cleanup/irc_update.php on line 26 | Errors parsing cleanup/irc_update.php"
+cleanup/karma_update.php,false,true,_quarantine/cleanup/karma_update.php,stubbed due to markers: $fluent
+cleanup/karmavip_update.php,false,true,_quarantine/cleanup/karmavip_update.php,"stubbed due to markers: $db->run(');; php -l failed: Parse error: syntax error, unexpected token "","" in cleanup/karmavip_update.php on line 36 | Errors parsing cleanup/karmavip_update.php"
+cleanup/king_update.php,false,true,_quarantine/cleanup/king_update.php,"stubbed due to markers: $fluent, /* columns */"
+cleanup/leechwarn_update.php,false,true,_quarantine/cleanup/leechwarn_update.php,"stubbed due to markers: $fluent, /* columns */"
+cleanup/lotteryclean.php,false,true,_quarantine/cleanup/lotteryclean.php,"stubbed due to markers: $db->run(');; php -l failed: Parse error: syntax error, unexpected token "","" in cleanup/lotteryclean.php on line 30 | Errors parsing cleanup/lotteryclean.php"
+cleanup/messages_cleanup.php,false,false,_quarantine/cleanup/messages_cleanup.php,has_sql false; kept stub
+cleanup/mow_update.php,false,true,_quarantine/cleanup/mow_update.php,stubbed due to markers: $fluent
+cleanup/newsrss_cleanup.php,false,false,_quarantine/cleanup/newsrss_cleanup.php,has_sql false; kept stub
+cleanup/optimizedb.php,false,false,_quarantine/cleanup/optimizedb.php,has_sql false; kept stub
+cleanup/peer_update.php,false,true,_quarantine/cleanup/peer_update.php,stubbed due to markers: $fluent
+cleanup/pirate_update.php,false,true,_quarantine/cleanup/pirate_update.php,"stubbed due to markers: $fluent, /* columns */"
+cleanup/prime_caches.php,false,true,_quarantine/cleanup/prime_caches.php,stubbed due to markers: $fluent
+cleanup/processkill_update.php,false,false,_quarantine/cleanup/processkill_update.php,has_sql false; kept stub
+cleanup/pu_demote_update.php,false,true,_quarantine/cleanup/pu_demote_update.php,stubbed due to markers: $fluent
+cleanup/pu_update.php,false,true,_quarantine/cleanup/pu_update.php,stubbed due to markers: $fluent
+cleanup/referrer_update.php,false,false,_quarantine/cleanup/referrer_update.php,has_sql false; kept stub
+cleanup/sendpmpos_update.php,false,true,_quarantine/cleanup/sendpmpos_update.php,stubbed due to markers: $fluent
+cleanup/silvertorrents_update.php,false,true,_quarantine/cleanup/silvertorrents_update.php,stubbed due to markers: $fluent
+cleanup/sitepot_update.php,false,true,_quarantine/cleanup/sitepot_update.php,stubbed due to markers: $fluent
+cleanup/sitestats_update.php,false,true,_quarantine/cleanup/sitestats_update.php,stubbed due to markers: $fluent
+cleanup/snatchclean_update.php,false,false,_quarantine/cleanup/snatchclean_update.php,has_sql false; kept stub
+cleanup/torrents_normalize.php,false,true,_quarantine/cleanup/torrents_normalize.php,stubbed due to markers: $fluent
+cleanup/torrents_update.php,false,true,_quarantine/cleanup/torrents_update.php,stubbed due to markers: $fluent
+cleanup/trivia_points_update.php,false,true,_quarantine/cleanup/trivia_points_update.php,"stubbed due to markers: $fluent, /* columns */"
+cleanup/trivia_update.php,false,true,_quarantine/cleanup/trivia_update.php,"stubbed due to markers: $fluent, /* columns */"
+cleanup/tvmaze_schedule_update.php,true,false,_quarantine/cleanup/tvmaze_schedule_update.php,
+cleanup/tvmaze_shows_update.php,false,true,_quarantine/cleanup/tvmaze_shows_update.php,"stubbed due to markers: $fluent, /* columns */"
+cleanup/tvmaze_update.php,false,true,_quarantine/cleanup/tvmaze_update.php,stubbed due to markers: $fluent
+cleanup/uploadpos_update.php,false,true,_quarantine/cleanup/uploadpos_update.php,stubbed due to markers: $fluent
+cleanup/user_update.php,false,true,_quarantine/cleanup/user_update.php,stubbed due to markers: $fluent
+cleanup/visible_update.php,false,true,_quarantine/cleanup/visible_update.php,stubbed due to markers: $fluent
+cleanup/warned_update.php,false,true,_quarantine/cleanup/warned_update.php,stubbed due to markers: $fluent
+admin/class_promo.php,false,true,_quarantine/rebroken/admin/class_promo.php,"php -l failed: Parse error: syntax error, unexpected identifier ""name"" in admin/class_promo.php on line 243 | Errors parsing admin/class_promo.php"
+admin/comments.php,false,true,_quarantine/rebroken/admin/comments.php,"php -l failed: Parse error: syntax error, unexpected identifier ""allComments"" in admin/comments.php on line 26 | Errors parsing admin/comments.php"
+admin/namechanger.php,false,false,_quarantine/rebroken/admin/namechanger.php,has_sql false; kept stub
+admin/reports.php,false,true,_quarantine/rebroken/admin/reports.php,"php -l failed: Parse error: syntax error, unexpected end of file in admin/reports.php on line 121 | Errors parsing admin/reports.php"
+admin/reputation_ad.php,false,true,_quarantine/rebroken/admin/reputation_ad.php,"stubbed due to markers: $db->run("");, $db->run(');; php -l failed: Parse error: syntax error, unexpected token ""else"", expecting end of file in admin/reputation_ad.php on line 254 | Errors parsing admin/reputation_ad.php"
+admin/shit_list.php,false,true,_quarantine/rebroken/admin/shit_list.php,"stubbed due to markers: $db->run(');; php -l failed: Parse error: syntax error, unexpected identifier ""shit_list_"", expecting "")"" in admin/shit_list.php on line 42 | Errors parsing admin/shit_list.php"
+admin/sitelog.php,false,true,_quarantine/rebroken/admin/sitelog.php,"stubbed due to markers: $db->run("");; php -l failed: Parse error: syntax error, unexpected identifier ""SELECT"", expecting "")"" in admin/sitelog.php on line 28 | Errors parsing admin/sitelog.php"
+admin/system_view.php,false,true,_quarantine/rebroken/admin/system_view.php,"stubbed due to markers: $db->run("");; php -l failed: Parse error: syntax error, unexpected fully qualified name ""\n"", expecting "")"" in admin/system_view.php on line 93 | Errors parsing admin/system_view.php"
+admin/warn.php,false,true,_quarantine/rebroken/admin/warn.php,"stubbed due to markers: $db->run(');; php -l failed: Parse error: syntax error, unexpected identifier ""Hey"", expecting "")"" in admin/warn.php on line 56 | Errors parsing admin/warn.php"
+include/function_account_delete.php,false,true,_quarantine/rebroken/include/function_account_delete.php,"stubbed due to markers: $db->run("");; php -l failed: Parse error: Unclosed '(' on line 41 in include/function_account_delete.php on line 45 | Errors parsing include/function_account_delete.php"
+public/coins.php,false,true,_quarantine/rebroken/public/coins.php,"stubbed due to markers: $db->run(');; php -l failed: Parse error: syntax error, unexpected token "","", expecting end of file in public/coins.php on line 15 | Errors parsing public/coins.php"
+public/comment.php,false,true,_quarantine/rebroken/public/comment.php,"stubbed due to markers: $db->run("");; php -l failed: Parse error: syntax error, unexpected string content """", expecting ""-"" or identifier or variable or number in public/comment.php on line 113 | Errors parsing public/comment.php"
+public/credits.php,false,true,_quarantine/rebroken/public/credits.php,"stubbed due to markers: $db->run("");, $db->run(');; php -l failed: Parse error: syntax error, unexpected token "","", expecting end of file in public/credits.php on line 11 | Errors parsing public/credits.php"
+public/friends.php,false,true,_quarantine/rebroken/public/friends.php,"stubbed due to markers: $db->run("");, $db->run(');; php -l failed: Parse error: syntax error, unexpected token "","", expecting end of file in public/friends.php on line 14 | Errors parsing public/friends.php"
+public/gift.php,false,true,_quarantine/rebroken/public/gift.php,"stubbed due to markers: $db->run(');; php -l failed: Parse error: syntax error, unexpected token "","", expecting end of file in public/gift.php on line 13 | Errors parsing public/gift.php"
+public/invite.php,false,true,_quarantine/rebroken/public/invite.php,"stubbed due to markers: $db->run("");, $db->run(');; php -l failed: Parse error: syntax error, unexpected token "","", expecting end of file in public/invite.php on line 13 | Errors parsing public/invite.php"
+public/messages.php,false,true,_quarantine/rebroken/public/messages.php,"stubbed due to markers: $db->run(');; php -l failed: Parse error: syntax error, unexpected identifier ""Location"", expecting "")"" in public/messages.php on line 94 | Errors parsing public/messages.php"
+public/reputation.php,false,true,_quarantine/rebroken/public/reputation.php,"stubbed due to markers: $db->run(');; php -l failed: Parse error: syntax error, unexpected token "","", expecting end of file in public/reputation.php on line 15 | Errors parsing public/reputation.php"
+public/staffbox.php,false,true,_quarantine/rebroken/public/staffbox.php,"stubbed due to markers: $db->run("");, $db->run(');; php -l failed: Parse error: syntax error, unexpected token "","", expecting end of file in public/staffbox.php on line 14 | Errors parsing public/staffbox.php"
+public/takeedit.php,false,true,_quarantine/rebroken/public/takeedit.php,"stubbed due to markers: $db->run(');; php -l failed: Parse error: syntax error, unexpected token "","", expecting end of file in public/takeedit.php on line 15 | Errors parsing public/takeedit.php"
+public/takeeditcp.php,false,true,_quarantine/rebroken/public/takeeditcp.php,"stubbed due to markers: $db->run(');; php -l failed: Parse error: syntax error, unexpected token "","", expecting end of file in public/takeeditcp.php on line 28 | Errors parsing public/takeeditcp.php"
+public/usercp.php,false,true,_quarantine/rebroken/public/usercp.php,"stubbed due to markers: $db->run(');; php -l failed: Parse error: syntax error, unexpected token "","", expecting end of file in public/usercp.php on line 29 | Errors parsing public/usercp.php"
+public/usermood.php,false,true,_quarantine/rebroken/public/usermood.php,"stubbed due to markers: $db->run(');; php -l failed: Parse error: syntax error, unexpected token "","", expecting end of file in public/usermood.php on line 13 | Errors parsing public/usermood.php"
+public/users.php,false,true,_quarantine/rebroken/public/users.php,"php -l failed: Parse error: syntax error, unexpected string content """", expecting ""-"" or identifier or variable or number in public/users.php on line 118 | Errors parsing public/users.php"

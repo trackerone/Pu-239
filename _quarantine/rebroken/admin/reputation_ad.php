@@ -1,5 +1,6 @@
 <?php
 declare(strict_types=1);
+
 require_once dirname(__DIR__) . '/bootstrap_web.php';
 
 use DI\DependencyException;
@@ -312,7 +313,7 @@ function show_form_rep(array $input)
         stderr(_('Error'), _('Invalid ID.'));
     }
     $title = _('User Reputation Manager');
-    $rows = $db->fetchAll('SELECT r.*, p.topic_id, t.topic_name, leftfor.username AS leftfor_name, 
+    $rows = $db->fetchAll('SELECT r.*, p.topic_id, t.topic_name, leftfor.username AS leftfor_name,
                     leftby.username AS leftby_name
                     FROM reputation r
                     LEFT JOIN posts p ON p.id=r.postid
