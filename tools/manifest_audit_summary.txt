@@ -1,30 +1,20 @@
 Autofix manifest audit summary
 
-Total unique files reviewed: 30
-Rehydrated entries with files present: 0
-Rehydrated entries missing on disk: 0
-Re-quarantined entries: 20
+Dataset: tools/autofix_manifest.csv (latest entry per file)
 
-No rehydrated files with confirmed on-disk copies were found in this audit pass.
+Key totals
+- Total unique files tracked: 35
+- Files rehydrated in latest state: 0
+- Files re-quarantined in latest state: 4
+- Files with stray config fixes applied: 0
+- Files with function include removals: 0
 
-Re-quarantined files:
-  - admin/class_promo.php (source: _quarantine/rebroken/admin/class_promo.php)
-  - admin/comments.php (source: _quarantine/rebroken/admin/comments.php)
-  - admin/reports.php (source: _quarantine/rebroken/admin/reports.php)
-  - admin/sitelog.php (source: _quarantine/rebroken/admin/sitelog.php)
-  - admin/system_view.php (source: _quarantine/rebroken/admin/system_view.php)
-  - include/function_account_delete.php (source: _quarantine/rebroken/include/function_account_delete.php)
-  - public/coins.php (source: _quarantine/rebroken/public/coins.php)
-  - public/comment.php (source: _quarantine/rebroken/public/comment.php)
-  - public/credits.php (source: _quarantine/rebroken/public/credits.php)
-  - public/friends.php (source: _quarantine/rebroken/public/friends.php)
-  - public/gift.php (source: _quarantine/rebroken/public/gift.php)
-  - public/invite.php (source: _quarantine/rebroken/public/invite.php)
-  - public/messages.php (source: _quarantine/rebroken/public/messages.php)
-  - public/reputation.php (source: _quarantine/rebroken/public/reputation.php)
-  - public/staffbox.php (source: _quarantine/rebroken/public/staffbox.php)
-  - public/takeedit.php (source: _quarantine/rebroken/public/takeedit.php)
-  - public/takeeditcp.php (source: _quarantine/rebroken/public/takeeditcp.php)
-  - public/usercp.php (source: _quarantine/rebroken/public/usercp.php)
-  - public/usermood.php (source: _quarantine/rebroken/public/usermood.php)
-  - public/users.php (source: _quarantine/rebroken/public/users.php)
+Re-quarantined files and preserved sources
+- admin/class_promo.php ← _quarantine/rebroken/admin/class_promo.php
+- admin/comments.php ← _quarantine/rebroken/admin/comments.php
+- admin/reports.php ← _quarantine/rebroken/admin/reports.php
+- public/users.php ← _quarantine/rebroken/public/users.php
+
+Observations
+- Many files remain in modernization stubs without further automated action; follow-up work will require manual restoration or new migrations.
+- No files were successfully rehydrated during this pass, so no runtime-ready assets were returned from quarantine.
