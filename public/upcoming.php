@@ -2,20 +2,21 @@
 declare(strict_types=1);
 require_once dirname(__DIR__) . '/bootstrap_web.php';
 
-$db = $container->get(Database::class);
-
-
-
-
+use PU239\Config\ConfigRepository;
+use Pu239\Database;
 use Pu239\Image;
 use Pu239\Session;
 use Pu239\Torrent;
 use Pu239\Upcoming;
 use Rakit\Validation\Validator;
 
+global $container;
+/** @var ConfigRepository $config */
+$config = $container->get(ConfigRepository::class);
+$db = $container->get(Database::class);
+
 require_once __DIR__ . '/../include/bittorrent.php';
 $user = check_user_status();
-global $container, $site_config;
 
 $stdfoot = [
     'js' => [
@@ -106,7 +107,7 @@ $form = "
                 <div class='columns is-marginless is-paddingless'>
                     <div class='column is-one-quarter has-text-left'>" . _('Category') . "</div>
                     <div class='column'>
-                        " . category_dropdown($site_config['categories']['movie']) . "
+                        " . category_dropdown($config->get('categories.movie')) . "
                     </div>
                 </div>
                 <div class='columns is-marginless is-paddingless'>
@@ -124,7 +125,7 @@ $form = "
                         <div id='droppable' class='droppable bg-03 top20'>
                             <span id='comment'>" . _('Drop images or click here to select images.') . "</span>
                             <div id='loader' class='is-hidden'>
-                                <img src='{$site_config['paths']['images_baseurl']}/forums/updating.svg' alt='Loading...'>
+                                <img src='{$config->get('paths.images_baseurl')}/forums/updating.svg' alt='Loading...'>
                             </div>
                         </div>
                         <div class='output-wrapper output'></div>
@@ -196,7 +197,7 @@ $HTMLOUT .= "
         <li><a href='{$_SERVER['PHP_SELF']}'>" . _('View Recipes in the Oven') . '</a></li>' : "
         <li><a href='{$_SERVER['PHP_SELF']}?action=view_all'>" . _('View All Recipes') . '</a></li>') . "
     </ul>
-    <h1 class='has-text-centered'>{$site_config['site']['name']}'s " . _('Cooker') . '</h1>';
+    <h1 class='has-text-centered'>{$config->get('site.name')}'s " . _('Cooker') . '</h1>';
 
 if (!empty($add_new)) {
     $HTMLOUT .= $add_new;
@@ -217,7 +218,7 @@ if (!empty($add_new)) {
     if (!empty($recipes)) {
         foreach ($recipes as $recipe) {
             $has_full_access = $user['id'] === $recipe['userid'] || has_access($user['class'], UC_STAFF, '') && $has_access;
-            $caticon = !empty($recipe['image']) ? "<img src='{$site_config['paths']['images_baseurl']}caticons/" . get_category_icons() . '/' . format_comment($recipe['image']) . "' class='tooltipper' alt='" . format_comment($recipe['cat']) . "' title='" . format_comment($recipe['cat']) . "' height='20px' width='auto'>" : format_comment($recipe['cat']);
+            $caticon = !empty($recipe['image']) ? "<img src='{$config->get('paths.images_baseurl')}caticons/" . get_category_icons() . '/' . format_comment($recipe['image']) . "' class='tooltipper' alt='" . format_comment($recipe['cat']) . "' title='" . format_comment($recipe['cat']) . "' height='20px' width='auto'>" : format_comment($recipe['cat']);
             $poster = !empty($recipe['poster']) ? "<div class='has-text-centered'><img src='" . url_proxy($recipe['poster'], true, 250) . "' alt='image' class='img-polaroid'></div>" : '';
             $background = $imdb_id = '';
             preg_match('#(tt\d{7,8})#', $recipe['url'], $match);
@@ -226,7 +227,7 @@ if (!empty($add_new)) {
                 $background = $images_class->find_images($imdb_id, $type = 'background');
                 $background = !empty($background) ? "style='background-image: url({$background});'" : '';
                 $poster = !empty($recipe['poster']) ? $recipe['poster'] : $images_class->find_images($imdb_id, $type = 'poster');
-                $poster = empty($poster) ? "<img src='{$site_config['paths']['images_baseurl']}noposter.png' alt='" . ('Poster') . "' class='tooltip-poster'>" : "<img src='" . url_proxy($poster, true, 250) . "' alt='Poster for {$recipe['name']}' class='tooltip-poster'>";
+                $poster = empty($poster) ? "<img src='{$config->get('paths.images_baseurl')}noposter.png' alt='" . ('Poster') . "' class='tooltip-poster'>" : "<img src='" . url_proxy($poster, true, 250) . "' alt='Poster for {$recipe['name']}' class='tooltip-poster'>";
             }
             $chef = format_username($recipe['userid']);
             $plot = $torrent->get_plot($imdb_id);
@@ -274,7 +275,7 @@ if (!empty($add_new)) {
 
 $title = _('Cooker');
 $breadcrumbs = [
-    "<a href='{$site_config['paths']['baseurl']}/browse.php'>" . _('Browse Torrents') . '</a>',
+    "<a href='{$config->get('paths.baseurl')}/browse.php'>" . _('Browse Torrents') . '</a>',
     "<a href='{$_SERVER['PHP_SELF']}'>$title</a>",
 ];
 echo stdhead($title, [], 'page-wrapper', $breadcrumbs) . wrapper($HTMLOUT) . stdfoot($stdfoot);

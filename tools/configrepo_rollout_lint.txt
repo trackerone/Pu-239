@@ -1,6 +1,9 @@
 chat/lib/class/AJAXChatTemplate.php: OK
+*** codex/refactor-legacy-config-to-configrepository-l20m0t
+=======
 *** codex/refactor-legacy-config-to-configrepository-xyf5zu
 =======
+*** master
 admin/datareset.php: OK
 blocks/userdetails/traffic.php: OK
 admin/mysql_overview.php: OK
@@ -51,4 +54,32 @@ public/rss.php: OK
 admin/stats_extra.php: OK
 admin/memcache.php: OK
 public/blackjack.php: OK
+*** codex/refactor-legacy-config-to-configrepository-l20m0t
+No syntax errors detected in admin/upgrade_database.php
+No syntax errors detected in public/viewnfo.php
+No syntax errors detected in admin/manage_images.php
+No syntax errors detected in public/rules.php
+No syntax errors detected in admin/iphistory.php
+No syntax errors detected in public/bot_triggers.php
+No syntax errors detected in admin/traceroute.php
+No syntax errors detected in public/upcoming.php
+No syntax errors detected in admin/block.settings.php
+No syntax errors detected in admin/todo.php
+No syntax errors detected in public/userhistory.php
+No syntax errors detected in admin/referrers.php
+No syntax errors detected in admin/deathrow.php
+No syntax errors detected in admin/forum_manage.php
+No syntax errors detected in admin/invite_tree.php
+No syntax errors detected in messages/forward_pm.php
+No syntax errors detected in admin/usersearch.php
+No syntax errors detected in messages/view_mailbox.php
+No syntax errors detected in admin/uploadapps.php
+No syntax errors detected in messages/use_draft.php
+No syntax errors detected in messages/forward.php
+No syntax errors detected in messages/edit_mailboxes.php
+No syntax errors detected in messages/view_message.php
+No syntax errors detected in messages/delete.php
+No syntax errors detected in messages/search.php
+=======
+*** master
 *** master

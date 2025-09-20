@@ -2,12 +2,7 @@
 declare(strict_types=1);
 require_once dirname(__DIR__) . '/bootstrap_web.php';
 
-$db = $container->get(Database::class);
-
-
-
-
-
+use PU239\Config\ConfigRepository;
 use Pu239\BotReplies;
 use Pu239\BotTriggers;
 use Pu239\Cache;
@@ -15,10 +10,13 @@ use Pu239\Database;
 use Pu239\Session;
 use Rakit\Validation\Validator;
 
+global $container;
+/** @var ConfigRepository $config */
+$config = $container->get(ConfigRepository::class);
+$db = $container->get(Database::class);
+
 require_once __DIR__ . '/../include/bittorrent.php';
 $user = check_user_status();
-
-global $container, $site_config;
 
 $cache = $container->get(Cache::class);
 // $fluent removed — use $this->db (ExtendedPdo)
@@ -61,7 +59,7 @@ if (has_access($user['class'], UC_ADMINISTRATOR, 'coder') && !empty($data)) {
     }
     $validator = $container->get(Validator::class);
     $session = $container->get(Session::class);
-    $data['phraseid'] = isset($data['id']) ? decrypt($data['id'], $site_config['salt']['one']) : '';
+    $data['phraseid'] = isset($data['id']) ? decrypt($data['id'], $config->get('salt.one')) : '';
     $validation = $validator->validate($data, [
         'add_trigger' => 'regex:/^[\p{L}\p{M}\p{N}\p{Z}\p{P}]+$/u',
         'update_trigger' => 'regex:/^[\p{L}\p{M}\p{N}\p{Z}\p{P}]+$/u',
@@ -306,7 +304,7 @@ if (empty($triggers)) {
                 } else {
                     $each_approved = _("You can't approve your reply.");
                 }
-                $post_id = encrypt($eaches['id'], $site_config['salt']['one']);
+                $post_id = encrypt($eaches['id'], $config->get('salt.one'));
                 $current_text = trim($eaches['reply']);
                 $inner_body .= "
                     <tr id='reply_{$eaches['id']}'>
@@ -325,7 +323,7 @@ if (empty($triggers)) {
                                 <span>" . main_table($inner_body, $inner_heading) . '</span>
                             </span>';
         }
-        $post_id = encrypt($trigger['id'], $site_config['salt']['one']);
+        $post_id = encrypt($trigger['id'], $config->get('salt.one'));
         $body .= "
 					<tr>
 						<td>					

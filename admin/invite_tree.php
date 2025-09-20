@@ -2,12 +2,14 @@
 declare(strict_types=1);
 require_once dirname(__DIR__) . '/bootstrap_web.php';
 
+use PU239\Config\ConfigRepository;
 use Pu239\Database;
 use Pu239\User;
 
 
-global $container, $site_config;
-
+global $container;
+/** @var ConfigRepository $config */
+$config = $container->get(ConfigRepository::class);
 $db = $container->get(Database::class);
 
 $class = get_access(basename($_SERVER['REQUEST_URI']));
@@ -24,9 +26,9 @@ if ($id !== 0) {
     <div class="bottom20">
         <ul class="level-center bg-06">' . ($arr_user['invitedby'] == 0 ? '
             <li class="margin10"><a title="' . htmlsafechars($arr_user['username']) . ' ' . _('was registered during open doors') . '" class="is-link tooltipper">' . _('go up one level') . '</a></li>' : '
-            <li class="margin10"><a href="' . $site_config['paths']['baseurl'] . '/staffpanel.php?tool=invite_tree&amp;really_deep=1&amp;id=' . (int) $arr_user['invitedby'] . '" title="go up one level" class="is-link tooltipper">' . _('go up one level') . '</a></li>') . '
-            <li class="margin10"><a href="' . $site_config['paths']['baseurl'] . '/staffpanel.php?tool=invite_tree&amp;' . (isset($_GET['deeper']) ? '' : '&amp;deeper=1') . '&amp;id=' . $id . '" title=" ' . _('click to') . ' ' . (isset($_GET['deeper']) ? _('shrink') : _('expand')) . ' ' . _('this tree') . ' " class="is-link tooltipper">' . _('expand tree') . '</a></li>
-            <li class="margin10"><a href="' . $site_config['paths']['baseurl'] . '/staffpanel.php?tool=invite_tree&amp;really_deep=1&amp;id=' . $id . '" title="' . _('click to expand even more') . '" class="is-link tooltipper">' . _('expand even more') . '</a></li>
+            <li class="margin10"><a href="' . $config->get('paths.baseurl') . '/staffpanel.php?tool=invite_tree&amp;really_deep=1&amp;id=' . (int) $arr_user['invitedby'] . '" title="go up one level" class="is-link tooltipper">' . _('go up one level') . '</a></li>') . '
+            <li class="margin10"><a href="' . $config->get('paths.baseurl') . '/staffpanel.php?tool=invite_tree&amp;' . (isset($_GET['deeper']) ? '' : '&amp;deeper=1') . '&amp;id=' . $id . '" title=" ' . _('click to') . ' ' . (isset($_GET['deeper']) ? _('shrink') : _('expand')) . ' ' . _('this tree') . ' " class="is-link tooltipper">' . _('expand tree') . '</a></li>
+            <li class="margin10"><a href="' . $config->get('paths.baseurl') . '/staffpanel.php?tool=invite_tree&amp;really_deep=1&amp;id=' . $id . '" title="' . _('click to expand even more') . '" class="is-link tooltipper">' . _('expand even more') . '</a></li>
         </ul>
     </div>
     <h1 class="has-text-centered">' . htmlsafechars($arr_user['username']) . (substr($arr_user['username'], -1) === 's' ? '\'' : '\'s') . ' ' . _('Invite Tree') . '</h1>
@@ -245,7 +247,7 @@ if ($id !== 0) {
                         <a class="pagination-link is-current" aria-label="' . $LL . '">' . $LL . '</a>';
         } else {
             $HTMLOUT .= '
-                        <a href="' . $site_config['paths']['baseurl'] . '/staffpanel.php?tool=invite_tree&amp;letter=' . $L . '" class="pagination-link button">' . $LL . '</a>';
+                        <a href="' . $config->get('paths.baseurl') . '/staffpanel.php?tool=invite_tree&amp;letter=' . $L . '" class="pagination-link button">' . $LL . '</a>';
         }
         ++$count;
     }
@@ -258,7 +260,7 @@ if ($id !== 0) {
     $res_count = sql_query('SELECT COUNT(id) FROM users WHERE ' . $query);
     $arr_count = mysqli_fetch_row($res_count);
     $count = $arr_count[0] > 0 ? (int) $arr_count[0] : 0;
-    $link = $site_config['paths']['baseurl'] . '/staffpanel.php?tool=invite_tree';
+    $link = $config->get('paths.baseurl') . '/staffpanel.php?tool=invite_tree';
     $pager = pager($perpage, $count, $link);
     $menu_top = $pager['pagertop'];
     $menu_bottom = $pager['pagerbottom'];
@@ -280,7 +282,7 @@ if ($id !== 0) {
         while ($row = mysqli_fetch_assoc($res)) {
             $country = ($row['name'] != null) ? '
                 <td>
-                    <img src="' . $site_config['paths']['images_baseurl'] . 'flag/' . $row['flagpic'] . '" alt="' . htmlsafechars($row['name']) . '" title="' . htmlsafechars($row['name']) . '" class="tooltipper">
+                    <img src="' . $config->get('paths.images_baseurl') . 'flag/' . $row['flagpic'] . '" alt="' . htmlsafechars($row['name']) . '" title="' . htmlsafechars($row['name']) . '" class="tooltipper">
                 </td>' : '
                 <td>---</td>';
             $body .= '
@@ -289,7 +291,7 @@ if ($id !== 0) {
                 <td>' . get_date((int) $row['registered'], '') . '</td><td>' . get_date((int) $row['last_access'], '') . '</td>
                 <td>' . get_user_class_name((int) $row['class']) . '</td>' . $country . '
                 <td>
-                    <a href="' . $site_config['paths']['baseurl'] . '/staffpanel.php?tool=invite_tree&amp;id=' . (int) $row['id'] . '" title="' . _('Look at this members invite tree') . '" class="tooltipper">
+                    <a href="' . $config->get('paths.baseurl') . '/staffpanel.php?tool=invite_tree&amp;id=' . (int) $row['id'] . '" title="' . _('Look at this members invite tree') . '" class="tooltipper">
                         <span class="button is-small">' . _('VIEW') . '</span>
                     </a>
                 </td>
@@ -303,7 +305,7 @@ if ($id !== 0) {
 }
 $title = _('Invite Tree');
 $breadcrumbs = [
-    "<a href='{$site_config['paths']['baseurl']}/staffpanel.php'>" . _('Staff Panel') . '</a>',
+    "<a href='{$config->get('paths.baseurl')}/staffpanel.php'>" . _('Staff Panel') . '</a>',
     "<a href='{$_SERVER['PHP_SELF']}'>$title</a>",
 ];
 echo stdhead($title, [], 'page-wrapper', $breadcrumbs) . wrapper($HTMLOUT) . stdfoot();
