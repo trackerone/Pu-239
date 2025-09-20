@@ -1,2 +1,3 @@
 No rehydrated files for offset=0 at 2025-09-20T08:10:44.490481 (no-op OK)
 No rehydrated files for offset=8 at 2025-09-20T08:43:24.046912 (no-op OK)
+No rehydrated files for offset=20 at 2025-09-20T09:26:57.808730Z (no-op OK)

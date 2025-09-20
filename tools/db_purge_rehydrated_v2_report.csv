@@ -1,0 +1,2 @@
+file,replaced_patterns,in_clause_used,limit_bind_ok,select_star_flag,notes
+admin/reports.php,[],false,true,false,pre-migrated with Database layer
