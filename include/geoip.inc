@@ -1376,10 +1376,12 @@ class GeoIP
 
 function geoip_load_shared_mem($file)
 {
-    $fp = fopen($file, 'rb');
-    if (!$fp) {
-        echo "error opening $file: $php_errormsg\n";
-        exit;
+    $fp = @fopen($file, 'rb');
+    if ($fp === false) {
+        $error = error_get_last();
+        $message = $error['message'] ?? 'unknown error';
+
+        throw new \RuntimeException(sprintf('Unable to open GeoIP data file "%s": %s', (string) $file, $message));
     }
     $s_array = fstat($fp);
     $size = $s_array['size'];
