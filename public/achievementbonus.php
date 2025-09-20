@@ -1,20 +1,19 @@
 <?php
+
 declare(strict_types=1);
-require_once dirname(__DIR__) . '/bootstrap_web.php';
-
-$db = $container->get(Database::class);
-
-
-
 
 use Pu239\Ach_bonus;
+use Pu239\Database;
 use Pu239\Session;
 use Pu239\User;
 use Pu239\Usersachiev;
 
+require_once dirname(__DIR__) . '/bootstrap_web.php';
+
+$db = $container->get(Database::class);
+
 require_once __DIR__ . '/../include/bittorrent.php';
 $user = check_user_status();
-global $container, $site_config;
 
 $session = $container->get(Session::class);
 $usersachiev = $container->get(Usersachiev::class);

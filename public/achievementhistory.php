@@ -1,18 +1,17 @@
 <?php
+
 declare(strict_types=1);
-require_once dirname(__DIR__) . '/bootstrap_web.php';
-
-$db = $container->get(Database::class);
-
-
-
-
 
 use Pu239\Achievement;
+use Pu239\Database;
 use Pu239\Post;
 use Pu239\Topic;
 use Pu239\User;
 use Pu239\Usersachiev;
+
+require_once dirname(__DIR__) . '/bootstrap_web.php';
+
+$db = $container->get(Database::class);
 
 require_once __DIR__ . '/../include/bittorrent.php';
 $user = check_user_status();
@@ -41,7 +40,6 @@ $achievement = $container->get(Achievement::class);
 $count = (int) $achievement->get_achievements_count($id);
 $perpage = 15;
 $pager = pager($perpage, $count, "?id=$id&amp;");
-global $site_config;
 
 $HTMLOUT = "
     <div class='w-100'>

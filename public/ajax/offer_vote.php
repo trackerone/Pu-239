@@ -1,70 +1,64 @@
 <?php
+
 declare(strict_types=1);
+
+use Pu239\Database;
+
 require_once dirname(__DIR__) . '/bootstrap_web.php';
 
 $db = $container->get(Database::class);
 
-
-
-
-use Pu239\Database;
-
 require_once __DIR__ . '/../../include/bittorrent.php';
 $user = check_user_status();
-header('content-type: application/json');
-global $container;
 
-if (empty($user)) {
-    echo json_encode(['vote' => 'invalid']);
-    app_halt('Exit called');
-}
-$id = (int) $_POST['id'];
-$voted = $_POST['voted'];
-if (empty($id) || !isset($voted)) {
+header('content-type: application/json');
+
+if ($user === false) {
     echo json_encode(['voted' => 'invalid']);
     app_halt('Exit called');
 }
-// $fluent removed — use $this->db (ExtendedPdo)
-if ($voted === 'yes') {
-    $update = [
-        'vote' => 'no',
-    ];
-    try {
-        $fluent->update('offer_votes')
-               ->set($update)
-               ->where('user_id = ?', $user['id'])
-               ->where('offer_id = ?', $id)
-               ->execute();
-        echo json_encode(['voted' => 'no']);
-        app_halt('Exit called');
-    } catch (Exception $e) {
-        // TODO
-    }
-} elseif ($voted === 'no') {
-    try {
-        $fluent->deleteFrom('offer_votes')
-               ->where('user_id = ?', $user['id'])
-               ->where('offer_id = ?', $id)
-               ->execute();
-        echo json_encode(['voted' => 0]);
-        app_halt('Exit called');
-    } catch (Exception $e) {
-        // TODO
-    }
-} else {
-    $values = [
-        'vote' => 'yes',
-        'user_id' => $user['id'],
-        'offer_id' => $id,
-    ];
-    try {
-        $sql = "INSERT INTO offer_votes (/* columns */) VALUES (/* values */)";
-$db->perform($sql, $values);
-        echo json_encode(['voted' => 'yes']);
-        app_halt('Exit called');
-    } catch (Exception $e) {
-        // TODO
-    }
+
+// TODO(2025): csrf on POST where missing
+$offerId = (int) ($_POST['id'] ?? 0);
+$currentVote = $_POST['voted'] ?? '';
+
+if ($offerId <= 0 || $currentVote === '') {
+    echo json_encode(['voted' => 'invalid']);
+    app_halt('Exit called');
 }
-echo json_encode(['voted' => 'invalid']);
+
+$params = [
+    'offer_id' => $offerId,
+    'user_id' => (int) $user['id'],
+];
+
+if ($currentVote === 'yes') {
+    $db->run(
+        'UPDATE offer_votes SET vote = :vote WHERE offer_id = :offer_id AND user_id = :user_id',
+        $params + ['vote' => 'no']
+    );
+
+    echo json_encode(['voted' => 'no']);
+    app_halt('Exit called');
+}
+
+if ($currentVote === 'no') {
+    $db->run(
+        'DELETE FROM offer_votes WHERE offer_id = :offer_id AND user_id = :user_id',
+        $params
+    );
+
+    echo json_encode(['voted' => 0]);
+    app_halt('Exit called');
+}
+
+$db->run(
+    'INSERT INTO offer_votes (vote, user_id, offer_id, added) VALUES (:vote, :user_id, :offer_id, :added)',
+    $params + [
+        'vote' => 'yes',
+        'added' => [TIME_NOW, \PDO::PARAM_INT],
+    ]
+);
+
+echo json_encode(['voted' => 'yes']);
 app_halt('Exit called');

@@ -7,7 +7,6 @@ use DI\NotFoundException;
 use Pu239\Cache;
 use Pu239\Database;
 
-global $container, $site_config;
 $db = $container->get(Database::class);
 
 require_once __DIR__ . '/../../include/bittorrent.php';
@@ -37,13 +36,15 @@ if (!empty($user) && is_array($user)) {
  */
 function comment_like_unlike(array $fields, array $user)
 {
-    global $container, $site_config, $db;
+    global $container, $db;
 
     header('content-type: application/json');
 
     $id = (int) ($_POST['id'] ?? 0);
     $type = mb_substr(trim((string) ($_POST['type'] ?? '')), 0, 12);
     $current = mb_substr(trim((string) ($_POST['current'] ?? '')), 0, 10);
+
+    // TODO(2025): csrf on POST where missing
 
     if (!isset($fields[$type])) {
         echo json_encode(['label' => _('Invalid Data Type')]);
@@ -70,24 +71,33 @@ function comment_like_unlike(array $fields, array $user)
         default => throw new InvalidArgumentException('Invalid like type'),
     };
 
-    $exists = (int) $db->run(
+    $exists = (int) $db->fetchValue(
         "SELECT COUNT(id) FROM likes WHERE user_id = :uid AND {$type}_id = :id",
-        [':uid' => (int) $user['id'], ':id' => $id]
-    )->fetchColumn();
+        [
+            'uid' => (int) $user['id'],
+            'id' => $id,
+        ]
+    );
     $cache = $container->get(Cache::class);
 
     if ($exists === 0 && $current === 'Like') {
         try {
-            $db->beginTransaction();
-            $db->run("INSERT INTO likes ({$type}_id, user_id) VALUES (:id, :uid)", [':id' => $id, ':uid' => (int) $user['id']]);
-            $db->run("UPDATE {$table} SET user_likes = user_likes + 1 WHERE id = :id", [':id' => $id]);
-            $db->commit();
-        } catch (\PDOException $e) {
-            if ((int) ($e->errorInfo[1] ?? 0) === 1062) {
-                $db->rollBack();
-            } else {
-                $db->rollBack();
-                throw $e;
+            $db->tx(function (Database $db) use ($type, $id, $user): void {
+                $db->run(
+                    "INSERT INTO likes ({$type}_id, user_id) VALUES (:id, :uid)",
+                    [
+                        'id' => $id,
+                        'uid' => (int) $user['id'],
+                    ]
+                );
+                $db->run(
+                    "UPDATE {$table} SET user_likes = user_likes + 1 WHERE id = :id",
+                    ['id' => $id]
+                );
+            });
+        } catch (PDOException $exception) {
+            if ((int) ($exception->errorInfo[1] ?? 0) !== 1062) {
+                throw $exception;
             }
         }
         $cache->delete("{$type}_user_likes_" . $id);
@@ -95,15 +105,19 @@ function comment_like_unlike(array $fields, array $user)
         $label = 'Unlike';
         $list = 'you like this';
     } elseif ($exists === 1 && $current === 'Unlike') {
-        try {
-            $db->beginTransaction();
-            $db->run("DELETE FROM likes WHERE {$type}_id = :id AND user_id = :uid", [':id' => $id, ':uid' => (int) $user['id']]);
-            $db->run("UPDATE {$table} SET user_likes = user_likes - 1 WHERE id = :id", [':id' => $id]);
-            $db->commit();
-        } catch (\PDOException $e) {
-            $db->rollBack();
-            throw $e;
-        }
+        $db->tx(function (Database $db) use ($type, $id, $user): void {
+            $db->run(
+                "DELETE FROM likes WHERE {$type}_id = :id AND user_id = :uid",
+                [
+                    'id' => $id,
+                    'uid' => (int) $user['id'],
+                ]
+            );
+            $db->run(
+                "UPDATE {$table} SET user_likes = user_likes - 1 WHERE id = :id",
+                ['id' => $id]
+            );
+        });
         $cache->delete("{$type}_user_likes_" . $id);
         $cache->delete('latest_comments_');
         $label = 'Like';
@@ -116,9 +130,12 @@ function comment_like_unlike(array $fields, array $user)
         $list = '';
     }
 
-    $rows = $db->fetchAll(
+    $rows = $db->toArray(
         "SELECT user_id FROM likes WHERE {$type}_id = :id AND user_id != :uid",
-        [':id' => $id, ':uid' => (int) $user['id']]
+        [
+            'id' => $id,
+            'uid' => (int) $user['id'],
+        ]
     );
     $names = [];
     foreach ($rows as $row) {

@@ -1,11 +1,6 @@
 <?php
+
 declare(strict_types=1);
-require_once dirname(__DIR__) . '/bootstrap_web.php';
-
-$db = $container->get(Database::class);
-
-
-
 
 use Pu239\Database;
 use Pu239\Peer;
@@ -13,10 +8,14 @@ use Pu239\Session;
 use Pu239\Snatched;
 use Pu239\User;
 
+require_once dirname(__DIR__) . '/bootstrap_web.php';
+
+$db = $container->get(Database::class);
+
 require_once __DIR__ . '/../../include/bittorrent.php';
 $curuser = check_user_status();
-global $container;
 
+// TODO(2025): csrf on POST where missing
 $posted_action = isset($_POST['action']) ? htmlsafechars($_POST['action']) : (isset($_GET['action']) ? htmlsafechars($_GET['action']) : '');
 $valid_actions = [
     'flush_torrents',
@@ -24,15 +23,15 @@ $valid_actions = [
     'watched_user',
 ];
 
-$referer = $_SERVER['HTTP_REFERER'] . '#general';
-$action = in_array($posted_action, $valid_actions) ? $posted_action : '';
+$referer = ($_SERVER['HTTP_REFERER'] ?? $site_config['paths']['baseurl']) . '#general';
+$action = in_array($posted_action, $valid_actions, true) ? $posted_action : '';
 $session = $container->get(Session::class);
-if (!isset($action)) {
+if ($action === '') {
     $session->set('is-danger', _('Access Not Allowed'));
     header('Location: ' . $referer);
     app_halt('Exit called');
 }
-$id = $curuser['class'] < UC_STAFF ? $curuser['id'] : (int) $_POST['id'];
+$id = $curuser['class'] < UC_STAFF ? $curuser['id'] : (int) ($_POST['id'] ?? 0);
 if ($id === 0) {
     $session->set('is-danger', _('Invalid ID'));
     header('Location: ' . $referer);
@@ -57,16 +56,20 @@ switch ($action) {
                 'txt' => _pfe('Staff Flush: {0} flushed {1} torrent for {2}', 'Staff Flush: {0} flushed {1} torrents for {2}', "[url={$site_config['paths']['baseurl']}/userdetails.php?id={$curuser['id']}]{$curuser['username']}[/url]", $count, "[url={$site_config['paths']['baseurl']}/userdetails.php?id={$id}]{$user['username']}[/url]"),
             ];
         }
-        // $fluent removed — use $this->db (ExtendedPdo)
-        $sql = "INSERT INTO sitelog (/* columns */) VALUES (/* values */)";
-$db->perform($sql, $values);
+        $db->run(
+            'INSERT INTO sitelog (added, txt) VALUES (:added, :txt)',
+            [
+                'added' => [TIME_NOW, \PDO::PARAM_INT],
+                'txt' => $values['txt'],
+            ]
+        );
         break;
 
     case 'staff_notes':
         if ($curuser['class'] < UC_STAFF) {
             stderr(_('Error'), _('How did you get here?'));
         }
-        $posted_notes = isset($_POST['new_staff_note']) ? htmlsafechars($_POST['new_staff_note']) : '';
+        $posted_notes = htmlsafechars((string) ($_POST['new_staff_note'] ?? ''));
         if ($id !== $curuser['id'] && $curuser['class'] > $user['class']) {
             $update = [
                 'staff_notes' => $posted_notes,
@@ -82,16 +85,17 @@ $db->perform($sql, $values);
             stderr(_('Error'), _('How did you get here?'));
         }
 
-        $posted = isset($_POST['watched_reason']) ? htmlsafechars($_POST['watched_reason']) : '';
+        $posted = htmlsafechars((string) ($_POST['watched_reason'] ?? ''));
         if ($id !== $curuser['id'] || $curuser['class'] < $user['class']) {
-            if (isset($_POST['add_to_watched_users']) && $_POST['add_to_watched_users'] === 'yes' && $user['watched_user'] == 0) {
+            $addToWatched = $_POST['add_to_watched_users'] ?? '';
+            if ($addToWatched === 'yes' && (int) $user['watched_user'] === 0) {
                 $update['watched_user'] = TIME_NOW;
                 write_log("{$curuser['username']} added member [url={$site_config['paths']['baseurl']}/userdetails.php?id={$id}]{$user['username']}[/url] to watched users.");
-            } elseif (isset($_POST['add_to_watched_users']) && $_POST['add_to_watched_users'] === 'no' && $user['watched_user'] > 0) {
+            } elseif ($addToWatched === 'no' && (int) $user['watched_user'] > 0) {
                 $update['watched_user'] = 0;
                 write_log("{$curuser['username']} removed member [url={$site_config['paths']['baseurl']}/userdetails.php?id={$id}]{$user['username']}[/url] from watched users. <br>{$user['username']} had been on the list since " . get_date((int) $user['watched_user'], 'LONG'));
             }
-            if ($_POST['watched_reason'] !== $user['watched_user_reason']) {
+            if (($posted) !== $user['watched_user_reason']) {
                 $update['watched_user_reason'] = $posted;
                 write_log("{$curuser['username']} changed watched user text for: [url={$site_config['paths']['baseurl']}/userdetails.php?id={$id}]{$user['username']}[/url] Changes made:<br>Text was:<br>" . htmlsafechars((string) $user['watched_user_reason']) . '<br>Is now:<br>' . $posted);
             }

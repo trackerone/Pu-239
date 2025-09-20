@@ -1,19 +1,18 @@
 <?php
+
 declare(strict_types=1);
+
+use Pu239\Database;
+use Pu239\User;
+
 require_once dirname(__DIR__) . '/bootstrap_web.php';
 
 $db = $container->get(Database::class);
-
-
-
-
-use Pu239\User;
 
 if (empty($_GET['wantemail'])) {
     app_halt('<div class="margin10 has-text-info">You can\'t post nothing please enter a email!</div>');
 }
 require_once __DIR__ . '/../../include/bittorrent.php';
-global $container;
 
 if (is_array($_GET['wantemail']) || !validemail($_GET['wantemail'])) {
     echo "<span class='has-text-danger'>" . _('Invalid Email Address') . '</span>';
