@@ -163,6 +163,7 @@ No matches.
 ## staffpanel
 - `staffpanel/index.php`: relocated the staff panel controller from `public/`, replaced FluentPDO lookups with `$db->fetchAll`, `$db->run`, and `$db->insert` using bound parameters, and standardized cache resets.
 - `public/staffpanel.php`: now requires the new `staffpanel/index.php` controller to maintain the legacy entrypoint.
+- Batch offset 50: reviewed `staffpanel/` with no additional controllers requiring modernization, documented the no-op batch in the staffpanel manifests, and re-confirmed zero legacy `mysqli_`/`sql_query()`/`sqlesc()` usage.
 
 ### Verification
 ```
