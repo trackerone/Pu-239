@@ -7,10 +7,13 @@ use MatthiasMullie\Scrapbook\Exception\UnbegunTransaction;
 use Pu239\Database;
 use Pu239\Snatched;
 use Pu239\User;
+use PU239\Config\ConfigRepository;
 
 global $container;
 /** @var Database $db */
 $db = $container->get(Database::class);
+/** @var ConfigRepository $config */
+$config = $container->get(ConfigRepository::class);
 
 /**
  * @param mixed $data
@@ -22,10 +25,10 @@ $db = $container->get(Database::class);
  */
 function hitrun_update($data): void
 {
-    global $container, $site_config;
+    global $container, $config;
 
     $time_start = microtime(true);
-    if ($site_config['hnr_config']['hnr_online'] === 1) {
+    if ((int) $config->get('hnr_config.hnr_online') === 1) {
         $user_class = $container->get(User::class);
         $snatched = $container->get(Snatched::class);
         $dt = TIME_NOW;
@@ -38,14 +41,14 @@ function hitrun_update($data): void
         $work = [];
         foreach ($classes as $class) {
             $work[] = [
-                'min_class' => $site_config['hnr_config'][$class . 'class'],
-                'days_3' => $site_config['hnr_config']['_3day_' . $class] * 3600,
-                'days_14' => $site_config['hnr_config']['_14day_' . $class] * 3600,
-                'days_over_14' => $site_config['hnr_config']['_14day_over_' . $class] * 3600,
-                'age' => $site_config['hnr_config']['torrentage' . $i++],
-                'caindays' => $site_config['hnr_config']['caindays'],
-                'cainallowed' => $site_config['hnr_config']['cainallowed'],
-                'all_torrents' => $site_config['hnr_config']['all_torrents'],
+                'min_class' => (int) $config->get('hnr_config.' . $class . 'class'),
+                'days_3' => (int) $config->get('hnr_config._3day_' . $class) * 3600,
+                'days_14' => (int) $config->get('hnr_config._14day_' . $class) * 3600,
+                'days_over_14' => (int) $config->get('hnr_config._14day_over_' . $class) * 3600,
+                'age' => (int) $config->get('hnr_config.torrentage' . $i++),
+                'caindays' => (float) $config->get('hnr_config.caindays'),
+                'cainallowed' => (int) $config->get('hnr_config.cainallowed'),
+                'all_torrents' => (int) $config->get('hnr_config.all_torrents'),
             ];
         }
         $hnrs = [];
@@ -66,7 +69,7 @@ function hitrun_update($data): void
         $users = $snatched->get_user_to_add_hnr();
         foreach ($users as $user) {
             $subject = 'Download disabled by System';
-            $msg = 'Sorry ' . htmlsafechars($user['username']) . ",\n Because you have " . $site_config['hnr_config']['cainallowed'] . " or more torrents that have not been seeded to either a 1:1 ratio, or for the expected seeding time, your downloading rights have been disabled by the Auto system !\nTo get your Downloading rights back is simple,\n just start seeding the torrents in your profile [ click your username, then click your [url=" . $site_config['paths']['baseurl'] . '/userdetails.php?id=' . (int) $user['userid'] . "&completed=1]Completed Torrents[/url] link to see what needs seeding ] and your downloading rights will be turned back on by the Auto system after the next clean-time [ updates 4 times per hour ].\n\nDownloads are disabled after a member has three or more torrents that have not been seeded to either a 1 to 1 ratio, OR for the required seed time [ please see the [url=" . $site_config['paths']['baseurl'] . '/faq.php]FAQ[/url] or [url=' . $site_config['paths']['baseurl'] . "/rules.php]Site Rules[/url] for more info ]\n\nIf this message has been in error, or you feel there is a good reason for it, please feel free to PM a staff member with your concerns.\n\n we will do our best to fix this situation.\n\nBest of luck!\n " . $site_config['site']['name'] . " staff.\n";
+            $msg = 'Sorry ' . htmlsafechars($user['username']) . ",\n Because you have " . (int) $config->get('hnr_config.cainallowed') . " or more torrents that have not been seeded to either a 1:1 ratio, or for the expected seeding time, your downloading rights have been disabled by the Auto system !\nTo get your Downloading rights back is simple,\n just start seeding the torrents in your profile [ click your username, then click your [url=" . (string) $config->get('paths.baseurl') . '/userdetails.php?id=' . (int) $user['userid'] . "&completed=1]Completed Torrents[/url] link to see what needs seeding ] and your downloading rights will be turned back on by the Auto system after the next clean-time [ updates 4 times per hour ].\n\nDownloads are disabled after a member has three or more torrents that have not been seeded to either a 1 to 1 ratio, OR for the required seed time [ please see the [url=" . (string) $config->get('paths.baseurl') . '/faq.php]FAQ[/url] or [url=' . (string) $config->get('paths.baseurl') . "/rules.php]Site Rules[/url] for more info ]\n\nIf this message has been in error, or you feel there is a good reason for it, please feel free to PM a staff member with your concerns.\n\n we will do our best to fix this situation.\n\nBest of luck!\n " . (string) $config->get('app.name') . " staff.\n";
             $_pms[] = [
                 'receiver' => $user['userid'],
                 'added' => $dt,
@@ -86,7 +89,7 @@ function hitrun_update($data): void
         $users = $snatched->get_user_to_remove_hnr();
         foreach ($users as $user) {
             $subject = 'Download restored by System';
-            $msg = 'Hi ' . htmlsafechars($user['username']) . ",\n Congratulations ! Because you have seeded the torrents that needed seeding, your downloading rights have been restored by the Auto System !\n\nhave fun !\n " . $site_config['site']['name'] . " staff.\n";
+            $msg = 'Hi ' . htmlsafechars($user['username']) . ",\n Congratulations ! Because you have seeded the torrents that needed seeding, your downloading rights have been restored by the Auto System !\n\nhave fun !\n " . (string) $config->get('app.name') . " staff.\n";
             $_pms[] = [
                 'receiver' => $user['userid'],
                 'added' => $dt,
