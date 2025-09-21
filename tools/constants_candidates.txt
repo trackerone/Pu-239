@@ -58,6 +58,19 @@ blocks/index/cooker.php
 blocks/index/disclaimer.php
 blocks/index/offers.php
 blocks/index/requests.php
+<<<<<< codex/refactor-legacy-config-constants-to-configrepository-2wa1n8
+=======
+blocks/index/staff_picks.php
+blocks/index/stats.php
+blocks/index/top_torrents.php
+blocks/index/trivia.php
+blocks/userdetails/completed.php
+blocks/userdetails/gender.php
+blocks/userdetails/report.php
+blocks/userdetails/seedbonus.php
+chat/lib/class/AJAXChatTemplate.php
+config/app.php
+>>>>>> master
 config/security.php
 forums/add_subscription.php
 forums/clear_unread_post.php
