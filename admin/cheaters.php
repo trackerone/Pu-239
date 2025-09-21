@@ -2,11 +2,14 @@
 declare(strict_types=1);
 require_once dirname(__DIR__) . '/bootstrap_web.php';
 
-use Pu239\Database;
 use Pu239\Cache;
+use Pu239\Config\ConfigRepository;
+use Pu239\Database;
 
 
-global $container, $site_config, $CURUSER;
+global $container, $CURUSER;
+/** @var ConfigRepository $config */
+$config = $container->get(ConfigRepository::class);
 
 $db    = $container->get(Database::class);
 $cache = $container->get(Cache::class);
@@ -66,7 +69,7 @@ $perpage = 15;
 $HTMLOUT = "<h1 class='has-text-centered'>Possible Cheaters</h1>";
 
 if ($count > 0) {
-    $pager = pager($perpage, $count, $site_config['paths']['baseurl'] . '/staffpanel.php?tool=cheaters&amp;action=cheaters&amp;');
+    $pager = pager($perpage, $count, (string) $config->get('paths.baseurl') . '/staffpanel.php?tool=cheaters&amp;action=cheaters&amp;');
 
     $HTMLOUT .= "
     <form action='{$_SERVER['PHP_SELF']}?tool=cheaters&amp;action=cheaters' method='post' enctype='multipart/form-data' accept-charset='utf-8'>";
@@ -98,7 +101,7 @@ if ($count > 0) {
         $torrname = htmlsafechars(CutName($arr['tname'], 80));
 
         $cheater = format_username($userid) . ' ' . _(' has been flagged with an abnormally high upload speed!') . '<br>'
-            . _('On torrent') . " <a href='{$site_config['paths']['baseurl']}/details.php?id=" . (int) $arr['tid'] . "' title='{$torrname}'>{$torrname}</a><br>"
+            . _('On torrent') . " <a href='" . (string) $config->get('paths.baseurl') . "/details.php?id=" . (int) $arr['tid'] . "' title='{$torrname}'>{$torrname}</a><br>"
             . _('Uploaded') . ' ' . mksize((int) $arr['upthis']) . '<br>'
             . _('Speed') . ' ' . mksize((int) $arr['rate']) . '/s<br>'
             . _('Within') . ' ' . (int) $arr['timediff'] . ' ' . _('Seconds') . '<br>'
@@ -141,7 +144,7 @@ if ($count > 0) {
 
 $title = _('Ratio Cheats');
 $breadcrumbs = [
-    "<a href='{$site_config['paths']['baseurl']}/staffpanel.php'>" . _('Staff Panel') . '</a>',
+    "<a href='" . (string) $config->get('paths.baseurl') . "/staffpanel.php'>" . _('Staff Panel') . '</a>',
     "<a href='{$_SERVER['PHP_SELF']}'>$title</a>",
 ];
 

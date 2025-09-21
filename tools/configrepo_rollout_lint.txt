@@ -315,3 +315,53 @@ No syntax errors detected in include/function_bonus.php
 No syntax errors detected in include/function_books.php
 No syntax errors detected in include/function_breadcrumbs.php
 No syntax errors detected in include/function_categories.php
+No syntax errors detected in acpmanage.php
+No syntax errors detected in admin/allagents.php
+No syntax errors detected in admin/banclient.php
+No syntax errors detected in admin/bannedemails.php
+No syntax errors detected in admin/bans.php
+No syntax errors detected in admin/bonusmanage.php
+No syntax errors detected in admin/categories.php
+No syntax errors detected in admin/cheaters.php
+No syntax errors detected in admin/class_config.php
+No syntax errors detected in admin/cleanup_manager.php
+No syntax errors detected in admin/cloudview.php
+No syntax errors detected in admin/delacct.php
+No syntax errors detected in admin/edit_moods.php
+No syntax errors detected in admin/findnotconnectable.php
+No syntax errors detected in admin/floodlimit.php
+No syntax errors detected in admin/flush.php
+No syntax errors detected in admin/forum_config.php
+No syntax errors detected in admin/freeleech.php
+No syntax errors detected in admin/freeusers.php
+No syntax errors detected in admin/goaccess.php
+admin/grouppm.php: OK
+admin/hit_and_run.php: OK
+admin/hnrwarn.php: OK
+admin/inactive.php: OK
+admin/ipcheck.php: OK
+admin/leechwarn.php: OK
+admin/mega_search.php: OK
+admin/modded_torrents.php: OK
+admin/modtask.php: OK
+admin/mysql_stats.php: OK
+No syntax errors detected in admin/news.php
+No syntax errors detected in admin/polls_manager.php
+No syntax errors detected in admin/site_settings.php
+No syntax errors detected in admin/snatched_torrents.php
+No syntax errors detected in admin/sysoplog.php
+No syntax errors detected in admin/themes.php
+No syntax errors detected in admin/trivia_config.php
+No syntax errors detected in admin/uploader_info.php
+No syntax errors detected in admin/user_hits.php
+No syntax errors detected in admin/view_peers.php
+No syntax errors detected in blocks/global/crazyhour.php
+No syntax errors detected in blocks/global/demotion.php
+No syntax errors detected in blocks/global/freeleech_contribution.php
+No syntax errors detected in blocks/global/happyhour.php
+No syntax errors detected in blocks/global/lottery.php
+No syntax errors detected in blocks/global/message.php
+No syntax errors detected in blocks/global/report.php
+No syntax errors detected in blocks/global/staffmessages.php
+No syntax errors detected in blocks/global/uploadapp.php
+No syntax errors detected in blocks/index/active_24h_users.php

@@ -2,11 +2,14 @@
 declare(strict_types=1);
 require_once dirname(__DIR__) . '/bootstrap_web.php';
 
+use PU239\Config\ConfigRepository;
 use Pu239\Database;
 use Pu239\Session;
 
 
 global $container;
+/** @var ConfigRepository $config */
+$config = $container->get(ConfigRepository::class);
 
 $db = $container->get(Database::class);
 
@@ -67,7 +70,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if (!isset($description)) {
             unset($set['description']);
         }
-        $item = isset($site_config[$parent][$name]) ? $site_config[$parent][$name] : '';
+        $item = $config->get("{$parent}.{$name}");
         $parentname = (isset($parent) ? $parent : '') . '::' . $name;
         if (!isset($set['name'])) {
             if ($id != 0) {
@@ -277,7 +280,7 @@ foreach ($keys as $key) {
                     </div>
                 </td>
             </tr>" . (isset($row['parent']) ? "
-            <tr><td colspan='6' class='has-text-warning has-text-weight-bold has-text-centered'>Usage: \$site_config['{$row['parent']}']['{$row['name']}']</td></tr>
+            <tr><td colspan='6' class='has-text-warning has-text-weight-bold has-text-centered'>Usage: $config->get('{$row['parent']}.{$row['name']}')</td></tr>
             <tr><td colspan='6'></td></tr>" : '');
         }
     }
@@ -299,7 +302,7 @@ foreach ($keys as $key) {
 }
 $title = _('Site Settings');
 $breadcrumbs = [
-    "<a href='{$site_config['paths']['baseurl']}/staffpanel.php'>" . _('Staff Panel') . '</a>',
+    "<a href='{$config->get('paths.baseurl')}/staffpanel.php'>" . _('Staff Panel') . '</a>',
     "<a href='{$_SERVER['PHP_SELF']}'>$title</a>",
 ];
 echo stdhead($title, [], 'page-wrapper', $breadcrumbs) . wrapper($HTMLOUT) . stdfoot($stdfoot);
