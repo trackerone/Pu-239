@@ -63,3 +63,38 @@ format divs using main_div function
 
 xbt  
 ocelot  
+
+// 2025 ---> 
+# TODOs — PU239 Modernisering 2025
+
+Samlet oversigt over kendte TODOs, regressioner og migrationspunkter.
+Opdateres løbende som vi opdager nye forhold.
+
+---
+
+## ConfigRepository regression
+**Date:** 2025-09-21  
+**Source:** [P1] Bonus awards  
+
+### Problem
+- `ConfigRepository` loader kun statiske filer i `config/*.php`.
+- DB-baserede settings fra `Settings::get_settings()` mangler.
+- Nuværende lookups returnerer `null`:
+  - `bonus.on`
+  - `bonus.per_thanks`
+  - `expires.user_cache`
+
+### Impact
+- `(bool) null → false` → seed bonus on thanks er altid **disabled**.
+- `(int) null → 0` → user cache TTL bliver **0** (ingen caching).
+
+### Resolution options
+1. Udvid `ConfigRepository` til at merge DB-settings ind.
+2. Definér manglende keys i `config/*.php` med defaults.
+3. Tilføj fallback i feature-kode når `null` returneres.
+
+---
+
+*(flere punkter tilføjes her, efterhånden som vi finder dem)*
+/////////
+
