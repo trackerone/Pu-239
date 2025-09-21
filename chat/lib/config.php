@@ -2,6 +2,8 @@
 declare(strict_types=1);
 require_once dirname(__DIR__, 2) . '/bootstrap.php';
 
+use PU239\Config\ConfigRepository;
+
 /*
  * @package AJAX_Chat
  * @author Sebastian Tschan
@@ -10,43 +12,46 @@ require_once dirname(__DIR__, 2) . '/bootstrap.php';
  * @link https://blueimp.net/ajax/
  */
 
-global $site_config, $CURUSER;
+global $container, $CURUSER;
+
+/** @var ConfigRepository $config */
+$config = $container->get(ConfigRepository::class);
 
 // Define AJAX Chat user roles:
-define('AJAX_CHAT_CHATBOT', $site_config['chatbot']['role']);
+define('AJAX_CHAT_CHATBOT', (int) $config->get('chatbot.role'));
 
 // AJAX Chat config parameters:
-$config = [];
+$chatConfig = [];
 
 // javascript file
-$config['js_main'] = get_file_name('chat_main_js');
-$config['js'] = get_file_name('chat_js');
-$config['js_log'] = get_file_name('chat_log_js');
+$chatConfig['js_main'] = get_file_name('chat_main_js');
+$chatConfig['js'] = get_file_name('chat_js');
+$chatConfig['js_log'] = get_file_name('chat_log_js');
 
 // Database connection values:
-$config['dbConnection'] = [];
+$chatConfig['dbConnection'] = [];
 // Database hostname:
-$config['dbConnection']['host'] = $site_config['db']['host'];
+$chatConfig['dbConnection']['host'] = (string) $config->get('database.host');
 // Database username:
-$config['dbConnection']['user'] = $site_config['db']['username'];
+$chatConfig['dbConnection']['user'] = (string) $config->get('database.user');
 // Database password:
-$config['dbConnection']['pass'] = $site_config['db']['password'];
+$chatConfig['dbConnection']['pass'] = (string) $config->get('database.pass');
 // Database name:
-$config['dbConnection']['name'] = $site_config['db']['database'];
+$chatConfig['dbConnection']['name'] = (string) $config->get('database.database');
 // Database type:
-$config['dbConnection']['type'] = null;
+$chatConfig['dbConnection']['type'] = null;
 // Database link:
-$config['dbConnection']['link'] = null;
+$chatConfig['dbConnection']['link'] = null;
 
 // Available languages:
-//$config['langAvailable'] = [
+//$chatConfig['langAvailable'] = [
 //    'ar', 'bg', 'ca', 'cy', 'cz', 'da', 'de', 'el', 'en', 'es', 'et', 'fa', 'fi', 'fr', 'gl', 'he', 'hr', 'hu', 'in', 'it', 'ja', 'ka', 'kr', 'mk', 'nl', 'nl-be', 'no', 'pl', 'pt-br', 'pt-pt', 'ro', 'ru', 'sk', 'sl', 'sr', 'sv', 'th', 'tr', 'uk', 'zh', 'zh-tw',
 //];
-$config['langAvailable'] = ['en'];
+$chatConfig['langAvailable'] = ['en'];
 // Default language:
-$config['langDefault'] = 'en';
+$chatConfig['langDefault'] = 'en';
 // Language names (each languge code in available languages must have a display name assigned here):
-$config['langNames'] = [
+$chatConfig['langNames'] = [
     'ar' => 'عربي',
     'bg' => 'Български',
     'ca' => 'Català',
@@ -91,7 +96,7 @@ $config['langNames'] = [
 ];
 
 // Available styles:
-$config['styleAvailable'] = [
+$chatConfig['styleAvailable'] = [
     'transparent',
     'beige',
     'black',
@@ -111,67 +116,69 @@ $config['styleAvailable'] = [
     'XenForo',
 ];
 // Default style:
-$config['styleDefault'] = 'transparent';
+$chatConfig['styleDefault'] = 'transparent';
 
 // The encoding used for the XHTML content:
-$config['contentEncoding'] = 'UTF-8';
+$chatConfig['contentEncoding'] = 'UTF-8';
 // The encoding of the data source, like userNames and channelNames:
-$config['sourceEncoding'] = 'UTF-8';
+$chatConfig['sourceEncoding'] = 'UTF-8';
 // The content-type of the XHTML page (e.g. "text/html", will be set dependent on browser capabilities if set to null):
-$config['contentType'] = null;
+$chatConfig['contentType'] = null;
 
 // Site name:
-$config['siteName'] = $site_config['site']['name'];
+$chatConfig['siteName'] = (string) $config->get('app.name');
 
 // Session name used to identify the session cookie:
-$config['sessionName'] = $site_config['session']['name'];
+$chatConfig['sessionName'] = (string) $config->get('session.name');
 // Prefix added to every session key:
-$config['sessionKeyPrefix'] = $site_config['session']['prefix'];
+// TODO(2025): map legacy key "session.prefix" to appropriate config path
+$chatConfig['sessionKeyPrefix'] = (string) $config->get('session.prefix', '');
 // The lifetime of the language, style and setting cookies in days:
-$config['sessionCookieLifeTime'] = $site_config['cookies']['lifetime'];
+// TODO(2025): map legacy key "cookies.lifetime" to appropriate config path
+$chatConfig['sessionCookieLifeTime'] = (int) $config->get('session.cookie_lifetime', 0);
 // The path of the cookies, '/' allows to read the cookies from all directories:
-$config['sessionCookiePath'] = $site_config['cookies']['path'];
+$chatConfig['sessionCookiePath'] = (string) $config->get('session.cookie_path', '/');
 // The domain of the cookies, defaults to the hostname of the server if set to null:
-$config['sessionCookieDomain'] = $site_config['cookies']['domain'];
+$chatConfig['sessionCookieDomain'] = (string) $config->get('session.cookie_domain', '');
 
 // Default channelName used together with the defaultChannelID if no channel with this ID exists:
-$config['defaultChannelName'] = $site_config['site']['name'];
+$chatConfig['defaultChannelName'] = (string) $config->get('app.name');
 // ChannelID used when no channel is given:
-$config['defaultChannelID'] = 0;
+$chatConfig['defaultChannelID'] = 0;
 // Defines an array of channelIDs (e.g. array(0, 1)) to limit the number of available channels, will be ignored if set to null:
-$config['limitChannelList'] = null;
+$chatConfig['limitChannelList'] = null;
 
 // userID plus this value are private channels (this is also the max userID and max channelID):
-$config['privateChannelDiff'] = 500000000;
+$chatConfig['privateChannelDiff'] = 500000000;
 // userID plus this value are used for private messages:
-$config['privateMessageDiff'] = 1000000000;
+$chatConfig['privateMessageDiff'] = 1000000000;
 
 // Enable/Disable private Channels:
-$config['allowPrivateChannels'] = true;
+$chatConfig['allowPrivateChannels'] = true;
 // Enable/Disable private Messages:
-$config['allowPrivateMessages'] = true;
+$chatConfig['allowPrivateMessages'] = true;
 
 // Private channels should be distinguished by either a prefix or a suffix or both (no whitespace):
-$config['privateChannelPrefix'] = '[';
+$chatConfig['privateChannelPrefix'] = '[';
 // Private channels should be distinguished by either a prefix or a suffix or both (no whitespace):
-$config['privateChannelSuffix'] = ']';
+$chatConfig['privateChannelSuffix'] = ']';
 
 // If enabled, users will be logged in automatically as guest users (if allowed), if not authenticated:
-$config['forceAutoLogin'] = true;
+$chatConfig['forceAutoLogin'] = true;
 
 // Defines if login/logout and channel enter/leave are displayed:
-$config['showChannelMessages'] = false;
+$chatConfig['showChannelMessages'] = false;
 
 // If enabled, the chat will only be accessible for the admin:
-$config['chatClosed'] = false;
+$chatConfig['chatClosed'] = false;
 // Defines the timezone offset in seconds (-12*60*60 to 12*60*60) - if null, the server timezone is used:
-$config['timeZoneOffset'] = null;
+$chatConfig['timeZoneOffset'] = null;
 // Defines the hour of the day the chat is opened (0 - closingHour):
-$config['openingHour'] = 0;
+$chatConfig['openingHour'] = 0;
 // Defines the hour of the day the chat is closed (openingHour - 24):
-$config['closingHour'] = 24;
+$chatConfig['closingHour'] = 24;
 // Defines the weekdays the chat is opened (0=Sunday to 6=Saturday):
-$config['openingWeekDays'] = [
+$chatConfig['openingWeekDays'] = [
     0,
     1,
     2,
@@ -182,88 +189,91 @@ $config['openingWeekDays'] = [
 ];
 
 // Enable/Disable guest logins:
-$config['allowGuestLogins'] = false;
+$chatConfig['allowGuestLogins'] = false;
 // Enable/Disable write access for guest users - if disabled, guest users may not write messages:
-$config['allowGuestWrite'] = false;
+$chatConfig['allowGuestWrite'] = false;
 // Allow/Disallow guest users to choose their own userName:
-$config['allowGuestUserName'] = false;
+$chatConfig['allowGuestUserName'] = false;
 // Guest users should be distinguished by either a prefix or a suffix or both (no whitespace):
-$config['guestUserPrefix'] = '(';
+$chatConfig['guestUserPrefix'] = '(';
 // Guest users should be distinguished by either a prefix or a suffix or both (no whitespace):
-$config['guestUserSuffix'] = ')';
+$chatConfig['guestUserSuffix'] = ')';
 // Guest userIDs may not be lower than this value (and not higher than privateChannelDiff):
-$config['minGuestUserID'] = 400000000;
+$chatConfig['minGuestUserID'] = 400000000;
 
 // Allow/Disallow registered users to delete their own messages:
-$config['allowUserMessageDelete'] = true;
+$chatConfig['allowUserMessageDelete'] = true;
 
 // The userID used for ChatBot messages:
-$config['chatBotID'] = $site_config['chatbot']['id'];
+$chatConfig['chatBotID'] = (int) $config->get('chatbot.id');
 // The userName used for ChatBot messages
-$config['chatBotName'] = $site_config['chatbot']['name'];
+$chatConfig['chatBotName'] = (string) $config->get('chatbot.name');
 // The userRole used for ChatBot messages:
-$config['chatBotRole'] = $site_config['chatbot']['role'];
+$chatConfig['chatBotRole'] = (int) $config->get('chatbot.role');
 // Minutes until a user is declared inactive (last status update) - the minimum is 2 minutes:
-$config['inactiveTimeout'] = 5;
+$chatConfig['inactiveTimeout'] = 5;
 // Interval in minutes to check for inactive users:
-$config['inactiveCheckInterval'] = 1;
+$chatConfig['inactiveCheckInterval'] = 1;
 
 // Defines if messages are shown which have been sent before the user entered the channel:
-$config['requestMessagesPriorChannelEnter'] = true;
+$chatConfig['requestMessagesPriorChannelEnter'] = true;
 // Defines an array of channelIDs (e.g. array(0, 1)) for which the previous setting is always true (will be ignored if set to null):
-$config['requestMessagesPriorChannelEnterList'] = null;
+$chatConfig['requestMessagesPriorChannelEnterList'] = null;
 // Max time difference in hours for messages to display on each request:
-$config['requestMessagesTimeDiff'] = 720;
+$chatConfig['requestMessagesTimeDiff'] = 720;
 // Max number of messages to display on each request:
-$config['requestMessagesLimit'] = 50;
+$chatConfig['requestMessagesLimit'] = 50;
 
 // Max users in chat (does not affect moderators or admins):
-$config['maxUsersLoggedIn'] = 200;
+$chatConfig['maxUsersLoggedIn'] = 200;
 // Max userName length:
-$config['userNameMaxLength'] = 64;
+$chatConfig['userNameMaxLength'] = 64;
 // Max messageText length:
-$config['messageTextMaxLength'] = 2000;
+$chatConfig['messageTextMaxLength'] = 2000;
 // Defines the max number of messages a user may send per minute:
-$config['maxMessageRate'] = 20;
+$chatConfig['maxMessageRate'] = 20;
 
 // Argument that is given to the handleLogout JavaScript method:
-//$config['logoutData'] = './?logout=true';
-$config['logoutData'] = '';
+//$chatConfig['logoutData'] = './?logout=true';
+$chatConfig['logoutData'] = '';
 
 // If true, checks if the user IP is the same when logged in:
-$config['ipCheck'] = false;
+$chatConfig['ipCheck'] = false;
 
 // Defines the max time difference in hours for logs when no period or search condition is given:
-$config['logsRequestMessagesTimeDiff'] = 12;
+$chatConfig['logsRequestMessagesTimeDiff'] = 12;
 // Defines how many logs are returned on each logs request:
-$config['logsRequestMessagesLimit'] = 10;
+$chatConfig['logsRequestMessagesLimit'] = 10;
 
 // Defines the earliest year used for the logs selection:
-$config['logsFirstYear'] = 2007;
+$chatConfig['logsFirstYear'] = 2007;
 
 // Defines if old messages are purged from the database:
-$config['logsPurgeLogs'] = false;
+$chatConfig['logsPurgeLogs'] = false;
 // Max time difference in days for old messages before they are purged from the database:
-$config['logsPurgeTimeDiff'] = 10000;
+$chatConfig['logsPurgeTimeDiff'] = 10000;
 
 // Defines if registered users (including moderators) have access to the logs (admins are always granted access):
-$config['logsUserAccess'] = false;
+$chatConfig['logsUserAccess'] = false;
 // Defines a list of channels (e.g. array(0, 1)) to limit the logs access for registered users, includes all channels the user has access to if set to null:
-$config['logsUserAccessChannelList'] = null;
+$chatConfig['logsUserAccessChannelList'] = null;
 
 // Defines if the socket server is enabled:
-$config['socketServerEnabled'] = false;
+$chatConfig['socketServerEnabled'] = false;
 // Defines the hostname of the socket server used to connect from client side (the server hostname is used if set to null):
-$config['socketServerHost'] = null;
+$chatConfig['socketServerHost'] = null;
 // Defines the IP of the socket server used to connect from server side to broadcast update messages:
-$config['socketServerIP'] = '127.0.0.1';
+$chatConfig['socketServerIP'] = '127.0.0.1';
 // Defines the port of the socket server:
-$config['socketServerPort'] = 1935;
+$chatConfig['socketServerPort'] = 1935;
 // This ID can be used to distinguish between different chat installations using the same socket server:
-$config['socketServerChatID'] = 0;
+$chatConfig['socketServerChatID'] = 0;
 
 // This is used to anonymize the external urls
-$config['anonymous_link'] = $site_config['site']['anonymizer_url'];
+// TODO(2025): map legacy key "site.anonymizer_url" to appropriate config path
+$chatConfig['anonymous_link'] = (string) $config->get('site.anonymizer_url', '');
 
 // Font Scaling
-$config['font_size'] = !empty($CURUSER['font_size']) ? $CURUSER['font_size'] . '%' : '70%';
+$chatConfig['font_size'] = !empty($CURUSER['font_size']) ? $CURUSER['font_size'] . '%' : '70%';
+
+$config = $chatConfig;
