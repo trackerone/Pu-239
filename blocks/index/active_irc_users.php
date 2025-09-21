@@ -5,9 +5,12 @@ require_once __DIR__ . '/../../include/runtime_safe.php';
 require_once __DIR__ . '/../../include/bootstrap_pdo.php';
 
 use Pu239\Cache;
+use Pu239\Config\ConfigRepository;
 use Pu239\Database;
 
-global $container, $site_config;
+global $container;
+/** @var ConfigRepository $config */
+$config = $container->get(ConfigRepository::class);
 
 $db = $container->get(Database::class);
 $cache = $container->get(Cache::class);
@@ -38,7 +41,7 @@ if ($irc === false || is_null($irc)) {
     }
 
     $irc['count'] = number_format($count);
-    $cache->set('ircusers_', $irc, $site_config['expires']['activeircusers']);
+    $cache->set('ircusers_', $irc, (int) $config->get('expires.activeircusers'));
 }
 
 $active_users_irc .= "

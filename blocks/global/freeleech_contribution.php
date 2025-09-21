@@ -3,10 +3,13 @@ declare(strict_types=1);
 
 require_once dirname(__DIR__) . '/bootstrap.php';
 
+use Pu239\Config\ConfigRepository;
 use Pu239\Database;
 use Psr\SimpleCache\CacheInterface as Cache;
 
-global $container, $site_config;
+global $container;
+/** @var ConfigRepository $config */
+$config = $container->get(ConfigRepository::class);
 
 $getActiveEvent = static function (Database $db, Cache $cache): array {
     $event = $cache->get('site_events_details_');
@@ -101,7 +104,7 @@ if (
 }
 
 $esc = static fn($value): string => htmlspecialchars((string) $value, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
-$baseurl = $esc($site_config['paths']['baseurl'] ?? '');
+$baseurl = $esc((string) $config->get('paths.baseurl'));
 
 $percentFl = number_format($freeleech['percent'], 2);
 $percentDu = number_format($doubleUpload['percent'], 2);

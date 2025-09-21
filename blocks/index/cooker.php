@@ -4,6 +4,7 @@ declare(strict_types=1);
 require_once __DIR__ . '/../../include/runtime_safe.php';
 require_once __DIR__ . '/../../include/bootstrap_pdo.php';
 
+use Pu239\Config\ConfigRepository;
 use Pu239\Database;
 use Pu239\Image;
 use Pu239\Torrent;
@@ -11,11 +12,13 @@ use Pu239\Upcoming;
 
 require_once INCL_DIR . 'function_torrent_hover.php';
 $user = check_user_status();
-global $container, $site_config;
+global $container;
+/** @var ConfigRepository $config */
+$config = $container->get(ConfigRepository::class);
 
 $db = $container->get(Database::class);
 $cooker_class = $container->get(Upcoming::class);
-$recipes = $cooker_class->get_all($site_config['latest']['recipes_limit'], 0, 'expected', false, false, true, (bool) $user['hidden']);
+$recipes = $cooker_class->get_all((int) $config->get('latest.recipes_limit'), 0, 'expected', false, false, true, (bool) $user['hidden']);
 $torrent_class = $container->get(Torrent::class);
 $cooker .= "
     <a id='cooker-hash'></a>
@@ -36,7 +39,8 @@ $cooker .= "
 if (!empty($recipes) && is_array($recipes)) {
     foreach ($recipes as $recipe) {
         $class_color = get_user_class_name($recipe['class'], true);
-        $caticon = !empty($recipe['image']) ? "<img src='{$site_config['paths']['images_baseurl']}caticons/" . get_category_icons() . '/' . format_comment($recipe['image']) . "' class='tooltipper' alt='" . format_comment($recipe['cat']) . "' title='" . format_comment($recipe['cat']) . "' height='20px' width='auto'>" : format_comment($recipe['cat']);
+        $imagesBaseurl = (string) $config->get('paths.images_baseurl');
+        $caticon = !empty($recipe['image']) ? "<img src='{$imagesBaseurl}caticons/" . get_category_icons() . '/' . format_comment($recipe['image']) . "' class='tooltipper' alt='" . format_comment($recipe['cat']) . "' title='" . format_comment($recipe['cat']) . "' height='20px' width='auto'>" : format_comment($recipe['cat']);
         $poster = !empty($recipe['poster']) ? "<div class='has-text-centered'><img src='" . url_proxy($recipe['poster'], true, 250) . "' alt='image' class='img-polaroid'></div>" : '';
         $background = $imdb_id = '';
         preg_match('#(tt\d{7,8})#', $recipe['url'], $match);
@@ -46,7 +50,7 @@ if (!empty($recipes) && is_array($recipes)) {
             $background = $images_class->find_images($imdb_id, $type = 'background');
             $background = !empty($background) ? "style='background-image: url({$background});'" : '';
             $poster = !empty($recipe['poster']) ? $recipe['poster'] : $images_class->find_images($imdb_id, $type = 'poster');
-            $poster = empty($poster) ? "<img src='{$site_config['paths']['images_baseurl']}noposter.png' alt='Poster for {$recipe['name']}' class='tooltip-poster'>" : "<img src='" . url_proxy($poster, true, 250) . "' alt='Poster for {$recipe['name']}' class='tooltip-poster'>";
+            $poster = empty($poster) ? "<img src='{$imagesBaseurl}noposter.png' alt='Poster for {$recipe['name']}' class='tooltip-poster'>" : "<img src='" . url_proxy($poster, true, 250) . "' alt='Poster for {$recipe['name']}' class='tooltip-poster'>";
         }
         $chef = "<span class='" . get_user_class_name($recipe['class'], true) . "'>" . $recipe['username'] . '</span>';
         $plot = $torrent_class->get_plot($imdb_id);

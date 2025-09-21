@@ -3,6 +3,7 @@ declare(strict_types=1);
 require_once dirname(__DIR__) . '/bootstrap_web.php';
 
 use Pu239\Cache;
+use Pu239\Config\ConfigRepository;
 use Pu239\Database;
 use Pu239\Message;
 use Pu239\Roles;
@@ -12,7 +13,9 @@ use Pu239\User;
 require_once CLASS_DIR . 'class_user_options.php';
 require_once CLASS_DIR . 'class_user_options_2.php';
 
-global $container, $CURUSER, $site_config;
+global $container, $CURUSER;
+/** @var ConfigRepository $config */
+$config  = $container->get(ConfigRepository::class);
 
 $db      = $container->get(Database::class);
 $session = $container->get(Session::class);
@@ -219,7 +222,7 @@ $db->perform($sql, $values);
        As a donor, you are given some bonus gigs added to your uploaded amount, the status of VIP, and the warm fuzzy feeling you get inside for helping to support this site that we all know and love {2} so, thanks again, and enjoy!
        cheers,
        {3} Staff
-       PS. Your donator status will last for {4} and can be found on your user details page and can only be seen by you {5} It was set by {6}', ':wave:', $site_config['site']['name'], ':smile:', $site_config['site']['name'], $dur, ':smile:', $username);
+       PS. Your donator status will last for {4} and can be found on your user details page and can only be seen by you {5} It was set by {6}', ':wave:', (string) $config->get('site.name'), ':smile:', (string) $config->get('site.name'), $dur, ':smile:', $username);
                 $subject = _('Thank You for Your Donation!');
                 $modcomment = get_date($dt, 'DATE', 1) . ' - ' . _fe('Donor status set by {0}', $CURUSER['username']) . ".\n" . $modcomment;
             }
@@ -249,7 +252,7 @@ $db->perform($sql, $values);
        Your donation helps us in the costs of running the site. Everything above the current running costs will go towards next months costs!
        As a donor, you are given some bonus gigs added to your uploaded amount, and, you have the the status of VIP, and the warm fuzzy feeling you get inside for helping to support this site that we all know and love {2} so, thanks again, and enjoy! cheers,
        {3} Staff
-       PS. Your donator status will last for an extra {4} on top of your current donation status, and can be found on your user details page and can only be seen by you {5} It was set by {6}', ':wave:', $site_config['site']['name'], ':smile:', $site_config['site']['name'], $dur, ':smile:', $username);
+       PS. Your donator status will last for an extra {4} on top of your current donation status, and can be found on your user details page and can only be seen by you {5} It was set by {6}', ':wave:', (string) $config->get('site.name'), ':smile:', (string) $config->get('site.name'), $dur, ':smile:', $username);
         $subject = _('Thank You for Your Donation... Again!');
         $modcomment = get_date($dt, 'DATE', 1) . ' - ' . _fe('Donator status set for another {0} by {1}.', $dur, $CURUSER['username']) . "\n" . $modcomment;
         $msgs[] = [
@@ -573,7 +576,7 @@ $db->perform($sql, $values);
         $avatar = validate_url($avatar);
         if (!empty($avatar)) {
             $img_size = getimagesize($avatar);
-            if ($img_size == false || !in_array($img_size['mime'], $site_config['images']['extensions'])) {
+            if ($img_size == false || !in_array($img_size['mime'], (array) $config->get('images.extensions'))) {
                 stderr(_('Error'), _('Not an image or unsupported image type!'));
             }
             if ($img_size[0] < 100 || $img_size[1] < 100) {
@@ -588,7 +591,7 @@ $db->perform($sql, $values);
         $signature = validate_url($signature);
         if (!empty($signature)) {
             $img_size = getimagesize($signature);
-            if ($img_size == false || !in_array($img_size['mime'], $site_config['images']['extensions'])) {
+            if ($img_size == false || !in_array($img_size['mime'], (array) $config->get('images.extensions'))) {
                 stderr(_('Error'), _('Not an image or unsupported image type!'));
             }
             if ($img_size[0] < 100 || $img_size[1] < 15) {
@@ -846,8 +849,8 @@ $db->perform($sql, ['userID' => $userid]);
             $modcomment = get_date($dt, 'DATE', 1) . ' - ' . _('This account has been suspended by ') . $CURUSER['username'] . _(' reason: ') . $suspended_reason . ".\n" . $modcomment;
             $useredit[] = _('Account suspended = Yes');
             $subject = _('Account Suspended!');
-            $msg = _fe('Your account has been suspended by {0}.', $username) . "\n[b]" . _('Reason') . ":[/b]\n{$suspended_reason}.\n\n" . _('While your account is suspended, your posting - uploading - downloading - commenting - invites will not work, and the only people that you can PM are staff members.') . "\n\n" . _('If you feel this suspension is in error, please feel free to contact a staff member. ') . "\n\n" . _('cheers,') . "\n" . $site_config['site']['name'] . _(' Staff');
-            $body = _('Account for ') . '[b][url=' . $site_config['paths']['baseurl'] . '/userdetails.php?id=' . (int) $user['id'] . ']' . htmlsafechars($user['username']) . '[/url][/b] ' . _('has been suspended by ') . $CURUSER['username'] . "\n\n [b]" . _('Reason') . ":[/b]\n " . $suspended_reason;
+            $msg = _fe('Your account has been suspended by {0}.', $username) . "\n[b]" . _('Reason') . ":[/b]\n{$suspended_reason}.\n\n" . _('While your account is suspended, your posting - uploading - downloading - commenting - invites will not work, and the only people that you can PM are staff members.') . "\n\n" . _('If you feel this suspension is in error, please feel free to contact a staff member. ') . "\n\n" . _('cheers,') . "\n" . (string) $config->get('site.name') . _(' Staff');
+            $body = _('Account for ') . '[b][url=' . (string) $config->get('paths.baseurl') . '/userdetails.php?id=' . (int) $user['id'] . ']' . htmlsafechars($user['username']) . '[/url][/b] ' . _('has been suspended by ') . $CURUSER['username'] . "\n\n [b]" . _('Reason') . ":[/b]\n " . $suspended_reason;
             auto_post(_('Account Suspended!'), $body);
             $msgs[] = [
                 'poster' => $CURUSER['id'],
@@ -867,7 +870,7 @@ $db->perform($sql, ['userID' => $userid]);
                 $modcomment = get_date($dt, 'DATE', 1) . ' - ' . _('This account has been Un-suspended by ') . $CURUSER['username'] . ".\n" . $modcomment;
                 $useredit[] = _('Account suspended = No');
                 $subject = _('Account Un-Suspended!');
-                $msg = _fe("Your account has had it's suspension lifted by {0}\n\ncheers,\n{1} Staff", $username, $site_config['site']['name']);
+                $msg = _fe("Your account has had it's suspension lifted by {0}\n\ncheers,\n{1} Staff", $username, (string) $config->get('site.name'));
                 $msgs[] = [
                     'poster' => $CURUSER['id'],
                     'receiver' => $userid,
@@ -992,7 +995,7 @@ $db->perform($sql, ['userID' => $userid]);
         write_info(_('User account') . " $userid (" . format_username((int) $userid) . ")\n" . _('Things edited: ') . implode(', ', $useredit) . _(' by ') . format_username((int) $CURUSER['id']));
     }
     $returnto = htmlsafechars($post['returnto']) . '#edit';
-    header("Location: {$site_config['paths']['baseurl']}/$returnto");
+    header('Location: ' . (string) $config->get('paths.baseurl') . "/$returnto");
 }
 
 stderr(_('Error'), _('No idea what to do'));
