@@ -240,4 +240,113 @@ Consolidated overview of known TODOs, regressions, and migration issues. Updated
 
 ---
 
+## ConfigRepository lacks HnR settings data
+
+**Date:** 2025-09-21
+**Source:** \[P1] Hit‑and‑Run thresholds
+
+### Problem
+
+* Refactor now pulls HnR thresholds from `ConfigRepository` (e.g. `foreach ($config->get('hnr_config') …)`).
+* `ConfigRepository` only has static config from `config/*.php`.
+* DB‑backed `hnr_config` entries that `Settings::get_settings()` merged into `$site_config` are missing.
+
+### Impact
+
+* `get('hnr_config')` returns null → loop never persists updates.
+* Form shows empty values and cannot save.
+* All lookups return null/false, breaking feature.
+
+### Resolution options
+
+1. Continue reading from `$site_config` or `Settings` service for this feature.
+2. Extend `ConfigRepository` to hydrate with DB‑backed `hnr_config` data.
+
+---
+
+## ConfigRepository lookup bypasses blackjack access control
+
+**Date:** 2025-09-21
+**Source:** \[P0] Game access guard
+
+### Problem
+
+* Guard now uses `$config->get('allowed.play')` and `$config->get('class_names')`.
+* `ConfigRepository` lacks these dynamic arrays (they are populated in `$site_config` by `include/bittorrent.php`).
+
+### Impact
+
+* `get('allowed.play')` returns null → check becomes `$user['class'] < 0`, never triggers.
+* Any user can play blackjack regardless of class.
+* `get('class_names')` returns null → indexing could fatal.
+
+### Resolution options
+
+1. Keep reading from `$site_config` for dynamic arrays.
+2. Extend `ConfigRepository` to include dynamic arrays from bootstrap.
+
+---
+
+## Initialize ConfigRepository after bootstrapping container
+
+**Date:** 2025-09-21
+**Source:** \[P1] Fatal ordering issue
+
+### Problem
+
+* Code calls `$config = $container->get(ConfigRepository::class);` **before** including `bootstrap_web.php`.
+* `$container` is created inside the bootstrap.
+
+### Impact
+
+* `$container` is undefined → fatal error on page load.
+
+### Resolution
+
+* Move bootstrap include before ConfigRepository call.
+* Or delay lookup until after bootstrap executes.
+
+---
+
+## Bootstrap before using DI container
+
+**Date:** 2025-09-21
+**Source:** \[P1] Undefined container usage
+
+### Problem
+
+* `$config = $container->get(ConfigRepository::class);` runs before bootstrap.
+* `$container` is created in bootstrap, so call fails.
+
+### Impact
+
+* Fatal error as soon as page executes.
+
+### Resolution
+
+* Always include bootstrap before container lookups.
+
+---
+
+## Initialize ConfigRepository after bootstrap
+
+**Date:** 2025-09-21
+**Source:** \[P1] Admin load page
+
+### Problem
+
+* Page grabs `$config = $container->get(ConfigRepository::class)` before bootstrap.
+* Container is created inside bootstrap.
+
+### Impact
+
+* Undefined variable `$container` → fatal.
+
+### Resolution
+
+* Include bootstrap before accessing ConfigRepository.
+* Ensure admin load pages don’t access container prematurely.
+
+---
+
 *(more items will be added here as they are discovered)*
