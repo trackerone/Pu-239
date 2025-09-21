@@ -1,13 +1,16 @@
 <?php
 declare(strict_types=1);
 
-$db = $container->get(Database::class);
-
 require_once __DIR__ . '/runtime_safe.php';
 
 use DI\DependencyException;
 use DI\NotFoundException;
+use Pu239\Config\ConfigRepository;
 use Pu239\User;
+
+global $container;
+/** @var ConfigRepository $config */
+$config = $container->get(ConfigRepository::class);
 
 /**
  * @param $ip
@@ -38,7 +41,7 @@ function validip($ip)
  */
 function get_date(int $date, string $method, int $norelative = 1, int $full_relative = 0)
 {
-    global $container, $site_config;
+    global $container, $config;
 
     $user = [];
     if (function_exists('get_userid')) {
@@ -49,16 +52,16 @@ function get_date(int $date, string $method, int $norelative = 1, int $full_rela
         }
     }
     $today_time = $yesterday_time = $tomorrow_time = 0;
-    $use_12_hour = !empty($user['use_12_hour']) ? $user['use_12_hour'] : $site_config['site']['use_12_hour'];
+    $use_12_hour = !empty($user['use_12_hour']) ? $user['use_12_hour'] : (bool) $config->get('site.use_12_hour');
     $time_string = $use_12_hour ? 'g:i:s a' : 'H:i:s';
     $time_string_without_seconds = $use_12_hour ? 'g:i a' : 'H:i';
     $time_options = [
-        'JOINED' => $site_config['time']['joined'],
-        'SHORT' => $site_config['time']['short'] . ' ' . $time_string,
-        'LONG' => $site_config['time']['long'] . ' ' . $time_string,
-        'TINY' => $site_config['time']['tiny'],
-        'DATE' => $site_config['time']['date'],
-        'FORM' => $site_config['time']['form'],
+        'JOINED' => (string) $config->get('time.joined'),
+        'SHORT' => (string) $config->get('time.short') . ' ' . $time_string,
+        'LONG' => (string) $config->get('time.long') . ' ' . $time_string,
+        'TINY' => (string) $config->get('time.tiny'),
+        'DATE' => (string) $config->get('time.date'),
+        'FORM' => (string) $config->get('time.form'),
         'TIME' => $time_string,
         'MYSQL' => 'Y-m-d G:i:s',
         'WITH_SEC' => $time_string,
@@ -76,12 +79,12 @@ function get_date(int $date, string $method, int $norelative = 1, int $full_rela
         $user_offset = 0;
     }
 
-    if ($site_config['time']['use_relative']) {
+    if ((int) $config->get('time.use_relative')) {
         $today_time = gmdate('d,m,Y', (TIME_NOW + $user_offset));
         $yesterday_time = gmdate('d,m,Y', ((TIME_NOW - 86400) + $user_offset));
         $tomorrow_time = gmdate('d,m,Y', ((TIME_NOW + 86400) + $user_offset));
     }
-    if ($site_config['time']['use_relative'] === 3) {
+    if ((int) $config->get('time.use_relative') === 3) {
         $full_relative = 1;
     }
     if ($full_relative && $norelative != false) {
@@ -107,9 +110,9 @@ function get_date(int $date, string $method, int $norelative = 1, int $full_rela
         } else {
             return gmdate($time_options[$method], ($date + $user_offset));
         }
-    } elseif ($site_config['time']['use_relative'] && $norelative != 1) {
+    } elseif ((int) $config->get('time.use_relative') && $norelative != 1) {
         $this_time = gmdate('d,m,Y', ($date + $user_offset));
-        if ($site_config['time']['use_relative'] === 2) {
+        if ((int) $config->get('time.use_relative') === 2) {
             $diff = TIME_NOW - $date;
             if ($diff < 3600) {
                 if ($diff < 120) {
@@ -121,22 +124,22 @@ function get_date(int $date, string $method, int $norelative = 1, int $full_rela
         }
         if ($this_time == $today_time) {
             if ($method === 'WITHOUT_SEC') {
-                return str_replace('{--}', 'Today', gmdate($site_config['time']['use_relative_format_without_seconds'] . $time_string_without_seconds, ($date + $user_offset)));
+                return str_replace('{--}', 'Today', gmdate((string) $config->get('time.use_relative_format_without_seconds') . $time_string_without_seconds, ($date + $user_offset)));
             }
 
-            return str_replace('{--}', 'Today', gmdate($site_config['time']['use_relative_format'] . $time_string, ($date + $user_offset)));
+            return str_replace('{--}', 'Today', gmdate((string) $config->get('time.use_relative_format') . $time_string, ($date + $user_offset)));
         } elseif ($this_time == $yesterday_time) {
             if ($method === 'WITHOUT_SEC') {
-                return str_replace('{--}', 'Yesterday', gmdate($site_config['time']['use_relative_format_without_seconds'] . $time_string_without_seconds, ($date + $user_offset)));
+                return str_replace('{--}', 'Yesterday', gmdate((string) $config->get('time.use_relative_format_without_seconds') . $time_string_without_seconds, ($date + $user_offset)));
             }
 
-            return str_replace('{--}', 'Yesterday', gmdate($site_config['time']['use_relative_format'] . $time_string, ($date + $user_offset)));
+            return str_replace('{--}', 'Yesterday', gmdate((string) $config->get('time.use_relative_format') . $time_string, ($date + $user_offset)));
         } elseif ($this_time == $tomorrow_time) {
             if ($method === 'WITHOUT_SEC') {
-                return str_replace('{--}', 'Tomorrow', gmdate($site_config['time']['use_relative_format_without_seconds'] . $time_string_without_seconds, ($date + $user_offset)));
+                return str_replace('{--}', 'Tomorrow', gmdate((string) $config->get('time.use_relative_format_without_seconds') . $time_string_without_seconds, ($date + $user_offset)));
             }
 
-            return str_replace('{--}', 'Tomorrow', gmdate($site_config['time']['use_relative_format'] . $time_string_without_seconds, ($date + $user_offset)));
+            return str_replace('{--}', 'Tomorrow', gmdate((string) $config->get('time.use_relative_format') . $time_string_without_seconds, ($date + $user_offset)));
         } else {
             return gmdate($time_options[$method], ($date + $user_offset));
         }

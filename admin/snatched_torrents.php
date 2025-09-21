@@ -2,10 +2,13 @@
 declare(strict_types=1);
 require_once dirname(__DIR__) . '/bootstrap_web.php';
 
+use PU239\Config\ConfigRepository;
 use Pu239\Database;
 
 
-global $container, $site_config;
+global $container;
+/** @var ConfigRepository $config */
+$config = $container->get(ConfigRepository::class);
 
 $db = $container->get(Database::class);
 
@@ -174,7 +177,7 @@ if ($count > 0) {
         $body .= '
     <tr>
         <td>' . format_username((int) $row['userid']) . "</td>
-        <td><a href='{$site_config['paths']['baseurl']}/details.php?id=" . (int) $row['torrentid'] . "'><b>" . $smallname . '</b></a></td>
+        <td><a href='{$config->get('paths.baseurl')}/details.php?id=" . (int) $row['torrentid'] . "'><b>" . $smallname . '</b></a></td>
         <td class="has-text-centered"><b>' . get_date((int) $row['hit_and_run'], 'LONG', 0, 1) . '</b></td>
         <td class="has-text-centered"><b>' . format_comment($row['mark_of_cain']) . '</b></td>
         <td class="has-text-centered"><b>' . $row['timesann'] . '</b></td>
@@ -203,7 +206,7 @@ if ($count > $snatchedperpage) {
 }
 $title = _('Snatched Torrents');
 $breadcrumbs = [
-    "<a href='{$site_config['paths']['baseurl']}/staffpanel.php'>" . _('Staff Panel') . '</a>',
+    "<a href='{$config->get('paths.baseurl')}/staffpanel.php'>" . _('Staff Panel') . '</a>',
     "<a href='{$_SERVER['PHP_SELF']}'>$title</a>",
 ];
 echo stdhead($title, [], 'page-wrapper', $breadcrumbs) . wrapper($HTMLOUT) . stdfoot();

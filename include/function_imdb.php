@@ -1,8 +1,6 @@
 <?php
 declare(strict_types=1);
 
-$db = $container->get(Database::class);
-
 require_once __DIR__ . '/runtime_safe.php';
 
 require_once INCL_DIR . 'function_fanart.php';
@@ -19,9 +17,14 @@ use Imdb\Person;
 use Imdb\Title;
 use MatthiasMullie\Scrapbook\Exception\UnbegunTransaction;
 use Pu239\Cache;
+use Pu239\Config\ConfigRepository;
 use Pu239\Database;
 use Pu239\Image;
 use Pu239\Torrent;
+
+global $container;
+/** @var ConfigRepository $config */
+$config = $container->get(ConfigRepository::class);
 use Spatie\Image\Exceptions\InvalidManipulation;
 
 /**
@@ -43,18 +46,20 @@ use Spatie\Image\Exceptions\InvalidManipulation;
  */
 function get_imdb_info(string $imdb_id, bool $title, bool $data_only, ?int $tid, ?string $poster)
 {
-    global $container, $site_config, $BLOCKS;
+    global $container, $config, $BLOCKS;
 
     $cache = $container->get(Cache::class);
     if (!$BLOCKS['imdb_api_on']) {
         return false;
     }
+    $baseUrl = (string) $config->get('paths.baseurl');
+    $imagesBaseUrl = (string) $config->get('paths.images_baseurl');
     $imdbid = $imdb_id;
     $imdb_id = str_replace('tt', '', $imdb_id);
     $imdb_data = $cache->get('imdb_' . $imdb_id);
     if ($imdb_data === false || is_null($imdb_data)) {
-        $config = $container->get(Config::class);
-        $movie = new Title($imdb_id, $config);
+        $imdbConfig = $container->get(Config::class);
+        $movie = new Title($imdb_id, $imdbConfig);
 
         if (empty($movie->title())) {
             $cache->set('imdb_' . $imdb_id, 'failed', 86400);
@@ -343,7 +348,7 @@ function get_imdb_info(string $imdb_id, bool $title, bool $data_only, ?int $tid,
     foreach ($imdb as $foo => $boo) {
         if (!empty($imdb_data[$foo])) {
             if (!is_array($imdb_data[$foo])) {
-                $imdb_data[$foo] = $boo === 'Title' ? "<a href='{$site_config['paths']['baseurl']}/browse.php?si={$imdbid}' class='tooltipper' title='" . _('Browse by IMDb') . "'>{$imdb_data[$foo]}</a>" : $imdb_data[$foo];
+                $imdb_data[$foo] = $boo === 'Title' ? "<a href='{$baseUrl}/browse.php?si={$imdbid}' class='tooltipper' title='" . _('Browse by IMDb') . "'>{$imdb_data[$foo]}</a>" : $imdb_data[$foo];
                 if ($boo === 'Rating') {
                     $percent = $imdb_data['rating'] * 10;
                     $imdb_data[$foo] = "
@@ -356,7 +361,7 @@ function get_imdb_info(string $imdb_id, bool $title, bool $data_only, ?int $tid,
                         </div>";
                 } elseif ($boo === 'Year') {
                     $year = _('Search by year') . ': ' . $imdb_data['year'];
-                    $imdb_data[$foo] = "<a href='{$site_config['paths']['baseurl']}/browse.php?sys={$imdb_data['year']}&amp;sye={$imdb_data['year']}' target='_blank' class='tooltipper' title='$year'>{$imdb_data['year']}</a>";
+                    $imdb_data[$foo] = "<a href='{$baseUrl}/browse.php?sys={$imdb_data['year']}&amp;sye={$imdb_data['year']}' target='_blank' class='tooltipper' title='$year'>{$imdb_data['year']}</a>";
                 } elseif ($boo === 'MPAA') {
                     if (empty($imdb_data['mpaa_reason']) && !empty($imdb_data['mpaa']['United States'])) {
                         $imdb_data['mpaa_reason'] = $imdb_data['mpaa']['United States'];
@@ -393,7 +398,7 @@ function get_imdb_info(string $imdb_id, bool $title, bool $data_only, ?int $tid,
             } elseif ($foo === 'genres') {
                 foreach ($imdb_data[$foo] as $genre) {
                     $genre_title = _('Search by genre') . ': ' . ucwords($genre);
-                    $imdb_tmp[] = "<a href='{$site_config['paths']['baseurl']}/browse.php?sg=" . urlencode(strtolower($genre)) . "' target='_blank' class='tooltipper' title='$genre_title'>" . ucwords($genre) . '</a>';
+                $imdb_tmp[] = "<a href='{$baseUrl}/browse.php?sg=" . urlencode(strtolower($genre)) . "' target='_blank' class='tooltipper' title='$genre_title'>" . ucwords($genre) . '</a>';
                 }
             }
             if (!empty($imdb_tmp)) {
@@ -468,7 +473,7 @@ function get_imdb_title($imdb_id)
  */
 function get_imdb_info_short($imdb_id)
 {
-    global $container, $site_config, $BLOCKS;
+    global $container, $config, $BLOCKS;
 
     if (empty($imdb_id)) {
         return false;
@@ -479,6 +484,8 @@ function get_imdb_info_short($imdb_id)
         return false;
     }
 
+    $baseUrl = (string) $config->get('paths.baseurl');
+    $imagesBaseUrl = (string) $config->get('paths.images_baseurl');
     $imdbid = $imdb_id;
     $imdb_id = str_replace('tt', '', $imdb_id);
     $imdb_data = get_imdb_info($imdb_id, true, true, null, null);
@@ -518,8 +525,8 @@ function get_imdb_info_short($imdb_id)
         }
     }
 
-    if (empty($imdb_data['poster']) || $imdb_data['poster'] === $site_config['paths']['images_baseurl'] . 'proxy/') {
-        $poster = $site_config['paths']['images_baseurl'] . 'noposter.png';
+    if (empty($imdb_data['poster']) || $imdb_data['poster'] === $imagesBaseUrl . 'proxy/') {
+        $poster = $imagesBaseUrl . 'noposter.png';
         $imdb_data['poster'] = $poster;
     }
     $imdb_data['placeholder'] = url_proxy($poster, true, 250, null, 20);
@@ -545,7 +552,7 @@ function get_imdb_info_short($imdb_id)
     $imdb_info = "
             <div class='masonry-item-clean padding10 bg-04 round10'>
                 <div class='dt-tooltipper-large has-text-centered vertical_spread h-100' data-tooltip-content='#movie_{$imdb_data['id']}_tooltip'>
-                    <a href='{$site_config['paths']['baseurl']}/browse.php?si=tt{$imdb_id}'>
+                    <a href='{$baseUrl}/browse.php?si=tt{$imdb_id}'>
                         <img src='{$imdb_data['placeholder']}' data-src='{$imdb_data['poster']}' alt='Poster' class='lazy tooltip-poster'>
                     </a>
                     <div class='has-text-centered top10'>{$imdb_data['title']}</div>
@@ -702,7 +709,7 @@ function get_upcoming(bool $images = false)
  */
 function update_torrent_data(string $imdb_id)
 {
-    global $container, $site_config, $BLOCKS;
+    global $container, $config, $BLOCKS;
 
     $cache = $container->get(Cache::class);
     if (!$BLOCKS['imdb_api_on']) {
@@ -734,8 +741,9 @@ function update_torrent_data(string $imdb_id)
             ->where('imdb_id = ?', 'tt' . $imdb_id)
             ->fetchAll();
 
+        $torrentDetailsTtl = (int) $config->get('expires.torrent_details');
         foreach ($torrents as $torrent) {
-            $cache->update_row('torrent_details_' . $torrent['id'], $set, $site_config['expires']['torrent_details']);
+            $cache->update_row('torrent_details_' . $torrent['id'], $set, $torrentDetailsTtl);
         }
     }
 
@@ -755,12 +763,13 @@ function update_torrent_data(string $imdb_id)
  */
 function get_imdb_person($person_id)
 {
-    global $container, $site_config, $BLOCKS;
+    global $container, $config, $BLOCKS;
 
     $cache = $container->get(Cache::class);
     if (!$BLOCKS['imdb_api_on']) {
         return false;
     }
+    $anonymizerUrl = (string) $config->get('site.anonymizer_url');
     $imdb_person = $cache->get('imdb_person_' . $person_id);
     // $fluent removed — use $this->db (ExtendedPdo)
     if ($imdb_person === false || is_null($imdb_person)) {
@@ -776,8 +785,8 @@ function get_imdb_person($person_id)
         } else {
             $cache->set('imdb_person_' . $person_id, 'failed', 86400);
         }
-        $config = $container->get(Config::class);
-        $person = new Person($person_id, $config);
+        $imdbConfig = $container->get(Config::class);
+        $person = new Person($person_id, $imdbConfig);
         $imdb_person = [];
         if (!empty($person->name())) {
             $imdb_person['name'] = $person->name();
@@ -811,7 +820,7 @@ $db->perform($sql, array_merge($set, ['imdb_id' => $person_id]));
                 'href="',
             ], [
                 '<br>',
-                'href="' . $site_config['site']['anonymizer_url'],
+                'href="' . $anonymizerUrl,
             ], $data[0]['desc']);
         }
 

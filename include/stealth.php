@@ -6,11 +6,15 @@ use DI\DependencyException;
 use DI\NotFoundException;
 use MatthiasMullie\Scrapbook\Exception\UnbegunTransaction;
 use Pu239\Cache;
+use Pu239\Config\ConfigRepository;
 use Pu239\Database;
 use Pu239\Session;
 use Pu239\User;
 
 global $container;
+/** @var ConfigRepository $config */
+$config = $container->get(ConfigRepository::class);
+/** @var Database $db */
 $db = $container->get(Database::class);
 
 /**
@@ -21,7 +25,7 @@ $db = $container->get(Database::class);
  */
 function stealth(int $userid, bool $stealth = true)
 {
-    global $container, $site_config, $CURUSER, $db;
+    global $container, $CURUSER, $db, $config;
 
     $users_class = $container->get(User::class);
     $username = $users_class->get_item('username', $userid);
@@ -52,16 +56,16 @@ function stealth(int $userid, bool $stealth = true)
     $cache->update_row('user_'.$userid, [
         'perms' => $row['perms'],
         'modcomment' => $modcomment,
-    ], $site_config['expires']['user_cache']);
+    ], $config->get('expires.user_cache'));
     if ($userid === $CURUSER['id']) {
         $cache->update_row('user_'.$CURUSER['id'], [
             'perms' => $row['perms'],
             'modcomment' => $modcomment,
-        ], $site_config['expires']['user_cache']);
+        ], $config->get('expires.user_cache'));
     }
     \write_log('Member [b][url=userdetails.php?id='.$userid.']'.(\htmlsafechars($row['username'])).'[/url][/b] '.$display.' in Stealth Mode thanks to [b]'.$CURUSER['username'].'[/b]');
     $session = $container->get(Session::class);
     $session->set('is-info', "{$username} $display Stealthy");
-    \header("Location: {$site_config['paths']['baseurl']}/userdetails.php?id=$userid");
+    \header("Location: {$config->get('paths.baseurl')}/userdetails.php?id=$userid");
     \app_halt('Exit called');
 }

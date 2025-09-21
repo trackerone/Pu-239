@@ -1,6 +1,7 @@
 <?php
 declare(strict_types=1);
 
+use Pu239\Config\ConfigRepository;
 use Pu239\Database;
 
 global $container, $site_config;
@@ -11,6 +12,16 @@ if (isset($container)) {
         $db = $container->get(Database::class);
     } catch (\Throwable $e) {
         $db = null;
+    }
+}
+
+/** @var ConfigRepository|null $config */
+$config = null;
+if (isset($container)) {
+    try {
+        $config = $container->get(ConfigRepository::class);
+    } catch (\Throwable $e) {
+        $config = null;
     }
 }
 

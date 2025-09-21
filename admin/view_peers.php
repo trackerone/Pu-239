@@ -2,12 +2,15 @@
 declare(strict_types=1);
 require_once dirname(__DIR__) . '/bootstrap_web.php';
 
+use PU239\Config\ConfigRepository;
 use Pu239\Database;
 use Pu239\Peer;
 use Pu239\Session;
 
 
-global $container, $site_config;
+global $container;
+/** @var ConfigRepository $config */
+$config = $container->get(ConfigRepository::class);
 
 $db = $container->get(Database::class);
 
@@ -76,7 +79,7 @@ for ($i = 0; $i <= count($valid_sort); ++$i) {
         $link[$i] = 'desc';
     }
 }
-$pager = pager($peersperpage, $count, $site_config['paths']['baseurl'] . '/staffpanel.php?tool=view_peers&amp;' . $pagerlink);
+$pager = pager($peersperpage, $count, $config->get('paths.baseurl') . '/staffpanel.php?tool=view_peers&amp;' . $pagerlink);
 if ($count > $peersperpage) {
     $HTMLOUT .= $pager['pagertop'];
 }
@@ -107,7 +110,7 @@ if (!empty($results)) {
         $body .= '
     <tr>
         <td class="has-text-centered">' . format_username((int) $row['userid']) . '</td>
-        <td><a href="' . $site_config['paths']['baseurl'] . '/details.php?id=' . $row['torrent'] . '">' . $smallname . '</a></td>
+        <td><a href="' . $config->get('paths.baseurl') . '/details.php?id=' . $row['torrent'] . '">' . $smallname . '</a></td>
         <td class="has-text-centered">' . htmlsafechars($row['ip']) . '</td>
         <td class="has-text-centered">' . $row['port'] . '</td>
         <td class="has-text-centered">' . htmlsafechars(getagent($row['agent'], $row['peer_id'])) . '</td>
@@ -138,7 +141,7 @@ if ($count > $peersperpage) {
 }
 $title = _('Peers Overview');
 $breadcrumbs = [
-    "<a href='{$site_config['paths']['baseurl']}/staffpanel.php'>" . _('Staff Panel') . '</a>',
+    "<a href='{$config->get('paths.baseurl')}/staffpanel.php'>" . _('Staff Panel') . '</a>',
     "<a href='{$_SERVER['PHP_SELF']}'>$title</a>",
 ];
 echo stdhead($title, [], 'page-wrapper', $breadcrumbs) . wrapper($HTMLOUT) . stdfoot();

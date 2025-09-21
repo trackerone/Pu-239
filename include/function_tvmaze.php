@@ -1,8 +1,6 @@
 <?php
 declare(strict_types=1);
 
-$db = $container->get(Database::class);
-
 require_once __DIR__ . '/runtime_safe.php';
 
 use DI\DependencyException;
@@ -12,9 +10,14 @@ use Pu239\Cache;
 use Pu239\Image;
 use Pu239\Person;
 use Pu239\Torrent;
+use Pu239\Config\ConfigRepository;
 use Spatie\Image\Exceptions\InvalidManipulation;
 
 require_once INCL_DIR . 'function_html.php';
+
+global $container;
+/** @var ConfigRepository $config */
+$config = $container->get(ConfigRepository::class);
 
 /**
  * @param $tvmaze_data
@@ -29,7 +32,7 @@ require_once INCL_DIR . 'function_html.php';
  */
 function tvmaze_format($tvmaze_data, $tvmaze_type)
 {
-    global $container, $site_config, $BLOCKS;
+    global $container, $BLOCKS, $config;
 
     $person_class = $container->get(Person::class);
     if (!$BLOCKS['tvmaze_api_on']) {
@@ -38,7 +41,7 @@ function tvmaze_format($tvmaze_data, $tvmaze_type)
     $cast = !empty($tvmaze_data['_embedded']['cast']) ? $tvmaze_data['_embedded']['cast'] : [];
     $tvmaze_display['show'] = [
         'name' => line_by_line('Series Title', '%s'),
-        'url' => line_by_line('Series Link', "<a href='{$site_config['site']['anonymizer_url']}%s'>TVMaze Lookup</a>"),
+        'url' => line_by_line('Series Link', "<a href='{$config->get('site.anonymizer_url')}%s'>TVMaze Lookup</a>"),
         'premiered' => line_by_line('Series Started', '%s'),
         'airtime' => line_by_line('Airs', '%s'),
         'origin' => line_by_line('Origin: Language', '%s'),
@@ -200,7 +203,7 @@ function tvmaze_format($tvmaze_data, $tvmaze_type)
  */
 function episode_format($tvmaze_data, $tvmaze_type)
 {
-    global $site_config, $BLOCKS;
+    global $config, $BLOCKS;
 
     if (!$BLOCKS['tvmaze_api_on']) {
         return false;
@@ -208,7 +211,7 @@ function episode_format($tvmaze_data, $tvmaze_type)
     $tvmaze_display['episode'] = [
         'name' => line_by_line('Episode Title', '%s'),
         'season_episode' => line_by_line('Episode', '%s'),
-        'url' => line_by_line('Episode Link', "<a href='{$site_config['site']['anonymizer_url']}%s'>TVMaze Lookup</a>"),
+        'url' => line_by_line('Episode Link', "<a href='{$config->get('site.anonymizer_url')}%s'>TVMaze Lookup</a>"),
         'showtime' => line_by_line('Aired', '%s'),
         'runtime' => line_by_line('Runtime', '%s min'),
         'summary' => line_by_line('Summary', '%s'),
@@ -314,7 +317,7 @@ function get_episode($tvmaze_id, $season, $episode, $tid)
  */
 function tvmaze(int $tvmaze_id, int $tid, int $season = 0, int $episode = 0, string $poster = '', bool $images = false)
 {
-    global $container, $site_config, $BLOCKS;
+    global $container, $BLOCKS, $config;
 
     if (!$BLOCKS['tvmaze_api_on'] || empty($tvmaze_id)) {
         return false;
@@ -339,7 +342,7 @@ function tvmaze(int $tvmaze_id, int $tid, int $season = 0, int $episode = 0, str
         $airtime = $timestamp + $airtime[0] * 3600 + (isset($airtime[1]) ? $airtime[1] * 60 : 0);
     }
     $days = implode(', ', $tvmaze_show_data['schedule']['days']);
-    $use_12_hour = !empty($CURUSER['use_12_hour']) ? $CURUSER['use_12_hour'] : $site_config['site']['use_12_hour'];
+    $use_12_hour = !empty($CURUSER['use_12_hour']) ? $CURUSER['use_12_hour'] : $config->get('site.use_12_hour');
     $tvmaze_show_data['airtime'] = $days . ' at ' . ($use_12_hour ? time24to12($airtime) : get_date((int) $airtime, 'WITHOUT_SEC', 0, 1)) . " on {$tvmaze_show_data['network']['name']}. <span class='has-text-primary'>(Time zone: {$tvmaze_show_data['network']['country']['timezone']})</span>";
     $tvmaze_show_data['origin'] = "{$tvmaze_show_data['network']['country']['name']}: {$tvmaze_show_data['language']}";
     if (count($tvmaze_show_data['genres']) > 0) {
@@ -349,7 +352,7 @@ function tvmaze(int $tvmaze_id, int $tid, int $season = 0, int $episode = 0, str
         $tmp = [];
         foreach ($temp as $genre) {
             $genre_title = 'Search by genre: ' . ucwords($genre);
-            $tmp[] = "<a href='{$site_config['paths']['baseurl']}/browse.php?sg=" . urlencode(strtolower($genre)) . "' target='_blank' class='tooltipper' title='$genre_title'>" . ucwords($genre) . '</a>';
+            $tmp[] = "<a href='{$config->get('paths.baseurl')}/browse.php?sg=" . urlencode(strtolower($genre)) . "' target='_blank' class='tooltipper' title='$genre_title'>" . ucwords($genre) . '</a>';
         }
         $tvmaze_show_data['genres_clickable'] = implode(', ', $tmp);
     }

@@ -1,8 +1,6 @@
 <?php
 declare(strict_types=1);
 
-$db = $container->get(Database::class);
-
 require_once __DIR__ . '/runtime_safe.php';
 
 use Delight\Auth\AuthError;
@@ -11,12 +9,20 @@ use DI\DependencyException;
 use DI\NotFoundException;
 use MatthiasMullie\Scrapbook\Exception\UnbegunTransaction;
 use Pu239\Bookmark;
+use Pu239\Config\ConfigRepository;
+use Pu239\Database;
 use Pu239\Image;
 use Pu239\Session;
 use Spatie\Image\Exceptions\InvalidManipulation;
 
 require_once INCL_DIR . 'function_categories.php';
 require_once INCL_DIR . 'function_event.php';
+
+global $container;
+/** @var ConfigRepository $config */
+$config = $container->get(ConfigRepository::class);
+/** @var Database $db */
+$db = $container->get(Database::class);
 $curuser = check_user_status();
 
 /**
@@ -47,7 +53,7 @@ function linkcolor($num)
  */
 function torrenttable(array $torrents, array $curuser)
 {
-    global $container, $site_config, $curuser;
+    global $container, $curuser, $config;
 
     $session = $container->get(Session::class);
     $scheme = $session->get('scheme') === 'http' ? '' : '&amp;ssl=1';
@@ -69,18 +75,18 @@ function torrenttable(array $torrents, array $curuser)
         $lookup = get_lookup();
         $catinfo = get_cat_info($torrent, $lookup);
         $new = $torrent['added'] >= $curuser['last_browse'] ? "<span class='tag is-danger'>" . _('New') . "!</span>" : '';
-        $sticky = $torrent['sticky'] === 'yes' ? "<img src='$image' data-src='{$site_config['paths']['images_baseurl']}sticky.gif' class='tooltipper icon lazy' alt='" . _('Sticky') . "' title='" . _('Sticky') . "'>" : '';
+        $sticky = $torrent['sticky'] === 'yes' ? "<img src='$image' data-src='{$config->get('paths.images_baseurl')}sticky.gif' class='tooltipper icon lazy' alt='" . _('Sticky') . "' title='" . _('Sticky') . "'>" : '';
         $poster = get_poster($torrent, $poster_image);
         $uploader = get_uploader($torrent);
         $uploaded = get_week_day($torrent['added']) . ', ' . get_date($torrent['added'], 'LONG', 1, 0);
-        $title = "<a href='{$site_config['paths']['baseurl']}/details.php?id={$torrent['id']}'><span class='is-wrapped'>" . format_comment($torrent['name']) . "</span></a>";
+        $title = "<a href='{$config->get('paths.baseurl')}/details.php?id={$torrent['id']}'><span class='is-wrapped'>" . format_comment($torrent['name']) . "</span></a>";
         $ratio = $torrent['leechers'] >= 1 ? $torrent['seeders'] / $torrent['leechers'] : 1;
-        $seeders = "<a href='{$site_config['paths']['baseurl']}/peerlist.php?id={$torrent['id']}#seeders' class='tooltipper' title='" . _('Seeders') . "'><span style='color: " . get_slr_color($ratio) . ";'>" . number_format($torrent['seeders']) . '</span></a>';
-        $leechers = "<a href='{$site_config['paths']['baseurl']}/peerlist.php?id={$torrent['id']}#leechers' class='tooltipper' title='" . _('Leechers') . "'>" . number_format($torrent['leechers']) . '</a>';
-        $snatched = "<a href='{$site_config['paths']['baseurl']}/snatches.php?id={$torrent['id']}' class='tooltipper' title='" . _('Times Completed') . "'>" . number_format($torrent['times_completed']) . '</a>';
-        $numfiles = "<a href='{$site_config['paths']['baseurl']}/filelist.php?id={$torrent['id']}'>" . number_format($torrent['numfiles']) . '</a>';
-        $comments = "<a href='{$site_config['paths']['baseurl']}/details.php?id={$torrent['id']}&amp;hit=1&amp;tocomm=1' class='tooltipper' title='" . _('Comments') . "'>" . number_format($torrent['comments']) . '</a>';
-        $download = "<a href='{$site_config['paths']['baseurl']}/download.php?torrent={$torrent['id']}{$scheme}'><i class='icon-download icon tooltipper' aria-hidden='true' title='" . _('Download this Torrent!') . "'></i></a>";
+        $seeders = "<a href='{$config->get('paths.baseurl')}/peerlist.php?id={$torrent['id']}#seeders' class='tooltipper' title='" . _('Seeders') . "'><span style='color: " . get_slr_color($ratio) . ";'>" . number_format($torrent['seeders']) . '</span></a>';
+        $leechers = "<a href='{$config->get('paths.baseurl')}/peerlist.php?id={$torrent['id']}#leechers' class='tooltipper' title='" . _('Leechers') . "'>" . number_format($torrent['leechers']) . '</a>';
+        $snatched = "<a href='{$config->get('paths.baseurl')}/snatches.php?id={$torrent['id']}' class='tooltipper' title='" . _('Times Completed') . "'>" . number_format($torrent['times_completed']) . '</a>';
+        $numfiles = "<a href='{$config->get('paths.baseurl')}/filelist.php?id={$torrent['id']}'>" . number_format($torrent['numfiles']) . '</a>';
+        $comments = "<a href='{$config->get('paths.baseurl')}/details.php?id={$torrent['id']}&amp;hit=1&amp;tocomm=1' class='tooltipper' title='" . _('Comments') . "'>" . number_format($torrent['comments']) . '</a>';
+        $download = "<a href='{$config->get('paths.baseurl')}/download.php?torrent={$torrent['id']}{$scheme}'><i class='icon-download icon tooltipper' aria-hidden='true' title='" . _('Download this Torrent!') . "'></i></a>";
         $bookmark = get_bookmark($torrent);
         $subtitles = get_subtitles($torrent, $lookup);
         $audios = get_audios($torrent, $lookup);
@@ -275,31 +281,31 @@ function get_togo($row)
  */
 function get_tools($row)
 {
-    global $site_config, $curuser;
+    global $config, $curuser;
 
     $links = '';
-    $staff_tools = has_access($curuser['class'], $site_config['allowed']['fast_edit'], 'torrent_mod') || has_access($curuser['class'], $site_config['allowed']['fast_delete'], '') || has_access($curuser['class'], $site_config['allowed']['staff_picks'], '');
+    $staff_tools = has_access($curuser['class'], $config->get('allowed.fast_edit'), 'torrent_mod') || has_access($curuser['class'], $config->get('allowed.fast_delete'), '') || has_access($curuser['class'], $config->get('allowed.staff_picks'), '');
     if ($staff_tools) {
         $returnto = !empty($_SERVER['REQUEST_URI']) ? '&amp;returnto=' . urlencode($_SERVER['REQUEST_URI']) : '';
-        $edit_link = (has_access($curuser['class'], $site_config['allowed']['fast_edit'], 'torrent_mod') ? "
+        $edit_link = (has_access($curuser['class'], $config->get('allowed.fast_edit'), 'torrent_mod') ? "
                 <div>
-                    <a href='{$site_config['paths']['baseurl']}/edit.php?id=" . $row['id'] . "{$returnto}' class='tooltipper padding5' title='Fast Edit'>
+                    <a href='{$config->get('paths.baseurl')}/edit.php?id=" . $row['id'] . "{$returnto}' class='tooltipper padding5' title='Fast Edit'>
                         <i class='icon-edit icon has-text-info' aria-hidden='true'></i>
                     </a>
                 </div>" : '');
-        $del_link = (has_access($curuser['class'], $site_config['allowed']['fast_delete'], '') ? "
+        $del_link = (has_access($curuser['class'], $config->get('allowed.fast_delete'), '') ? "
                 <div>
-                    <a href='{$site_config['paths']['baseurl']}/fastdelete.php?id=" . $row['id'] . "{$returnto}' class='tooltipper padding5' title='Fast Delete'>
+                    <a href='{$config->get('paths.baseurl')}/fastdelete.php?id=" . $row['id'] . "{$returnto}' class='tooltipper padding5' title='Fast Delete'>
                         <i class='icon-trash-empty icon has-text-danger' aria-hidden='true'></i>
                     </a>
                 </div>" : '');
         $staff_pick = '';
-        if (has_access($curuser['class'], $site_config['allowed']['staff_picks'], '') && $row['staff_picks'] > 0) {
+        if (has_access($curuser['class'], $config->get('allowed.staff_picks'), '') && $row['staff_picks'] > 0) {
             $staff_pick = "
                 <div data-id='{$row['id']}' data-pick='{$row['staff_picks']}' class='staff_pick tooltipper padding5' title='Remove from Staff Picks'>
                     <i class='icon-star-empty icon has-text-danger' aria-hidden='true'></i>
                 </div>";
-        } elseif (has_access($curuser['class'], $site_config['allowed']['staff_picks'], '')) {
+        } elseif (has_access($curuser['class'], $config->get('allowed.staff_picks'), '')) {
             $staff_pick = "
                 <div data-id='{$row['id']}' data-pick='{$row['staff_picks']}' class='staff_pick tooltipper padding5' title='Add to Staff Picks'>
                     <i class='icon-star-empty icon has-text-success' aria-hidden='true'></i>
@@ -326,12 +332,12 @@ function get_tools($row)
  */
 function get_staff_picks($row)
 {
-    global $site_config;
+    global $config;
 
     $image = placeholder_image(20, 20);
     $staff_pick = $row['staff_picks'] > 0 ? "
                     <div id='staff_pick_{$row['id']}'>
-                        <img src='$image' data-src='{$site_config['paths']['images_baseurl']}staff_pick.png' class='tooltipper emoticon lazy' alt='" . _('Staff Pick!') . "' title='" . _('Staff Pick!') . "'>
+                        <img src='$image' data-src='{$config->get('paths.images_baseurl')}staff_pick.png' class='tooltipper emoticon lazy' alt='" . _('Staff Pick!') . "' title='" . _('Staff Pick!') . "'>
                     </div>" : "
                     <div id='staff_pick_{$row['id']}'></div>";
 
@@ -345,9 +351,9 @@ function get_staff_picks($row)
  */
 function get_imdb_rating($row)
 {
-    global $site_config;
+    global $config;
     $imdb_info = '';
-    if ($row['rating'] > 0 && (in_array($row['category'], $site_config['categories']['movie']) || in_array($row['category'], $site_config['categories']['tv']))) {
+    if ($row['rating'] > 0 && (in_array($row['category'], $config->get('categories.movie')) || in_array($row['category'], $config->get('categories.tv')))) {
         $percent = !empty($row['rating']) ? $row['rating'] * 10 : 0;
         $imdb_info = "
                     <div class='star-ratings-css tooltipper' title='{$percent}% " . _('of IMDb voters liked this!') . "'>
@@ -371,20 +377,20 @@ function get_imdb_rating($row)
  */
 function get_icons($row)
 {
-    global $site_config;
+    global $config;
 
     $image = placeholder_image(16, 16);
     $icons = [];
     $title = "
         <div class=\"size_5 has-text-centered has-text-success\">" . _('VIP') . "</div>" . _('This torrent is for VIP users only!');
     $icons[] = $row['vip'] == 1 ? "
-        <img src='$image' data-src='{$site_config['paths']['images_baseurl']}star.png' class='tooltipper icon lazy' alt='" . _('VIP') . "' title='$title'>" : '';
+        <img src='$image' data-src='{$config->get('paths.images_baseurl')}star.png' class='tooltipper icon lazy' alt='" . _('VIP') . "' title='$title'>" : '';
     $icons[] = !empty($row['youtube']) ? "
         <a href=\"" . htmlsafechars($row['youtube']) . "\" target=\"_blank\">
             <i class=\"icon-youtube icon\" aria-hidden=\"true\"></i>
         </a>" : '';
     $icons[] = $row['release_group'] === 'scene' ? "
-        <img src='$image' data-src='{$site_config['paths']['images_baseurl']}scene.gif' class='tooltipper icon lazy' title='" . _('Scene') . "' alt='" . _('Scene') . "'>" : ($row['release_group'] === 'p2p' ? " <img src='$image' data-src='{$site_config['paths']['images_baseurl']}p2p.gif' class='tooltipper icon lazy' title='" . _('P2P') . "' alt='" . _('P2P') . "'>" : '');
+        <img src='$image' data-src='{$config->get('paths.images_baseurl')}scene.gif' class='tooltipper icon lazy' title='" . _('Scene') . "' alt='" . _('Scene') . "'>" : ($row['release_group'] === 'p2p' ? " <img src='$image' data-src='{$config->get('paths.images_baseurl')}p2p.gif' class='tooltipper icon lazy' title='" . _('P2P') . "' alt='" . _('P2P') . "'>" : '');
     $title = "
         <div class=\"size_5 has-text-primary has-text-centered\">" . _('CHECKED') . "</div>
         <div class=\"right10\">" . _('By') . ": " . format_comment($row['checked_by_username']) . "</div>
@@ -396,27 +402,27 @@ function get_icons($row)
         <div class=\"has-text-centered\">" . ($row['free'] > 1 ? _('Expires') . ': ' . get_date((int) $row['free'], 'DATE') . '<br>(' . mkprettytime($row['free'] - TIME_NOW) . ' ' . _('to go') . ')</div>' : "
         <div class=\"has-text-centered\">" . _('Unlimited') . "</div>");
     $icons[] = $row['free'] != 0 ? "
-        <img src='$image' data-src='{$site_config['paths']['images_baseurl']}gold.png' class='tooltipper icon lazy' alt='" . _('Free Torrent!') . "' title='$title'>" : '';
+        <img src='$image' data-src='{$config->get('paths.images_baseurl')}gold.png' class='tooltipper icon lazy' alt='" . _('Free Torrent!') . "' title='$title'>" : '';
     $title = "
         <div class=\"has-text-centered size_5 has-text-success\">" . _('Silver Torrent') . "!</div>
         <div class=\"has-text-centered\">" . ($row['silver'] > 1 ? _('Expires') . ': ' . get_date((int) $row['silver'], 'DATE') . '<br>(' . mkprettytime($row['silver'] - TIME_NOW) . ' ' . _('to go') . ")</div>" : "
         <div class=\"has-text-centered\">" . _('Unlimited') . "</div>");
     $icons[] = $row['silver'] != 0 ? "
-        <img src='$image' data-src='{$site_config['paths']['images_baseurl']}silver.png' class='tooltipper icon lazy' alt='" . _('Silver Torrent!') . "' title='$title'>" : '';
+        <img src='$image' data-src='{$config->get('paths.images_baseurl')}silver.png' class='tooltipper icon lazy' alt='" . _('Silver Torrent!') . "' title='$title'>" : '';
     $icons[] = $row['freetorrent'] != 0 ? '
-        <img src="' . $image . '" data-src="' . $site_config['paths']['images_baseurl'] . 'freedownload.gif" class="tooltipper icon lazy" alt="' . _('Free Slot') . '" title="' . _('Free Slot in Use') . '">' : '';
+        <img src="' . $image . '" data-src="' . $config->get('paths.images_baseurl') . 'freedownload.gif" class="tooltipper icon lazy" alt="' . _('Free Slot') . '" title="' . _('Free Slot in Use') . '">' : '';
     $icons[] = $row['doubletorrent'] != 0 ? '
-        <img src="' . $image . '" data-src="' . $site_config['paths']['images_baseurl'] . 'doubleseed.gif" class="tooltipper icon lazy" alt="' . _('Double Upload Slot') . '" title="' . _('Double Upload Slot in Use') . '">' : '';
+        <img src="' . $image . '" data-src="' . $config->get('paths.images_baseurl') . 'doubleseed.gif" class="tooltipper icon lazy" alt="' . _('Double Upload Slot') . '" title="' . _('Double Upload Slot in Use') . '">' : '';
     $title = "
         <div class=\"size_5 has-text-centered has-text-danger\">" . _('Nuked') . "</div>
         <div class=\"right10\">" . _('Reason') . ": " . format_comment($row['nukereason']) . "</div>";
     $icons[] = $row['nuked'] === 'yes' ? "
-        <img src='$image' data-src='{$site_config['paths']['images_baseurl']}nuked.gif' class='tooltipper icon lazy' alt='" . _('Nuked') . "'  class='has-text-centered' title='$title'>" : '';
+        <img src='$image' data-src='{$config->get('paths.images_baseurl')}nuked.gif' class='tooltipper icon lazy' alt='" . _('Nuked') . "'  class='has-text-centered' title='$title'>" : '';
     $title = "
         <div class=\"size_5 has-text-centered has-text-success\">" . _('Bumped') . "</div>
         <div class=\"has-text-centered\">" . _('This torrent was Re-Animated!') . "</div>";
     $icons[] = $row['bump'] === 'yes' ? "
-        <img src='$image' data-src='{$site_config['paths']['images_baseurl']}forums/up.gif' class='tooltipper icon lazy' alt='" . _('Re-Animated Torrent') . "' title='$title'>" : '';
+        <img src='$image' data-src='{$config->get('paths.images_baseurl')}forums/up.gif' class='tooltipper icon lazy' alt='" . _('Re-Animated Torrent') . "' title='$title'>" : '';
 
     $icons = array_filter($icons);
     $icon_string = implode('&nbsp;', $icons);
@@ -432,7 +438,7 @@ function get_icons($row)
  */
 function get_genres($row, $lookup)
 {
-    global $site_config;
+    global $config;
 
     $genres = '';
     $genre_icons = '';
@@ -441,7 +447,7 @@ function get_genres($row, $lookup)
         $newgenre = [];
         $row['newgenre'] = explode(',', $row['newgenre']);
         foreach ($row['newgenre'] as $foo) {
-            $newgenre[] = "<a href='{$site_config['paths']['baseurl']}/browse.php?{$lookup}sg=" . strtolower(trim($foo)) . "'>" . ucfirst(strtolower(trim($foo))) . '</a>';
+            $newgenre[] = "<a href='{$config->get('paths.baseurl')}/browse.php?{$lookup}sg=" . strtolower(trim($foo)) . "'>" . ucfirst(strtolower(trim($foo))) . '</a>';
         }
         if (!empty($newgenre)) {
             $genre_icons = implode(',&nbsp;', $newgenre);
@@ -462,7 +468,7 @@ function get_genres($row, $lookup)
  */
 function get_audios($row, $lookup)
 {
-    global $container, $site_config;
+    global $container, $config;
 
     $subs = $container->get('subtitles');
     $subs_array = explode('|', $row['audios']);
@@ -472,8 +478,8 @@ function get_audios($row, $lookup)
         foreach ($subs as $sub) {
             if (strtolower($sub['name']) === strtolower($subname)) {
                 $Subs[] = "
-                    <a href='{$site_config['paths']['baseurl']}/browse.php?{$lookup}st=" . htmlsafechars($sub['name']) . "' class='left5'>
-                        <img src='$image' data-src='{$site_config['paths']['images_baseurl']}/{$sub['pic']}' class='tooltipper icon is-marginless lazy' width='16' alt='" . htmlsafechars($sub['name']) . "' title='" . htmlsafechars($sub['name']) . "'>
+                    <a href='{$config->get('paths.baseurl')}/browse.php?{$lookup}st=" . htmlsafechars($sub['name']) . "' class='left5'>
+                        <img src='$image' data-src='{$config->get('paths.images_baseurl')}/{$sub['pic']}' class='tooltipper icon is-marginless lazy' width='16' alt='" . htmlsafechars($sub['name']) . "' title='" . htmlsafechars($sub['name']) . "'>
                     </a>";
             }
         }
@@ -498,7 +504,7 @@ function get_audios($row, $lookup)
  */
 function get_subtitles($row, $lookup)
 {
-    global $container, $site_config;
+    global $container, $config;
 
     $subs = $container->get('subtitles');
     $subs_array = explode('|', $row['subs']);
@@ -508,8 +514,8 @@ function get_subtitles($row, $lookup)
         foreach ($subs as $sub) {
             if (strtolower($sub['name']) === strtolower($subname)) {
                 $Subs[] = "
-                    <a href='{$site_config['paths']['baseurl']}/browse.php?{$lookup}st=" . htmlsafechars($sub['name']) . "' class='left5'>
-                        <img src='{$image}' data-src='{$site_config['paths']['images_baseurl']}/{$sub['pic']}' class='tooltipper icon is-marginless lazy' width='16' alt='" . htmlsafechars($sub['name']) . "' title='" . htmlsafechars($sub['name']) . "'>
+                    <a href='{$config->get('paths.baseurl')}/browse.php?{$lookup}st=" . htmlsafechars($sub['name']) . "' class='left5'>
+                        <img src='{$image}' data-src='{$config->get('paths.images_baseurl')}/{$sub['pic']}' class='tooltipper icon is-marginless lazy' width='16' alt='" . htmlsafechars($sub['name']) . "' title='" . htmlsafechars($sub['name']) . "'>
                     </a>";
             }
         }
@@ -600,13 +606,13 @@ function get_bookmark($row)
  */
 function get_poster($row, $image)
 {
-    global $container, $site_config;
+    global $container, $config;
 
     if (empty($row['poster']) && !empty($row['imdb_id'])) {
         $image_class = $container->get(Image::class);
         $row['poster'] = $image_class->find_images($row['imdb_id'], 'poster');
     }
-    $poster = empty($row['poster']) ? "<img src='$image' data-src='{$site_config['paths']['images_baseurl']}noposter.png' class='img-torrent lazy' alt='" . _('Poster') . "'>" : "<img src='{$image}' data-src='" . url_proxy($row['poster'], true, 100) . "' class='img-torrent lazy' alt='" . _('Poster') . "'>";
+    $poster = empty($row['poster']) ? "<img src='$image' data-src='{$config->get('paths.images_baseurl')}noposter.png' class='img-torrent lazy' alt='" . _('Poster') . "'>" : "<img src='{$image}' data-src='" . url_proxy($row['poster'], true, 100) . "' class='img-torrent lazy' alt='" . _('Poster') . "'>";
 
     return $poster;
 }
@@ -646,7 +652,7 @@ function get_lookup()
  */
 function get_cat_info($row, $lookup)
 {
-    global $site_config;
+    global $config;
 
     $categories = genrelist(false);
     $change = [];
@@ -665,9 +671,9 @@ function get_cat_info($row, $lookup)
 
     $catinfo = '';
     if (isset($row['cat_name'])) {
-        $catinfo .= "<a href='{$site_config['paths']['baseurl']}/browse.php?{$lookup}" . (!empty($row['parent_id']) ? "cats[]={$row['parent_id']}&amp;" : '') . 'cats[]=' . $row['category'] . "'>";
+        $catinfo .= "<a href='{$config->get('paths.baseurl')}/browse.php?{$lookup}" . (!empty($row['parent_id']) ? "cats[]={$row['parent_id']}&amp;" : '') . 'cats[]=' . $row['category'] . "'>";
         if (isset($row['cat_pic']) && $row['cat_pic'] != '') {
-            $catinfo .= "<img src='$image' data-src='{$site_config['paths']['images_baseurl']}caticons/" . get_category_icons() . "/{$row['cat_pic']}' class='tooltipper lazy' alt='{$row['cat_name']}' title='{$row['cat_name']}'>";
+            $catinfo .= "<img src='$image' data-src='{$config->get('paths.images_baseurl')}caticons/" . get_category_icons() . "/{$row['cat_pic']}' class='tooltipper lazy' alt='{$row['cat_name']}' title='{$row['cat_name']}'>";
         } else {
             $catinfo .= format_comment($row['cat_name']);
         }

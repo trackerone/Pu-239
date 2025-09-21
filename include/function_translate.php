@@ -1,14 +1,15 @@
 <?php
 declare(strict_types=1);
 
-$db = $container->get(Database::class);
-
 require_once __DIR__ . '/runtime_safe.php';
 
 use Delight\I18n\I18n;
+use Pu239\Config\ConfigRepository;
 use Pu239\Session;
 
-global $container, $site_config;
+global $container;
+/** @var ConfigRepository $config */
+$config = $container->get(ConfigRepository::class);
 
 $i18n = $container->get(I18n::class);
 $lang = get_language();
