@@ -1,13 +1,16 @@
 <?php
 declare(strict_types=1);
 
-$db = $container->get(Database::class);
-
 require_once __DIR__ . '/runtime_safe.php';
 
 use DI\DependencyException;
 use DI\NotFoundException;
 use Pu239\Cache;
+use Pu239\Config\ConfigRepository;
+
+global $container;
+/** @var ConfigRepository $config */
+$config = $container->get(ConfigRepository::class);
 
 /**
  * @throws NotFoundException
@@ -18,7 +21,7 @@ use Pu239\Cache;
  */
 function rsstfreakinfo()
 {
-    global $container, $site_config;
+    global $container, $config;
 
     $cache = $container->get(Cache::class);
     require_once INCL_DIR . 'function_html.php';
@@ -52,6 +55,7 @@ function rsstfreakinfo()
                                                              ->item(0)->nodeValue));
             $date = htmlsafechars($item->getElementsByTagName('pubDate')
                                        ->item(0)->nodeValue);
+            $anonymizerUrl = (string) $config->get('site.anonymizer_url');
             $content = str_replace([
                 '<![CDATA[',
                 ']]>',
@@ -59,11 +63,11 @@ function rsstfreakinfo()
             ], [
                 '',
                 '',
-                'href="' . $site_config['site']['anonymizer_url'],
+                'href="' . $anonymizerUrl,
             ], preg_replace('/<p>/', "<p class='has-text-primary'>", $item->getElementsByTagName('description')
                                                                                                  ->item(0)->nodeValue, 1));
             $link = "
-                            <a href='{$site_config['site']['anonymizer_url']}" . $item->getElementsByTagName('link')
+                            <a href='{$anonymizerUrl}" . $item->getElementsByTagName('link')
                                                                                       ->item(0)->nodeValue . "' target='_blank'>
                                 <span class='size_2 has-text-primary'>Read more</span>
                             </a>";

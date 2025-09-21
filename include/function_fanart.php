@@ -1,14 +1,17 @@
 <?php
 declare(strict_types=1);
 
-$db = $container->get(Database::class);
-
 require_once __DIR__ . '/runtime_safe.php';
 
 use DI\DependencyException;
 use DI\NotFoundException;
+use Pu239\Config\ConfigRepository;
 use Pu239\Database;
 use Pu239\Image;
+
+global $container;
+/** @var ConfigRepository $config */
+$config = $container->get(ConfigRepository::class);
 
 /**
  * @param        $thetvdb_id
@@ -23,7 +26,7 @@ use Pu239\Image;
  */
 function getTVImagesByTVDb($thetvdb_id, $type = 'showbackground', $season = 0)
 {
-    global $container, $BLOCKS, $site_config;
+    global $container, $BLOCKS, $config;
 
     if (!$BLOCKS['fanart_api_on']) {
         return false;
@@ -43,7 +46,7 @@ function getTVImagesByTVDb($thetvdb_id, $type = 'showbackground', $season = 0)
         $type = 'tv' . $type;
     }
 
-    $key = $site_config['api']['fanart'];
+    $key = (string) $config->get('api.fanart');
     if (empty($key) || empty($thetvdb_id) || !in_array($type, $types)) {
         return false;
     }
@@ -56,9 +59,11 @@ function getTVImagesByTVDb($thetvdb_id, $type = 'showbackground', $season = 0)
     }
     if (!empty($fanart[$type])) {
         $images = [];
+        $preferredLanguages = (array) $config->get('fanart.image_lang', []);
+        $preferredLanguages = (array) $config->get('fanart.image_lang', []);
         // $fluent removed — use $this->db (ExtendedPdo)
         foreach ($fanart[$type] as $image) {
-            if (!empty($site_config['fanart']['image_lang']) && !empty($image['lang']) && in_array($image['lang'], $site_config['fanart']['image_lang'])) {
+            if (!empty($preferredLanguages) && !empty($image['lang']) && in_array($image['lang'], $preferredLanguages, true)) {
                 if ($season != 0) {
                     if ($image['season'] == $season) {
                         $images[] = $image['url'];
@@ -66,9 +71,9 @@ function getTVImagesByTVDb($thetvdb_id, $type = 'showbackground', $season = 0)
                 } else {
                     $images[] = $image['url'];
                 }
-            } elseif (empty($site_config['fanart']['image_lang'])) {
+            } elseif (empty($preferredLanguages)) {
                 $images[] = $image['url'];
-            } elseif (!empty($site_config['fanart']['image_lang']) && empty($image['lang']) && in_array('empty', $site_config['fanart']['image_lang'])) {
+            } elseif (!empty($preferredLanguages) && empty($image['lang']) && in_array('empty', $preferredLanguages, true)) {
                 $images[] = $image['url'];
             }
         }
@@ -116,7 +121,7 @@ function getTVImagesByTVDb($thetvdb_id, $type = 'showbackground', $season = 0)
  */
 function getMovieImagesByID(string $id, bool $store, string $type = 'moviebackground')
 {
-    global $container, $BLOCKS, $site_config;
+    global $container, $BLOCKS, $config;
 
     if (!$BLOCKS['fanart_api_on']) {
         return false;
@@ -126,7 +131,7 @@ function getMovieImagesByID(string $id, bool $store, string $type = 'moviebackgr
         'movieposter',
         'moviebanner',
     ];
-    $key = $site_config['api']['fanart'];
+    $key = (string) $config->get('api.fanart');
     if (empty($key) || empty($id) || !in_array($type, $types)) {
         return false;
     }
@@ -148,11 +153,11 @@ function getMovieImagesByID(string $id, bool $store, string $type = 'moviebackgr
                 'updated' => TIME_NOW,
                 'lang' => !empty($image['lang']) ? $image['lang'] : 'unknown',
             ];
-            if (!empty($site_config['fanart']['image_lang']) && !empty($image['lang']) && in_array($image['lang'], $site_config['fanart']['image_lang'])) {
+            if (!empty($preferredLanguages) && !empty($image['lang']) && in_array($image['lang'], $preferredLanguages, true)) {
                 $images[] = $image;
-            } elseif (empty($site_config['fanart']['image_lang'])) {
+            } elseif (empty($preferredLanguages)) {
                 $images[] = $image;
-            } elseif (!empty($site_config['fanart']['image_lang']) && empty($image['lang']) && in_array('empty', $site_config['fanart']['image_lang'])) {
+            } elseif (!empty($preferredLanguages) && empty($image['lang']) && in_array('empty', $preferredLanguages, true)) {
                 $images[] = $image;
             }
         }

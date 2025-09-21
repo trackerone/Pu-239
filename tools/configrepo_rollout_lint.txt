@@ -335,6 +335,8 @@ No syntax errors detected in admin/forum_config.php
 No syntax errors detected in admin/freeleech.php
 No syntax errors detected in admin/freeusers.php
 No syntax errors detected in admin/goaccess.php
+<<<<<< codex/refactor-legacy-config-constants-to-configrepository-bwhwqr
+=======
 *** codex/refactor-legacy-config-constants-to-configrepository-2wa1n8
 =======
 *** codex/refactor-legacy-config-constants-to-configrepository-6lq2lf
@@ -348,6 +350,7 @@ No syntax errors detected in admin/goaccess.php
 *** master
 *** master
 *** master
+>>>>>> master
 admin/grouppm.php: OK
 admin/hit_and_run.php: OK
 admin/hnrwarn.php: OK
@@ -358,6 +361,8 @@ admin/mega_search.php: OK
 admin/modded_torrents.php: OK
 admin/modtask.php: OK
 admin/mysql_stats.php: OK
+<<<<<< codex/refactor-legacy-config-constants-to-configrepository-bwhwqr
+=======
 *** codex/refactor-legacy-config-constants-to-configrepository-2wa1n8
 =======
 *** codex/refactor-legacy-config-constants-to-configrepository-6lq2lf
@@ -368,6 +373,7 @@ admin/mysql_stats.php: OK
 *** master
 *** master
 *** master
+>>>>>> master
 No syntax errors detected in admin/news.php
 No syntax errors detected in admin/polls_manager.php
 No syntax errors detected in admin/site_settings.php
@@ -378,6 +384,8 @@ No syntax errors detected in admin/trivia_config.php
 No syntax errors detected in admin/uploader_info.php
 No syntax errors detected in admin/user_hits.php
 No syntax errors detected in admin/view_peers.php
+<<<<<< codex/refactor-legacy-config-constants-to-configrepository-bwhwqr
+=======
 *** codex/refactor-legacy-config-constants-to-configrepository-2wa1n8
 =======
 *** codex/refactor-legacy-config-constants-to-configrepository-6lq2lf
@@ -385,6 +393,7 @@ No syntax errors detected in admin/view_peers.php
 *** codex/refactor-legacy-config-constants-to-configrepository-ipan9z
 *** master
 *** master
+>>>>>> master
 No syntax errors detected in blocks/global/crazyhour.php
 No syntax errors detected in blocks/global/demotion.php
 No syntax errors detected in blocks/global/freeleech_contribution.php
@@ -395,10 +404,13 @@ No syntax errors detected in blocks/global/report.php
 No syntax errors detected in blocks/global/staffmessages.php
 No syntax errors detected in blocks/global/uploadapp.php
 No syntax errors detected in blocks/index/active_24h_users.php
+<<<<<< codex/refactor-legacy-config-constants-to-configrepository-bwhwqr
+=======
 *** codex/refactor-legacy-config-constants-to-configrepository-2wa1n8
 =======
 *** codex/refactor-legacy-config-constants-to-configrepository-6lq2lf
 *** master
+>>>>>> master
 No syntax errors detected in blocks/index/active_birthday_users.php
 No syntax errors detected in blocks/index/active_irc_users.php
 No syntax errors detected in blocks/index/active_users.php
@@ -411,7 +423,10 @@ No syntax errors detected in blocks/index/offers.php
 No syntax errors detected in blocks/index/requests.php
 No syntax errors detected in config/expires.php
 No syntax errors detected in config/latest.php
+<<<<<< codex/refactor-legacy-config-constants-to-configrepository-bwhwqr
+=======
 *** codex/refactor-legacy-config-constants-to-configrepository-2wa1n8
+>>>>>> master
 No syntax errors detected in blocks/index/staff_picks.php
 No syntax errors detected in blocks/index/stats.php
 No syntax errors detected in blocks/index/top_torrents.php
@@ -420,6 +435,23 @@ No syntax errors detected in blocks/userdetails/completed.php
 No syntax errors detected in blocks/userdetails/gender.php
 No syntax errors detected in blocks/userdetails/report.php
 No syntax errors detected in blocks/userdetails/seedbonus.php
+<<<<<< codex/refactor-legacy-config-constants-to-configrepository-bwhwqr
+No syntax errors detected in include/function_chatbot.php
+No syntax errors detected in include/function_comments.php
+No syntax errors detected in include/function_common.php
+No syntax errors detected in include/function_details.php
+No syntax errors detected in include/function_fanart.php
+No syntax errors detected in include/function_happyhour.php
+No syntax errors detected in include/function_html.php
+No syntax errors detected in include/function_imdb.php
+No syntax errors detected in include/function_newsrss.php
+No syntax errors detected in include/function_pager.php
+No syntax errors detected in include/function_polls.php
+No syntax errors detected in include/function_returnto.php
+No syntax errors detected in include/function_searchcloud.php
+No syntax errors detected in include/function_tfreak.php
+No syntax errors detected in include/function_tmdb.php
+=======
 =======
 =======
 =======
@@ -430,3 +462,4 @@ No syntax errors detected in blocks/userdetails/seedbonus.php
 *** master
 *** master
 *** master
+>>>>>> master

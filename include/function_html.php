@@ -1,8 +1,6 @@
 <?php
 declare(strict_types=1);
 
-$db = $container->get(Database::class);
-
 require_once __DIR__ . '/runtime_safe.php';
 
 use Delight\Auth\AuthError;
@@ -13,8 +11,13 @@ use Intervention\Image\Image;
 use MatthiasMullie\Scrapbook\Exception\UnbegunTransaction;
 use PHPMailer\PHPMailer\PHPMailer;
 use Pu239\Cache;
+use Pu239\Config\ConfigRepository;
 use Pu239\Database;
 use Pu239\ImageProxy;
+
+global $container;
+/** @var ConfigRepository $config */
+$config = $container->get(ConfigRepository::class);
 use Spatie\Image\Exceptions\InvalidManipulation;
 
 require_once INCL_DIR . 'function_categories.php';
@@ -125,13 +128,14 @@ function tr($x, $y, $noesc = false, $class = '')
  */
 function insert_smilies_frame()
 {
-    global $smilies, $site_config;
+    global $smilies, $config;
     $htmlout = '';
     $htmlout .= begin_frame('Smilies', true);
     $htmlout .= begin_table(false);
     $htmlout .= "<tr><td class='colhead'>Type...</td><td class='colhead'>To make a...</td></tr>\n";
+    $imagesBaseUrl = (string) $config->get('paths.images_baseurl');
     foreach ($smilies as $code => $url) {
-        $htmlout .= "<tr><td>$code</td><td><img src=\"{$site_config['paths']['images_baseurl']}smilies/{$url}\" alt=''></td></tr>\n";
+        $htmlout .= "<tr><td>$code</td><td><img src=\"{$imagesBaseUrl}smilies/{$url}\" alt=''></td></tr>\n";
     }
     $htmlout .= end_table();
     $htmlout .= end_frame();
@@ -421,7 +425,7 @@ function validate_url($url)
  */
 function doc_head(string $title, bool $hidden = true)
 {
-    global $site_config;
+    global $config;
 
     return "<!doctype html>
 <html lang='en-US'>
@@ -432,9 +436,9 @@ function doc_head(string $title, bool $hidden = true)
     <meta charset='utf-8'>
     <meta http-equiv='X-UA-Compatible' content='IE=edge'>
     <meta name='viewport' content='width=device-width, initial-scale=1'>
-    <meta property='og:url' content='{$site_config['paths']['baseurl']}'>
+    <meta property='og:url' content='" . (string) $config->get('paths.baseurl') . "'>
     <meta property='og:type' content='website'>
-    <meta property='og:description' content='{$site_config['session']['domain']} - {$site_config['site']['name']}'>";
+    <meta property='og:description' content='" . (string) $config->get('session.cookie_domain') . " - " . (string) $config->get('site.name') . "'>";
 }
 
 /**
@@ -452,14 +456,16 @@ function doc_head(string $title, bool $hidden = true)
  */
 function send_mail($email, $subject, $html, $plain)
 {
-    global $container, $site_config;
+    global $container, $config;
 
-    if (!$site_config['mail']['smtp_enable']) {
+    if (!(bool) $config->get('mail.smtp.enabled')) {
         return false;
     }
     $mail = $container->get(PHPMailer::class);
     if ($mail) {
-        $mail->setFrom("{$site_config['site']['email']}", "{$site_config['chatbot']['name']}");
+        $fromAddress = (string) $config->get('mail.from.address');
+        $fromName = (string) ($config->get('mail.from.name') ?? $config->get('chatbot.name'));
+        $mail->setFrom($fromAddress, $fromName);
         try {
             $mail->addAddress($email);
         } catch (Exception $e) {
@@ -467,7 +473,7 @@ function send_mail($email, $subject, $html, $plain)
 
             return false;
         }
-        $mail->addReplyTo($site_config['site']['email']);
+        $mail->addReplyTo($fromAddress);
         $mail->isHTML(true);
         $mail->Subject = $subject;
         $mail->Body = $html;
