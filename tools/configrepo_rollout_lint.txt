@@ -137,6 +137,16 @@ No syntax errors detected in public/allsmiles.php
 *** codex/refactor-legacy-config-to-configrepository-w5o2m3
 =======
 =======
+No syntax errors detected in public/ajax/ajax_tooltips.php
+No syntax errors detected in public/ajax/autocomplete.php
+No syntax errors detected in public/ajax/member_input.php
+No syntax errors detected in public/ajax/rating.php
+No syntax errors detected in public/ajax/take_upload.php
+No syntax errors detected in public/ajax/take_url_upload.php
+No syntax errors detected in public/ajax/thanks.php
+No syntax errors detected in public/ajax/torrents_lookup.php
+No syntax errors detected in public/ajax/view_sql.php
+No syntax errors detected in public/allsmiles.php
 *** master
 *** master
 *** master
