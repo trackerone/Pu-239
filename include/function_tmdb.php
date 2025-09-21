@@ -1,13 +1,18 @@
 <?php
 declare(strict_types=1);
 
-require_once __DIR__.'/runtime_safe.php';
+require_once __DIR__ . '/runtime_safe.php';
 
 use DI\DependencyException;
 use DI\NotFoundException;
 use Pu239\Cache;
+use Pu239\Config\ConfigRepository;
 use Pu239\Database;
 use Pu239\Image;
+
+global $container;
+/** @var ConfigRepository $config */
+$config = $container->get(ConfigRepository::class);
 
 /**
  * @return array|bool|mixed
@@ -18,20 +23,21 @@ use Pu239\Image;
  */
 function get_tv_by_day($dates, bool $images = false)
 {
-    global $container, $site_config, $BLOCKS;
+    global $container, $config, $BLOCKS;
     $db = $container->get(Database::class);
 
     if (! $BLOCKS['tmdb_api_on']) {
         return false;
     }
     $cache = $container->get(Cache::class);
-    $tmdb_data = $cache->get('tmdb_tv_'.$dates);
+    $tmdb_data = $cache->get('tmdb_tv_' . $dates);
     if ($tmdb_data === false || \is_null($tmdb_data)) {
-        $apikey = $site_config['api']['tmdb'];
+        $apikey = (string) $config->get('api.tmdb');
         if (empty($apikey)) {
             return false;
         }
-        $url = "https://api.themoviedb.org/3/discover/tv?air_date.gte={$dates}&air_date.lte={$dates}&api_key={$apikey}&with_original_language={$site_config['language']['tmdb']}";
+        $language = (string) $config->get('language.tmdb');
+        $url = "https://api.themoviedb.org/3/discover/tv?air_date.gte={$dates}&air_date.lte={$dates}&api_key={$apikey}&with_original_language={$language}";
         $content = \fetch($url, false);
         if (! $content) {
             $cache->set('tmdb_tv_'.$dates, [], 3600);
@@ -90,18 +96,19 @@ function get_tv_by_day($dates, bool $images = false)
  */
 function get_movies_by_week($dates)
 {
-    global $site_config, $BLOCKS, $container;
+    global $config, $BLOCKS, $container;
     $cache = $container->get(Cache::class);
 
     if (! $BLOCKS['tmdb_api_on']) {
         return false;
     }
 
-    $apikey = $site_config['api']['tmdb'];
+    $apikey = (string) $config->get('api.tmdb');
     if (empty($apikey)) {
         return false;
     }
-    $url = "https://api.themoviedb.org/3/discover/movie?primary_release_date.gte={$dates[0]}&primary_release_date.lte={$dates[1]}&api_key=$apikey&sort_by=release_date.asc&include_adult=false&include_video=false&with_original_language={$site_config['language']['tmdb']}";
+    $language = (string) $config->get('language.tmdb');
+    $url = "https://api.themoviedb.org/3/discover/movie?primary_release_date.gte={$dates[0]}&primary_release_date.lte={$dates[1]}&api_key=$apikey&sort_by=release_date.asc&include_adult=false&include_video=false&with_original_language={$language}";
     $content = \fetch($url, false);
     if (! $content) {
         return false;
@@ -130,7 +137,7 @@ function get_movies_by_week($dates)
  */
 function get_movies_in_theaters(bool $images = false)
 {
-    global $container, $site_config, $BLOCKS;
+    global $container, $config, $BLOCKS;
     $db = $container->get(Database::class);
 
     if (! $BLOCKS['tmdb_api_on']) {
@@ -139,11 +146,13 @@ function get_movies_in_theaters(bool $images = false)
     $cache = $container->get(Cache::class);
     $tmdb_data = $cache->get('tmdb_movies_in_theaters_');
     if ($tmdb_data === false || \is_null($tmdb_data)) {
-        $apikey = $site_config['api']['tmdb'];
+        $apikey = (string) $config->get('api.tmdb');
         if (empty($apikey)) {
             return false;
         }
-        $url = "https://api.themoviedb.org/3/movie/now_playing?api_key=$apikey&language={$site_config['language']['tmdb_movie']}&region={$site_config['language']['tmdb_movie_region']}";
+        $language = (string) $config->get('language.tmdb_movie');
+        $region = (string) $config->get('language.tmdb_movie_region');
+        $url = "https://api.themoviedb.org/3/movie/now_playing?api_key=$apikey&language={$language}&region={$region}";
         $content = \fetch($url, false);
         if (! $content) {
             $cache->set('tmdb_movies_in_theaters_', 'failed', 3600);
@@ -195,7 +204,7 @@ function get_movies_in_theaters(bool $images = false)
  */
 function get_movies_by_vote_average($count, bool $images = false)
 {
-    global $container, $site_config, $BLOCKS;
+    global $container, $config, $BLOCKS;
     $db = $container->get(Database::class);
 
     if (! $BLOCKS['tmdb_api_on']) {
@@ -204,14 +213,16 @@ function get_movies_by_vote_average($count, bool $images = false)
 
     $page = $count / 20;
     $cache = $container->get(Cache::class);
-    $tmdb_data = $cache->get('tmdb_movies_vote_average_'.$count);
+    $tmdb_data = $cache->get('tmdb_movies_vote_average_' . $count);
     if ($tmdb_data === false || \is_null($tmdb_data)) {
-        $apikey = $site_config['api']['tmdb'];
+        $apikey = (string) $config->get('api.tmdb');
         if (empty($apikey)) {
             return false;
         }
         $min_votes = 5000;
-        $url = "https://api.themoviedb.org/3/discover/movie?api_key=$apikey&with_original_language={$site_config['language']['tmdb']}&language={$site_config['language']['tmdb_movie']}&sort_by=vote_average.desc&include_adult=false&include_video=false&vote_count.gte=$min_votes";
+        $language = (string) $config->get('language.tmdb');
+        $movieLanguage = (string) $config->get('language.tmdb_movie');
+        $url = "https://api.themoviedb.org/3/discover/movie?api_key=$apikey&with_original_language={$language}&language={$movieLanguage}&sort_by=vote_average.desc&include_adult=false&include_video=false&vote_count.gte=$min_votes";
         $content = \fetch($url, false);
         if (! $content) {
             $cache->set('tmdb_movies_vote_average_'.$count, 'failed', 3600);
@@ -262,7 +273,7 @@ function get_movies_by_vote_average($count, bool $images = false)
  */
 function get_movie_id($imdbid, $type)
 {
-    global $container, $site_config, $BLOCKS;
+    global $container, $config, $BLOCKS;
     $db = $container->get(Database::class);
 
     if (! $BLOCKS['tmdb_api_on']) {
@@ -285,12 +296,13 @@ function get_movie_id($imdbid, $type)
         return $id;
     }
 
-    $apikey = $site_config['api']['tmdb'];
+    $apikey = (string) $config->get('api.tmdb');
     if (empty($apikey)) {
         return false;
     }
 
-    $url = "https://api.themoviedb.org/3/movie/{$imdbid}?api_key={$apikey}&language={$site_config['language']['tmdb_movie']}";
+    $language = (string) $config->get('language.tmdb_movie');
+    $url = "https://api.themoviedb.org/3/movie/{$imdbid}?api_key={$apikey}&language={$language}";
     $content = \fetch($url, false);
     if (! $content) {
         return false;
@@ -404,13 +416,13 @@ function getStartAndEndDate($year, $week)
  */
 function get_imdbid($tmdbid)
 {
-    global $site_config, $BLOCKS;
+    global $config, $BLOCKS;
 
     if (! $BLOCKS['tmdb_api_on']) {
         return false;
     }
 
-    $apikey = $site_config['api']['tmdb'];
+    $apikey = (string) $config->get('api.tmdb');
     $url = "https://api.themoviedb.org/3/movie/{$tmdbid}/external_ids?api_key={$apikey}";
     $content = \fetch($url, false);
     if (! $content) {

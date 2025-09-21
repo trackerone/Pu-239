@@ -1,16 +1,18 @@
 <?php
 declare(strict_types=1);
 
-$db = $container->get(Database::class);
-
 require_once __DIR__ . '/runtime_safe.php';
 
 use DI\DependencyException;
 use DI\NotFoundException;
-
 use Pu239\Cache;
+use Pu239\Config\ConfigRepository;
 use Pu239\Database;
 use Pu239\Searchcloud;
+
+global $container;
+/** @var ConfigRepository $config */
+$config = $container->get(ConfigRepository::class);
 
 /**
  * @param int $limit
@@ -122,7 +124,7 @@ function searchcloud_insert(string $word, string $column)
  */
 function cloud()
 {
-    global $site_config;
+    global $config;
 
     $small = 14;
     $big = 80;
@@ -157,7 +159,7 @@ function cloud()
                 'ss',
             ], $values['column']);
             $cloud_tags[] = "
-                            <a class='tooltipper tag_cloud' style='color:{$color}; font-size: {$size}px' href='{$site_config['paths']['baseurl']}/browse.php?{$column}=" . urlencode((string) $tag) . "&amp;incldead=1' title='<div class=\"size_5 has-text-primary has-text-centered\">\"" . htmlsafechars((string) $tag) . "\"</div><br>has been searched for {$count} times.'>
+                            <a class='tooltipper tag_cloud' style='color:{$color}; font-size: {$size}px' href='" . (string) $config->get('paths.baseurl') . "/browse.php?{$column}=" . urlencode((string) $tag) . "&amp;incldead=1' title='<div class=\"size_5 has-text-primary has-text-centered\">\"" . htmlsafechars((string) $tag) . "\"</div><br>has been searched for {$count} times.'>
                                 <span class='padding10 has-no-wrap'>" . htmlsafechars(stripslashes((string) $tag)) . '</span>
                             </a>';
         }

@@ -1,8 +1,6 @@
 <?php
 declare(strict_types=1);
 
-$db = $container->get(Database::class);
-
 require_once __DIR__ . '/runtime_safe.php';
 
 use DI\DependencyException;
@@ -10,6 +8,7 @@ use DI\NotFoundException;
 use MatthiasMullie\Scrapbook\Exception\UnbegunTransaction;
 use Pu239\BotReplies;
 use Pu239\Cache;
+use Pu239\Config\ConfigRepository;
 use Pu239\Database;
 use Pu239\User;
 
@@ -18,13 +17,17 @@ require_once INCL_DIR . 'function_users.php';
 require_once INCL_DIR . 'function_html.php';
 require_once CHAT_DIR . 'lib/config.php';
 
-global $container, $site_config;
+global $container;
+/** @var ConfigRepository $config */
+$config = $container->get(ConfigRepository::class);
+/** @var Database $db */
+$db = $container->get(Database::class);
 
 $user_class = $container->get(User::class);
 $user = $user_class->getUserFromId((int) $argv[1]);
 $user['channel'] = (int) $argv[2];
 $user['text'] = urldecode($argv[3]);
-$user['random'] = mt_rand(1, $site_config['chatbot']['gift_odds']);
+$user['random'] = mt_rand(1, (int) $config->get('chatbot.gift_odds'));
 
 $run = false;
 if ($user['channel'] === 0) {
@@ -116,14 +119,14 @@ function bot_respond($user)
             $msg = str_replace('username', $nick, $msg);
         }
         if (!empty($msg)) {
-            global $site_config;
+            global $config, $db;
 
             usleep(mt_rand(1000000, 3000000));
             // $fluent removed — use $this->db (ExtendedPdo)
             $values = [
-                'userID' => $site_config['chatbot']['id'],
-                'userName' => $site_config['chatbot']['name'],
-                'userRole' => $site_config['chatbot']['role'],
+                'userID' => (int) $config->get('chatbot.id'),
+                'userName' => (string) $config->get('chatbot.name'),
+                'userRole' => (string) $config->get('chatbot.role'),
                 'channel' => 0,
                 'dateTime' => get_date(TIME_NOW, 'MYSQL'),
                 'ttl' => 0,
@@ -149,7 +152,7 @@ $db->perform($sql, $values);
  */
 function random_gifts($user)
 {
-    global $container, $site_config;
+    global $container, $config, $db;
 
     $user_class = get_user_class_name($user['class'], true);
     $username = '[' . $user_class . ']' . $user['username'] . '[/' . $user_class . ']';
@@ -175,7 +178,7 @@ function random_gifts($user)
                 'bonuscomment' => get_date(TIME_NOW, 'DATE', 1) . ' - Awarded ' . $amount . " invites from Chat.\n" . $user['bonuscomment'],
                 'invites' => $user['invites'] + $amount,
             ];
-            $msg = "{$username} has been randomly selected to receive $amount invites from " . $site_config['chatbot']['name'];
+            $msg = "{$username} has been randomly selected to receive $amount invites from " . (string) $config->get('chatbot.name');
             break;
         case 'upload':
             $amount = mt_rand(1, 50);
@@ -184,7 +187,7 @@ function random_gifts($user)
                 'bonuscomment' => get_date(TIME_NOW, 'DATE', 1) . ' - Awarded ' . $amount . " GB ($GB) Seedbonus from Chat.\n" . $user['bonuscomment'],
                 'uploaded' => $GB + $user['uploaded'],
             ];
-            $msg = "{$username} has been randomly selected to receive " . number_format($amount) . ' GB upload credit from ' . $site_config['chatbot']['name'];
+            $msg = "{$username} has been randomly selected to receive " . number_format($amount) . ' GB upload credit from ' . (string) $config->get('chatbot.name');
             break;
         case 'karma':
             $amount = mt_rand(500, 25000);
@@ -192,7 +195,7 @@ function random_gifts($user)
                 'bonuscomment' => get_date(TIME_NOW, 'DATE', 1) . ' - Awarded ' . $amount . " Karma from Chat\n" . $user['bonuscomment'],
                 'seedbonus' => $amount + $user['seedbonus'],
             ];
-            $msg = "{$username} has been randomly selected to receive " . number_format($amount) . ' karma points from ' . $site_config['chatbot']['name'];
+            $msg = "{$username} has been randomly selected to receive " . number_format($amount) . ' karma points from ' . (string) $config->get('chatbot.name');
             break;
         case 'reputation':
             $amount = mt_rand(1, 15);
@@ -200,7 +203,7 @@ function random_gifts($user)
                 'bonuscomment' => get_date(TIME_NOW, 'DATE', 1) . ' - Awarded ' . $amount . " Reputation from Chat.\n" . $user['bonuscomment'],
                 'reputation' => $amount + $user['reputation'],
             ];
-            $msg = "{$username} has been randomly selected to receive $amount reputation points from " . $site_config['chatbot']['name'];
+            $msg = "{$username} has been randomly selected to receive $amount reputation points from " . (string) $config->get('chatbot.name');
             break;
         case 'freeslots':
             $amount = mt_rand(1, 10);
@@ -208,7 +211,7 @@ function random_gifts($user)
                 'bonuscomment' => get_date(TIME_NOW, 'DATE', 1) . ' - Awarded ' . $amount . " Freeslots from Chat.\n" . $user['bonuscomment'],
                 'freeslots' => $amount + $user['freeslots'],
             ];
-            $msg = "{$username} has been randomly selected to receive $amount freeslot" . plural($amount) . ' from ' . $site_config['chatbot']['name'];
+            $msg = "{$username} has been randomly selected to receive $amount freeslot" . plural($amount) . ' from ' . (string) $config->get('chatbot.name');
             break;
         case 'freeleech':
             $amount = mt_rand(1, 72);
@@ -218,7 +221,7 @@ function random_gifts($user)
                 'bonuscomment' => get_date(TIME_NOW, 'DATE', 1) . ' - Awarded ' . $amount . " hours of Freeleech from Chat.\n" . $user['bonuscomment'],
                 'personal_freeleech' => get_date($hours + $personal_freeleech, 'MYSQL'),
             ];
-            $msg = "{$username} has been randomly selected to receive $amount hours of Freeleech from " . $site_config['chatbot']['name'];
+            $msg = "{$username} has been randomly selected to receive $amount hours of Freeleech from " . (string) $config->get('chatbot.name');
             break;
         case 'doubleseed':
             $amount = mt_rand(1, 72);
@@ -228,7 +231,7 @@ function random_gifts($user)
                 'bonuscomment' => get_date(TIME_NOW, 'DATE', 1) . ' - Awarded ' . $amount . " hours of DoubleSeed from Chat.\n" . $user['bonuscomment'],
                 'personal_doubleseed' => get_date($hours + $personal_doubleseed, 'MYSQL'),
             ];
-            $msg = "{$username} has been randomly selected to receive $amount hours of freeleech from " . $site_config['chatbot']['name'];
+            $msg = "{$username} has been randomly selected to receive $amount hours of freeleech from " . (string) $config->get('chatbot.name');
             break;
         case 'bankrupt':
             $msg = "{$username} has been randomly selected to be demoted, bankrupted and stripped of all upload credit. Have a nice day!";
@@ -246,9 +249,9 @@ function random_gifts($user)
     }
     if (!empty($msg)) {
         $values = [
-            'userID' => $site_config['chatbot']['id'],
-            'userName' => $site_config['chatbot']['name'],
-            'userRole' => $site_config['chatbot']['role'],
+            'userID' => (int) $config->get('chatbot.id'),
+            'userName' => (string) $config->get('chatbot.name'),
+            'userRole' => (string) $config->get('chatbot.role'),
             'channel' => 0,
             'dateTime' => get_date(TIME_NOW, 'MYSQL'),
             'ttl' => 3600,

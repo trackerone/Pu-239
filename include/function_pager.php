@@ -1,9 +1,13 @@
 <?php
 declare(strict_types=1);
 
-$db = $container->get(Database::class);
-
 require_once __DIR__ . '/runtime_safe.php';
+
+use Pu239\Config\ConfigRepository;
+
+global $container;
+/** @var ConfigRepository $config */
+$config = $container->get(ConfigRepository::class);
 
 /**
  * @param       $perpage
@@ -118,7 +122,7 @@ function pager(int $perpage, int $count, $href, $opts = [], $class = null)
  */
 function pager_rep($data)
 {
-    global $site_config;
+    global $config;
 
     $pager = [
         'pages' => 0,
@@ -147,7 +151,7 @@ function pager_rep($data)
     }
     if ($pager['pages'] > 1) {
         if (isset($data['mini'])) {
-            $pager['first_page'] = "<img src='{$site_config['paths']['images_baseurl']}multipage.gif' alt='' title=''>";
+            $pager['first_page'] = "<img src='" . (string) $config->get('paths.images_baseurl') . "multipage.gif' alt='' title=''>";
         } else {
             $pager['first_page'] = "<span style='background: #F0F5FA; border: 1px solid #072A66;padding: 1px 3px 1px 3px;'>" . _pf('{0} Page', '{0} Pages', $pager['pages']) . '</span>&#160;';
         }

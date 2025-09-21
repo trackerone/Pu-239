@@ -1,14 +1,17 @@
 <?php
 declare(strict_types=1);
 
-$db = $container->get(Database::class);
-
 require_once __DIR__ . '/runtime_safe.php';
 
 use DI\DependencyException;
 use DI\NotFoundException;
 use Pu239\Cache;
+use Pu239\Config\ConfigRepository;
 use Pu239\Database;
+
+global $container;
+/** @var ConfigRepository $config */
+$config = $container->get(ConfigRepository::class);
 
 /**
  * @param $imdb_id
@@ -59,7 +62,7 @@ function get_banner($imdb_id)
  */
 function get_poster($imdb_id)
 {
-    global $container, $site_config;
+    global $container, $config;
 
     $cache = $container->get(Cache::class);
     if (!empty($imdb_id)) {
@@ -82,5 +85,5 @@ function get_poster($imdb_id)
         }
     }
 
-    return $site_config['paths']['images_baseurl'] . '/noposter.png';
+    return (string) $config->get('paths.images_baseurl') . '/noposter.png';
 }

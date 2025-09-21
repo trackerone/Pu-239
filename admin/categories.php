@@ -6,11 +6,14 @@ use DI\DependencyException;
 use DI\NotFoundException;
 use MatthiasMullie\Scrapbook\Exception\UnbegunTransaction;
 use Pu239\Cache;
+use Pu239\Config\ConfigRepository;
 use Pu239\Database;
 use Spatie\Image\Exceptions\InvalidManipulation;
 
 
 global $container;
+/** @var ConfigRepository $config */
+$config = $container->get(ConfigRepository::class);
 
 $db = $container->get(Database::class);
 
@@ -120,7 +123,7 @@ $results = $db->perform($sql, array_merge($set, ['category' => $params['id']]));
  */
 function move_cat_form($params)
 {
-    global $site_config;
+    global $config;
 
     if (!isset($params['id']) || !is_valid_id((int) $params['id'])) {
         stderr(_('Error'), _('No category ID selected'));
@@ -145,7 +148,7 @@ function move_cat_form($params)
     $select .= '
             </select>';
     $htmlout = "
-        <form action='{$_SERVER['PHP_SELF']}?tool=categories' method='post' enctype='multipart/form-data' accept-charset='utf-8'>
+        <form action='" . (string) $config->get('paths.baseurl') . "/staffpanel.php?tool=categories' method='post' enctype='multipart/form-data' accept-charset='utf-8'>
             <input type='hidden' name='mode' value='takemove_cat'>
             <input type='hidden' name='id' value='{$current_cat['id']}'>
             <h2 class='has-text-centered'>" . _fe('You are about to move category: {0}', format_comment($current_cat['name'])) . "</h2>
@@ -163,7 +166,7 @@ function move_cat_form($params)
         </form>';
     $title = _('Move Category');
     $breadcrumbs = [
-        "<a href='{$site_config['paths']['baseurl']}/staffpanel.php'>" . _('Staff Panel') . '</a>',
+        "<a href='" . (string) $config->get('paths.baseurl') . "/staffpanel.php'>" . _('Staff Panel') . '</a>',
         "<a href='{$_SERVER['PHP_SELF']}'>$title</a>",
     ];
     echo stdhead($title, [], 'page-wrapper', $breadcrumbs) . wrapper($htmlout) . stdfoot();
@@ -268,7 +271,7 @@ $results = $db->perform($sql, ['id' => $params['id']]);
  */
 function delete_cat_form($params)
 {
-    global $container, $site_config;
+    global $container, $config;
 
     if (!isset($params['id']) || !is_valid_id((int) $params['id'])) {
         stderr(_('Error'), _('No category ID selected'));
@@ -308,7 +311,7 @@ function delete_cat_form($params)
 
     $title = _('Delete Category');
     $breadcrumbs = [
-        "<a href='{$site_config['paths']['baseurl']}/staffpanel.php'>" . _('Staff Panel') . '</a>',
+        "<a href='" . (string) $config->get('paths.baseurl') . "/staffpanel.php'>" . _('Staff Panel') . '</a>',
         "<a href='{$_SERVER['PHP_SELF']}'>$title</a>",
     ];
     echo stdhead($title, [], 'page-wrapper', $breadcrumbs) . wrapper($htmlout) . stdfoot();
@@ -380,7 +383,7 @@ $update = $db->perform($sql, array_merge($set, ['id' => $params['id']]));
  */
 function edit_cat_form($params)
 {
-    global $site_config;
+    global $config;
 
     if (!isset($params['id']) || !is_valid_id((int) $params['id'])) {
         stderr(_('Error'), _('No category ID selected'));
@@ -422,7 +425,7 @@ function edit_cat_form($params)
         </form>';
     $title = _('Edit Category');
     $breadcrumbs = [
-        "<a href='{$site_config['paths']['baseurl']}/staffpanel.php'>" . _('Staff Panel') . '</a>',
+        "<a href='" . (string) $config->get('paths.baseurl') . "/staffpanel.php'>" . _('Staff Panel') . '</a>',
         "<a href='{$_SERVER['PHP_SELF']}'>$title</a>",
     ];
     echo stdhead($title, [], 'page-wrapper', $breadcrumbs) . wrapper($htmlout) . stdfoot();
@@ -434,12 +437,12 @@ function edit_cat_form($params)
  */
 function show_categories()
 {
-    global $site_config;
+    global $config;
 
     $parents = get_parents([]);
     $select = get_images([]);
     $htmlout = "
-        <form action='" . $site_config['paths']['baseurl'] . "/staffpanel.php?tool=categories' method='post' enctype='multipart/form-data' accept-charset='utf-8'>";
+        <form action='" . (string) $config->get('paths.baseurl') . "/staffpanel.php?tool=categories' method='post' enctype='multipart/form-data' accept-charset='utf-8'>";
     $htmlout .= main_div("
             <input type='hidden' name='mode' value='takeadd_cat'>
             <div class='has-text-centered padding20'>
@@ -496,7 +499,7 @@ function show_categories()
     $htmlout .= main_table($body, $heading);
     $title = _('Admin Categories');
     $breadcrumbs = [
-        "<a href='{$site_config['paths']['baseurl']}/staffpanel.php'>" . _('Staff Panel') . '</a>',
+        "<a href='" . (string) $config->get('paths.baseurl') . "/staffpanel.php'>" . _('Staff Panel') . '</a>',
         "<a href='{$_SERVER['PHP_SELF']}'>$title</a>",
     ];
     echo stdhead($title, [], 'page-wrapper', $breadcrumbs) . wrapper($htmlout) . stdfoot();
@@ -510,10 +513,10 @@ function show_categories()
  */
 function build_table(array $data, string $parent_name)
 {
-    global $site_config;
+    global $config;
 
     $cat_image = !empty($data['image']) && file_exists(IMAGES_DIR . 'caticons/1/' . $data['image']) ? "
-            <img src='{$site_config['paths']['images_baseurl']}caticons/1/" . htmlsafechars($data['image']) . "' alt='{$data['id']}'>" : _('No Image');
+            <img src='" . (string) $config->get('paths.images_baseurl') . "caticons/1/" . htmlsafechars($data['image']) . "' alt='{$data['id']}'>" : _('No Image');
 
     $row = "
         <tr>
@@ -526,13 +529,13 @@ function build_table(array $data, string $parent_name)
             <td class='has-text-centered'>{$cat_image}</td>
             <td>
                 <div class='level-center'>
-                    <a href='{$site_config['paths']['baseurl']}/staffpanel.php?tool=categories&amp;mode=edit_cat&amp;id={$data['id']}'>
+                    <a href='" . (string) $config->get('paths.baseurl') . "/staffpanel.php?tool=categories&amp;mode=edit_cat&amp;id={$data['id']}'>
                         <i class='icon-edit icon has-text-info tooltipper' title='" . _('Edit') . "'></i>
                     </a>
-                    <a href='{$site_config['paths']['baseurl']}/staffpanel.php?tool=categories&amp;mode=del_cat&amp;id={$data['id']}'>
+                    <a href='" . (string) $config->get('paths.baseurl') . "/staffpanel.php?tool=categories&amp;mode=del_cat&amp;id={$data['id']}'>
                         <i class='icon-trash-empty icon has-text-danger tooltipper' aria-hidden='true' title='" . _('Delete') . "'></i>
                     </a>
-                    <a href='{$site_config['paths']['baseurl']}/staffpanel.php?tool=categories&amp;mode=move_cat&amp;id={$data['id']}'>
+                    <a href='" . (string) $config->get('paths.baseurl') . "/staffpanel.php?tool=categories&amp;mode=move_cat&amp;id={$data['id']}'>
                         <i class='icon-plus icon has-text-success tooltipper' aria-hidden='true' title='" . _('Move') . "'></i>
                     </a>
                 </div>
@@ -660,7 +663,7 @@ function set_ordered(array $params)
  */
 function get_images(array $cat)
 {
-    global $site_config;
+    global $config;
 
     $path = IMAGES_DIR . 'caticons/1/';
     $objects = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($path, RecursiveDirectoryIterator::SKIP_DOTS), RecursiveIteratorIterator::SELF_FIRST);
@@ -669,7 +672,7 @@ function get_images(array $cat)
     foreach ($objects as $name => $object) {
         $basename = pathinfo($name, PATHINFO_BASENAME);
         $ext = pathinfo($name, PATHINFO_EXTENSION);
-        if (in_array($ext, $site_config['images']['formats'])) {
+        if (in_array($ext, (array) $config->get('images.formats', []))) {
             $files[] = $basename;
         }
     }
@@ -740,7 +743,7 @@ function get_cat(int $id)
  */
 function flush_torrents(int $id)
 {
-    global $container, $site_config;
+    global $container, $config;
 
     // $fluent removed — use $this->db (ExtendedPdo)
     $torrents = $fluent->from('torrents')
@@ -758,6 +761,6 @@ function flush_torrents(int $id)
 
     $cache = $container->get(Cache::class);
     foreach ($torrents as $torrent) {
-        $cache->update_row('torrent_details_' . $torrent['id'], $set, $site_config['expires']['torrent_details']);
+        $cache->update_row('torrent_details_' . $torrent['id'], $set, (int) $config->get('expires.torrent_details', 0));
     }
 }

@@ -2,12 +2,15 @@
 declare(strict_types=1);
 require_once dirname(__DIR__) . '/bootstrap_web.php';
 
+use Pu239\Config\ConfigRepository;
 use Pu239\Database;
 use Pu239\IP;
 use Pu239\User;
 
 
-global $container, $site_config;
+global $container;
+/** @var ConfigRepository $config */
+$config = $container->get(ConfigRepository::class);
 
 $db = $container->get(Database::class);
 
@@ -22,7 +25,7 @@ $heading = '
         <th>' . _('User') . '</th>
         <th>' . _('Email') . '</th>
         <th>' . _('Registered') . '</th>
-        <th>' . _('Last access') . '</th>' . ($site_config['site']['ratio_free'] ? '' : '
+        <th>' . _('Last access') . '</th>' . ((bool) $config->get('site.ratio_free') ? '' : '
         <th>' . _('Downloaded') . '</th>') . '
         <th>' . _('Uploaded') . '</th>
         <th>' . _('Ratio') . '</th>
@@ -52,7 +55,7 @@ foreach ($data as $ras) {
                     <td>' . format_username((int) $arr['id']) . '</td>
                     <td>' . format_comment($arr['email']) . "</td>
                     <td>$added</td>
-                    <td>$last_access</td>" . ($site_config['site']['ratio_free'] ? '' : "
+                    <td>$last_access</td>" . ((bool) $config->get('site.ratio_free') ? '' : "
                     <td>$downloaded</td>") . "
                     <td>$uploaded</td>
                     <td>" . member_ratio((float) $arr['uploaded'], (float) $arr['downloaded']) . '</td>
@@ -72,7 +75,7 @@ if (!empty($body)) {
 }
 $title = _('IP Check');
 $breadcrumbs = [
-    "<a href='{$site_config['paths']['baseurl']}/staffpanel.php'>" . _('Staff Panel') . '</a>',
+    "<a href='" . (string) $config->get('paths.baseurl') . "/staffpanel.php'>" . _('Staff Panel') . '</a>',
     "<a href='{$_SERVER['PHP_SELF']}'>$title</a>",
 ];
 echo stdhead($title, [], 'page-wrapper', $breadcrumbs) . wrapper($HTMLOUT) . stdfoot();

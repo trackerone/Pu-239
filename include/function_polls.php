@@ -1,14 +1,17 @@
 <?php
 declare(strict_types=1);
 
-$db = $container->get(Database::class);
-
 require_once __DIR__ . '/runtime_safe.php';
 
 use DI\DependencyException;
 use DI\NotFoundException;
+use Pu239\Config\ConfigRepository;
 use Pu239\PollVoter;
 use Spatie\Image\Exceptions\InvalidManipulation;
+
+global $container;
+/** @var ConfigRepository $config */
+$config = $container->get(ConfigRepository::class);
 
 /**
  * @throws NotFoundException
@@ -158,17 +161,17 @@ function parse_poll()
  */
 function poll_header($pid = '', $poll_q = '')
 {
-    global $site_config;
+    global $config;
 
     $HTMLOUT = "<script>
     /*<![CDATA[*/
     function go_gadget_show()
     {
-      window.location = \"{$site_config['paths']['baseurl']}/index.php?pollid={$pid}&mode=show&st=main\";
+      window.location = \"" . (string) $config->get('paths.baseurl') . "/index.php?pollid={$pid}&mode=show&st=main\";
     }
     function go_gadget_vote()
     {
-      window.location = \"{$site_config['paths']['baseurl']}/index.php?pollid={$pid}&st=main\";
+      window.location = \"" . (string) $config->get('paths.baseurl') . "/index.php?pollid={$pid}&st=main\";
     }
     /*]]>*/
     </script>
@@ -176,7 +179,7 @@ function poll_header($pid = '', $poll_q = '')
     <div id='poll' class='box'>
         <div class='bordered'>
             <div class='alt_bordered bg-00 padding20'>
-                <form action='{$site_config['paths']['baseurl']}/polls_take_vote.php?pollid={$pid}&amp;st=main&amp;addpoll=1' method='post' enctype='multipart/form-data' accept-charset='utf-8'>";
+                <form action='" . (string) $config->get('paths.baseurl') . "/polls_take_vote.php?pollid={$pid}&amp;st=main&amp;addpoll=1' method='post' enctype='multipart/form-data' accept-charset='utf-8'>";
 
     return $HTMLOUT;
 }
@@ -207,7 +210,7 @@ function poll_footer()
  */
 function poll_show_rendered_choice($choice_id = '', $votes = '', $id = '', $answer = '', $percentage = '', $width = '')
 {
-    global $site_config;
+    global $config;
 
     return "
         <div class='bottom20 bg-02 round5 padding10'>
@@ -215,7 +218,7 @@ function poll_show_rendered_choice($choice_id = '', $votes = '', $id = '', $answ
                 $answer
             </div>
             <div class='level-center-center top10'>
-                <img src='{$site_config['paths']['images_baseurl']}polls/bar.gif' style='width: {$width}px; height: 11px;' alt=''>
+                <img src='" . (string) $config->get('paths.images_baseurl') . "polls/bar.gif' style='width: {$width}px; height: 11px;' alt=''>
                 [$percentage%]
             </div>
             <span class='size_4'>Total Votes: $votes</span>

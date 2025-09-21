@@ -6,9 +6,12 @@ use DI\DependencyException;
 use DI\NotFoundException;
 use Pu239\Database;
 use Pu239\Session;
+use Pu239\Config\ConfigRepository;
 
 
-global $container, $site_config;
+global $container;
+/** @var ConfigRepository $config */
+$config = $container->get(ConfigRepository::class);
 
 /** @var Database $db */
 $db = $container->get(Database::class);
@@ -145,7 +148,7 @@ function manualclean(array $params): void
  */
 function cleanup_show_main(): void
 {
-    global $container, $site_config;
+    global $container, $config;
     /** @var Database $db */
     $db = $container->get(Database::class);
 
@@ -153,7 +156,7 @@ function cleanup_show_main(): void
     $count = (int) ($countRow['count'] ?? 0);
 
     $perpage = 15;
-    $pager = pager($perpage, $count, $site_config['paths']['baseurl'] . '/staffpanel.php?tool=cleanup_manager&amp;');
+    $pager = pager($perpage, $count, (string) $config->get('paths.baseurl') . '/staffpanel.php?tool=cleanup_manager&amp;');
 
     $limit = max(1, (int) ($pager['limit'] ?? $perpage));
     $offset = max(0, (int) ($pager['offset'] ?? 0));
@@ -179,18 +182,18 @@ function cleanup_show_main(): void
                 <td><strong>{$title}</strong><br><span class='size-2'>{$desc}<br>{$file} :: {$func}</span></td>
                 <td class='has-text-centered'>{$every} s</td>
                 <td class='has-text-centered'>{$next}</td>
-                <td class='has-text-centered'><a class='button is-small' href='{$site_config['paths']['baseurl']}/staffpanel.php?tool=cleanup_manager&amp;mode=edit&amp;cid=" . (int) $row['clean_id'] . "'>" . _('Edit') . "</a></td>
-                <td class='has-text-centered'><a class='button is-small' href='{$site_config['paths']['baseurl']}/staffpanel.php?tool=cleanup_manager&amp;mode=delete&amp;cid=" . (int) $row['clean_id'] . "' onclick='return confirm(" . json_encode(_('Really delete?')) . ")'>" . _('Delete') . "</a></td>
-                <td class='has-text-centered'><a class='button is-small' href='{$site_config['paths']['baseurl']}/staffpanel.php?tool=cleanup_manager&amp;mode=unlock&amp;cid=" . (int) $row['clean_id'] . "&amp;clean_on=" . (int) $row['clean_on'] . "'>{$on}</a></td>
-                <td class='has-text-centered'><a class='button is-small' href='{$site_config['paths']['baseurl']}/staffpanel.php?tool=cleanup_manager&amp;mode=run&amp;cid=" . (int) $row['clean_id'] . "'>" . _('Run now') . "</a></td>
+                <td class='has-text-centered'><a class='button is-small' href='" . (string) $config->get('paths.baseurl') . "/staffpanel.php?tool=cleanup_manager&amp;mode=edit&amp;cid=" . (int) $row['clean_id'] . "'>" . _('Edit') . "</a></td>
+                <td class='has-text-centered'><a class='button is-small' href='" . (string) $config->get('paths.baseurl') . "/staffpanel.php?tool=cleanup_manager&amp;mode=delete&amp;cid=" . (int) $row['clean_id'] . "' onclick='return confirm(" . json_encode(_('Really delete?')) . ")'>" . _('Delete') . "</a></td>
+                <td class='has-text-centered'><a class='button is-small' href='" . (string) $config->get('paths.baseurl') . "/staffpanel.php?tool=cleanup_manager&amp;mode=unlock&amp;cid=" . (int) $row['clean_id'] . "&amp;clean_on=" . (int) $row['clean_on'] . "'>{$on}</a></td>
+                <td class='has-text-centered'><a class='button is-small' href='" . (string) $config->get('paths.baseurl') . "/staffpanel.php?tool=cleanup_manager&amp;mode=run&amp;cid=" . (int) $row['clean_id'] . "'>" . _('Run now') . "</a></td>
             </tr>";
     }
 
     $tbody = $rows !== '' ? $rows : "<tr><td colspan='7' class='has-text-centered'>" . _('No tasks') . '</td></tr>';
     $htmlout = "
         <ul class='level-center bg-06'>
-            <li class='is-link margin10'><a href='{$site_config['paths']['baseurl']}/staffpanel.php?tool=cleanup_manager&amp;mode=new'>" . _('Add new') . "</a></li>
-            <li class='is-link margin10'><a href='{$site_config['paths']['baseurl']}/staffpanel.php?tool=cleanup_manager&amp;mode=reset'>" . _('Reset Clean Time') . "</a></li>
+            <li class='is-link margin10'><a href='" . (string) $config->get('paths.baseurl') . "/staffpanel.php?tool=cleanup_manager&amp;mode=new'>" . _('Add new') . "</a></li>
+            <li class='is-link margin10'><a href='" . (string) $config->get('paths.baseurl') . "/staffpanel.php?tool=cleanup_manager&amp;mode=reset'>" . _('Reset Clean Time') . "</a></li>
         </ul>
         <h1 class='has-text-centered top20'>" . _('Current Cleanup Tasks') . '</h1>' . ($count > $perpage ? $pager['pagertop'] : '') . '
         <table class="table table-bordered table-striped bottom20">
@@ -211,7 +214,7 @@ function cleanup_show_main(): void
 
     $title = _('Cleanup Manager');
     $breadcrumbs = [
-        "<a href='{$site_config['paths']['baseurl']}/staffpanel.php'>" . _('Staff Panel') . '</a>',
+        "<a href='" . (string) $config->get('paths.baseurl') . "/staffpanel.php'>" . _('Staff Panel') . '</a>',
         "<a href='{$_SERVER['PHP_SELF']}'>$title</a>",
     ];
 
@@ -223,7 +226,7 @@ function cleanup_show_main(): void
  */
 function cleanup_show_edit(): void
 {
-    global $container, $site_config;
+    global $container, $config;
     /** @var Database $db */
     $db = $container->get(Database::class);
 
@@ -254,7 +257,7 @@ function cleanup_show_edit(): void
 
     $title = _('Cleanup Manager');
     $breadcrumbs = [
-        "<a href='{$site_config['paths']['baseurl']}/staffpanel.php'>" . _('Staff Panel') . '</a>',
+        "<a href='" . (string) $config->get('paths.baseurl') . "/staffpanel.php'>" . _('Staff Panel') . '</a>',
         "<a href='{$_SERVER['PHP_SELF']}'>$title</a>",
     ];
     echo stdhead($title, [], 'page-wrapper', $breadcrumbs) . wrapper($htmlout) . stdfoot();
@@ -331,7 +334,7 @@ function cleanup_take_edit(array $params): void
  */
 function cleanup_show_new(): void
 {
-    global $site_config;
+    global $config;
 
     $clean_time = (int) strtotime('today midnight');
     $htmlout = '<h2>' . _('Add a new cleanup task') . "</h2>
@@ -383,7 +386,7 @@ function cleanup_show_new(): void
 
     $title = _('Cleanup Manager');
     $breadcrumbs = [
-        "<a href='{$site_config['paths']['baseurl']}/staffpanel.php'>" . _('Staff Panel') . '</a>',
+        "<a href='" . (string) $config->get('paths.baseurl') . "/staffpanel.php'>" . _('Staff Panel') . '</a>',
         "<a href='{$_SERVER['PHP_SELF']}'>$title</a>",
     ];
     echo stdhead($title, [], 'page-wrapper', $breadcrumbs) . wrapper($htmlout) . stdfoot();
