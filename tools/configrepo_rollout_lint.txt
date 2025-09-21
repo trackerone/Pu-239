@@ -335,3 +335,16 @@ No syntax errors detected in admin/forum_config.php
 No syntax errors detected in admin/freeleech.php
 No syntax errors detected in admin/freeusers.php
 No syntax errors detected in admin/goaccess.php
+*** codex/refactor-legacy-config-constants-to-configrepository-vrnd3h
+admin/grouppm.php: OK
+admin/hit_and_run.php: OK
+admin/hnrwarn.php: OK
+admin/inactive.php: OK
+admin/ipcheck.php: OK
+admin/leechwarn.php: OK
+admin/mega_search.php: OK
+admin/modded_torrents.php: OK
+admin/modtask.php: OK
+admin/mysql_stats.php: OK
+=======
+*** master
