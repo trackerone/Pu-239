@@ -82,3 +82,4 @@ offset=230,batch_size=10,processed=10,replacements=159
 *** master
 *** master
 *** master
+offset=0,batch_size=20,processed=20,replacements=88
