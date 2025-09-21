@@ -1,100 +1,435 @@
-In no particular order  
+# PU239\_original — TODO 2025 (Modernized from 2018 legacy list)
 
-add: cleanup scrip to add reputation points based on active time on site  
-report comments not working correctly  
-fix: iphistory.php  
-update: blocks to include cooker  
-update: upload to look to recipes in cooker  
-add: notifications to cooker  
-fix: parallax scrolling in firefox  
-check: upload/download peers speed showing 0  
-update: "Signups are Invite Only" to "Invalid or expired promotion link"
-update: user info for paranoia  
-replace or fix cookie consent, seems lifetime doesn't set or stay set correctly  
-update code to use freetorrent and doubletorrent instead of free and double  
-remove all cacheing from peers table, neither ocelot nor xbt can read from or update the cache  
-finish: offers, requests, upcomin and bot replies  
-add: script to check cheaters, make request to client to get random chunk, validate chuck against hash, update db for success, failure to validate, empty response and no response
-remove: need for session in announce.php scrape.php  
-check: $torrent_updateset['times_completed'] = $torrent['times_completed'] + 1; announce.php  
-check: thanks  
-fix: forum topic rating  
-update admin/shit_list.php  
-finish: casino.php rewrite  
-remove the need for using global $mysqli  
-remove the need for using global $CURUSER  
+*Status*: September 21, 2025  • Principles: **Modernization Dogma (hardcore)** 2025‑09‑19.
 
-find and update all users "Pending"  
-finish replacing homespun user create/delete/etc  
+---
 
-add torrent client ban pages, started in demo site  
-finish cache inbox_ and messages_stuff  
-fix birthday cleanup  
-fix karma cleanup  
+## 0) Approach to the 2018 TODO
 
+The 2018 list is treated as **historical context only**. Each item has been triaged as **KEEP**, **REPLACE**, **DROP**, or **DECIDE**. All new work must follow the modernization dogma (PHP 8.3, Aura/ExtendedPDO, DI, no legacy globals, CI gates).
 
-user blocks AVATAR is only used in userdetails.php, check to see if useful elsewhere in code  
-replace mysql full text search with elasticsearch  
-add language to staff.php  
-replace current authentication system  
-replace current session handler  
-add ip login/seedbox restrictions  
-finish/update/replace breadcrumbs  
-replace page refresh with ajax for clickable items  
-add live search (look ahead) to all search blocks  
-add bot replies  
-add lyrics api musiXmatch  
-add music api spotify/last.fm  
-replace paypal with stripe  
-merge thanks and thankyou tables/code  
-update headers: location  
-what is cache userstatus  
-update queries for user, get/set cache instead of query to get, only to set  
-update caches replace delete with proper update  
-add daily, weekly, monthly to top 10 stats page  
-finish torrent blocks in userdetails, add pagination, initially closed on page load  
-remove begin_table and end_table functions  
-remove begin_frame and end_frame functions  
-remove begin_main_frame and end_main_frame functions  
-remove/replace function textbbcode calls, doesn't exist  
-replace mysqli commands with pdo/fluentpdo  
-format tables using main_table function  
-format divs using main_div function  
+Legend:
 
-xbt  
-ocelot  
+* **KEEP**: Still relevant – implement with a modern solution.
+* **REPLACE**: Same intent, but updated technology/flow in 2025.
+* **DROP**: Out of scope or obsolete.
+* **DECIDE**: Requires product/feature decision.
 
-// 2025 ---> 
-# TODOs — PU239 Modernisering 2025
+---
 
-Samlet oversigt over kendte TODOs, regressioner og migrationspunkter.
-Opdateres løbende som vi opdager nye forhold.
+## 1) Triage Matrix
+
+### Tracker Core & Correctness
+
+* **Peers speed shows 0** → **KEEP** (announce/scrape parsing + DB writes; no cache on peers).
+* **Remove all caching from peers table** → **KEEP** (write‑hot table, direct DB writes only).
+* **Announce times\_completed increment** → **KEEP** (validate state machine).
+* **Thanks check / merge thanks & thankyou** → **KEEP** (schema unification + bonus logic).
+* **Freetorrent/doubletorrent flags** → **KEEP** (single source in metadata).
+* **Torrent client ban pages** → **KEEP** (admin UI + enforcement).
+* **Cheater‑check script (random chunk validation)** → **DECIDE** (needs feasibility check; heuristic alternative possible).
+* **xbt / ocelot** → **DECIDE** (decide strategy: support one, drop both, or replace with lightweight tracker module).
+
+### Auth, Sessions, Security, Compliance
+
+* **Replace authentication system** → **REPLACE** (modern password hashing, optional 2FA, hardened sessions).
+* **Replace session handler** → **REPLACE** (secure cookies, SameSite, redis‑backed store).
+* **IP login/seedbox restrictions** → **KEEP** (policy + UI + logging).
+* **Cookie consent lifetime bug** → **REPLACE** (GDPR‑compliant CMP with persistence).
+* **Remove global \$mysqli / \$CURUSER** → **KEEP** (already enforced; DI + request‑scoped context).
+* **CSRF & redirect headers** → **KEEP** (unified redirects, CSRF protection for all POST/PUT/DELETE).
+
+### Accounts, Users & UI
+
+* **Update users "Pending" state** → **KEEP** (activation flow).
+* **Replace homespun user CRUD** → **REPLACE** (service layer + transactions).
+* **User paranoia info** → **KEEP** (granular visibility controls).
+* **User avatar block only in userdetails** → **DECIDE** (extend to other areas?).
+* **Breadcrumbs** → **KEEP** (componentized).
+* **Replace page refresh with AJAX** → **REPLACE** (progressive enhancement via HTMX/fetch).
+* **Add live search (typeahead)** → **REPLACE** (Meilisearch/OpenSearch backend).
+* **Top 10 stats daily/weekly/monthly** → **KEEP** (new aggregations + caching).
+* **Forum topic rating** → **DECIDE** (check relevance in 2025).
+
+### Content, Media & APIs
+
+* **Lyrics API (Musixmatch), Music API (Spotify/Last.fm)** → **DECIDE** (licensing & usefulness).
+* **Replace PayPal with Stripe** → **DECIDE** (only if payments are in scope).
+
+### Admin & Maintenance
+
+* **Report comments bug** → **KEEP**.
+* **Fix iphistory.php** → **KEEP** (rewrite admin tool).
+* **Update admin/shit\_list.php** → **KEEP**.
+* **Finish offers, requests, upcoming, bot replies** → **DECIDE** (scope review).
+* **Finish inbox/messages cache** → **KEEP** (fix invalidation).
+* **Fix birthday cleanup / karma cleanup** → **KEEP** (cron tasks).
+* **Blocks: cooker/recipes/notifications** → **DROP** (legacy artifacts).
+* **Parallax scrolling in Firefox** → **DROP** (not relevant; modern CSS fallback if needed).
+
+### Search
+
+* **Replace MySQL full‑text with Elasticsearch** → **REPLACE** (Meilisearch or OpenSearch).
+
+### Performance & Cache
+
+* **Update queries for user: cache strategy** → **REPLACE** (read via cache layer, write through DB + invalidate).
+* **Replace cache deletes with targeted updates** → **KEEP**.
+* **Document cache userstatus** → **KEEP** (simplify & standardize).
+
+---
+
+## 2) 30/60/90 Day Roadmap
+
+### Days 0–30: Foundation & correctness
+
+1. **Config & DB consolidation**
+
+   * Integrate dynamic settings (bonus.on, expires.user\_cache) into ConfigRepository.
+   * Remove all `$mysqli`/`$CURUSER` globals.
+2. **Tracker correctness package**
+
+   * Fix peers speed = 0, remove peers cache reads.
+   * Validate announce/scrape state (`times_completed++`, flags).
+   * Merge thanks/thankyou + bonus pipeline.
+3. **Security hardening**
+
+   * Sessions (httponly, samesite, secure, rotation).
+   * CSRF enforcement everywhere.
+   * Redirect consistency.
+4. **Admin bugfix trio**: iphistory.php, report comments, shit\_list.
+
+### Days 31–60: Auth/UX/Cache
+
+5. **Auth refresh**
+
+   * Argon2id hashing, rehash on login, optional TOTP.
+   * Redis session store.
+6. **Cache layer**
+
+   * Document `userstatus`.
+   * Targeted cache invalidation strategy.
+7. **UI improvements**
+
+   * Breadcrumb component.
+   * Progressive enhancement for clickable actions.
+   * Top10 stats with multiple timeframes.
+
+### Days 61–90: Search/Notifications/Policies
+
+8. **Search upgrade**
+
+   * Meilisearch POC (index torrents + users).
+   * Live typeahead API.
+9. **Notifications & messaging**
+
+   * Finish inbox/messages cache.
+   * Central notifications bus.
+10. **Policy & compliance**
+
+* GDPR cookie consent persistence.
+* IP/seedbox restrictions.
+
+---
+
+## 3) Work Packages
+
+**WP‑01 Tracker peers & completion**
+
+* Remove peers cache reads; direct DB writes.
+* Fix speed parsing.
+* Integration tests for `times_completed` and edge cases.
+
+**WP‑02 Thanks/bonus consolidation**
+
+* Merge tables, migrate data.
+* Fix config lookups.
+* Add audit log + metrics.
+
+**WP‑03 Auth & session**
+
+* Argon2id hashing + TOTP.
+* Redis sessions with rotation.
+
+**WP‑04 Admin fixes**
+
+* Rewrite iphistory.php, report comments, shit\_list using service layer.
+
+**WP‑05 Search & typeahead**
+
+* Deploy Meilisearch/OpenSearch, index data.
+* UI typeahead integration.
+
+**WP‑06 Notifications & messaging**
+
+* Event‑based notifications system.
+* Cache invalidation documented.
+
+**WP‑07 Compliance**
+
+* GDPR‑compliant cookie consent.
+* IP/seedbox policy enforcement.
+
+---
+
+## 4) Explicit DROPs
+
+* Parallax fix in Firefox.
+* Cooker/recipes features.
+* Stripe integration (only if payments become scope).
+
+---
+
+## 5) DECIDE Items
+
+* Anti‑cheat: random chunk vs heuristic.
+* XBT vs Ocelot strategy.
+* Lyrics/music API (value vs licensing).
+* Forum topic rating (do we need it?).
+* Avatar block expansion beyond userdetails.
+
+---
+
+## 6) Core Rules
+
+* **Peers table**: no cache reads, DB writes only, events exported to metrics.
+* **Cache invalidation**: targeted only, no blanket deletes, documented TTL per namespace.
+* **Config**: all config via ConfigRepository, no raw `$site_config`.
+* **Globals**: forbidden (`$mysqli`, `$CURUSER`).
+* **Security**: CSRF required for all state‑changing actions, strict cookies, uniform redirects.
+
+---
+
+## 7) Changelog (ongoing)
+
+* [ ] (to be filled as PRs merge)
+
+---
+
+# TODOs — PU239 Modernization 2025
+
+Consolidated overview of known TODOs, regressions, and migration issues. Updated continuously as new findings are reported.
 
 ---
 
 ## ConfigRepository regression
-**Date:** 2025-09-21  
-**Source:** [P1] Bonus awards  
+
+**Date:** 2025-09-21
+**Source:** \[P1] Bonus awards
 
 ### Problem
-- `ConfigRepository` loader kun statiske filer i `config/*.php`.
-- DB-baserede settings fra `Settings::get_settings()` mangler.
-- Nuværende lookups returnerer `null`:
-  - `bonus.on`
-  - `bonus.per_thanks`
-  - `expires.user_cache`
+
+* `ConfigRepository` only loads static files from `config/*.php`.
+* DB‑based settings from `Settings::get_settings()` are missing.
+* Current lookups return `null`:
+
+  * `bonus.on`
+  * `bonus.per_thanks`
+  * `expires.user_cache`
 
 ### Impact
-- `(bool) null → false` → seed bonus on thanks er altid **disabled**.
-- `(int) null → 0` → user cache TTL bliver **0** (ingen caching).
+
+* `(bool) null → false` → seed bonus on thanks is always **disabled**.
+* `(int) null → 0` → user cache TTL becomes **0** (no caching).
 
 ### Resolution options
-1. Udvid `ConfigRepository` til at merge DB-settings ind.
-2. Definér manglende keys i `config/*.php` med defaults.
-3. Tilføj fallback i feature-kode når `null` returneres.
+
+1. Extend `ConfigRepository` to merge in DB settings.
+2. Define missing keys in `config/*.php` with defaults.
+3. Add feature‑level fallback when `null` is returned.
 
 ---
 
-*(flere punkter tilføjes her, efterhånden som vi finder dem)*
-/////////
+## ConfigRepository lacks HnR settings data
+
+**Date:** 2025-09-21
+**Source:** \[P1] Hit‑and‑Run thresholds
+
+### Problem
+
+* Refactor now pulls HnR thresholds from `ConfigRepository` (e.g. `foreach ($config->get('hnr_config') …)`).
+* `ConfigRepository` only has static config from `config/*.php`.
+* DB‑backed `hnr_config` entries that `Settings::get_settings()` merged into `$site_config` are missing.
+
+### Impact
+
+* `get('hnr_config')` returns null → loop never persists updates.
+* Form shows empty values and cannot save.
+* All lookups return null/false, breaking feature.
+
+### Resolution options
+
+1. Continue reading from `$site_config` or `Settings` service for this feature.
+2. Extend `ConfigRepository` to hydrate with DB‑backed `hnr_config` data.
+
+---
+
+## ConfigRepository lookup bypasses blackjack access control
+
+**Date:** 2025-09-21
+**Source:** \[P0] Game access guard
+
+### Problem
+
+* Guard now uses `$config->get('allowed.play')` and `$config->get('class_names')`.
+* `ConfigRepository` lacks these dynamic arrays (they are populated in `$site_config` by `include/bittorrent.php`).
+
+### Impact
+
+* `get('allowed.play')` returns null → check becomes `$user['class'] < 0`, never triggers.
+* Any user can play blackjack regardless of class.
+* `get('class_names')` returns null → indexing could fatal.
+
+### Resolution options
+
+1. Keep reading from `$site_config` for dynamic arrays.
+2. Extend `ConfigRepository` to include dynamic arrays from bootstrap.
+
+---
+
+## Initialize ConfigRepository after bootstrapping container
+
+**Date:** 2025-09-21
+**Source:** \[P1] Fatal ordering issue
+
+### Problem
+
+* Code calls `$config = $container->get(ConfigRepository::class);` **before** including `bootstrap_web.php`.
+* `$container` is created inside the bootstrap.
+
+### Impact
+
+* `$container` is undefined → fatal error on page load.
+
+### Resolution
+
+* Move bootstrap include before ConfigRepository call.
+* Or delay lookup until after bootstrap executes.
+
+---
+
+## Bootstrap before using DI container
+
+**Date:** 2025-09-21
+**Source:** \[P1] Undefined container usage
+
+### Problem
+
+* `$config = $container->get(ConfigRepository::class);` runs before bootstrap.
+* `$container` is created in bootstrap, so call fails.
+
+### Impact
+
+* Fatal error as soon as page executes.
+
+### Resolution
+
+* Always include bootstrap before container lookups.
+
+---
+
+## Initialize ConfigRepository after bootstrap
+
+**Date:** 2025-09-21
+**Source:** \[P1] Admin load page
+
+### Problem
+
+* Page grabs `$config = $container->get(ConfigRepository::class)` before bootstrap.
+* Container is created inside bootstrap.
+
+### Impact
+
+* Undefined variable `$container` → fatal.
+
+### Resolution
+
+* Include bootstrap before accessing ConfigRepository.
+* Ensure admin load pages don’t access container prematurely.
+
+---
+
+Import Pu239\Database before requesting it from the container
+Date: 2025-09-21
+Source: [P1] Cleanup scripts
+
+Problem
+Cleanup scripts call $container->get(Database::class) without importing Pu239\\Database. PHP resolves this to string "Database", which does not exist.
+
+Impact
+DI container throws NotFoundException / fatal error as soon as cron controller loads the file.
+
+Resolution
+Add use Pu239\\Database; or fully qualify the class name before requesting it.
+
+---
+
+Map rebroken candidates to existing directories
+Date: 2025-09-21
+Source: [P1] Rebroken inventory
+
+Problem
+active_candidate values still include the rebroken/ prefix, e.g. _quarantine/rebroken/admin/class_promo.php. Actual stubs live directly under admin/*, include/*, and public/*.
+
+Impact
+Restoration scripts would try to write to non-existent directories, preventing quarantined files from being restored.
+
+Resolution
+Strip the rebroken/ component so paths point to the real target directories.
+
+Requiring CLI bootstrap in shared helper breaks web staff panel
+Date: 2025-09-21
+Source: [P1] bin/functions.php
+
+---
+
+Problem
+bin/functions.php requires bootstrap_cli.php, which exits when PHP_SAPI !== 'cli'.
+
+Impact
+When included from public/staffpanel.php in web context, the request terminates with “This script must be run from CLI”.
+
+Resolution
+Load the general bootstrap in shared helpers, or bypass the CLI-only guard for web use.
+
+Restore SCEditor theme CSS in asset bundle
+Date: 2025-09-21
+Source: [P1] Asset build
+
+---
+
+Problem
+buildAssetLists() no longer adds modern.min.css from SCEditor and instead lists variables.css twice.
+
+Impact
+Uglify bundle omits the SCEditor theme, causing editor UI to render without styling.
+
+Resolution
+Re-include SCEditor theme CSS and remove duplicate variables entry before bundling.
+
+Returning markup from global blocks makes alerts disappear
+Date: 2025-09-21
+Source: [P1] Global blocks refactor
+
+---
+
+Problem
+Blocks now return HTML instead of appending to $htmlout. Templates include them with require_once but never capture the return.
+
+Impact
+Markup is discarded; alert blocks and others no longer appear in header.
+
+Resolution
+Either append to $htmlout as before, or adjust callers to capture and concatenate the return value.
+
+---
+
+
+
+---
+
+*(more items will be added here as they are discovered)*
+
+---
+
 
