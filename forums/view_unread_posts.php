@@ -1,13 +1,18 @@
 <?php
 declare(strict_types=1);
-require_once dirname(__DIR__) . '/bootstrap.php';
+
+use Pu239\Config\ConfigRepository;
 use Pu239\Database;
 
-$db = $container->get(Database::class);
+require_once dirname(__DIR__) . '/bootstrap.php';
+
 $colour = $topicpoll = $topic_status_image = '';
 $HTMLOUT .= $mini_menu . '<h1 class="has-text-centered">' . _('Unread posts since your last visit') . '</h1>';
 $user = check_user_status();
-global $container, $site_config;
+global $container;
+/** @var ConfigRepository $config */
+$config = $container->get(ConfigRepository::class);
+$db = $container->get(Database::class);
 
 // $fluent removed — use $this->db (ExtendedPdo)
 $count = $fluent->from('read_posts')
@@ -19,7 +24,7 @@ if ($count === 0) {
     require_once FORUM_DIR . 'mark_all_as_read.php';
     mark_as_unread($user);
 }
-$time = $site_config['forum_config']['readpost_expiry'];
+$time = $config->get('forum_config.readpost_expiry');
 $query = $fluent->from('topics AS t')
                 ->select(null)
                 ->select('t.id')
@@ -32,7 +37,7 @@ $query = $fluent->from('topics AS t')
 if ($user['class'] < UC_STAFF) {
     $query = $query->where('p.status = ?', 'ok')
                    ->where('t.status = ?', 'ok');
-} elseif ($user['class'] < $site_config['forum_config']['min_delete_view_class']) {
+} elseif ($user['class'] < $config->get('forum_config.min_delete_view_class')) {
     $query = $query->where('p.status != ?', 'deleted')
                    ->where('t.status != ?', 'deleted');
 }
@@ -59,7 +64,7 @@ if ($count === 0) {
 } else {
     $page = isset($_GET['page']) ? $_GET['page'] : 0;
     $perpage = isset($_GET['perpage']) ? $_GET['perpage'] : 20;
-    $link = $site_config['paths']['baseurl'] . '/forums.php?action=view_unread_posts&amp;' . (isset($_GET['perpage']) ? "perpage={$perpage}&amp;" : '');
+    $link = $config->get('paths.baseurl') . '/forums.php?action=view_unread_posts&amp;' . (isset($_GET['perpage']) ? "perpage={$perpage}&amp;" : '');
     $pager = pager($perpage, $count, $link);
     $menu_top = $count > $perpage ? $pager['pagertop'] : '';
     $menu_bottom = $count > $perpage ? $pager['pagerbottom'] : '';
@@ -80,7 +85,7 @@ if ($count === 0) {
     if ($user['class'] < UC_STAFF) {
         $unread->where("p.status = 'ok'")
                ->where("t.status = 'ok'");
-    } elseif ($user['class'] < $site_config['forum_config']['min_delete_view_class']) {
+    } elseif ($user['class'] < $config->get('forum_config.min_delete_view_class')) {
         $unread->where("p.status != 'deleted'")
                ->where("t.status != 'deleted'");
     }
@@ -95,8 +100,8 @@ if ($count === 0) {
     $HTMLOUT .= $menu_top;
     $heading = '
         <tr>
-            <th><img src="' . $site_config['paths']['images_baseurl'] . 'forums/topic.gif" class="icon tooltipper" alt="' . _('Topic') . '" title="' . _('Topic') . '"></th>
-            <th><img src="' . $site_config['paths']['images_baseurl'] . 'forums/topic_normal.gif" class="icon tooltipper" alt=' . _('Thread Icon') . '" title=' . _('Thread Icon') . '"></th>
+            <th><img src="' . $config->get('paths.images_baseurl') . 'forums/topic.gif" class="icon tooltipper" alt="' . _('Topic') . '" title="' . _('Topic') . '"></th>
+            <th><img src="' . $config->get('paths.images_baseurl') . 'forums/topic_normal.gif" class="icon tooltipper" alt=' . _('Thread Icon') . '" title=' . _('Thread Icon') . '"></th>
             <th>' . _('New Posts') . '!</th>
             <th>' . _('Replies') . '</th>
             <th>' . _('Views') . '</th>
@@ -111,11 +116,11 @@ if ($count === 0) {
                 break;
 
             case 'recycled':
-                $topic_status_image = '<img src="' . $site_config['paths']['images_baseurl'] . 'forums/recycle_bin.gif" class="icon tooltipper" alt="' . _('Recycled') . '" title="' . _('This thread is currently') . ' ' . _('in the recycle-bin') . '">';
+                $topic_status_image = '<img src="' . $config->get('paths.images_baseurl') . 'forums/recycle_bin.gif" class="icon tooltipper" alt="' . _('Recycled') . '" title="' . _('This thread is currently') . ' ' . _('in the recycle-bin') . '">';
                 break;
 
             case 'deleted':
-                $topic_status_image = '<img src="' . $site_config['paths']['images_baseurl'] . 'forums/delete_icon.gif" class="icon tooltipper" alt="' . _('Deleted') . '" title="' . _('This thread is currently') . ' ' . _('Deleted') . '">';
+                $topic_status_image = '<img src="' . $config->get('paths.images_baseurl') . 'forums/delete_icon.gif" class="icon tooltipper" alt="' . _('Deleted') . '" title="' . _('This thread is currently') . ' ' . _('Deleted') . '">';
                 break;
         }
         $locked = $arr_unread['locked'] === 'yes';
@@ -147,33 +152,33 @@ if ($count === 0) {
                                 ->fetch("count");
 
         $icon = empty($arr_unread['icon']) ? '
-            <img src="' . $site_config['paths']['images_baseurl'] . 'forums/topic_normal.gif" class="icon tooltipper left5" alt="' . _('Topic') . '" title="' . _('Topic') . '">' : '
-            <img src="' . $site_config['paths']['images_baseurl'] . 'smilies/' . $arr_unread['icon'] . '.gif" class="icon tooltipper left5" alt="' . _('Unread') . '" title="' . _('Unread') . '">';
+            <img src="' . $config->get('paths.images_baseurl') . 'forums/topic_normal.gif" class="icon tooltipper left5" alt="' . _('Topic') . '" title="' . _('Topic') . '">' : '
+            <img src="' . $config->get('paths.images_baseurl') . 'smilies/' . $arr_unread['icon'] . '.gif" class="icon tooltipper left5" alt="' . _('Unread') . '" title="' . _('Unread') . '">';
         $first_post_text = bubble("<i class='icon-search icon' aria-hidden='true'></i>", format_comment($arr_unread['body'], true, true, false), _('Last Post') . ' ' . _('Preview'));
         $topic_name = ($sticky ? '
-            <img src="' . $site_config['paths']['images_baseurl'] . 'forums/pinned.gif" class="icon tooltipper left5" alt="' . _('Pinned') . '" title="' . _('Pinned') . '">' : '') . ($topicpoll ? '
-            <img src="' . $site_config['paths']['images_baseurl'] . 'forums/poll.gif" class="icon tooltipper left5" alt="' . _('Poll') . '" title="' . _('Poll') . '">' : '') . '
-            <a class="is-link tooltipper left5" href="' . $site_config['paths']['baseurl'] . '/forums.php?action=view_topic&amp;topic_id=' . $arr_unread['topic_id'] . '" title="' . _('First post in thread') . '">' . format_comment($arr_unread['topic_name']) . '</a>
-            <a class="is-link tooltipper left5" href="' . $site_config['paths']['baseurl'] . '/forums.php?action=view_topic&amp;topic_id=' . $arr_unread['topic_id'] . '&amp;page=0#' . $arr_unread['last_post_read'] . '" title="' . _('First unread post in this thread') . '">
-                <img src="' . $site_config['paths']['images_baseurl'] . 'forums/last_post.gif" class="icon" alt="' . _('Last Post') . '">
+            <img src="' . $config->get('paths.images_baseurl') . 'forums/pinned.gif" class="icon tooltipper left5" alt="' . _('Pinned') . '" title="' . _('Pinned') . '">' : '') . ($topicpoll ? '
+            <img src="' . $config->get('paths.images_baseurl') . 'forums/poll.gif" class="icon tooltipper left5" alt="' . _('Poll') . '" title="' . _('Poll') . '">' : '') . '
+            <a class="is-link tooltipper left5" href="' . $config->get('paths.baseurl') . '/forums.php?action=view_topic&amp;topic_id=' . $arr_unread['topic_id'] . '" title="' . _('First post in thread') . '">' . format_comment($arr_unread['topic_name']) . '</a>
+            <a class="is-link tooltipper left5" href="' . $config->get('paths.baseurl') . '/forums.php?action=view_topic&amp;topic_id=' . $arr_unread['topic_id'] . '&amp;page=0#' . $arr_unread['last_post_read'] . '" title="' . _('First unread post in this thread') . '">
+                <img src="' . $config->get('paths.images_baseurl') . 'forums/last_post.gif" class="icon" alt="' . _('Last Post') . '">
             </a>' . ($posted > 0 ? '
-            <img src="' . $site_config['paths']['images_baseurl'] . 'forums/posted.gif" class="icon tooltipper left5" alt="Posted" title="Posted">' : '') . ($subscriptions > 0 ? '
-            <img src="' . $site_config['paths']['images_baseurl'] . 'forums/subscriptions.gif" class="icon tooltipper left5" alt="' . _('Subscribed') . '" title="' . _('Subscribed') . '">' : '') . '
-            <img src="' . $site_config['paths']['images_baseurl'] . 'forums/new.gif" class="icon tooltipper left5" alt="' . _('New post in topic') . '!" title="' . _('New post in topic') . '!">';
+            <img src="' . $config->get('paths.images_baseurl') . 'forums/posted.gif" class="icon tooltipper left5" alt="Posted" title="Posted">' : '') . ($subscriptions > 0 ? '
+            <img src="' . $config->get('paths.images_baseurl') . 'forums/subscriptions.gif" class="icon tooltipper left5" alt="' . _('Subscribed') . '" title="' . _('Subscribed') . '">' : '') . '
+            <img src="' . $config->get('paths.images_baseurl') . 'forums/new.gif" class="icon tooltipper left5" alt="' . _('New post in topic') . '!" title="' . _('New post in topic') . '!">';
         $body .= '
             <tr>
-                <td><img src="' . $site_config['paths']['images_baseurl'] . 'forums/' . $topicpic . '.gif" class="icon tooltipper" alt="' . _('Topic') . '" title="' . _('Topic') . '"></td>
+                <td><img src="' . $config->get('paths.images_baseurl') . 'forums/' . $topicpic . '.gif" class="icon tooltipper" alt="' . _('Topic') . '" title="' . _('Topic') . '"></td>
                 <td>' . $icon . '</td>
                 <td>
                     <table>
                         <tr>
                             <td>
-                                <div class="level-left">' . $topic_name . $first_post_text . '<a class="is-link tooltipper left5" href="' . $site_config['paths']['baseurl'] . '/forums.php?action=clear_unread_post&amp;topic_id=' . $arr_unread['topic_id'] . '&amp;last_post=' . $arr_unread['last_post'] . '" title="' . _('Remove') . ' ' . _('this topic from your unread list. To remove all, use the: Mark All As Read link above') . '.">' . "<i class='icon-trash-empty icon has-text-danger' aria-hidden='true'></i></a>" . $topic_status_image . '</div></td>
+                                <div class="level-left">' . $topic_name . $first_post_text . '<a class="is-link tooltipper left5" href="' . $config->get('paths.baseurl') . '/forums.php?action=clear_unread_post&amp;topic_id=' . $arr_unread['topic_id'] . '&amp;last_post=' . $arr_unread['last_post'] . '" title="' . _('Remove') . ' ' . _('this topic from your unread list. To remove all, use the: Mark All As Read link above') . '.">' . "<i class='icon-trash-empty icon has-text-danger' aria-hidden='true'></i></a>" . $topic_status_image . '</div></td>
                             <td>' . $rpic . '</td>
                         </tr>
                     </table>
                     ' . (!empty($arr_unread['topic_desc']) ? '&#9658; <span style="font-size: x-small;">' . format_comment($arr_unread['topic_desc']) . '</span>' : '') . '
-                    <hr>in: <a class="is-link" href="' . $site_config['paths']['baseurl'] . '/forums.php?action=view_forum&amp;forum_id=' . $arr_unread['forum_id'] . '">' . format_comment($arr_unread['forum_name']) . '</a>
+                    <hr>in: <a class="is-link" href="' . $config->get('paths.baseurl') . '/forums.php?action=view_forum&amp;forum_id=' . $arr_unread['forum_id'] . '">' . format_comment($arr_unread['forum_name']) . '</a>
                     ' . (!empty($arr_unread['topic_desc']) ? ' [ <span style="font-size: x-small;">' . format_comment($arr_unread['topic_desc']) . '</span> ]' : '') . '
                 </td>
                 <td>' . number_format($arr_unread['post_count']) . '</td>
@@ -184,6 +189,6 @@ if ($count === 0) {
     $HTMLOUT .= main_table($body, $heading) . $menu_bottom;
 }
 $breadcrumbs = [
-    "<a href='{$site_config['paths']['baseurl']}/forums.php'>" . _('Forums') . '</a>',
-    "<a href='{$site_config['paths']['baseurl']}/forums.php?action=view_unread_posts'>" . _('Unread Posts') . '</a>',
+    '<a href="' . $config->get('paths.baseurl') . '/forums.php">' . _('Forums') . '</a>',
+    '<a href="' . $config->get('paths.baseurl') . '/forums.php?action=view_unread_posts">' . _('Unread Posts') . '</a>',
 ];

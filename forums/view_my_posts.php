@@ -1,12 +1,17 @@
 <?php
 declare(strict_types=1);
-require_once dirname(__DIR__) . '/bootstrap.php';
+
+use Pu239\Config\ConfigRepository;
 use Pu239\Database;
+
+require_once dirname(__DIR__) . '/bootstrap.php';
 
 $colour = $post_status_image = '';
 $ASC_DESC = ((isset($_GET['ASC_DESC']) && $_GET['ASC_DESC'] === 'ASC') ? 'ASC ' : 'DESC ');
-global $container;
-$db = $container->get(Database::class);, $site_config, $CURUSER;
+global $container, $CURUSER;
+/** @var ConfigRepository $config */
+$config = $container->get(ConfigRepository::class);
+$db = $container->get(Database::class);
 
 $fluent = $db; // alias
 // $fluent removed — use $this->db (ExtendedPdo)
@@ -18,7 +23,7 @@ $count = $fluent->from('posts AS p')
 if ($CURUSER['class'] < UC_STAFF) {
     $count = $count->where('p.status = "ok"')
                    ->where('t.status = "ok"');
-} elseif ($CURUSER['class'] < $site_config['forum_config']['min_delete_view_class']) {
+} elseif ($CURUSER['class'] < $config->get('forum_config.min_delete_view_class')) {
     $count = $count->where('p.status != "deleted"')
                    ->where('t.status != "deleted"');
 }
@@ -28,17 +33,17 @@ $count = $count->where('p.user_id = ?', $CURUSER['id'])
 
 $page = isset($_GET['page']) ? (int) $_GET['page'] : 0;
 $perpage = isset($_GET['perpage']) ? (int) $_GET['perpage'] : 20;
-$subscription_on_off = isset($_GET['s']) ? ($_GET['s'] == 1 ? '<br><div style="font-weight: bold;">' . _('Subscribed to topic') . ' <img src="' . $site_config['paths']['images_baseurl'] . 'forums/subscribe.gif" alt=" " class="emoticon"></div>' : '<br><div style="font-weight: bold;">' . _('Unsubscribed from topic') . ' <img src="' . $site_config['paths']['images_baseurl'] . 'forums/unsubscribe.gif" alt=" " class="emoticon"></div>') : '';
-$link = $site_config['paths']['baseurl'] . '/forums.php?action=view_my_posts&amp;' . (isset($_GET['perpage']) ? "perpage={$perpage}&amp;" : '');
+$subscription_on_off = isset($_GET['s']) ? ($_GET['s'] == 1 ? '<br><div style="font-weight: bold;">' . _('Subscribed to topic') . ' <img src="' . $config->get('paths.images_baseurl') . 'forums/subscribe.gif" alt=" " class="emoticon"></div>' : '<br><div style="font-weight: bold;">' . _('Unsubscribed from topic') . ' <img src="' . $config->get('paths.images_baseurl') . 'forums/unsubscribe.gif" alt=" " class="emoticon"></div>') : '';
+$link = $config->get('paths.baseurl') . '/forums.php?action=view_my_posts&amp;' . (isset($_GET['perpage']) ? "perpage={$perpage}&amp;" : '');
 $pager = pager($perpage, $count, $link);
 $menu_top = $pager['pagertop'];
 $menu_bottom = $pager['pagerbottom'];
 $LIMIT = $pager['limit'];
-$rows = $db->fetchAll('SELECT p.id AS post_id, p.topic_id, p.user_id, p.added, p.body, p.edited_by, p.edit_date, p.icon, p.post_title, p.bbcode, p.post_history, p.edit_reason, p.status AS post_status, p.anonymous, t.id AS topic_id, t.topic_name, t.forum_id, t.sticky, t.locked, t.poll_id, t.status AS topic_status, f.name AS forum_name, f.description FROM posts AS p LEFT JOIN topics AS t ON p.topic_id=t.id LEFT JOIN forums AS f ON f.id=t.forum_id WHERE  ' . ($CURUSER['class'] < UC_STAFF ? 'p.status = \'ok\' AND t.status = \'ok\' AND' : ($CURUSER['class'] < $site_config['forum_config']['min_delete_view_class'] ? 'p.status != \'deleted\' AND t.status != \'deleted\'  AND' : '')) . ' p.user_id=' . $CURUSER['id'] . ' AND f.min_class_read <= ' . $CURUSER['class'] . ' ORDER BY p.id ' . $ASC_DESC . $LIMIT) or sqlerr(__FILE__, __LINE__);
+$rows = $db->fetchAll('SELECT p.id AS post_id, p.topic_id, p.user_id, p.added, p.body, p.edited_by, p.edit_date, p.icon, p.post_title, p.bbcode, p.post_history, p.edit_reason, p.status AS post_status, p.anonymous, t.id AS topic_id, t.topic_name, t.forum_id, t.sticky, t.locked, t.poll_id, t.status AS topic_status, f.name AS forum_name, f.description FROM posts AS p LEFT JOIN topics AS t ON p.topic_id=t.id LEFT JOIN forums AS f ON f.id=t.forum_id WHERE  ' . ($CURUSER['class'] < UC_STAFF ? 'p.status = \'ok\' AND t.status = \'ok\' AND' : ($CURUSER['class'] < $config->get('forum_config.min_delete_view_class') ? 'p.status != \'deleted\' AND t.status != \'deleted\'  AND' : '')) . ' p.user_id=' . $CURUSER['id'] . ' AND f.min_class_read <= ' . $CURUSER['class'] . ' ORDER BY p.id ' . $ASC_DESC . $LIMIT) or sqlerr(__FILE__, __LINE__);
 $HTMLOUT .= $mini_menu . '<h1 class="has-text-centered">' . $count . ' ' . _('Posts by') . ' ' . format_username((int) $CURUSER['id']) . '</h1>
 			<ul class="level-center bottom20">
                 <li>
-                    <a href="' . $site_config['paths']['baseurl'] . '/forums.php?action=view_my_posts" class="button is-small tooltipper" title="' . _('view posts from newest to oldest') . '">' . _('Sort by newest posts first') . '</a>
+                    <a href="' . $config->get('paths.baseurl') . '/forums.php?action=view_my_posts" class="button is-small tooltipper" title="' . _('view posts from newest to oldest') . '">' . _('Sort by newest posts first') . '</a>
                 </li>
                 <li>
                     <a href="forums.php?action=view_my_posts&amp;ASC_DESC=ASC" class="button is-small tooltipper" title="' . _('view posts from oldest to newest') . '">' . _('Sort by oldest posts first') . '</a>
@@ -53,11 +58,11 @@ foreach ($rows as $arr) {
             break;
 
         case 'recycled':
-            $topic_status_image = '<img src="' . $site_config['paths']['images_baseurl'] . 'forums/recycle_bin.gif" alt="' . _('Recycled') . '" title="' . _('This thread is currently') . ' ' . _('in the recycle-bin') . '" class="emoticon">';
+            $topic_status_image = '<img src="' . $config->get('paths.images_baseurl') . 'forums/recycle_bin.gif" alt="' . _('Recycled') . '" title="' . _('This thread is currently') . ' ' . _('in the recycle-bin') . '" class="emoticon">';
             break;
 
         case 'deleted':
-            $topic_status_image = '<img src="' . $site_config['paths']['images_baseurl'] . 'forums/delete_icon.gif" alt="' . _('Deleted') . '" title="' . _('This thread is currently') . ' ' . _('Deleted') . '" class="emoticon">';
+            $topic_status_image = '<img src="' . $config->get('paths.images_baseurl') . 'forums/delete_icon.gif" alt="' . _('Deleted') . '" title="' . _('This thread is currently') . ' ' . _('Deleted') . '" class="emoticon">';
             break;
     }
     $post_status = htmlsafechars($arr['post_status']);
@@ -69,20 +74,20 @@ foreach ($rows as $arr) {
 
         case 'recycled':
             $post_status = 'recycled';
-            $post_status_image = ' <img src="' . $site_config['paths']['images_baseurl'] . 'forums/recycle_bin.gif" alt="' . _('Recycled') . '" title="' . _('This post is currently') . ' ' . _('in the recycle-bin') . '" class="emoticon">';
+            $post_status_image = ' <img src="' . $config->get('paths.images_baseurl') . 'forums/recycle_bin.gif" alt="' . _('Recycled') . '" title="' . _('This post is currently') . ' ' . _('in the recycle-bin') . '" class="emoticon">';
             break;
 
         case 'deleted':
             $post_status = 'deleted';
-            $post_status_image = ' <img src="' . $site_config['paths']['images_baseurl'] . 'forums/delete_icon.gif" alt="' . _('Deleted') . '" title="' . _('This post is currently') . ' ' . _('Deleted') . '" class="emoticon">';
+            $post_status_image = ' <img src="' . $config->get('paths.images_baseurl') . 'forums/delete_icon.gif" alt="' . _('Deleted') . '" title="' . _('This post is currently') . ' ' . _('Deleted') . '" class="emoticon">';
             break;
 
         case 'postlocked':
             $post_status = 'postlocked';
-            $post_status_image = ' <img src="' . $site_config['paths']['images_baseurl'] . 'forums/thread_locked.gif" alt="' . _('Locked') . '" title="' . _('This post is currently') . ' ' . _('Locked') . '" class="emoticon">';
+            $post_status_image = ' <img src="' . $config->get('paths.images_baseurl') . 'forums/thread_locked.gif" alt="' . _('Locked') . '" title="' . _('This post is currently') . ' ' . _('Locked') . '" class="emoticon">';
             break;
     }
-    $post_icon = (!empty($arr['icon']) ? '<img src="' . $site_config['paths']['images_baseurl'] . 'smilies/' . htmlsafechars($arr['icon']) . '.gif" alt="icon" title="icon" class="emoticon"> ' : '<img src="' . $site_config['paths']['images_baseurl'] . 'forums/topic_normal.gif" alt="Normal Topic" title="Normal Topic" class="emoticon"> ');
+    $post_icon = (!empty($arr['icon']) ? '<img src="' . $config->get('paths.images_baseurl') . 'smilies/' . htmlsafechars($arr['icon']) . '.gif" alt="icon" title="icon" class="emoticon"> ' : '<img src="' . $config->get('paths.images_baseurl') . 'forums/topic_normal.gif" alt="Normal Topic" title="Normal Topic" class="emoticon"> ');
     $post_title = (!empty($arr['post_title']) ? ' <span style="font-weight: bold; font-size: x-small;">' . htmlsafechars($arr['post_title']) . '</span>' : '' . _('Link to Post') . '');
     $edited_by = '';
     if ($arr['edit_date'] > 0) {
@@ -119,8 +124,8 @@ foreach ($rows as $arr) {
             </td>
 			<td>
                 <span style="white-space:nowrap;">
-            		<a href="forums.php?action=view_my_posts&amp;page=' . $page . '#top"><img src="' . $site_config['paths']['images_baseurl'] . 'forums/up.gif" alt="' . _('Top') . '" class="emoticon"></a> 
-                    <a href="forums.php?action=view_my_posts&amp;page=' . $page . '#bottom"><img src="' . $site_config['paths']['images_baseurl'] . 'forums/down.gif" alt="' . _('Bottom') . '" class="emoticon"></a>
+            		<a href="forums.php?action=view_my_posts&amp;page=' . $page . '#top"><img src="' . $config->get('paths.images_baseurl') . 'forums/up.gif" alt="' . _('Top') . '" class="emoticon"></a> 
+                    <a href="forums.php?action=view_my_posts&amp;page=' . $page . '#bottom"><img src="' . $config->get('paths.images_baseurl') . 'forums/down.gif" alt="' . _('Bottom') . '" class="emoticon"></a>
     			</span>
             </td>
 		</tr>
@@ -132,6 +137,6 @@ foreach ($rows as $arr) {
 }
 $HTMLOUT .= '<a id="bottom"></a>' . ($count > $perpage ? $menu_bottom : '');
 $breadcrumbs = [
-    "<a href='{$site_config['paths']['baseurl']}/forums.php'>" . _('Forums') . '</a>',
-    "<a href='{$site_config['paths']['baseurl']}/forums.php?action=view_my_posts'>" . _('My Posts') . '</a>',
+    '<a href="' . $config->get('paths.baseurl') . '/forums.php">' . _('Forums') . '</a>',
+    '<a href="' . $config->get('paths.baseurl') . '/forums.php?action=view_my_posts">' . _('My Posts') . '</a>',
 ];

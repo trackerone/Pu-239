@@ -1,11 +1,16 @@
 <?php
 declare(strict_types=1);
-require_once dirname(__DIR__) . '/bootstrap.php';
+
 use Pu239\Cache;
+use Pu239\Config\ConfigRepository;
 use Pu239\Database;
 
+require_once dirname(__DIR__) . '/bootstrap.php';
+
+global $container, $CURUSER;
+/** @var ConfigRepository $config */
+$config = $container->get(ConfigRepository::class);
 $db = $container->get(Database::class);
-global $container, $site_config, $CURUSER;
 
 $post_id = isset($_GET['post_id']) ? (int) $_GET['post_id'] : (isset($_POST['post_id']) ? (int) $_POST['post_id'] : 0);
 $topic_id = isset($_GET['topic_id']) ? (int) $_GET['topic_id'] : (isset($_POST['topic_id']) ? (int) $_POST['topic_id'] : 0);
@@ -49,7 +54,7 @@ if ($arr_post['first_post'] == $post_id && $CURUSER['class'] < UC_STAFF) {
     stderr(_('Error'), _('This is the first post in the topic, only Staff can delete topics.'));
 }
 if ($arr_post['first_post'] == $post_id && $CURUSER['class'] >= UC_STAFF) {
-    stderr(_('Error'), _('This is the first post in the topic, you must use %s', '<a class="is-link" href="' . $site_config['paths']['baseurl'] . '/forums.php?action=forums_admin&amp;action_2=delete_topic&amp;topic_id=' . $topic_id . '">' . _('Delete Topic') . '</a>.'));
+    stderr(_('Error'), _('This is the first post in the topic, you must use %s', '<a class="is-link" href="' . $config->get('paths.baseurl') . '/forums.php?action=forums_admin&amp;action_2=delete_topic&amp;topic_id=' . $topic_id . '">' . _('Delete Topic') . '</a>.'));
 }
 if ($arr_post['post_status'] !== 'deleted') {
     stderr(_('Error'), _("This post was not soft deleted, it can't be undeleted"));

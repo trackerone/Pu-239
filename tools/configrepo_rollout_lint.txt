@@ -225,3 +225,85 @@ Parse error: syntax error, unexpected identifier "no", expecting ")" in forums/p
 Errors parsing forums/post_reply.php
 No syntax errors detected in forums/quick_reply.php
 No syntax errors detected in forums/search.php
+*** codex/refactor-legacy-config-constants-to-configrepository-7ax7cl
+No syntax errors detected in forums/section_view.php
+No syntax errors detected in forums/section_view.php
+
+Parse error: syntax error, unexpected identifier "id", expecting ")" in forums/staff_actions.php on line 50
+Errors parsing forums/staff_actions.php
+No syntax errors detected in forums/subscriptions.php
+No syntax errors detected in forums/undelete_post.php
+
+Parse error: syntax error, unexpected token ">" in forums/view_forum.php on line 130
+Errors parsing forums/view_forum.php
+No syntax errors detected in forums/view_my_posts.php
+No syntax errors detected in forums/view_post_history.php
+
+Parse error: syntax error, unexpected single-quoted string ";", expecting ")" in forums/view_topic.php on line 305
+Errors parsing forums/view_topic.php
+No syntax errors detected in forums/view_unread_posts.php
+No syntax errors detected in include/arcade.php
+
+Parse error: syntax error, unexpected identifier "id", expecting ")" in forums/staff_actions.php on line 50
+Errors parsing forums/staff_actions.php
+No syntax errors detected in forums/section_view.php
+
+Parse error: syntax error, unexpected identifier "id", expecting ")" in forums/staff_actions.php on line 50
+Errors parsing forums/staff_actions.php
+No syntax errors detected in forums/subscriptions.php
+No syntax errors detected in forums/undelete_post.php
+
+Parse error: syntax error, unexpected token ">" in forums/view_forum.php on line 130
+Errors parsing forums/view_forum.php
+No syntax errors detected in forums/view_my_posts.php
+No syntax errors detected in forums/view_post_history.php
+
+Parse error: syntax error, unexpected single-quoted string ";", expecting ")" in forums/view_topic.php on line 305
+Errors parsing forums/view_topic.php
+No syntax errors detected in forums/view_unread_posts.php
+No syntax errors detected in include/arcade.php
+No syntax errors detected in forums/subscriptions.php
+No syntax errors detected in forums/section_view.php
+
+Parse error: syntax error, unexpected identifier "id", expecting ")" in forums/staff_actions.php on line 50
+Errors parsing forums/staff_actions.php
+No syntax errors detected in forums/subscriptions.php
+No syntax errors detected in forums/undelete_post.php
+
+Parse error: syntax error, unexpected token ">" in forums/view_forum.php on line 130
+Errors parsing forums/view_forum.php
+No syntax errors detected in forums/view_my_posts.php
+No syntax errors detected in forums/view_post_history.php
+
+Parse error: syntax error, unexpected single-quoted string ";", expecting ")" in forums/view_topic.php on line 305
+Errors parsing forums/view_topic.php
+No syntax errors detected in forums/view_unread_posts.php
+No syntax errors detected in include/arcade.php
+No syntax errors detected in forums/section_view.php
+php -l forums/section_view.php
+
+Parse error: syntax error, unexpected identifier "id", expecting ")" in forums/staff_actions.php on line 50
+Errors parsing forums/staff_actions.php
+php -l forums/staff_actions.php
+No syntax errors detected in forums/subscriptions.php
+php -l forums/subscriptions.php
+No syntax errors detected in forums/undelete_post.php
+php -l forums/undelete_post.php
+
+Parse error: syntax error, unexpected token ">" in forums/view_forum.php on line 130
+Errors parsing forums/view_forum.php
+php -l forums/view_forum.php
+No syntax errors detected in forums/view_my_posts.php
+php -l forums/view_my_posts.php
+No syntax errors detected in forums/view_post_history.php
+php -l forums/view_post_history.php
+
+Parse error: syntax error, unexpected single-quoted string ";", expecting ")" in forums/view_topic.php on line 305
+Errors parsing forums/view_topic.php
+php -l forums/view_topic.php
+No syntax errors detected in forums/view_unread_posts.php
+php -l forums/view_unread_posts.php
+No syntax errors detected in include/arcade.php
+php -l include/arcade.php
+=======
+*** master
