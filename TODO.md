@@ -349,4 +349,87 @@ Consolidated overview of known TODOs, regressions, and migration issues. Updated
 
 ---
 
+Import Pu239\Database before requesting it from the container
+Date: 2025-09-21
+Source: [P1] Cleanup scripts
+
+Problem
+Cleanup scripts call $container->get(Database::class) without importing Pu239\\Database. PHP resolves this to string "Database", which does not exist.
+
+Impact
+DI container throws NotFoundException / fatal error as soon as cron controller loads the file.
+
+Resolution
+Add use Pu239\\Database; or fully qualify the class name before requesting it.
+
+---
+
+Map rebroken candidates to existing directories
+Date: 2025-09-21
+Source: [P1] Rebroken inventory
+
+Problem
+active_candidate values still include the rebroken/ prefix, e.g. _quarantine/rebroken/admin/class_promo.php. Actual stubs live directly under admin/*, include/*, and public/*.
+
+Impact
+Restoration scripts would try to write to non-existent directories, preventing quarantined files from being restored.
+
+Resolution
+Strip the rebroken/ component so paths point to the real target directories.
+
+Requiring CLI bootstrap in shared helper breaks web staff panel
+Date: 2025-09-21
+Source: [P1] bin/functions.php
+
+---
+
+Problem
+bin/functions.php requires bootstrap_cli.php, which exits when PHP_SAPI !== 'cli'.
+
+Impact
+When included from public/staffpanel.php in web context, the request terminates with “This script must be run from CLI”.
+
+Resolution
+Load the general bootstrap in shared helpers, or bypass the CLI-only guard for web use.
+
+Restore SCEditor theme CSS in asset bundle
+Date: 2025-09-21
+Source: [P1] Asset build
+
+---
+
+Problem
+buildAssetLists() no longer adds modern.min.css from SCEditor and instead lists variables.css twice.
+
+Impact
+Uglify bundle omits the SCEditor theme, causing editor UI to render without styling.
+
+Resolution
+Re-include SCEditor theme CSS and remove duplicate variables entry before bundling.
+
+Returning markup from global blocks makes alerts disappear
+Date: 2025-09-21
+Source: [P1] Global blocks refactor
+
+---
+
+Problem
+Blocks now return HTML instead of appending to $htmlout. Templates include them with require_once but never capture the return.
+
+Impact
+Markup is discarded; alert blocks and others no longer appear in header.
+
+Resolution
+Either append to $htmlout as before, or adjust callers to capture and concatenate the return value.
+
+---
+
+
+
+---
+
 *(more items will be added here as they are discovered)*
+
+---
+
+
