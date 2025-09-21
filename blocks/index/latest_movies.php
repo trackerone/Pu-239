@@ -4,21 +4,22 @@ declare(strict_types=1);
 require_once __DIR__ . '/../../include/runtime_safe.php';
 require_once __DIR__ . '/../../include/bootstrap_pdo.php';
 
+use Pu239\Config\ConfigRepository;
 use Pu239\Database;
 use Pu239\Image;
 use Pu239\Torrent;
-use PU239\Config\ConfigRepository;
 
 require_once PARTIALS_DIR . 'torrent_table.php';
 $user = check_user_status();
+/** @var \DI\Container $container */
 global $container;
 
 $db = $container->get(Database::class);
 $torrent = $container->get(Torrent::class);
 /** @var ConfigRepository $config */
 $config = $container->get(ConfigRepository::class);
-$movieCategories = $config->get('categories.movie');
-$imagesBaseurl = (string) $config->get('paths.images_baseurl');
+$movieCategories = $config->arr('categories.movie', ['Movie']);
+$imagesBaseurl = rtrim($config->str('paths.images_baseurl', '/images'), '/') . '/';
 $last5movietorrents = $torrent->get_latest($movieCategories);
 
 $latest_movies .= "

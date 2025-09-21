@@ -1,15 +1,46 @@
 <?php
 declare(strict_types=1);
 
-use PU239\Config\ConfigRepository;
+use Pu239\Config\ConfigRepository;
 use Psr\Log\LoggerInterface;
 
+/** @var \DI\Container $container */
 if (!isset($container) || !$container->has(ConfigRepository::class)) {
     return;
 }
 
 /** @var ConfigRepository $config */
 $config = $container->get(ConfigRepository::class);
+$compat = [];
+
+// Legacy constants → new keys (only if missing)
+if (defined('SITE_URL') && $config->get('app.url') === null) {
+    $compat['app']['url'] = (string) SITE_URL;
+}
+if (defined('SQL_DEBUG') && $config->get('app.debug') === null) {
+    $compat['app']['debug'] = (bool) SQL_DEBUG;
+}
+if (defined('COOKIE_DOMAIN') && $config->get('security.cookies.domain') === null) {
+    $compat['security']['cookies']['domain'] = (string) COOKIE_DOMAIN;
+}
+if (defined('ANNOUNCE_URL') && $config->get('app.announce_url') === null) {
+    $compat['app']['announce_url'] = (string) ANNOUNCE_URL;
+}
+
+// Web path fallbacks (seed only if absent) — DO NOT touch config/paths.php
+if ($config->get('paths.baseurl') === null) {
+    $compat['paths']['baseurl'] = '/';
+}
+if ($config->get('paths.images_baseurl') === null) {
+    $compat['paths']['images_baseurl'] = '/images';
+}
+if ($config->get('paths.avatars_baseurl') === null) {
+    $compat['paths']['avatars_baseurl'] = '/images/avatars';
+}
+
+if (!empty($compat)) {
+    $config->merge($compat);
+}
 $logger = null;
 if ($container->has(LoggerInterface::class)) {
     $logger = $container->get(LoggerInterface::class);

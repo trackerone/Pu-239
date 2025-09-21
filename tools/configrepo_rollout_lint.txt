@@ -206,3 +206,8 @@ Deprecated: Pu239\Torrent::remove_torrent(): Implicitly marking parameter $owner
 Deprecated: Pu239\Torrent::remove_torrent(): Implicitly marking parameter $added as nullable is deprecated, the explicit nullable type must be used instead in src/Torrent.php on line 348
 No syntax errors detected in src/Torrent.php
 No syntax errors detected in src/Uglify/UglifyService.php
+No syntax errors detected in classes/Config/ConfigRepository.php
+No syntax errors detected in include/config_compat.php
+No syntax errors detected in blocks/index/latest_movies.php
+No syntax errors detected in blocks/index/latest_tv.php
+No syntax errors detected in blocks/index/forum_posts.php

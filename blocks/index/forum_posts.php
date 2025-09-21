@@ -1,25 +1,24 @@
 <?php
-
 declare(strict_types=1);
 
 require_once __DIR__ . '/../../include/runtime_safe.php';
-
 require_once __DIR__ . '/../../include/bootstrap_pdo.php';
 
 use Pu239\Cache;
+use Pu239\Config\ConfigRepository;
 use Pu239\Database;
-use PU239\Config\ConfigRepository;
 
+/** @var \DI\Container $container */
 global $container, $CURUSER;
 
 $db = $container->get(Database::class);
 $cache = $container->get(Cache::class);
 /** @var ConfigRepository $config */
 $config = $container->get(ConfigRepository::class);
-$latestPostsLimit = (int) $config->get('latest.posts_limit');
-$latestPostsExpire = (int) $config->get('expires.latestposts');
-$baseurl = (string) $config->get('paths.baseurl');
-$imagesBaseurl = (string) $config->get('paths.images_baseurl');
+$latestPostsLimit = max(1, $config->int('latest.posts_limit', 15));
+$latestPostsExpire = max(60, $config->int('expires.latestposts', 300));
+$baseurl = rtrim($config->str('paths.baseurl', ''), '/');
+$imagesBaseurl = rtrim($config->str('paths.images_baseurl', '/images'), '/') . '/';
 
 $forum_posts .= "
     <a id='latestforum-hash'></a>
@@ -112,9 +111,9 @@ if (!empty($topics) && is_array($topics)) {
         } else {
             $author = !empty($topicarr['tuser_id']) ? format_username((int) $topicarr['tuser_id']) : ($topicarr['tuser_id'] == '0' ? '<i>System</i>' : '<i>' . _('Unknown') . " [{$topicarr['tuser_id']}]</i>");
         }
-        $staffimg = $topicarr['min_class_read'] >= UC_STAFF ? "<img src='" . $imagesBaseurl . "staff.png' alt='Staff forum' class='tooltipper' title='Staff Forum'>" : '';
-        $stickyimg = $topicarr['sticky'] === 'yes' ? "<img src='" . $imagesBaseurl . "sticky.gif' alt='" . _('Sticky') . "' class='tooltipper right5 left5' title='" . _('Sticky Topic') . "'>" : '';
-        $lockedimg = $topicarr['locked'] === 'yes' ? "<img src='" . $imagesBaseurl . "forumicons/locked.gif' alt='" . _('Locked') . "' class='tooltipper right5' title='" . _('Locked Topic') . "'>" : '';
+        $staffimg = $topicarr['min_class_read'] >= UC_STAFF ? "<img src='{$imagesBaseurl}staff.png' alt='Staff forum' class='tooltipper' title='Staff Forum'>" : '';
+        $stickyimg = $topicarr['sticky'] === 'yes' ? "<img src='{$imagesBaseurl}sticky.gif' alt='" . _('Sticky') . "' class='tooltipper right5 left5' title='" . _('Sticky Topic') . "'>" : '';
+        $lockedimg = $topicarr['locked'] === 'yes' ? "<img src='{$imagesBaseurl}forumicons/locked.gif' alt='" . _('Locked') . "' class='tooltipper right5' title='" . _('Locked Topic') . "'>" : '';
         $topic_name = "<div class='level-left'>{$lockedimg}{$stickyimg}<a href='{$baseurl}/forums.php?action=view_topic&amp;topic_id=$topicid&amp;page=last#" . (int) $topicarr['last_post'] . "'><span class='torrent-name'>" . format_comment($topicarr['topic_name']) . "</span></a>{$staffimg}{$menu}</div><span class='size_3'>" . _fe('in {0} by {1} ({2})', "<a href='{$baseurl}/forums.php?action=view_forum&amp;forum_id=" . (int) $topicarr['forum_id'] . "'>" . format_comment($topicarr['name']) . '</a>', $author, $added) . '</span>';
         $forum_posts .= "
                     <tr>
