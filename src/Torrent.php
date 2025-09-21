@@ -9,6 +9,7 @@ use Envms\FluentPDO\Exception;
 use MatthiasMullie\Scrapbook\Exception\UnbegunTransaction;
 use PDOStatement;
 use Spatie\Image\Exceptions\InvalidManipulation;
+use PU239\Config\ConfigRepository;
 
 require_once __DIR__ . '/../include/runtime_safe.php';
 require_once __DIR__ . '/../include/bootstrap_pdo.php';
@@ -20,26 +21,24 @@ class Torrent
 {
     protected $cache;
     protected $fluent;
-    protected $site_config;
+    protected ConfigRepository $config;
     protected $users_class;
-    protected $settings;
     protected $image;
 
     /**
      * Torrent constructor.
      *
-     * @param Cache    $cache
-     * @param Database $fluent
-     * @param User     $users_class
-     * @param Image    $image
-     * @param Settings $settings
+     * @param Cache             $cache
+     * @param Database          $fluent
+     * @param User              $users_class
+     * @param Image             $image
+     * @param ConfigRepository  $config
      *
      * @throws Exception
      */
-    public function __construct(Cache $cache, Database $fluent, User $users_class, Image $image, Settings $settings)
+    public function __construct(Cache $cache, Database $fluent, User $users_class, Image $image, ConfigRepository $config)
     {
-        $this->settings = $settings;
-        $this->site_config = $this->settings->get_settings();
+        $this->config = $config;
         $this->fluent = $fluent;
         $this->cache = $cache;
         $this->image = $image;
@@ -152,10 +151,14 @@ $this->db->perform($sql, ['tid' => $tid]);
     {
         $torrent = $this->cache->get('torrent_details_' . $tid);
         if ($torrent === false || is_null($torrent) || $fresh) {
+            $minVotes = (int) $this->config->get('site.minvotes', 0);
+            if ($minVotes === 0) {
+                // TODO(2025): map legacy key "site.minvotes" to appropriate config path
+            }
             $torrent = $this->fluent->from('torrents')
                 ->select('HEX(info_hash) AS info_hash')
                 ->select('LENGTH(nfo) AS nfosz')
-                ->select("IF(num_ratings < {$this->site_config['site']['minvotes']}, NULL, ROUND(rating_sum / num_ratings, 1)) AS rating")
+                ->select("IF(num_ratings < {$minVotes}, NULL, ROUND(rating_sum / num_ratings, 1)) AS rating")
                 ->where('id = ?', $tid)
                 ->fetch();
             if (empty($torrent)) {
@@ -180,7 +183,11 @@ $this->db->perform($sql, ['tid' => $tid]);
                 ->limit(1)
                 ->fetch();
 
-            $this->cache->set('torrent_details_' . $tid, $torrent, $this->site_config['expires']['torrent_details']);
+            $ttl = (int) $this->config->get('expires.torrent_details', 0);
+            if ($ttl === 0) {
+                // TODO(2025): map legacy key "expires.torrent_details" to appropriate config path
+            }
+            $this->cache->set('torrent_details_' . $tid, $torrent, $ttl);
         }
 
         return $torrent;
@@ -305,7 +312,11 @@ $this->db->perform($sql, ['tid' => $tid]);
 $query = $this->db->perform($sql, array_merge($set, ['id' => $tid]));
 
         if ($query) {
-            $this->cache->update_row('torrent_details_' . $tid, $set, $this->site_config['expires']['torrent_details']);
+            $ttl = (int) $this->config->get('expires.torrent_details', 0);
+            if ($ttl === 0) {
+                // TODO(2025): map legacy key "expires.torrent_details" to appropriate config path
+            }
+            $this->cache->update_row('torrent_details_' . $tid, $set, $ttl);
             if ($seeders) {
                 $this->cache->deleteMulti([
                     'scroller_torrents_',
@@ -349,6 +360,16 @@ $query = $this->db->perform($sql, array_merge($set, ['id' => $tid]));
         }
         if (!empty($tid) && !empty($owner)) {
             $key = 'torrent_hash_' . bin2hex($infohash);
+            $movieCategories = $this->config->get('categories.movie', []);
+            if (!is_array($movieCategories)) {
+                // TODO(2025): map legacy key "categories.movie" to appropriate config path
+                $movieCategories = [];
+            }
+            $tvCategories = $this->config->get('categories.tv', []);
+            if (!is_array($tvCategories)) {
+                // TODO(2025): map legacy key "categories.tv" to appropriate config path
+                $tvCategories = [];
+            }
             $this->cache->deleteMulti([
                 $key,
                 'peers_' . $owner,
@@ -356,8 +377,8 @@ $query = $this->db->perform($sql, array_merge($set, ['id' => $tid]));
                 'latest_comments_',
                 'top_torrents_',
                 'latest_torrents_',
-                'latest_torrents_' . implode('_', $this->site_config['categories']['movie']),
-                'latest_torrents_' . implode('_', $this->site_config['categories']['tv']),
+                'latest_torrents_' . implode('_', $movieCategories),
+                'latest_torrents_' . implode('_', $tvCategories),
                 'scroller_torrents_',
                 'torrent_details_' . $tid,
                 'latest_torrents_',
@@ -375,12 +396,16 @@ $query = $this->db->perform($sql, array_merge($set, ['id' => $tid]));
         if ($added > TIME_NOW - (14 * 86400)) {
             $seedbonus = $this->users_class->get_item('seedbonus', $owner);
             $set = [
-                'seedbonus' => $seedbonus - $this->site_config['bonus']['per_delete'],
+                'seedbonus' => $seedbonus - (float) $this->config->get('bonus.per_delete', 0),
             ];
             $sql = "UPDATE users SET /* columns */ WHERE id = :id";
-$this->db->perform($sql, array_merge($set, ['id' => $owner]));
+            $this->db->perform($sql, array_merge($set, ['id' => $owner]));
 
-            $this->cache->update_row('user_' . $owner, $set, $this->site_config['expires']['user_cache']);
+            $ttl = (int) $this->config->get('expires.user_cache', 0);
+            if ($ttl === 0) {
+                // TODO(2025): map legacy key "expires.user_cache" to appropriate config path
+            }
+            $this->cache->update_row('user_' . $owner, $set, $ttl);
         }
 
         return true;
@@ -517,6 +542,10 @@ $id = $this->db->perform($sql, $values);
                 ->orderBy('t.added DESC');
 
             $scrollers = [];
+            $scrollerLimit = (int) $this->config->get('latest.scroller_limit', 0);
+            if ($scrollerLimit === 0) {
+                // TODO(2025): map legacy key "latest.scroller_limit" to appropriate config path
+            }
             foreach ($torrents as $torrent) {
                 if (!empty($torrent['parent_name'])) {
                     $torrent['cat'] = $torrent['parent_name'] . ' :: ' . $torrent['cat'];
@@ -544,12 +573,16 @@ $id = $this->db->perform($sql, $values);
                         $scrollers[] = $torrent;
                     }
                 }
-                if (count($scrollers) >= $this->site_config['latest']['scroller_limit']) {
+                if ($scrollerLimit > 0 && count($scrollers) >= $scrollerLimit) {
                     break;
                 }
             }
             $torrents = $scrollers;
-            $this->cache->set('scroller_torrents_', $torrents, $this->site_config['expires']['scroll_torrents']);
+            $ttl = (int) $this->config->get('expires.scroll_torrents', 0);
+            if ($ttl === 0) {
+                // TODO(2025): map legacy key "expires.scroll_torrents" to appropriate config path
+            }
+            $this->cache->set('scroller_torrents_', $torrents, $ttl);
         }
         if (!empty($torrents)) {
             foreach ($torrents as $torrent) {
@@ -590,6 +623,10 @@ $id = $this->db->perform($sql, $values);
                 ->orderBy('t.added DESC');
 
             $sliders = [];
+            $sliderLimit = (int) $this->config->get('latest.slider_limit', 0);
+            if ($sliderLimit === 0) {
+                // TODO(2025): map legacy key "latest.slider_limit" to appropriate config path
+            }
             foreach ($torrents as $torrent) {
                 if (!empty($torrent['parent_name'])) {
                     $torrent['cat'] = $torrent['parent_name'] . ' :: ' . $torrent['cat'];
@@ -609,18 +646,22 @@ $id = $this->db->perform($sql, $values);
                         $this->cache->set('banners_' . $torrent['imdb_id'], [], 3600);
                     }
                 }
-                if (!empty($banners) && !in_array($torrent['imdb_id'], $imdb_ids)) {
+                  if (!empty($banners) && !in_array($torrent['imdb_id'], $imdb_ids)) {
                     $sliders[] = $torrent;
                     $imdb_ids[] = $torrent['imdb_id'];
                 }
 
-                if (count($sliders) >= $this->site_config['latest']['slider_limit']) {
+                if ($sliderLimit > 0 && count($sliders) >= $sliderLimit) {
                     break;
                 }
             }
 
             $torrents = $sliders;
-            $this->cache->set('slider_torrents_', $torrents, $this->site_config['expires']['slider_torrents']);
+            $ttl = (int) $this->config->get('expires.slider_torrents', 0);
+            if ($ttl === 0) {
+                // TODO(2025): map legacy key "expires.slider_torrents" to appropriate config path
+            }
+            $this->cache->set('slider_torrents_', $torrents, $ttl);
         }
 
         if (!empty($torrents)) {
@@ -652,7 +693,11 @@ $id = $this->db->perform($sql, $values);
         $torrents = [];
         $staff_picks = $this->cache->get('staff_picks_');
         if ($staff_picks === false || is_null($staff_picks)) {
-            $staff_picks = $this->fluent->from('torrents AS t')
+            $staffLimit = (int) $this->config->get('latest.staff_picks', 0);
+            if ($staffLimit === 0) {
+                // TODO(2025): map legacy key "latest.staff_picks" to appropriate config path
+            }
+            $query = $this->fluent->from('torrents AS t')
                 ->select(null)
                 ->select('t.id')
                 ->select('t.added')
@@ -684,17 +729,23 @@ $id = $this->db->perform($sql, $values);
                 ->where('t.staff_picks != 0')
                 ->where('t.visible = "yes"')
                 ->where("z.name NOT IN ('UC_MIN', 'UC_STAFF', 'UC_MAX')")
-                ->orderBy('t.staff_picks DESC')
-                ->limit($this->site_config['latest']['staff_picks']);
+                ->orderBy('t.staff_picks DESC');
+            if ($staffLimit > 0) {
+                $query = $query->limit($staffLimit);
+            }
 
-            foreach ($staff_picks as $torrent) {
+            foreach ($query as $torrent) {
                 if (!empty($torrent['parent_name'])) {
                     $torrent['cat'] = $torrent['parent_name'] . ' :: ' . $torrent['cat'];
                 }
                 $torrents[] = $torrent;
             }
             $staff_picks = $torrents;
-            $this->cache->set('staff_picks_', $torrents, $this->site_config['expires']['staff_picks']);
+            $ttl = (int) $this->config->get('expires.staff_picks', 0);
+            if ($ttl === 0) {
+                // TODO(2025): map legacy key "expires.staff_picks" to appropriate config path
+            }
+            $this->cache->set('staff_picks_', $torrents, $ttl);
         }
         if (!empty($staff_picks)) {
             foreach ($staff_picks as $staff_pick) {
@@ -718,7 +769,11 @@ $id = $this->db->perform($sql, $values);
         $torrents = [];
         $top_torrents = $this->cache->get('top_torrents_');
         if ($top_torrents === false || is_null($top_torrents)) {
-            $top_torrents = $this->fluent->from('torrents AS t')
+            $limit = (int) $this->config->get('latest.torrents_limit', 0);
+            if ($limit === 0) {
+                // TODO(2025): map legacy key "latest.torrents_limit" to appropriate config path
+            }
+            $query = $this->fluent->from('torrents AS t')
                 ->select(null)
                 ->select('t.id')
                 ->select('t.added')
@@ -749,17 +804,23 @@ $id = $this->db->perform($sql, $values);
                 ->leftJoin('class_config AS z ON u.class = z.value')
                 ->where('t.visible = "yes"')
                 ->where("z.name NOT IN ('UC_MIN', 'UC_STAFF', 'UC_MAX')")
-                ->orderBy('t.seeders + t.leechers DESC')
-                ->limit($this->site_config['latest']['torrents_limit']);
+                ->orderBy('t.seeders + t.leechers DESC');
+            if ($limit > 0) {
+                $query = $query->limit($limit);
+            }
 
-            foreach ($top_torrents as $torrent) {
+            foreach ($query as $torrent) {
                 if (!empty($torrent['parent_name'])) {
                     $torrent['cat'] = $torrent['parent_name'] . ' :: ' . $torrent['cat'];
                 }
                 $torrents[] = $torrent;
             }
             $top_torrents = $torrents;
-            $this->cache->set('top_torrents_', $torrents, $this->site_config['expires']['top_torrents']);
+            $ttl = (int) $this->config->get('expires.top_torrents', 0);
+            if ($ttl === 0) {
+                // TODO(2025): map legacy key "expires.top_torrents" to appropriate config path
+            }
+            $this->cache->set('top_torrents_', $torrents, $ttl);
         }
         if (!empty($top_torrents)) {
             foreach ($top_torrents as $torrent) {
@@ -788,7 +849,11 @@ $id = $this->db->perform($sql, $values);
         $string = !empty($categories) ? implode('_', $categories) : '';
         $latest_torrents = $this->cache->get('latest_torrents_' . $string);
         if ($latest_torrents === false || is_null($latest_torrents)) {
-            $latest_torrents = $this->fluent->from('torrents AS t')
+            $limit = (int) $this->config->get('latest.torrents_limit', 0);
+            if ($limit === 0) {
+                // TODO(2025): map legacy key "latest.torrents_limit" to appropriate config path
+            }
+            $query = $this->fluent->from('torrents AS t')
                 ->select(null)
                 ->select('t.id')
                 ->select('t.added')
@@ -815,24 +880,30 @@ $id = $this->db->perform($sql, $values);
                 ->select("REPLACE(LOWER(z.classname), ' ', '_') AS classname")
                 ->leftJoin('users AS u ON t.owner = u.id')
                 ->leftJoin('class_config AS z ON u.class = z.value')
-                ->leftJoin('categories AS c ON t.category = c.id')
-                ->leftJoin('categories AS p ON c.parent_id = p.id')
-                ->where('t.visible = "yes"')
-                ->where("z.name NOT IN ('UC_MIN', 'UC_STAFF', 'UC_MAX')");
-            if (!empty($categories)) {
-                $latest_torrents = $latest_torrents->where('category IN (' . $in . ')', $categories);
-            }
-            $latest_torrents = $latest_torrents->orderBy('t.added DESC')
-                ->limit($this->site_config['latest']['torrents_limit']);
+                  ->leftJoin('categories AS c ON t.category = c.id')
+                  ->leftJoin('categories AS p ON c.parent_id = p.id')
+                  ->where('t.visible = "yes"')
+                  ->where("z.name NOT IN ('UC_MIN', 'UC_STAFF', 'UC_MAX')");
+              if (!empty($categories)) {
+                  $query = $query->where('category IN (' . $in . ')', $categories);
+              }
+              $query = $query->orderBy('t.added DESC');
+              if ($limit > 0) {
+                  $query = $query->limit($limit);
+              }
 
-            foreach ($latest_torrents as $torrent) {
-                if (!empty($torrent['parent_name'])) {
-                    $torrent['cat'] = $torrent['parent_name'] . ' :: ' . $torrent['cat'];
-                }
-                $torrents[] = $torrent;
-            }
-            $latest_torrents = $torrents;
-            $this->cache->set('latest_torrents_' . $string, $torrents, $this->site_config['expires']['last_torrents']);
+              foreach ($query as $torrent) {
+                  if (!empty($torrent['parent_name'])) {
+                      $torrent['cat'] = $torrent['parent_name'] . ' :: ' . $torrent['cat'];
+                  }
+                  $torrents[] = $torrent;
+              }
+              $latest_torrents = $torrents;
+              $ttl = (int) $this->config->get('expires.last_torrents', 0);
+              if ($ttl === 0) {
+                  // TODO(2025): map legacy key "expires.last_torrents" to appropriate config path
+              }
+              $this->cache->set('latest_torrents_' . $string, $torrents, $ttl);
         }
         if (!empty($latest_torrents)) {
             foreach ($latest_torrents as $torrent) {
@@ -896,7 +967,11 @@ $id = $this->db->perform($sql, $values);
                 }
                 $motw[] = $torrent;
             }
-            $this->cache->set('motw_', $motw, $this->site_config['expires']['motw']);
+            $ttl = (int) $this->config->get('expires.motw', 0);
+            if ($ttl === 0) {
+                // TODO(2025): map legacy key "expires.motw" to appropriate config path
+            }
+            $this->cache->set('motw_', $motw, $ttl);
         }
         if (!empty($motw)) {
             foreach ($motw as $torrent) {

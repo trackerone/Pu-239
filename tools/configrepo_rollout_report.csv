@@ -163,11 +163,26 @@ blocks/index/latest_tv.php,site_config(3),0,Replaced legacy config access with C
 blocks/index/latest_user.php,site_config(1),0,Removed unused legacy config reference
 blocks/index/mow.php,site_config(2),0,Replaced legacy config access with ConfigRepository
 blocks/index/news.php,site_config(6),0,Replaced legacy config access with ConfigRepository
+*** codex/refactor-legacy-config-constants-to-configrepository-hx44v3
+=======
 *** codex/refactor-legacy-config-constants-to-configrepository-hslwak
+*** master
 bonusmanage.php,none,0,Removed unused legacy site_config global
 chat/lib/config.php,site_config(16),3,Switched chat configuration bootstrap to ConfigRepository lookups
 cleanup/hitrun_update.php,site_config(14),0,Replaced hit-and-run settings with ConfigRepository access
 forums/_scaffold/__template.php,none,0,Removed unused legacy site_config global
 forums/attachment.php,site_config(4),0,Swapped forum attachment config reads to ConfigRepository
+*** codex/refactor-legacy-config-constants-to-configrepository-hx44v3
+src/Offer.php,none,0,Removed legacy site_config property wiring
+src/Peer.php,site_config(1),0,Use ConfigRepository cache TTL for peer summaries
+src/PollVoter.php,site_config(1),0,Lookup poll cache expiry via ConfigRepository
+src/Radiance.php,site_config(1),1,Swap tracker config path to ConfigRepository with TODO fallback
+src/Request.php,none,0,Removed unused site_config bootstrap
+src/Session.php,site_config(4),4,Replace session prefixes/notifications with ConfigRepository lookups
+src/Snatched.php,site_config(3),1,Read HnR limits and announce interval from ConfigRepository
+src/Torrent.php,site_config(17),17,Port torrent metadata limits/TTLs to ConfigRepository values
+src/Uglify/UglifyService.php,site_config(2),0,Generate asset helper with ConfigRepository base URL
 =======
+=======
+*** master
 *** master

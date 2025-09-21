@@ -147,6 +147,9 @@ No syntax errors detected in public/ajax/thanks.php
 No syntax errors detected in public/ajax/torrents_lookup.php
 No syntax errors detected in public/ajax/view_sql.php
 No syntax errors detected in public/allsmiles.php
+*** codex/refactor-legacy-config-constants-to-configrepository-hx44v3
+=======
+*** master
 *** master
 *** master
 *** master
@@ -171,3 +174,35 @@ No syntax errors detected in forums/_scaffold/__template.php
 No syntax errors detected in forums/attachment.php
 =======
 *** master
+No syntax errors detected in blocks/index/forum_posts.php
+No syntax errors detected in blocks/index/gift.php
+No syntax errors detected in blocks/index/latest_movies.php
+No syntax errors detected in blocks/index/latest_torrents.php
+No syntax errors detected in blocks/index/latest_torrents_glide.php
+No syntax errors detected in blocks/index/latest_torrents_scroll.php
+No syntax errors detected in blocks/index/latest_tv.php
+No syntax errors detected in blocks/index/latest_user.php
+No syntax errors detected in blocks/index/mow.php
+No syntax errors detected in blocks/index/news.php
+No syntax errors detected in bonusmanage.php
+No syntax errors detected in chat/lib/config.php
+No syntax errors detected in cleanup/hitrun_update.php
+No syntax errors detected in forums/_scaffold/__template.php
+No syntax errors detected in forums/attachment.php
+No syntax errors detected in src/Offer.php
+No syntax errors detected in src/Peer.php
+No syntax errors detected in src/PollVoter.php
+No syntax errors detected in src/Radiance.php
+No syntax errors detected in src/Request.php
+
+Deprecated: Pu239\Session::unset(): Implicitly marking parameter $prefix as nullable is deprecated, the explicit nullable type must be used instead in src/Session.php on line 88
+No syntax errors detected in src/Session.php
+No syntax errors detected in src/Snatched.php
+
+Deprecated: Pu239\Torrent::remove_torrent(): Implicitly marking parameter $tid as nullable is deprecated, the explicit nullable type must be used instead in src/Torrent.php on line 348
+
+Deprecated: Pu239\Torrent::remove_torrent(): Implicitly marking parameter $owner as nullable is deprecated, the explicit nullable type must be used instead in src/Torrent.php on line 348
+
+Deprecated: Pu239\Torrent::remove_torrent(): Implicitly marking parameter $added as nullable is deprecated, the explicit nullable type must be used instead in src/Torrent.php on line 348
+No syntax errors detected in src/Torrent.php
+No syntax errors detected in src/Uglify/UglifyService.php
