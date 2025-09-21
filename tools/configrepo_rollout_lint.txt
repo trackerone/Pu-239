@@ -335,6 +335,8 @@ No syntax errors detected in admin/forum_config.php
 No syntax errors detected in admin/freeleech.php
 No syntax errors detected in admin/freeusers.php
 No syntax errors detected in admin/goaccess.php
+*** codex/refactor-legacy-config-constants-to-configrepository-2wa1n8
+=======
 *** codex/refactor-legacy-config-constants-to-configrepository-6lq2lf
 =======
 *** codex/refactor-legacy-config-constants-to-configrepository-ipan9z
@@ -342,6 +344,7 @@ No syntax errors detected in admin/goaccess.php
 *** codex/refactor-legacy-config-constants-to-configrepository-xkbz6r
 =======
 *** codex/refactor-legacy-config-constants-to-configrepository-vrnd3h
+*** master
 *** master
 *** master
 *** master
@@ -355,11 +358,14 @@ admin/mega_search.php: OK
 admin/modded_torrents.php: OK
 admin/modtask.php: OK
 admin/mysql_stats.php: OK
+*** codex/refactor-legacy-config-constants-to-configrepository-2wa1n8
+=======
 *** codex/refactor-legacy-config-constants-to-configrepository-6lq2lf
 =======
 *** codex/refactor-legacy-config-constants-to-configrepository-ipan9z
 =======
 *** codex/refactor-legacy-config-constants-to-configrepository-xkbz6r
+*** master
 *** master
 *** master
 No syntax errors detected in admin/news.php
@@ -372,9 +378,12 @@ No syntax errors detected in admin/trivia_config.php
 No syntax errors detected in admin/uploader_info.php
 No syntax errors detected in admin/user_hits.php
 No syntax errors detected in admin/view_peers.php
+*** codex/refactor-legacy-config-constants-to-configrepository-2wa1n8
+=======
 *** codex/refactor-legacy-config-constants-to-configrepository-6lq2lf
 =======
 *** codex/refactor-legacy-config-constants-to-configrepository-ipan9z
+*** master
 *** master
 No syntax errors detected in blocks/global/crazyhour.php
 No syntax errors detected in blocks/global/demotion.php
@@ -386,7 +395,10 @@ No syntax errors detected in blocks/global/report.php
 No syntax errors detected in blocks/global/staffmessages.php
 No syntax errors detected in blocks/global/uploadapp.php
 No syntax errors detected in blocks/index/active_24h_users.php
+*** codex/refactor-legacy-config-constants-to-configrepository-2wa1n8
+=======
 *** codex/refactor-legacy-config-constants-to-configrepository-6lq2lf
+*** master
 No syntax errors detected in blocks/index/active_birthday_users.php
 No syntax errors detected in blocks/index/active_irc_users.php
 No syntax errors detected in blocks/index/active_users.php
@@ -399,10 +411,21 @@ No syntax errors detected in blocks/index/offers.php
 No syntax errors detected in blocks/index/requests.php
 No syntax errors detected in config/expires.php
 No syntax errors detected in config/latest.php
+*** codex/refactor-legacy-config-constants-to-configrepository-2wa1n8
+No syntax errors detected in blocks/index/staff_picks.php
+No syntax errors detected in blocks/index/stats.php
+No syntax errors detected in blocks/index/top_torrents.php
+No syntax errors detected in blocks/index/trivia.php
+No syntax errors detected in blocks/userdetails/completed.php
+No syntax errors detected in blocks/userdetails/gender.php
+No syntax errors detected in blocks/userdetails/report.php
+No syntax errors detected in blocks/userdetails/seedbonus.php
 =======
 =======
 =======
 =======
+=======
+*** master
 *** master
 *** master
 *** master

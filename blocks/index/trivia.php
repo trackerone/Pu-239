@@ -4,9 +4,14 @@ declare(strict_types=1);
 require_once __DIR__ . '/../../include/runtime_safe.php';
 require_once __DIR__ . '/../../include/bootstrap_pdo.php';
 
+use Pu239\Config\ConfigRepository;
 use Pu239\Database;
 
-global $container, $site_config;
+global $container;
+
+/** @var ConfigRepository $config */
+$config = $container->get(ConfigRepository::class);
+$baseUrl = (string) $config->get('paths.baseurl');
 
 $db = $container->get(Database::class);
 require_once INCL_DIR . 'function_trivia.php';
@@ -24,7 +29,7 @@ $buttons = "
             <button id='button' onclick=\"get_trivia_question()\" class='button is-small'>" . _('Get Trivia Question') . "</button>
         </li>
         <li  class='margin20'>
-            <a href='{$site_config['paths']['baseurl']}/trivia_results.php' target='_top' class='button is-small'>" . _('Get Trivia Results') . '</a>
+            <a href='{$baseUrl}/trivia_results.php' target='_top' class='button is-small'>" . _('Get Trivia Results') . '</a>
         </li>
     </ul>';
 $content = "
