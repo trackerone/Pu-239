@@ -4,6 +4,7 @@ declare(strict_types=1);
 require_once __DIR__ . '/../../include/runtime_safe.php';
 require_once __DIR__ . '/../../include/bootstrap_pdo.php';
 
+use Pu239\Config\ConfigRepository;
 use Pu239\Database;
 use Pu239\Image;
 use Pu239\Request;
@@ -11,12 +12,16 @@ use Pu239\Torrent;
 
 require_once INCL_DIR . 'function_torrent_hover.php';
 $user = check_user_status();
-global $container, $site_config;
+global $container;
+/** @var ConfigRepository $config */
+$config = $container->get(ConfigRepository::class);
 
 $db = $container->get(Database::class);
 $request_class = $container->get(Request::class);
-$requested = $request_class->get_all($site_config['latest']['requests_limit'], 0, 'added', false, false, (bool) $user['hidden'], $user['id']);
+$requested = $request_class->get_all((int) $config->get('latest.requests_limit'), 0, 'added', false, false, (bool) $user['hidden'], $user['id']);
 $torrent_class = $container->get(Torrent::class);
+$imagesBaseurl = (string) $config->get('paths.images_baseurl');
+$baseUrl = (string) $config->get('paths.baseurl');
 $requests .= "
     <a id='requests-hash'></a>
     <div id='requests' class='box'>
@@ -36,7 +41,7 @@ $requests .= "
 if (!empty($requested) && is_array($requested)) {
     foreach ($requested as $request) {
         $class_color = get_user_class_name($request['class'], true);
-        $caticon = !empty($request['image']) ? "<img src='{$site_config['paths']['images_baseurl']}caticons/" . get_category_icons() . '/' . format_comment($request['image']) . "' class='tooltipper' alt='" . format_comment($request['cat']) . "' title='" . format_comment($request['cat']) . "' height='20px' width='auto'>" : format_comment($request['cat']);
+        $caticon = !empty($request['image']) ? "<img src='{$imagesBaseurl}caticons/" . get_category_icons() . '/' . format_comment($request['image']) . "' class='tooltipper' alt='" . format_comment($request['cat']) . "' title='" . format_comment($request['cat']) . "' height='20px' width='auto'>" : format_comment($request['cat']);
         $poster = !empty($request['poster']) ? "<div class='has-text-centered'><img src='" . url_proxy($request['poster'], true, 250) . "' alt='image' class='img-polaroid'></div>" : '';
         $background = $imdb_id = '';
         preg_match('#(tt\d{7,8})#', $request['url'], $match);
@@ -46,7 +51,7 @@ if (!empty($requested) && is_array($requested)) {
             $background = $images_class->find_images($imdb_id, $type = 'background');
             $background = !empty($background) ? "style='background-image: url({$background});'" : '';
             $poster = !empty($request['poster']) ? $request['poster'] : $images_class->find_images($imdb_id, $type = 'poster');
-            $poster = empty($poster) ? "<img src='{$site_config['paths']['images_baseurl']}noposter.png' alt='Poster for {$request['name']}' class='tooltip-poster'>" : "<img src='" . url_proxy($poster, true, 250) . "' alt='Poster for {$request['name']}' class='tooltip-poster'>";
+            $poster = empty($poster) ? "<img src='{$imagesBaseurl}noposter.png' alt='Poster for {$request['name']}' class='tooltip-poster'>" : "<img src='" . url_proxy($poster, true, 250) . "' alt='Poster for {$request['name']}' class='tooltip-poster'>";
         }
         $chef = "<span class='" . get_user_class_name($request['class'], true) . "'>" . $request['username'] . '</span>';
         $plot = $torrent_class->get_plot($imdb_id);
@@ -63,7 +68,7 @@ if (!empty($requested) && is_array($requested)) {
         } else {
             $plot = '';
         }
-        $hover = upcoming_hover($site_config['paths']['baseurl'] . '/requests.php?action=view_request&amp;id=' . $request['id'], 'request_' . $request['id'], $request['name'], $background, $poster, get_date($request['added'], 'MYSQL'), get_date($request['added'], 'MYSQL'), $chef, $plot);
+        $hover = upcoming_hover($baseUrl . '/requests.php?action=view_request&amp;id=' . $request['id'], 'request_' . $request['id'], $request['name'], $background, $poster, get_date($request['added'], 'MYSQL'), get_date($request['added'], 'MYSQL'), $chef, $plot);
         $requests .= "
                     <tr>
                         <td class='has-text-centered has-no-border-right'>{$caticon}</td>

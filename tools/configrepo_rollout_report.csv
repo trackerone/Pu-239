@@ -239,11 +239,14 @@ admin/forum_config.php,site_config(4),0,Replaced legacy config access with Confi
 admin/freeleech.php,site_config(4),0,Replaced legacy config access with ConfigRepository
 admin/freeusers.php,site_config(4),0,Replaced legacy config access with ConfigRepository
 admin/goaccess.php,site_config(1),0,Replaced legacy config access with ConfigRepository
+*** codex/refactor-legacy-config-constants-to-configrepository-6lq2lf
+=======
 *** codex/refactor-legacy-config-constants-to-configrepository-ipan9z
 =======
 *** codex/refactor-legacy-config-constants-to-configrepository-xkbz6r
 =======
 *** codex/refactor-legacy-config-constants-to-configrepository-vrnd3h
+*** master
 *** master
 *** master
 admin/grouppm.php,site_config(1),0,Replaced legacy config access with ConfigRepository
@@ -256,9 +259,12 @@ admin/mega_search.php,site_config(16),0,Replaced legacy config access with Confi
 admin/modded_torrents.php,site_config(6),0,Replaced legacy config access with ConfigRepository
 admin/modtask.php,site_config(10),0,Replaced legacy config access with ConfigRepository
 admin/mysql_stats.php,site_config(1),0,Replaced legacy config access with ConfigRepository
+*** codex/refactor-legacy-config-constants-to-configrepository-6lq2lf
+=======
 *** codex/refactor-legacy-config-constants-to-configrepository-ipan9z
 =======
 *** codex/refactor-legacy-config-constants-to-configrepository-xkbz6r
+*** master
 *** master
 admin/news.php,site_config(10),0,Replaced legacy config access with ConfigRepository
 admin/polls_manager.php,site_config(13),0,Replaced legacy config access with ConfigRepository
@@ -270,7 +276,10 @@ admin/trivia_config.php,site_config(3),0,Replaced legacy config access with Conf
 admin/uploader_info.php,site_config(1),0,Replaced legacy config access with ConfigRepository
 admin/user_hits.php,site_config(1),0,Replaced legacy config access with ConfigRepository
 admin/view_peers.php,site_config(3),0,Replaced legacy config access with ConfigRepository
+*** codex/refactor-legacy-config-constants-to-configrepository-6lq2lf
+=======
 *** codex/refactor-legacy-config-constants-to-configrepository-ipan9z
+*** master
 blocks/global/crazyhour.php,site_config(2),0,Replaced legacy config access with ConfigRepository
 blocks/global/demotion.php,site_config(2),0,Replaced legacy config access with ConfigRepository
 blocks/global/freeleech_contribution.php,site_config(2),0,Replaced legacy config access with ConfigRepository
@@ -281,9 +290,22 @@ blocks/global/report.php,site_config(4),0,Replaced legacy config access with Con
 blocks/global/staffmessages.php,site_config(4),0,Replaced legacy config access with ConfigRepository
 blocks/global/uploadapp.php,site_config(4),0,Replaced legacy config access with ConfigRepository
 blocks/index/active_24h_users.php,site_config(2),0,Replaced legacy config access with ConfigRepository
+*** codex/refactor-legacy-config-constants-to-configrepository-6lq2lf
+blocks/index/active_birthday_users.php,site_config(1),0,Replaced legacy config access with ConfigRepository
+blocks/index/active_irc_users.php,site_config(1),0,Replaced legacy config access with ConfigRepository
+blocks/index/active_users.php,site_config(1),0,Replaced legacy config access with ConfigRepository
+blocks/index/advertise.php,site_config(1),0,Replaced legacy config access with ConfigRepository
+blocks/index/ajaxchat.php,site_config(1),0,Replaced legacy config access with ConfigRepository
+blocks/index/comments.php,site_config(2),0,Replaced legacy config access with ConfigRepository
+blocks/index/cooker.php,site_config(3),0,Replaced legacy config access with ConfigRepository
+blocks/index/disclaimer.php,site_config(1),0,Replaced legacy config access with ConfigRepository
+blocks/index/offers.php,site_config(4),0,Replaced legacy config access with ConfigRepository
+blocks/index/requests.php,site_config(4),0,Replaced legacy config access with ConfigRepository
 =======
 =======
 =======
+=======
+*** master
 *** master
 *** master
 *** master
