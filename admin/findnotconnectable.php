@@ -2,12 +2,15 @@
 declare(strict_types=1);
 require_once dirname(__DIR__) . '/bootstrap_web.php';
 
+use Pu239\Config\ConfigRepository;
 use Pu239\Database;
 use Pu239\Message;
 use Pu239\Session;
 
 
-global $container, $site_config, $CURUSER;
+global $container, $CURUSER;
+/** @var ConfigRepository $config */
+$config = $container->get(ConfigRepository::class);
 
 $db = $container->get(Database::class);
 
@@ -22,10 +25,10 @@ if (isset($_GET['action1']) && htmlsafechars($_GET['action1']) === 'list') {
     $HTMLOUT .= "
     <ul class='level-center bg-06'>
         <li class='is-link margin10'>
-            <a href='{$site_config['paths']['baseurl']}/staffpanel.php?tool=findnotconnectable&amp;action=findnotconnectable&amp;action1=sendpm'>" . _('Send All not connectable Users A PM') . "</a>
+            <a href='" . (string) $config->get('paths.baseurl') . "/staffpanel.php?tool=findnotconnectable&amp;action=findnotconnectable&amp;action1=sendpm'>" . _('Send All not connectable Users A PM') . "</a>
         </li>
         <li class='is-link margin10'>
-            <a href='{$site_config['paths']['baseurl']}/staffpanel.php?tool=findnotconnectable&amp;action=findnotconnectable'>" . _('View the Log (Check this before PMing users)') . "</a>
+            <a href='" . (string) $config->get('paths.baseurl') . "/staffpanel.php?tool=findnotconnectable&amp;action=findnotconnectable'>" . _('View the Log (Check this before PMing users)') . "</a>
         </li>
     </ul>
     <h1 class='has-text-centered'>" . _('Peers that are Not Connectable') . '</h1>';
@@ -52,7 +55,7 @@ if (isset($_GET['action1']) && htmlsafechars($_GET['action1']) === 'list') {
             $body .= '
             <tr>
                 <td>' . format_username((int) $arr2['userid']) . "</td>
-                <td><a href='{$site_config['paths']['baseurl']}/details.php?id={$arr2['torrent']}&amp;dllist=1#seeders'>{$arr2['torrent']}</a>";
+                <td><a href='" . (string) $config->get('paths.baseurl') . "/details.php?id={$arr2['torrent']}&amp;dllist=1#seeders'>{$arr2['torrent']}</a>";
             if ($arr2['seeder'] === 'yes') {
                 $body .= "<span class='has-text-danger'>*</span>";
             }
@@ -104,10 +107,10 @@ if (isset($_GET['action1']) && htmlsafechars($_GET['action1']) === 'sendpm') {
     $HTMLOUT .= "
     <ul class='level-center bg-06'>
         <li class='is-link margin10'>
-            <a href='{$site_config['paths']['baseurl']}/staffpanel.php?tool=findnotconnectable&amp;action=findnotconnectable'>" . _('View the Log (Check this before PMing users)') . "</a>
+            <a href='" . (string) $config->get('paths.baseurl') . "/staffpanel.php?tool=findnotconnectable&amp;action=findnotconnectable'>" . _('View the Log (Check this before PMing users)') . "</a>
         </li>
         <li class='is-link margin10'>
-            <a href='{$site_config['paths']['baseurl']}/staffpanel.php?tool=findnotconnectable&amp;action=findnotconnectable&amp;action1=list'>" . _('List Unconnectable Users') . "</a>
+            <a href='" . (string) $config->get('paths.baseurl') . "/staffpanel.php?tool=findnotconnectable&amp;action=findnotconnectable&amp;action1=list'>" . _('List Unconnectable Users') . "</a>
         </li>
     </ul>
     <div>
@@ -138,10 +141,10 @@ if (isset($_GET['action1']) == '') {
     $HTMLOUT .= "
     <ul class='level-center bg-06'>
         <li class='is-link margin10'>
-            <a href='{$site_config['paths']['baseurl']}/staffpanel.php?tool=findnotconnectable&amp;action=findnotconnectable&amp;action1=sendpm'>" . _('Send All not connectable Users A PM') . "</a>
+            <a href='" . (string) $config->get('paths.baseurl') . "/staffpanel.php?tool=findnotconnectable&amp;action=findnotconnectable&amp;action1=sendpm'>" . _('Send All not connectable Users A PM') . "</a>
         </li>
         <li class='is-link margin10'>
-            <a href='{$site_config['paths']['baseurl']}/staffpanel.php?tool=findnotconnectable&amp;action=findnotconnectable&amp;action1=list'>" . _('List Unconnectable Users') . "</a>
+            <a href='" . (string) $config->get('paths.baseurl') . "/staffpanel.php?tool=findnotconnectable&amp;action=findnotconnectable&amp;action1=list'>" . _('List Unconnectable Users') . "</a>
         </li>
     </ul>
     <h1 class='has-text-centered'>" . _('Unconnectable Peers Mass PM Log') . '</h1>';
@@ -171,7 +174,7 @@ if (isset($_GET['action1']) == '') {
 }
 $title = _('Non Connectables');
 $breadcrumbs = [
-    "<a href='{$site_config['paths']['baseurl']}/staffpanel.php'>" . _('Staff Panel') . '</a>',
+    "<a href='" . (string) $config->get('paths.baseurl') . "/staffpanel.php'>" . _('Staff Panel') . '</a>',
     "<a href='{$_SERVER['PHP_SELF']}'>$title</a>",
 ];
 echo stdhead($title, [], 'page-wrapper', $breadcrumbs) . wrapper($HTMLOUT) . stdfoot();

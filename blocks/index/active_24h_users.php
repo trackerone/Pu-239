@@ -5,9 +5,12 @@ require_once __DIR__ . '/../../include/runtime_safe.php';
 require_once __DIR__ . '/../../include/bootstrap_pdo.php';
 
 use Pu239\Cache;
+use Pu239\Config\ConfigRepository;
 use Pu239\Database;
 
-global $container, $site_config;
+global $container;
+/** @var ConfigRepository $config */
+$config = $container->get(ConfigRepository::class);
 
 $db = $container->get(Database::class);
 $cache = $container->get(Cache::class);
@@ -51,7 +54,7 @@ if ($active24 === false || is_null($active24)) {
         ]);
     }
 
-    $cache->set('last24_users_', $active24, $site_config['expires']['last24']);
+    $cache->set('last24_users_', $active24, (int) $config->get('expires.last24'));
 }
 
 $active_users_24 .= "

@@ -3,7 +3,11 @@ declare(strict_types=1);
 
 require_once dirname(__DIR__) . '/bootstrap.php';
 
-global $site_config;
+use Pu239\Config\ConfigRepository;
+
+global $container;
+/** @var ConfigRepository $config */
+$config = $container->get(ConfigRepository::class);
 
 $user = check_user_status();
 if (empty($user) || (int) ($user['override_class'] ?? 255) === 255) {
@@ -11,7 +15,7 @@ if (empty($user) || (int) ($user['override_class'] ?? 255) === 255) {
 }
 
 $esc = static fn($value): string => htmlspecialchars((string) $value, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
-$baseurl = $esc($site_config['paths']['baseurl'] ?? '');
+$baseurl = $esc((string) $config->get('paths.baseurl'));
 
 ob_start();
 ?>

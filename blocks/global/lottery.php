@@ -3,10 +3,13 @@ declare(strict_types=1);
 
 require_once dirname(__DIR__) . '/bootstrap.php';
 
+use Pu239\Config\ConfigRepository;
 use Pu239\Database;
 use Psr\SimpleCache\CacheInterface as Cache;
 
-global $container, $site_config;
+global $container;
+/** @var ConfigRepository $config */
+$config = $container->get(ConfigRepository::class);
 
 $user = check_user_status();
 if (empty($user)) {
@@ -30,7 +33,7 @@ if (empty($lottery['enable'])) {
 }
 
 $esc = static fn($value): string => htmlspecialchars((string) $value, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
-$baseurl = $esc($site_config['paths']['baseurl'] ?? '');
+$baseurl = $esc((string) $config->get('paths.baseurl'));
 $start = isset($lottery['start_date']) ? (int) $lottery['start_date'] : 0;
 $end = isset($lottery['end_date']) ? (int) $lottery['end_date'] : 0;
 $remaining = $end > TIME_NOW ? mkprettytime($end - TIME_NOW) : _('Ended');

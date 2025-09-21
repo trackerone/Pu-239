@@ -2,11 +2,14 @@
 declare(strict_types=1);
 require_once dirname(__DIR__) . '/bootstrap_web.php';
 
+use Pu239\Config\ConfigRepository;
 use Pu239\Database;
 use Pu239\Session;
 
 
-global $container, $CURUSER, $site_config;
+global $container, $CURUSER;
+/** @var ConfigRepository $config */
+$config = $container->get(ConfigRepository::class);
 
 $db = $container->get(Database::class);
 
@@ -112,7 +115,7 @@ if ($count == 0) {
                     <td>' . htmlsafechars($banned['last']) . '</td>
                     <td>' . format_username((int) $banned['addedby']) . '</td>
                     <td>' . htmlsafechars($banned['comment']) . "</td>
-                    <td><a href='" . $site_config['paths']['baseurl'] . '/staffpanel.php?tool=bans&amp;remove=' . $banned['id'] . "'><i class='icon-trash-empty icon tooltipper has-text-danger' title='" . _('Remove') . "'></i></a></td>
+                    <td><a href='" . (string) $config->get('paths.baseurl') . '/staffpanel.php?tool=bans&amp;remove=' . $banned['id'] . "'><i class='icon-trash-empty icon tooltipper has-text-danger' title='" . _('Remove') . "'></i></a></td>
                </tr>";
     }
     $HTMLOUT .= main_table($body, $header);
@@ -150,7 +153,7 @@ if ($CURUSER['class'] >= UC_MAX) {
 }
 $title = _('Bans');
 $breadcrumbs = [
-    "<a href='{$site_config['paths']['baseurl']}/staffpanel.php'>" . _('Staff Panel') . '</a>',
+    "<a href='" . (string) $config->get('paths.baseurl') . "/staffpanel.php'>" . _('Staff Panel') . '</a>',
     "<a href='{$_SERVER['PHP_SELF']}'>$title</a>",
 ];
 echo stdhead($title, [], 'page-wrapper', $breadcrumbs) . wrapper($HTMLOUT) . stdfoot();

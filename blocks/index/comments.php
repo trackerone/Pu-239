@@ -5,17 +5,21 @@ require_once __DIR__ . '/../../include/runtime_safe.php';
 require_once __DIR__ . '/../../include/bootstrap_pdo.php';
 require_once INCL_DIR . 'function_html.php';
 
-use Pu239\Database;
 use Pu239\Comment;
+use Pu239\Config\ConfigRepository;
+use Pu239\Database;
 use Pu239\Image;
 use Pu239\User;
 
 $user = check_user_status();
-global $container, $site_config;
+global $container;
+/** @var ConfigRepository $config */
+$config = $container->get(ConfigRepository::class);
 
 $db = $container->get(Database::class);
 $comment = $container->get(Comment::class);
 $comments = $comment->get_comments();
+$imagesBaseurl = (string) $config->get('paths.images_baseurl');
 $posted_comments .= "
         <a id='latest_comment-hash'></a>
         <div id='latest_comment' class='box'>
@@ -40,7 +44,7 @@ foreach ($comments as $comment) {
     if (empty($comment['poster']) && !empty($imdb_id)) {
         $comment['poster'] = $images_class->find_images($imdb_id);
     }
-    $comment['poster'] = empty($comment['poster']) ? "<img src='{$site_config['paths']['images_baseurl']}noposter.png' class='tooltip-poster' alt=''>" : "<img src='" . url_proxy($comment['poster'], true, 250) . "' alt='' class='tooltip-poster'>";
+    $comment['poster'] = empty($comment['poster']) ? "<img src='{$imagesBaseurl}noposter.png' class='tooltip-poster' alt=''>" : "<img src='" . url_proxy($comment['poster'], true, 250) . "' alt='' class='tooltip-poster'>";
     if ($comment['anonymous'] === '1' && ($user['class'] < UC_STAFF || (int) $comment['owner'] === $user['id'])) {
         $uploader = '<span>' . get_anonymous_name() . '</span>';
     } else {
@@ -49,7 +53,7 @@ foreach ($comments as $comment) {
         $uploader = "<span class='" . get_user_class_name((int) $comment['class'], true) . "'>" . $username . '</span>';
     }
 
-    $caticon = !empty($comment['image']) ? "<img src='{$site_config['paths']['images_baseurl']}caticons/" . get_category_icons() . '/' . $comment['image'] . "' class='tooltipper' alt='" . format_comment($comment['cat']) . "' title='" . format_comment($comment['cat']) . "' height='20px' width='auto'>" : format_comment($comment['cat']);
+    $caticon = !empty($comment['image']) ? "<img src='{$imagesBaseurl}caticons/" . get_category_icons() . '/' . $comment['image'] . "' class='tooltipper' alt='" . format_comment($comment['cat']) . "' title='" . format_comment($comment['cat']) . "' height='20px' width='auto'>" : format_comment($comment['cat']);
 
     $posted_comments .= "
                         <tr>

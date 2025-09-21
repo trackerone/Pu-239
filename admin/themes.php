@@ -4,12 +4,15 @@ require_once dirname(__DIR__) . '/bootstrap_web.php';
 
 use DI\DependencyException;
 use DI\NotFoundException;
+use PU239\Config\ConfigRepository;
 use Pu239\Cache;
 use Pu239\Database;
 use Pu239\Session;
 
 
-global $container, $site_config;
+global $container;
+/** @var ConfigRepository $config */
+$config = $container->get(ConfigRepository::class);
 
 $db = $container->get(Database::class);
 
@@ -87,7 +90,7 @@ if (isset($_GET['act'])) {
         </form>";
     }
     if ($act === 2) {
-        stderr(_('Delete Template'), _fe('Are you sure you want to delete this template? CLick {0}here{1} if you are sure', "<a href='{$site_config['paths']['baseurl']}/staffpanel.php?tool=themes&amp;action=themes&amp;act=5&amp;id=$id&amp;sure=1'>", '</a>'));
+        stderr(_('Delete Template'), _fe('Are you sure you want to delete this template? CLick {0}here{1} if you are sure', "<a href='{$config->get('paths.baseurl')}/staffpanel.php?tool=themes&amp;action=themes&amp;act=5&amp;id=$id&amp;sure=1'>", '</a>'));
     }
     if ($act === 3) {
         $ids = $fluent->from('stylesheets')
@@ -206,7 +209,7 @@ $update = $db->perform($sql, array_merge($set, ['id' => $tid]));
             clear_template_cache();
             $session->set('is-success', _('Successfully Edited'));
         }
-        header("Location: {$site_config['paths']['baseurl']}/staffpanel.php?tool=themes&action=themes");
+        header("Location: {$config->get('paths.baseurl')}/staffpanel.php?tool=themes&action=themes");
         app_halt('Exit called');
     }
     if ($act === 5) {
@@ -230,14 +233,14 @@ $update = $db->perform($sql, array_merge($set, ['id' => $tid]));
 $db->perform($sql, ['id' => $id]);
 
         $set = [
-            'stylesheet' => $site_config['site']['stylesheet'],
+            'stylesheet' => $config->get('site.stylesheet'),
         ];
         $sql = "UPDATE users SET /* columns */ WHERE stylesheet = :stylesheet";
 $db->perform($sql, array_merge($set, ['stylesheet' => $id]));
 
         clear_template_cache();
         $session->set('is-success', _('Successfully Deleted'));
-        header("Location: {$site_config['paths']['baseurl']}/staffpanel.php?tool=themes&action=themes");
+        header("Location: {$config->get('paths.baseurl')}/staffpanel.php?tool=themes&action=themes");
         app_halt('Exit called');
     }
     if ($act === 6) {
@@ -251,7 +254,7 @@ $db->perform($sql, array_merge($set, ['stylesheet' => $id]));
             stderr(_('Error'), _('Invalid Name'));
         }
         if (!file_exists(TEMPLATE_DIR . $_POST['id'] . '/template.php')) {
-            stderr(_('Error'), _fe('Template file does not exist. Continue? {0}Yes{1} {2}No{3}', "<a href='{$site_config['paths']['baseurl']}/staffpanel.php?tool=themes&amp;action=themes&amp;act=7&amp;id=" . (int) $_POST['id'] . '&amp;uri=' . $_POST['uri'] . '&amp;name=' . htmlsafechars($_POST['name']) . "'><span class='has-text-success left5'>", '</span></a>', "<a href='{$site_config['paths']['baseurl']}/staffpanel.php?tool=themes'><span class='has-text-danger left5'>", '</span></a>'));
+            stderr(_('Error'), _fe('Template file does not exist. Continue? {0}Yes{1} {2}No{3}', "<a href='{$config->get('paths.baseurl')}/staffpanel.php?tool=themes&amp;action=themes&amp;act=7&amp;id=" . (int) $_POST['id'] . '&amp;uri=' . $_POST['uri'] . '&amp;name=' . htmlsafechars($_POST['name']) . "'><span class='has-text-success left5'>", '</span></a>', "<a href='{$config->get('paths.baseurl')}/staffpanel.php?tool=themes'><span class='has-text-danger left5'>", '</span></a>'));
         }
         if (!isset($_POST['class'])) {
             stderr(_('Error'), _('Invalid Class'));
@@ -268,7 +271,7 @@ $db->perform($sql, $values);
 
         clear_template_cache();
         $session->set('is-success', _('Successfully Edited'));
-        header("Location: {$site_config['paths']['baseurl']}/staffpanel.php?tool=themes&action=themes");
+        header("Location: {$config->get('paths.baseurl')}/staffpanel.php?tool=themes&action=themes");
         app_halt('Exit called');
     }
     if ($act === 7) {
@@ -321,12 +324,12 @@ if (!isset($_GET['act'])) {
             <td>' . get_user_class_name((int) $template['min_class_to_view']) . "</td>
             <td>
                 <span>
-                    <a href='{$site_config['paths']['baseurl']}/staffpanel.php?tool=themes&amp;action=themes&amp;act=1&amp;id=" . (int) $template['id'] . "' class='tooltipper' title='" . _('Edit') . "'>
+                    <a href='{$config->get('paths.baseurl')}/staffpanel.php?tool=themes&amp;action=themes&amp;act=1&amp;id=" . (int) $template['id'] . "' class='tooltipper' title='" . _('Edit') . "'>
                         <i class='icon-edit icon has-text-info' aria-hidden='true'></i>
                     </a>
                 </span>
                 <span>
-                    <a href='{$site_config['paths']['baseurl']}/staffpanel.php?tool=themes&amp;action=themes&amp;act=2&amp;id=" . (int) $template['id'] . "' class='tooltipper' title='" . _('Delete') . "'>
+                    <a href='{$config->get('paths.baseurl')}/staffpanel.php?tool=themes&amp;action=themes&amp;act=2&amp;id=" . (int) $template['id'] . "' class='tooltipper' title='" . _('Delete') . "'>
                         <i class='icon-trash-empty icon has-text-danger' aria-hidden='true'></i>
                     </a>
                 </span>
@@ -335,14 +338,14 @@ if (!isset($_GET['act'])) {
     }
     $HTML .= main_table($body, $heading) . "
         <div class='has-text-centered margin20'>
-            <a href='{$site_config['paths']['baseurl']}/staffpanel.php?tool=themes&amp;action=themes&amp;act=3' class='tooltipper' title='" . _('Add a template') . "'>
+            <a href='{$config->get('paths.baseurl')}/staffpanel.php?tool=themes&amp;action=themes&amp;act=3' class='tooltipper' title='" . _('Add a template') . "'>
                 <span class='button is-small'>" . _('Add a template') . '</span>
             </a>
         </div>';
 }
 $title = _('Templates');
 $breadcrumbs = [
-    "<a href='{$site_config['paths']['baseurl']}/staffpanel.php'>" . _('Staff Panel') . '</a>',
+    "<a href='{$config->get('paths.baseurl')}/staffpanel.php'>" . _('Staff Panel') . '</a>',
     "<a href='{$_SERVER['PHP_SELF']}'>$title</a>",
 ];
 echo stdhead($title, [], 'page-wrapper', $breadcrumbs) . wrapper($HTML) . stdfoot();

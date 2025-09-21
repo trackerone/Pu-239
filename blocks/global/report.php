@@ -5,23 +5,31 @@ require_once __DIR__ . '/../../include/runtime_safe.php';
 require_once __DIR__ . '/../../include/bootstrap_pdo.php';
 
 use Pu239\Cache;
+use Pu239\Config\ConfigRepository;
 use Pu239\Database;
 
+global $container;
+/** @var ConfigRepository $config */
+$config = $container->get(ConfigRepository::class);
+
 $user = check_user_status();
-global $container, $site_config;
 
 $db = $container->get(Database::class);
 $cache = $container->get(Cache::class);
-if ($site_config['alerts']['report'] && has_access($user['class'], UC_STAFF, 'coder')) {
+$alertsEnabled = (bool) $config->get('alerts.report');
+$alertsTtl = (int) $config->get('expires.alerts');
+$baseurl = (string) $config->get('paths.baseurl');
+
+if ($alertsEnabled && has_access($user['class'], UC_STAFF, 'coder')) {
     $delt_with = $cache->get('new_report_');
     if ($delt_with === false || is_null($delt_with)) {
         $delt_with = $db->fetchValue('SELECT COUNT(*) AS count FROM reports WHERE delt_with = 0');
-        $cache->set('new_report_', $delt_with, $site_config['expires']['alerts']);
+        $cache->set('new_report_', $delt_with, $alertsTtl);
     }
     if ($delt_with > 0) {
         $htmlout .= "
     <li>
-        <a href='{$site_config['paths']['baseurl']}/staffpanel.php?tool=reports&amp;action=reports'>
+        <a href='{$baseurl}/staffpanel.php?tool=reports&amp;action=reports'>
             <span class='button tag is-danger dt-tooltipper-small' data-tooltip-content='#reportmessage_tooltip'>
                 " . _pfe('{0} New Report', '{0} New Reports', $delt_with) . "
             </span>
