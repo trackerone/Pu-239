@@ -1,3 +1,6 @@
+*** codex/refactor-to-configrepository-usage-9r8gv7
+=======
+.env.example
 CHANGELOG.md
 FORUM_TOUCHPOINTS.json
 FORUM_TOUCHPOINTS.md
@@ -81,11 +84,28 @@ blocks/userdetails/completed.php
 blocks/userdetails/gender.php
 blocks/userdetails/report.php
 blocks/userdetails/seedbonus.php
+*** master
 chat/lib/class/AJAXChatTemplate.php
 chat/lib/template/loggedIn.html
 chat/lib/template/logs.html
 config/app.php
 config/security.php
+*** codex/refactor-to-configrepository-usage-7pgqdy
+=======
+*** codex/refactor-to-configrepository-usage-46kx66
+=======
+*** codex/refactor-to-configrepository-usage-9r8gv7
+include/config_compat.php
+=======
+*** codex/refactor-to-configrepository-usage-4v69t1
+=======
+*** codex/refactor-to-configrepository-usage-j59s9m
+=======
+config/session.php
+*** master
+*** master
+*** master
+*** master
 forums/_quarantine/REPORT.json
 forums/add_subscription.php
 forums/clear_unread_post.php
@@ -201,3 +221,4 @@ tools/batch-43_7B-admin-autofix.php
 tools/cache_clear.php
 tools/reports/batch42-fluentpdo-usage.ndjson
 tools/reports/batch43_5-admin-audit.ndjson
+*** master
