@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace Pu239;
 
 use Envms\FluentPDO\Exception;
+use PU239\Config\ConfigRepository;
 use Psr\Container\ContainerInterface;
 
 require_once __DIR__ . '/../include/runtime_safe.php';
@@ -17,25 +18,25 @@ class Peer
     protected $cache;
     protected $fluent;
     protected $env;
-    protected $site_config;
     protected $limit;
     protected $container;
+    protected ConfigRepository $config;
 
     /**
      * Peer constructor.
      *
      * @param Cache              $cache
      * @param Database           $fluent
-     * @param Settings           $settings
      * @param ContainerInterface $c
+     * @param ConfigRepository   $config
      *
      * @throws Exception
      */
-    public function __construct(Cache $cache, Database $fluent, Settings $settings, ContainerInterface $c)
+    public function __construct(Cache $cache, Database $fluent, ContainerInterface $c, ConfigRepository $config)
     {
         $this->container = $c;
         $this->env = $this->container->get('env');
-        $this->site_config = $settings->get_settings();
+        $this->config = $config;
         $this->cache = $cache;
         $this->fluent = $fluent;
         $this->limit = $this->env['db']['query_limit'];
@@ -81,7 +82,8 @@ class Peer
                     $peers['percentage'] = ceil(($peers['conn_yes'] / $peers['count']) * 100);
                 }
             }
-            $this->cache->set('peers_' . $userid, $peers, $this->site_config['expires']['peers_']);
+            $ttl = (int) $this->config->get('expires.peers_', 0);
+            $this->cache->set('peers_' . $userid, $peers, $ttl);
         }
 
         return $peers;

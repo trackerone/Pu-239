@@ -6,11 +6,17 @@ require_once __DIR__ . '/../../include/bootstrap_pdo.php';
 
 use Pu239\Cache;
 use Pu239\Database;
+use PU239\Config\ConfigRepository;
 
-global $container, $site_config, $CURUSER;
+global $container, $CURUSER;
 
 $db = $container->get(Database::class);
 $cache = $container->get(Cache::class);
+/** @var ConfigRepository $config */
+$config = $container->get(ConfigRepository::class);
+$latestNewsExpires = (int) $config->get('expires.latest_news');
+$baseurl = (string) $config->get('paths.baseurl');
+$saltOne = (string) $config->get('salt.one');
 $news = $cache->get('latest_news_');
 if ($news === false || is_null($news)) {
     $dt = TIME_NOW - (86400 * 45);
@@ -21,13 +27,13 @@ if ($news === false || is_null($news)) {
             ':limit' => (int) 10,
         ]
     );
-    $cache->set('latest_news_', $news, $site_config['expires']['latest_news']);
+    $cache->set('latest_news_', $news, $latestNewsExpires);
 }
 
 $adminbutton = '';
 if ($CURUSER['class'] >= UC_STAFF) {
     $adminbutton = "
-        <a class='is-pulled-right size_2' href='{$site_config['paths']['baseurl']}/staffpanel.php?tool=news&amp;mode=news'>" . _('Title') . '</a>';
+        <a class='is-pulled-right size_2' href='{$baseurl}/staffpanel.php?tool=news&amp;mode=news'>" . _('Title') . '</a>';
 }
 $site_news .= "
     <a id='news-hash'></a>
@@ -40,13 +46,13 @@ if ($news) {
         $padding = ++$i >= count($news) ? '' : ' bottom20';
         $button = '';
         if ($CURUSER['class'] >= UC_STAFF) {
-            $hash = hash('sha256', $site_config['salt']['one'] . $array['id'] . 'add');
+            $hash = hash('sha256', $saltOne . $array['id'] . 'add');
             $button = "
                 <div class='is-pulled-right'>
-                    <a href='{$site_config['paths']['baseurl']}/staffpanel.php?tool=news&amp;mode=edit&amp;newsid=" . (int) $array['id'] . "'>
+                    <a href='{$baseurl}/staffpanel.php?tool=news&amp;mode=edit&amp;newsid=" . (int) $array['id'] . "'>
                         <i class='icon-edit icon has-text-info size_4 tooltipper' aria-hidden='true' title='" . _('Edit') . "'></i>
                     </a>
-                    <a href='{$site_config['paths']['baseurl']}/staffpanel.php?tool=news&amp;mode=delete&amp;newsid=" . (int) $array['id'] . "&amp;h={$hash}'>
+                    <a href='{$baseurl}/staffpanel.php?tool=news&amp;mode=delete&amp;newsid=" . (int) $array['id'] . "&amp;h={$hash}'>
                         <i class='icon-trash-empty icon has-text-danger size_4 tooltipper' aria-hidden='true' title='" . _('Delete') . "'></i>
                     </a>
                 </div>";

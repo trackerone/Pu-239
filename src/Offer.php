@@ -18,22 +18,17 @@ class Offer
 {
     protected $fluent;
     protected $cache;
-    protected $site_config;
-    protected $settings;
 
     /**
      * Upcoming constructor.
      *
      * @param Cache    $cache
      * @param Database $fluent
-     * @param Settings $settings
      *
      * @throws Exception
      */
-    public function __construct(Cache $cache, Database $fluent, Settings $settings)
+    public function __construct(Cache $cache, Database $fluent)
     {
-        $this->settings = $settings;
-        $this->site_config = $this->settings->get_settings();
         $this->fluent = $fluent;
         $this->cache = $cache;
     }

@@ -4,7 +4,7 @@ require_once dirname(__DIR__) . '/bootstrap.php';
 use Pu239\Database;
 
 
-global $container, $site_config;
+global $container;
 /** @var Pu239\Database $db */
 $db = $container->get(Database::class);
 

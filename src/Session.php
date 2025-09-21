@@ -3,6 +3,8 @@ declare(strict_types=1);
 
 namespace Pu239;
 
+use PU239\Config\ConfigRepository;
+
 require_once __DIR__ . '/../include/runtime_safe.php';
 require_once __DIR__ . '/../include/bootstrap_pdo.php';
 
@@ -11,15 +13,13 @@ require_once __DIR__ . '/../include/bootstrap_pdo.php';
  */
 class Session
 {
-    private $site_config;
+    private ConfigRepository $config;
     private $cache;
     private $fluent;
 
-    public function __construct()
+    public function __construct(ConfigRepository $config, Cache $cache, Database $fluent)
     {
-        global $site_config, $cache, $fluent;
-
-        $this->site_config = $site_config;
+        $this->config = $config;
         $this->cache = $cache;
         $this->fluent = $fluent;
     }
@@ -33,12 +33,20 @@ class Session
     {
         $prefix = '';
         if ($use_prefix) {
-            $prefix = $this->site_config['session']['prefix'];
+            $prefix = (string) $this->config->get('session.prefix', '');
+            if ($prefix === '') {
+                // TODO(2025): map legacy key "session.prefix" to appropriate config path
+            }
         }
-        if (in_array($key, $this->site_config['site']['notifications'])) {
+        $notifications = $this->config->get('site.notifications', []);
+        if (!is_array($notifications)) {
+            // TODO(2025): map legacy key "site.notifications" to appropriate config path
+            $notifications = [];
+        }
+        if (in_array($key, $notifications, true)) {
             $current = $this->get($key);
             if ($current) {
-                if (!in_array($value, $current)) {
+                if (!in_array($value, $current, true)) {
                     $_SESSION[$prefix . $key] = array_merge($current, [$value]);
                 }
             } else {
@@ -61,7 +69,10 @@ class Session
             return null;
         }
 
-        $prefix = $this->site_config['session']['prefix'];
+        $prefix = (string) $this->config->get('session.prefix', '');
+        if ($prefix === '') {
+            // TODO(2025): map legacy key "session.prefix" to appropriate config path
+        }
 
         if (isset($_SESSION[$prefix . $key])) {
             return $_SESSION[$prefix . $key];
@@ -77,7 +88,10 @@ class Session
     public function unset(string $key, string $prefix = null)
     {
         if ($prefix === null) {
-            $prefix = $this->site_config['session']['prefix'];
+            $prefix = (string) $this->config->get('session.prefix', '');
+            if ($prefix === '') {
+                // TODO(2025): map legacy key "session.prefix" to appropriate config path
+            }
         }
 
         unset($_SESSION[$prefix . $key]);

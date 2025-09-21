@@ -7,7 +7,7 @@ require_once __DIR__ . '/include/bootstrap_pdo.php';
 
 use Pu239\Database;
 
-global $container, $site_config;
+global $container;
 $db = $container->get(Database::class);
 $now = defined('TIME_NOW') ? (int) TIME_NOW : time();
 

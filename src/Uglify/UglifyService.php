@@ -6,6 +6,7 @@ namespace Pu239\Uglify;
 use Monolog\Logger;
 use RuntimeException;
 use Throwable;
+use PU239\Config\ConfigRepository;
 
 use function array_merge;
 use function array_unique;
@@ -45,6 +46,7 @@ use const TEMPLATE_DIR;
 final class UglifyService
 {
     private Logger $logger;
+    private ConfigRepository $config;
 
     /**
      * @var list<string>
@@ -61,9 +63,10 @@ final class UglifyService
      */
     private array $generatedFiles = [];
 
-    public function __construct(Logger $logger)
+    public function __construct(Logger $logger, ConfigRepository $config)
     {
         $this->logger = $logger;
+        $this->config = $config;
     }
 
     /**
@@ -105,16 +108,12 @@ final class UglifyService
      */
     private function runInternal(array $args): bool
     {
-        global $site_config, $BLOCKS;
+        global $BLOCKS;
 
         if (empty($BLOCKS)) {
             $this->errors[] = 'BLOCKS are empty';
 
             return false;
-        }
-
-        if (PHP_SAPI === 'cli') {
-            $site_config['cache']['driver'] = 'memory';
         }
 
         $normalizedArgs = $this->normalizeArgs($args);
@@ -420,6 +419,8 @@ final class UglifyService
 
 declare(strict_types = 1);
 
+use PU239\Config\ConfigRepository;
+
 /**
  * @param $file
  *
@@ -427,13 +428,21 @@ declare(strict_types = 1);
  */
 function get_file_name($file)
 {
-    global $site_config;
+    global $container;
+
+    if (!isset($container) || !$container->has(ConfigRepository::class)) {
+        return null;
+    }
+
+    /** @var ConfigRepository $config */
+    $config = $container->get(ConfigRepository::class);
+    $baseUrl = (string) $config->get('paths.baseurl');
 
     switch ($file) {
 PHP;
 
         foreach ($pages as $page) {
-            $output .= "\n        case '{$page[0]}':\n            return \"{\$site_config['paths']['baseurl']}/{$page[1]}\";";
+            $output .= "\n        case '{$page[0]}':\n            return \"{\$baseUrl}/{$page[1]}\";";
         }
 
         $output .= <<<'PHP'

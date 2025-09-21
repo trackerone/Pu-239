@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace Pu239;
 
 use Envms\FluentPDO\Exception;
+use PU239\Config\ConfigRepository;
 
 require_once __DIR__ . '/../include/runtime_safe.php';
 require_once __DIR__ . '/../include/bootstrap_pdo.php';
@@ -15,26 +16,24 @@ class PollVoter
 {
     protected $cache;
     protected $fluent;
-    protected $site_config;
+    protected ConfigRepository $config;
     protected $users_class;
     protected $polls_class;
-    protected $settings;
 
     /**
      * PollVoter constructor.
      *
-     * @param Cache    $cache
-     * @param Database $fluent
-     * @param User     $users_class
-     * @param Poll     $polls_class
-     * @param Settings $settings
+     * @param Cache             $cache
+     * @param Database          $fluent
+     * @param User              $users_class
+     * @param Poll              $polls_class
+     * @param ConfigRepository  $config
      *
      * @throws Exception
      */
-    public function __construct(Cache $cache, Database $fluent, User $users_class, Poll $polls_class, Settings $settings)
+    public function __construct(Cache $cache, Database $fluent, User $users_class, Poll $polls_class, ConfigRepository $config)
     {
-        $this->settings = $settings;
-        $this->site_config = $this->settings->get_settings();
+        $this->config = $config;
         $this->fluent = $fluent;
         $this->cache = $cache;
         $this->users_class = $users_class;
@@ -136,7 +135,8 @@ $id = $this->db->perform($sql, $values);
                 $poll_data['time'] = TIME_NOW;
             }
 
-            $this->cache->set('poll_data_' . $userid, $poll_data, $this->site_config['expires']['poll_data']);
+            $ttl = (int) $this->config->get('expires.poll_data', 0);
+            $this->cache->set('poll_data_' . $userid, $poll_data, $ttl);
         }
 
         return $poll_data;

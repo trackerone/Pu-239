@@ -4,8 +4,11 @@ require_once dirname(__DIR__) . '/bootstrap.php';
 use DI\DependencyException;
 use DI\NotFoundException;
 use Pu239\Database;
+use PU239\Config\ConfigRepository;
 
 $db = $container->get(Database::class);
+/** @var ConfigRepository $config */
+$config = $container->get(ConfigRepository::class);
 /**
  *
  * @param int $post_id
@@ -18,18 +21,18 @@ $db = $container->get(Database::class);
  */
 function upload_attachments(int $post_id)
 {
-    global $container, $site_config, $CURUSER;
+    global $container, $config, $CURUSER;
 
-    $max_file_size = (int) $site_config['forum_config']['max_file_size'];
+    $max_file_size = (int) $config->get('forum_config.max_file_size');
     $upload_folder = ATTACHMENT_DIR;
     $extension_error = $size_error = 0;
-    if ($CURUSER['class'] >= $site_config['forum_config']['min_upload_class']) {
+    if ($CURUSER['class'] >= (int) $config->get('forum_config.min_upload_class')) {
         foreach ($_FILES['attachment']['name'] as $key => $name) {
             if (!empty($name)) {
                 $size = (int) $_FILES['attachment']['size'][$key];
                 $type = $_FILES['attachment']['type'][$key];
-                $accepted_file_types = explode('|', $site_config['forum_config']['accepted_file_types']);
-                $accepted_file_extension = explode('|', $site_config['forum_config']['accepted_file_extension']);
+                $accepted_file_types = explode('|', (string) $config->get('forum_config.accepted_file_types'));
+                $accepted_file_extension = explode('|', (string) $config->get('forum_config.accepted_file_extension'));
                 $file_name = preg_replace('#[^\s\[\]\.a-zA-Z0-9_-]#', '', pathinfo($name, PATHINFO_FILENAME));
                 $file_extension = strtolower(pathinfo($name, PATHINFO_EXTENSION));
                 switch (true) {

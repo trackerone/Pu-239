@@ -5,6 +5,7 @@ namespace Pu239;
 
 use Envms\FluentPDO\Exception;
 use PDOStatement;
+use PU239\Config\ConfigRepository;
 
 require_once __DIR__ . '/../include/runtime_safe.php';
 require_once __DIR__ . '/../include/bootstrap_pdo.php';
@@ -17,23 +18,21 @@ class Snatched
     protected $cache;
     protected $fluent;
     protected $user;
-    protected $site_config;
-    protected $settings;
+    protected ConfigRepository $config;
 
     /**
      * Snatched constructor.
      *
-     * @param Cache    $cache
-     * @param Database $fluent
-     * @param User     $user
-     * @param Settings $settings
+     * @param Cache             $cache
+     * @param Database          $fluent
+     * @param User              $user
+     * @param ConfigRepository  $config
      *
      * @throws Exception
      */
-    public function __construct(Cache $cache, Database $fluent, User $user, Settings $settings)
+    public function __construct(Cache $cache, Database $fluent, User $user, ConfigRepository $config)
     {
-        $this->settings = $settings;
-        $this->site_config = $this->settings->get_settings();
+        $this->config = $config;
         $this->cache = $cache;
         $this->fluent = $fluent;
         $this->user = $user;
@@ -244,7 +243,7 @@ $result = $this->db->perform($sql, array_merge($set, ['id' => $id]));
                               ->groupBy('s.userid')
                               ->groupBy('modcomment')
                               ->groupBy('username')
-                              ->having('count <= ?', $this->site_config['hnr_config']['cainallowed'])
+                              ->having('count <= ?', (int) $this->config->get('hnr_config.cainallowed', 0))
                               ->fetchAll();
 
         return $users;
@@ -270,7 +269,7 @@ $result = $this->db->perform($sql, array_merge($set, ['id' => $id]));
                               ->groupBy('modcomment')
                               ->groupBy('username')
                               ->groupBy('hit_and_run_total')
-                              ->having('count > ?', $this->site_config['hnr_config']['cainallowed'])
+                              ->having('count > ?', (int) $this->config->get('hnr_config.cainallowed', 0))
                               ->fetchAll();
 
         return $users;
@@ -335,7 +334,11 @@ $result = $this->db->perform($sql, array_merge($set, ['id' => $id]));
      */
     public function update_seeder()
     {
-        $deadtime = TIME_NOW - floor($this->site_config['tracker']['announce_interval'] * 1.3);
+        $announceInterval = (int) $this->config->get('tracker.announce_interval', 0);
+        if ($announceInterval === 0) {
+            // TODO(2025): map legacy key "tracker.announce_interval" to appropriate config path
+        }
+        $deadtime = TIME_NOW - (int) floor($announceInterval * 1.3);
         $update = [
             'seeder' => 'no',
         ];
