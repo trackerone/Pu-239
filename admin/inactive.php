@@ -2,11 +2,14 @@
 declare(strict_types=1);
 require_once dirname(__DIR__) . '/bootstrap_web.php';
 
+use Pu239\Config\ConfigRepository;
 use Pu239\Database;
 use Pu239\Session;
 
 
-global $container, $site_config, $CURUSER;
+global $container, $CURUSER;
+/** @var ConfigRepository $config */
+$config = $container->get(ConfigRepository::class);
 
 /** @var Database $db */
 $db = $container->get(Database::class);
@@ -78,18 +81,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 </head>
 <body>
 <p>' . _('Hey') . " $username,</p>
-<p>" . _('Your account at ') . " {$site_config['site']['name']} " . _(' has been marked as inactive and will be deleted. If you wish to remain a member at') . " {$site_config['site']['name']}" . _(', please login.') . '<br>
+<p>" . _('Your account at ') . ' ' . (string) $config->get('site.name') . ' ' . _(' has been marked as inactive and will be deleted. If you wish to remain a member at') . ' ' . (string) $config->get('site.name') . _(', please login.') . '<br>
 ' . _('Your username is: ') . " $username<br>
 " . _('And was created: ') . " $added<br>
 " . _('Last accessed: ') . " $last_access<br>
-" . _('Login at: ') . " {$site_config['paths']['baseurl']}/login.php<br>
-" . _('If you have forgotten your password you can retrieve it at') . " {$site_config['paths']['baseurl']}/resetpw.php<br>
-" . _('Welcome back!') . " {$site_config['site']['name']}</p>
+" . _('Login at: ') . ' ' . (string) $config->get('paths.baseurl') . "/login.php<br>
+" . _('If you have forgotten your password you can retrieve it at') . ' ' . (string) $config->get('paths.baseurl') . "/resetpw.php<br>
+" . _('Welcome back!') . ' ' . (string) $config->get('site.name') . '</p>
 </body>
-</html>";
+</html>';
                     $mail = send_mail(
                         (string) $arr['email'],
-                        _('Your account at ') . "{$site_config['site']['name']}!",
+                        _('Your account at ') . (string) $config->get('site.name') . '!',
                         $body,
                         strip_tags($body)
                     );
@@ -133,7 +136,7 @@ $countRow = $db->fetch(
 $count = (int) ($countRow['count'] ?? 0);
 
 $perpage = 15;
-$pager = pager($perpage, $count, $site_config['paths']['baseurl'] . '/staffpanel.php?tool=inactive&amp;');
+$pager = pager($perpage, $count, (string) $config->get('paths.baseurl') . '/staffpanel.php?tool=inactive&amp;');
 
 // Fetch inactive page
 $rows = [];
@@ -244,7 +247,7 @@ if ($count > 0) {
 
 $title = _('Inactive Users');
 $breadcrumbs = [
-    "<a href='{$site_config['paths']['baseurl']}/staffpanel.php'>" . _('Staff Panel') . '</a>',
+    "<a href='" . (string) $config->get('paths.baseurl') . "/staffpanel.php'>" . _('Staff Panel') . '</a>',
     "<a href='{$_SERVER['PHP_SELF']}'>$title</a>",
 ];
 echo stdhead($title, [], 'page-wrapper', $breadcrumbs) . wrapper($HTMLOUT) . stdfoot();
