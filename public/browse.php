@@ -7,6 +7,7 @@ $db = $container->get(Database::class);
 
 
 
+use Pu239\Config\ConfigRepository;
 use Pu239\Database;
 use Pu239\User;
 
@@ -14,7 +15,12 @@ require_once __DIR__ . '/../include/bittorrent.php';
 require_once CLASS_DIR . 'class_user_options.php';
 require_once CLASS_DIR . 'class_user_options_2.php';
 $user = check_user_status();
-global $container, $site_config;
+global $container;
+/** @var ConfigRepository $config */
+$config = $container->get(ConfigRepository::class);
+
+$baseurl = (string) $config->get('paths.baseurl');
+$minVotes = (int) $config->get('site.minvotes');
 
 $users_class = $container->get(User::class);
 // $fluent removed — use $this->db (ExtendedPdo)
@@ -36,7 +42,7 @@ if (isset($_GET['clear_new']) && $_GET['clear_new'] == 1) {
         'last_browse' => TIME_NOW,
     ];
     $users_class->update($set, $user['id']);
-    header("Location: {$site_config['paths']['baseurl']}/browse.php");
+    header("Location: {$baseurl}/browse.php");
     app_halt('Exit called');
 }
 
@@ -45,7 +51,7 @@ $count = $fluent->from('torrents AS t')
                 ->select('COUNT(t.id) AS count');
 
 $query = $fluent->from('torrents AS t')
-                ->select("IF(t.num_ratings < {$site_config['site']['minvotes']}, NULL, ROUND(t.rating_sum / t.num_ratings, 1)) AS user_rating")
+                ->select("IF(t.num_ratings < {$minVotes}, NULL, ROUND(t.rating_sum / t.num_ratings, 1)) AS user_rating")
                 ->select('u.username')
                 ->select('cu.username AS checked_by_username')
                 ->select('u.class')
@@ -349,7 +355,7 @@ if ($count > 0) {
     } else {
         $addparam = $pagerlink;
     }
-    $pager = pager($torrentsperpage, $count, "{$site_config['paths']['baseurl']}/browse.php?" . $addparam);
+    $pager = pager($torrentsperpage, $count, "{$baseurl}/browse.php?" . $addparam);
     $query = $query->limit($pager['pdo']['limit'])
                    ->offset($pager['pdo']['offset'])
                    ->fetchAll();
@@ -359,7 +365,7 @@ if ($user['opt1'] & class_user_options::VIEWSCLOUD) {
 }
 
 $HTMLOUT .= "
-                                <form id='catsids' method='get' action='{$site_config['paths']['baseurl']}/browse.php' enctype='multipart/form-data' accept-charset='utf-8'>";
+                                <form id='catsids' method='get' action='{$baseurl}/browse.php' enctype='multipart/form-data' accept-charset='utf-8'>";
 if ($today) {
     $HTMLOUT .= "
                                     <input type='hidden' name='today' value='$today'>";
@@ -370,7 +376,7 @@ require_once PARTIALS_DIR . 'categories.php';
 if ($user['opt1'] & class_user_options::CLEAR_NEW_TAG_MANUALLY) {
     $new_button = "
         <div class='has-text-centered margin20'>
-            <a href='{$site_config['paths']['baseurl']}/browse.php?clear_new=1'><input type='submit' value='" . _('clear new tag') . "' class='button is-small'></a>
+            <a href='{$baseurl}/browse.php?clear_new=1'><input type='submit' value='" . _('clear new tag') . "' class='button is-small'></a>
         </div>";
 } else {
     $set = [

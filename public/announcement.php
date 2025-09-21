@@ -2,16 +2,17 @@
 declare(strict_types=1);
 require_once dirname(__DIR__) . '/bootstrap_web.php';
 
-$db = $container->get(Database::class);
-
-
-
-
+use Pu239\Config\ConfigRepository;
 use Pu239\Database;
+
+global $container;
+/** @var ConfigRepository $config */
+$config = $container->get(ConfigRepository::class);
+/** @var Database $db */
+$db = $container->get(Database::class);
 
 require_once __DIR__ . '/../include/bittorrent.php';
 $user = check_user_status();
-global $site_config;
 
 $HTMLOUT = '';
 stderr(_('Error'), _('This page is not complete.'));
@@ -59,14 +60,14 @@ if (!empty($row) && $row['curr_ann_id'] == 0 && $row['curr_ann_last_check'] == 0
             $add_set = 'curr_ann_id=' . sqlesc($ann_row['main_id']);
             $cache->update_row('user_' . $user['id'], [
                 'curr_ann_id' => $ann_row['main_id'],
-            ], $site_config['expires']['user_cache']);
+            ], $config->get('expires.user_cache'));
             $status = 2;
         } else {
             // Announcement not valid for member...
             $add_set = 'curr_ann_last_check = ' . sqlesc($dt);
             $cache->update_row('user_' . $user['id'], [
                 'curr_ann_last_check' => $dt,
-            ], $site_config['expires']['user_cache']);
+            ], $config->get('expires.user_cache'));
             $status = 1;
         }
         // Create or set status of process
@@ -83,7 +84,7 @@ if (!empty($row) && $row['curr_ann_id'] == 0 && $row['curr_ann_last_check'] == 0
         $add_set = 'curr_ann_last_check = ' . sqlesc($dt);
         $cache->update_row('user_' . $user['id'], [
             'curr_ann_last_check' => $dt,
-        ], $site_config['expires']['user_cache']);
+        ], $config->get('expires.user_cache'));
     }
     unset($result, $ann_row);
 }
@@ -104,7 +105,7 @@ if ((!empty($ann_subject)) && (!empty($ann_body))) {
                 <div class='tabular-cell'><b><span class='has-text-danger'>" . _('Announcement') . ': ' . htmlsafechars($ann_subject) . "</span></b></div>
             </div>
             <span class='is-blue'>" . format_comment($ann_body) . '</span>
-            ' . _('Click') . " <a href='{$site_config['paths']['baseurl']}/clear_announcement.php'>
+            ' . _('Click') . " <a href='{$config->get('paths.baseurl')}/clear_announcement.php'>
             <i><b>" . _('here') . '</b></i></a> ' . _('to clear this announcement') . '.
         </div>
     </div>';

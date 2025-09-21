@@ -86,6 +86,12 @@ offset=0,batch_size=20,processed=20,replacements=88
 offset=20,batch_size=10,processed=10,replacements=77
 offset=30,batch_size=10,processed=10,replacements=47
 offset=40,batch_size=10,processed=10,replacements=30
+<<<<<< codex/refactor-legacy-config-constants-to-configrepository-htorra
+offset=50,batch_size=10,processed=10,replacements=19
+offset=60,batch_size=10,processed=10,replacements=34
+offset=70,batch_size=15,processed=15,replacements=126
+offset=85,batch_size=15,processed=15,replacements=184
+=======
 <<<<<< codex/refactor-legacy-config-constants-to-configrepository-bwhwqr
 offset=50,batch_size=10,processed=10,replacements=19
 offset=60,batch_size=10,processed=10,replacements=34
@@ -110,5 +116,6 @@ offset=20,batch_size=10,processed=10,replacements=77
 *** master
 *** master
 *** master
+>>>>>> master
 >>>>>> master
 >>>>>> master
