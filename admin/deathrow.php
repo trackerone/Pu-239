@@ -2,6 +2,7 @@
 declare(strict_types=1);
 require_once dirname(__DIR__) . '/bootstrap_web.php';
 
+use PU239\Config\ConfigRepository;
 use Delight\Auth\AuthError;
 use Delight\Auth\NotLoggedInException;
 use DI\DependencyException;
@@ -13,8 +14,9 @@ use Pu239\Session;
 use Spatie\Image\Exceptions\InvalidManipulation;
 
 
-global $container, $site_config, $CURUSER;
-
+global $container, $CURUSER;
+/** @var ConfigRepository $config */
+$config = $container->get(ConfigRepository::class);
 $db = $container->get(Database::class);
 
 $class = get_access(basename($_SERVER['REQUEST_URI']));
@@ -57,7 +59,7 @@ function calctime($val)
  */
 function notify_owner(array $tids)
 {
-    global $container, $site_config;
+    global $container, $config;
 
     if (empty($tids)) {
         return false;
@@ -75,7 +77,7 @@ function notify_owner(array $tids)
     $subject = _('Dead Torrent Notice');
     $values = [];
     foreach ($torrents as $torrent) {
-        $msg = _fe('Torrent {0}{1}{2} will soon be deleted. Please re-seed this torrent to avoid deletion.', "[url={$site_config['paths']['baseurl']}/details.php?id={$torrent['id']}]", format_comment($torrent['name']), '[/url]');
+        $msg = _fe('Torrent {0}{1}{2} will soon be deleted. Please re-seed this torrent to avoid deletion.', "[url={$config->get('paths.baseurl')}/details.php?id={$torrent['id']}]", format_comment($torrent['name']), '[/url]');
         $values[] = [
             'receiver' => $torrent['owner'],
             'added' => $dt,
@@ -255,7 +257,7 @@ if ($count) {
         <tr>' . ($CURUSER['class'] >= UC_STAFF ? '
             <td>' . format_username((int) $queued['uid']) . '</td>' : '
             <td>' . _('Hidden') . '</td>') . "
-            <td><a href='{$site_config['paths']['baseurl']}/details.php?id={$id}&amp;hit=1'>" . format_comment($queued['torrent_name']) . "</a></td>
+            <td><a href='{$config->get('paths.baseurl')}/details.php?id={$id}&amp;hit=1'>" . format_comment($queued['torrent_name']) . "</a></td>
             <td>{$reason}</td>
             <td>" . get_date((int) $queued['notified'], 'LONG', 0, 1) . "</td>
             <td><input type='checkbox' name='remove[]' value='{$id}' class='tooltipper' title='" . _('Delete') . "'></td>
@@ -269,7 +271,7 @@ if ($count) {
         </form>";
     $title = _('Deatchrow');
     $breadcrumbs = [
-        "<a href='{$site_config['paths']['baseurl']}/staffpanel.php'>" . _('Staff Panel') . '</a>',
+        "<a href='{$config->get('paths.baseurl')}/staffpanel.php'>" . _('Staff Panel') . '</a>',
         "<a href='{$_SERVER['PHP_SELF']}'>$title</a>",
     ];
     echo stdhead($title, [], 'page-wrapper', $breadcrumbs) . wrapper($HTMLOUT) . stdfoot();
@@ -278,7 +280,7 @@ if ($count) {
     $HTMLOUT .= stdmsg(_('Awesome'), _('There are not torrents on deathrow'));
     $title = _('Deathrow');
     $breadcrumbs = [
-        "<a href='{$site_config['paths']['baseurl']}/staffpanel.php'>" . _('Staff Panel') . '</a>',
+        "<a href='{$config->get('paths.baseurl')}/staffpanel.php'>" . _('Staff Panel') . '</a>',
         "<a href='{$_SERVER['PHP_SELF']}'>$title</a>",
     ];
     echo stdhead($title, [], 'page-wrapper', $breadcrumbs) . wrapper($HTMLOUT) . stdfoot();

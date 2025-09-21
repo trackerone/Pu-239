@@ -4,11 +4,13 @@ declare(strict_types=1);
 require_once __DIR__ . '/../../include/runtime_safe.php';
 require_once __DIR__ . '/../../include/bootstrap_pdo.php';
 
+use PU239\Config\ConfigRepository;
 use Pu239\Cache;
 use Pu239\Database;
 
-global $container, $site_config, $user, $CURUSER;
-
+global $container, $user, $CURUSER;
+/** @var ConfigRepository $config */
+$config = $container->get(ConfigRepository::class);
 $db = $container->get(Database::class);
 
  $cache = $container->get(Cache::class);
@@ -21,7 +23,7 @@ if ($cache_share_ratio === false || is_null($cache_share_ratio)) {
 
     $cache_share_ratio['total_number'] = (int) $sql['total_number'];
     $cache_share_ratio['seed_time_total'] = (int) $sql['seed_time_total'];
-    $cache->set('share_ratio_' . $user['id'], $cache_share_ratio, $site_config['expires']['share_ratio']);
+    $cache->set('share_ratio_' . $user['id'], $cache_share_ratio, $config->get('expires.share_ratio'));
 }
 
 switch (true) {

@@ -2,11 +2,14 @@
 declare(strict_types=1);
 require_once __DIR__ . '/../include/runtime_safe.php';
 require_once __DIR__ . '/../include/bootstrap_pdo.php';
-use Pu239\Database;
 use DI\DependencyException;
 use DI\NotFoundException;
+use PU239\Config\ConfigRepository;
+use Pu239\Database;
 use Spatie\Image\Exceptions\InvalidManipulation;
 global $container;
+/** @var ConfigRepository $config */
+$config = $container->get(ConfigRepository::class);
 $db = $container->get(Database::class);
 
 $user = check_user_status();
@@ -91,7 +94,7 @@ $HTMLOUT .= main_div($main_div, 'bottom20');
  */
 function format_row(array $cat, string $parent, string $cat_name, array $grouped, array $cats, array $terms)
 {
-    global $site_config, $CURUSER;
+    global $CURUSER, $config;
 
     $terms = !empty($terms) ? '&amp;' . implode('&amp;', $terms) : '';
     $checked = in_array($cat['id'], $cats) ? 'checked' : '';
@@ -109,11 +112,17 @@ function format_row(array $cat, string $parent, string $cat_name, array $grouped
         $js = 'onclick="return showMe(event);"';
     }
     $link = "{$_SERVER['PHP_SELF']}?cats[]={$cat['id']}&amp;" . implode('&amp;', $list) . $terms;
-    $image = !empty($cat['image']) && $CURUSER['opt2'] & class_user_options_2::BROWSE_ICONS ? "
-        <div class='left10 tooltipper' title='" . _fe('Search All {0}', $parent === 'child' ? format_comment("{$cat_name} :: {$cat['name']}") : format_comment($cat['name'])) . "'>
-            <img class='caticon' src='{$site_config['paths']['images_baseurl']}caticons/{$CURUSER['categorie_icon']}/" . format_comment($cat['image']) . "' alt='" . format_comment($cat['name']) . "'>
-        </div>" : "
-        <div class='left10 tooltipper has-text-right tooltipper' title='" . _fe('Search All {0}', $parent === 'child' ? format_comment("{$cat_name} :: {$cat['name']}") : format_comment($cat['name'])) . "'>" . format_comment($cat['name']) . '</div>';
+    $search_title = _fe('Search All {0}', $parent === 'child' ? format_comment("{$cat_name} :: {$cat['name']}") : format_comment($cat['name']));
+    $images_baseurl = (string) $config->get('paths.images_baseurl');
+    if (!empty($cat['image']) && $CURUSER['opt2'] & class_user_options_2::BROWSE_ICONS) {
+        $image = "
+        <div class='left10 tooltipper' title='{$search_title}'>
+            <img class='caticon' src='" . $images_baseurl . "caticons/{$CURUSER['categorie_icon']}/" . format_comment($cat['image']) . "' alt='" . format_comment($cat['name']) . "'>
+        </div>";
+    } else {
+        $image = "
+        <div class='left10 tooltipper has-text-right tooltipper' title='{$search_title}'>" . format_comment($cat['name']) . '</div>';
+    }
 
     return "
         <a href='{$link}'>

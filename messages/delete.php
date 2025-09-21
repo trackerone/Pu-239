@@ -4,18 +4,21 @@ declare(strict_types=1);
 
 require_once dirname(__DIR__) . '/bootstrap.php';
 
+use PU239\Config\ConfigRepository;
 use Pu239\Cache;
 use Pu239\Message;
 
-global $container, $CURUSER, $site_config;
+global $container, $CURUSER;
+/** @var ConfigRepository $config */
+$config = $container->get(ConfigRepository::class);
 
 $messages_class = $container->get(Message::class);
 $message = $messages_class->get_by_id($pm_id);
 $cache = $container->get(Cache::class);
 if ($message['receiver'] == $CURUSER['id'] && $message['urgent'] === 'yes' && $message['unread'] === 'yes') {
-    stderr(_('Error'), _fe('You MUST read {0}this message{1} before you delete it!', '<a class="is-link" href="' . $site_config['paths']['baseurl'] . '/messages.php?action=view_message&id=' . $pm_id . '">', '</a>'));
+    stderr(_('Error'), _fe('You MUST read {0}this message{1} before you delete it!', '<a class="is-link" href="' . $config->get('paths.baseurl') . '/messages.php?action=view_message&id=' . $pm_id . '">', '</a>'));
 }
-if (($message['receiver'] == $CURUSER['id'] || $message['sender'] == $CURUSER['id']) && $message['location'] == $site_config['pm']['deleted']) {
+if (($message['receiver'] == $CURUSER['id'] || $message['sender'] == $CURUSER['id']) && $message['location'] == $config->get('pm.deleted')) {
     $messages_class->delete($pm_id, $CURUSER['id']);
 } elseif ($message['receiver'] == $CURUSER['id']) {
     $set = [
@@ -24,7 +27,7 @@ if (($message['receiver'] == $CURUSER['id'] || $message['sender'] == $CURUSER['i
     ];
     $messages_class->update($set, $pm_id);
     $cache->decrement('inbox_' . $CURUSER['id']);
-} elseif ($message['sender'] == $CURUSER['id'] && $message['location'] != $site_config['pm']['deleted']) {
+} elseif ($message['sender'] == $CURUSER['id'] && $message['location'] != $config->get('pm.deleted')) {
     $set = [
         'saved' => 'no',
     ];

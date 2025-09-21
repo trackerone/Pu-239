@@ -2,11 +2,13 @@
 declare(strict_types=1);
 require_once dirname(__DIR__) . '/bootstrap_web.php';
 
+use PU239\Config\ConfigRepository;
 use Pu239\Database;
 
 
-global $container, $site_config;
-
+global $container;
+/** @var ConfigRepository $config */
+$config = $container->get(ConfigRepository::class);
 $db = $container->get(Database::class);
 
 class_check(UC_MAX);
@@ -73,7 +75,7 @@ if (!empty($query)) {
         $autoincrement = isset($row['Auto_increment']) ? number_format($row['Auto_increment']) : 'null';
         $thispage = '&amp;Do=optimize&amp;table=' . urlencode($row['Name']);
         $overhead = ($row['Data_free'] > 1024 * 1024 * 10) ? "
-                <a href='{$site_config['paths']['baseurl']}/staffpanel.php?tool=mysql_overview&amp;action=mysql_overview$thispage'>
+                <a href='{$config->get('paths.baseurl')}/staffpanel.php?tool=mysql_overview&amp;action=mysql_overview$thispage'>
                     <span class='has-text-danger has-text-weight-bold'>$data_free</span>
                 </a>" : $data_free;
         $body .= "
@@ -105,7 +107,7 @@ $HTMLOUT .= main_table($body, $heading);
 
 $title = _('MySQL Overview');
 $breadcrumbs = [
-    "<a href='{$site_config['paths']['baseurl']}/staffpanel.php'>" . _('Staff Panel') . '</a>',
+    "<a href='{$config->get('paths.baseurl')}/staffpanel.php'>" . _('Staff Panel') . '</a>',
     "<a href='{$_SERVER['PHP_SELF']}'>$title</a>",
 ];
 echo stdhead($title, [], 'page-wrapper', $breadcrumbs) . wrapper($HTMLOUT) . stdfoot();

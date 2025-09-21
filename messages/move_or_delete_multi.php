@@ -1,13 +1,15 @@
 <?php
-
 declare(strict_types=1);
 
 require_once dirname(__DIR__) . '/bootstrap.php';
 
+use PU239\Config\ConfigRepository;
 use Pu239\Cache;
 use Pu239\Message;
 
-global $container, $site_config, $CURUSER;
+global $container, $CURUSER;
+/** @var ConfigRepository $config */
+$config = $container->get(ConfigRepository::class);
 
 // TODO(2025): csrf
 $posted_pm = $_POST['pm'] ?? [];
@@ -36,9 +38,9 @@ if (isset($_POST['delete'])) {
         $id = (int) $id;
         $message = $messages_class->get_by_id($id);
         if ($message['receiver'] == $CURUSER['id'] && $message['urgent'] === 'yes' && $message['unread'] === 'yes') {
-            stderr(_('Error'), _('You MUST read this message before you delete it!!!') . ' <a class="is-link" href="' . $site_config['paths']['baseurl'] . '/messages.php?action=view_message&id=' . $pm_id . '">' . _('BACK') . '</a>' . _(' to message.') . '');
+            stderr(_('Error'), _('You MUST read this message before you delete it!!!') . ' <a class="is-link" href="' . (string) $config->get('paths.baseurl') . '/messages.php?action=view_message&id=' . $pm_id . '">' . _('BACK') . '</a>' . _(' to message.') . '');
         }
-        if (($message['receiver'] == $CURUSER['id'] || $message['sender'] == $CURUSER['id']) && $message['location'] == $site_config['pm']['deleted']) {
+        if (($message['receiver'] == $CURUSER['id'] || $message['sender'] == $CURUSER['id']) && $message['location'] == (int) $config->get('pm.deleted')) {
             $result = $messages_class->delete($id, $CURUSER['id']);
         } elseif ($message['receiver'] == $CURUSER['id']) {
             $set = [
@@ -47,7 +49,7 @@ if (isset($_POST['delete'])) {
             ];
             $result = $messages_class->update($set, $id);
             $cache->decrement('inbox_' . $CURUSER['id']);
-        } elseif ($message['sender'] == $CURUSER['id'] && $message['location'] != $site_config['pm']['deleted']) {
+        } elseif ($message['sender'] == $CURUSER['id'] && $message['location'] != (int) $config->get('pm.deleted')) {
             $set = [
                 'saved' => 'no',
             ];

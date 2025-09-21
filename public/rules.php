@@ -2,17 +2,17 @@
 declare(strict_types=1);
 require_once dirname(__DIR__) . '/bootstrap_web.php';
 
-$db = $container->get(Database::class);
-
-
-
-
-
+use PU239\Config\ConfigRepository;
 use Delight\Auth\Auth;
+use Pu239\Database;
 use Pu239\Roles;
 
+global $container;
+/** @var ConfigRepository $config */
+$config = $container->get(ConfigRepository::class);
+$db = $container->get(Database::class);
+
 require_once __DIR__ . '/../include/bittorrent.php';
-global $container, $site_config;
 
 $auth = $container->get(Auth::class);
 if (!$auth->isLoggedIn()) {
@@ -24,7 +24,7 @@ if (!$auth->isLoggedIn()) {
 $HTMLOUT = "
         <fieldset id='rules'>
             <legend class='level-center-center padding20 size_7'>
-                <img src='{$site_config['paths']['images_baseurl']}info.png' alt='' class='tooltipper right5' title='" . _('Guidelines') . "' width='25'>" . _('Guidelines') . '
+                <img src='{$config->get('paths.images_baseurl')}info.png' alt='' class='tooltipper right5' title='" . _('Guidelines') . "' width='25'>" . _('Guidelines') . '
             </legend>';
 
 $main_div = "
@@ -119,7 +119,7 @@ if ($user['class'] >= UC_STAFF) {
                                 </tr>
                                 <tr>
                                     <td>
-                                        <img src='{$site_config['paths']['images_baseurl']}star.png' alt='Donor' class='tooltipper' title='Donor'>
+                                        <img src='{$config->get('paths.images_baseurl')}star.png' alt='Donor' class='tooltipper' title='Donor'>
                                     </td>
                                     <td>" . _('This status is given ONLY by the Sysops since only they can verify that they actually donated something.') . "</td>
                                 </tr>

@@ -2,11 +2,15 @@
 
 declare(strict_types=1);
 
+use PU239\Config\ConfigRepository;
 use Pu239\Cache;
 use Pu239\Database;
 
 require_once dirname(__DIR__) . '/bootstrap_web.php';
 
+global $container;
+/** @var ConfigRepository $config */
+$config = $container->get(ConfigRepository::class);
 $cache = $container->get(Cache::class);
 $db = $container->get(Database::class);
 
@@ -77,7 +81,7 @@ if ($results !== []) {
         $template .= "
         <ul class='columns {$background} round10'>
             <li class='column is-three-fifth'>
-                <a href='{$site_config['paths']['baseurl']}/details.php?id={$torrentId}&amp;hit=1'>
+                <a href='{$config->get('paths.baseurl')}/details.php?id={$torrentId}&amp;hit=1'>
                     <span class='{$color}'>{$name}</span>
                 </a>
             </li>

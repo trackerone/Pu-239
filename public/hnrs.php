@@ -7,6 +7,7 @@ $db = $container->get(Database::class);
 
 
 
+use PU239\Config\ConfigRepository;
 use Pu239\Database;
 use Pu239\Session;
 use Pu239\Snatched;
@@ -18,8 +19,9 @@ require_once CLASS_DIR . 'class_user_options.php';
 require_once CLASS_DIR . 'class_user_options_2.php';
 $user = check_user_status();
 $HTMLOUT = '';
-global $container, $site_config;
-
+global $container;
+/** @var ConfigRepository $config */
+$config = $container->get(ConfigRepository::class);
 if (isset($_GET['id']) && $user['class'] >= UC_STAFF) {
     $userid = (int) $_GET['id'];
     $users_class = $container->get(User::class);
@@ -83,7 +85,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $cache->delete('userhnrs_' . $userid);
             $session->set('is-success', _('You have successfully removed the HnR for this torrent!'));
         } elseif (!empty($_POST['bytes'])) {
-            $downloaded = $site_config['site']['ratio_free'] ? $torrent['size'] : $snatched['downloaded'];
+            $downloaded = $config->get('site.ratio_free') ? $torrent['size'] : $snatched['downloaded'];
             $bytes = $downloaded - $snatched['uploaded'];
             if ($diff < $bytes) {
                 $session->set('is-danger', _('You do not have enough upload credit!'));
@@ -157,7 +159,7 @@ if (count($hnrs) > 0) {
             <th class='has-text-centered'>" . _('Seeders') . "</th>
             <th class='has-text-centered'>" . _('Leechers') . "</th>
             <th class='has-text-centered'>" . _('Uploaded') . '</th>
-            ' . ($site_config['site']['ratio_free'] ? "
+            ' . ($config->get('site.ratio_free') ? "
             <th class='has-text-centered'>" . _('Size') . '</th>' : "
             <th class='has-text-centered'>" . _('Downloaded') . '</th>') . "
             <th class='has-text-centered'>" . _('Ratio') . "</th>
@@ -170,39 +172,39 @@ if (count($hnrs) > 0) {
     foreach ($hnrs as $a) {
         $torrent_needed_seed_time = ($a['st'] - $a['torrent_added']);
         switch (true) {
-            case $user['class'] <= $site_config['hnr_config']['firstclass']:
-                $days_3 = $site_config['hnr_config']['_3day_first'] * 3600;
-                $days_14 = $site_config['hnr_config']['_14day_first'] * 3600;
-                $days_over_14 = $site_config['hnr_config']['_14day_over_first'] * 3600;
+            case $user['class'] <= $config->get('hnr_config.firstclass'):
+                $days_3 = $config->get('hnr_config._3day_first') * 3600;
+                $days_14 = $config->get('hnr_config._14day_first') * 3600;
+                $days_over_14 = $config->get('hnr_config._14day_over_first') * 3600;
                 break;
 
-            case $user['class'] < $site_config['hnr_config']['secondclass']:
-                $days_3 = $site_config['hnr_config']['_3day_second'] * 3600;
-                $days_14 = $site_config['hnr_config']['_14day_second'] * 3600;
-                $days_over_14 = $site_config['hnr_config']['_14day_over_second'] * 3600;
+            case $user['class'] < $config->get('hnr_config.secondclass'):
+                $days_3 = $config->get('hnr_config._3day_second') * 3600;
+                $days_14 = $config->get('hnr_config._14day_second') * 3600;
+                $days_over_14 = $config->get('hnr_config._14day_over_second') * 3600;
                 break;
 
-            case $user['class'] >= $site_config['hnr_config']['thirdclass']:
-                $days_3 = $site_config['hnr_config']['_3day_third'] * 3600;
-                $days_14 = $site_config['hnr_config']['_14day_third'] * 3600;
-                $days_over_14 = $site_config['hnr_config']['_14day_over_third'] * 3600;
+            case $user['class'] >= $config->get('hnr_config.thirdclass'):
+                $days_3 = $config->get('hnr_config._3day_third') * 3600;
+                $days_14 = $config->get('hnr_config._14day_third') * 3600;
+                $days_over_14 = $config->get('hnr_config._14day_over_third') * 3600;
                 break;
 
             default:
-                $days_3 = $site_config['hnr_config']['_3day_first'] * 3600; //== 1 days
-                $days_14 = $site_config['hnr_config']['_14day_first'] * 3600; //== 1 days
-                $days_over_14 = $site_config['hnr_config']['_14day_over_first'] * 3600; //== 1 day
+                $days_3 = $config->get('hnr_config._3day_first') * 3600; //== 1 days
+                $days_14 = $config->get('hnr_config._14day_first') * 3600; //== 1 days
+                $days_over_14 = $config->get('hnr_config._14day_over_first') * 3600; //== 1 day
         }
         switch (true) {
-            case $site_config['hnr_config']['torrentage1'] * 86400 > ($a['st'] - $a['torrent_added']):
+            case $config->get('hnr_config.torrentage1') * 86400 > ($a['st'] - $a['torrent_added']):
                 $minus_ratio = ($days_3 - $a['seedtime']);
                 break;
 
-            case $site_config['hnr_config']['torrentage2'] * 86400 > ($a['st'] - $a['torrent_added']):
+            case $config->get('hnr_config.torrentage2') * 86400 > ($a['st'] - $a['torrent_added']):
                 $minus_ratio = ($days_14 - $a['seedtime']);
                 break;
 
-            case $site_config['hnr_config']['torrentage3'] * 86400 <= ($a['st'] - $a['torrent_added']):
+            case $config->get('hnr_config.torrentage3') * 86400 <= ($a['st'] - $a['torrent_added']):
                 $minus_ratio = ($days_over_14 - $a['seedtime']);
                 break;
 
@@ -235,14 +237,14 @@ if (count($hnrs) > 0) {
         }
 
         $dl_speed = mksize($dl_speed);
-        $checkbox_for_delete = ($user['class'] >= UC_STAFF && $user['id'] != $userid ? " [<a href='" . $site_config['paths']['baseurl'] . '/userdetails.php?id=' . $userid . '&amp;delete_hit_and_run=' . (int) $a['sid'] . "'>" . _('Remove') . '</a>]' : '');
-        $mark_of_cain = ($a['mark_of_cain'] === 'yes' ? "<img src='{$site_config['paths']['images_baseurl']}moc.gif' width='40px' alt='" . _('Mark Of Cain') . "' class='tooltipper' title='" . _('The mark of Cain!') . "'>" . $checkbox_for_delete : '');
-        $hit_n_run = ($a['hit_and_run'] > 0 ? "<img src='{$site_config['paths']['images_baseurl']}hnr.gif' width='40px' alt='" . _('Hit and run') . "' class='tooltipper' title='" . _('Hit and run!') . "'>" : '');
+        $checkbox_for_delete = ($user['class'] >= UC_STAFF && $user['id'] != $userid ? " [<a href='" . $config->get('paths.baseurl') . '/userdetails.php?id=' . $userid . '&amp;delete_hit_and_run=' . (int) $a['sid'] . "'>" . _('Remove') . '</a>]' : '');
+        $mark_of_cain = ($a['mark_of_cain'] === 'yes' ? "<img src='{$config->get('paths.images_baseurl')}moc.gif' width='40px' alt='" . _('Mark Of Cain') . "' class='tooltipper' title='" . _('The mark of Cain!') . "'>" . $checkbox_for_delete : '');
+        $hit_n_run = ($a['hit_and_run'] > 0 ? "<img src='{$config->get('paths.images_baseurl')}hnr.gif' width='40px' alt='" . _('Hit and run') . "' class='tooltipper' title='" . _('Hit and run!') . "'>" : '');
         $needs_seed = time() < $a['hit_and_run'] + 86400 ? ' in ' . mkprettytime($a['hit_and_run'] + 86400 - time()) : '';
 
         if ($bp >= $cost && $cost != 0) {
             $buyout = "
-            <form method='post' action='{$site_config['paths']['baseurl']}/hnrs.php' enctype='multipart/form-data' accept-charset='utf-8'>
+            <form method='post' action='{$config->get('paths.baseurl')}/hnrs.php' enctype='multipart/form-data' accept-charset='utf-8'>
                 <input type='hidden' name='seed' value='{$minus_ratio}'>
                 <input type='hidden' name='sid' value='{$a['sid']}'>
                 <input type='hidden' name='tid' value='{$a['tid']}'>
@@ -255,11 +257,11 @@ if (count($hnrs) > 0) {
             $buyout = '';
         }
 
-        $a_downloaded = $site_config['site']['ratio_free'] ? $a['size'] : $a['downloaded'];
+        $a_downloaded = $config->get('site.ratio_free') ? $a['size'] : $a['downloaded'];
         $bytes = $a_downloaded - $a['uploaded'];
         if ($diff >= $bytes) {
             $buybytes = "
-            <form method='post' action='{$site_config['paths']['baseurl']}/hnrs.php' enctype='multipart/form-data' accept-charset='utf-8'>
+            <form method='post' action='{$config->get('paths.baseurl')}/hnrs.php' enctype='multipart/form-data' accept-charset='utf-8'>
                 <input type='hidden' name='bytes' value='{$bytes}'>
                 <input type='hidden' name='sid' value='{$a['sid']}'>
                 <input type='hidden' name='tid' value='{$a['tid']}'>
@@ -275,7 +277,7 @@ if (count($hnrs) > 0) {
         $or = !empty($buyout) && !empty($buybytes) ? 'or' : '';
         $sucks = empty($buyout) ? _fe('Seed for {0}', $need_to_seed) : _fe('or<br>Seed for {0}', $need_to_seed);
         $a['cat'] = $a['parent_name'] . ' :: ' . $a['catname'];
-        $caticon = !empty($a['image']) ? "<img height='42px' class='round5 tooltipper' src='{$site_config['paths']['images_baseurl']}caticons/{$user['categorie_icon']}/{$a['image']}' alt='{$a['cat']}' title='{$a['name']}'>" : $a['cat'];
+        $caticon = !empty($a['image']) ? "<img height='42px' class='round5 tooltipper' src='{$config->get('paths.images_baseurl')}caticons/{$user['categorie_icon']}/{$a['image']}' alt='{$a['cat']}' title='{$a['name']}'>" : $a['cat'];
         $body .= "
         <tr>
             <td class='padding5'>$caticon</td>
@@ -285,7 +287,7 @@ if (count($hnrs) > 0) {
             <td class='has-text-centered'>" . (int) $a['seeders'] . "</td>
             <td class='has-text-centered'>" . (int) $a['leechers'] . "</td>
             <td class='has-text-centered'>" . mksize($a['uploaded']) . '</td>
-            ' . ($site_config['site']['ratio_free'] ? "<td class='has-text-centered'>" . mksize($a['size']) . '</td>' : "<td class='has-text-centered'>" . mksize($a['downloaded']) . '</td>') . "
+            ' . ($config->get('site.ratio_free') ? "<td class='has-text-centered'>" . mksize($a['size']) . '</td>' : "<td class='has-text-centered'>" . mksize($a['downloaded']) . '</td>') . "
             <td class='has-text-centered'>" . ($a['downloaded'] > 0 ? "<span style='color: " . get_ratio_color($a['uploaded'] / $a['downloaded']) . ";'>" . number_format($a['uploaded'] / $a['downloaded'], 3) . '</span>' : ($a['uploaded'] > 0 ? 'Inf.' : '---')) . "<br></td>
             <td class='has-text-centered'>" . get_date((int) $a['complete_date'], 'DATE') . "</td>
             <td class='has-text-centered'>" . get_date((int) $a['last_action'], 'DATE') . "</td>
@@ -300,8 +302,8 @@ if (count($hnrs) > 0) {
 
 $title = _('HnRs');
 $breadcrumbs = [
-    "<a href='{$site_config['paths']['baseurl']}/userdetails.php?id={$userid}'>" . _('User Details') . '</a>',
-    "<a href='{$site_config['paths']['baseurl']}/usercp.php?id={$userid}'>" . _('User CP') . '</a>',
+    "<a href='{$config->get('paths.baseurl')}/userdetails.php?id={$userid}'>" . _('User Details') . '</a>',
+    "<a href='{$config->get('paths.baseurl')}/usercp.php?id={$userid}'>" . _('User CP') . '</a>',
     "<a href='{$_SERVER['PHP_SELF']}'>$title</a>",
 ];
 echo stdhead($title, [], 'page-wrapper', $breadcrumbs) . wrapper($completed) . stdfoot();

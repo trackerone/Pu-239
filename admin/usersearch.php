@@ -2,11 +2,14 @@
 declare(strict_types=1);
 require_once dirname(__DIR__) . '/bootstrap_web.php';
 
+use PU239\Config\ConfigRepository;
 use Pu239\Cache;
 use Pu239\Database;
 
 
-global $container, $site_config, $CURUSER;
+global $container, $CURUSER;
+/** @var ConfigRepository $config */
+$config = $container->get(ConfigRepository::class);
 
 $db    = $container->get(Database::class);
 $class = get_access(basename($_SERVER['REQUEST_URI']));
@@ -35,10 +38,10 @@ $where_is = ' i.type = "login" ';
 $HTMLOUT .= "
         <ul class='level-center bg-06'>
             <li class='is-link margin10'>
-                <a href='{$site_config['paths']['baseurl']}/staffpanel.php?tool=usersearch&amp;h=1'>" . _('Instructions') . "</a>
+                <a href='{$config->get('paths.baseurl')}/staffpanel.php?tool=usersearch&amp;h=1'>" . _('Instructions') . "</a>
             </li>
             <li class='is-link margin10'>
-                <a href='{$site_config['paths']['baseurl']}/staffpanel.php?tool=usersearch'>" . _('Reset') . "</a>
+                <a href='{$config->get('paths.baseurl')}/staffpanel.php?tool=usersearch'>" . _('Reset') . "</a>
             </li>
         </ul>
         <h1 class='has-text-centered'>" . _('Administrative User Search') . '</h1>';
@@ -730,7 +733,7 @@ if (!empty($search)) {
     $count = (int) $arr[0];
     $q1 = isset($q1) ? ($q1 . '&amp;') : '';
     $perpage = 30;
-    $pager = pager($perpage, $count, "{$site_config['paths']['baseurl']}/staffpanel.php?tool=usersearch&amp;" . $q1);
+    $pager = pager($perpage, $count, "{$config->get('paths.baseurl')}/staffpanel.php?tool=usersearch&amp;" . $q1);
     $query1 .= $pager['limit'];
     $res = sql_query($query1) or sqlerr(__FILE__, __LINE__);
     if (empty($rows)) {
@@ -766,7 +769,7 @@ if (!empty($search)) {
                 if ($count === 0) {
                     $ipstr = $user['ip'] . ' ' . $user['type'];
                 } else {
-                    $ipstr = "<a href='{$site_config['paths']['baseurl']}/staffpanel.php?tool=testip&amp;action=testip&amp;ip=" . htmlsafechars($user['ip']) . "'><span style='color: #FF0000;'><b>" . htmlsafechars($user['ip']) . '</b></span></a>';
+                    $ipstr = "<a href='{$config->get('paths.baseurl')}/staffpanel.php?tool=testip&amp;action=testip&amp;ip=" . htmlsafechars($user['ip']) . "'><span style='color: #FF0000;'><b>" . htmlsafechars($user['ip']) . '</b></span></a>';
                 }
             } else {
                 $ipstr = '---';
@@ -805,7 +808,7 @@ if (!empty($search)) {
             <td>' . ratios($pul, $pdl) . '</td>
             <td>' . number_format($pul / 1048576) . '</td>
             <td>' . number_format($pdl / 1048576) . '</td>
-            <td>' . ($n_posts ? "<a href='{$site_config['paths']['baseurl']}/userhistory.php?action=viewposts&amp;id=" . (int) $user['id'] . "'>$n_posts</a>" : $n_posts) . '|' . ($n_comments ? "<a href='{$site_config['paths']['baseurl']}/userhistory.php?action=viewcomments&amp;id=" . (int) $user['id'] . "'>$n_comments</a>" : $n_comments) . '</td>
+            <td>' . ($n_posts ? "<a href='{$config->get('paths.baseurl')}/userhistory.php?action=viewposts&amp;id=" . (int) $user['id'] . "'>$n_posts</a>" : $n_posts) . '|' . ($n_comments ? "<a href='{$config->get('paths.baseurl')}/userhistory.php?action=viewcomments&amp;id=" . (int) $user['id'] . "'>$n_comments</a>" : $n_comments) . '</td>
         </tr>';
         }
         $HTMLOUT .= main_table($body, $heading, 'top20');
@@ -814,7 +817,7 @@ if (!empty($search)) {
         }
         $HTMLOUT .= "
 <br>
-<form method='post' action='{$site_config['paths']['baseurl']}/new_announcement.php' enctype='multipart/form-data' accept-charset='utf-8'>
+<form method='post' action='{$config->get('paths.baseurl')}/new_announcement.php' enctype='multipart/form-data' accept-charset='utf-8'>
     <div class='has-text-centered margin20'>
         <input name='n_pms' type='hidden' value='" . $count . "'>
         <input name='ann_query' type='hidden' value='" . rawurlencode($announcement_query) . "'>
@@ -829,7 +832,7 @@ if (isset($pagemenu)) {
 
 $title = _('User Search');
 $breadcrumbs = [
-    "<a href='{$site_config['paths']['baseurl']}/staffpanel.php'>" . _('Staff Panel') . '</a>',
+    "<a href='{$config->get('paths.baseurl')}/staffpanel.php'>" . _('Staff Panel') . '</a>',
     "<a href='{$_SERVER['PHP_SELF']}'>$title</a>",
 ];
 echo stdhead($title, [], 'page-wrapper', $breadcrumbs) . wrapper($HTMLOUT) . stdfoot();

@@ -1,7 +1,7 @@
 <?php
-
 declare(strict_types=1);
 
+use PU239\Config\ConfigRepository;
 use Pu239\Ach_bonus;
 use Pu239\Database;
 use Pu239\Session;
@@ -10,6 +10,10 @@ use Pu239\Usersachiev;
 
 require_once dirname(__DIR__) . '/bootstrap_web.php';
 
+$baseurl = '';
+global $container;
+/** @var ConfigRepository $config */
+$config = $container->get(ConfigRepository::class);
 $db = $container->get(Database::class);
 
 require_once __DIR__ . '/../include/bittorrent.php';
@@ -18,9 +22,10 @@ $user = check_user_status();
 $session = $container->get(Session::class);
 $usersachiev = $container->get(Usersachiev::class);
 $achieve_points = $usersachiev->get_count($user['id']);
+$baseurl = (string) $config->get('paths.baseurl');
 if (empty($achieve_points)) {
     $session->set('is-warning', _("It appears that you don't have any Achievement Bonus Points available to spend."));
-    header("Location: {$site_config['paths']['baseurl']}/achievementhistory.php?id={$user['id']}");
+    header('Location: ' . $baseurl . '/achievementhistory.php?id=' . $user['id']);
     app_halt('Exit called');
 }
 $users_class = $container->get(User::class);
@@ -67,7 +72,7 @@ if ($bonus['bonus_type'] === 1) {
     } elseif ($rand_fail === 2) {
         $msg = _fe('Sorry, We put your achievement bonus point into the collection plate in an attempt to get {0} a date.', get_anonymous_name());
     } elseif ($rand_fail === 3) {
-        $msg = _fe('Sorry, The evil villian {0} has stolen your bonus point.', $site_config['chatbot']['name']);
+        $msg = _fe('Sorry, The evil villian {0} has stolen your bonus point.', (string) $config->get('chatbot.name'));
     } elseif ($rand_fail === 4) {
         $msg = _fe('Sorry, {0} has used your achievement bonus point in attempt to buy puppy chow to lure doggies onto his dinner plate.', get_anonymous_name());
     } else {
@@ -103,10 +108,10 @@ if (!empty($msg)) {
     ];
     $usersachiev->update($update, $user['id']);
     $session->set('is-success', $msg);
-    header("Location: {$site_config['paths']['baseurl']}/achievementhistory.php?id={$user['id']}");
+    header('Location: ' . $baseurl . '/achievementhistory.php?id=' . $user['id']);
     app_halt('Exit called');
 } else {
     $session->set('is-warning', _('Invalid data'));
-    header("Location: {$site_config['paths']['baseurl']}/achievementhistory.php?id={$user['id']}");
+    header('Location: ' . $baseurl . '/achievementhistory.php?id=' . $user['id']);
     app_halt('Exit called');
 }

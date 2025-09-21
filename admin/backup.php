@@ -2,11 +2,13 @@
 declare(strict_types=1);
 require_once dirname(__DIR__) . '/bootstrap_web.php';
 
+use PU239\Config\ConfigRepository;
 use Pu239\Database;
 
 
-global $container, $CURUSER, $site_config;
-
+global $container, $CURUSER;
+/** @var ConfigRepository $config */
+$config = $container->get(ConfigRepository::class);
 $db = $container->get(Database::class);
 
 $class = get_access(basename($_SERVER['REQUEST_URI']));
@@ -87,7 +89,7 @@ if (empty($mode)) {
                             <tr>
                                 <td>" . _('Use gzip compression') . '</td>
                                 <td>' . _('Optional') . "</td>
-                                <td class='rowhead'>" . ($site_config['backup']['use_gzip'] ? "<div class='has-text-centered has-text-centered is-success'>" . _('Yes') . '</div>' : "<div class='has-text-centered has-text-danger'>" . _('No') . '</div>') . '</td>
+                                <td class='rowhead'>" . ($config->get('backup.use_gzip') ? "<div class='has-text-centered has-text-centered is-success'>" . _('Yes') . '</div>' : "<div class='has-text-centered has-text-danger'>" . _('No') . '</div>') . '</td>
                             </tr>
                             <tr>
                                 <td>' . _('Correct path to gzip') . '</td>
@@ -114,7 +116,7 @@ if (empty($mode)) {
                             </tr>
                             <tr>
                                 <td colspan='2'>" . _('Write actions to log(backup/download/delete)') . '</td>
-                                <td>' . ($site_config['backup']['write_to_log'] ? "<div class='has-text-centered is-success'>" . _('Yes') . '</div>' : "<div class='has-text-centered has-text-danger'>" . _('No') . '</div>') . '</td>
+                                <td>' . ($config->get('backup.write_to_log') ? "<div class='has-text-centered is-success'>" . _('Yes') . '</div>' : "<div class='has-text-centered has-text-danger'>" . _('No') . '</div>') . '</td>
                             </tr>
                         </tbody>
                     </table>
@@ -139,33 +141,33 @@ if (empty($mode)) {
     }
     $title = _('Backup Manager');
     $breadcrumbs = [
-        "<a href='{$site_config['paths']['baseurl']}/staffpanel.php'>" . _('Staff Panel') . '</a>',
+        "<a href='{$config->get('paths.baseurl')}/staffpanel.php'>" . _('Staff Panel') . '</a>',
         "<a href='{$_SERVER['PHP_SELF']}'>$title</a>",
     ];
     echo stdhead($title, [], 'page-wrapper', $breadcrumbs) . wrapper($HTMLOUT) . stdfoot();
 } elseif ($mode === 'backup') {
-    $host = $site_config['db']['host'];
-    $user = $site_config['db']['username'];
-    $pass = quotemeta($site_config['db']['password']);
-    $db = $site_config['db']['database'];
+    $host = $config->get('db.host');
+    $user = $config->get('db.username');
+    $pass = quotemeta($config->get('db.password'));
+    $db = $config->get('db.database');
     $ext = $db . '_' . date('Y.m.d-H.i.s', $dt) . '.sql';
     $bdir = BACKUPS_DIR . 'db' . DIRECTORY_SEPARATOR . date('Y.m.d', $dt) . DIRECTORY_SEPARATOR;
     make_dir($bdir, 0774);
     $filepath = $bdir . $ext;
-    if ($site_config['backup']['use_gzip']) {
+    if ($config->get('backup.use_gzip')) {
         exec(MYSQLDUMP . " -h $host -u'{$user}' -p'{$pass}' $db | gzip -q9>{$filepath}.gz");
     } else {
         exec(MYSQLDUMP . " -h $host -u'{$user}' -p'{$pass}' $db>$filepath");
     }
     $values = [
-        'name' => $ext . ($site_config['backup']['use_gzip'] ? '.gz' : ''),
+        'name' => $ext . ($config->get('backup.use_gzip') ? '.gz' : ''),
         'added' => $dt,
         'userid' => $CURUSER['id'],
     ];
     $sql = "INSERT INTO dbbackup (/* columns */) VALUES (/* values */)";
 $db->perform($sql, $values);
 
-    if ($site_config['backup']['write_to_log']) {
+    if ($config->get('backup.write_to_log')) {
         write_log($CURUSER['username'] . '(' . get_user_class_name((int) $CURUSER['class']) . ') ' . _('successfully backed-up the database.'));
     }
     header('Location: ' . $_SERVER['PHP_SELF'] . '?tool=backup');
@@ -201,7 +203,7 @@ $db->perform($sql, $values);
                    ->where('id', $ids)
                    ->execute();
 
-            if ($site_config['backup']['write_to_log']) {
+            if ($config->get('backup.write_to_log')) {
                 write_log($CURUSER['username'] . '(' . get_user_class_name((int) $CURUSER['class']) . ') ' . _('successfully deleted') . ' ' . $count . ' ' . ($count > 1 ? _('databases') : _('database')) . '.');
             }
             $location = 'backup';

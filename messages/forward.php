@@ -4,10 +4,13 @@ declare(strict_types=1);
 
 require_once dirname(__DIR__) . '/bootstrap.php';
 
+use PU239\Config\ConfigRepository;
 use Pu239\Message;
 use Pu239\User;
 
-global $container, $CURUSER, $site_config;
+global $container, $CURUSER;
+/** @var ConfigRepository $config */
+$config = $container->get(ConfigRepository::class);
 
 $body = '';
 $messages_class = $container->get(Message::class);
@@ -32,7 +35,7 @@ $HTMLOUT .= '<h1>' . _('Fwd: ') . htmlsafechars($message['subject']) . '</h1>
     <table class="table table-bordered">
     <tr>
         <td colspan="2" class="colhead"><h1>' . _('forward message ') . '
-        <img src="' . $site_config['paths']['images_baseurl'] . 'arrow_next.gif" alt=":">' . _('Fwd: ') . htmlsafechars($message['subject']) . '</h1></td>
+        <img src="' . $config->get('paths.images_baseurl') . 'arrow_next.gif" alt=":">' . _('Fwd: ') . htmlsafechars($message['subject']) . '</h1></td>
     </tr>
     <tr>
         <td><span>' . _('To:') . '</span></td>

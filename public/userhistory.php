@@ -3,7 +3,7 @@ declare(strict_types=1);
 require_once dirname(__DIR__) . '/bootstrap_web.php';
 
 use Pu239\Database;
-use Pu239\Config\ConfigRepository;
+use PU239\Config\ConfigRepository;
 
 use Pu239\User;
 
@@ -29,7 +29,6 @@ $page = isset($_GET['page']) ? $_GET['page'] : '';
 $action = isset($_GET['action']) ? htmlsafechars($_GET['action']) : 'viewposts';
 $perpage = 25;
 $HTMLOUT = '';
-// TODO(2025): replace with $config->get(...) for site configuration lookups.
 if ($action === 'viewposts') {
     $select_is = 'COUNT(DISTINCT p.id)';
     $from_is = 'posts AS p LEFT JOIN topics as t ON p.topic_id=t.id LEFT JOIN forums AS f ON t.forum_id=f.id';
@@ -64,7 +63,7 @@ if ($action === 'viewposts') {
         $forumid = (int) $arr['f_id'];
         $forumname = format_comment($arr['name']);
         $editedby = (int) $arr['edited_by'];
-        $dt = TIME_NOW - $site_config['forum_config']['readpost_expiry'];
+        $dt = TIME_NOW - (int) $config->get('forum_config.readpost_expiry');
         $newposts = 0;
         if ($arr['added'] > $dt) {
             $newposts = ($arr['last_post_read'] < $arr['last_post']) && $curuser['id'] == $userid;
@@ -72,11 +71,11 @@ if ($action === 'viewposts') {
         $added = get_date((int) $arr['added'], '');
         $title = "
         $added -- <b>" . _('Forum') . ": </b>
-        <a href='{$site_config['paths']['baseurl']}/forums.php?action=view_forum&amp;forum_id=$forumid'>$forumname</a>
+        <a href='{$config->get('paths.baseurl')}/forums.php?action=view_forum&amp;forum_id=$forumid'>$forumname</a>
         -- <b>" . _('Topic') . ": </b>
-        <a href='{$site_config['paths']['baseurl']}/forums.php?action=view_topic&amp;topic_id=$topicid'>$topicname</a>
+        <a href='{$config->get('paths.baseurl')}/forums.php?action=view_topic&amp;topic_id=$topicid'>$topicname</a>
         -- <b>" . _('Post') . ": </b>
-        <a href='{$site_config['paths']['baseurl']}/forums.php?action=view_topic&amp;topic_id=$topicid&amp;page=p$postid#$postid'>#{$postid}</a>" . ($newposts ? "
+        <a href='{$config->get('paths.baseurl')}/forums.php?action=view_topic&amp;topic_id=$topicid&amp;page=p$postid#$postid'>#{$postid}</a>" . ($newposts ? "
         <b>(<span class='has-text-danger'>" . _('NEW!') . '</span>)</b>' : '');
         $body = format_comment($arr['body']);
 
@@ -149,7 +148,7 @@ if ($action === 'viewposts') {
         $HTMLOUT .= "
         <div class='portlet'>
             <h3 class='has-text-centered'>
-                $added --- <b>" . _('Torrent:') . ': </b>' . ($torrent ? ("<a href='{$site_config['paths']['baseurl']}/details.php?id=$torrentid&amp;tocomm=1'>$torrent</a>") : ' [' . _('Deleted') . '] ') . ' --- <b>' . _('Comment') . ": </b>#<a href='{$site_config['paths']['baseurl']}/details.php?id=$torrentid&amp;tocomm=1$page_url'>$commentid</a>
+                $added --- <b>" . _('Torrent:') . ': </b>' . ($torrent ? ("<a href='{$config->get('paths.baseurl')}/details.php?id=$torrentid&amp;tocomm=1'>$torrent</a>") : ' [' . _('Deleted') . '] ') . ' --- <b>' . _('Comment') . ": </b>#<a href='{$config->get('paths.baseurl')}/details.php?id=$torrentid&amp;tocomm=1$page_url'>$commentid</a>
             </h3>" . main_div($body, '', 'padding20') . '
         </div>';
     }

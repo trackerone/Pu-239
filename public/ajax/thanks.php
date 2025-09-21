@@ -1,28 +1,33 @@
 <?php
 declare(strict_types=1);
-require_once dirname(__DIR__) . '/bootstrap_web.php';
 
-use Pu239\Database;
+use PU239\Config\ConfigRepository;
 use Pu239\Cache;
+use Pu239\Database;
 use DI\DependencyException;
 use DI\NotFoundException;
 
-global $container, $site_config;
+require_once dirname(__DIR__) . '/bootstrap_web.php';
+
+global $container;
+/** @var ConfigRepository $config */
+$config = $container->get(ConfigRepository::class);
 $db = $container->get(Database::class);
 $cache = $container->get(Cache::class);
+$baseurl = (string) $config->get('paths.baseurl');
 
 require_once __DIR__ . '/../../include/bittorrent.php';
 $user = check_user_status();
 
 if (empty($_POST)) {
     stderr(_('Error'), _('Access Not Allowed'));
-    header("Location: {$site_config['paths']['baseurl']}");
+    header('Location: ' . $baseurl);
     app_halt('Exit called');
 }
 
 if (!isset($user)) {
     stderr(_('Error'), _("You can't add a thank you on your own torrent"));
-    header("Location: {$site_config['paths']['baseurl']}");
+    header('Location: ' . $baseurl);
     app_halt('Exit called');
 }
 
@@ -38,7 +43,9 @@ $ajax = isset($_POST['ajax']) && (int) $_POST['ajax'] === 1;
  */
 function print_list(int $uid, int $tid, bool $ajax)
 {
-    global $db, $cache, $site_config;
+    global $cache, $config, $db;
+
+    $baseurl = (string) $config->get('paths.baseurl');
 
     $rows = $db->fetchAll(
         'SELECT th.userid, u.username, u.seedbonus FROM thanks AS th INNER JOIN users AS u ON u.id = th.userid WHERE th.torrentid = :tid ORDER BY u.class DESC',
@@ -59,7 +66,7 @@ function print_list(int $uid, int $tid, bool $ajax)
         ]);
     }
 
-    $form = !$hadTh ? "<span class='left10'><form action='{$site_config['paths']['baseurl']}/ajax/thanks.php' method='post'><input type='submit' class='button is-small details-button' name='submit' value='Say thanks'><input type='hidden' name='torrentid' value='{$tid}'><input type='hidden' name='action' value='add'></form></span enctype='multipart/form-data' accept-charset='utf-8'>" : '';
+    $form = !$hadTh ? "<span class='left10'><form action='{$baseurl}/ajax/thanks.php' method='post'><input type='submit' class='button is-small details-button' name='submit' value='Say thanks'><input type='hidden' name='torrentid' value='{$tid}'><input type='hidden' name='action' value='add'></form></span enctype='multipart/form-data' accept-charset='utf-8'>" : '';
     $out = (count($list) > 0 ? implode(', ', $list) : '');
 
     return <<<IFRAME
@@ -121,11 +128,11 @@ switch ($do) {
                         'INSERT INTO thanks (userid, torrentid) VALUES (:uid, :tid)',
                         [':uid' => $uid, ':tid' => $tid]
                     );
-                    if ($site_config['bonus']['on']) {
+                    if ((bool) $config->get('bonus.on')) {
                         $db->run(
                             'UPDATE users SET seedbonus = seedbonus + :bonus WHERE id = :id',
                             [
-                                ':bonus' => $site_config['bonus']['per_thanks'],
+                                ':bonus' => (float) $config->get('bonus.per_thanks'),
                                 ':id' => $uid,
                             ]
                         );
@@ -135,14 +142,14 @@ switch ($do) {
                     $db->rollBack();
                     break;
                 }
-                if ($site_config['bonus']['on']) {
+                if ((bool) $config->get('bonus.on')) {
                     $User = $db->fetch('SELECT seedbonus FROM users WHERE id = :id', [':id' => $uid]);
                     $cache->update_row(
                         'user_' . $uid,
                         [
                             'seedbonus' => (int) ($User['seedbonus'] ?? 0),
                         ],
-                        $site_config['expires']['user_cache']
+                        (int) $config->get('expires.user_cache')
                     );
                 }
                 echo print_list($uid, $tid, $ajax);

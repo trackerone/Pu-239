@@ -2,11 +2,13 @@
 declare(strict_types=1);
 require_once dirname(__DIR__) . '/bootstrap_web.php';
 
+use PU239\Config\ConfigRepository;
 use Pu239\Cache;
 use Pu239\Database;
 
-global $container, $CURUSER, $site_config;
-
+global $container, $CURUSER;
+/** @var ConfigRepository $config */
+$config = $container->get(ConfigRepository::class);
 $db = $container->get(Database::class);
 
 $class = get_access(basename($_SERVER['REQUEST_URI']));
@@ -38,7 +40,7 @@ if (isset($_GET['remove'])) {
         }
         $modcomment = get_date((int) TIME_NOW, 'DATE', 1) . ' - ' . _('Removed from watched users by') . " {$CURUSER['username']}\n" . $user['modcomment'];
         $db->run('UPDATE users SET watched_user = 0, modcomment = :modcomment WHERE id = :id', [':modcomment' => $modcomment, ':id' => $id]);
-        $cache->update_row('user_' . $id, ['watched_user' => 0, 'modcomment' => $modcomment], $site_config['expires']['user_cache']);
+        $cache->update_row('user_' . $id, ['watched_user' => 0, 'modcomment' => $modcomment], $config->get('expires.user_cache'));
         ++$count;
         $removed_log .= ($removed_log === '' ? '' : ', ') . format_username($id);
     }
@@ -74,9 +76,9 @@ if (isset($_GET['add'])) {
         $stmt = $db->run('UPDATE users SET watched_user = :now, modcomment = :mc, watched_user_reason = :reason WHERE id = :id', [':now' => TIME_NOW, ':mc' => $modcomment, ':reason' => $watched_user_reason, ':id' => $member]);
         if ($stmt->rowCount()) {
             $cache = $container->get(Cache::class);
-            $cache->update_row('user_' . $member, ['watched_user' => TIME_NOW, 'watched_user_reason' => $watched_user_reason, 'modcomment' => $modcomment], $site_config['expires']['user_cache']);
+            $cache->update_row('user_' . $member, ['watched_user' => TIME_NOW, 'watched_user_reason' => $watched_user_reason, 'modcomment' => $modcomment], $config->get('expires.user_cache'));
             $H1_thingie = '<h1 class="has-text-centered">' . _fe('Success! {0} Added to the Watched Users List!', format_comment($user['username'])) . '</h1>';
-            write_log(_fe('{0} Added {1} to the {2} watched users list{4}.', format_username($CURUSER['id']), format_username((int) $member), "<a href='{$site_config['paths']['baseurl']}/staffpanel.php?tool=watched_users&amp;action=watched_users' class='is-link'>", '</a>'));
+            write_log(_fe('{0} Added {1} to the {2} watched users list{4}.', format_username($CURUSER['id']), format_username((int) $member), "<a href='{$config->get('paths.baseurl')}/staffpanel.php?tool=watched_users&amp;action=watched_users' class='is-link'>", '</a>'));
         }
     }
 }
@@ -96,11 +98,11 @@ if (!empty($rows)) {
         <h1 class='has-text-centered'>" . _('Watched Users') . "[ {$watched_users} ]</h1>
     <table class='table table-bordered table-striped'>
     <tr>
-        <td><a href='{$site_config['paths']['baseurl']}/staffpanel.php?tool=watched_users&amp;action=watched_users&amp;sort=watched_user&amp;ASC={$asc}'>" . _('Added') . "</a></td>
-        <td><a href='{$site_config['paths']['baseurl']}/staffpanel.php?tool=watched_users&amp;action=watched_users&amp;sort=username&amp;ASC={$asc}'>" . _('Username') . "</a></td>
+        <td><a href='{$config->get('paths.baseurl')}/staffpanel.php?tool=watched_users&amp;action=watched_users&amp;sort=watched_user&amp;ASC={$asc}'>" . _('Added') . "</a></td>
+        <td><a href='{$config->get('paths.baseurl')}/staffpanel.php?tool=watched_users&amp;action=watched_users&amp;sort=username&amp;ASC={$asc}'>" . _('Username') . "</a></td>
         <td class='has-text-left'>" . _('Suspicion') . "</td>
         <td class='has-text-centered'>" . _('Stats') . "</td>
-        <td class='has-text-centered'><a href='{$site_config['paths']['baseurl']}/staffpanel.php?tool=watched_users&amp;action=watched_users&amp;sort=invitedby&amp;ASC={$asc}'>" . _('Invited By') . "</a></td>" .
+        <td class='has-text-centered'><a href='{$config->get('paths.baseurl')}/staffpanel.php?tool=watched_users&amp;action=watched_users&amp;sort=invitedby&amp;ASC={$asc}'>" . _('Invited By') . "</a></td>" .
         ($CURUSER['class'] >= UC_STAFF ? "
         <td class='has-text-centered'>
             <input type='checkbox' id='checkThemAll' class='tooltipper' title='Select All'>
@@ -138,7 +140,7 @@ if (!empty($rows)) {
 
 $title = _('Watched Users');
 $breadcrumbs = [
-    "<a href='{$site_config['paths']['baseurl']}/staffpanel.php'>" . _('Staff Panel') . '</a>',
+    "<a href='{$config->get('paths.baseurl')}/staffpanel.php'>" . _('Staff Panel') . '</a>',
     "<a href='{$_SERVER['PHP_SELF']}'>$title</a>",
 ];
 echo stdhead($title, [], 'page-wrapper', $breadcrumbs) . wrapper($HTMLOUT) . stdfoot();

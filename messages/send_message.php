@@ -1,14 +1,16 @@
 <?php
-
 declare(strict_types=1);
 
 require_once dirname(__DIR__) . '/bootstrap.php';
 
+use PU239\Config\ConfigRepository;
 use Pu239\Message;
 use Pu239\User;
 
 $subject = $msg = '';
-global $container, $CURUSER, $site_config;
+global $container, $CURUSER;
+/** @var ConfigRepository $config */
+$config = $container->get(ConfigRepository::class);
 
 // TODO(2025): csrf
 
@@ -122,7 +124,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 }
 
 $HTMLOUT .= $top_links . "
-    <form name='compose' method='post' action='{$site_config['paths']['baseurl']}/messages.php' enctype='multipart/form-data' accept-charset='utf-8'>
+    <form name='compose' method='post' action='" . (string) $config->get('paths.baseurl') . "/messages.php' enctype='multipart/form-data' accept-charset='utf-8'>
         <input type='hidden' name='action' value='send_message'>";
 
 if ($receiver) {
@@ -170,7 +172,7 @@ if ($replyto) {
                         <input type="checkbox" name="delete" value="' . $replyto . '" ' . ($CURUSER['deletepms'] === 'yes' ? 'checked' : '') . '>' . _('Delete PM');
 }
 $disabled = empty($receiver) && empty($returnto) ? ' disabled' : '';
-$accepted_file_types = str_replace('|', ', ', $site_config['forum_config']['accepted_file_types']);
+$accepted_file_types = str_replace('|', ', ', (string) $config->get('forum_config.accepted_file_types'));
 $HTMLOUT .= '
                         <input type="checkbox" name="save" value="1" checked>' . _('Save PM ') . '
                     </div>
