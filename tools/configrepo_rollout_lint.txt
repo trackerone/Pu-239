@@ -335,9 +335,12 @@ No syntax errors detected in admin/forum_config.php
 No syntax errors detected in admin/freeleech.php
 No syntax errors detected in admin/freeusers.php
 No syntax errors detected in admin/goaccess.php
+*** codex/refactor-legacy-config-constants-to-configrepository-ipan9z
+=======
 *** codex/refactor-legacy-config-constants-to-configrepository-xkbz6r
 =======
 *** codex/refactor-legacy-config-constants-to-configrepository-vrnd3h
+*** master
 *** master
 admin/grouppm.php: OK
 admin/hit_and_run.php: OK
@@ -349,7 +352,10 @@ admin/mega_search.php: OK
 admin/modded_torrents.php: OK
 admin/modtask.php: OK
 admin/mysql_stats.php: OK
+*** codex/refactor-legacy-config-constants-to-configrepository-ipan9z
+=======
 *** codex/refactor-legacy-config-constants-to-configrepository-xkbz6r
+*** master
 No syntax errors detected in admin/news.php
 No syntax errors detected in admin/polls_manager.php
 No syntax errors detected in admin/site_settings.php
@@ -360,7 +366,20 @@ No syntax errors detected in admin/trivia_config.php
 No syntax errors detected in admin/uploader_info.php
 No syntax errors detected in admin/user_hits.php
 No syntax errors detected in admin/view_peers.php
+*** codex/refactor-legacy-config-constants-to-configrepository-ipan9z
+No syntax errors detected in blocks/global/crazyhour.php
+No syntax errors detected in blocks/global/demotion.php
+No syntax errors detected in blocks/global/freeleech_contribution.php
+No syntax errors detected in blocks/global/happyhour.php
+No syntax errors detected in blocks/global/lottery.php
+No syntax errors detected in blocks/global/message.php
+No syntax errors detected in blocks/global/report.php
+No syntax errors detected in blocks/global/staffmessages.php
+No syntax errors detected in blocks/global/uploadapp.php
+No syntax errors detected in blocks/index/active_24h_users.php
 =======
 =======
+=======
+*** master
 *** master
 *** master

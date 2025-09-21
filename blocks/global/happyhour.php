@@ -3,14 +3,18 @@ declare(strict_types=1);
 
 require_once dirname(__DIR__) . '/bootstrap.php';
 
-global $site_config;
+use Pu239\Config\ConfigRepository;
+
+global $container;
+/** @var ConfigRepository $config */
+$config = $container->get(ConfigRepository::class);
 
 $user = check_user_status();
-if (empty($user) || empty($site_config['bonus']['happy_hour'])) {
+if (empty($user) || !(bool) $config->get('bonus.happy_hour')) {
     return '';
 }
 
-$happyFile = $site_config['paths']['happyhour'] ?? '';
+$happyFile = (string) $config->get('paths.happyhour');
 if (!is_string($happyFile) || $happyFile === '' || !is_file($happyFile)) {
     return '';
 }
@@ -33,7 +37,7 @@ $timeLeft = mkprettytime(($start + 3600) - $now);
 $formattedTime = $minutes . ' min : ' . $seconds . ' sec';
 
 $esc = static fn($value): string => htmlspecialchars((string) $value, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
-$baseurl = $esc($site_config['paths']['baseurl'] ?? '');
+$baseurl = $esc((string) $config->get('paths.baseurl'));
 $linkCategory = $categoryId === 255 ? '255' : (string) $categoryId;
 $categoryUrl = $esc($linkCategory);
 $categoryMessage = $categoryId === 255
