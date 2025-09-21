@@ -12,9 +12,14 @@ use DI\NotFoundException;
 
 use MatthiasMullie\Scrapbook\Exception\UnbegunTransaction;
 use Pu239\Cache;
+use Pu239\Config\ConfigRepository;
 use Pu239\Database;
 use Pu239\Message;
 use Spatie\Image\Exceptions\InvalidManipulation;
+
+global $container;
+/** @var ConfigRepository $config */
+$config = $container->get(ConfigRepository::class);
 
 /**
  * @param string $subject
@@ -33,20 +38,21 @@ use Spatie\Image\Exceptions\InvalidManipulation;
  */
 function auto_post($subject = 'Error - Subject Missing', $body = 'Error - No Body')
 {
-    global $container, $site_config, $CURUSER;
+    global $container, $config, $CURUSER;
 
     // $fluent removed — use $this->db (ExtendedPdo)
-    if (user_exists($site_config['chatbot']['id'])) {
+    $chatbotId = (int) $config->get('chatbot.id');
+    if (user_exists($chatbotId)) {
         $topicid = $fluent->from('topics')
                           ->select(null)
                           ->select('id')
-                          ->where('forum_id = ?', $site_config['staff_forums'][0])
+                          ->where('forum_id = ?', (int) $config->get('staff_forums.0'))
                           ->where('topic_name = ?', $subject)
                           ->fetch('id');
         if (!$topicid) {
             $values = [
-                'user_id' => $site_config['chatbot']['id'],
-                'forum_id' => $site_config['staff_forums'][0],
+                'user_id' => $chatbotId,
+                'forum_id' => (int) $config->get('staff_forums.0'),
                 'topic_name' => $subject,
             ];
             $sql = "INSERT INTO topics (/* columns */) VALUES (/* values */)";
@@ -56,12 +62,12 @@ $topicid = $db->perform($sql, $values);
                 'topic_count' => new Literal('topic_count + 1'),
             ];
             $sql = "UPDATE forums SET /* columns */ WHERE id = :id";
-$db->perform($sql, array_merge($set, ['id' => $site_config['staff_forums'][0]]));
+$db->perform($sql, array_merge($set, ['id' => (int) $config->get('staff_forums.0')]));
         }
 
         $values = [
             'topic_id' => $topicid,
-            'user_id' => $site_config['chatbot']['id'],
+            'user_id' => $chatbotId,
             'added' => TIME_NOW,
             'body' => $body,
         ];
@@ -78,7 +84,7 @@ $db->perform($sql, array_merge($set, ['id' => $topicid]));
             'post_count' => new Literal('post_count + 1'),
         ];
         $sql = "UPDATE forums SET /* columns */ WHERE id = :id";
-$db->perform($sql, array_merge($set, ['id' => $site_config['staff_forums'][0]]));
+$db->perform($sql, array_merge($set, ['id' => (int) $config->get('staff_forums.0')]));
 
         $cache = $container->get(Cache::class);
         $cache->delete('last_posts_' . $CURUSER['class']);
@@ -86,7 +92,7 @@ $db->perform($sql, array_merge($set, ['id' => $site_config['staff_forums'][0]]))
 
         unset($values);
         $values[] = [
-            'receiver' => $site_config['site']['owner'],
+            'receiver' => (int) $config->get('site.owner'),
             'added' => TIME_NOW,
             'subject' => $subject,
             'msg' => $body,

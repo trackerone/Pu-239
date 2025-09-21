@@ -7,8 +7,13 @@ require_once __DIR__ . '/runtime_safe.php';
 
 use DI\DependencyException;
 use DI\NotFoundException;
+use Pu239\Config\ConfigRepository;
 use Pu239\User;
 use Spatie\Image\Exceptions\InvalidManipulation;
+
+global $container;
+/** @var ConfigRepository $config */
+$config = $container->get(ConfigRepository::class);
 
 require_once INCL_DIR . 'function_html.php';
 
@@ -24,16 +29,17 @@ require_once INCL_DIR . 'function_users.php';
  */
 function smilies_frame($smilies_set)
 {
-    global $site_config;
+    global $config;
 
     $image = placeholder_image();
+    $imagesBaseUrl = (string) $config->get('paths.images_baseurl');
     $list = $emoticons = '';
     foreach ($smilies_set as $code => $url) {
         $list .= "
             <span class='margin10 mw-50 is-flex tooltipper' title='{$code}'>
                 <span class='bordered bg-03'>
                     <a href='#'>
-                        <img src='{$image}' data-src='{$site_config['paths']['images_baseurl']}smilies/" . $url . "' alt='{$code}' class='lazy w-100'>
+                        <img src='{$image}' data-src='{$imagesBaseUrl}smilies/" . $url . "' alt='{$code}' class='lazy w-100'>
                     </a>
                 </span>
             </span>";
@@ -56,9 +62,9 @@ function smilies_frame($smilies_set)
  */
 function BBcode(string $body = '', string $class = 'w-100', int $height = 600)
 {
-    global $site_config;
+    global $config;
 
-    if (!$site_config['site']['BBcode']) {
+    if (!(bool) $config->get('site.BBcode')) {
         $textarea = "
             <div class='$class'>
                 <textarea name='text' rows='10'></textarea>
@@ -198,8 +204,10 @@ function format_urls($s)
  */
 function format_comment(?string $text, bool $strip_html = true, bool $urls = true, bool $images = true)
 {
-    global $container, $site_config;
+    global $container, $config;
 
+    $baseurl = (string) $config->get('paths.baseurl');
+    $imagesBaseUrl = (string) $config->get('paths.images_baseurl');
     $users_class = $container->get(User::class);
     if (empty($text)) {
         return null;
@@ -330,9 +338,9 @@ function format_comment(?string $text, bool $strip_html = true, bool $urls = tru
         '<span class="text-\1">\2</span>',
         "<div style='margin-bottom: 5px;'><span class='flip button is-small'>Show Spoiler!</span><div class='panel spoiler' style='display:none;'>\\1</div></div><br>",
         "<div style='margin-bottom: 5px;'><span class='flip button is-small'>Show Hide!</span><div class='panel spoiler' style='display:none;'>\\1</div></div><br>",
-        "<div class='responsive-container'><iframe width='1920' height='1080' src='https://www.youtube.com/embed/\\1?autoplay=0&fs=0&iv_load_policy=3&showinfo=0&rel=0&cc_load_policy=0&start=0&end=0&origin={$site_config['paths']['baseurl']}&vq=hd1080&wmode=opaque' allow='fullscreen; accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture'></iframe></div>",
-        "<div class='responsive-container'><iframe width='1920' height='1080' src='https://www.youtube.com/embed/\\1?autoplay=0&fs=0&iv_load_policy=3&showinfo=0&rel=0&cc_load_policy=0&start=0&end=0&origin={$site_config['paths']['baseurl']}&vq=hd1080&wmode=opaque' allow='fullscreen; accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture'></iframe></div>",
-        "<div class='responsive-container'><iframe width='1920' height='1080' src='https://www.youtube.com/embed/\\1?autoplay=0&fs=0&iv_load_policy=3&showinfo=0&rel=0&cc_load_policy=0&start=0&end=0&origin={$site_config['paths']['baseurl']}&vq=hd1080&wmode=opaque' allow='fullscreen; accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture'></iframe></div>",
+        "<div class='responsive-container'><iframe width='1920' height='1080' src='https://www.youtube.com/embed/\\1?autoplay=0&fs=0&iv_load_policy=3&showinfo=0&rel=0&cc_load_policy=0&start=0&end=0&origin={$baseurl}&vq=hd1080&wmode=opaque' allow='fullscreen; accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture'></iframe></div>",
+        "<div class='responsive-container'><iframe width='1920' height='1080' src='https://www.youtube.com/embed/\\1?autoplay=0&fs=0&iv_load_policy=3&showinfo=0&rel=0&cc_load_policy=0&start=0&end=0&origin={$baseurl}&vq=hd1080&wmode=opaque' allow='fullscreen; accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture'></iframe></div>",
+        "<div class='responsive-container'><iframe width='1920' height='1080' src='https://www.youtube.com/embed/\\1?autoplay=0&fs=0&iv_load_policy=3&showinfo=0&rel=0&cc_load_policy=0&start=0&end=0&origin={$baseurl}&vq=hd1080&wmode=opaque' allow='fullscreen; accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture'></iframe></div>",
         '<embed style="width:500px; height:410px;" id="VideoPlayback" align="middle" type="application/x-shockwave-flash" src="//video.google.com/googleplayer.swf?docId=\\1" allowScriptAccess="sameDomain" quality="best" bgcolor="#fff" scale="noScale" wmode="window" salign="TL"  FlashVars="playerMode=embedded">',
         '<span><video width="500" loop muted autoplay><source src="//i.imgur.com/\1.webm" type="video/webm"><source src="//i.imgur.com/\1.mp4" type="video/mp4">Your browser does not support the video tag.</video></span>',
         '<span><video width="500" controls preload="none"><source src="\1"><source src="\1" type="video/mp4">Your browser does not support the video tag.</video></span>',
@@ -439,9 +447,9 @@ function format_comment(?string $text, bool $strip_html = true, bool $urls = tru
             $s = preg_replace("#\s*(width|height)=['\"](auto|\d+)['\"]\s*#", '', $s);
         }
         // [img] proxied local images
-        $s = preg_replace("#\[img\](.*" . preg_quote($site_config['paths']['images_baseurl']) . "proxy/.*)\[/img\]#i", '<img src="' . $image . '" data-src="\\1" alt="" class="lazy"></a>', $s);
+        $s = preg_replace("#\[img\](.*" . preg_quote($imagesBaseUrl, '#') . "proxy/.*)\[/img\]#i", '<img src="' . $image . '" data-src="\\1" alt="" class="lazy"></a>', $s);
         // [img] local images
-        $s = preg_replace("#\[img\](.*" . preg_quote($site_config['paths']['images_baseurl']) . ".*)\[/img\]#i", '<img src="' . $image . '" data-src="\\1" alt="" class="lazy emoticon is-2x"></a>', $s);
+        $s = preg_replace("#\[img\](.*" . preg_quote($imagesBaseUrl, '#') . ".*)\[/img\]#i", '<img src="' . $image . '" data-src="\\1" alt="" class="lazy emoticon is-2x"></a>', $s);
     }
     // [mcom]Text[/mcom]
     if (stripos($s, '[mcom]') !== false) {
@@ -467,15 +475,15 @@ function format_comment(?string $text, bool $strip_html = true, bool $urls = tru
     $s = str_replace('  ', '&#160;&#160;', $s);
     $smilies = $container->get('smilies');
     foreach ($smilies as $code => $url) {
-        $s = str_replace($code, "<img src='{$image}' data-src='{$site_config['paths']['images_baseurl']}smilies/{$url}' alt='' class='lazy'>", $s);
+        $s = str_replace($code, "<img src='{$image}' data-src='{$imagesBaseUrl}smilies/{$url}' alt='' class='lazy'>", $s);
     }
     $staff_smilies = $container->get('staff_smilies');
     foreach ($staff_smilies as $code => $url) {
-        $s = str_replace($code, "<img src='{$image}' data-src='{$site_config['paths']['images_baseurl']}smilies/{$url}' alt='' class='lazy'>", $s);
+        $s = str_replace($code, "<img src='{$image}' data-src='{$imagesBaseUrl}smilies/{$url}' alt='' class='lazy'>", $s);
     }
     $custom_smilies = $container->get('custom_smilies');
     foreach ($custom_smilies as $code => $url) {
-        $s = str_replace($code, "<img src='{$image}' data-src='{$site_config['paths']['images_baseurl']}smilies/{$url}' alt='' class='lazy'>", $s);
+        $s = str_replace($code, "<img src='{$image}' data-src='{$imagesBaseUrl}smilies/{$url}' alt='' class='lazy'>", $s);
     }
     $s = format_quotes($s);
     $s = str_replace([

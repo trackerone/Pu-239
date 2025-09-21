@@ -5,6 +5,7 @@ require_once __DIR__ . '/runtime_safe.php';
 
 require_once INCL_DIR . 'function_html.php';
 
+use Pu239\Config\ConfigRepository;
 use Pu239\Database;
 use Biblys\Isbn\Isbn;
 use DI\DependencyException;
@@ -16,6 +17,9 @@ use Pu239\Torrent;
 use Scriptotek\GoogleBooks\GoogleBooks;
 use Spatie\Image\Exceptions\InvalidManipulation;
 
+global $container;
+/** @var ConfigRepository $config */
+$config = $container->get(ConfigRepository::class);
 $db = $container->get(Database::class);
 
 /**
@@ -223,7 +227,7 @@ function format_ebook_html(array $ebook, int $api_hits)
  */
 function fetch_book_info(?string $isbn, ?string $name)
 {
-    global $container, $user, $site_config;
+    global $container, $user, $config;
 
     if (empty($isbn) && empty($name)) {
         return false;
@@ -236,7 +240,7 @@ function fetch_book_info(?string $isbn, ?string $name)
     $ebook = $cache->get('book_info_' . $hash);
     if ($ebook === false || is_null($ebook)) {
         $api_limit = 100;
-        if (!empty($site_config['api']['google_books'])) {
+        if (!empty($config->get('api.google_books'))) {
             $api_limit = 1000;
         }
         if ($api_hits >= $api_limit) {
@@ -333,7 +337,7 @@ function fetch_book_info(?string $isbn, ?string $name)
                 'zoom=2',
                 'zoom=1',
             ], 'zoom=0', $ebook['poster']);
-            $cache->set('book_info_' . $hash, $ebook, $site_config['expires']['book_info']);
+            $cache->set('book_info_' . $hash, $ebook, $config->get('expires.book_info'));
 
             return [
                 'ebook' => $ebook,

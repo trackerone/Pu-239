@@ -6,9 +6,12 @@ $db = $container->get(Database::class);
 require_once __DIR__ . '/runtime_safe.php';
 
 use Pu239\Cache;
+use Pu239\Config\ConfigRepository;
 use Pu239\Database;
 
 global $container;
+/** @var ConfigRepository $config */
+$config = $container->get(ConfigRepository::class);
 
 // $fluent removed — use $this->db (ExtendedPdo)
 $cache = $container->get(CACHE::class);
@@ -318,12 +321,12 @@ if ($total_fl['enabled'] === 'yes' || $total_du['enabled'] === 'yes' || $total_h
     $fl_header .= '</div>';
 }
 
-$bpt = $site_config['bonus']['per_duration'];
-$bmt = $site_config['bonus']['max_torrents'];
-$bonus_per_comment = $site_config['bonus']['per_comment'];
-$bonus_per_rating = $site_config['bonus']['per_rating'];
-$bonus_per_post = $site_config['bonus']['per_post'];
-$bonus_per_topic = $site_config['bonus']['per_topic'];
+$bpt = (float) $config->get('bonus.per_duration');
+$bmt = (int) $config->get('bonus.max_torrents');
+$bonus_per_comment = (float) $config->get('bonus.per_comment');
+$bonus_per_rating = (float) $config->get('bonus.per_rating');
+$bonus_per_post = (float) $config->get('bonus.per_post');
+$bonus_per_topic = (float) $config->get('bonus.per_topic');
 
 $at = $fluent->from('peers')
              ->select(null)

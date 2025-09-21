@@ -10,10 +10,15 @@ use Delight\Auth\Auth;
 use DI\DependencyException;
 use DI\NotFoundException;
 use Pu239\Cache;
+use Pu239\Config\ConfigRepository;
 use Pu239\Database;
 use Pu239\Roles;
 use Pu239\Session;
 use Pu239\User;
+
+global $container;
+/** @var ConfigRepository $config */
+$config = $container->get(ConfigRepository::class);
 
 require_once INCL_DIR . 'function_autopost.php';
 require_once INCL_DIR . 'function_html.php';
@@ -29,18 +34,20 @@ require_once INCL_DIR . 'function_staff.php';
  */
 function class_check(int $class = UC_STAFF)
 {
-    global $container, $site_config;
+    global $container, $config;
 
     $user = check_user_status();
     if (empty($user)) {
-        header("Location: {$site_config['paths']['baseurl']}/404.html");
+        $baseurl = (string) $config->get('paths.baseurl');
+        header('Location: ' . $baseurl . '/404.html');
         app_halt('Exit called');
     }
     $auth = $container->get(Auth::class);
     if ($auth->isRemembered()) {
         $session = $container->get(Session::class);
         $session->set('is-danger', _('Please confirm your password.'));
-        header("Location: {$site_config['paths']['baseurl']}/verify.php?page=" . urlencode($_SERVER['REQUEST_URI']));
+        $baseurl = $baseurl ?? (string) $config->get('paths.baseurl');
+        header('Location: ' . $baseurl . '/verify.php?page=' . urlencode($_SERVER['REQUEST_URI']));
         app_halt('Exit called');
     }
     $userid = $user['id'];
@@ -48,11 +55,14 @@ function class_check(int $class = UC_STAFF)
         write_info("{$user['username']} attempted to access a staff page");
         stderr(_('Error'), 'No Permission. Page is for ' . get_user_class_name((int) $class) . ' and above. Read the FAQ.');
     }
-    if ($user['class'] > UC_MAX || (!in_array($user['id'], $site_config['is_staff']) && (!$user['roles_mask'] & Roles::CODER))) {
+    $isStaff = (array) $config->get('is_staff');
+    if ($user['class'] > UC_MAX || (!in_array($user['id'], $isStaff) && (!$user['roles_mask'] & Roles::CODER))) {
         $ip = getip($user['id']);
-        $body = "User: [url={$site_config['paths']['baseurl']}/userdetails.php?id={$user['id']}][color=user]{$user['username']}[/color][/url] - {$ip}[br]Class {$user['class']}[br]Current page: {$_SERVER['PHP_SELF']}[br]Previous page: " . (isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : 'no referer') . '[br]Action: ' . $_SERVER['REQUEST_URI'] . '[br] Member has been disabled and demoted by class check system.';
+        $baseurl = $baseurl ?? (string) $config->get('paths.baseurl');
+        $body = 'User: [url=' . $baseurl . '/userdetails.php?id=' . $user['id'] . '][color=user]' . $user['username'] . '[/color][/url] - ' . $ip . '[br]Class ' . $user['class'] . '[br]Current page: ' . $_SERVER['PHP_SELF'] . '[br]Previous page: ' . (isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : 'no referer') . '[br]Action: ' . $_SERVER['REQUEST_URI'] . '[br] Member has been disabled and demoted by class check system.';
         $subject = 'Warning Class Check System!';
-        if (user_exists($site_config['chatbot']['id'])) {
+        $chatbotId = (int) $config->get('chatbot.id');
+        if (user_exists($chatbotId)) {
             $post_info = auto_post($subject, $body);
             $update = [
                 'class' => UC_MIN,
@@ -60,7 +70,7 @@ function class_check(int $class = UC_STAFF)
             ];
             $users_class = $container->get(User::class);
             $users_class->update($update, $userid);
-            write_log('Class Check System Initialized [url=' . $site_config['paths']['baseurl'] . '/forums.php?action=view_topic&amp;topic_id=' . $post_info['topicid'] . '&amp;page=last#' . $post_info['postid'] . ']VIEW[/url]');
+            write_log('Class Check System Initialized [url=' . $baseurl . '/forums.php?action=view_topic&amp;topic_id=' . $post_info['topicid'] . '&amp;page=last#' . $post_info['postid'] . ']VIEW[/url]');
             stderr(_('Error'), _('You dont have the correct credentials to be here!'));
         }
     }

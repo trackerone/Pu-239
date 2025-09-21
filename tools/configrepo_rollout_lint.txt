@@ -307,3 +307,11 @@ No syntax errors detected in include/arcade.php
 php -l include/arcade.php
 =======
 *** master
+No syntax errors detected in include/class/class_check.php
+No syntax errors detected in include/function_autopost.php
+No syntax errors detected in include/function_bbcode.php
+No syntax errors detected in include/function_bluray.php
+No syntax errors detected in include/function_bonus.php
+No syntax errors detected in include/function_books.php
+No syntax errors detected in include/function_breadcrumbs.php
+No syntax errors detected in include/function_categories.php
