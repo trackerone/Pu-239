@@ -1,12 +1,17 @@
 <?php
 declare(strict_types=1);
-require_once dirname(__DIR__) . '/bootstrap.php';
+
+use Pu239\Config\ConfigRepository;
 use Pu239\Database;
+
+require_once dirname(__DIR__) . '/bootstrap.php';
 
 $posts = $delete_me = $rpic = $content = $child = $parent_forum_name = $first_post_arr = $post_status_image = $sub_forums = $locked = '';
 $forum_id = isset($_GET['forum_id']) ? (int) $_GET['forum_id'] : (isset($_POST['forum_id']) ? (int) $_POST['forum_id'] : 0);
-global $container;
-$db = $container->get(Database::class);, $site_config, $CURUSER;
+global $container, $CURUSER;
+/** @var ConfigRepository $config */
+$config = $container->get(ConfigRepository::class);
+$db = $container->get(Database::class);
 
 if (!is_valid_id($forum_id)) {
     stderr(_('Error'), _('Bad ID.'));
@@ -57,7 +62,7 @@ foreach ($query as $sub_forums_arr) {
         app_halt('Exit called');
     }
 
-    $where = $CURUSER['class'] < UC_STAFF ? 'posts.status = "ok" AND topics.status = "ok"' : $CURUSER['class'] < $site_config['forum_config']['min_delete_view_class'] ? 'posts.status != "deleted"  AND topics.status != "deleted"' : '';
+    $where = $CURUSER['class'] < UC_STAFF ? 'posts.status = "ok" AND topics.status = "ok"' : $CURUSER['class'] < $config->get('forum_config.min_delete_view_class') ? 'posts.status != "deleted"  AND topics.status != "deleted"' : '';
     $post_arr = $fluent->from('topics')
                        ->select(null)
                        ->select('topics.id AS topic_id')
@@ -90,29 +95,29 @@ foreach ($query as $sub_forums_arr) {
                 break;
 
             case 'recycled':
-                $topic_status_image = ' <img src="' . $site_config['paths']['images_baseurl'] . 'forums/recycle_bin.gif" alt="' . _('Recycled') . '" title="' . _('This topic is currently') . ' ' . _('in the recycle-bin') . '" class="tooltipper icon">';
+                $topic_status_image = ' <img src="' . $config->get('paths.images_baseurl') . 'forums/recycle_bin.gif" alt="' . _('Recycled') . '" title="' . _('This topic is currently') . ' ' . _('in the recycle-bin') . '" class="tooltipper icon">';
                 break;
 
             case 'deleted':
-                $topic_status_image = ' <img src="' . $site_config['paths']['images_baseurl'] . 'forums/delete_icon.gif" alt="' . _('Deleted') . '" title="' . _('This topic is currently') . ' ' . _('Deleted') . '" class="tooltipper icon">';
+                $topic_status_image = ' <img src="' . $config->get('paths.images_baseurl') . 'forums/delete_icon.gif" alt="' . _('Deleted') . '" title="' . _('This topic is currently') . ' ' . _('Deleted') . '" class="tooltipper icon">';
                 break;
         }
         if ($post_arr['tan'] === 1) {
             if ($CURUSER['class'] < UC_STAFF && $post_arr['user_id'] != $CURUSER['id']) {
-                $last_post = '<span style="white-space:nowrap;">' . _('Last Post by') . ': <i>' . get_anonymous_name() . '</i> in &#9658; <a class="is-link" href="' . $site_config['paths']['baseurl'] . '/forums.php?action=view_topic&amp;topic_id=' . $last_topic_id . '&amp;page=last#' . $last_post_id . '" title="' . htmlsafechars($post_arr['topic_name']) . '">
+                $last_post = '<span style="white-space:nowrap;">' . _('Last Post by') . ': <i>' . get_anonymous_name() . '</i> in &#9658; <a class="is-link" href="' . $config->get('paths.baseurl') . '/forums.php?action=view_topic&amp;topic_id=' . $last_topic_id . '&amp;page=last#' . $last_post_id . '" title="' . htmlsafechars($post_arr['topic_name']) . '">
 						<span style="font-weight: bold;">' . CutName(htmlsafechars($post_arr['topic_name']), 30) . '</span></a>' . $topic_status_image . '<br>
 						' . get_date((int) $post_arr['added'], '') . '<br></span>';
             } else {
                 $last_post = '<span style="white-space:nowrap;">' . _('Last Post by') . ': <i>' . get_anonymous_name() . '</i> [' . format_username((int) $post_arr['user_id']) . ']
 						<span style="font-size: x-small;"> [ ' . get_user_class_name((int) $post_arr['class']) . ' ] </span><br>
-						in &#9658; <a class="is-link" href="' . $site_config['paths']['baseurl'] . '/forums.php?action=view_topic&amp;topic_id=' . $last_topic_id . '&amp;page=last#' . $last_post_id . '" title="' . htmlsafechars($post_arr['topic_name']) . '">
+						in &#9658; <a class="is-link" href="' . $config->get('paths.baseurl') . '/forums.php?action=view_topic&amp;topic_id=' . $last_topic_id . '&amp;page=last#' . $last_post_id . '" title="' . htmlsafechars($post_arr['topic_name']) . '">
 						<span style="font-weight: bold;">' . CutName(htmlsafechars($post_arr['topic_name']), 30) . '</span></a>' . $topic_status_image . '<br>
 						' . get_date((int) $post_arr['added'], '') . '<br></span>';
             }
         } else {
             $last_post = '<span style="white-space:nowrap;">' . _('Last Post by') . ': ' . format_username((int) $post_arr['user_id']) . '
 						<span style="font-size: x-small;"> [ ' . get_user_class_name((int) $post_arr['class']) . ' ] </span><br>
-						in &#9658; <a class="is-link" href="' . $site_config['paths']['baseurl'] . '/forums.php?action=view_topic&amp;topic_id=' . $last_topic_id . '&amp;page=last#' . $last_post_id . '" title="' . htmlsafechars($post_arr['topic_name']) . '">
+						in &#9658; <a class="is-link" href="' . $config->get('paths.baseurl') . '/forums.php?action=view_topic&amp;topic_id=' . $last_topic_id . '&amp;page=last#' . $last_post_id . '" title="' . htmlsafechars($post_arr['topic_name']) . '">
 						<span style="font-weight: bold;">' . CutName(htmlsafechars($post_arr['topic_name']), 30) . '</span></a>' . $topic_status_image . '<br>
 						' . get_date((int) $post_arr['added'], '') . '<br></span>';
         }
@@ -134,20 +139,20 @@ $heading = $body = '';
 if (!empty($content)) {
     $heading = '
         <tr>
-		    <th class="has-text-centered"><img src="' . $site_config['paths']['images_baseurl'] . 'forums/topic.gif" alt="' . _('Topic') . '" title="' . _('Topic') . '"  class="tooltipper icon"></th>
-		    <th class="has-text-centered"><img src="' . $site_config['paths']['images_baseurl'] . 'forums/topic_normal.gif" alt=' . _('Thread Icon') . '" title=' . _('Thread Icon') . '"  class="tooltipper icon"></th>
+		    <th class="has-text-centered"><img src="' . $config->get('paths.images_baseurl') . 'forums/topic.gif" alt="' . _('Topic') . '" title="' . _('Topic') . '"  class="tooltipper icon"></th>
+		    <th class="has-text-centered"><img src="' . $config->get('paths.images_baseurl') . 'forums/topic_normal.gif" alt=' . _('Thread Icon') . '" title=' . _('Thread Icon') . '"  class="tooltipper icon"></th>
 		    <th class="has-text-centered">' . _('Topic') . '</th>
 		    <th class="has-text-centered">' . _('Started By') . '</th>
 		    <th class="has-text-centered">' . _('Replies') . '</th>
 		    <th class="has-text-centered">' . _('Views') . '</th>
 		    <th class="has-text-centered">' . _('Last Post') . '</th>
-		    <th class="has-text-centered"><img src="' . $site_config['paths']['images_baseurl'] . 'forums/last_post.gif" alt="' . _('Last Post') . '" title="' . _('Last Post') . '" class="tooltipper icon"></th>
+		    <th class="has-text-centered"><img src="' . $config->get('paths.images_baseurl') . 'forums/last_post.gif" alt="' . _('Last Post') . '" title="' . _('Last Post') . '" class="tooltipper icon"></th>
 		</tr>';
 }
 $table = main_table($content, $heading);
 $HTMLOUT .= $table . ($may_post ? '
                     <div class="has-text-centered margin20">
-                        <form action="' . $site_config['paths']['baseurl'] . '/forums.php?action=new_topic&amp;forum_id=' . $forum_id . '" method="post" name="new" accept-charset="utf-8">
+                        <form action="' . $config->get('paths.baseurl') . '/forums.php?action=new_topic&amp;forum_id=' . $forum_id . '" method="post" name="new" accept-charset="utf-8">
 		                    <input type="hidden" name="action" value="new_topic">
 		                    <input type="hidden" name="forum_id" value="' . $forum_id . '">
 		                    <input type="submit" name="button" class="button is-small" value="' . _('New Topic') . '">
@@ -155,6 +160,6 @@ $HTMLOUT .= $table . ($may_post ? '
 		            </div>' : '<span>' . _('You are not permitted to post in this forum.') . '</span>') . $the_top_and_bottom . ($count > $perpage ? $menu_bottom : '');
 
 $breadcrumbs = [
-    "<a href='{$site_config['paths']['baseurl']}/forums.php'>" . _('Forums') . '</a>',
-    "<a href='{$site_config['paths']['baseurl']}/forums.php?action=view_forum&forum_id={$forum_id}'>{$forum_name}</a>",
+    '<a href="' . $config->get('paths.baseurl') . '/forums.php">' . _('Forums') . '</a>',
+    '<a href="' . $config->get('paths.baseurl') . '/forums.php?action=view_forum&amp;forum_id=' . $forum_id . '">' . $forum_name . '</a>',
 ];

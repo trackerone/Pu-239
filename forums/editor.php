@@ -1,6 +1,14 @@
 <?php
 declare(strict_types=1);
+
+use Pu239\Config\ConfigRepository;
+use Pu239\Database;
+
 require_once dirname(__DIR__) . '/bootstrap.php';
+
+global $container;
+/** @var ConfigRepository $config */
+$config = $container->get(ConfigRepository::class);
 $db = $container->get(Database::class);
 $user = check_user_status();
 $subscribe = empty($subscribe) ? 'no' : $subscribe;
@@ -13,7 +21,7 @@ $edit = (preg_match('/edit_post/', $_SERVER['QUERY_STRING']) ? '
 		<td>
 			<input type='text' maxlength='60' name='edit_reason' value='" . trim(strip_tags($edit_reason)) . "' class='w-100' placeholder='Optional'>
 		</td>
-	</tr>" . (has_access($user['class'], $site_config['allowed']['show_edited_by'], 'coder') || $user['id'] === $arr_post['id'] ? "
+	</tr>" . (has_access($user['class'], $config->get('allowed.show_edited_by'), 'coder') || $user['id'] === $arr_post['id'] ? "
 	<tr>
 		<td>Edited By</td>
 		<td>
@@ -30,91 +38,91 @@ $HTMLOUT .= main_table('
             <td>
                 <div class="level-center">
                     <span class="level-center flex-vertical margin10">
-                        <img src="' . $site_config['paths']['images_baseurl'] . 'smilies/smile1.gif" alt="' . _('Smile') . '" title="' . _('Smile') . '" class="tooltipper icon bottom10">
+                        <img src="' . $config->get('paths.images_baseurl') . 'smilies/smile1.gif" alt="' . _('Smile') . '" title="' . _('Smile') . '" class="tooltipper icon bottom10">
                         <input type="radio" name="icon" value="smile1" ' . ($icon === 'smile1' ? 'checked' : '') . '>
                     </span>
                     <span class="level-center flex-vertical margin10">
-                        <img src="' . $site_config['paths']['images_baseurl'] . 'smilies/grin.gif" alt="' . _('Grin') . '" title="' . _('Grin') . '" class="tooltipper icon bottom10">
+                        <img src="' . $config->get('paths.images_baseurl') . 'smilies/grin.gif" alt="' . _('Grin') . '" title="' . _('Grin') . '" class="tooltipper icon bottom10">
                         <input type="radio" name="icon" value="grin" ' . ($icon === 'grin' ? 'checked' : '') . '>
                     </span>
                     <span class="level-center flex-vertical margin10">
-                        <img src="' . $site_config['paths']['images_baseurl'] . 'smilies/tongue.gif" alt="' . _('Tongue') . '" title="' . _('Tongue') . '" class="tooltipper icon bottom10">
+                        <img src="' . $config->get('paths.images_baseurl') . 'smilies/tongue.gif" alt="' . _('Tongue') . '" title="' . _('Tongue') . '" class="tooltipper icon bottom10">
                         <input type="radio" name="icon" value="tongue" ' . ($icon === 'tongue' ? 'checked' : '') . '>
                     </span>
                     <span class="level-center flex-vertical margin10">
-                        <img src="' . $site_config['paths']['images_baseurl'] . 'smilies/cry.gif" alt="' . _('Cry') . '" title="' . _('Cry') . '" class="tooltipper icon bottom10">
+                        <img src="' . $config->get('paths.images_baseurl') . 'smilies/cry.gif" alt="' . _('Cry') . '" title="' . _('Cry') . '" class="tooltipper icon bottom10">
                         <input type="radio" name="icon" value="cry" ' . ($icon === 'cry' ? 'checked' : '') . '>
                     </span>
                     <span class="level-center flex-vertical margin10">
-                        <img src="' . $site_config['paths']['images_baseurl'] . 'smilies/wink.gif" alt="' . _('Wink') . '" title="' . _('Wink') . '" class="tooltipper icon bottom10">
+                        <img src="' . $config->get('paths.images_baseurl') . 'smilies/wink.gif" alt="' . _('Wink') . '" title="' . _('Wink') . '" class="tooltipper icon bottom10">
                         <input type="radio" name="icon" value="wink" ' . ($icon === 'wink' ? 'checked' : '') . '>
                     </span>
                     <span class="level-center flex-vertical margin10">
-                        <img src="' . $site_config['paths']['images_baseurl'] . 'smilies/rolleyes.gif" alt="' . _('Roll eyes') . '" title="' . _('Roll eyes') . '" class="tooltipper icon bottom10">
+                        <img src="' . $config->get('paths.images_baseurl') . 'smilies/rolleyes.gif" alt="' . _('Roll eyes') . '" title="' . _('Roll eyes') . '" class="tooltipper icon bottom10">
                         <input type="radio" name="icon" value="rolleyes" ' . ($icon === 'rolleyes' ? 'checked' : '') . '>
                     </span>
                     <span class="level-center flex-vertical margin10">
-                        <img src="' . $site_config['paths']['images_baseurl'] . 'smilies/blink.gif" alt="' . _('Blink') . '" title="' . _('Blink') . '" class="tooltipper icon bottom10">
+                        <img src="' . $config->get('paths.images_baseurl') . 'smilies/blink.gif" alt="' . _('Blink') . '" title="' . _('Blink') . '" class="tooltipper icon bottom10">
                         <input type="radio" name="icon" value="blink" ' . ($icon === 'blink' ? 'checked' : '') . '>
                     </span>
                     <span class="level-center flex-vertical margin10">
-                        <img src="' . $site_config['paths']['images_baseurl'] . 'smilies/bow.gif" alt="' . _('Bow') . '" title="' . _('Bow') . '" class="tooltipper icon bottom10">
+                        <img src="' . $config->get('paths.images_baseurl') . 'smilies/bow.gif" alt="' . _('Bow') . '" title="' . _('Bow') . '" class="tooltipper icon bottom10">
                         <input type="radio" name="icon" value="bow" ' . ($icon === 'bow' ? 'checked' : '') . '>
                     </span>
                     <span class="level-center flex-vertical margin10">
-                        <img src="' . $site_config['paths']['images_baseurl'] . 'smilies/clap2.gif" alt="' . _('Clap') . '" title="' . _('Clap') . '" class="tooltipper icon bottom10">
+                        <img src="' . $config->get('paths.images_baseurl') . 'smilies/clap2.gif" alt="' . _('Clap') . '" title="' . _('Clap') . '" class="tooltipper icon bottom10">
                         <input type="radio" name="icon" value="clap2" ' . ($icon === 'clap2' ? 'checked' : '') . '>
                     </span>
                     <span class="level-center flex-vertical margin10">
-                        <img src="' . $site_config['paths']['images_baseurl'] . 'smilies/hmmm.gif" alt="' . _('Hmm') . '" title="' . _('Hmm') . '" class="tooltipper icon bottom10">
+                        <img src="' . $config->get('paths.images_baseurl') . 'smilies/hmmm.gif" alt="' . _('Hmm') . '" title="' . _('Hmm') . '" class="tooltipper icon bottom10">
                         <input type="radio" name="icon" value="hmmm" ' . ($icon === 'hmmm' ? 'checked' : '') . '>
                     </span>
                     <span class="level-center flex-vertical margin10">
-                        <img src="' . $site_config['paths']['images_baseurl'] . 'smilies/devil.gif" alt="' . _('Devil') . '" title="' . _('Devil') . '" class="tooltipper icon bottom10">
+                        <img src="' . $config->get('paths.images_baseurl') . 'smilies/devil.gif" alt="' . _('Devil') . '" title="' . _('Devil') . '" class="tooltipper icon bottom10">
                         <input type="radio" name="icon" value="devil" ' . ($icon === 'devil' ? 'checked' : '') . '>
                     </span>
                     <span class="level-center flex-vertical margin10">
-                        <img src="' . $site_config['paths']['images_baseurl'] . 'smilies/angry.gif" alt="' . _('Angry') . '" title="' . _('Angry') . '" class="tooltipper icon bottom10">
+                        <img src="' . $config->get('paths.images_baseurl') . 'smilies/angry.gif" alt="' . _('Angry') . '" title="' . _('Angry') . '" class="tooltipper icon bottom10">
                         <input type="radio" name="icon" value="angry" ' . ($icon === 'angry' ? 'checked' : '') . '>
                     </span>
                     <span class="level-center flex-vertical margin10">
-                        <img src="' . $site_config['paths']['images_baseurl'] . 'smilies/shit.gif" alt="' . _('Shit') . '" title="' . _('Shit') . '" class="tooltipper icon bottom10">
+                        <img src="' . $config->get('paths.images_baseurl') . 'smilies/shit.gif" alt="' . _('Shit') . '" title="' . _('Shit') . '" class="tooltipper icon bottom10">
                         <input type="radio" name="icon" value="shit" ' . ($icon === 'shit' ? 'checked' : '') . '>
                     </span>
                     <span class="level-center flex-vertical margin10">
-                        <img src="' . $site_config['paths']['images_baseurl'] . 'smilies/sick.gif" alt="' . _('Sick') . '" title="' . _('Sick') . '" class="tooltipper icon bottom10">
+                        <img src="' . $config->get('paths.images_baseurl') . 'smilies/sick.gif" alt="' . _('Sick') . '" title="' . _('Sick') . '" class="tooltipper icon bottom10">
                         <input type="radio" name="icon" value="sick" ' . ($icon === 'sick' ? 'checked' : '') . '>
                     </span>
                     <span class="level-center flex-vertical margin10">
-                        <img src="' . $site_config['paths']['images_baseurl'] . 'smilies/tease.gif" alt="' . _('Tease') . '" title="' . _('Tease') . '" class="tooltipper icon bottom10">
+                        <img src="' . $config->get('paths.images_baseurl') . 'smilies/tease.gif" alt="' . _('Tease') . '" title="' . _('Tease') . '" class="tooltipper icon bottom10">
                         <input type="radio" name="icon" value="tease" ' . ($icon === 'tease' ? 'checked' : '') . '>
                     </span>
                     <span class="level-center flex-vertical margin10">
-                        <img src="' . $site_config['paths']['images_baseurl'] . 'smilies/love.gif" alt="' . _('Love') . '" title="' . _('Love') . '" class="tooltipper icon bottom10">
+                        <img src="' . $config->get('paths.images_baseurl') . 'smilies/love.gif" alt="' . _('Love') . '" title="' . _('Love') . '" class="tooltipper icon bottom10">
                         <input type="radio" name="icon" value="love" ' . ($icon === 'love' ? 'checked' : '') . '>
                     </span>
                     <span class="level-center flex-vertical margin10">
-                        <img src="' . $site_config['paths']['images_baseurl'] . 'smilies/ohmy.gif" alt="' . _('Oh my') . '" title="' . _('Oh my') . '" class="tooltipper icon bottom10">
+                        <img src="' . $config->get('paths.images_baseurl') . 'smilies/ohmy.gif" alt="' . _('Oh my') . '" title="' . _('Oh my') . '" class="tooltipper icon bottom10">
                         <input type="radio" name="icon" value="ohmy" ' . ($icon === 'ohmy' ? 'checked' : '') . '>
                     </span>
                     <span class="level-center flex-vertical margin10">
-                        <img src="' . $site_config['paths']['images_baseurl'] . 'smilies/yikes.gif" alt="' . _('Yikes') . '" title="' . _('Yikes') . '" class="tooltipper icon bottom10">
+                        <img src="' . $config->get('paths.images_baseurl') . 'smilies/yikes.gif" alt="' . _('Yikes') . '" title="' . _('Yikes') . '" class="tooltipper icon bottom10">
                         <input type="radio" name="icon" value="yikes" ' . ($icon === 'yikes' ? 'checked' : '') . '>
                     </span>
                     <span class="level-center flex-vertical margin10">
-                        <img src="' . $site_config['paths']['images_baseurl'] . 'smilies/spider.gif" alt="' . _('Spider') . '" title="' . _('Spider') . '" class="tooltipper icon bottom10">
+                        <img src="' . $config->get('paths.images_baseurl') . 'smilies/spider.gif" alt="' . _('Spider') . '" title="' . _('Spider') . '" class="tooltipper icon bottom10">
                         <input type="radio" name="icon" value="spider" ' . ($icon === 'spider' ? 'checked' : '') . '>
                     </span>
                     <span class="level-center flex-vertical margin10">
-                        <img src="' . $site_config['paths']['images_baseurl'] . 'smilies/wall.gif" alt="' . _('Wall') . '" title="' . _('Wall') . '" class="tooltipper icon bottom10">
+                        <img src="' . $config->get('paths.images_baseurl') . 'smilies/wall.gif" alt="' . _('Wall') . '" title="' . _('Wall') . '" class="tooltipper icon bottom10">
                         <input type="radio" name="icon" value="wall" ' . ($icon === 'wall' ? 'checked' : '') . '>
                     </span>
                     <span class="level-center flex-vertical margin10">
-                        <img src="' . $site_config['paths']['images_baseurl'] . 'smilies/idea.gif" alt="' . _('Idea') . '" title="' . _('Idea') . '" class="tooltipper icon bottom10">
+                        <img src="' . $config->get('paths.images_baseurl') . 'smilies/idea.gif" alt="' . _('Idea') . '" title="' . _('Idea') . '" class="tooltipper icon bottom10">
                         <input type="radio" name="icon" value="idea" ' . ($icon === 'idea' ? 'checked' : '') . '>
                     </span>
                     <span class="level-center flex-vertical margin10">
-                        <img src="' . $site_config['paths']['images_baseurl'] . 'smilies/question.gif" alt="' . _('Question') . '" title="' . _('Question') . '" class="tooltipper icon bottom10">
+                        <img src="' . $config->get('paths.images_baseurl') . 'smilies/question.gif" alt="' . _('Question') . '" title="' . _('Question') . '" class="tooltipper icon bottom10">
                         <input type="radio" name="icon" value="question" ' . ($icon === 'question' ? 'checked' : '') . '>
                     </span>
                 </div>

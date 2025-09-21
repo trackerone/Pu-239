@@ -1,9 +1,15 @@
 <?php
 declare(strict_types=1);
-require_once dirname(__DIR__) . '/bootstrap.php';
+
+use Pu239\Config\ConfigRepository;
 use Pu239\Database;
 use Pu239\Post;
 
+require_once dirname(__DIR__) . '/bootstrap.php';
+
+global $container;
+/** @var ConfigRepository $config */
+$config = $container->get(ConfigRepository::class);
 $db = $container->get(Database::class);
 flood_limit('forums');
 $page = $colour = $arr_quote = '';
@@ -11,9 +17,9 @@ $topic_id = isset($_GET['topic_id']) ? (int) $_GET['topic_id'] : (isset($_POST['
 if (!is_valid_id($topic_id)) {
     stderr(_('Error'), _('Invalid ID'));
 }
-global $CURUSER, $site_config;
+global $CURUSER;
 
-$rows = $db->fetchAll('SELECT t.topic_name, t.topic_desc, t.locked, f.min_class_read, f.min_class_write, f.id AS real_forum_id, s.id AS subscribed_id FROM topics AS t LEFT JOIN forums AS f ON t.forum_id=f.id LEFT JOIN subscriptions AS s ON s.topic_id=t.id WHERE ' . ($CURUSER['class'] < UC_STAFF ? 't.status = \'ok\' AND' : ($CURUSER['class'] < $site_config['forum_config']['min_delete_view_class'] ? 't.status != \'deleted\'  AND' : '')) . ' t.id=' . sqlesc($topic_id)) or sqlerr(__FILE__, __LINE__);
+$rows = $db->fetchAll('SELECT t.topic_name, t.topic_desc, t.locked, f.min_class_read, f.min_class_write, f.id AS real_forum_id, s.id AS subscribed_id FROM topics AS t LEFT JOIN forums AS f ON t.forum_id=f.id LEFT JOIN subscriptions AS s ON s.topic_id=t.id WHERE ' . ($CURUSER['class'] < UC_STAFF ? 't.status = \'ok\' AND' : ($CURUSER['class'] < $config->get('forum_config.min_delete_view_class') ? 't.status != \'deleted\'  AND' : '')) . ' t.id=' . sqlesc($topic_id)) or sqlerr(__FILE__, __LINE__);
 $arr = mysqli_fetch_assoc($res);
 if ($arr['locked'] === 'yes') {
     stderr(_('Error'), _('This topic is locked'));
@@ -53,8 +59,8 @@ if ($quote !== 0 && $body === '') {
 }
 
 $HTMLOUT .= '
-    <h1 class="has-text-centered">' . _('Reply in topic') . ' "<a class="is-link" href="' . $site_config['paths']['baseurl'] . '/forums.php?action=view_topic&amp;topic_id=' . $topic_id . '">' . format_comment($arr['topic_name']) . '</a>"</h1>
-    <form method="post" action="' . $site_config['paths']['baseurl'] . '/forums.php?action=post_reply&amp;topic_id=' . $topic_id . '" enctype="multipart/form-data" accept-charset="utf-8">';
+    <h1 class="has-text-centered">' . _('Reply in topic') . ' "<a class="is-link" href="' . $config->get('paths.baseurl') . '/forums.php?action=view_topic&amp;topic_id=' . $topic_id . '">' . format_comment($arr['topic_name']) . '</a>"</h1>
+    <form method="post" action="' . $config->get('paths.baseurl') . '/forums.php?action=post_reply&amp;topic_id=' . $topic_id . '" enctype="multipart/form-data" accept-charset="utf-8">';
 
 require_once FORUM_DIR . 'editor.php';
 

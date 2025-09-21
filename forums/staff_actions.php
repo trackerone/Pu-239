@@ -1,9 +1,16 @@
 <?php
 declare(strict_types=1);
-require_once dirname(__DIR__) . '/bootstrap.php';
+
+use Pu239\Config\ConfigRepository;
 use Pu239\Database;
-use Pu239\Cache;
 use Pu239\Post;
+
+require_once dirname(__DIR__) . '/bootstrap.php';
+
+global $container;
+/** @var ConfigRepository $config */
+$config = $container->get(ConfigRepository::class);
+$db = $container->get(Database::class);
 
 $user = check_user_status();
 
@@ -28,9 +35,6 @@ $valid_staff_actions = [
     'un_delete_topic',
 ];
 $staff_action = in_array($posted_staff_action, $valid_staff_actions) ? $posted_staff_action : 1;
-global $container;
-$db = $container->get(Database::class);, $site_config;
-
 if (!has_access($user['class'], UC_STAFF, 'coder')) {
     stderr(_('Error'), _('No access for you Mr. Fancy-Pants...'));
 }
@@ -236,7 +240,7 @@ if ($topic_id > 0) {
 	<input type="submit" name="button" class="top20 button is-small" value="' . _('Delete Topic') . '">
 	</form>');
         }
-        if ($site_config['forum_config']['delete_for_real']) {
+        if ($config->get('forum_config.delete_for_real')) {
             $db->run('UPDATE topics SET status = "deleted" WHERE id = :id', [':id' => $topic_id]) or sqlerr(__FILE__, __LINE__);
             header('Location: ' . $_SERVER['PHP_SELF']);
             app_halt('Exit called');

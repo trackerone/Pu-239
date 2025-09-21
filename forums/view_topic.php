@@ -1,11 +1,14 @@
 <?php
 declare(strict_types=1);
-require_once dirname(__DIR__) . '/bootstrap.php';
+
 use Pu239\Cache;
+use Pu239\Config\ConfigRepository;
 use Pu239\Database;
 use Pu239\Mood;
 use Pu239\Session;
 use Pu239\User;
+
+require_once dirname(__DIR__) . '/bootstrap.php';
 
 require_once __DIR__ . '/../include/bittorrent.php';
 require_once FORUM_DIR . 'quick_reply.php';
@@ -20,8 +23,10 @@ if (!is_valid_id($topic_id)) {
 
 $upload_errors_size = isset($_GET['se']) ? (int) $_GET['se'] : 0;
 $upload_errors_type = isset($_GET['ee']) ? (int) $_GET['ee'] : 0;
-global $container;
-$db = $container->get(Database::class);, $site_config, $CURUSER;
+global $container, $CURUSER;
+/** @var ConfigRepository $config */
+$config = $container->get(ConfigRepository::class);
+$db = $container->get(Database::class);
 
 $_forum_sort = isset($CURUSER['forum_sort']) ? $CURUSER['forum_sort'] : 'DESC';
 $fluent = $db; // alias
@@ -52,11 +57,11 @@ $arr = $fluent->from('topics AS t')
 if (!has_access($CURUSER['class'], UC_STAFF, 'forum_mod')) {
     $arr = $arr->where('t.status = "ok"');
 }
-if (!has_access($CURUSER['class'], $site_config['forum_config']['min_delete_view_class'], 'forum_mod')) {
+if (!has_access($CURUSER['class'], $config->get('forum_config.min_delete_view_class'), 'forum_mod')) {
     $arr = $arr->where('t.status != "deleted"');
 }
 $arr = $arr->fetch();
-if (empty($arr) || !has_access($CURUSER['class'], $arr['min_class_read'], '') || !is_valid_id($arr['topic_id']) || !has_access($CURUSER['class'], $site_config['forum_config']['min_delete_view_class'], '') && $status === 'deleted' || !has_access($CURUSER['class'], UC_STAFF, '') && $status === 'recycled') {
+if (empty($arr) || !has_access($CURUSER['class'], $arr['min_class_read'], '') || !is_valid_id($arr['topic_id']) || !has_access($CURUSER['class'], $config->get('forum_config.min_delete_view_class'), '') && $status === 'deleted' || !has_access($CURUSER['class'], UC_STAFF, '') && $status === 'recycled') {
     stderr(_('Error'), _('Invalid ID.'));
 }
 
@@ -69,12 +74,12 @@ switch ($status) {
 
     case 'recycled':
         $status = 'recycled';
-        $status_image = '<img src="' . $image . '" data-src="' . $site_config['paths']['images_baseurl'] . 'forums/recycle_bin.gif" alt="' . _('Recycled') . '" title="' . _('This thread is currently') . ' ' . _('in the recycle-bin') . '" class="tooltipper emoticon lazy">';
+        $status_image = '<img src="' . $image . '" data-src="' . $config->get('paths.images_baseurl') . 'forums/recycle_bin.gif" alt="' . _('Recycled') . '" title="' . _('This thread is currently') . ' ' . _('in the recycle-bin') . '" class="tooltipper emoticon lazy">';
         break;
 
     case 'deleted':
         $status = 'deleted';
-        $status_image = '<img src="' . $image . '" data-src="' . $site_config['paths']['images_baseurl'] . 'forums/delete_icon.gif" alt="' . _('Deleted') . '" title="' . _('This thread is currently') . ' ' . _('Deleted') . '" class="tooltipper emoticon lazy">';
+        $status_image = '<img src="' . $image . '" data-src="' . $config->get('paths.images_baseurl') . 'forums/delete_icon.gif" alt="' . _('Deleted') . '" title="' . _('This thread is currently') . ' ' . _('Deleted') . '" class="tooltipper emoticon lazy">';
         break;
 }
 
@@ -133,33 +138,33 @@ if ($arr['poll_id'] > 0) {
 
         $total_non_votes = $num_non_votes > 0 ? ' [ ' . _pfe('{0} member just wanted to see the results', '{0} members just wanted to see the results', number_format($num_non_votes)) . ' ]' : '';
         $topic_poll .= ($voted || $poll_open === 0 ? '' : '
-    <form action="' . $site_config['paths']['baseurl'] . '/forums.php?action=poll" method="post" name="poll" accept-charset="utf-8">
+    <form action="' . $config->get('paths.baseurl') . '/forums.php?action=poll" method="post" name="poll" accept-charset="utf-8">
         <input type="hidden" name="topic_id" value="' . $topic_id . '">
         <input type="hidden" name="action_2" value="poll_vote">') . '
         <div class="level-wide bottom20 padding20">
             <div class="level-left">
-                <img src="' . $image . '" data-src="' . $site_config['paths']['images_baseurl'] . 'forums/poll.gif" alt="" class="tooltipper emoticon lazy">
+                <img src="' . $image . '" data-src="' . $config->get('paths.images_baseurl') . 'forums/poll.gif" alt="" class="tooltipper emoticon lazy">
             </div>
             <div class="level-center-center size_7">
-                <img src="' . $image . '" data-src="' . $site_config['paths']['images_baseurl'] . 'forums/poll_question.png" alt="" class="tooltipper emoticon lazy right20">           
+                <img src="' . $image . '" data-src="' . $config->get('paths.images_baseurl') . 'forums/poll_question.png" alt="" class="tooltipper emoticon lazy right20">           
                 ' . format_comment($arr_poll['question']) . '
             </div>
             <div class="level-right">
                 <span class="right20">' . ($arr_poll['poll_closed'] === 'yes' ? 'Poll :: Closed</span>' : ($arr_poll['poll_starts'] > TIME_NOW ? 'Poll :: Starts: </span>' . get_date((int) $arr_poll['poll_starts'], '') : ($arr_poll['poll_ends'] == 1356048000 ? '</span>' : ($arr_poll['poll_ends'] > TIME_NOW ? 'Poll :: Ends: </span>' . get_date((int) $arr_poll['poll_ends'], 'LONG', 0, 1) : '</span>')))) . ($CURUSER['class'] < UC_STAFF ? '' : '
-                    <a href="' . $site_config['paths']['baseurl'] . '/forums.php?action=poll&amp;action_2=poll_edit&amp;topic_id=' . $topic_id . '" class="is-link">
-                        <img src="' . $image . '" data-src="' . $site_config['paths']['images_baseurl'] . 'forums/modify.gif" alt="" class="tooltipper emoticon lazy" title="' . _('Edit') . '">
+                    <a href="' . $config->get('paths.baseurl') . '/forums.php?action=poll&amp;action_2=poll_edit&amp;topic_id=' . $topic_id . '" class="is-link">
+                        <img src="' . $image . '" data-src="' . $config->get('paths.images_baseurl') . 'forums/modify.gif" alt="" class="tooltipper emoticon lazy" title="' . _('Edit') . '">
                     </a>
-                    <a href="' . $site_config['paths']['baseurl'] . '/forums.php?action=poll&amp;action_2=poll_reset&amp;topic_id=' . $topic_id . '" class="is-link">
-                        <img src="' . $image . '" data-src="' . $site_config['paths']['images_baseurl'] . 'forums/stop_watch.png" alt=" " class="tooltipper emoticon lazy" title="' . _('Reset') . '">
+                    <a href="' . $config->get('paths.baseurl') . '/forums.php?action=poll&amp;action_2=poll_reset&amp;topic_id=' . $topic_id . '" class="is-link">
+                        <img src="' . $image . '" data-src="' . $config->get('paths.images_baseurl') . 'forums/stop_watch.png" alt=" " class="tooltipper emoticon lazy" title="' . _('Reset') . '">
                     </a>' . (($arr_poll['poll_ends'] > TIME_NOW || $arr_poll['poll_closed'] === 'no') ? '
-                    <a href="' . $site_config['paths']['baseurl'] . '/forums.php?action=poll&amp;action_2=poll_close&amp;topic_id=' . $topic_id . '" class="is-link">
-                        <img src="' . $image . '" data-src="' . $site_config['paths']['images_baseurl'] . 'forums/clock.png" alt="" class="emoticon lazy" title="Close">
+                    <a href="' . $config->get('paths.baseurl') . '/forums.php?action=poll&amp;action_2=poll_close&amp;topic_id=' . $topic_id . '" class="is-link">
+                        <img src="' . $image . '" data-src="' . $config->get('paths.images_baseurl') . 'forums/clock.png" alt="" class="emoticon lazy" title="Close">
                     </a>' : '
-                    <a href="' . $site_config['paths']['baseurl'] . '/forums.php?action=poll&amp;action_2=poll_open&amp;topic_id=' . $topic_id . '" class="is-link">
-                        <img src="' . $image . '" data-src="' . $site_config['paths']['images_baseurl'] . 'forums/clock.png" alt="" class="emoticon lazy" title="' . _('Start') . '">
+                    <a href="' . $config->get('paths.baseurl') . '/forums.php?action=poll&amp;action_2=poll_open&amp;topic_id=' . $topic_id . '" class="is-link">
+                        <img src="' . $image . '" data-src="' . $config->get('paths.images_baseurl') . 'forums/clock.png" alt="" class="emoticon lazy" title="' . _('Start') . '">
                     </a>') . '
-                    <a href="' . $site_config['paths']['baseurl'] . '/forums.php?action=poll&amp;action_2=poll_delete&amp;topic_id=' . $topic_id . '" class="is-link">
-                        <img src="' . $image . '" data-src="' . $site_config['paths']['images_baseurl'] . 'forums/delete.gif" alt="" class="tooltipper emoticon lazy" title="' . _('Delete') . '">
+                    <a href="' . $config->get('paths.baseurl') . '/forums.php?action=poll&amp;action_2=poll_delete&amp;topic_id=' . $topic_id . '" class="is-link">
+                        <img src="' . $image . '" data-src="' . $config->get('paths.images_baseurl') . 'forums/delete.gif" alt="" class="tooltipper emoticon lazy" title="' . _('Delete') . '">
                     </a>') . '
                 </span>
             </div>
@@ -179,7 +184,7 @@ if ($arr['poll_id'] > 0) {
                 $math = $vote_count > 0 ? round(($vote_count / $total_votes) * 100) : 0;
                 $math_text = $math . '% with ' . $vote_count . ' vote' . plural($vote_count);
                 $math_image = '
-            <div style="padding: 0; background-image: url(' . $site_config['paths']['images_baseurl'] . '/forums/vote_img_bg.gif); background-repeat: repeat-x">
+            <div style="padding: 0; background-image: url(' . $config->get('paths.images_baseurl') . '/forums/vote_img_bg.gif); background-repeat: repeat-x">
                 <span class="tooltipper" title="' . $math_text . '">
                     <i class="icon-search icon" aria-hidden="true"></i>
                 </span>
@@ -192,13 +197,13 @@ if ($arr['poll_id'] > 0) {
                     <input type="checkbox" name="vote[]" id="vote[]" value="' . $i . '" class="right10"> ') . ($i + 1) . '.
                 </span>
                 <span>' . format_comment($poll_options[$i]) . $math_image . $math_text . (in_array($i, $members_votes) ? '
-                    <img src="' . $image . '" data-src="' . $site_config['paths']['images_baseurl'] . 'forums/check.gif" alt=" " class="tooltipper emoticon lazy">' . _('Your vote') . '!' : '') . '
+                    <img src="' . $image . '" data-src="' . $config->get('paths.images_baseurl') . 'forums/check.gif" alt=" " class="tooltipper emoticon lazy">' . _('Your vote') . '!' : '') . '
                 </span>
             </span>');
         }
         $topic_poll .= ($change_vote === 1 && $voted ? '
-            <a href="' . $site_config['paths']['baseurl'] . '/forums.php?action=poll&amp;action_2=reset_vote&amp;topic_id=' . $topic_id . '" class="is-link">
-                <img src="' . $image . '" data-src="' . $site_config['paths']['images_baseurl'] . 'forums/stop_watch.png" alt="" class="tooltipper emoticon lazy"> ' . _('Reset Your Vote') . '!
+            <a href="' . $config->get('paths.baseurl') . '/forums.php?action=poll&amp;action_2=reset_vote&amp;topic_id=' . $topic_id . '" class="is-link">
+                <img src="' . $image . '" data-src="' . $config->get('paths.images_baseurl') . 'forums/stop_watch.png" alt="" class="tooltipper emoticon lazy"> ' . _('Reset Your Vote') . '!
             </a>' : '') . ($voted ? _('Total votes') . ': ' . number_format($total_votes) . $total_non_votes . ($CURUSER['class'] < UC_STAFF ? '' : '<br>
             <a class="is-link"  title="' . _('List voters') . '" id="toggle_voters">' . _('List voters') . '</a>
             <div id="voters" style="display:none">' . $who_voted . '</div>') : ($poll_open === 0 ? '' : '
@@ -239,8 +244,8 @@ $subscribed = $fluent->from('subscriptions')
                      ->where('user_id = ?', $CURUSER['id'])
                      ->fetch('id');
 
-$subscriptions = $subscribed ? "<a href='{$site_config['paths']['baseurl']}/forums.php?action=delete_subscription&amp;topic_id={$topic_id}'>" . _('Unsubscribe from this topic') . '</a>' : "
-        <a href='{$site_config['paths']['baseurl']}/forums.php?action=add_subscription&amp;forum_id={$forum_id}&amp;topic_id={$topic_id}'>" . _('Subscribe to this topic') . '</a>';
+$subscriptions = $subscribed ? "<a href='{$config->get('paths.baseurl')}/forums.php?action=delete_subscription&amp;topic_id={$topic_id}'>" . _('Unsubscribe from this topic') . '</a>' : "
+        <a href='{$config->get('paths.baseurl')}/forums.php?action=add_subscription&amp;forum_id={$forum_id}&amp;topic_id={$topic_id}'>" . _('Subscribe to this topic') . '</a>';
 
 $values = [
     'user_id' => $CURUSER['id'],
@@ -276,7 +281,7 @@ if ($topic_users_cache === false || is_null($topic_users_cache)) {
     $topicusers = empty($list) ? '' : implode(',&nbsp;&nbsp;', $list);
     $topic_users_cache['topic_users'] = $topicusers;
     $topic_users_cache['actcount'] = empty($list) ? 0 : count($list);
-    $cache->set('now_viewing_topic_', $topic_users_cache, $site_config['expires']['forum_users']);
+    $cache->set('now_viewing_topic_', $topic_users_cache, $config->get('expires.forum_users'));
 }
 if (!$topic_users_cache['topic_users']) {
     $topic_users_cache['topic_users'] = _('There have been no active users in the last 15 minutes.');
@@ -333,7 +338,7 @@ if ($CURUSER['class'] >= UC_STAFF) {
     $table = '
         <tr>
             <td>
-                <img src="' . $image . '" data-src="' . $site_config['paths']['images_baseurl'] . 'forums/merge.gif" alt="' . _('Merge') . '" title="' . _('Merge') . '" class="tooltipper emoticon lazy">
+                <img src="' . $image . '" data-src="' . $config->get('paths.images_baseurl') . 'forums/merge.gif" alt="' . _('Merge') . '" title="' . _('Merge') . '" class="tooltipper emoticon lazy">
             </td>
             <td>
                 <input type="radio" name="action_2" value="merge_posts">' . _('Merge With') . '<br>
@@ -351,7 +356,7 @@ if ($CURUSER['class'] >= UC_STAFF) {
         </tr>
         <tr>
             <td>
-                <img src="' . $image . '" data-src="' . $site_config['paths']['images_baseurl'] . 'forums/split.gif" alt="' . _('Split') . '" title="' . _('Split') . '" class="tooltipper emoticon lazy">
+                <img src="' . $image . '" data-src="' . $config->get('paths.images_baseurl') . 'forums/split.gif" alt="' . _('Split') . '" title="' . _('Split') . '" class="tooltipper emoticon lazy">
             </td>
             <td>
                 <input type="radio" name="action_2" value="split_topic">' . _('Split Topic') . '
@@ -366,7 +371,7 @@ if ($CURUSER['class'] >= UC_STAFF) {
         </tr>
         <tr>
             <td>
-                <img src="' . $image . '" data-src="' . $site_config['paths']['images_baseurl'] . 'forums/send_pm.png" alt="' . _('Send Message') . '" title="' . _('Send Message') . '" class="tooltipper emoticon lazy">
+                <img src="' . $image . '" data-src="' . $config->get('paths.images_baseurl') . 'forums/send_pm.png" alt="' . _('Send Message') . '" title="' . _('Send Message') . '" class="tooltipper emoticon lazy">
             </td>
             <td colspan="2">
                 <div id="pm" style="display:none">' . main_table('
@@ -408,13 +413,13 @@ if ($CURUSER['class'] >= UC_STAFF) {
         </tr>
                 <tr>
                     <td>
-                        <img src="' . $image . '" data-src="' . $site_config['paths']['images_baseurl'] . 'forums/pinned.gif" alt="' . _('Pinned') . '" title="' . _('Pinned') . '" class="tooltipper emoticon lazy">
+                        <img src="' . $image . '" data-src="' . $config->get('paths.images_baseurl') . 'forums/pinned.gif" alt="' . _('Pinned') . '" title="' . _('Pinned') . '" class="tooltipper emoticon lazy">
                     </td>
                     <td>
                         <span>' . _('Pin') . ' ' . _('Topic') . ':</span>
                     </td>
                     <td>
-                        <form action="' . $site_config['paths']['baseurl'] . '/forums.php?action=staff_actions" method="post" accept-charset="utf-8">
+                        <form action="' . $config->get('paths.baseurl') . '/forums.php?action=staff_actions" method="post" accept-charset="utf-8">
                             <input type="hidden" name="action_2" value="set_pinned">
                             <input type="hidden" name="topic_id" value="' . $topic_id . '">
                             <input type="radio" name="pinned" value="yes" ' . ($sticky === 'yes' ? 'checked' : '') . '> Yes
@@ -427,13 +432,13 @@ if ($CURUSER['class'] >= UC_STAFF) {
                 </tr>
                 <tr>
                     <td>
-                        <img src="' . $image . '" data-src="' . $site_config['paths']['images_baseurl'] . 'forums/thread_locked.gif" alt="' . _('Locked') . '" title="' . _('Locked') . '" class="tooltipper emoticon lazy">
+                        <img src="' . $image . '" data-src="' . $config->get('paths.images_baseurl') . 'forums/thread_locked.gif" alt="' . _('Locked') . '" title="' . _('Locked') . '" class="tooltipper emoticon lazy">
                     </td>
                     <td>
                         <span>' . _('Lock') . ' ' . _('Topic') . ':</span>
                     </td>
                     <td>
-                        <form action="' . $site_config['paths']['baseurl'] . '/forums.php?action=staff_actions" method="post" accept-charset="utf-8">
+                        <form action="' . $config->get('paths.baseurl') . '/forums.php?action=staff_actions" method="post" accept-charset="utf-8">
                             <input type="hidden" name="action_2" value="set_locked">
                             <input type="hidden" name="topic_id" value="' . $topic_id . '">
                             <input type="radio" name="locked" value="yes" ' . ($locked === 'yes' ? 'checked' : '') . '> Yes
@@ -447,13 +452,13 @@ if ($CURUSER['class'] >= UC_STAFF) {
                 <tr>
                     <td>
 
-                        <img src="' . $image . '" data-src="' . $site_config['paths']['images_baseurl'] . 'forums/move.gif" alt="' . _('Move') . '" title="' . _('Move') . '" class="tooltipper emoticon lazy">
+                        <img src="' . $image . '" data-src="' . $config->get('paths.images_baseurl') . 'forums/move.gif" alt="' . _('Move') . '" title="' . _('Move') . '" class="tooltipper emoticon lazy">
                     </td>
                     <td>
                         <span>' . _('Move') . ' ' . _('Topic') . ':</span>
                     </td>
                     <td>
-                        <form action="' . $site_config['paths']['baseurl'] . '/forums.php?action=staff_actions" method="post" accept-charset="utf-8">
+                        <form action="' . $config->get('paths.baseurl') . '/forums.php?action=staff_actions" method="post" accept-charset="utf-8">
                             <input type="hidden" name="action_2" value="move_topic">
                             <input type="hidden" name="topic_id" value="' . $topic_id . '">
                             <select name="forum_id">
@@ -467,13 +472,13 @@ if ($CURUSER['class'] >= UC_STAFF) {
                 </tr>
                 <tr>
                     <td>
-                        <img src="' . $image . '" data-src="' . $site_config['paths']['images_baseurl'] . 'forums/modify.gif" alt="' . _('Modify') . '" title="' . _('Modify') . '" class="tooltipper emoticon lazy">
+                        <img src="' . $image . '" data-src="' . $config->get('paths.images_baseurl') . 'forums/modify.gif" alt="' . _('Modify') . '" title="' . _('Modify') . '" class="tooltipper emoticon lazy">
                     </td>
                     <td>
                         <span>' . _('Rename') . ' ' . _('Topic') . ':</span>
                     </td>
                     <td>
-                        <form action="' . $site_config['paths']['baseurl'] . '/forums.php?action=staff_actions" method="post" accept-charset="utf-8">
+                        <form action="' . $config->get('paths.baseurl') . '/forums.php?action=staff_actions" method="post" accept-charset="utf-8">
                             <input type="hidden" name="action_2" value="rename_topic">
                             <input type="hidden" name="topic_id" value="' . $topic_id . '">
                             <input type="text" size="40" maxlength="120" name="new_topic_name" value="' . (!empty($topic_name) ? $topic_name : '') . '">
@@ -485,13 +490,13 @@ if ($CURUSER['class'] >= UC_STAFF) {
                 </tr>
                 <tr>
                     <td>
-                        <img src="' . $image . '" data-src="' . $site_config['paths']['images_baseurl'] . 'forums/modify.gif" alt="' . _('Modify') . '" title="' . _('Modify') . '" class="tooltipper emoticon lazy">
+                        <img src="' . $image . '" data-src="' . $config->get('paths.images_baseurl') . 'forums/modify.gif" alt="' . _('Modify') . '" title="' . _('Modify') . '" class="tooltipper emoticon lazy">
                     </td>
                     <td>
                         <span>' . _('Change Topic Desc') . ':</span>
                     </td>
                     <td>
-                        <form action="' . $site_config['paths']['baseurl'] . '/forums.php?action=staff_actions" method="post" accept-charset="utf-8">
+                        <form action="' . $config->get('paths.baseurl') . '/forums.php?action=staff_actions" method="post" accept-charset="utf-8">
                             <input type="hidden" name="action_2" value="change_topic_desc">
                             <input type="hidden" name="topic_id" value="' . $topic_id . '">
                             <input type="text" size="40" maxlength="120" name="new_topic_desc" value="' . (!empty($topic_desc1) ? $topic_desc1 : '') . '"></td>
@@ -502,13 +507,13 @@ if ($CURUSER['class'] >= UC_STAFF) {
                 </tr>
                 <tr>
                     <td>
-                        <img src="' . $image . '" data-src="' . $site_config['paths']['images_baseurl'] . 'forums/merge.gif" alt="' . _('Merge') . '" title="' . _('Merge Topic') . '" class="tooltipper emoticon lazy">
+                        <img src="' . $image . '" data-src="' . $config->get('paths.images_baseurl') . 'forums/merge.gif" alt="' . _('Merge') . '" title="' . _('Merge Topic') . '" class="tooltipper emoticon lazy">
                     </td>
                     <td>
                         <span>' . _('Merge') . ' ' . _('Topic') . ':</span>
                     </td>
                     <td>' . _('With topic #') . '
-                        <form action="' . $site_config['paths']['baseurl'] . '/forums.php?action=staff_actions" method="post" accept-charset="utf-8">
+                        <form action="' . $config->get('paths.baseurl') . '/forums.php?action=staff_actions" method="post" accept-charset="utf-8">
                             <input type="hidden" name="action_2" value="merge_topic">
                             <input type="hidden" name="topic_id" value="' . $topic_id . '">
                             <input type="text" size="4" name="topic_to_merge_with" value="' . $topic_id . '">
@@ -523,13 +528,13 @@ if ($CURUSER['class'] >= UC_STAFF) {
                 </tr>
                 <tr>
                     <td>
-                        <img src="' . $image . '" data-src="' . $site_config['paths']['images_baseurl'] . 'forums/merge.gif" alt="' . _('Append') . '" title="' . _('Append Topic') . '" class="tooltipper emoticon lazy">
+                        <img src="' . $image . '" data-src="' . $config->get('paths.images_baseurl') . 'forums/merge.gif" alt="' . _('Append') . '" title="' . _('Append Topic') . '" class="tooltipper emoticon lazy">
                     </td>
                     <td>
                         <span>' . _('Append') . ' ' . _('Topic') . ':</span>
                     </td>
                     <td>' . _('With topic #') . '
-                        <form action="' . $site_config['paths']['baseurl'] . '/forums.php?action=staff_actions" method="post" accept-charset="utf-8">
+                        <form action="' . $config->get('paths.baseurl') . '/forums.php?action=staff_actions" method="post" accept-charset="utf-8">
                             <input type="hidden" name="action_2" value="append_topic">
                             <input type="hidden" name="topic_id" value="' . $topic_id . '">
                             <input type="text" size="4" name="topic_to_append_into" value="' . $topic_id . '">
@@ -544,12 +549,12 @@ if ($CURUSER['class'] >= UC_STAFF) {
                 </tr>
                 <tr>
                     <td>
-                        <img src="' . $image . '" data-src="' . $site_config['paths']['images_baseurl'] . 'forums/recycle_bin.gif" alt="' . _('Recycle') . '" title="' . _('Recycle') . '" class="tooltipper emoticon lazy"></td>
+                        <img src="' . $image . '" data-src="' . $config->get('paths.images_baseurl') . 'forums/recycle_bin.gif" alt="' . _('Recycle') . '" title="' . _('Recycle') . '" class="tooltipper emoticon lazy"></td>
                     <td>
                         <span>' . _('Move to Recycle Bin') . ':</span>
                     </td>
                     <td>
-                        <form action="' . $site_config['paths']['baseurl'] . '/forums.php?action=staff_actions" method="post" accept-charset="utf-8">
+                        <form action="' . $config->get('paths.baseurl') . '/forums.php?action=staff_actions" method="post" accept-charset="utf-8">
                             <input type="hidden" name="action_2" value="move_to_recycle_bin">
                             <input type="hidden" name="topic_id" value="' . $topic_id . '">
                             <input type="hidden" name="forum_id" value="' . $forum_id . '">
@@ -565,22 +570,22 @@ if ($CURUSER['class'] >= UC_STAFF) {
                 </tr>
                 <tr>
                     <td>
-                        <img src="' . $image . '" data-src="' . $site_config['paths']['images_baseurl'] . 'forums/delete.gif" alt="' . _('Delete') . '" title="' . _('Delete') . '" class="tooltipper emoticon lazy"></td>
+                        <img src="' . $image . '" data-src="' . $config->get('paths.images_baseurl') . 'forums/delete.gif" alt="' . _('Delete') . '" title="' . _('Delete') . '" class="tooltipper emoticon lazy"></td>
                     <td>
                         <span>' . _('Delete Topic') . ':</span>
                     </td>
                     <td>' . _('Are you really sure you want to delete this topic, and not just move it or merge it?') . '</td>
                     <td class="has-text-centered">
-                        <form action="' . $site_config['paths']['baseurl'] . '/forums.php?action=staff_actions" method="post" accept-charset="utf-8">
+                        <form action="' . $config->get('paths.baseurl') . '/forums.php?action=staff_actions" method="post" accept-charset="utf-8">
                             <input type="hidden" name="action_2" value="delete_topic">
                             <input type="hidden" name="topic_id" value="' . $topic_id . '">
                             <input type="submit" name="button" class="button is-small w-100" value="' . _('Delete Topic') . '">
                         </form>
                     </td>
-                </tr>' . ($CURUSER['class'] < $site_config['forum_config']['min_delete_view_class'] ? '' : '
+                </tr>' . ($CURUSER['class'] < $config->get('forum_config.min_delete_view_class') ? '' : '
                 <tr>
                     <td>
-                        <img src="' . $image . '" data-src="' . $site_config['paths']['images_baseurl'] . 'forums/delete_icon.gif" alt="' . _('Un-Delete Topic') . '" title="' . _('Un-Delete Topic') . '" class="tooltipper emoticon lazy">
+                        <img src="' . $image . '" data-src="' . $config->get('paths.images_baseurl') . 'forums/delete_icon.gif" alt="' . _('Un-Delete Topic') . '" title="' . _('Un-Delete Topic') . '" class="tooltipper emoticon lazy">
                     </td>
                     <td>
                         <span>
@@ -589,7 +594,7 @@ if ($CURUSER['class'] >= UC_STAFF) {
                     </td>
                     <td></td>
                     <td class="has-text-centered">
-                        <form action="' . $site_config['paths']['baseurl'] . '/forums.php?action=staff_actions" method="post" accept-charset="utf-8">
+                        <form action="' . $config->get('paths.baseurl') . '/forums.php?action=staff_actions" method="post" accept-charset="utf-8">
                             <input type="hidden" name="action_2" value="un_delete_topic">
                             <input type="hidden" name="topic_id" value="' . $topic_id . '">
                             <input type="submit" name="button" class="button is-small w-100" value="' . _('Un-Delete Topic') . '">
@@ -598,7 +603,7 @@ if ($CURUSER['class'] >= UC_STAFF) {
                 </tr>
                 <tr>
                     <td class="has-text-centered" colspan="4">
-                        <span class="has-text-danger">*</span>only <span>' . get_user_class_name((int) $site_config['forum_config']['min_delete_view_class']) . '</span> ' . _('and above can see these options!') . '
+                        <span class="has-text-danger">*</span>only <span>' . get_user_class_name((int) $config->get('forum_config.min_delete_view_class')) . '</span> ' . _('and above can see these options!') . '
                     </td>
                 </tr>');
     $HTMLOUT .= main_table($table) . '
@@ -608,7 +613,7 @@ if ($CURUSER['class'] >= UC_STAFF) {
 $HTMLOUT .= quick_reply($topic_id);
 
 $breadcrumbs = [
-    "<a href='{$site_config['paths']['baseurl']}/forums.php'>" . _('Forums') . '</a>',
-    "<a href='{$site_config['paths']['baseurl']}/forums.php?action=view_forum&forum_id={$forum_id}'>{$forum_name}</a>",
-    "<a href='{$site_config['paths']['baseurl']}/forums.php?action=view_topic&topic_id={$topic_id}'>{$topic_name}</a>",
+    "<a href='{$config->get('paths.baseurl')}/forums.php'>" . _('Forums') . '</a>',
+    "<a href='{$config->get('paths.baseurl')}/forums.php?action=view_forum&forum_id={$forum_id}'>{$forum_name}</a>",
+    "<a href='{$config->get('paths.baseurl')}/forums.php?action=view_topic&topic_id={$topic_id}'>{$topic_name}</a>",
 ];

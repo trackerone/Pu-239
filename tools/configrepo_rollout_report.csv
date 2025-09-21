@@ -186,3 +186,23 @@ src/Uglify/UglifyService.php,site_config(2),0,Generate asset helper with ConfigR
 =======
 *** master
 *** master
+forums/editor.php,site_config(23),0,Replaced legacy config access with ConfigRepository
+forums/last_ten.php,site_config(1),0,Replaced legacy config access with ConfigRepository
+forums/mark_all_as_read.php,site_config(1),0,Replaced legacy config access with ConfigRepository
+forums/member_post_history.php,site_config(27),0,Replaced legacy config access with ConfigRepository
+forums/new_replies.php,site_config(18),0,Replaced legacy config access with ConfigRepository
+forums/new_topic.php,site_config(9),0,Replaced legacy config access with ConfigRepository
+forums/poll.php,site_config(6),0,Replaced legacy config access with ConfigRepository
+forums/post_reply.php,site_config(3),0,Replaced legacy config access with ConfigRepository
+forums/quick_reply.php,site_config(1),0,Replaced legacy config access with ConfigRepository
+forums/search.php,site_config(25),0,Replaced legacy config access with ConfigRepository
+forums/section_view.php,site_config(13),0,Replaced legacy config access with ConfigRepository
+forums/staff_actions.php,site_config(2),0,Replaced legacy config access with ConfigRepository
+forums/subscriptions.php,site_config(22),0,Replaced legacy config access with ConfigRepository
+forums/undelete_post.php,site_config(2),0,Replaced legacy config access with ConfigRepository
+forums/view_forum.php,site_config(13),0,Replaced legacy config access with ConfigRepository
+forums/view_my_posts.php,site_config(16),0,Replaced legacy config access with ConfigRepository
+forums/view_post_history.php,site_config(3),0,Replaced legacy config access with ConfigRepository
+forums/view_topic.php,site_config(53),0,Replaced legacy config access with ConfigRepository
+forums/view_unread_posts.php,site_config(24),0,Replaced legacy config access with ConfigRepository
+include/arcade.php,site_config(11),0,Replaced legacy config access with ConfigRepository
