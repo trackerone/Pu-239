@@ -8,11 +8,18 @@ require_once __DIR__ . '/../../include/bootstrap_pdo.php';
 
 use Pu239\Cache;
 use Pu239\Database;
+use PU239\Config\ConfigRepository;
 
-global $container, $CURUSER, $site_config;
+global $container, $CURUSER;
 
 $db = $container->get(Database::class);
 $cache = $container->get(Cache::class);
+/** @var ConfigRepository $config */
+$config = $container->get(ConfigRepository::class);
+$latestPostsLimit = (int) $config->get('latest.posts_limit');
+$latestPostsExpire = (int) $config->get('expires.latestposts');
+$baseurl = (string) $config->get('paths.baseurl');
+$imagesBaseurl = (string) $config->get('paths.images_baseurl');
 
 $forum_posts .= "
     <a id='latestforum-hash'></a>
@@ -35,13 +42,13 @@ if ($topics === false || is_null($topics)) {
             LIMIT :limit',
         [
             ':class' => (int) $CURUSER['class'],
-            ':limit' => (int) $site_config['latest']['posts_limit'],
+            ':limit' => $latestPostsLimit,
         ]
     );
     if (!empty($topics)) {
-        $cache->set('last_posts_' . $CURUSER['class'], $topics, $site_config['expires']['latestposts']);
+        $cache->set('last_posts_' . $CURUSER['class'], $topics, $latestPostsExpire);
     } else {
-        $cache->set('last_posts_' . $CURUSER['class'], 'empty', $site_config['expires']['latestposts']);
+        $cache->set('last_posts_' . $CURUSER['class'], 'empty', $latestPostsExpire);
     }
 }
 $forum_posts .= "
@@ -77,7 +84,7 @@ if (!empty($topics) && is_array($topics)) {
                 $menu .= '[ ';
             }
             if ($pages > 1) {
-                $menu .= "<a href='{$site_config['paths']['baseurl']}/forums.php?action=view_topic&amp;topic_id=$topicid&amp;page=$i'>$i</a>\n";
+                $menu .= "<a href='{$baseurl}/forums.php?action=view_topic&amp;topic_id=$topicid&amp;page=$i'>$i</a>\n";
             }
             if ($i < $pages) {
                 $menu .= "|\n";
@@ -105,10 +112,10 @@ if (!empty($topics) && is_array($topics)) {
         } else {
             $author = !empty($topicarr['tuser_id']) ? format_username((int) $topicarr['tuser_id']) : ($topicarr['tuser_id'] == '0' ? '<i>System</i>' : '<i>' . _('Unknown') . " [{$topicarr['tuser_id']}]</i>");
         }
-        $staffimg = $topicarr['min_class_read'] >= UC_STAFF ? "<img src='" . $site_config['paths']['images_baseurl'] . "staff.png' alt='Staff forum' class='tooltipper' title='Staff Forum'>" : '';
-        $stickyimg = $topicarr['sticky'] === 'yes' ? "<img src='" . $site_config['paths']['images_baseurl'] . "sticky.gif' alt='" . _('Sticky') . "' class='tooltipper right5 left5' title='" . _('Sticky Topic') . "'>" : '';
-        $lockedimg = $topicarr['locked'] === 'yes' ? "<img src='" . $site_config['paths']['images_baseurl'] . "forumicons/locked.gif' alt='" . _('Locked') . "' class='tooltipper right5' title='" . _('Locked Topic') . "'>" : '';
-        $topic_name = "<div class='level-left'>{$lockedimg}{$stickyimg}<a href='{$site_config['paths']['baseurl']}/forums.php?action=view_topic&amp;topic_id=$topicid&amp;page=last#" . (int) $topicarr['last_post'] . "'><span class='torrent-name'>" . format_comment($topicarr['topic_name']) . "</span></a>{$staffimg}{$menu}</div><span class='size_3'>" . _fe('in {0} by {1} ({2})', "<a href='{$site_config['paths']['baseurl']}/forums.php?action=view_forum&amp;forum_id=" . (int) $topicarr['forum_id'] . "'>" . format_comment($topicarr['name']) . '</a>', $author, $added) . '</span>';
+        $staffimg = $topicarr['min_class_read'] >= UC_STAFF ? "<img src='" . $imagesBaseurl . "staff.png' alt='Staff forum' class='tooltipper' title='Staff Forum'>" : '';
+        $stickyimg = $topicarr['sticky'] === 'yes' ? "<img src='" . $imagesBaseurl . "sticky.gif' alt='" . _('Sticky') . "' class='tooltipper right5 left5' title='" . _('Sticky Topic') . "'>" : '';
+        $lockedimg = $topicarr['locked'] === 'yes' ? "<img src='" . $imagesBaseurl . "forumicons/locked.gif' alt='" . _('Locked') . "' class='tooltipper right5' title='" . _('Locked Topic') . "'>" : '';
+        $topic_name = "<div class='level-left'>{$lockedimg}{$stickyimg}<a href='{$baseurl}/forums.php?action=view_topic&amp;topic_id=$topicid&amp;page=last#" . (int) $topicarr['last_post'] . "'><span class='torrent-name'>" . format_comment($topicarr['topic_name']) . "</span></a>{$staffimg}{$menu}</div><span class='size_3'>" . _fe('in {0} by {1} ({2})', "<a href='{$baseurl}/forums.php?action=view_forum&amp;forum_id=" . (int) $topicarr['forum_id'] . "'>" . format_comment($topicarr['name']) . '</a>', $author, $added) . '</span>';
         $forum_posts .= "
                     <tr>
                         <td>{$topic_name}</td>

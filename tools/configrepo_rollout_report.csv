@@ -153,3 +153,13 @@ public/allsmiles.php,none,0,Already using ConfigRepository; no legacy constants 
 *** master
 *** master
 *** master
+blocks/index/forum_posts.php,site_config(10),0,Replaced legacy config access with ConfigRepository
+blocks/index/gift.php,site_config(3),0,Replaced legacy config access with ConfigRepository
+blocks/index/latest_movies.php,site_config(3),0,Replaced legacy config access with ConfigRepository
+blocks/index/latest_torrents.php,site_config(2),0,Replaced legacy config access with ConfigRepository
+blocks/index/latest_torrents_glide.php,site_config(1),0,Removed unused legacy config reference
+blocks/index/latest_torrents_scroll.php,site_config(1),0,Removed unused legacy config reference
+blocks/index/latest_tv.php,site_config(3),0,Replaced legacy config access with ConfigRepository
+blocks/index/latest_user.php,site_config(1),0,Removed unused legacy config reference
+blocks/index/mow.php,site_config(2),0,Replaced legacy config access with ConfigRepository
+blocks/index/news.php,site_config(6),0,Replaced legacy config access with ConfigRepository
