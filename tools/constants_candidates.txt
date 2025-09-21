@@ -1,3 +1,4 @@
+.env.example
 CHANGELOG.md
 FORUM_TOUCHPOINTS.json
 FORUM_TOUCHPOINTS.md
@@ -86,6 +87,10 @@ chat/lib/template/loggedIn.html
 chat/lib/template/logs.html
 config/app.php
 config/security.php
+*** codex/refactor-to-configrepository-usage-j59s9m
+=======
+config/session.php
+*** master
 forums/_quarantine/REPORT.json
 forums/add_subscription.php
 forums/clear_unread_post.php
