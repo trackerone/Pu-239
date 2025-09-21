@@ -1,6 +1,13 @@
 <?php
 declare(strict_types=1);
+
+use PU239\Config\ConfigRepository;
+
 require_once dirname(__DIR__) . '/bootstrap_web.php';
+
+global $container;
+/** @var ConfigRepository $config */
+$config = $container->get(ConfigRepository::class);
 
 require_once __DIR__ . '/../../include/bittorrent.php';
 $user = check_user_status();
@@ -57,9 +64,9 @@ function adminer_object()
          */
         public function name()
         {
-            global $site_config;
+            global $config;
 
-            return $site_config['site']['name'];
+            return (string) $config->get('site.name');
         }
 
         /**
@@ -67,9 +74,9 @@ function adminer_object()
          */
         public function database()
         {
-            global $site_config;
+            global $config;
 
-            return $site_config['db']['database'];
+            return (string) $config->get('db.database');
         }
 
         /**
@@ -77,13 +84,13 @@ function adminer_object()
          */
         public function credentials()
         {
-            global $site_config, $user;
+            global $config, $user;
 
-            if (in_array($user['id'], $site_config['adminer']['allowed_ids'])) {
+            if (in_array($user['id'], (array) $config->get('adminer.allowed_ids'), true)) {
                 return [
                     'localhost',
-                    $site_config['db']['username'],
-                    $site_config['db']['password'],
+                    (string) $config->get('db.username'),
+                    (string) $config->get('db.password'),
                 ];
             }
         }

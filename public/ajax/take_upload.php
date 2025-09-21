@@ -1,17 +1,19 @@
 <?php
 declare(strict_types=1);
+
+use PU239\Config\ConfigRepository;
+use Pu239\Database;
+use Pu239\ImageProxy;
+
 require_once dirname(__DIR__) . '/bootstrap_web.php';
 
+global $container;
+/** @var ConfigRepository $config */
+$config = $container->get(ConfigRepository::class);
 $db = $container->get(Database::class);
-
-
-
-
-use Pu239\ImageProxy;
 
 require_once __DIR__ . '/../../include/bittorrent.php';
 $user = check_user_status();
-global $container, $site_config;
 
 header('content-type: application/json');
 if (empty($user['id'])) {
@@ -19,12 +21,12 @@ if (empty($user['id'])) {
     app_halt('Exit called');
 }
 $username = $user['username'];
-$SaLt = $site_config['salt']['one'];
-$SaLty = $site_config['salt']['two'];
-$skey = $site_config['salt']['three'];
-$maxsize = $site_config['bucket']['maxsize'];
+$SaLt = (string) $config->get('salt.one');
+$SaLty = (string) $config->get('salt.two');
+$skey = (string) $config->get('salt.three');
+$maxsize = (int) $config->get('bucket.maxsize');
 $folders = date('Y/m');
-$formats = $site_config['images']['formats'];
+$formats = (array) $config->get('images.formats');
 $str = implode('|', $formats);
 $bucketdir = BITBUCKET_DIR . $folders . '/';
 $bucketlink = $folders . '/';
@@ -37,7 +39,7 @@ $image_proxy = $container->get(ImageProxy::class);
 for ($i = 0; $i < $_POST['nbr_files']; ++$i) {
     $file = preg_replace('`[^a-z0-9\-\_\.]`i', '', $_FILES['file_' . $i]['name']);
     $it1 = exif_imagetype($_FILES['file_' . $i]['tmp_name']);
-    if (!in_array($it1, $site_config['images']['exif'])) {
+    if (!in_array($it1, (array) $config->get('images.exif'))) {
         echo json_encode(['msg' => _('Invalid file extension. jpg, gif, png and webp only.')]);
         app_halt('Exit called');
     }
@@ -56,7 +58,7 @@ for ($i = 0; $i < $_POST['nbr_files']; ++$i) {
         app_halt('Exit called');
     }
     $image_proxy->optimize_image($path, '', false);
-    $images[] = "{$site_config['paths']['baseurl']}/img.php?{$pathlink}";
+    $images[] = (string) $config->get('paths.baseurl') . '/img.php?' . $pathlink;
 }
 
 if (!empty($images)) {

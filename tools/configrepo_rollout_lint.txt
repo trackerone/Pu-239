@@ -1,4 +1,6 @@
 chat/lib/class/AJAXChatTemplate.php: OK
+*** codex/refactor-legacy-config-to-configrepository-zj0m12
+=======
 *** codex/refactor-legacy-config-to-configrepository-f601es
 =======
 *** codex/refactor-legacy-config-to-configrepository-406qd1
@@ -9,6 +11,7 @@ chat/lib/class/AJAXChatTemplate.php: OK
 =======
 *** codex/refactor-legacy-config-to-configrepository-xyf5zu
 =======
+*** master
 *** master
 *** master
 *** master
@@ -63,6 +66,8 @@ public/rss.php: OK
 admin/stats_extra.php: OK
 admin/memcache.php: OK
 public/blackjack.php: OK
+*** codex/refactor-legacy-config-to-configrepository-zj0m12
+=======
 *** codex/refactor-legacy-config-to-configrepository-f601es
 =======
 *** codex/refactor-legacy-config-to-configrepository-406qd1
@@ -70,6 +75,7 @@ public/blackjack.php: OK
 *** codex/refactor-legacy-config-to-configrepository-w5o2m3
 =======
 *** codex/refactor-legacy-config-to-configrepository-l20m0t
+*** master
 *** master
 *** master
 *** master
@@ -98,7 +104,10 @@ No syntax errors detected in messages/edit_mailboxes.php
 No syntax errors detected in messages/view_message.php
 No syntax errors detected in messages/delete.php
 No syntax errors detected in messages/search.php
+*** codex/refactor-legacy-config-to-configrepository-zj0m12
+=======
 *** codex/refactor-legacy-config-to-configrepository-f601es
+*** master
 No syntax errors detected in include/stealth.php
 No syntax errors detected in messages/move.php
 No syntax errors detected in messages/move_or_delete_multi.php
@@ -111,12 +120,24 @@ No syntax errors detected in public/achievementlist.php
 No syntax errors detected in public/ajax/ajax_tooltips.php
 No syntax errors detected in public/ajax/autocomplete.php
 No syntax errors detected in public/ajax/member_input.php
+*** codex/refactor-legacy-config-to-configrepository-zj0m12
+No syntax errors detected in public/ajax/autocomplete.php
+No syntax errors detected in public/ajax/member_input.php
+No syntax errors detected in public/ajax/rating.php
+No syntax errors detected in public/ajax/take_upload.php
+No syntax errors detected in public/ajax/take_url_upload.php
+No syntax errors detected in public/ajax/thanks.php
+No syntax errors detected in public/ajax/torrents_lookup.php
+No syntax errors detected in public/ajax/view_sql.php
+No syntax errors detected in public/allsmiles.php
+=======
 =======
 *** codex/refactor-legacy-config-to-configrepository-406qd1
 =======
 *** codex/refactor-legacy-config-to-configrepository-w5o2m3
 =======
 =======
+*** master
 *** master
 *** master
 *** master

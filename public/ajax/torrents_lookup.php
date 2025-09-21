@@ -1,21 +1,22 @@
 <?php
 declare(strict_types=1);
-require_once dirname(__DIR__) . '/bootstrap_web.php';
 
-$db = $container->get(Database::class);
-
-
-
-
+use PU239\Config\ConfigRepository;
 use DI\DependencyException;
 use DI\NotFoundException;
 use Pu239\Cache;
 use Pu239\Database;
 
+require_once dirname(__DIR__) . '/bootstrap_web.php';
+
+global $container;
+/** @var ConfigRepository $config */
+$config = $container->get(ConfigRepository::class);
+$db = $container->get(Database::class);
+
 require_once __DIR__ . '/../../include/bittorrent.php';
 $user = check_user_status();
 header('content-type: application/json');
-global $container;
 
 if (empty($user)) {
     echo json_encode(['fail' => 'csrf']);
@@ -364,7 +365,10 @@ function get_snatched_staff(int $userid)
  */
 function maketable(array $torrents)
 {
-    global $site_config;
+    global $config;
+
+    $ratio_free = (bool) $config->get('site.ratio_free');
+    $baseurl = (string) $config->get('paths.baseurl');
 
     $heading = '
         <tr>
@@ -373,7 +377,7 @@ function maketable(array $torrents)
             <th>' . _('Size') . '</th>
             <th>' . _('Seeders') . '</th>
             <th>' . _('Leechers') . '</th>
-            <th>' . _('Uploaded') . '</th>' . ($site_config['site']['ratio_free'] ? '' : '
+            <th>' . _('Uploaded') . '</th>' . ($ratio_free ? '' : '
             <th>' . _('Downloaded') . '</th>') . '
             <th>' . _('Ratio') . '</th>
         </tr>';
@@ -398,12 +402,12 @@ function maketable(array $torrents)
         <tr>
             <td class='has-text-centered'>$cat_info</td>
             <td>
-                <a class='is-link' href='{$site_config['paths']['baseurl']}/details.php?id={$torrent['torrentid']}&amp;hit=1'><b>" . htmlsafechars($torrent['name']) . "</b></a>
+                <a class='is-link' href='{$baseurl}/details.php?id={$torrent['torrentid']}&amp;hit=1'><b>" . htmlsafechars($torrent['name']) . "</b></a>
             </td>
             <td class='has-text-centered'>$size</td>
             <td class='has-text-centered'>$seeders</td>
             <td class='has-text-centered'>$leechers</td>
-            <td class='has-text-centered'>$uploaded</td>" . ($site_config['site']['ratio_free'] ? '' : "
+            <td class='has-text-centered'>$uploaded</td>" . ($ratio_free ? '' : "
             <td class='has-text-centered'>$downloaded</td>") . "
             <td class='has-text-centered'>$ratio</td>
         </tr>";
@@ -421,15 +425,18 @@ function maketable(array $torrents)
  */
 function snatchtable(array $torrents)
 {
-    global $site_config;
+    global $config;
+
+    $ratio_free = (bool) $config->get('site.ratio_free');
+    $baseurl = (string) $config->get('paths.baseurl');
 
     $heading = '
         <tr>
             <th>' . _('Category') . '</th>
             <th>' . _('Torrent') . '</th>
             <th>' . _('Uploaded') . '</th>
-            <th>' . _('Rate') . '</th>' . ($site_config['site']['ratio_free'] ? '' : '
-            <th>' . _('Downloaded') . '</th>') . ($site_config['site']['ratio_free'] ? '' : '
+            <th>' . _('Rate') . '</th>' . ($ratio_free ? '' : '
+            <th>' . _('Downloaded') . '</th>') . ($ratio_free ? '' : '
             <th>' . _('Rate') . '</th>') . '
             <th>' . _('Ratio') . '</th>
             <th>' . _('Activity') . '</th>
@@ -447,11 +454,11 @@ function snatchtable(array $torrents)
         <tr>
             <td>$cat_info</td>
             <td>
-                <a class='is-link' href='{$site_config['paths']['baseurl']}/details.php?id={$XBT_or_PHP}'><b>" . (strlen($torrent['name']) > 50 ? substr($torrent['name'], 0, 50 - 3) . '...' : htmlsafechars($torrent['name'])) . '</b></a>
+                <a class='is-link' href='{$baseurl}/details.php?id={$XBT_or_PHP}'><b>" . (strlen($torrent['name']) > 50 ? substr($torrent['name'], 0, 50 - 3) . '...' : htmlsafechars($torrent['name'])) . '</b></a>
             </td>
             <td>' . mksize($torrent['uploaded']) . "</td>
-            <td>$upspeed/s</td>" . ($site_config['site']['ratio_free'] ? '' : '
-            <td>' . mksize($torrent['downloaded']) . '</td>') . ($site_config['site']['ratio_free'] ? '' : "
+            <td>$upspeed/s</td>" . ($ratio_free ? '' : '
+            <td>' . mksize($torrent['downloaded']) . '</td>') . ($ratio_free ? '' : "
             <td>$downspeed/s</td>") . "
             <td>$ratio</td>
             <td>" . mkprettytime($torrent['seedtime'] + $torrent['leechtime']) . '</td>
@@ -479,14 +486,17 @@ function snatchtable(array $torrents)
  */
 function staff_snatchtable(array $torrents, int $userid)
 {
-    global $site_config;
+    global $config;
+
+    $ratio_free = (bool) $config->get('site.ratio_free');
+    $baseurl = (string) $config->get('paths.baseurl');
 
     $heading = '
                     <tr>
                         <th>' . _('Category') . '</th>
                         <th>' . _('Torrent') . '</th>
                         <th>' . _('S / L') . '</th>
-                        <th>' . _('Uploaded') . '' . ($site_config['site']['ratio_free'] ? '' : _('/ Down')) . '</th>
+                        <th>' . _('Uploaded') . '' . ($ratio_free ? '' : _('/ Down')) . '</th>
                         <th>' . _('Size') . '</th>
                         <th>' . _('Ratio') . '</th>
                         <th>' . _('Client') . '</th>
@@ -541,7 +551,7 @@ function staff_snatchtable(array $torrents, int $userid)
                     <b><span class='has-text-danger'>" . _('Not Finished') . '</span></b><br>') . '') . $cat_info . "
                 </td>
                 <td>
-                    <a class='is-link' href='{$site_config['paths']['baseurl']}/details.php?id={$arr['torrentid']}'><b>" . htmlsafechars($arr['torrent_name']) . '</b></a>' . ($arr['complete_date'] != '0' ? "<br>
+                    <a class='is-link' href='{$baseurl}/details.php?id={$arr['torrentid']}'><b>" . htmlsafechars($arr['torrent_name']) . '</b></a>' . ($arr['complete_date'] != '0' ? "<br>
                     <span class='is-warning'>" . _('Started') . ': ' . get_date($arr['start_date'], 'LONG', 0, 1) . "</span><br>
                     <span class='is-orange'>" . _('Last Action') . ': ' . get_date($arr['last_action'], 'LONG', 0, 1) . '</span>' . ($arr['complete_date'] === 0 ? ($arr['owner'] == $userid ? '' : '[ ' . mksize($arr['size'] - $arr['downloaded']) . '' . _(' still to go ') . ']') : '') : '') . '<br>' . _(' Finished: ') . get_date($arr['complete_date'], 'LONG', 0, 1) . '' . ($arr['complete_date'] != 0 ? "<br>
                     <span style='color: silver;'>" . _('Time to download') . ': ' . ($arr['leechtime'] != '0' ? mkprettytime($arr['leechtime']) : mkprettytime($arr['complete_date'] - $arr['start_date']) . '') . "</span>
@@ -553,10 +563,10 @@ function staff_snatchtable(array $torrents, int $userid)
                 </td>
                 <td>' . _('Seeders') . ': ' . $arr['seeders'] . '<br>' . _('Leechers') . ': ' . $arr['leechers'] . "</td>
                 <td>
-                    <span class='is-lightgreen'>" . _('Uploaded') . ': <br><b>' . mksize($arr['uploaded']) . '</b></span>' . ($site_config['site']['ratio_free'] ? '' : "<br>
+                    <span class='is-lightgreen'>" . _('Uploaded') . ': <br><b>' . mksize($arr['uploaded']) . '</b></span>' . ($ratio_free ? '' : "<br>
                     <span class='is-orange'>" . _('Downloaded') . ': <br><b>' . mksize($arr['downloaded']) . '</b></span>') . '
                 </td>
-                <td>' . mksize($arr['size']) . ($site_config['site']['ratio_free'] ? '' : '<br>' . _('Difference of') . ": <br>
+                <td>' . mksize($arr['size']) . ($ratio_free ? '' : '<br>' . _('Difference of') . ": <br>
                     <span class='is-orange'><b>" . mksize($arr['size'] - $arr['downloaded']) . '</b></span>') . '
                 </td>
                 <td>' . $ratio . '<br>' . ($arr['seeder'] === 'yes' ? "
@@ -581,14 +591,14 @@ function staff_snatchtable(array $torrents, int $userid)
  */
 function cat_image($torrent)
 {
-    global $site_config;
+    global $config;
 
     $cat = '';
     if (!empty($torrent['parent_name'])) {
         $cat = $torrent['parent_name'] . ' :: ' . $torrent['catname'];
     }
 
-    $image = !empty($catimage) && file_exists(IMAGES_DIR . 'caticons/' . get_category_icons() . "/$catimage") ? "{$site_config['paths']['images_baseurl']}caticons/" . get_category_icons() . "/$catimage" : '';
+    $image = !empty($catimage) && file_exists(IMAGES_DIR . 'caticons/' . get_category_icons() . "/$catimage") ? (string) $config->get('paths.images_baseurl') . 'caticons/' . get_category_icons() . "/$catimage" : '';
     $catname = htmlsafechars($cat);
     $catimage = !empty($image) ? "<img src='$image' title='$catname' alt='$catname' width='42' height='42' class='tooltipper'>" : $catname;
 

@@ -1,11 +1,15 @@
 <?php
 declare(strict_types=1);
+
+use PU239\Config\ConfigRepository;
+use Pu239\Cache;
+use Pu239\Database;
+
 require_once dirname(__DIR__) . '/bootstrap_web.php';
 
-use Pu239\Database;
-use Pu239\Cache;
-
-global $container, $site_config;
+global $container;
+/** @var ConfigRepository $config */
+$config = $container->get(ConfigRepository::class);
 $db = $container->get(Database::class);
 $cache = $container->get(Cache::class);
 
@@ -62,19 +66,19 @@ if ($what === 'torrent') {
         [':id' => $id]
     );
     if ($r_f) {
-        $cache->update_row(
-            'torrent_details_' . $id,
-            [
-                'num_ratings' => (int) $r_f['num_ratings'],
-                'rating_sum' => (int) $r_f['rating_sum'],
-            ],
-            $site_config['expires']['torrent_details']
-        );
-    }
+            $cache->update_row(
+                'torrent_details_' . $id,
+                [
+                    'num_ratings' => (int) $r_f['num_ratings'],
+                    'rating_sum' => (int) $r_f['rating_sum'],
+                ],
+                (int) $config->get('expires.torrent_details')
+            );
+        }
 }
 
-if ($site_config['bonus']['on']) {
-    $amount = $what === 'torrent' ? $site_config['bonus']['per_rating'] : $site_config['bonus']['per_topic'];
+if ((bool) $config->get('bonus.on')) {
+    $amount = $what === 'torrent' ? (float) $config->get('bonus.per_rating') : (float) $config->get('bonus.per_topic');
     $db->run(
         'UPDATE users SET seedbonus = seedbonus + :amount WHERE id = :id',
         [
@@ -87,7 +91,7 @@ if ($site_config['bonus']['on']) {
         [
             'seedbonus' => $user['seedbonus'] + $amount,
         ],
-        $site_config['expires']['user_cache']
+        (int) $config->get('expires.user_cache')
     );
 }
 

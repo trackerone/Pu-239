@@ -1,4 +1,7 @@
+*** codex/refactor-legacy-config-to-configrepository-zj0m12
+=======
 *** codex/refactor-legacy-config-to-configrepository-f601es
+*** master
 CHANGELOG.md
 FORUM_TOUCHPOINTS.json
 FORUM_TOUCHPOINTS.md
@@ -97,7 +100,10 @@ chat/lib/config.php
 chat/lib/template/loggedIn.html
 chat/lib/template/logs.html
 cleanup/hitrun_update.php
+*** codex/refactor-legacy-config-to-configrepository-zj0m12
+=======
 config/session.php
+*** master
 forums/_quarantine/REPORT.json
 forums/_scaffold/__template.php
 forums/add_subscription.php
@@ -159,6 +165,9 @@ include/function_users.php
 include/images_update.php
 include/runtime_safe.php
 include/stealth.php
+*** codex/refactor-legacy-config-to-configrepository-zj0m12
+migration-report.md
+=======
 messages/move.php
 messages/move_or_delete_multi.php
 messages/send_message.php
@@ -178,6 +187,7 @@ public/ajax/thanks.php
 public/ajax/torrents_lookup.php
 public/ajax/view_sql.php
 public/allsmiles.php
+*** master
 public/anatomy.php
 public/announce.php
 public/announcement.php
@@ -269,6 +279,8 @@ tools/batch-43_7B-admin-autofix.php
 tools/cache_clear.php
 tools/reports/batch42-fluentpdo-usage.ndjson
 tools/reports/batch43_5-admin-audit.ndjson
+*** codex/refactor-legacy-config-to-configrepository-zj0m12
+=======
 =======
 *** codex/refactor-legacy-config-to-configrepository-406qd1
 chat/lib/class/AJAXChatTemplate.php
@@ -584,6 +596,7 @@ src/PollVoter.php
 src/Torrent.php
 src/Radiance.php
 src/Comment.php
+*** master
 *** master
 *** master
 *** master

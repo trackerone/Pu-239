@@ -1,7 +1,14 @@
 <?php
 declare(strict_types=1);
+
+use PU239\Config\ConfigRepository;
+use Pu239\Database;
+
 require_once dirname(__DIR__) . '/bootstrap_web.php';
 
+global $container;
+/** @var ConfigRepository $config */
+$config = $container->get(ConfigRepository::class);
 $db = $container->get(Database::class);
 
 
@@ -10,7 +17,7 @@ $db = $container->get(Database::class);
 
 require_once __DIR__ . '/../include/bittorrent.php';
 $user = check_user_status();
-global $ontainer, $site_config;
+$images_baseurl = (string) $config->get('paths.images_baseurl');
 
 $body_class = 'background-16 skin-2';
 $htmlout = doc_head('All Smiles') . "
@@ -40,7 +47,7 @@ foreach ($smilies as $code => $url) {
         <span class='margin10 mw-50 is-flex tooltipper' title='{$code}'>
             <span class='bordered bg-04'>
                 <a href=\"javascript: pops('" . str_replace("'", "\'", $code) . "')\">
-                    <img src='{$site_config['paths']['images_baseurl']}smilies/" . $url . "' alt='{$code}'>
+                    <img src='{$images_baseurl}smilies/" . $url . "' alt='{$code}'>
                 </a>
             </span>
         </span>";
@@ -51,7 +58,7 @@ foreach ($customsmilies as $code => $url) {
        <span class='margin10 mw-50 is-flex tooltipper' title='{$code}'>
             <span class='bordered bg-04'>
                 <a href=\"javascript: pops('" . str_replace("'", "\'", $code) . "')\">
-                    <img src='{$site_config['paths']['images_baseurl']}smilies/" . $url . "' alt='{$code}'>
+                    <img src='{$images_baseurl}smilies/" . $url . "' alt='{$code}'>
                 </a>
             </span>
         </span>";
@@ -63,7 +70,7 @@ if ($user['class'] >= UC_STAFF) {
         <span class='margin10 mw-50 is-flex tooltipper' title='{$code}'>
             <span class='bordered bg-04'>
                 <a href=\"javascript: pops('" . str_replace("'", "\'", $code) . "')\">
-                    <img src='{$site_config['paths']['images_baseurl']}smilies/" . $url . "' alt='{$code}'>
+                    <img src='{$images_baseurl}smilies/" . $url . "' alt='{$code}'>
                 </a>
             </span>
         </span>";

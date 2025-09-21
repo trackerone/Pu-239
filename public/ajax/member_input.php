@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use PU239\Config\ConfigRepository;
 use Pu239\Database;
 use Pu239\Peer;
 use Pu239\Session;
@@ -10,6 +11,9 @@ use Pu239\User;
 
 require_once dirname(__DIR__) . '/bootstrap_web.php';
 
+global $container;
+/** @var ConfigRepository $config */
+$config = $container->get(ConfigRepository::class);
 $db = $container->get(Database::class);
 
 require_once __DIR__ . '/../../include/bittorrent.php';
@@ -23,7 +27,8 @@ $valid_actions = [
     'watched_user',
 ];
 
-$referer = ($_SERVER['HTTP_REFERER'] ?? $site_config['paths']['baseurl']) . '#general';
+$baseurl = (string) $config->get('paths.baseurl');
+$referer = ($_SERVER['HTTP_REFERER'] ?? $baseurl) . '#general';
 $action = in_array($posted_action, $valid_actions, true) ? $posted_action : '';
 $session = $container->get(Session::class);
 if ($action === '') {
@@ -48,12 +53,12 @@ switch ($action) {
         if ($id === $curuser['id']) {
             $values = [
                 'added' => TIME_NOW,
-                'txt' => _pfe('{0} flushed {1} torrent.', '{0} flushed {1} torrents.', "[url={$site_config['paths']['baseurl']}/userdetails.php?id={$curuser['id']}]{$curuser['username']}[/url]", $count),
+                'txt' => _pfe('{0} flushed {1} torrent.', '{0} flushed {1} torrents.', "[url={$baseurl}/userdetails.php?id={$curuser['id']}]{$curuser['username']}[/url]", $count),
             ];
         } elseif ($id !== $curuser['id'] && $curuser['class'] >= UC_STAFF) {
             $values = [
                 'added' => TIME_NOW,
-                'txt' => _pfe('Staff Flush: {0} flushed {1} torrent for {2}', 'Staff Flush: {0} flushed {1} torrents for {2}', "[url={$site_config['paths']['baseurl']}/userdetails.php?id={$curuser['id']}]{$curuser['username']}[/url]", $count, "[url={$site_config['paths']['baseurl']}/userdetails.php?id={$id}]{$user['username']}[/url]"),
+                'txt' => _pfe('Staff Flush: {0} flushed {1} torrent for {2}', 'Staff Flush: {0} flushed {1} torrents for {2}', "[url={$baseurl}/userdetails.php?id={$curuser['id']}]{$curuser['username']}[/url]", $count, "[url={$baseurl}/userdetails.php?id={$id}]{$user['username']}[/url]"),
             ];
         }
         $db->run(
@@ -75,7 +80,7 @@ switch ($action) {
                 'staff_notes' => $posted_notes,
             ];
             $users_class->update($update, $id);
-            write_log("{$curuser['username']} edited member [url={$site_config['paths']['baseurl']}/userdetails.php?id={$id}]{$user['username']}[/url] staff notes. Changes made:<br>Was:<br>" . htmlsafechars((string) $user['staff_notes']) . '<br>is now:<br>' . $posted_notes);
+            write_log("{$curuser['username']} edited member [url={$baseurl}/userdetails.php?id={$id}]{$user['username']}[/url] staff notes. Changes made:<br>Was:<br>" . htmlsafechars((string) $user['staff_notes']) . '<br>is now:<br>' . $posted_notes);
         }
         header('Location: ' . $referer);
         break;
@@ -90,14 +95,14 @@ switch ($action) {
             $addToWatched = $_POST['add_to_watched_users'] ?? '';
             if ($addToWatched === 'yes' && (int) $user['watched_user'] === 0) {
                 $update['watched_user'] = TIME_NOW;
-                write_log("{$curuser['username']} added member [url={$site_config['paths']['baseurl']}/userdetails.php?id={$id}]{$user['username']}[/url] to watched users.");
+                write_log("{$curuser['username']} added member [url={$baseurl}/userdetails.php?id={$id}]{$user['username']}[/url] to watched users.");
             } elseif ($addToWatched === 'no' && (int) $user['watched_user'] > 0) {
                 $update['watched_user'] = 0;
-                write_log("{$curuser['username']} removed member [url={$site_config['paths']['baseurl']}/userdetails.php?id={$id}]{$user['username']}[/url] from watched users. <br>{$user['username']} had been on the list since " . get_date((int) $user['watched_user'], 'LONG'));
+                write_log("{$curuser['username']} removed member [url={$baseurl}/userdetails.php?id={$id}]{$user['username']}[/url] from watched users. <br>{$user['username']} had been on the list since " . get_date((int) $user['watched_user'], 'LONG'));
             }
             if (($posted) !== $user['watched_user_reason']) {
                 $update['watched_user_reason'] = $posted;
-                write_log("{$curuser['username']} changed watched user text for: [url={$site_config['paths']['baseurl']}/userdetails.php?id={$id}]{$user['username']}[/url] Changes made:<br>Text was:<br>" . htmlsafechars((string) $user['watched_user_reason']) . '<br>Is now:<br>' . $posted);
+                write_log("{$curuser['username']} changed watched user text for: [url={$baseurl}/userdetails.php?id={$id}]{$user['username']}[/url] Changes made:<br>Text was:<br>" . htmlsafechars((string) $user['watched_user_reason']) . '<br>Is now:<br>' . $posted);
             }
             if (!empty($update)) {
                 $users_class->update($update, $id);
