@@ -1,9 +1,15 @@
 <?php
 declare(strict_types=1);
-require_once dirname(__DIR__) . '/bootstrap.php';
+
+use Pu239\Config\ConfigRepository;
 use Pu239\Database;
 use Pu239\User;
 
+require_once dirname(__DIR__) . '/bootstrap.php';
+
+global $container;
+/** @var ConfigRepository $config */
+$config = $container->get(ConfigRepository::class);
 $db = $container->get(Database::class);
 $author_error = $content = $count = $count2 = $edited_by = $row_count = $over_forum_id = $author_id = '';
 $search_where = $selected_forums = [];
@@ -30,7 +36,7 @@ $pager_links .= $sort_by ? '&amp;sort_by=' . $sort_by : '';
 $pager_links .= $asc_desc ? '&amp;asc_desc=' . $asc_desc : '';
 $pager_links .= $show_as ? '&amp;show_as=' . $show_as : '';
 $author_id = 0;
-global $container, $site_config, $CURUSER;
+global $CURUSER;
 
 $users_class = $container->get(User::class);
 if ($author) {
@@ -81,7 +87,7 @@ if ($search || $author_id) {
                        ->where('t.status = "ok"');
         $results = $results->where('p.status = "ok"')
                            ->where('t.status = "ok"');
-    } elseif ($CURUSER['class'] < $site_config['forum_config']['min_delete_view_class']) {
+    } elseif ($CURUSER['class'] < $config->get('forum_config.min_delete_view_class')) {
         $count = $count->where('p.status != "deleted"')
                        ->where('t.status != "deleted"');
         $results = $results->where('p.status != "deleted"')
@@ -139,7 +145,7 @@ if ($search || $author_id) {
     $count = $count->fetch("count");
     $page = isset($_GET['page']) ? (int) $_GET['page'] : 0;
     $perpage = 15;
-    $link = $site_config['paths']['baseurl'] . '/forums.php?action=search' . $pager_links . (isset($_GET['perpage']) ? "&amp;perpage={$perpage}&amp;" : '');
+    $link = $config->get('paths.baseurl') . '/forums.php?action=search' . $pager_links . (isset($_GET['perpage']) ? "&amp;perpage={$perpage}&amp;" : '');
     $pager = pager($perpage, $count, $link);
     $menu_top = $pager['pagertop'];
     $menu_bottom = $pager['pagerbottom'];
@@ -158,8 +164,8 @@ if ($search || $author_id) {
         <a id="results"></a>';
                 $heading = '
         <tr>
-            <th class="w-1"><img src="' . $site_config['paths']['images_baseurl'] . 'forums/topic.gif" alt="' . _('Topic') . '" title="' . _('Topic') . '" class="emoticon tooltipper"></th>
-            <th class="w-1"><img src="' . $site_config['paths']['images_baseurl'] . 'forums/topic_normal.gif" alt="' . _('Thread Icon') . '" title="' . _('Thread Icon') . '" class="emoticon tooltipper"></th>
+            <th class="w-1"><img src="' . $config->get('paths.images_baseurl') . 'forums/topic.gif" alt="' . _('Topic') . '" title="' . _('Topic') . '" class="emoticon tooltipper"></th>
+            <th class="w-1"><img src="' . $config->get('paths.images_baseurl') . 'forums/topic_normal.gif" alt="' . _('Thread Icon') . '" title="' . _('Thread Icon') . '" class="emoticon tooltipper"></th>
             <th class="w-40">' . _('Topic / Post') . '</th>
             <th class="w-40">' . _('in Forum') . '</th>
             <th class="w-1">' . _('Replies') . '</th>
@@ -184,8 +190,8 @@ if ($search || $author_id) {
                     $rpic = ($arr['num_ratings'] != 0 ? ratingpic_forums(round($arr['rating_sum'] / $arr['num_ratings'], 1)) : '');
                     $table_body .= '
         <tr>
-            <td><img src="' . $site_config['paths']['images_baseurl'] . 'forums/' . ($posts < 30 ? ($arr['locked'] === 'yes' ? 'locked' : 'topic') : 'hot_topic') . '.gif" alt="' . _('Topic') . '" title="' . _('Topic') . '" class="emoticon tooltipper"></td>
-            <td>' . (empty($arr['icon']) ? '<img src="' . $site_config['paths']['images_baseurl'] . 'forums/topic_normal.gif" alt="' . _('Topic') . '" title="' . _('Topic') . '" class="emoticon">' : '<img src="' . $site_config['paths']['images_baseurl'] . 'smilies/' . htmlsafechars((string) $arr['icon']) . '.gif" alt="' . htmlsafechars((string) $arr['icon']) . '" title="' . htmlsafechars((string) $arr['icon']) . '" class="emoticon tooltipper">') . '</td>
+            <td><img src="' . $config->get('paths.images_baseurl') . 'forums/' . ($posts < 30 ? ($arr['locked'] === 'yes' ? 'locked' : 'topic') : 'hot_topic') . '.gif" alt="' . _('Topic') . '" title="' . _('Topic') . '" class="emoticon tooltipper"></td>
+            <td>' . (empty($arr['icon']) ? '<img src="' . $config->get('paths.images_baseurl') . 'forums/topic_normal.gif" alt="' . _('Topic') . '" title="' . _('Topic') . '" class="emoticon">' : '<img src="' . $config->get('paths.images_baseurl') . 'smilies/' . htmlsafechars((string) $arr['icon']) . '.gif" alt="' . htmlsafechars((string) $arr['icon']) . '" title="' . htmlsafechars((string) $arr['icon']) . '" class="emoticon tooltipper">') . '</td>
             <td>
                 <div class="padding20">
                     <div class="columns">
@@ -193,7 +199,7 @@ if ($search || $author_id) {
                             <span class="has-text-weight-bold">' . _('Post') . ': </span>
                         </div>
                         <div class="column">
-                            <a class="is-link tooltipper" href="' . $site_config['paths']['baseurl'] . '/forums.php?action=view_topic&amp;topic_id=15&amp;page=p' . $arr['post_id'] . '&amp;search=' . $search_post . '#' . $arr['post_id'] . '" title="' . _('go to the post') . '">' . (empty($post_title) ? '' . _('Link to Post') . '' : $post_title) . '</a>
+                            <a class="is-link tooltipper" href="' . $config->get('paths.baseurl') . '/forums.php?action=view_topic&amp;topic_id=15&amp;page=p' . $arr['post_id'] . '&amp;search=' . $search_post . '#' . $arr['post_id'] . '" title="' . _('go to the post') . '">' . (empty($post_title) ? '' . _('Link to Post') . '' : $post_title) . '</a>
                         </div>
                     </div>
                     <div class="columns">
@@ -209,8 +215,8 @@ if ($search || $author_id) {
                             <span style="font-style: italic;">' . _('In topic') . ': </span>
                         </div>
                         <div class="column">
-                            ' . ($arr['sticky'] === 'yes' ? '<img src="' . $site_config['paths']['images_baseurl'] . 'forums/pinned.gif" alt="' . _('Pinned') . '" title="' . _('Pinned') . '" class="emoticon tooltipper">' : '') . ($arr['poll_id'] > 0 ? '<img src="' . $site_config['paths']['images_baseurl'] . 'forums/poll.gif" alt="Poll" title="Poll" class="emoticon tooltipper">' : '') . '
-                                <a class="is-link tooltipper" href="' . $site_config['paths']['baseurl'] . '/forums.php?action=view_topic&amp;topic_id=' . $arr['topic_id'] . '" title="' . _('go to topic') . '">' . $topic_title . '</a>' . $post_text . '
+                            ' . ($arr['sticky'] === 'yes' ? '<img src="' . $config->get('paths.images_baseurl') . 'forums/pinned.gif" alt="' . _('Pinned') . '" title="' . _('Pinned') . '" class="emoticon tooltipper">' : '') . ($arr['poll_id'] > 0 ? '<img src="' . $config->get('paths.images_baseurl') . 'forums/poll.gif" alt="Poll" title="Poll" class="emoticon tooltipper">' : '') . '
+                                <a class="is-link tooltipper" href="' . $config->get('paths.baseurl') . '/forums.php?action=view_topic&amp;topic_id=' . $arr['topic_id'] . '" title="' . _('go to topic') . '">' . $topic_title . '</a>' . $post_text . '
                         </div>' . (!empty($rpic) ? '
                         <div class="column is-1">
                             ' . $rpic . '
@@ -225,7 +231,7 @@ if ($search || $author_id) {
                 </div>
             </td>
             <td>
-                <a class="is-link tooltipper" href="' . $site_config['paths']['baseurl'] . '/forums.php?action=view_forum&amp;forum_id=' . $arr['forum_id'] . '" title="' . _('go to forum') . '">' . htmlsafechars((string) $arr['forum_name']) . '</a>
+                <a class="is-link tooltipper" href="' . $config->get('paths.baseurl') . '/forums.php?action=view_forum&amp;forum_id=' . $arr['forum_id'] . '" title="' . _('go to forum') . '">' . htmlsafechars((string) $arr['forum_name']) . '</a>
                 ' . ($arr['forum_desc'] != '' ? '&#9658; <span style="font-size: x-small;">' . htmlsafechars((string) $arr['forum_desc']) . '</span>' : '') . '
             </td>
             <td>' . number_format($posts - 1) . '</td>
@@ -251,20 +257,20 @@ if ($search || $author_id) {
                     }
                     $post_id = $arr['post_id'];
                     $posts = $arr['post_count'];
-                    $post_icon = ($arr['icon'] != '' ? '<img src="' . $site_config['paths']['images_baseurl'] . 'smilies/' . htmlsafechars($arr['icon']) . '.gif" alt="icon" title="icon" class="emoticon tooltipper"> ' : '<img src="' . $site_config['paths']['images_baseurl'] . 'forums/topic_normal.gif" alt="Normal Topic" class="emoticon"> ');
+                    $post_icon = ($arr['icon'] != '' ? '<img src="' . $config->get('paths.images_baseurl') . 'smilies/' . htmlsafechars($arr['icon']) . '.gif" alt="icon" title="icon" class="emoticon tooltipper"> ' : '<img src="' . $config->get('paths.images_baseurl') . 'forums/topic_normal.gif" alt="Normal Topic" class="emoticon"> ');
                     $edited_by = '';
                     if ($arr['edit_date'] > 0) {
                         $edited_username = $users_class->get_item('username', (int) $arr['edited_by']);
-                        $edited_by = '<span style="font-weight: bold; font-size: x-small;">Last edited by <a class="is-link" href="' . $site_config['paths']['baseurl'] . '/member_details.php?id=' . $arr['edited_by'] . '">' . htmlsafechars($edited_username) . '</a> at ' . get_date((int) $arr['edit_date'], '') . ' GMT ' . ($arr['edit_reason'] != '' ? ' </span>[ Reason: ' . htmlsafechars($arr['edit_reason']) . ' ] <span style="font-weight: bold; font-size: x-small;">' : '');
+                        $edited_by = '<span style="font-weight: bold; font-size: x-small;">Last edited by <a class="is-link" href="' . $config->get('paths.baseurl') . '/member_details.php?id=' . $arr['edited_by'] . '">' . htmlsafechars($edited_username) . '</a> at ' . get_date((int) $arr['edit_date'], '') . ' GMT ' . ($arr['edit_reason'] != '' ? ' </span>[ Reason: ' . htmlsafechars($arr['edit_reason']) . ' ] <span style="font-weight: bold; font-size: x-small;">' : '');
                     }
                     $body = ($arr['bbcode'] === 'yes' ? highlightWords(format_comment($arr['body']), $search) : highlightWords(format_comment_no_bbcode($arr['body']), $search));
                     $table_body = '
         <tr>
             <td colspan="3">in:
-                <a class="is-link tooltipper" href="' . $site_config['paths']['baseurl'] . '/forums.php?action=view_forum&amp;forum_id=' . $arr['forum_id'] . '" title="' . _('Link to %s', 'Forum') . '">
+                <a class="is-link tooltipper" href="' . $config->get('paths.baseurl') . '/forums.php?action=view_forum&amp;forum_id=' . $arr['forum_id'] . '" title="' . _('Link to %s', 'Forum') . '">
                     <span>' . htmlsafechars($arr['forum_name']) . '</span>
                 </a> in:
-                <a class="is-link tooltipper" href="' . $site_config['paths']['baseurl'] . '/forums.php?action=view_topic&amp;topic_id=' . $arr['topic_id'] . '" title="' . _('Link to %s', 'Ttopic') . '">
+                <a class="is-link tooltipper" href="' . $config->get('paths.baseurl') . '/forums.php?action=view_topic&amp;topic_id=' . $arr['topic_id'] . '" title="' . _('Link to %s', 'Ttopic') . '">
                     <span>' . $topic_title . '</span>
                 </a>
             </td>
@@ -275,15 +281,15 @@ if ($search || $author_id) {
             </td>
             <td>
                 <span style="white-space:nowrap;">' . $post_icon . '
-                    <a class="is-link tooltipper" href="' . $site_config['paths']['baseurl'] . '/forums.php?action=view_topic&amp;topic_id=' . $arr['topic_id'] . '&amp;page=' . $page . '#' . $arr['post_id'] . '" title="Link to Post">' . $post_title . '
+                    <a class="is-link tooltipper" href="' . $config->get('paths.baseurl') . '/forums.php?action=view_topic&amp;topic_id=' . $arr['topic_id'] . '&amp;page=' . $page . '#' . $arr['post_id'] . '" title="Link to Post">' . $post_title . '
                     </a>
                     <span class="left20">' . _('Posted') . ': ' . get_date((int) $arr['added'], '') . ' [' . get_date((int) $arr['added'], '', 0, 1) . ']</span>
                 </span>
             </td>
             <td>
                 <span>
-                    <a href="' . $site_config['paths']['baseurl'] . '/forums.php?action=view_my_GETs&amp;page=' . $page . '#top"><img src="' . $site_config['paths']['images_baseurl'] . 'forums/up.gif" alt="' . _('Top') . '" title="' . _('Top') . '" class="emoticon tooltipper"></a>
-                    <a href="' . $site_config['paths']['baseurl'] . '/forums.php?action=view_my_GETs&amp;page=' . $page . '#bottom"><img src="' . $site_config['paths']['images_baseurl'] . 'forums/down.gif" alt="' . _('Bottom') . '" title="' . _('Bottom') . '" class="emoticon tooltipper"></a>
+                    <a href="' . $config->get('paths.baseurl') . '/forums.php?action=view_my_GETs&amp;page=' . $page . '#top"><img src="' . $config->get('paths.images_baseurl') . 'forums/up.gif" alt="' . _('Top') . '" title="' . _('Top') . '" class="emoticon tooltipper"></a>
+                    <a href="' . $config->get('paths.baseurl') . '/forums.php?action=view_my_GETs&amp;page=' . $page . '#bottom"><img src="' . $config->get('paths.images_baseurl') . 'forums/down.gif" alt="' . _('Bottom') . '" title="' . _('Bottom') . '" class="emoticon tooltipper"></a>
                 </span>
             </td>
         </tr>
@@ -326,7 +332,7 @@ foreach ($forums as $arr_forums) {
                     <td class="has-no-border">
                         <div class="is-flex level-left">
                             <input name="f' . $arr_forums['real_forum_id'] . '" type="checkbox" ' . ($selected_forums ? 'checked' : '') . ' value="1">
-                            <a href="' . $site_config['paths']['baseurl'] . '/forums.php?action=view_forum&amp;forum_id=' . $arr_forums['real_forum_id'] . '" class="is-link tooltipper left10" title="' . htmlsafechars($arr_forums['description']) . '">' . htmlsafechars($arr_forums['name']) . '
+                            <a href="' . $config->get('paths.baseurl') . '/forums.php?action=view_forum&amp;forum_id=' . $arr_forums['real_forum_id'] . '" class="is-link tooltipper left10" title="' . htmlsafechars($arr_forums['description']) . '">' . htmlsafechars($arr_forums['name']) . '
                             </a>
                         </div>
                     </td>
@@ -443,6 +449,6 @@ $table_body = '
 
 $HTMLOUT .= main_table($table_body) . '</form>' . $content;
 $breadcrumbs = [
-    "<a href='{$site_config['paths']['baseurl']}/forums.php'>" . _('Forums') . '</a>',
-    "<a href='{$site_config['paths']['baseurl']}/forums.php?action=search'>" . _('Search') . '</a>',
+    "<a href='{$config->get('paths.baseurl')}/forums.php'>" . _('Forums') . '</a>',
+    "<a href='{$config->get('paths.baseurl')}/forums.php?action=search'>" . _('Search') . '</a>',
 ];

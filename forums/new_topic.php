@@ -1,16 +1,22 @@
 <?php
 declare(strict_types=1);
-require_once dirname(__DIR__) . '/bootstrap.php';
+
 use Pu239\Cache;
+use Pu239\Config\ConfigRepository;
 use Pu239\Database;
 
+require_once dirname(__DIR__) . '/bootstrap.php';
+
+global $container;
+/** @var ConfigRepository $config */
+$config = $container->get(ConfigRepository::class);
 $db = $container->get(Database::class);
 flood_limit('forums');
 $forum_id = isset($_GET['forum_id']) ? (int) $_GET['forum_id'] : (isset($_POST['forum_id']) ? (int) $_POST['forum_id'] : 0);
 if (!is_valid_id($forum_id)) {
     stderr(_('Error'), _('Invalid ID'));
 }
-global $container, $CURUSER, $site_config;
+global $CURUSER;
 
 if ($CURUSER['forum_post'] === 'no' || $CURUSER['status'] !== 0) {
     stderr(_('Error'), _('Your posting rights have been suspended.'));
@@ -117,20 +123,20 @@ $db->perform($sql, array_merge($set, ['id' => $topic_id]));
     $sql = "UPDATE forums SET /* columns */ WHERE id = :id";
 $db->perform($sql, array_merge($set, ['id' => $forum_id]));
 
-    if ($site_config['site']['autoshout_chat'] || $site_config['site']['autoshout_irc']) {
-        $message = htmlsafechars($CURUSER['username']) . ' ' . _('Created a new topic') . " [quote][url={$site_config['paths']['baseurl']}/forums.php?action=view_topic&topic_id=$topic_id&page=last]" . $topic_name . '[/url][/quote]';
-        if (!in_array($forum_id, $site_config['staff_forums'])) {
+    if ($config->get('site.autoshout_chat') || $config->get('site.autoshout_irc')) {
+        $message = htmlsafechars($CURUSER['username']) . ' ' . _('Created a new topic') . " [quote][url={$config->get('paths.baseurl')}/forums.php?action=view_topic&topic_id=$topic_id&page=last]" . $topic_name . '[/url][/quote]';
+        if (!in_array($forum_id, $config->get('staff_forums'))) {
             autoshout($message);
         }
     }
-    if ($site_config['bonus']['on']) {
+    if ($config->get('bonus.on')) {
         $set = [
-            'seedbonus' => $CURUSER['seedbonus'] + $site_config['bonus']['per_topic'],
+            'seedbonus' => $CURUSER['seedbonus'] + $config->get('bonus.per_topic'),
         ];
         $sql = "UPDATE users SET /* columns */ WHERE id = :id";
 $db->perform($sql, array_merge($set, ['id' => $CURUSER['id']]));
         $cache->update_row('user_' . $CURUSER['id'], [
-            'seedbonus' => $CURUSER['seedbonus'] + $site_config['bonus']['per_topic'],
+            'seedbonus' => $CURUSER['seedbonus'] + $config->get('bonus.per_topic'),
         ]);
     }
 
@@ -164,8 +170,8 @@ $forum_name = $fluent->from('forums')
 $section_name = htmlsafechars($forum_name);
 
 $HTMLOUT .= '
-    <h1 class="has-text-centered">' . _('New topic in') . ' "<a class="is-link" href="' . $site_config['paths']['baseurl'] . '/forums.php?action=view_forum&amp;forum_id=' . $forum_id . '">' . $section_name . '</a>"</h1>
-    <form method="post" action="' . $site_config['paths']['baseurl'] . '/forums.php?action=new_topic&amp;forum_id=' . $forum_id . '" enctype="multipart/form-data" accept-charset="utf-8">';
+    <h1 class="has-text-centered">' . _('New topic in') . ' "<a class="is-link" href="' . $config->get('paths.baseurl') . '/forums.php?action=view_forum&amp;forum_id=' . $forum_id . '">' . $section_name . '</a>"</h1>
+    <form method="post" action="' . $config->get('paths.baseurl') . '/forums.php?action=new_topic&amp;forum_id=' . $forum_id . '" enctype="multipart/form-data" accept-charset="utf-8">';
 
 require_once FORUM_DIR . 'editor.php';
 
