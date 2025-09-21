@@ -28,16 +28,6 @@ admin/mega_search.php
 admin/modded_torrents.php
 admin/modtask.php
 admin/mysql_stats.php
-admin/news.php
-admin/polls_manager.php
-admin/site_settings.php
-admin/snatched_torrents.php
-admin/sysoplog.php
-admin/themes.php
-admin/trivia_config.php
-admin/uploader_info.php
-admin/user_hits.php
-admin/view_peers.php
 bannedemails.php
 bin/clear_cache.php
 bin/functions.php

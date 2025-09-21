@@ -7,6 +7,7 @@ use Delight\Auth\NotLoggedInException;
 use DI\DependencyException;
 use DI\NotFoundException;
 use MatthiasMullie\Scrapbook\Exception\UnbegunTransaction;
+use PU239\Config\ConfigRepository;
 use Pu239\Database;
 use Pu239\Poll;
 use Pu239\PollVoter;
@@ -15,6 +16,8 @@ use Spatie\Image\Exceptions\InvalidManipulation;
 
 
 global $container;
+/** @var ConfigRepository $config */
+$config = $container->get(ConfigRepository::class);
 
 $db = $container->get(Database::class);
 
@@ -69,7 +72,7 @@ switch ($params['mode']) {
  */
 function delete_poll($stdfoot)
 {
-    global $container, $site_config;
+    global $container, $config;
 
     $poll_stuffs = $container->get(Poll::class);
     $pollvoter_class = $container->get(PollVoter::class);
@@ -84,7 +87,7 @@ function delete_poll($stdfoot)
             <a href='javascript:history.back()' title='" . _('Cancel this operation') . "' class='button is-small right20'>
                 " . _('Go Back') . "
             </a>
-            <a href='{$site_config['paths']['baseurl']}/staffpanel.php?tool=polls_manager&amp;action=polls_manager&amp;mode=delete&amp;pid={$pid}&amp;sure=1' class='button is-small'>
+            <a href='{$config->get('paths.baseurl')}/staffpanel.php?tool=polls_manager&amp;action=polls_manager&amp;mode=delete&amp;pid={$pid}&amp;sure=1' class='button is-small'>
                 " . _('Delete Sure?') . '
             </a>
         </div>');
@@ -186,12 +189,12 @@ function insert_new_poll()
  */
 function show_poll_form($stdfoot)
 {
-    global $site_config;
+    global $config;
 
-    $poll_box = poll_box($site_config['poll']['max_questions'], $site_config['poll']['max_choices_per_question'], 'poll_new');
+    $poll_box = poll_box($config->get('poll.max_questions'), $config->get('poll.max_choices_per_question'), 'poll_new');
     $title = _('Add New Poll');
     $breadcrumbs = [
-        "<a href='{$site_config['paths']['baseurl']}/staffpanel.php'>" . _('Staff Panel') . '</a>',
+        "<a href='{$config->get('paths.baseurl')}/staffpanel.php'>" . _('Staff Panel') . '</a>',
         "<a href='{$_SERVER['PHP_SELF']}'>$title</a>",
     ];
     echo stdhead($title, [], 'page-wrapper', $breadcrumbs) . wrapper($poll_box) . stdfoot($stdfoot);
@@ -210,7 +213,7 @@ function show_poll_form($stdfoot)
  */
 function edit_poll_form($stdfoot)
 {
-    global $container, $site_config;
+    global $container, $config;
 
     $poll_stuffs = $container->get(Poll::class);
     $poll_questions = '';
@@ -239,11 +242,11 @@ function edit_poll_form($stdfoot)
     $poll_votes = preg_replace("#,(\n)?$#", '\\1', $poll_votes);
     $poll_question = $poll_data['poll_question'];
     $show_open = $poll_data['choices'] ? 1 : 0;
-    $poll_box = poll_box($site_config['poll']['max_questions'], $site_config['poll']['max_choices_per_question'], 'poll_update', $poll_questions, $poll_choices, $poll_votes, $show_open, $poll_question, $poll_multi);
+    $poll_box = poll_box($config->get('poll.max_questions'), $config->get('poll.max_choices_per_question'), 'poll_update', $poll_questions, $poll_choices, $poll_votes, $show_open, $poll_question, $poll_multi);
 
     $title = _('Edit Poll');
     $breadcrumbs = [
-        "<a href='{$site_config['paths']['baseurl']}/staffpanel.php'>" . _('Staff Panel') . '</a>',
+        "<a href='{$config->get('paths.baseurl')}/staffpanel.php'>" . _('Staff Panel') . '</a>',
         "<a href='{$_SERVER['PHP_SELF']}'>$title</a>",
     ];
     echo stdhead($title, [], 'page-wrapper', $breadcrumbs) . wrapper($poll_box) . stdfoot($stdfoot);
@@ -262,7 +265,7 @@ function edit_poll_form($stdfoot)
  */
 function show_poll_archive($stdfoot)
 {
-    global $container, $site_config;
+    global $container, $config;
 
     $poll_stuffs = $container->get(Poll::class);
     $HTMLOUT = '';
@@ -271,7 +274,7 @@ function show_poll_archive($stdfoot)
         $HTMLOUT = main_div("
         <h1 class='has-text-centered'>" . _('No polls defined') . "</h1>
         <div class='has-text-centered'>
-            <a href='{$site_config['paths']['baseurl']}/staffpanel.php?tool=polls_manager&amp;action=polls_manager&amp;mode=new' class='button is-small margin20'>
+            <a href='{$config->get('paths.baseurl')}/staffpanel.php?tool=polls_manager&amp;action=polls_manager&amp;mode=new' class='button is-small margin20'>
                 " . _('Add New Poll') . '
             </a>
         </div>');
@@ -279,7 +282,7 @@ function show_poll_archive($stdfoot)
         $HTMLOUT .= "
         <h1 class='has-text-centered'>" . _('Manage Polls') . "</h1>
         <div class='has-text-centered'>
-            <a href='{$site_config['paths']['baseurl']}/staffpanel.php?tool=polls_manager&amp;action=polls_manager&amp;mode=new' class='button is-small margin20'>
+            <a href='{$config->get('paths.baseurl')}/staffpanel.php?tool=polls_manager&amp;action=polls_manager&amp;mode=new' class='button is-small margin20'>
                 " . _('Add New Poll') . '
             <a>
         </div>';
@@ -307,12 +310,12 @@ function show_poll_archive($stdfoot)
             <td>
                 <div class='level-center'>
                     <span>
-                        <a href='{$site_config['paths']['baseurl']}/staffpanel.php?tool=polls_manager&amp;action=polls_manager&amp;mode=edit&amp;pid=" . (int) $row['pid'] . "' title='" . _('Edit') . "' class='tooltipper'>
+                        <a href='{$config->get('paths.baseurl')}/staffpanel.php?tool=polls_manager&amp;action=polls_manager&amp;mode=edit&amp;pid=" . (int) $row['pid'] . "' title='" . _('Edit') . "' class='tooltipper'>
                             <i class='icon-edit icon has-text-info' aria-hidden='true'></i>
                         </a>
                     </span>
                     <span>
-                        <a href='{$site_config['paths']['baseurl']}/staffpanel.php?tool=polls_manager&amp;action=polls_manager&amp;mode=delete&amp;pid=" . (int) $row['pid'] . "' title='" . _('Delete') . "' class='tooltipper'>
+                        <a href='{$config->get('paths.baseurl')}/staffpanel.php?tool=polls_manager&amp;action=polls_manager&amp;mode=delete&amp;pid=" . (int) $row['pid'] . "' title='" . _('Delete') . "' class='tooltipper'>
                             <i class='icon-trash-empty icon has-text-danger' aria-hidden='true'></i>
                         </a>
                     </span>
@@ -324,7 +327,7 @@ function show_poll_archive($stdfoot)
     }
     $title = _('Poll Archive');
     $breadcrumbs = [
-        "<a href='{$site_config['paths']['baseurl']}/staffpanel.php'>" . _('Staff Panel') . '</a>',
+        "<a href='{$config->get('paths.baseurl')}/staffpanel.php'>" . _('Staff Panel') . '</a>',
         "<a href='{$_SERVER['PHP_SELF']}'>$title</a>",
     ];
     echo stdhead($title, [], 'page-wrapper', $breadcrumbs) . wrapper($HTMLOUT) . stdfoot($stdfoot);
@@ -345,7 +348,7 @@ function show_poll_archive($stdfoot)
  */
 function poll_box($max_poll_questions = '', $max_poll_choices = '', $form_type = '', $poll_questions = '', $poll_choices = '', $poll_votes = '', $show_open = '', $poll_question = '', $poll_multi = '')
 {
-    global $site_config;
+    global $config;
 
     $pid = isset($_GET['pid']) ? (int) $_GET['pid'] : 0;
     $form_type = $form_type != '' ? $form_type : 'poll_update';
@@ -402,7 +405,7 @@ function poll_box($max_poll_questions = '', $max_poll_choices = '', $form_type =
             </fieldset>
             <div class='has-text-centered'>
                 <input type='submit' name='submit' value='" . _('Post Poll') . "' class='button is-small right20'>
-                <a href='{$site_config['paths']['baseurl']}/staffpanel.php?tool=polls_manager&amp;action=polls_manager' class='button is-small'>" . _('Cancel') . '</a>
+                <a href='{$config->get('paths.baseurl')}/staffpanel.php?tool=polls_manager&amp;action=polls_manager' class='button is-small'>" . _('Cancel') . '</a>
             </div>
         </div>
     </form>';
@@ -415,7 +418,7 @@ function poll_box($max_poll_questions = '', $max_poll_choices = '', $form_type =
  */
 function makepoll()
 {
-    global $site_config;
+    global $config;
 
     $questions = [];
     $choices_count = 0;
@@ -460,10 +463,10 @@ function makepoll()
             $choices_count += intval(count($data['choice']));
         }
     }
-    if (count($questions) > $site_config['poll']['max_questions']) {
+    if (count($questions) > $config->get('poll.max_questions')) {
         app_halt('poll_to_many');
     }
-    if ($choices_count > ($site_config['poll']['max_questions'] * $site_config['poll']['max_choices_per_question'])) {
+    if ($choices_count > ($config->get('poll.max_questions') * $config->get('poll.max_choices_per_question'))) {
         app_halt('poll_to_many');
     }
     if (isset($_POST['mode']) && $_POST['mode'] == 'poll_update') {
