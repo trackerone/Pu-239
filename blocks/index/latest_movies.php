@@ -7,14 +7,19 @@ require_once __DIR__ . '/../../include/bootstrap_pdo.php';
 use Pu239\Database;
 use Pu239\Image;
 use Pu239\Torrent;
+use PU239\Config\ConfigRepository;
 
 require_once PARTIALS_DIR . 'torrent_table.php';
 $user = check_user_status();
-global $container, $site_config;
+global $container;
 
 $db = $container->get(Database::class);
 $torrent = $container->get(Torrent::class);
-$last5movietorrents = $torrent->get_latest($site_config['categories']['movie']);
+/** @var ConfigRepository $config */
+$config = $container->get(ConfigRepository::class);
+$movieCategories = $config->get('categories.movie');
+$imagesBaseurl = (string) $config->get('paths.images_baseurl');
+$last5movietorrents = $torrent->get_latest($movieCategories);
 
 $latest_movies .= "
     <a id='latesttorrents-hash'></a>
@@ -29,7 +34,7 @@ foreach ($last5movietorrents as $last) {
     if (empty($last['poster']) && !empty($last['imdb_id'])) {
         $last['poster'] = $images_class->find_images($last['imdb_id']);
     }
-    $last['poster'] = empty($last['poster']) ? "<img src='{$site_config['paths']['images_baseurl']}noposter.png' alt='Poster for {$last['name']}' class='tooltip-poster'>" : "<img src='" . url_proxy($last['poster'], true, 250) . "' alt='Poster for {$last['name']}' class='tooltip-poster'>";
+    $last['poster'] = empty($last['poster']) ? "<img src='{$imagesBaseurl}noposter.png' alt='Poster for {$last['name']}' class='tooltip-poster'>" : "<img src='" . url_proxy($last['poster'], true, 250) . "' alt='Poster for {$last['name']}' class='tooltip-poster'>";
     if ($last['anonymous'] === '1' && ($user['class'] < UC_STAFF || $last['owner'] === $user['id'])) {
         $last['uploader'] = get_anonymous_name();
     } else {

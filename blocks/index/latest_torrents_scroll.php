@@ -8,7 +8,7 @@ use Pu239\Database;
 use Pu239\Cache;
 use Pu239\Torrent;
 
-global $container, $site_config, $CURUSER;
+global $container, $CURUSER;
 
 $db = $container->get(Database::class);
 $cache = $container->get(Cache::class);
