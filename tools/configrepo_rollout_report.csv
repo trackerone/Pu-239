@@ -2,6 +2,23 @@ file,replaced,todos,notes
 chat/lib/class/AJAXChatTemplate.php,none,0,no legacy config usage detected
 chat/lib/template/loggedIn.html,none,0,no legacy config usage detected (template placeholder only)
 chat/lib/template/logs.html,none,0,no legacy config usage detected (template placeholder only)
+*** codex/refactor-legacy-config-to-configrepository-zj0m12
+=======
+*** codex/refactor-legacy-config-to-configrepository-f601es
+=======
+*** codex/refactor-legacy-config-to-configrepository-406qd1
+=======
+*** codex/refactor-legacy-config-to-configrepository-w5o2m3
+=======
+*** codex/refactor-legacy-config-to-configrepository-l20m0t
+=======
+*** codex/refactor-legacy-config-to-configrepository-xyf5zu
+=======
+*** master
+*** master
+*** master
+*** master
+*** master
 admin/datareset.php,site_config(5),0,Replaced legacy config access with ConfigRepository
 blocks/userdetails/traffic.php,site_config(2),0,Replaced legacy config access with ConfigRepository
 admin/mysql_overview.php,site_config(3),0,Replaced legacy config access with ConfigRepository
@@ -52,6 +69,19 @@ public/rss.php,site_config(19),0,Replaced legacy config access with ConfigReposi
 admin/stats_extra.php,site_config(24),0,Replaced legacy config access with ConfigRepository
 admin/memcache.php,site_config(23),0,Replaced legacy config access with ConfigRepository
 public/blackjack.php,site_config(40),0,Replaced legacy config access with ConfigRepository
+*** codex/refactor-legacy-config-to-configrepository-zj0m12
+=======
+*** codex/refactor-legacy-config-to-configrepository-f601es
+=======
+*** codex/refactor-legacy-config-to-configrepository-406qd1
+=======
+*** codex/refactor-legacy-config-to-configrepository-w5o2m3
+=======
+*** codex/refactor-legacy-config-to-configrepository-l20m0t
+*** master
+*** master
+*** master
+*** master
 admin/upgrade_database.php,site_config(3),0,Replaced legacy config access with ConfigRepository
 public/viewnfo.php,site_config(4),0,Replaced legacy config access with ConfigRepository
 admin/manage_images.php,site_config(4),0,Replaced legacy config access with ConfigRepository
@@ -77,6 +107,10 @@ messages/edit_mailboxes.php,site_config(5),0,Replaced legacy config access with 
 messages/view_message.php,site_config(20),0,Replaced legacy config access with ConfigRepository
 messages/delete.php,site_config(4),0,Replaced legacy config access with ConfigRepository
 messages/search.php,site_config(6),0,Replaced legacy config access with ConfigRepository
+*** codex/refactor-legacy-config-to-configrepository-zj0m12
+=======
+*** codex/refactor-legacy-config-to-configrepository-f601es
+*** master
 messages/move.php,site_config(1),0,Replaced legacy base URL lookup with ConfigRepository
 messages/move_or_delete_multi.php,site_config(4),0,Rewired PM actions to ConfigRepository keys
 messages/send_message.php,site_config(3),0,Form handling now sources paths and file types from ConfigRepository
@@ -86,6 +120,7 @@ public/achievementbonus.php,site_config(4),0,Bonus redirects and chatbot metadat
 public/achievementhistory.php,site_config(3),0,History page assets and links switched to ConfigRepository
 public/achievementlist.php,site_config(1),0,Achievement icon path migrated to ConfigRepository
 public/ajax/ajax_tooltips.php,site_config(10),0,Tooltip metrics and links refactored to ConfigRepository access
+*** codex/refactor-legacy-config-to-configrepository-zj0m12
 public/ajax/autocomplete.php,site_config(1),0,Autocomplete suggestions now pull torrent URLs from ConfigRepository base path
 public/ajax/member_input.php,site_config(7),0,Member management endpoints now derive base URLs from ConfigRepository
 public/ajax/rating.php,site_config(6),0,Rating handler now reads cache TTLs and bonus toggles via ConfigRepository
@@ -95,3 +130,16 @@ public/ajax/thanks.php,site_config(9),0,Thanks endpoint sources redirects forms 
 public/ajax/torrents_lookup.php,site_config(17),0,Torrent lookup tables fetch base URL ratio flags and image paths from ConfigRepository
 public/ajax/view_sql.php,site_config(8),0,Adminer bootstrap now loads site info and database credentials via ConfigRepository
 public/allsmiles.php,site_config(4),0,Smilies popover resolves image base via ConfigRepository path setting
+=======
+=======
+*** codex/refactor-legacy-config-to-configrepository-406qd1
+=======
+*** codex/refactor-legacy-config-to-configrepository-w5o2m3
+=======
+=======
+*** master
+*** master
+*** master
+*** master
+*** master
+*** master
