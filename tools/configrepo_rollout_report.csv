@@ -196,6 +196,7 @@ forums/poll.php,site_config(6),0,Replaced legacy config access with ConfigReposi
 forums/post_reply.php,site_config(3),0,Replaced legacy config access with ConfigRepository
 forums/quick_reply.php,site_config(1),0,Replaced legacy config access with ConfigRepository
 forums/search.php,site_config(25),0,Replaced legacy config access with ConfigRepository
+*** codex/refactor-legacy-config-constants-to-configrepository-7ax7cl
 forums/section_view.php,site_config(13),0,Replaced legacy config access with ConfigRepository
 forums/staff_actions.php,site_config(2),0,Replaced legacy config access with ConfigRepository
 forums/subscriptions.php,site_config(22),0,Replaced legacy config access with ConfigRepository
@@ -206,3 +207,5 @@ forums/view_post_history.php,site_config(3),0,Replaced legacy config access with
 forums/view_topic.php,site_config(53),0,Replaced legacy config access with ConfigRepository
 forums/view_unread_posts.php,site_config(24),0,Replaced legacy config access with ConfigRepository
 include/arcade.php,site_config(11),0,Replaced legacy config access with ConfigRepository
+=======
+*** master
