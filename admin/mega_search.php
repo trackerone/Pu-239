@@ -2,10 +2,13 @@
 declare(strict_types=1);
 require_once dirname(__DIR__) . '/bootstrap_web.php';
 
+use Pu239\Config\ConfigRepository;
 use Pu239\Database;
 
 
-global $site_config, $container;
+global $container;
+/** @var ConfigRepository $config */
+$config = $container->get(ConfigRepository::class);
 
 $db = $container->get(Database::class);
 
@@ -93,13 +96,13 @@ if (!empty($user_names)) {
                 </td>
                 <td>
                     <span class="has-text-success tooltipper" title="' . _('Uploaded') . '">
-                        <img src="' . $site_config['paths']['images_baseurl'] . 'up.png" alt="' . _('Up') . '"> 
+                        <img src="' . (string) $config->get('paths.images_baseurl') . 'up.png" alt="' . _('Up') . '"> 
                         ' . mksize($arr['uploaded']) . '
                     </span>
-                    ' . ($site_config['site']['ratio_free'] ? '
+                    ' . ((bool) $config->get('site.ratio_free') ? '
                 </td>' : '<br>
                     <span class="has-text-danger tooltipper" title="' . _('Downloaded') . '">
-                        <img src="' . $site_config['paths']['images_baseurl'] . 'dl.png" alt="' . _('Down') . '">  
+                        <img src="' . (string) $config->get('paths.images_baseurl') . 'dl.png" alt="' . _('Down') . '">  
                         ' . mksize($arr['downloaded']) . '
                     </span>
                 </td>') . '
@@ -185,13 +188,13 @@ if (isset($_POST['msg_to_analyze'])) {
                 </td>
                 <td>
                     <span class="has-text-success tooltipper" title="' . _('Uploaded') . '">
-                        <img src="' . $site_config['paths']['images_baseurl'] . 'up.png" alt="' . _('Up') . '"> 
+                        <img src="' . (string) $config->get('paths.images_baseurl') . 'up.png" alt="' . _('Up') . '"> 
                         ' . mksize($arr['uploaded']) . '
                     </span>
-                    ' . ($site_config['site']['ratio_free'] ? '
+                    ' . ((bool) $config->get('site.ratio_free') ? '
                 </td>' : '<br>
                     <span class="tooltipper has-text-danger" title="' . _('Downloaded') . '">
-                        <img src="' . $site_config['paths']['images_baseurl'] . 'dl.png" alt="' . _('Down') . '">  
+                        <img src="' . (string) $config->get('paths.images_baseurl') . 'dl.png" alt="' . _('Down') . '">  
                         ' . mksize($arr['downloaded']) . '
                     </span>
                 </td>') . '
@@ -320,10 +323,10 @@ if (isset($_POST['msg_to_analyze'])) {
                         <span class="has-color-lime" title="last access">' . get_date((int) $arr['last_access'], '') . '</span>
                     </td>
                     <td>
-                        <img src="' . $site_config['paths']['images_baseurl'] . 'up.png" alt="' . _('Up') . '" title="' . _('Uploaded') . '"> 
+                        <img src="' . (string) $config->get('paths.images_baseurl') . 'up.png" alt="' . _('Up') . '" title="' . _('Uploaded') . '"> 
                         <span class="has-color-lime">' . mksize($arr['uploaded']) . '</span>
-                        ' . ($site_config['site']['ratio_free'] ? '' : '<br>
-                        <img src="' . $site_config['paths']['images_baseurl'] . 'dl.png" alt="' . _('Down') . '" title="' . _('Downloaded') . '">  
+                        ' . ((bool) $config->get('site.ratio_free') ? '' : '<br>
+                        <img src="' . (string) $config->get('paths.images_baseurl') . 'dl.png" alt="' . _('Down') . '" title="' . _('Downloaded') . '">  
                         <span class="has-color-danger">' . mksize($arr['downloaded']) . '</span></td>') . '
                     <td>' . member_ratio((float) $arr['uploaded'], (float) $arr['downloaded']) . '</td>
                     <td>' . (!empty($arr['ip']) ? htmlsafechars($arr['ip']) : '') . '</td>
@@ -384,9 +387,9 @@ if (isset($_POST['invite_code'])) {
                     <td>' . (!empty($user['ip']) ? htmlsafechars($user['ip']) : '') . '</td>
                     <td>' . get_date($user['last_access'], '') . '</td>
                     <td>' . get_date($user['registered'], '') . '</td>
-                    <td><img src="' . $site_config['paths']['images_baseurl'] . 'up.png" alt="' . _('Up') . '" title="' . _('Uploaded') . '"> <span class="has-color-lime">' . mksize($user['uploaded']) . '</span>
-                    ' . ($site_config['site']['ratio_free'] ? '' : '<br>
-                    <img src="' . $site_config['paths']['images_baseurl'] . 'dl.png" alt="' . _('Down') . '" title="' . _('Downloaded') . '">  
+                    <td><img src="' . (string) $config->get('paths.images_baseurl') . 'up.png" alt="' . _('Up') . '" title="' . _('Uploaded') . '"> <span class="has-color-lime">' . mksize($user['uploaded']) . '</span>
+                    ' . ((bool) $config->get('site.ratio_free') ? '' : '<br>
+                    <img src="' . (string) $config->get('paths.images_baseurl') . 'dl.png" alt="' . _('Down') . '" title="' . _('Downloaded') . '">  
                     <span class="has-color-danger">' . mksize($user['downloaded']) . '</span></td>') . '
                     <td>' . member_ratio($user['uploaded'], $user['downloaded']) . '</td>
                     <td>' . ($user['invitedby'] == 0 ? _('open signups') : format_username($user['invitedby'])) . '</td>
@@ -433,9 +436,9 @@ if (isset($_POST['invite_code'])) {
                     <td>' . (!empty($user_invited['ip']) ? htmlsafechars($user_invited['ip']) : '') . '</td>
                     <td>' . get_date($user_invited['last_access'], '') . '</td>
                     <td>' . get_date($user_invited['added'], '') . '</td>
-                    <td><img src="' . $site_config['paths']['images_baseurl'] . 'up.png" alt="' . _('Up') . '" title="' . _('Uploaded') . '"> <span class="has-color-lime">' . mksize($user_invited['uploaded']) . '</span>
-                    ' . ($site_config['site']['ratio_free'] ? '' : '<br>
-                    <img src="' . $site_config['paths']['images_baseurl'] . 'dl.png" alt="' . _('Down') . '" title="' . _('Downloaded') . '">  
+                    <td><img src="' . (string) $config->get('paths.images_baseurl') . 'up.png" alt="' . _('Up') . '" title="' . _('Uploaded') . '"> <span class="has-color-lime">' . mksize($user_invited['uploaded']) . '</span>
+                    ' . ((bool) $config->get('site.ratio_free') ? '' : '<br>
+                    <img src="' . (string) $config->get('paths.images_baseurl') . 'dl.png" alt="' . _('Down') . '" title="' . _('Downloaded') . '">  
                     <span class="has-color-danger">' . mksize($user_invited['downloaded']) . '</span></td>') . '
                     <td>' . member_ratio($user_invited['uploaded'], $user_invited['downloaded']) . '</td>
                     <td>' . ($user_invited['invitedby'] == 0 ? _('open signups') : format_username($user_invited['receiver'])) . '</td>
@@ -445,7 +448,7 @@ if (isset($_POST['invite_code'])) {
 }
 $title = _('Mega Search');
 $breadcrumbs = [
-    "<a href='{$site_config['paths']['baseurl']}/staffpanel.php'>" . _('Staff Panel') . '</a>',
+    "<a href='" . (string) $config->get('paths.baseurl') . "/staffpanel.php'>" . _('Staff Panel') . '</a>',
     "<a href='{$_SERVER['PHP_SELF']}'>$title</a>",
 ];
 echo stdhead($title, [], 'page-wrapper', $breadcrumbs) . wrapper($HTMLOUT) . stdfoot();
