@@ -1,8 +1,14 @@
 <?php
 declare(strict_types=1);
-require_once dirname(__DIR__) . '/bootstrap.php';
+
+use Pu239\Config\ConfigRepository;
 use Pu239\Database;
 
+require_once dirname(__DIR__) . '/bootstrap.php';
+
+global $container;
+/** @var ConfigRepository $config */
+$config = $container->get(ConfigRepository::class);
 $db = $container->get(Database::class);
 $topic_id = isset($_GET['topic_id']) ? (int) $_GET['topic_id'] : (isset($_POST['topic_id']) ? (int) $_POST['topic_id'] : 0);
 if (!is_valid_id($topic_id)) {
@@ -39,7 +45,7 @@ if ($action == 1) {
     stderr(_('Error'), _('Invalid action'));
 }
 //=== casting a vote(s) ===========================================================================================//
-global $CURUSER, $site_config;
+global $CURUSER;
 
 switch ($action) {
     case 'poll_vote':
@@ -101,21 +107,21 @@ switch ($action) {
 		<input type="hidden" name="add_the_poll" value="1">
 	<table>
 	<tr>
-		<td colspan="3"><span style="color: white; font-weight: bold;"><img src="' . $site_config['paths']['images_baseurl'] . 'forums/poll.gif" alt="' . _('Poll') . '" title="' . _('Poll') . '" style="vertical-align: middle;"> ' . _('Add poll to topic') . '!</span></td>
+		<td colspan="3"><span style="color: white; font-weight: bold;"><img src="' . $config->get('paths.images_baseurl') . 'forums/poll.gif" alt="' . _('Poll') . '" title="' . _('Poll') . '" style="vertical-align: middle;"> ' . _('Add poll to topic') . '!</span></td>
 	</tr>
 	<tr>
-		<td><img src="' . $site_config['paths']['images_baseurl'] . 'forums/question.png" alt="' . _('Question') . '" title="' . _('Question') . '" width="24" style="vertical-align: middle;"></td>
+		<td><img src="' . $config->get('paths.images_baseurl') . 'forums/question.png" alt="' . _('Question') . '" title="' . _('Question') . '" width="24" style="vertical-align: middle;"></td>
 		<td><span style="white - space:nowrap;font-weight: bold;">' . _('Poll question') . ':</span></td>
 		<td><input type="text" name="poll_question" class="w-100" value=""></td>
 	</tr>
 	<tr>
-		<td><img src="' . $site_config['paths']['images_baseurl'] . 'forums/options.gif" alt="' . _('Options') . '" title="' . _('Options') . '" width="24" style="vertical-align: middle;"></td>
+		<td><img src="' . $config->get('paths.images_baseurl') . 'forums/options.gif" alt="' . _('Options') . '" title="' . _('Options') . '" width="24" style="vertical-align: middle;"></td>
 		<td><span style="white - space:nowrap;font-weight: bold;">' . _('Poll answers') . ':</span></td>
 		<td><textarea cols="30" rows="4" name="poll_answers" class="text_area_small"></textarea>
 		<br> ' . _('One option per line. There is a minimum of 2 options, and a maximun of 20 options. BBcode is enabled.') . '</td>
 	</tr>
 	<tr>
-		<td><img src="' . $site_config['paths']['images_baseurl'] . 'forums/clock.png" alt="' . _('Clock') . '" title="' . _('Clock') . '" width="30" style="vertical-align: middle;"></td>
+		<td><img src="' . $config->get('paths.images_baseurl') . 'forums/clock.png" alt="' . _('Clock') . '" title="' . _('Clock') . '" width="30" style="vertical-align: middle;"></td>
 		<td><span style="white - space:nowrap;font-weight: bold;">' . _('Poll starts') . ':</span></td>
 		<td><select name="poll_starts">
 											<option class="body" value="0">' . _('Start Now') . '!</option>
@@ -129,7 +135,7 @@ switch ($action) {
 											</select> ' . _("When to start the poll. Default is 'Start Now'") . '!" </td>
 	</tr>
 	<tr>
-		<td><img src="' . $site_config['paths']['images_baseurl'] . 'forums/stop.png" alt = "' . _('Stop') . '" title="' . _('Stop') . '" width="20" style="vertical-align: middle;"></td>
+		<td><img src="' . $config->get('paths.images_baseurl') . 'forums/stop.png" alt = "' . _('Stop') . '" title="' . _('Stop') . '" width="20" style="vertical-align: middle;"></td>
 		<td><span style="white-space:nowrap;font-weight: bold;">' . _('Poll ends') . ':</span></td>
 		<td><select name = "poll_ends">
 											<option class="body" value = "1356048000">' . _('Run Forever') . '</option>
@@ -148,7 +154,7 @@ switch ($action) {
 											</select>' . _("How long this poll should run? Default is to 'Run Forever'") . '"</td>
 	</tr>
 	<tr>
-		<td><img src="' . $site_config['paths']['images_baseurl'] . 'forums/multi.gif" alt = "' . _('Multi') . '" title="' . _('Multi') . '" width="20" style="vertical-align: middle;"></td>
+		<td><img src="' . $config->get('paths.images_baseurl') . 'forums/multi.gif" alt = "' . _('Multi') . '" title="' . _('Multi') . '" width="20" style="vertical-align: middle;"></td>
 		<td><span style="white-space:nowrap;font-weight: bold;">' . _('Multi options') . ':</span></td>
 		<td><select name = "multi_options">
 											<option class="body" value = "1">' . _('Single option') . '!</option>' . $options . '

@@ -1,11 +1,17 @@
 <?php
 declare(strict_types=1);
-require_once dirname(__DIR__) . '/bootstrap.php';
+
 use DI\DependencyException;
 use DI\NotFoundException;
 use Pu239\Cache;
+use Pu239\Config\ConfigRepository;
 use Pu239\Database;
 
+require_once dirname(__DIR__) . '/bootstrap.php';
+
+global $container;
+/** @var ConfigRepository $config */
+$config = $container->get(ConfigRepository::class);
 $db = $container->get(Database::class);
 $user = check_user_status();
 if ($_GET['action'] === 'mark_all_as_read') {
@@ -99,9 +105,9 @@ function mark_as_unread(array $user)
  */
 function get_topics()
 {
-    global $container, $site_config;
+    global $container, $config;
 
-    $dt = TIME_NOW - ($site_config['forum_config']['readpost_expiry'] * 86400);
+    $dt = TIME_NOW - ($config->get('forum_config.readpost_expiry') * 86400);
     // $fluent removed — use $this->db (ExtendedPdo)
     $query = $fluent->from('topics AS t')
                     ->select(null)

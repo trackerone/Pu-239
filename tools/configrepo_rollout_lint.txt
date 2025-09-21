@@ -211,3 +211,17 @@ No syntax errors detected in include/config_compat.php
 No syntax errors detected in blocks/index/latest_movies.php
 No syntax errors detected in blocks/index/latest_tv.php
 No syntax errors detected in blocks/index/forum_posts.php
+No syntax errors detected in forums/editor.php
+No syntax errors detected in forums/last_ten.php
+No syntax errors detected in forums/mark_all_as_read.php
+No syntax errors detected in forums/member_post_history.php
+No syntax errors detected in forums/new_replies.php
+No syntax errors detected in forums/new_topic.php
+
+Parse error: syntax error, unexpected identifier "Location", expecting ")" in forums/poll.php on line 55
+Errors parsing forums/poll.php
+
+Parse error: syntax error, unexpected identifier "no", expecting ")" in forums/post_reply.php on line 45
+Errors parsing forums/post_reply.php
+No syntax errors detected in forums/quick_reply.php
+No syntax errors detected in forums/search.php
