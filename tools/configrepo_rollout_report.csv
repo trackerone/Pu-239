@@ -239,6 +239,7 @@ admin/forum_config.php,site_config(4),0,Replaced legacy config access with Confi
 admin/freeleech.php,site_config(4),0,Replaced legacy config access with ConfigRepository
 admin/freeusers.php,site_config(4),0,Replaced legacy config access with ConfigRepository
 admin/goaccess.php,site_config(1),0,Replaced legacy config access with ConfigRepository
+*** codex/refactor-legacy-config-constants-to-configrepository-vrnd3h
 admin/grouppm.php,site_config(1),0,Replaced legacy config access with ConfigRepository
 admin/hit_and_run.php,site_config(29),0,Replaced legacy config access with ConfigRepository
 admin/hnrwarn.php,site_config(1),0,Replaced legacy config access with ConfigRepository
@@ -249,3 +250,5 @@ admin/mega_search.php,site_config(16),0,Replaced legacy config access with Confi
 admin/modded_torrents.php,site_config(6),0,Replaced legacy config access with ConfigRepository
 admin/modtask.php,site_config(10),0,Replaced legacy config access with ConfigRepository
 admin/mysql_stats.php,site_config(1),0,Replaced legacy config access with ConfigRepository
+=======
+*** master
