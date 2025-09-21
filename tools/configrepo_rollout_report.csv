@@ -209,3 +209,13 @@ forums/view_unread_posts.php,site_config(24),0,Replaced legacy config access wit
 include/arcade.php,site_config(11),0,Replaced legacy config access with ConfigRepository
 =======
 *** master
+include/bittorrent.php,none,0,SKIPPED_EXPLICIT
+include/class/class_check.php,site_config(7),0,Replaced legacy config access with ConfigRepository
+include/cron_controller.php,none,0,SKIPPED_DB_ARRAY
+include/function_autopost.php,site_config(9),0,Replaced legacy config access with ConfigRepository
+include/function_bbcode.php,site_config(13),0,Replaced legacy config access with ConfigRepository
+include/function_bluray.php,site_config(2),0,Replaced legacy config access with ConfigRepository
+include/function_bonus.php,site_config(6),0,Replaced legacy config access with ConfigRepository
+include/function_books.php,site_config(3),0,Replaced legacy config access with ConfigRepository
+include/function_breadcrumbs.php,site_config(2),0,Replaced legacy config access with ConfigRepository
+include/function_categories.php,site_config(3),0,Replaced legacy config access with ConfigRepository

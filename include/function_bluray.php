@@ -8,9 +8,14 @@ require_once __DIR__ . '/runtime_safe.php';
 use DI\DependencyException;
 use DI\NotFoundException;
 use Pu239\Cache;
+use Pu239\Config\ConfigRepository;
 use Pu239\Database;
 use Pu239\Image;
 use Spatie\Image\Exceptions\InvalidManipulation;
+
+global $container;
+/** @var ConfigRepository $config */
+$config = $container->get(ConfigRepository::class);
 
 /**
  * @param bool $images
@@ -26,7 +31,7 @@ use Spatie\Image\Exceptions\InvalidManipulation;
  */
 function get_bluray_info(bool $images = false)
 {
-    global $container, $BLOCKS, $site_config;
+    global $container, $BLOCKS, $config;
 
     if (!$BLOCKS['bluray_com_api_on']) {
         return false;
@@ -72,7 +77,7 @@ function get_bluray_info(bool $images = false)
                     $poster_link = "https://images.static-bluray.com/movies/covers/{$match[2]}_large.jpg";
                 }
             }
-            $poster = $placeholder = $site_config['paths']['images_baseurl'] . 'noposter.png';
+            $poster = $placeholder = (string) $config->get('paths.images_baseurl') . 'noposter.png';
 
             if (!empty($poster_link)) {
                 $image = url_proxy($poster_link, true, 250);

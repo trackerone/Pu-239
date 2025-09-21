@@ -5,6 +5,12 @@ $db = $container->get(Database::class);
 
 require_once __DIR__ . '/runtime_safe.php';
 
+use Pu239\Config\ConfigRepository;
+
+global $container;
+/** @var ConfigRepository $config */
+$config = $container->get(ConfigRepository::class);
+
 /**
  * @param array $breadcrumbs
  *
@@ -12,12 +18,13 @@ require_once __DIR__ . '/runtime_safe.php';
  */
 function breadcrumbs(array $breadcrumbs)
 {
-    global $site_config;
+    global $config;
 
+    $baseurl = (string) $config->get('paths.baseurl');
     $crumbs = "
                     <nav class='breadcrumb round5' aria-label='breadcrumbs'>
                         <ul>
-                            <li><a href='{$site_config['paths']['baseurl']}'>" . _('Home') . '</a></li>';
+                            <li><a href='{$baseurl}'>" . _('Home') . '</a></li>';
     foreach ($breadcrumbs as $link) {
         if (!empty($link)) {
             $link = str_replace(",", '', $link);

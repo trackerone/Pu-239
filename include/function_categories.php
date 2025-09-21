@@ -8,7 +8,12 @@ require_once __DIR__ . '/runtime_safe.php';
 use DI\DependencyException;
 use DI\NotFoundException;
 use Pu239\Cache;
+use Pu239\Config\ConfigRepository;
 use Pu239\Database;
+
+global $container;
+/** @var ConfigRepository $config */
+$config = $container->get(ConfigRepository::class);
 
 /**
  *
@@ -22,7 +27,7 @@ use Pu239\Database;
  */
 function genrelist(bool $grouped)
 {
-    global $container, $site_config;
+    global $container, $config;
 
     $cache = $container->get(Cache::class);
     // $fluent removed — use $this->db (ExtendedPdo)
@@ -42,7 +47,7 @@ function genrelist(bool $grouped)
                 $ret[] = $parent;
             }
             if (!empty($ret)) {
-                $cache->set('genrelist_grouped_', $ret, $site_config['expires']['genrelist']);
+                $cache->set('genrelist_grouped_', $ret, (int) $config->get('expires.genrelist'));
             }
         }
     } else {
@@ -60,7 +65,7 @@ function genrelist(bool $grouped)
                 $ret[] = $cat;
             }
             if (!empty($ret)) {
-                $cache->set('genrelist_ordered_', $ret, $site_config['expires']['genrelist']);
+                $cache->set('genrelist_ordered_', $ret, (int) $config->get('expires.genrelist'));
             }
         }
     }
