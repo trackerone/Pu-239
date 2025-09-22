@@ -1,16 +1,21 @@
 <?php
 declare(strict_types=1);
 
-$db = $container->get(Database::class);
-
 require_once __DIR__ . '/runtime_safe.php';
 
 use DI\DependencyException;
 use DI\NotFoundException;
 use Pu239\Cache;
+use Pu239\Config\ConfigRepository;
 use Pu239\Database;
 use Pu239\Mood;
 use Pu239\User;
+
+global $container;
+/** @var ConfigRepository $config */
+$config = $container->get(ConfigRepository::class);
+/** @var Database $db */
+$db = $container->get(Database::class);
 use Spatie\Image\Exceptions\InvalidManipulation;
 
 /**
@@ -27,7 +32,7 @@ use Spatie\Image\Exceptions\InvalidManipulation;
  */
 function commenttable($rows, $variant = 'torrent')
 {
-    global $container, $CURUSER, $site_config;
+    global $container, $CURUSER, $config;
 
     $users_class = $container->get(User::class);
     require_once INCL_DIR . 'function_users.php';
@@ -107,7 +112,7 @@ function commenttable($rows, $variant = 'torrent')
                 $this_text .= "<span class='left5 tooltipper' title='$title'>" . format_username((int) $row['user']) . '</span>';
                 $this_text .= '
                     <a href="javascript:;" onclick="PopUp(\'usermood.php\',\'Mood\',530,500,1,1);" class="left5">
-                        <img src="' . $site_config['paths']['images_baseurl'] . 'smilies/' . $moodpic . '" alt="' . $moodname . '" class="tooltipper" title="' . ($row['anonymous'] === '1' ? '<i>' . get_anonymous_name() . '</i>' : htmlsafechars($usersdata['username'])) . ' ' . $moodname . '!">
+                        <img src="' . (string) $config->get('paths.images_baseurl') . 'smilies/' . $moodpic . '" alt="' . $moodname . '" class="tooltipper" title="' . ($row['anonymous'] === '1' ? '<i>' . get_anonymous_name() . '</i>' : htmlsafechars($usersdata['username'])) . ' ' . $moodname . '!">
                     </a>';
             }
         } else {
@@ -117,10 +122,10 @@ function commenttable($rows, $variant = 'torrent')
         $row['id'] = (int) $row['id'];
         $tid = !empty($row[$variant]) ? "&amp;tid={$row[$variant]}" : '';
         $this_text .= ($row['user'] == $CURUSER['id'] || $CURUSER['class'] >= UC_STAFF ? "
-                    <a href='{$site_config['paths']['baseurl']}/{$type}.php?action=edit&amp;cid={$row['id']}{$extra_link}{$tid}' class='button is-small left10'>" . _('Edit') . '</a>' : '') . ($CURUSER['class'] >= UC_VIP ? "
-                    <a href='{$site_config['paths']['baseurl']}/report.php?type=Comment&amp;id={$row['id']}' class='button is-small left10'>Report this Comment</a>" : '') . ($CURUSER['class'] >= UC_STAFF ? "
-                    <a href='{$site_config['paths']['baseurl']}/{$type}.php?{$delete}&amp;cid={$row['id']}{$extra_link}{$tid}' class='button is-small left10'>" . _('Delete') . '</a>' : '') . ($row['editedby'] && $CURUSER['class'] >= UC_STAFF ? "
-                    <a href='{$site_config['paths']['baseurl']}/{$type}.php?action=vieworiginal&amp;cid={$row['id']}{$extra_link}{$tid}' class='button is-small left10'>" . _('View Original') . '</a>' : '') . "
+                    <a href='" . (string) $config->get('paths.baseurl') . "/{$type}.php?action=edit&amp;cid={$row['id']}{$extra_link}{$tid}' class='button is-small left10'>" . _('Edit') . '</a>' : '') . ($CURUSER['class'] >= UC_VIP ? "
+                    <a href='" . (string) $config->get('paths.baseurl') . "/report.php?type=Comment&amp;id={$row['id']}' class='button is-small left10'>Report this Comment</a>" : '') . ($CURUSER['class'] >= UC_STAFF ? "
+                    <a href='" . (string) $config->get('paths.baseurl') . "/{$type}.php?{$delete}&amp;cid={$row['id']}{$extra_link}{$tid}' class='button is-small left10'>" . _('Delete') . '</a>' : '') . ($row['editedby'] && $CURUSER['class'] >= UC_STAFF ? "
+                    <a href='" . (string) $config->get('paths.baseurl') . "/{$type}.php?action=vieworiginal&amp;cid={$row['id']}{$extra_link}{$tid}' class='button is-small left10'>" . _('View Original') . '</a>' : '') . "
                     <span data-id='{$cid}' data-type='{$variant}' class='mlike button is-small left10'>" . ucfirst($wht) . "</span>
                     <span class='tot-{$cid} left10'>{$att_str}</span>
                 </span>
@@ -168,7 +173,7 @@ function commenttable($rows, $variant = 'torrent')
  */
 function format_table_border($row, $image, $this_text, $avatar, $CURUSER, $usersdata, $text, $top, $member_reputation)
 {
-    global $site_config;
+    global $config;
 
     return main_div("
             <a id='comm{$row['id']}'></a>
@@ -178,7 +183,7 @@ function format_table_border($row, $image, $this_text, $avatar, $CURUSER, $users
                     <div class='column round10 bg-02 is-2-widescreen is-3-desktop is-4-tablet is-12-mobile has-text-centered'>
                         " . $avatar . '<br>' . ($row['anonymous'] === '1' ? '<i>' . get_anonymous_name() . '</i>' : format_username((int) $row['user'])) . ($row['anonymous'] === '1' || empty($usersdata['title']) ? '' : '<br><span style=" font-size: xx-small;">[' . htmlsafechars($usersdata['title']) . ']</span>') . '<br>
                         <span>' . ($row['anonymous'] === '1' ? '' : get_user_class_name((int) $usersdata['class'])) . '</span><br>
-                        ' . ($usersdata['last_access'] > (TIME_NOW - 300) && get_anonymous($usersdata['id']) ? ' <img src="' . $image . '" data-src="' . $site_config['paths']['images_baseurl'] . 'forums/online.gif" alt="Online" title="Online" class="tooltipper icon is-small lazy"> Online' : ' <img src="' . $image . '" data-src="' . $site_config['paths']['images_baseurl'] . 'forums/offline.gif" alt="' . _('Offline') . '" title="' . _('Offline') . '" class="tooltipper icon is-small lazy"> ' . _('Offline') . '') . '<br>' . _('Karma') . ': ' . number_format((float) $usersdata['seedbonus']) . '<br>' . $member_reputation . '<br>' . (!empty($usersdata['website']) ? ' <a href="' . htmlsafechars($usersdata['website']) . '" target="_blank" title="' . _('click to go to website') . '"><img src="' . $image . '" data-src="' . $site_config['paths']['images_baseurl'] . 'forums/website.gif" alt="website" class="tooltipper emoticon lazy"></a> ' : '') . ($usersdata['show_email'] === 'yes' ? ' <a href="mailto:' . htmlsafechars($usersdata['email']) . '"  title="' . _('click to email') . '" target="_blank"><i class="icon-mail icon tooltipper" aria-hidden="true" title="email"><i></a>' : '') . ($CURUSER['class'] >= UC_STAFF && !empty($usersdata['ip']) ? '
+                        ' . ($usersdata['last_access'] > (TIME_NOW - 300) && get_anonymous($usersdata['id']) ? ' <img src="' . $image . '" data-src="' . (string) $config->get('paths.images_baseurl') . 'forums/online.gif" alt="Online" title="Online" class="tooltipper icon is-small lazy"> Online' : ' <img src="' . $image . '" data-src="' . (string) $config->get('paths.images_baseurl') . 'forums/offline.gif" alt="' . _('Offline') . '" title="' . _('Offline') . '" class="tooltipper icon is-small lazy"> ' . _('Offline') . '') . '<br>' . _('Karma') . ': ' . number_format((float) $usersdata['seedbonus']) . '<br>' . $member_reputation . '<br>' . (!empty($usersdata['website']) ? ' <a href="' . htmlsafechars($usersdata['website']) . '" target="_blank" title="' . _('click to go to website') . '"><img src="' . $image . '" data-src="' . (string) $config->get('paths.images_baseurl') . 'forums/website.gif" alt="website" class="tooltipper emoticon lazy"></a> ' : '') . ($usersdata['show_email'] === 'yes' ? ' <a href="mailto:' . htmlsafechars($usersdata['email']) . '"  title="' . _('click to email') . '" target="_blank"><i class="icon-mail icon tooltipper" aria-hidden="true" title="email"><i></a>' : '') . ($CURUSER['class'] >= UC_STAFF && !empty($usersdata['ip']) ? '
                         <ul class="level-center">
                             <li class="margin10"><a href="' . url_proxy('https://ws.arin.net/?queryinput=' . htmlsafechars($usersdata['ip'])) . '" title="' . _('whois to find ISP info') . '" target="_blank" class="button is-small">' . _('IP whois') . '</a></li>
                         </ul>' : '') . "
@@ -209,7 +214,7 @@ function format_table_border($row, $image, $this_text, $avatar, $CURUSER, $users
  */
 function format_table_no_border($row, $image, $this_text, $avatar, $CURUSER, $usersdata, $text, $member_reputation)
 {
-    global $site_config;
+    global $config;
 
     return "
         <div class='columns bg-03 top20 round10'>
@@ -221,7 +226,7 @@ function format_table_no_border($row, $image, $this_text, $avatar, $CURUSER, $us
                     <div class='column round10 bg-02 is-2-widescreen is-3-desktop is-4-tablet is-12-mobile has-text-centered'>
                         " . $avatar . '<br>' . ($row['anonymous'] === '1' ? '<i>' . get_anonymous_name() . '</i>' : format_username((int) $row['user'])) . ($row['anonymous'] === '1' || empty($usersdata['title']) ? '' : '<br><span style=" font-size: xx-small;">[' . htmlsafechars($usersdata['title']) . ']</span>') . '<br>
                         <span>' . ($row['anonymous'] === '1' ? '' : get_user_class_name((int) $usersdata['class'])) . '</span><br>
-                        ' . ($usersdata['last_access'] > (TIME_NOW - 300) && get_anonymous($usersdata['id']) ? ' <img src="' . $image . '" data-src="' . $site_config['paths']['images_baseurl'] . 'forums/online.gif" alt="Online" title="Online" class="tooltipper icon is-small lazy"> Online' : ' <img src="' . $image . '" data-src="' . $site_config['paths']['images_baseurl'] . 'forums/offline.gif" alt="' . _('Offline') . '" title="' . _('Offline') . '" class="tooltipper icon is-small lazy"> ' . _('Offline') . '') . '<br>' . _('Karma') . ': ' . number_format((float) $usersdata['seedbonus']) . '<br>' . $member_reputation . '<br>' . (!empty($usersdata['website']) ? ' <a href="' . htmlsafechars($usersdata['website']) . '" target="_blank" title="' . _('click to go to website') . '"><img src="' . $image . '" data-src="' . $site_config['paths']['images_baseurl'] . 'forums/website.gif" alt="website" class="tooltipper emoticon lazy"></a> ' : '') . ($usersdata['show_email'] === 'yes' ? ' <a href="mailto:' . htmlsafechars($usersdata['email']) . '"  title="' . _('click to email') . '" target="_blank"><i class="icon-mail icon tooltipper" aria-hidden="true" title="email"><i></a>' : '') . ($CURUSER['class'] >= UC_STAFF && !empty($usersdata['ip']) ? '
+                        ' . ($usersdata['last_access'] > (TIME_NOW - 300) && get_anonymous($usersdata['id']) ? ' <img src="' . $image . '" data-src="' . (string) $config->get('paths.images_baseurl') . 'forums/online.gif" alt="Online" title="Online" class="tooltipper icon is-small lazy"> Online' : ' <img src="' . $image . '" data-src="' . (string) $config->get('paths.images_baseurl') . 'forums/offline.gif" alt="' . _('Offline') . '" title="' . _('Offline') . '" class="tooltipper icon is-small lazy"> ' . _('Offline') . '') . '<br>' . _('Karma') . ': ' . number_format((float) $usersdata['seedbonus']) . '<br>' . $member_reputation . '<br>' . (!empty($usersdata['website']) ? ' <a href="' . htmlsafechars($usersdata['website']) . '" target="_blank" title="' . _('click to go to website') . '"><img src="' . $image . '" data-src="' . (string) $config->get('paths.images_baseurl') . 'forums/website.gif" alt="website" class="tooltipper emoticon lazy"></a> ' : '') . ($usersdata['show_email'] === 'yes' ? ' <a href="mailto:' . htmlsafechars($usersdata['email']) . '"  title="' . _('click to email') . '" target="_blank"><i class="icon-mail icon tooltipper" aria-hidden="true" title="email"><i></a>' : '') . ($CURUSER['class'] >= UC_STAFF && !empty($usersdata['ip']) ? '
                         <ul class="level-center">
                             <li class="margin10"><a href="' . url_proxy('https://ws.arin.net/?queryinput=' . htmlsafechars($usersdata['ip'])) . '" title="' . _('whois to find ISP info') . '" target="_blank" class="button is-small">' . _('IP whois') . '</a></li>
                         </ul>' : '') . "

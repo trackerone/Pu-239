@@ -2,12 +2,15 @@
 declare(strict_types=1);
 require_once dirname(__DIR__) . '/bootstrap_web.php';
 
+use PU239\Config\ConfigRepository;
 use Pu239\Cache;
 use Pu239\Database;
 use Pu239\Session;
 
 
-global $container, $site_config, $CURUSER;
+global $container, $CURUSER;
+/** @var ConfigRepository $config */
+$config = $container->get(ConfigRepository::class);
 
 $db = $container->get(Database::class);
 
@@ -46,11 +49,11 @@ if ($mode === 'delete') {
     if (!is_valid_id($newsid)) {
         stderr(_('Error'), _('Invalid ID'));
     }
-    $hash = hash('sha256', $site_config['salt']['one'] . $newsid . 'add');
+    $hash = hash('sha256', (string) $config->get('salt.one') . $newsid . 'add');
     $sure = '';
     $sure = isset($_GET['sure']) ? (int) $_GET['sure'] : '';
     if (!$sure) {
-        stderr(_('Confirm Delete'), _('Do you really want to delete this news entry? Click') . "<a href='{$site_config['paths']['baseurl']}/staffpanel.php?tool=news&amp;mode=delete&amp;sure=1&amp;h=$hash&amp;newsid=$newsid'> " . _('here') . '</a> ' . _('if you are sure.') . '', null);
+        stderr(_('Confirm Delete'), _('Do you really want to delete this news entry? Click') . "<a href='{$config->get('paths.baseurl')}/staffpanel.php?tool=news&amp;mode=delete&amp;sure=1&amp;h=$hash&amp;newsid=$newsid'> " . _('here') . '</a> ' . _('if you are sure.') . '', null);
     }
     if ($_GET['h'] != $hash) {
         stderr(_('Error'), _('what are you doing?'));
@@ -60,7 +63,7 @@ if ($mode === 'delete') {
 $db->perform($sql, ['id' => $newsid]);
     $cache->delete('latest_news_');
     $session->set('is-success', _('News entry deleted'));
-    header("Location: {$site_config['paths']['baseurl']}/staffpanel.php?tool=news&mode=news");
+    header("Location: {$config->get('paths.baseurl')}/staffpanel.php?tool=news&mode=news");
     app_halt('Exit called');
 } elseif ($mode === 'add') {
     $body = isset($_POST['body']) ? htmlsafechars($_POST['body']) : '';
@@ -93,7 +96,7 @@ $results = $db->perform($sql, $values);
     } else {
         $session->set('is-warning', _("Something's wrong!"));
     }
-    header("Location: {$site_config['paths']['baseurl']}/staffpanel.php?tool=news&mode=news");
+    header("Location: {$config->get('paths.baseurl')}/staffpanel.php?tool=news&mode=news");
     app_halt('Exit called');
 } elseif ($mode === 'edit') {
     $newsid = (int) $_GET['newsid'];
@@ -127,7 +130,7 @@ $results = $db->perform($sql, $values);
 $db->perform($sql, array_merge($update, ['id' => $newsid]));
         $cache->delete('latest_news_');
         $session->set('is-success', _('News item was edited successfully'));
-        header("Location: {$site_config['paths']['baseurl']}/staffpanel.php?tool=news&mode=news");
+        header("Location: {$config->get('paths.baseurl')}/staffpanel.php?tool=news&mode=news");
         app_halt('Exit called');
     } else {
         $HTMLOUT .= "
@@ -184,7 +187,7 @@ $db->perform($sql, array_merge($update, ['id' => $newsid]));
             </form>";
         $title = _('New Manager');
         $breadcrumbs = [
-            "<a href='{$site_config['paths']['baseurl']}/staffpanel.php'>" . _('Staff Panel') . '</a>',
+            "<a href='{$config->get('paths.baseurl')}/staffpanel.php'>" . _('Staff Panel') . '</a>',
             "<a href='{$_SERVER['PHP_SELF']}'>$title</a>",
         ];
         echo stdhead($title, $stdhead, 'page-wrapper', $breadcrumbs) . wrapper($HTMLOUT) . stdfoot($stdfoot);
@@ -253,7 +256,7 @@ $db->perform($sql, array_merge($update, ['id' => $newsid]));
         $title = $arr['title'];
         $added = get_date((int) $arr['added'], 'LONG', 0, 1);
         $by = '<b>' . format_username((int) $arr['userid']) . '</b>';
-        $hash = hash('sha256', $site_config['salt']['one'] . $newsid . 'add');
+        $hash = hash('sha256', (string) $config->get('salt.one') . $newsid . 'add');
         $user = $arr['anonymous'] === '1' ? get_anonymous_name() : format_username((int) $arr['userid']);
         $class = $i++ != 0 ? 'top20' : '';
         $HTMLOUT .= main_div("
@@ -262,10 +265,10 @@ $db->perform($sql, array_merge($update, ['id' => $newsid]));
                     " . _('News entry created by') . " $user $added
                 </div>
                 <div class='has-text-right'>
-                    <a href='{$site_config['paths']['baseurl']}/staffpanel.php?tool=news&amp;mode=edit&amp;newsid=$newsid' title='" . _('Edit') . "' class='tooltipper'>
+                    <a href='{$config->get('paths.baseurl')}/staffpanel.php?tool=news&amp;mode=edit&amp;newsid=$newsid' title='" . _('Edit') . "' class='tooltipper'>
                         <i class='icon-edit icon has-text-info' aria-hidden='true'></i>
                     </a>
-                    <a href='{$site_config['paths']['baseurl']}/staffpanel.php?tool=news&amp;mode=delete&amp;newsid=$newsid&amp;sure=1&amp;h=$hash' title='" . _('Delete') . "' class='has-text-danger tooltipper'>
+                    <a href='{$config->get('paths.baseurl')}/staffpanel.php?tool=news&amp;mode=delete&amp;newsid=$newsid&amp;sure=1&amp;h=$hash' title='" . _('Delete') . "' class='has-text-danger tooltipper'>
                         <i class='icon-cancel icon has-text-danger' aria-hidden='true'></i>
                     </a>
                 </div>
@@ -279,7 +282,7 @@ $db->perform($sql, array_merge($update, ['id' => $newsid]));
 
 $title = _('News Manager');
 $breadcrumbs = [
-    "<a href='{$site_config['paths']['baseurl']}/staffpanel.php'>" . _('Staff Panel') . '</a>',
+    "<a href='{$config->get('paths.baseurl')}/staffpanel.php'>" . _('Staff Panel') . '</a>',
     "<a href='{$_SERVER['PHP_SELF']}'>$title</a>",
 ];
 echo stdhead($title, $stdhead, 'page-wrapper', $breadcrumbs) . wrapper($HTMLOUT) . stdfoot($stdfoot);

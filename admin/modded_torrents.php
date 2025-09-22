@@ -4,10 +4,13 @@ require_once dirname(__DIR__) . '/bootstrap_web.php';
 
 use DI\DependencyException;
 use DI\NotFoundException;
+use Pu239\Config\ConfigRepository;
 use Pu239\Database;
 
 
 global $container;
+/** @var ConfigRepository $config */
+$config = $container->get(ConfigRepository::class);
 
 $db = $container->get(Database::class);
 
@@ -45,7 +48,7 @@ $links = "
  */
 function do_sort($arr, $empty = false)
 {
-    global $site_config;
+    global $config;
 
     $returnto = !empty($_SERVER['REQUEST_URI']) ? '&amp;returnto=' . urlencode($_SERVER['REQUEST_URI']) : '';
     $ret_html = '';
@@ -55,7 +58,7 @@ function do_sort($arr, $empty = false)
             $ret_html .= "
                 <tr>
                     <td>
-                        <a href='{$site_config['paths']['baseurl']}/details.php?id=" . (int) $res['id'] . "'>" . htmlsafechars($res['name']) . '</a>
+                        <a href='" . (string) $config->get('paths.baseurl') . "/details.php?id=" . (int) $res['id'] . "'>" . htmlsafechars($res['name']) . '</a>
                     </td>
                     <td>' . format_username((int) $res['checked_by']) . '</td>
                     <td>' . get_date((int) $res['checked_when'], 'LONG') . '</td>
@@ -64,11 +67,11 @@ function do_sort($arr, $empty = false)
             $ret_html .= "
                 <tr>
                     <td>
-                        <a href='{$site_config['paths']['baseurl']}/details.php?id={$res['id']}{$returnto}'>" . htmlsafechars($res['name']) . '</a>
+                        <a href='" . (string) $config->get('paths.baseurl') . "/details.php?id={$res['id']}{$returnto}'>" . htmlsafechars($res['name']) . '</a>
                     </td>
                     <td>' . get_date((int) $res['added'], 'LONG') . "</td>
                     <td>
-                        <a href='{$site_config['paths']['baseurl']}/edit.php?id={$res['id']}{$returnto}' class='tooltipper' title='" . _('Edit') . "'>
+                        <a href='" . (string) $config->get('paths.baseurl') . "/edit.php?id={$res['id']}{$returnto}' class='tooltipper' title='" . _('Edit') . "'>
                             <i class='icon-edit icon has-text-info' aria-hidden='true'></i>
                         </a>
                     </td>
@@ -221,7 +224,7 @@ if (isset($_GET['type']) && in_array($_GET['type'], $modes)) {
         $title = _('No Torrents Modded') . " $mode";
     }
     $breadcrumbs = [
-        "<a href='{$site_config['paths']['baseurl']}/staffpanel.php'>" . _('Staff Panel') . '</a>',
+        "<a href='" . (string) $config->get('paths.baseurl') . "/staffpanel.php'>" . _('Staff Panel') . '</a>',
         "<a href='{$_SERVER['PHP_SELF']}'>$title</a>",
     ];
     echo stdhead($title, [], 'page-wrapper', $breadcrumbs) . wrapper($HTMLOUT) . stdfoot();
@@ -340,7 +343,7 @@ if (isset($_GET['type']) && in_array($_GET['type'], $modes)) {
         stderr(_('Error'), _('Empty Data Supplied! Please Try Again'));
     }
     $breadcrumbs = [
-        "<a href='{$site_config['paths']['baseurl']}/staffpanel.php'>" . _('Staff Panel') . '</a>',
+        "<a href='" . (string) $config->get('paths.baseurl') . "/staffpanel.php'>" . _('Staff Panel') . '</a>',
         "<a href='{$_SERVER['PHP_SELF']}'>$title</a>",
     ];
     echo stdhead($title, [], 'page-wrapper', $breadcrumbs) . wrapper($HTMLOUT) . stdfoot();
@@ -382,7 +385,7 @@ $HTMLOUT .= main_div("
 
 $title = _('Modded Torrents');
 $breadcrumbs = [
-    "<a href='{$site_config['paths']['baseurl']}/staffpanel.php'>" . _('Staff Panel') . '</a>',
+    "<a href='" . (string) $config->get('paths.baseurl') . "/staffpanel.php'>" . _('Staff Panel') . '</a>',
     "<a href='{$_SERVER['PHP_SELF']}'>$title</a>",
 ];
 echo stdhead($title, [], 'page-wrapper', $breadcrumbs) . wrapper($HTMLOUT) . stdfoot();

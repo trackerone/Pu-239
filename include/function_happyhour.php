@@ -1,11 +1,16 @@
 <?php
 declare(strict_types=1);
 
-require_once __DIR__.'/runtime_safe.php';
+require_once __DIR__ . '/runtime_safe.php';
 
 use DI\DependencyException;
 use DI\NotFoundException;
+use Pu239\Config\ConfigRepository;
 use Pu239\Database;
+
+global $container;
+/** @var ConfigRepository $config */
+$config = $container->get(ConfigRepository::class);
 
 /**
  * @return bool|false|float|int|string
@@ -16,7 +21,7 @@ use Pu239\Database;
  */
 function happyHour($action)
 {
-    global $container, $site_config;
+    global $container, $config;
     $db = $container->get(Database::class);
 
     if ($action === 'generate') {
@@ -35,7 +40,7 @@ function happyHour($action)
 
         return $happyHour;
     }
-    $file = $site_config['paths']['happyhour'];
+    $file = (string) $config->get('paths.happyhour');
     $happy = \json_decode(\file_get_contents($file), true);
     $happyHour = \strtotime($happy['time']);
     $happyDate = $happyHour;
@@ -84,9 +89,9 @@ function happyHour($action)
  */
 function happyCheck($action, $id = null)
 {
-    global $site_config;
+    global $config;
 
-    $file = $site_config['paths']['happyhour'];
+    $file = (string) $config->get('paths.happyhour');
     $happy = \json_decode(\file_get_contents($file), true);
     $happycheck = (int) $happy['catid'];
     if ($action === 'check') {
@@ -105,9 +110,9 @@ function happyCheck($action, $id = null)
  */
 function happyFile($act)
 {
-    global $site_config;
+    global $config;
 
-    $file = $site_config['paths']['happyhour'];
+    $file = (string) $config->get('paths.happyhour');
     $happy = \json_decode(\file_get_contents($file), true);
     if ($act === 'set') {
         $array_happy = [
@@ -124,7 +129,7 @@ function happyFile($act)
     }
     if (! empty($array_happy)) {
         $array_happy = \json_encode($array_happy);
-        $file = $site_config['paths']['happyhour'];
+        $file = (string) $config->get('paths.happyhour');
         $file = \fopen($file, 'w');
         \ftruncate($file, 0);
         \fwrite($file, $array_happy);

@@ -1,13 +1,16 @@
 <?php
 declare(strict_types=1);
 
-$db = $container->get(Database::class);
-
 require_once __DIR__ . '/runtime_safe.php';
 
 use DI\DependencyException;
 use DI\NotFoundException;
+use Pu239\Config\ConfigRepository;
 use Rakit\Validation\Validator;
+
+global $container;
+/** @var ConfigRepository $config */
+$config = $container->get(ConfigRepository::class);
 
 /**
  *
@@ -20,10 +23,12 @@ use Rakit\Validation\Validator;
  */
 function get_return_to(string $partial_url)
 {
-    global $container, $site_config;
+    global $container, $config;
 
     $validator = $container->get(Validator::class);
-    $real_url = (strpos(urldecode($partial_url), $site_config['paths']['baseurl']) !== false) ? urldecode($partial_url) : $site_config['paths']['baseurl'] . urldecode($partial_url);
+    $baseUrl = (string) $config->get('paths.baseurl');
+    $decoded = urldecode($partial_url);
+    $real_url = strpos($decoded, $baseUrl) !== false ? $decoded : $baseUrl . $decoded;
     $url = [
         'http_url' => $real_url,
     ];

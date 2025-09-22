@@ -5,23 +5,31 @@ require_once __DIR__ . '/../../include/runtime_safe.php';
 require_once __DIR__ . '/../../include/bootstrap_pdo.php';
 
 use Pu239\Cache;
+use Pu239\Config\ConfigRepository;
 use Pu239\Database;
 
+global $container;
+/** @var ConfigRepository $config */
+$config = $container->get(ConfigRepository::class);
+
 $user = check_user_status();
-global $container, $site_config;
 
 $db = $container->get(Database::class);
-if ($site_config['alerts']['uploadapp'] && has_access($user['class'], UC_STAFF, 'coder')) {
+$alertsEnabled = (bool) $config->get('alerts.uploadapp');
+$alertsTtl = (int) $config->get('expires.alerts');
+$baseurl = (string) $config->get('paths.baseurl');
+
+if ($alertsEnabled && has_access($user['class'], UC_STAFF, 'coder')) {
     $cache = $container->get(Cache::class);
     $newapp = $cache->get('new_uploadapp_');
     if ($newapp === false || is_null($newapp)) {
         $newapp = $db->fetchValue('SELECT COUNT(*) AS count FROM uploadapp WHERE status = ?', ['pending']);
-        $cache->set('new_uploadapp_', $newapp, $site_config['expires']['alerts']);
+        $cache->set('new_uploadapp_', $newapp, $alertsTtl);
     }
     if ($newapp > 0) {
         $htmlout .= "
     <li>
-        <a href='{$site_config['paths']['baseurl']}/staffpanel.php?tool=uploadapps&amp;action=app'>
+        <a href='{$baseurl}/staffpanel.php?tool=uploadapps&amp;action=app'>
             <span class='button tag is-info dt-tooltipper-small has-text-black' data-tooltip-content='#uploadapp_tooltip'>
                 " . _p('New Uploader App', 'New Uploader Apps', $newapp) . "
             </span>

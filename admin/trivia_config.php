@@ -2,11 +2,14 @@
 declare(strict_types=1);
 require_once dirname(__DIR__) . '/bootstrap_web.php';
 
+use PU239\Config\ConfigRepository;
 use Pu239\Database;
 use Pu239\Session;
 
 
-global $container, $site_config;
+global $container;
+/** @var ConfigRepository $config */
+$config = $container->get(ConfigRepository::class);
 
 $db = $container->get(Database::class);
 
@@ -81,7 +84,7 @@ $newid = $db->perform($sql, $values);
                                 ->where('MATCH (question, answer1, answer2, answer3, answer4, answer5) AGAINST (? IN NATURAL LANGUAGE MODE)', $search)
                                 ->fetch("count");
 
-                $pager = pager(15, $count, "{$site_config['paths']['baseurl']}/staffpanel.php?tool=trivia_config&");
+                $pager = pager(15, $count, "{$config->get('paths.baseurl')}/staffpanel.php?tool=trivia_config&");
                 $questions = $fluent->from('triviaq')
                                     ->where('MATCH (question, answer1, answer2, answer3, answer4, answer5) AGAINST (? IN NATURAL LANGUAGE MODE)', $search)
                                     ->orderBy('qid')
@@ -99,7 +102,7 @@ if (empty($search)) {
                     ->select('COUNT(qid) AS count')
                     ->fetch("count");
 
-    $pager = pager(15, $count, "{$site_config['paths']['baseurl']}/staffpanel.php?tool=trivia_config&");
+    $pager = pager(15, $count, "{$config->get('paths.baseurl')}/staffpanel.php?tool=trivia_config&");
     $questions = $fluent->from('triviaq')
                         ->orderBy('qid')
                         ->limit($pager['pdo']['limit'])
@@ -152,7 +155,7 @@ foreach ($questions as $question) {
 $HTMLOUT .= $pager['pagerbottom'];
 $title = _('Trivia Manager');
 $breadcrumbs = [
-    "<a href='{$site_config['paths']['baseurl']}/staffpanel.php'>" . _('Staff Panel') . '</a>',
+    "<a href='{$config->get('paths.baseurl')}/staffpanel.php'>" . _('Staff Panel') . '</a>',
     "<a href='{$_SERVER['PHP_SELF']}'>$title</a>",
 ];
 echo stdhead($title, [], 'page-wrapper', $breadcrumbs) . wrapper($HTMLOUT) . stdfoot();

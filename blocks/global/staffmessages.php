@@ -5,23 +5,31 @@ require_once __DIR__ . '/../../include/runtime_safe.php';
 require_once __DIR__ . '/../../include/bootstrap_pdo.php';
 
 use Pu239\Cache;
+use Pu239\Config\ConfigRepository;
 use Pu239\Database;
 
+global $container;
+/** @var ConfigRepository $config */
+$config = $container->get(ConfigRepository::class);
+
 $user = check_user_status();
-global $container, $site_config;
 
 $db = $container->get(Database::class);
 $cache = $container->get(Cache::class);
-if ($site_config['alerts']['staffmsg'] && has_access($user['class'], UC_STAFF, 'coder')) {
+$alertsEnabled = (bool) $config->get('alerts.staffmsg');
+$alertsTtl = (int) $config->get('expires.alerts');
+$baseurl = (string) $config->get('paths.baseurl');
+
+if ($alertsEnabled && has_access($user['class'], UC_STAFF, 'coder')) {
     $answeredby = $cache->get('staff_mess_');
     if ($answeredby === false || is_null($answeredby)) {
         $answeredby = $db->fetchValue('SELECT COUNT(*) AS count FROM staffmessages WHERE answeredby = 0');
-        $cache->set('staff_mess_', $answeredby, $site_config['expires']['alerts']);
+        $cache->set('staff_mess_', $answeredby, $alertsTtl);
     }
     if ($answeredby > 0) {
         $htmlout .= "
         <li>
-            <a href='{$site_config['paths']['baseurl']}/staffbox.php'>
+            <a href='{$baseurl}/staffbox.php'>
                 <span class='button tag is-warning dt-tooltipper-small' data-tooltip-content='#staffmessage_tooltip'>
                     " . _p('New Staff Message', 'New Staff Messages', $answeredby) . "
                 </span>

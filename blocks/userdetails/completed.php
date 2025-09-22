@@ -4,13 +4,21 @@ declare(strict_types=1);
 require_once __DIR__ . '/../../include/runtime_safe.php';
 require_once __DIR__ . '/../../include/bootstrap_pdo.php';
 
+use Pu239\Config\ConfigRepository;
 use Pu239\Database;
 
-global $container, $site_config, $CURUSER;
+global $container, $CURUSER, $user;
+
+/** @var ConfigRepository $config */
+$config = $container->get(ConfigRepository::class);
+$hnrConfig = (array) $config->get('hnr_config');
+$imagesBaseurl = (string) $config->get('paths.images_baseurl');
+$baseUrl = (string) $config->get('paths.baseurl');
+$ratioFree = (bool) $config->get('site.ratio_free');
 
 $db = $container->get(Database::class);
 
-if ($site_config['hnr_config']['hnr_online'] == 1 && $user['paranoia'] < 2 || $CURUSER['id'] == $id || $CURUSER['class'] >= (UC_MIN + 1)) {
+if ((int) $hnrConfig['hnr_online'] === 1 && $user['paranoia'] < 2 || $CURUSER['id'] == $id || $CURUSER['class'] >= (UC_MIN + 1)) {
     $completed = $count2 = $dlc = '';
     $torrents = $db->fetchAll(
         'SELECT t.name, t.added AS torrent_added, s.complete_date AS c, s.downspeed, s.seedtime, s.seeder,
@@ -34,7 +42,7 @@ if ($site_config['hnr_config']['hnr_online'] == 1 && $user['paranoia'] < 2 || $C
             <th>' . _('S') . '</th>
             <th>' . _('L') . '</th>
             <th>' . _('UL') . '</th>
-            ' . ($site_config['site']['ratio_free'] ? '' : '
+            ' . ($ratioFree ? '' : '
             <th>' . _('DL') . '</th>') . '
             <th>' . _('Ratio') . '</th>
             <th>' . _('When Completed') . '</th>
@@ -46,25 +54,25 @@ if ($site_config['hnr_config']['hnr_online'] == 1 && $user['paranoia'] < 2 || $C
             $What_Id = $a['id'];
             $torrent_needed_seed_time = ($a['st'] - $a['torrent_added']);
             switch (true) {
-                case $user['class'] <= $site_config['hnr_config']['firstclass']:
-                    $days_3 = $site_config['hnr_config']['_3day_first'] * 3600;
-                    $days_14 = $site_config['hnr_config']['_14day_first'] * 3600;
-                    $days_over_14 = $site_config['hnr_config']['_14day_over_first'] * 3600;
+                case $user['class'] <= (int) $hnrConfig['firstclass']:
+                    $days_3 = (int) $hnrConfig['_3day_first'] * 3600;
+                    $days_14 = (int) $hnrConfig['_14day_first'] * 3600;
+                    $days_over_14 = (int) $hnrConfig['_14day_over_first'] * 3600;
                     break;
-                case $user['class'] < $site_config['hnr_config']['secondclass']:
-                    $days_3 = $site_config['hnr_config']['_3day_second'] * 3600;
-                    $days_14 = $site_config['hnr_config']['_14day_second'] * 3600;
-                    $days_over_14 = $site_config['hnr_config']['_14day_over_second'] * 3600;
+                case $user['class'] < (int) $hnrConfig['secondclass']:
+                    $days_3 = (int) $hnrConfig['_3day_second'] * 3600;
+                    $days_14 = (int) $hnrConfig['_14day_second'] * 3600;
+                    $days_over_14 = (int) $hnrConfig['_14day_over_second'] * 3600;
                     break;
-                case $user['class'] >= $site_config['hnr_config']['secondclass'] && $user['class'] < $site_config['hnr_config']['thirdclass']:
-                    $days_3 = $site_config['hnr_config']['_3day_second'] * 3600;
-                    $days_14 = $site_config['hnr_config']['_14day_second'] * 3600;
-                    $days_over_14 = $site_config['hnr_config']['_14day_over_second'] * 3600;
+                case $user['class'] >= (int) $hnrConfig['secondclass'] && $user['class'] < (int) $hnrConfig['thirdclass']:
+                    $days_3 = (int) $hnrConfig['_3day_second'] * 3600;
+                    $days_14 = (int) $hnrConfig['_14day_second'] * 3600;
+                    $days_over_14 = (int) $hnrConfig['_14day_over_second'] * 3600;
                     break;
-                case $user['class'] >= $site_config['hnr_config']['thirdclass']:
-                    $days_3 = $site_config['hnr_config']['_3day_third'] * 3600;
-                    $days_14 = $site_config['hnr_config']['_14day_third'] * 3600;
-                    $days_over_14 = $site_config['hnr_config']['_14day_over_third'] * 3600;
+                case $user['class'] >= (int) $hnrConfig['thirdclass']:
+                    $days_3 = (int) $hnrConfig['_3day_third'] * 3600;
+                    $days_14 = (int) $hnrConfig['_14day_third'] * 3600;
+                    $days_over_14 = (int) $hnrConfig['_14day_over_third'] * 3600;
                     break;
                 default:
                     $days_3 = 0;
@@ -73,15 +81,15 @@ if ($site_config['hnr_config']['hnr_online'] == 1 && $user['paranoia'] < 2 || $C
             }
             $foo = $a['downloaded'] > 0 ? $a['uploaded'] / $a['downloaded'] : 0;
             switch (true) {
-                case $site_config['hnr_config']['torrentage1'] * 86400 > ($a['st'] - $a['torrent_added']):
+                case (int) $hnrConfig['torrentage1'] * 86400 > ($a['st'] - $a['torrent_added']):
                     $minus_ratio = ($days_3 - $a['seedtime']) - ($foo * 3 * 86400);
                     break;
 
-                case $site_config['hnr_config']['torrentage2'] * 86400 > ($a['st'] - $a['torrent_added']):
+                case (int) $hnrConfig['torrentage2'] * 86400 > ($a['st'] - $a['torrent_added']):
                     $minus_ratio = ($days_14 - $a['seedtime']) - ($foo * 2 * 86400);
                     break;
 
-                case $site_config['hnr_config']['torrentage3'] * 86400 <= ($a['st'] - $a['torrent_added']):
+                case (int) $hnrConfig['torrentage3'] * 86400 <= ($a['st'] - $a['torrent_added']):
                     $minus_ratio = ($days_over_14 - $a['seedtime']) - ($foo * 86400);
                     break;
             }
@@ -123,22 +131,22 @@ if ($site_config['hnr_config']['hnr_online'] == 1 && $user['paranoia'] < 2 || $C
                     $dlc = 'Chartreuse';
                     break;
             }
-            $checkbox_for_delete = ($CURUSER['class'] >= UC_STAFF ? " [<a href='" . $site_config['paths']['baseurl'] . '/userdetails.php?id=' . $id . '&amp;delete_hit_and_run=' . (int) $What_Id . "'>" . _('Remove') . '</a>]' : '');
-            $mark_of_cain = ($a['mark_of_cain'] == 'yes' ? "<img src='{$site_config['paths']['images_baseurl']}moc.gif' width='40px' alt='" . _('Mark Of Cain') . "' title='" . _('The mark of Cain!') . "'>" . $checkbox_for_delete : '');
-            $hit_n_run = ($a['hit_and_run'] > 0 ? "<img src='{$site_config['paths']['images_baseurl']}hnr.gif' width='40px' alt='" . _('Hit and run') . "' title='" . _('Hit and run!') . "'>" : '');
+            $checkbox_for_delete = ($CURUSER['class'] >= UC_STAFF ? " [<a href='" . $baseUrl . '/userdetails.php?id=' . $id . '&amp;delete_hit_and_run=' . (int) $What_Id . "'>" . _('Remove') . '</a>]' : '');
+            $mark_of_cain = ($a['mark_of_cain'] == 'yes' ? "<img src='{$imagesBaseurl}moc.gif' width='40px' alt='" . _('Mark Of Cain') . "' title='" . _('The mark of Cain!') . "'>" . $checkbox_for_delete : '');
+            $hit_n_run = ($a['hit_and_run'] > 0 ? "<img src='{$imagesBaseurl}hnr.gif' width='40px' alt='" . _('Hit and run') . "' title='" . _('Hit and run!') . "'>" : '');
             $a['cat'] = $a['parent_name'] . '::' . $a['catname'];
-            $caticon = !empty($a['image']) ? "<img height='42px' class='round5 tooltipper' src='{$site_config['paths']['images_baseurl']}caticons/{$CURUSER['categorie_icon']}/{$a['image']}' alt='{$a['cat']}' title='{$a['name']}'>" : $a['cat'];
+            $caticon = !empty($a['image']) ? "<img height='42px' class='round5 tooltipper' src='{$imagesBaseurl}caticons/{$CURUSER['categorie_icon']}/{$a['image']}' alt='{$a['cat']}' title='{$a['name']}'>" : $a['cat'];
 
             $body .= "
             <tr>
                 <td style='padding: 5px'>$caticon</td>
                 <td>
-                    <a class='is-link' href='{$site_config['paths']['baseurl']}/details.php?id=" . (int) $a['tid'] . "&amp;hit=1'><b>" . htmlsafechars((string) $a['name']) . '</b></a>
+                    <a class='is-link' href='{$baseUrl}/details.php?id=" . (int) $a['tid'] . "&amp;hit=1'><b>" . htmlsafechars((string) $a['name']) . '</b></a>
                     <br><span>  ' . (($CURUSER['class'] >= UC_STAFF || $user['id'] == $CURUSER['id']) ? '' . _('seeded for') . '</span>: ' . mkprettytime($a['seedtime']) . (($minus_ratio != '0:00' && $a['uploaded'] < $a['downloaded']) ? '<br>' . _('should still seed for: ') . '' . $minus_ratio . '&#160;&#160;' : '') . ($a['seeder'] === 'yes' ? "&#160;<span class='has-text-success'> [<b>" . _('seeding') . '</b>]</span>' : $hit_n_run . '&#160;' . $mark_of_cain) : '') . '</td>
                 <td>' . (int) $a['seeders'] . '</td>
                 <td>' . (int) $a['leechers'] . '</td>
                 <td>' . mksize($a['uploaded']) . '</td>
-                ' . ($site_config['site']['ratio_free'] ? '' : '
+                ' . ($ratioFree ? '' : '
                 <td>' . mksize($a['downloaded']) . '</td>') . '
                 <td>' . ($a['downloaded'] > 0 ? "<span style='color: " . get_ratio_color($a['uploaded'] / $a['downloaded']) . ";'>" . number_format($a['uploaded'] / $a['downloaded'], 3) . '</span>' : ($a['uploaded'] > 0 ? 'Inf.' : '---')) . '<br></td>
                 <td>' . get_date((int) $a['complete_date'], 'DATE') . '</td>

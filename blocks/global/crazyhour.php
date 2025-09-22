@@ -5,8 +5,13 @@ require_once dirname(__DIR__) . '/bootstrap.php';
 
 use DI\DependencyException;
 use DI\NotFoundException;
+use Pu239\Config\ConfigRepository;
 use Pu239\Database;
 use Psr\SimpleCache\CacheInterface as Cache;
+
+global $container;
+/** @var ConfigRepository $config */
+$config = $container->get(ConfigRepository::class);
 
 /**
  * @throws DependencyException
@@ -14,9 +19,9 @@ use Psr\SimpleCache\CacheInterface as Cache;
  */
 function renderCrazyHour(): string
 {
-    global $container, $site_config, $CURUSER;
+    global $container, $config, $CURUSER;
 
-    if (empty($site_config['bonus']['crazy_hour'])) {
+    if (!(bool) $config->get('bonus.crazy_hour')) {
         return '';
     }
 

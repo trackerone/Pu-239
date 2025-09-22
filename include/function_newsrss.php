@@ -1,14 +1,17 @@
 <?php
 declare(strict_types=1);
 
-$db = $container->get(Database::class);
-
 require_once __DIR__ . '/runtime_safe.php';
 
 use DI\DependencyException;
 use DI\NotFoundException;
 use Pu239\Cache;
+use Pu239\Config\ConfigRepository;
 use Pu239\Database;
+
+global $container;
+/** @var ConfigRepository $config */
+$config = $container->get(ConfigRepository::class);
 
 /**
  * @param array $links
@@ -19,9 +22,9 @@ use Pu239\Database;
  */
 function foxnews_shout($links = [])
 {
-    global $container, $site_config;
+    global $container, $config;
 
-    if (!$site_config['newsrss']['foxnews']) {
+    if (!(bool) $config->get('newsrss.foxnews')) {
         return;
     }
     $empty = empty($links);
@@ -32,7 +35,7 @@ function foxnews_shout($links = [])
         //'Sports' => 'http://feeds.foxnews.com/foxnews/sports',
     ];
 
-    if ($site_config['site']['autoshout_chat'] || $site_config['site']['autoshout_irc']) {
+    if ((bool) $config->get('site.autoshout_chat') || (bool) $config->get('site.autoshout_irc')) {
         include_once INCL_DIR . 'function_users.php';
         $cache = $container->get(Cache::class);
         // $fluent removed — use $this->db (ExtendedPdo)
@@ -106,13 +109,13 @@ function foxnews_shout($links = [])
  */
 function tfreak_shout($links = [])
 {
-    global $container, $site_config;
+    global $container, $config;
 
-    if (!$site_config['newsrss']['tfreak']) {
+    if (!(bool) $config->get('newsrss.tfreak')) {
         return;
     }
     $empty = empty($links);
-    if ($site_config['site']['autoshout_chat'] || $site_config['site']['autoshout_irc']) {
+    if ((bool) $config->get('site.autoshout_chat') || (bool) $config->get('site.autoshout_irc')) {
         include_once INCL_DIR . 'function_users.php';
         $cache = $container->get(Cache::class);
         // $fluent removed — use $this->db (ExtendedPdo)
@@ -183,9 +186,9 @@ function tfreak_shout($links = [])
  */
 function github_shout($links = [])
 {
-    global $container, $site_config;
+    global $container, $config;
 
-    if (!$site_config['newsrss']['github']) {
+    if (!(bool) $config->get('newsrss.github')) {
         return;
     }
     $empty = empty($links);
@@ -193,7 +196,7 @@ function github_shout($links = [])
         //'dev'    => 'https://github.com/darkalchemy/Pu-239/commits/dev.atom',
         'master' => 'https://github.com/darkalchemy/Pu-239/commits/master.atom',
     ];
-    if ($site_config['site']['autoshout_chat'] || $site_config['site']['autoshout_irc']) {
+    if ((bool) $config->get('site.autoshout_chat') || (bool) $config->get('site.autoshout_irc')) {
         include_once INCL_DIR . 'function_users.php';
         $cache = $container->get(Cache::class);
         // $fluent removed — use $this->db (ExtendedPdo)
