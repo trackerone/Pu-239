@@ -239,6 +239,28 @@ admin/forum_config.php,site_config(4),0,Replaced legacy config access with Confi
 admin/freeleech.php,site_config(4),0,Replaced legacy config access with ConfigRepository
 admin/freeusers.php,site_config(4),0,Replaced legacy config access with ConfigRepository
 admin/goaccess.php,site_config(1),0,Replaced legacy config access with ConfigRepository
+<<<<<< codex/refactor-legacy-config-constants-to-configrepository-ca9ms9
+=======
+<<<<<< codex/refactor-legacy-config-constants-to-configrepository-htorra
+=======
+<<<<<< codex/refactor-legacy-config-constants-to-configrepository-bwhwqr
+=======
+*** codex/refactor-legacy-config-constants-to-configrepository-2wa1n8
+=======
+*** codex/refactor-legacy-config-constants-to-configrepository-6lq2lf
+=======
+*** codex/refactor-legacy-config-constants-to-configrepository-ipan9z
+=======
+*** codex/refactor-legacy-config-constants-to-configrepository-xkbz6r
+=======
+*** codex/refactor-legacy-config-constants-to-configrepository-vrnd3h
+*** master
+*** master
+*** master
+*** master
+>>>>>> master
+>>>>>> master
+>>>>>> master
 admin/grouppm.php,site_config(1),0,Replaced legacy config access with ConfigRepository
 admin/hit_and_run.php,site_config(29),0,Replaced legacy config access with ConfigRepository
 admin/hnrwarn.php,site_config(1),0,Replaced legacy config access with ConfigRepository
@@ -249,6 +271,25 @@ admin/mega_search.php,site_config(16),0,Replaced legacy config access with Confi
 admin/modded_torrents.php,site_config(6),0,Replaced legacy config access with ConfigRepository
 admin/modtask.php,site_config(10),0,Replaced legacy config access with ConfigRepository
 admin/mysql_stats.php,site_config(1),0,Replaced legacy config access with ConfigRepository
+<<<<<< codex/refactor-legacy-config-constants-to-configrepository-ca9ms9
+=======
+<<<<<< codex/refactor-legacy-config-constants-to-configrepository-htorra
+=======
+<<<<<< codex/refactor-legacy-config-constants-to-configrepository-bwhwqr
+=======
+*** codex/refactor-legacy-config-constants-to-configrepository-2wa1n8
+=======
+*** codex/refactor-legacy-config-constants-to-configrepository-6lq2lf
+=======
+*** codex/refactor-legacy-config-constants-to-configrepository-ipan9z
+=======
+*** codex/refactor-legacy-config-constants-to-configrepository-xkbz6r
+*** master
+*** master
+*** master
+>>>>>> master
+>>>>>> master
+>>>>>> master
 admin/news.php,site_config(10),0,Replaced legacy config access with ConfigRepository
 admin/polls_manager.php,site_config(13),0,Replaced legacy config access with ConfigRepository
 admin/site_settings.php,site_config(3),0,Replaced legacy config access with ConfigRepository
@@ -259,6 +300,22 @@ admin/trivia_config.php,site_config(3),0,Replaced legacy config access with Conf
 admin/uploader_info.php,site_config(1),0,Replaced legacy config access with ConfigRepository
 admin/user_hits.php,site_config(1),0,Replaced legacy config access with ConfigRepository
 admin/view_peers.php,site_config(3),0,Replaced legacy config access with ConfigRepository
+<<<<<< codex/refactor-legacy-config-constants-to-configrepository-ca9ms9
+=======
+<<<<<< codex/refactor-legacy-config-constants-to-configrepository-htorra
+=======
+<<<<<< codex/refactor-legacy-config-constants-to-configrepository-bwhwqr
+=======
+*** codex/refactor-legacy-config-constants-to-configrepository-2wa1n8
+=======
+*** codex/refactor-legacy-config-constants-to-configrepository-6lq2lf
+=======
+*** codex/refactor-legacy-config-constants-to-configrepository-ipan9z
+*** master
+> master
+>>>>>> master
+>>>>>> master
+>>>>>> master
 blocks/global/crazyhour.php,site_config(2),0,Replaced legacy config access with ConfigRepository
 blocks/global/demotion.php,site_config(2),0,Replaced legacy config access with ConfigRepository
 blocks/global/freeleech_contribution.php,site_config(2),0,Replaced legacy config access with ConfigRepository
@@ -269,6 +326,19 @@ blocks/global/report.php,site_config(4),0,Replaced legacy config access with Con
 blocks/global/staffmessages.php,site_config(4),0,Replaced legacy config access with ConfigRepository
 blocks/global/uploadapp.php,site_config(4),0,Replaced legacy config access with ConfigRepository
 blocks/index/active_24h_users.php,site_config(2),0,Replaced legacy config access with ConfigRepository
+<<<<<< codex/refactor-legacy-config-constants-to-configrepository-ca9ms9
+=======
+<<<<<< codex/refactor-legacy-config-constants-to-configrepository-htorra
+=======
+<<<<<< codex/refactor-legacy-config-constants-to-configrepository-bwhwqr
+=======
+< codex/refactor-legacy-config-constants-to-configrepository-2wa1n8
+=======
+*** codex/refactor-legacy-config-constants-to-configrepository-6lq2lf
+> master
+>>>>>> master
+>>>>>> master
+>>>>>> master
 blocks/index/active_birthday_users.php,site_config(1),0,Replaced legacy config access with ConfigRepository
 blocks/index/active_irc_users.php,site_config(1),0,Replaced legacy config access with ConfigRepository
 blocks/index/active_users.php,site_config(1),0,Replaced legacy config access with ConfigRepository
@@ -279,6 +349,16 @@ blocks/index/cooker.php,site_config(3),0,Replaced legacy config access with Conf
 blocks/index/disclaimer.php,site_config(1),0,Replaced legacy config access with ConfigRepository
 blocks/index/offers.php,site_config(4),0,Replaced legacy config access with ConfigRepository
 blocks/index/requests.php,site_config(4),0,Replaced legacy config access with ConfigRepository
+<<<<<< codex/refactor-legacy-config-constants-to-configrepository-ca9ms9
+=======
+<<<<<< codex/refactor-legacy-config-constants-to-configrepository-htorra
+=======
+<<<<<< codex/refactor-legacy-config-constants-to-configrepository-bwhwqr
+=======
+< codex/refactor-legacy-config-constants-to-configrepository-2wa1n8
+>>>>>> master
+>>>>>> master
+>>>>>> master
 blocks/index/staff_picks.php,site_config(1),0,Replaced legacy config access with ConfigRepository
 blocks/index/stats.php,none,0,Removed unused \$site_config global; no replacements needed
 blocks/index/top_torrents.php,site_config(1),0,Replaced legacy config access with ConfigRepository
@@ -289,6 +369,13 @@ blocks/userdetails/report.php,site_config(1),0,Replaced legacy config access wit
 blocks/userdetails/seedbonus.php,site_config(1),0,Replaced legacy config access with ConfigRepository
 chat/lib/class/AJAXChatTemplate.php,none,0,String literal reference only; no config migration required
 config/app.php,none,0,Config already exposes announce URL and related settings
+<<<<<< codex/refactor-legacy-config-constants-to-configrepository-ca9ms9
+=======
+<<<<<< codex/refactor-legacy-config-constants-to-configrepository-htorra
+=======
+<<<<<< codex/refactor-legacy-config-constants-to-configrepository-bwhwqr
+>>>>>> master
+>>>>>> master
 include/function_chatbot.php,site_config(17),0,Replaced legacy config access with ConfigRepository
 include/function_comments.php,site_config(10),0,Replaced legacy config access with ConfigRepository
 include/function_common.php,site_config(18),0,Replaced legacy config access with ConfigRepository
@@ -304,6 +391,10 @@ include/function_returnto.php,site_config(2),0,Replaced legacy config access wit
 include/function_searchcloud.php,site_config(2),0,Replaced legacy config access with ConfigRepository
 include/function_tfreak.php,site_config(3),0,Replaced legacy config access with ConfigRepository
 include/function_tmdb.php,site_config(17),0,Replaced legacy config access with ConfigRepository
+<<<<<< codex/refactor-legacy-config-constants-to-configrepository-ca9ms9
+=======
+<<<<<< codex/refactor-legacy-config-constants-to-configrepository-htorra
+>>>>>> master
 include/function_torrenttable.php,site_config(43),0,Replaced torrent table lookups with ConfigRepository access
 include/function_translate.php,site_config(1),0,Removed legacy site_config global and wired ConfigRepository bootstrap
 include/function_tvmaze.php,site_config(7),0,Switched TVMaze integration to ConfigRepository for anonymizer and time settings
@@ -320,4 +411,21 @@ public/bjstats.php,site_config(3),0,Checked blackjack permissions using ConfigRe
 public/browse.php,site_config(6),0,Replaced browse redirects and pager links with ConfigRepository base URL
 public/bugs.php,site_config(10),0,Updated bug messaging templates and staff broadcasts to use ConfigRepository
 public/announce.php,site_config(0),0,Normalized ConfigRepository bootstrap usage after runtime_safe refactor
+<<<<<< codex/refactor-legacy-config-constants-to-configrepository-ca9ms9
 include/function_torrenttable.php,none,0,Removed stray global reuse after ConfigRepository migration
+=======
+=======
+=======
+=======
+=======
+=======
+=======
+=======
+*** master
+*** master
+*** master
+*** master
+> master
+>>>>>> master
+>>>>>> master
+>>>>>> master

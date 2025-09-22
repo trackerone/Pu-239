@@ -53,7 +53,11 @@ function linkcolor($num)
  */
 function torrenttable(array $torrents, array $curuser)
 {
+<<<<<< codex/refactor-legacy-config-constants-to-configrepository-ca9ms9
     global $container, $config;
+=======
+    global $container, $curuser, $config;
+>>>>>> master
 
     $session = $container->get(Session::class);
     $scheme = $session->get('scheme') === 'http' ? '' : '&amp;ssl=1';
