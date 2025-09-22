@@ -58,11 +58,13 @@ blocks/index/cooker.php
 blocks/index/disclaimer.php
 blocks/index/offers.php
 blocks/index/requests.php
+<<<<<< codex/refactor-legacy-config-constants-to-configrepository-ca9ms9
+=======
 <<<<<< codex/refactor-legacy-config-constants-to-configrepository-htorra
 =======
 <<<<<< codex/refactor-legacy-config-constants-to-configrepository-bwhwqr
 =======
-<<<<<< codex/refactor-legacy-config-constants-to-configrepository-2wa1n8
+<<<<< codex/refactor-legacy-config-constants-to-configrepository-2wa1n8
 =======
 blocks/index/staff_picks.php
 blocks/index/stats.php
@@ -75,6 +77,7 @@ blocks/userdetails/seedbonus.php
 chat/lib/class/AJAXChatTemplate.php
 config/app.php
 >>>>> master
+>>>>>> master
 >>>>>> master
 >>>>>> master
 config/security.php
