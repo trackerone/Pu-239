@@ -1,16 +1,20 @@
 <?php
 declare(strict_types=1);
-require_once dirname(__DIR__) . '/bootstrap_web.php';
-
-$db = $container->get(Database::class);
-
-
-
-
 
 use Pu239\Cache;
+use Pu239\Config\ConfigRepository;
 use Pu239\Database;
 use Pu239\PollVoter;
+
+require_once dirname(__DIR__) . '/bootstrap_web.php';
+
+global $container;
+/** @var ConfigRepository $config */
+$config = $container->get(ConfigRepository::class);
+/** @var Database $db */
+$db = $container->get(Database::class);
+$pollDataTtl = (int) $config->get('expires.poll_data', 0);
+$baseUrl = (string) $config->get('paths.baseurl');
 
 require_once __DIR__ . '/../include/bittorrent.php';
 $user = check_user_status();
@@ -20,7 +24,6 @@ if (!is_valid_id($poll_id)) {
 }
 $vote_cast = [];
 $_POST['choice'] = isset($_POST['choice']) ? $_POST['choice'] : [];
-global $container, $site_config;
 
 // $fluent removed — use $this->db (ExtendedPdo)
 $poll_data = $fluent->from('polls')
@@ -85,7 +88,7 @@ if (!$_POST['nullvote']) {
         'user_id' => $user['id'],
         'vote_date' => TIME_NOW,
         'choices' => $choices,
-    ], $site_config['expires']['poll_data']);
+    ], $pollDataTtl);
 
     $set = [
         'votes' => new Literal('votes + 1'),
@@ -109,10 +112,10 @@ $result = $db->perform($sql, array_merge($set, ['pid' => $poll_data['pid']]));
         'votes' => $votes,
         'user_id' => $user['id'],
         'vote_date' => TIME_NOW,
-    ], $site_config['expires']['poll_data']);
+    ], $pollDataTtl);
 
     if (!$vid) {
         stderr(_('Error'), _('Could not update records'));
     }
 }
-header("location: {$site_config['paths']['baseurl']}/#poll");
+header("location: {$baseUrl}/#poll");
