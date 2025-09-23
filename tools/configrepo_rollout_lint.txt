@@ -568,3 +568,16 @@ No syntax errors detected in include/function_torrenttable.php
 No syntax errors detected in public/clear_announcement.php
 No syntax errors detected in public/contactstaff.php
 No syntax errors detected in public/delete.php
+<<<<<< codex/refactor-to-use-configrepository-2d89fd
+No syntax errors detected in public/fastdelete.php
+No syntax errors detected in public/filelist.php
+No syntax errors detected in public/flash.php
+No syntax errors detected in public/forums.php
+No syntax errors detected in public/games.php
+No syntax errors detected in public/peerlist.php
+No syntax errors detected in public/polls_take_vote.php
+No syntax errors detected in public/recover.php
+No syntax errors detected in public/requests.php
+No syntax errors detected in public/restoreclass.php
+=======
+>>>>>> master
