@@ -1,23 +1,29 @@
 <?php
 declare(strict_types=1);
+
+use Pu239\Config\ConfigRepository;
+use Pu239\Database;
+
 require_once dirname(__DIR__) . '/bootstrap_web.php';
 
+global $container;
+/** @var ConfigRepository $config */
+$config = $container->get(ConfigRepository::class);
+/** @var Database $db */
 $db = $container->get(Database::class);
-
-
-
-
-
-use Pu239\Database;
+$baseUrl = (string) $config->get('paths.baseurl');
+$siteName = (string) $config->get('site.name');
+$arcadeGames = $config->arr('arcade.games');
+$arcadeGameNames = $config->arr('arcade.game_names');
+$topScorePoints = $config->get('arcade.top_score_points');
 
 require_once __DIR__ . '/../include/bittorrent.php';
 $user = check_user_status();
-global $site_config;
 
 $scores = '';
 $player = $user['id'];
 
-$all_our_games = $site_config['arcade']['games'];
+$all_our_games = $arcadeGames;
 
 if (isset($_GET['gamename'])) {
     $gamename = strip_tags($_GET['gamename']);
@@ -46,15 +52,15 @@ $HTMLOUT .= "
         <div class='bottom20'>
             <ul class='level-center bg-06'>
                 <li class='is-link margin10'>
-                    <a href='{$site_config['paths']['baseurl']}/arcade.php'>" . _('Arcade') . "</a>
+                    <a href='{$baseUrl}/arcade.php'>" . _('Arcade') . "</a>
                 </li>
                 <li class='is-link margin10'>
-                    <a href='{$site_config['paths']['baseurl']}/arcade_top_scores.php'>" . _('Top Scores') . "</a>
+                    <a href='{$baseUrl}/arcade_top_scores.php'>" . _('Top Scores') . "</a>
                 </li>
             </ul>
         </div>
-        <h1 class='has-text-centered'>" . _fe('{0} Old School Arcade!', $site_config['site']['name']) . "</h1>
-        <div class='has-text-centered'>" . _fe('Top Scores Earn {0} Karma Points', $site_config['arcade']['top_score_points']) . '</div>';
+        <h1 class='has-text-centered'>" . _fe('{0} Old School Arcade!', $siteName) . "</h1>
+        <div class='has-text-centered'>" . _fe('Top Scores Earn {0} Karma Points', $topScorePoints) . '</div>';
 
 $HTMLOUT .= "
         <div class='bordered top20'>
@@ -62,7 +68,7 @@ $HTMLOUT .= "
                 <object style='width: {$game_width}px; height: {$game_height}px;' width='{$game_width}' height='{$game_height}'>
                     <param name='movie' value='./media/flash_games/{$gameURI}'>
                     <param name='quality' value='high'>
-                    <embed src='{$site_config['paths']['baseurl']}/media/flash_games/{$gameURI}' quality='high' type='application/x-shockwave-flash' style='width: {$game_width}px;' height: {$game_height}px; width='{$game_width}' height='{$game_height}'>
+                    <embed src='{$baseUrl}/media/flash_games/{$gameURI}' quality='high' type='application/x-shockwave-flash' style='width: {$game_width}px;' height: {$game_height}px; width='{$game_width}' height='{$game_height}'>
                 </object>
             </div>
         </div>";
@@ -70,8 +76,8 @@ $HTMLOUT .= "
 $rows = $db->fetchAll('SELECT * FROM flashscores WHERE game = ' . sqlesc($gamename) . ' ORDER BY score DESC LIMIT 15');
 
 if (mysqli_num_rows($res) > 0) {
-    $id = array_search($gamename, $site_config['arcade']['games']);
-    $fullgamename = $site_config['arcade']['game_names'][$id];
+    $id = array_search($gamename, $arcadeGames, true);
+    $fullgamename = $arcadeGameNames[$id] ?? '';
     $HTMLOUT .= "
         <table class='table table-bordered table-striped top20 bottom20'>
             <thead>
@@ -142,8 +148,8 @@ if (mysqli_num_rows($res) > 0) {
         </table>';
 } //}
 else {
-    $id = array_search($gamename, $site_config['arcade']['games']);
-    $fullgamename = $site_config['arcade']['game_names'][$id];
+    $id = array_search($gamename, $arcadeGames, true);
+    $fullgamename = $arcadeGameNames[$id] ?? '';
     $HTMLOUT .= "
         <table class='table table-bordered table-striped top20 bottom20'>
             <thead>
@@ -168,7 +174,7 @@ else {
 }
 $title = _('Old School Arcade');
 $breadcrumbs = [
-    "<a href='{$site_config['paths']['baseurl']}/games.php'>" . _('Games') . '</a>',
+    "<a href='{$baseUrl}/games.php'>" . _('Games') . '</a>',
     "<a href='{$_SERVER['PHP_SELF']}'>$title</a>",
 ];
 echo stdhead($title, [], 'page-wrapper', $breadcrumbs) . wrapper($HTMLOUT) . stdfoot();

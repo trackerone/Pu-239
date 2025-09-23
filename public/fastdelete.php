@@ -3,14 +3,19 @@ declare(strict_types=1);
 require_once dirname(__DIR__) . '/bootstrap_web.php';
 
 use Pu239\Cache;
+use Pu239\Config\ConfigRepository;
 use Pu239\Database;
 use Pu239\Session;
 use Pu239\Torrent;
+
 global $container;
+/** @var ConfigRepository $config */
+$config = $container->get(ConfigRepository::class);
+/** @var Database $db */
 $db = $container->get(Database::class);
+$baseUrl = (string) $config->get('paths.baseurl');
 
 require_once __DIR__ . '/../include/bittorrent.php';
-global $site_config;
 $user = check_user_status();
 
 if ($user['class'] < UC_STAFF) {
@@ -37,7 +42,14 @@ if (!$tid) {
 $sure = isset($_GET['sure']) && (int) $_GET['sure'];
 if (!$sure) {
     $returnto = !empty($_GET['returnto']) ? '&amp;returnto=' . urlencode($_GET['returnto']) : '';
-    stderr(_('Sanity Check'), _fe('Are you sure you want to delete this torrent?<br>Click {0}here{1} if you are.', "<a href='{$site_config['paths']['baseurl']}/fastdelete.php?id={$_GET['id']}&sure=1{$returnto}' class='is-link'>", '</a>'));
+    stderr(
+        _('Sanity Check'),
+        _fe(
+            'Are you sure you want to delete this torrent?<br>Click {0}here{1} if you are.',
+            "<a href='{$baseUrl}/fastdelete.php?id={$_GET['id']}&sure=1{$returnto}' class='is-link'>",
+            '</a>'
+        )
+    );
 }
 
 $torrents_class = $container->get(Torrent::class);
@@ -56,10 +68,10 @@ if ($user['id'] != $tid['owner']) {
 }
 write_log(_fe('Torrent {0} was deleted by {1}', $tid['name'], $user['username']));
 $cache = $container->get(Cache::class);
-if ($site_config['bonus']['on']) {
+if ($config->get('bonus.on')) {
     $dt = TIME_NOW - (14 * 86400);
     if ($tid['added'] > $dt) {
-        $sb = $tid['seedbonus'] - $site_config['bonus']['per_delete'];
+        $sb = $tid['seedbonus'] - $config->get('bonus.per_delete');
         $db->run(
             'UPDATE users SET seedbonus = :seedbonus WHERE id = :id',
             [
@@ -69,13 +81,13 @@ if ($site_config['bonus']['on']) {
         );
         $cache->update_row('user_' . $tid['owner'], [
             'seedbonus' => $sb,
-        ], $site_config['expires']['user_cache']);
+        ], $config->get('expires.user_cache'));
     }
 }
 $session = $container->get(Session::class);
 $session->set('is-success', _fe("Torrent deleted\n[b]{0}[/b]", format_comment($tid['name'])));
 if (isset($_GET['returnto'])) {
-    header("Location: {$site_config['paths']['baseurl']}{$_GET['returnto']}");
+    header('Location: ' . $baseUrl . $_GET['returnto']);
 } else {
-    header("Location: {$site_config['paths']['baseurl']}");
+    header('Location: ' . $baseUrl);
 }

@@ -1,24 +1,28 @@
 <?php
 declare(strict_types=1);
+
 require_once dirname(__DIR__) . '/bootstrap_web.php';
-
-$db = $container->get(Database::class);
-
-
-
-
 
 use DI\DependencyException;
 use DI\NotFoundException;
+use Pu239\Config\ConfigRepository;
 use Pu239\Database;
 
 require_once __DIR__ . '/../include/bittorrent.php';
 check_user_status();
 $image = placeholder_image();
-global $container, $site_config;
+
+global $container;
+/** @var ConfigRepository $config */
+$config = $container->get(ConfigRepository::class);
+/** @var Database $db */
+$db = $container->get(Database::class);
 
 $support = $mods = $admin = $sysop = [];
 $htmlout = $firstline = '';
+$classNames = (array) $config->get('class_names');
+$imagesBaseUrl = (string) $config->get('paths.images_baseurl');
+$baseUrl = (string) $config->get('paths.baseurl');
 // $fluent removed — use $this->db (ExtendedPdo)
 $query = $fluent->from('users')
                 ->select(null)
@@ -41,7 +45,7 @@ foreach ($query as $arr2) {
     if ($arr2['support'] === 'yes') {
         $support[] = $arr2;
     } else {
-        $staffs[strtolower($site_config['class_names'][$arr2['class']])][] = $arr2;
+        $staffs[strtolower($classNames[$arr2['class']])][] = $arr2;
     }
 }
 
@@ -57,7 +61,7 @@ foreach ($query as $arr2) {
  */
 function DoStaff($staff_array, $staffclass)
 {
-    global $site_config;
+    global $baseUrl, $imagesBaseUrl;
 
     $image = placeholder_image();
     if (empty($staff_array)) {
@@ -71,13 +75,13 @@ function DoStaff($staff_array, $staffclass)
     foreach ($staff_array as $staff) {
         $body .= '
                     <tr>';
-        $flagpic = !empty($staff['flagpic']) ? "{$site_config['paths']['images_baseurl']}flag/{$staff['flagpic']}" : '';
+        $flagpic = !empty($staff['flagpic']) ? "{$imagesBaseUrl}flag/{$staff['flagpic']}" : '';
         $flagname = !empty($staff['flagname']) ? $staff['flagname'] : '';
         $flag = !empty($flagpic) ? "<img src='{$image}' data-src='$flagpic' alt='" . htmlsafechars($flagname) . "' class='emoticon lazy'>" : '';
         $body .= '
                         <td>' . format_username((int) $staff['id']) . "</td>
-                        <td><img src='{$image}' data-src='{$site_config['paths']['images_baseurl']}" . ($staff['last_access'] > $dt && get_anonymous($staff['id']) ? 'online.png' : 'offline.png') . "' alt='' class='emoticon lazy'></td>" . "
-                        <td><a href='{$site_config['paths']['baseurl']}/messages.php?action=send_message&amp;receiver=" . (int) $staff['id'] . '&amp;returnto=' . urlencode($_SERVER['REQUEST_URI']) . "'><i class='icon-mail icon tooltipper' aria-hidden='true' title='Personal Message'></i></a></td>" . "
+                        <td><img src='{$image}' data-src='{$imagesBaseUrl}" . ($staff['last_access'] > $dt && get_anonymous($staff['id']) ? 'online.png' : 'offline.png') . "' alt='' class='emoticon lazy'></td>" . "
+                        <td><a href='{$baseUrl}/messages.php?action=send_message&amp;receiver=" . (int) $staff['id'] . '&amp;returnto=' . urlencode($_SERVER['REQUEST_URI']) . "'><i class='icon-mail icon tooltipper' aria-hidden='true' title='Personal Message'></i></a></td>" . "
                         <td>$flag</td>
                     </tr>";
     }
@@ -95,13 +99,13 @@ $dt = TIME_NOW - 180;
 if (!empty($support)) {
     $body = '';
     foreach ($support as $a) {
-        $flagpic = !empty($staff['flagpic']) ? "{$site_config['paths']['images_baseurl']}flag/{$staff['flagpic']}" : '';
+        $flagpic = !empty($staff['flagpic']) ? "{$imagesBaseUrl}flag/{$staff['flagpic']}" : '';
         $flagname = !empty($staff['flagname']) ? $staff['flagname'] : '';
         $body .= '
                 <tr>
                     <td>' . format_username((int) $a['id']) . "</td>
-                    <td><img src='{$image}' data-src='{$site_config['paths']['images_baseurl']}" . ($a['last_access'] > $dt ? 'online.png' : 'offline.png') . "' alt='' class='emoticon lazy'></td>
-                    <td><a href='{$site_config['paths']['baseurl']}messages.php?action=send_message&amp;receiver=" . (int) $a['id'] . "'><i class='icon-mail icon tooltipper' aria-hidden='true' title='" . _('Personal Message') . "'></i></a></td>
+                    <td><img src='{$image}' data-src='{$imagesBaseUrl}" . ($a['last_access'] > $dt ? 'online.png' : 'offline.png') . "' alt='' class='emoticon lazy'></td>
+                    <td><a href='{$baseUrl}messages.php?action=send_message&amp;receiver=" . (int) $a['id'] . "'><i class='icon-mail icon tooltipper' aria-hidden='true' title='" . _('Personal Message') . "'></i></a></td>
                     <td><img src='{$image}' data-src='$flagpic' alt='" . htmlsafechars($flagname) . "' class='emoticon lazy'></td>
                     <td>" . htmlsafechars($a['supportfor']) . '</td>
                 </tr>';

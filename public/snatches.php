@@ -1,25 +1,29 @@
 <?php
 declare(strict_types=1);
+
 require_once dirname(__DIR__) . '/bootstrap_web.php';
 
-$db = $container->get(Database::class);
-
-
-
-
+use Pu239\Config\ConfigRepository;
 use Pu239\Database;
 use Pu239\Session;
 use Pu239\Torrent;
 
+global $container;
+/** @var ConfigRepository $config */
+$config = $container->get(ConfigRepository::class);
+/** @var Database $db */
+$db = $container->get(Database::class);
+
 require_once __DIR__ . '/../include/bittorrent.php';
 $user = check_user_status();
-global $container, $site_config;
 
 $HTMLOUT = '';
+$baseUrl = (string) $config->get('paths.baseurl');
+$ratioFree = (bool) $config->get('site.ratio_free');
 if (empty($_GET['id'])) {
     $session = $container->get(Session::class);
     $session->set('is-warning', 'Invalid Information');
-    header("Location: {$site_config['paths']['baseurl']}/index.php");
+    header("Location: {$baseUrl}/index.php");
     app_halt('Exit called');
 }
 $id = (int) $_GET['id'];
@@ -38,15 +42,15 @@ $count = $fluent->from('snatched AS s')
                 ->fetch("count");
 
 $perpage = 25;
-$pager = pager($perpage, $count, $site_config['paths']['baseurl'] . "/snatches.php?id=$id&amp;");
+$pager = pager($perpage, $count, $baseUrl . "/snatches.php?id=$id&amp;");
 if (!$count) {
-    stderr(_('No Snatches'), _fe('It appears that there are currently no snatches for this {0}torrent.{1}', "<a href='{$site_config['paths']['baseurl']}/details.php?id={$id}'>", '</a>'));
+    stderr(_('No Snatches'), _fe('It appears that there are currently no snatches for this {0}torrent.{1}', "<a href='{$baseUrl}/details.php?id={$id}'>", '</a>'));
 }
 $torrent = $container->get(Torrent::class);
 $name = $torrent->get_items(['name'], $id);
 $HTMLOUT .= "
     <h1 class='has-text-centered'>Snatches for torrent</h1>
-    <h3 class='has-text-centered'><a href='{$site_config['paths']['baseurl']}/details.php?id={$id}'>" . htmlsafechars((string) $name) . "</a></h3>
+    <h3 class='has-text-centered'><a href='{$baseUrl}/details.php?id={$id}'>" . htmlsafechars((string) $name) . "</a></h3>
     <h3 class='has-text-centered'>Currently $count snatch" . ($count === 1 ? '' : 'es') . '</h3>';
 if ($count > $perpage) {
     $HTMLOUT .= $pager['pagertop'];
@@ -56,8 +60,8 @@ $header = "
             <th class='has-text-left'>" . _('Username') . "</th>
             <th class='has-text-right'>" . _('Uploaded') . "</th>
             <th class='has-text-right'>" . _('Upspeed') . '</th>
-            ' . ($site_config['site']['ratio_free'] ? '' : "<th class='has-text-right'>" . _('Downloaded') . '</th>') . '
-            ' . ($site_config['site']['ratio_free'] ? '' : "<th class='has-text-right'>" . _('Downspeed') . '</th>') . "
+            ' . ($ratioFree ? '' : "<th class='has-text-right'>" . _('Downloaded') . '</th>') . '
+            ' . ($ratioFree ? '' : "<th class='has-text-right'>" . _('Downspeed') . '</th>') . "
             <th class='has-text-right'>" . _('Ratio') . "</th>
             <th class='has-text-right'>" . _('Completed') . "</th>
             <th class='has-text-right'>" . _('Seed time') . "</th>
@@ -94,8 +98,8 @@ foreach ($snatches as $arr) {
             <td class='has-text-left'>{$username}</td>
             <td class='has-text-right'>" . mksize($arr['uploaded']) . "</td>
             <td class='has-text-right'>" . htmlsafechars($upspeed) . '/s</td>
-            ' . ($site_config['site']['ratio_free'] ? '' : "<td class='has-text-right'>" . mksize($arr['downloaded']) . '</td>') . '
-            ' . ($site_config['site']['ratio_free'] ? '' : "<td class='has-text-right'>" . htmlsafechars($downspeed) . '/s</td>') . "
+            ' . ($ratioFree ? '' : "<td class='has-text-right'>" . mksize($arr['downloaded']) . '</td>') . '
+            ' . ($ratioFree ? '' : "<td class='has-text-right'>" . htmlsafechars($downspeed) . '/s</td>') . "
             <td class='has-text-right'>" . htmlsafechars($ratio) . "</td>
             <td class='has-text-right'>" . htmlsafechars($completed) . "</td>
             <td class='has-text-right'>" . mkprettytime($arr['seedtime']) . "</td>

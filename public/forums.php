@@ -15,7 +15,13 @@ $user = check_user_status();
 global $container;
 /** @var ConfigRepository $config */
 $config = $container->get(ConfigRepository::class);
+/** @var Database $db */
 $db = $container->get(Database::class);
+$baseUrl = (string) $config->get('paths.baseurl');
+$imagesBaseUrl = (string) $config->get('paths.images_baseurl');
+$minUploadClass = (int) $config->get('forum_config.min_upload_class', 0);
+$minDeleteViewClass = (int) $config->get('forum_config.min_delete_view_class', 0);
+$readpostExpiry = (int) $config->get('forum_config.readpost_expiry', 0);
 
 $image = placeholder_image();
 $stdhead = [
@@ -30,8 +36,7 @@ $stdfoot = [
     ],
 ];
 $over_forum_id = $count = $now_viewing = $child_boards = '';
-// TODO(2025): replace with $config->get(...) for site configuration lookups.
-if (!$site_config['forum_config']['online'] && !has_access($user['class'], UC_STAFF, 'coder')) {
+if (!$config->get('forum_config.online') && !has_access($user['class'], UC_STAFF, 'coder')) {
     stderr(_('Information'), _('The forums are currently offline for maintainance work'));
 }
 $HTMLOUT = '';
@@ -111,31 +116,31 @@ $mini_menu = "
     <div class='bottom20'>
         <ul class='level-center bg-06'>" . ($action !== 'forum' ? "
             <li class='margin10'>
-                <a href='{$site_config['paths']['baseurl']}/forums.php'>" . _('Main Forums') . '</a>
+                <a href='{$baseUrl}/forums.php'>" . _('Main Forums') . '</a>
             </li>' : '') . ($action !== 'subscriptions' ? "
             <li class='margin10'>
-                <a href='{$site_config['paths']['baseurl']}/forums.php?action=subscriptions'>" . _('My Subscriptions') . '</a>
+                <a href='{$baseUrl}/forums.php?action=subscriptions'>" . _('My Subscriptions') . '</a>
             </li>' : '') . ($action !== 'search' ? "
             <li class='margin10'>
-                <a href='{$site_config['paths']['baseurl']}/forums.php?action=search'>" . _('Search') . '</a>
+                <a href='{$baseUrl}/forums.php?action=search'>" . _('Search') . '</a>
             </li>' : '') . ($action !== 'view_unread_posts' ? "
             <li class='margin10'>
-                <a href='{$site_config['paths']['baseurl']}/forums.php?action=view_unread_posts'>" . _('Unread Posts') . '</a>
+                <a href='{$baseUrl}/forums.php?action=view_unread_posts'>" . _('Unread Posts') . '</a>
             </li>' : '') . ($action !== 'new_replies' ? "
             <li class='margin10'>
-                <a href='{$site_config['paths']['baseurl']}/forums.php?action=new_replies'>" . _('New Replies') . '</a>
+                <a href='{$baseUrl}/forums.php?action=new_replies'>" . _('New Replies') . '</a>
             </li>' : '') . ($action !== 'vew_my_posts' ? "
             <li class='margin10'>
-                <a href='{$site_config['paths']['baseurl']}/forums.php?action=view_my_posts'>" . _('My Posts') . '</a>
+                <a href='{$baseUrl}/forums.php?action=view_my_posts'>" . _('My Posts') . '</a>
             </li>' : '') . "
             <li class='margin10'>
-        	    <a href='{$site_config['paths']['baseurl']}/forums.php?action=mark_all_as_read'>" . _('Mark All As Read') . "</a>
+        	    <a href='{$baseUrl}/forums.php?action=mark_all_as_read'>" . _('Mark All As Read') . "</a>
         	</li>
             <li class='margin10'>
-        	    <a href='{$site_config['paths']['baseurl']}/forums.php?action=mark_all_as_unread'>" . _('Mark All As Unread') . '</a>
+        	    <a href='{$baseUrl}/forums.php?action=mark_all_as_unread'>" . _('Mark All As Unread') . '</a>
         	</li>' . (has_access($user['class'], UC_SYSOP, 'coder') && $action !== 'member_post_history' ? "
             <li class='margin10'>
-        	    <a href='{$site_config['paths']['baseurl']}/forums.php?action=member_post_history'>" . _('Member Post History') . '</a>
+        	    <a href='{$baseUrl}/forums.php?action=member_post_history'>" . _('Member Post History') . '</a>
         	</li>' : '') . '
         </ul>
     </div>';
@@ -145,33 +150,33 @@ $legend = main_table("
         <td colspan='8'>" . _('Legend') . "</td>
     </tr>
     <tr>
-        <td class='has-text-centered'><img src='{$image}' data-src='{$site_config['paths']['images_baseurl']}forums/unlockednew.gif' alt='unlockednew' title='" . _('Unlocked new') . "' class='tooltipper emoticon lazy'></td>
+        <td class='has-text-centered'><img src='{$image}' data-src='{$imagesBaseUrl}forums/unlockednew.gif' alt='unlockednew' title='" . _('Unlocked new') . "' class='tooltipper emoticon lazy'></td>
         <td>" . _('Unread forum') . "</td>
-        <td class='has-text-centered'><img src='{$image}' data-src='{$site_config['paths']['images_baseurl']}forums/unlocked.gif' alt='unlocked' title='" . _('Unlocked') . "' class='tooltipper emoticon lazy'></td>
+        <td class='has-text-centered'><img src='{$image}' data-src='{$imagesBaseUrl}forums/unlocked.gif' alt='unlocked' title='" . _('Unlocked') . "' class='tooltipper emoticon lazy'></td>
         <td>" . _('Read forum') . "</td>
-        <td class='has-text-centered'><img src='{$image}' data-src='{$site_config['paths']['images_baseurl']}forums/topicnew.gif' alt='topicnew' title='" . _('New Topic') . "' class='tooltipper emoticon lazy'></td>
+        <td class='has-text-centered'><img src='{$image}' data-src='{$imagesBaseUrl}forums/topicnew.gif' alt='topicnew' title='" . _('New Topic') . "' class='tooltipper emoticon lazy'></td>
         <td>" . _('Unread post') . "</td>
-        <td class='has-text-centered'><img src='{$image}' data-src='{$site_config['paths']['images_baseurl']}forums/topic.gif' alt='topic' title='" . _('Topic') . "' class='tooltipper emoticon lazy'></td>
+        <td class='has-text-centered'><img src='{$image}' data-src='{$imagesBaseUrl}forums/topic.gif' alt='topic' title='" . _('Topic') . "' class='tooltipper emoticon lazy'></td>
         <td>" . _('Read post') . "</td>
     </tr>
 	<tr>
-        <td class='has-text-centered'><img src='{$image}' data-src='{$site_config['paths']['images_baseurl']}forums/hot_topic_new.gif' alt='hot_topic_new' title='" . _('Hot Topic New') . "' class='tooltipper emoticon lazy'></td>
+        <td class='has-text-centered'><img src='{$image}' data-src='{$imagesBaseUrl}forums/hot_topic_new.gif' alt='hot_topic_new' title='" . _('Hot Topic New') . "' class='tooltipper emoticon lazy'></td>
         <td>" . _('Hot topic un-read') . "</td>
-        <td class='has-text-centered'><img src='{$image}' data-src='{$site_config['paths']['images_baseurl']}forums/hot_topic.gif' alt='hot_topic' title='" . _('Hot Topic') . "' class='tooltipper emoticon lazy'></td>
+        <td class='has-text-centered'><img src='{$image}' data-src='{$imagesBaseUrl}forums/hot_topic.gif' alt='hot_topic' title='" . _('Hot Topic') . "' class='tooltipper emoticon lazy'></td>
         <td>" . _('Hot topic [more than 30 replies]') . "</td>
-        <td class='has-text-centered'><img src='{$image}' data-src='{$site_config['paths']['images_baseurl']}forums/lockednew.gif' alt='lockednew' title='" . _('Locked new') . "' class='tooltipper emoticon lazy'></td>
+        <td class='has-text-centered'><img src='{$image}' data-src='{$imagesBaseUrl}forums/lockednew.gif' alt='lockednew' title='" . _('Locked new') . "' class='tooltipper emoticon lazy'></td>
         <td>" . _('Locked un-read') . "</td>
-        <td class='has-text-centered'><img src='{$image}' data-src='{$site_config['paths']['images_baseurl']}forums/locked.gif' alt='locked' title='" . _('Locked') . "' class='tooltipper emoticon lazy'></td>
+        <td class='has-text-centered'><img src='{$image}' data-src='{$imagesBaseUrl}forums/locked.gif' alt='locked' title='" . _('Locked') . "' class='tooltipper emoticon lazy'></td>
         <td>" . _('Locked') . "</td>
 	</tr>
 	<tr>
-        <td class='has-text-centered'><img src='{$image}' data-src='{$site_config['paths']['images_baseurl']}forums/poll.gif' alt='poll' title='" . _('Poll') . "' class='tooltipper emoticon lazy'></td>
+        <td class='has-text-centered'><img src='{$image}' data-src='{$imagesBaseUrl}forums/poll.gif' alt='poll' title='" . _('Poll') . "' class='tooltipper emoticon lazy'></td>
         <td>" . _('Poll') . "</td>
-        <td class='has-text-centered'><img src='{$image}' data-src='{$site_config['paths']['images_baseurl']}forums/pinned.gif' alt='pinned' title='" . _('Pinned') . "' class='tooltipper emoticon lazy'></td>
+        <td class='has-text-centered'><img src='{$image}' data-src='{$imagesBaseUrl}forums/pinned.gif' alt='pinned' title='" . _('Pinned') . "' class='tooltipper emoticon lazy'></td>
         <td>" . _('Pinned') . "</td>
-        <td class='has-text-centered'><img src='{$image}' data-src='{$site_config['paths']['images_baseurl']}forums/subscriptions.gif' alt='" . _('Subscribed') . "' title='" . _('Subscribed') . "' class='tooltipper emoticon lazy'></td>
+        <td class='has-text-centered'><img src='{$image}' data-src='{$imagesBaseUrl}forums/subscriptions.gif' alt='" . _('Subscribed') . "' title='" . _('Subscribed') . "' class='tooltipper emoticon lazy'></td>
         <td>" . _('Subscribed to thread') . "</td>
-        <td class='has-text-centered'><img src='{$image}' data-src='{$site_config['paths']['images_baseurl']}forums/posted.gif' alt='posted' title='" . _('Posted') . "' class='tooltipper emoticon lazy'></td>
+        <td class='has-text-centered'><img src='{$image}' data-src='{$imagesBaseUrl}forums/posted.gif' alt='posted' title='" . _('Posted') . "' class='tooltipper emoticon lazy'></td>
         <td>" . _('You have posted here') . "</td>
 	</tr>
 	<tr>
@@ -179,9 +184,9 @@ $legend = main_table("
             <i class='icon-search icon tooltipper' aria-hidden='true' title='" . _('1st Post Preview') . "'></i>
         </td>
         <td>" . _('1st Post Preview') . "</td>
-        <td class='has-text-centered'><img src='{$image}' data-src='{$site_config['paths']['images_baseurl']}forums/last_post.gif' alt='last post' title='" . _('Last Post') . "' class='tooltipper emoticon lazy'></td>
+        <td class='has-text-centered'><img src='{$image}' data-src='{$imagesBaseUrl}forums/last_post.gif' alt='last post' title='" . _('Last Post') . "' class='tooltipper emoticon lazy'></td>
         <td>" . _('Last Post') . "</td>
-        <td class='has-text-centered'><img src='{$image}' data-src='{$site_config['paths']['images_baseurl']}forums/topic_normal.gif' alt='" . _('Thread Icon') . "' title='" . _('Thread Icon') . "' class='tooltipper emoticon lazy'></td>
+        <td class='has-text-centered'><img src='{$image}' data-src='{$imagesBaseUrl}forums/topic_normal.gif' alt='" . _('Thread Icon') . "' title='" . _('Thread Icon') . "' class='tooltipper emoticon lazy'></td>
         <td>" . _('Thread Icon') . '</td>
         <td></td>
         <td></td>
@@ -197,15 +202,15 @@ $options = '';
 for ($i = 2; $i < 21; ++$i) {
     $options .= '<option value="' . $i . '" ' . ($multi_options === $i ? 'selected' : '') . '>' . $i . ' options</option>';
 }
-$accept_types = str_replace('|', ', ', $site_config['forum_config']['accepted_file_types']);
+$accept_types = str_replace('|', ', ', (string) $config->get('forum_config.accepted_file_types', ''));
 $more_options = '
-<div id="staff_tools" ' . ((isset($_POST['poll_question']) && $_POST['poll_question'] !== '') ? '' : 'style="display:none"') . '>' . main_table(($user['class'] < $site_config['forum_config']['min_upload_class'] ? '' : '<tr>
-<td><img src="' . $image . '" data-src="' . $site_config['paths']['images_baseurl'] . 'forums/attach.gif" alt="' . _('Attach') . '" class="emoticon lazy"></td>
+<div id="staff_tools" ' . ((isset($_POST['poll_question']) && $_POST['poll_question'] !== '') ? '' : 'style="display:none"') . '>' . main_table(($user['class'] < $minUploadClass ? '' : '<tr>
+<td><img src="' . $image . '" data-src="' . $imagesBaseUrl . 'forums/attach.gif" alt="' . _('Attach') . '" class="emoticon lazy"></td>
 <td><span style="white-space:nowrap;font-weight: bold;">' . _('Attachments') . ':</span></td>
 <td>
 <input type="file" size="30" name="attachment[]" accept="' . $accept_types . '"> <a title="' . _('Add more attachments') . '"  id="more" style="white-space:nowrap;font-weight:bold;cursor:pointer;">' . _('Add more attachments') . '</a>
-<img src="' . $image . '" data-src="' . $site_config['paths']['images_baseurl'] . 'forums/zip.gif" alt="' . _('Zip') . '}" class="emoticon lazy tooltipper" title="Zip Files">
-<img src="' . $image . '" data-src="' . $site_config['paths']['images_baseurl'] . 'forums/rar.gif" alt="' . _('Rar') . '" class="emoticon lazy tooltipper" title="Rar Files"><br>
+<img src="' . $image . '" data-src="' . $imagesBaseUrl . 'forums/zip.gif" alt="' . _('Zip') . '}" class="emoticon lazy tooltipper" title="Zip Files">
+<img src="' . $image . '" data-src="' . $imagesBaseUrl . 'forums/rar.gif" alt="' . _('Rar') . '" class="emoticon lazy tooltipper" title="Rar Files"><br>
 <div id="attach_more" style="display:none">
 <input type="file" size="30" name="attachment[]"><br>
 <input type="file" size="30" name="attachment[]"><br>
@@ -215,21 +220,21 @@ $more_options = '
 </tr>') . ((isset($_GET['action']) && $_GET['action'] != 'new_topic') ? '' : '<tr>
 <td></td>
 <td></td>
-<td><span style="white-space:nowrap;font-weight: bold;"> <img src="' . $image . '" data-src="' . $site_config['paths']['images_baseurl'] . 'forums/poll.gif" alt="" class="emoticon lazy">' . _('Add poll to topic') . '</span>
+<td><span style="white-space:nowrap;font-weight: bold;"> <img src="' . $image . '" data-src="' . $imagesBaseUrl . 'forums/poll.gif" alt="" class="emoticon lazy">' . _('Add poll to topic') . '</span>
 </td>
 </tr>
 <tr>
-<td><img src="' . $image . '" data-src="' . $site_config['paths']['images_baseurl'] . 'forums/question.png" alt="Question" class="emoticon lazy"></td>
+<td><img src="' . $image . '" data-src="' . $imagesBaseUrl . 'forums/question.png" alt="Question" class="emoticon lazy"></td>
 <td><span style="white-space:nowrap;font-weight: bold;">' . _('Poll question') . ':</span></td>
 <td><input type="text" name="poll_question" class="w-100" value="' . (isset($_POST['poll_question']) ? strip_tags($_POST['poll_question']) : '') . '"></td>
 </tr>
 <tr>
-<td><img src="' . $image . '" data-src="' . $site_config['paths']['images_baseurl'] . 'forums/options.gif" alt="' . _('Poll answers') . '" class="emoticon lazy"></td>
+<td><img src="' . $image . '" data-src="' . $imagesBaseUrl . 'forums/options.gif" alt="' . _('Poll answers') . '" class="emoticon lazy"></td>
 <td><span style="white-space:nowrap;font-weight: bold;">' . _('Poll answers') . ':</span></td>
 <td><textarea cols="30" rows="4" name="poll_answers" class="text_area_small">' . (isset($_POST['poll_answers']) ? strip_tags($_POST['poll_answers']) : '') . '</textarea><br>' . _('One option per line. There is a minimum of 2 options, and a maximun of 20 options. BBcode is enabled.') . '</td>
 </tr>
 <tr>
-<td><img src="' . $image . '" data-src="' . $site_config['paths']['images_baseurl'] . 'forums/clock.png" alt=' . _('Poll starts') . ' class="emoticon lazy"></td>
+<td><img src="' . $image . '" data-src="' . $imagesBaseUrl . 'forums/clock.png" alt=' . _('Poll starts') . ' class="emoticon lazy"></td>
 <td><span style="white-space:nowrap;font-weight: bold;">' . _('Poll starts') . ':</span></td>
 <td><select name="poll_starts">
 <option value="0" ' . ($poll_starts === 0 ? 'selected' : '') . '>' . _('Start Now') . '!</option>
@@ -243,7 +248,7 @@ $more_options = '
 </select>' . _('When to start the poll. Default is: Start Now!') . '</td>
 </tr>
 <tr>
-<td><img src="' . $image . '" data-src="' . $site_config['paths']['images_baseurl'] . 'forums/stop.png" alt=' . _('Poll ends') . ' class="emoticon lazy"></td>
+<td><img src="' . $image . '" data-src="' . $imagesBaseUrl . 'forums/stop.png" alt=' . _('Poll ends') . ' class="emoticon lazy"></td>
 <td><span style="white-space:nowrap;font-weight: bold;">' . _('Poll ends') . ':</span></td>
 <td><select name="poll_ends">
 <option value="1356048000" ' . ($poll_ends === 1356048000 ? 'selected' : '') . '>' . _('Run Forever') . '</option>
@@ -262,7 +267,7 @@ $more_options = '
 </select>' . _("How long should this poll run? Default is 'run forever'") . '</td>
 </tr>
 <tr>
-<td><img src="' . $image . '" data-src="' . $site_config['paths']['images_baseurl'] . 'forums/multi.gif" alt=' . _('Multi options') . ' class="emoticon lazy"/></td>
+<td><img src="' . $image . '" data-src="' . $imagesBaseUrl . 'forums/multi.gif" alt=' . _('Multi options') . ' class="emoticon lazy"/></td>
 <td><span style="white-space:nowrap;font-weight: bold;">' . _('Multi options') . ':</span></td>
 <td><select name="multi_options">
 <option value="1" ' . ($multi_options === 1 ? 'selected' : '') . '>' . _('Single option') . '!</option>
@@ -470,7 +475,7 @@ switch ($action) {
                     if (!has_access($user['class'], UC_STAFF, 'coder')) {
                         $query = $query->where('p.status = "ok"')
                                        ->where('t.status = "ok"');
-                    } elseif ($user['class'] < $site_config['forum_config']['min_delete_view_class']) {
+                    } elseif ($user['class'] < $minDeleteViewClass) {
                         $query = $query->where('t.status != "deleted"')
                                        ->where('p.status != "deleted"');
                     }
@@ -479,7 +484,7 @@ switch ($action) {
                                            ->limit(1)
                                            ->fetch();
 
-                    $cache->set('forum_last_post_' . $forum_id . '_' . $user['class'], $last_post_arr, $site_config['expires']['last_post']);
+                    $cache->set('forum_last_post_' . $forum_id . '_' . $user['class'], $last_post_arr, (int) $config->get('expires.last_post', 0));
                 }
                 $last_post = '';
                 $topic_name = !empty($last_post_arr['topic_name']) ? format_comment(_($last_post_arr['topic_name'])) : '';
@@ -488,19 +493,19 @@ switch ($action) {
                     if (($last_read_post_arr = $cache->get('last_read_post_' . $last_post_arr['topic_id'] . '_' . $user['id'])) === false) {
                         $rows = $db->fetchAll('SELECT last_post_read FROM read_posts WHERE user_id = ' . sqlesc($user['id']) . ' AND topic_id = ' . sqlesc($last_post_arr['topic_id'])) or sqlerr(__FILE__, __LINE__);
                         $last_read_post_arr = mysqli_fetch_row($query);
-                        $cache->set('last_read_post_' . $last_post_arr['topic_id'] . '_' . $user['id'], $last_read_post_arr, $site_config['expires']['last_read_post']);
+                        $cache->set('last_read_post_' . $last_post_arr['topic_id'] . '_' . $user['id'], $last_read_post_arr, (int) $config->get('expires.last_read_post', 0));
                     }
-                    $image_to_use = ($last_post_arr['added'] > (TIME_NOW - $site_config['forum_config']['readpost_expiry'])) ? (!$last_read_post_arr or $last_post_id > $last_read_post_arr[0]) : 0;
+                    $image_to_use = ($last_post_arr['added'] > (TIME_NOW - $readpostExpiry)) ? (!$last_read_post_arr or $last_post_id > $last_read_post_arr[0]) : 0;
                     $img = ($image_to_use ? 'unlockednew' : 'unlocked');
 
                     if ($last_post_arr['tan'] === '1') {
                         if (!has_access($user['class'], UC_STAFF, 'coder') && $last_post_arr['user_id'] != $user['id']) {
-                            $last_post = '<span style="white-space:nowrap;">' . _('Last Post by') . ': <i>' . get_anonymous_name() . '</i> in &#9658; <a href="' . $site_config['paths']['baseurl'] . '/forums.php?action=view_topic&amp;topic_id=' . (int) $last_post_arr['topic_id'] . '&amp;page=last#' . $last_post_id . '" title="' . $topic_name . '" class="tooltipper"><span style="font-weight: bold;">' . CutName($topic_name, 30) . '</span></a><br>' . get_date((int) $last_post_arr['added'], '') . '<br></span>';
+                            $last_post = '<span style="white-space:nowrap;">' . _('Last Post by') . ': <i>' . get_anonymous_name() . '</i> in &#9658; <a href="' . $baseUrl . '/forums.php?action=view_topic&amp;topic_id=' . (int) $last_post_arr['topic_id'] . '&amp;page=last#' . $last_post_id . '" title="' . $topic_name . '" class="tooltipper"><span style="font-weight: bold;">' . CutName($topic_name, 30) . '</span></a><br>' . get_date((int) $last_post_arr['added'], '') . '<br></span>';
                         } else {
-                            $last_post = '<span style="white-space:nowrap;">' . _('Last Post by') . ': <i>' . get_anonymous_name() . '</i> [' . (!empty($last_post_arr['user_id']) ? format_username((int) $last_post_arr['user_id']) : _('Lost')) . ']<br>in &#9658; <a href="' . $site_config['paths']['baseurl'] . '/forums.php?action=view_topic&amp;topic_id=' . (int) $last_post_arr['topic_id'] . '&amp;page=last#' . $last_post_id . '" title="' . $topic_name . '"><span style="font-weight: bold;">' . CutName($topic_name, 30) . '</span></a><br>' . get_date((int) $last_post_arr['added'], '') . '<br></span>';
+                            $last_post = '<span style="white-space:nowrap;">' . _('Last Post by') . ': <i>' . get_anonymous_name() . '</i> [' . (!empty($last_post_arr['user_id']) ? format_username((int) $last_post_arr['user_id']) : _('Lost')) . ']<br>in &#9658; <a href="' . $baseUrl . '/forums.php?action=view_topic&amp;topic_id=' . (int) $last_post_arr['topic_id'] . '&amp;page=last#' . $last_post_id . '" title="' . $topic_name . '"><span style="font-weight: bold;">' . CutName($topic_name, 30) . '</span></a><br>' . get_date((int) $last_post_arr['added'], '') . '<br></span>';
                         }
                     } else {
-                        $last_post = '<span style="white-space:nowrap;">' . _('Last Post by') . ': ' . (!empty($last_post_arr['user_id']) ? format_username((int) $last_post_arr['user_id']) : _('Lost')) . '</span><br>in &#9658; <a href="' . $site_config['paths']['baseurl'] . '/forums.php?action=view_topic&amp;topic_id=' . (int) $last_post_arr['topic_id'] . '&amp;page=last#' . $last_post_id . '" title="' . $topic_name . '" class="tooltipper"><span style="font-weight: bold;">' . CutName($topic_name, 30) . '</span></a><br>' . get_date((int) $last_post_arr['added'], '') . '<br></span>';
+                        $last_post = '<span style="white-space:nowrap;">' . _('Last Post by') . ': ' . (!empty($last_post_arr['user_id']) ? format_username((int) $last_post_arr['user_id']) : _('Lost')) . '</span><br>in &#9658; <a href="' . $baseUrl . '/forums.php?action=view_topic&amp;topic_id=' . (int) $last_post_arr['topic_id'] . '&amp;page=last#' . $last_post_id . '" title="' . $topic_name . '" class="tooltipper"><span style="font-weight: bold;">' . CutName($topic_name, 30) . '</span></a><br>' . get_date((int) $last_post_arr['added'], '') . '<br></span>';
                     }
                 } else {
                     $img = 'unlocked';
@@ -519,9 +524,9 @@ switch ($action) {
                                     ->orderBy('sort');
 
                     foreach ($query as $arr) {
-                        $child_boards_cache[] = '<a href="' . $site_config['paths']['baseurl'] . '/forums.php?action=view_forum&amp;forum_id=' . (int) $arr['id'] . '" title="' . _('click to view') . '!" class="is-link tooltipper">' . format_comment($arr['name']) . '</a>';
+                        $child_boards_cache[] = '<a href="' . $baseUrl . '/forums.php?action=view_forum&amp;forum_id=' . (int) $arr['id'] . '" title="' . _('click to view') . '!" class="is-link tooltipper">' . format_comment($arr['name']) . '</a>';
                     }
-                    $cache->set($keys['child_boards'], $child_boards_cache, $site_config['expires']['child_boards']);
+                    $cache->set($keys['child_boards'], $child_boards_cache, (int) $config->get('expires.child_boards', 0));
                 }
                 $child_boards = '';
                 if (!empty($child_boards_cache)) {
@@ -532,7 +537,7 @@ switch ($action) {
                         <td class="min-350 w-40">
                             <div class="level">
                                 <span class="level-left">
-                                    <img src="' . $image . '" data-src="' . $site_config['paths']['images_baseurl'] . 'forums/' . $img . '.gif" alt="' . $img . '" title="' . _('Unlocked') . '" class="tooltipper emoticon lazy right10">
+                                    <img src="' . $image . '" data-src="' . $imagesBaseUrl . 'forums/' . $img . '.gif" alt="' . $img . '" title="' . _('Unlocked') . '" class="tooltipper emoticon lazy right10">
                                     ' . bubble('<a href="?action=view_forum&amp;forum_id=' . $arr_forums['real_forum_id'] . '">' . $forum_name . '</a>', $forum_description) . (has_access($user['class'], UC_ADMINISTRATOR, 'coder') ? '
                                 </span>
                                 <span class="level-right">
@@ -584,7 +589,7 @@ switch ($action) {
 
             $forum_users_cache['forum_users'] = $forumusers;
             $forum_users_cache['actcount'] = count($list);
-            $cache->set('now_viewing_', $forum_users_cache, $site_config['expires']['forum_users']);
+            $cache->set('now_viewing_', $forum_users_cache, (int) $config->get('expires.forum_users', 0));
         }
         if (!$forum_users_cache['forum_users']) {
             $forum_users_cache['forum_users'] = _('There have been no active users in the last 15 minutes');
@@ -627,7 +632,7 @@ function highlightWords($text, $words)
  */
 function ratingpic_forums($num)
 {
-    global $site_config;
+    global $imagesBaseUrl;
 
     $image = placeholder_image();
     $r = round($num * 2) / 2;
@@ -635,7 +640,7 @@ function ratingpic_forums($num)
         return;
     }
 
-    return '<img src="' . $image . '" data-src="' . $site_config['paths']['images_baseurl'] . 'forums/rating/' . $r . '.gif" alt="rating: ' . $num . ' / 5" class="emoticon lazy">';
+    return '<img src="' . $image . '" data-src="' . $imagesBaseUrl . 'forums/rating/' . $r . '.gif" alt="rating: ' . $num . ' / 5" class="emoticon lazy">';
 }
 
 /**
@@ -651,7 +656,7 @@ function ratingpic_forums($num)
  */
 function insert_quick_jump_menu($current_forum = 0, $staff = false)
 {
-    global $container, $site_config, $user;
+    global $baseUrl, $config, $container, $user;
     $db = $container->get(Database::class);
 
     $cache = $container->get(Cache::class);
@@ -672,13 +677,13 @@ function insert_quick_jump_menu($current_forum = 0, $staff = false)
                           ->orderBy('forums.parent_forum ASC')
                           ->orderBy('forums.sort ASC')
                           ->fetchAll();
-        $cache->set($cachename, $qjcache, $site_config['expires']['forum_insertJumpTo']);
+        $cache->set($cachename, $qjcache, (int) $config->get('expires.forum_insertJumpTo', 0));
     }
 
     $switch = '';
     $body = ($staff === false ? '
     <div class="has-text-centered margin20">
-        <form method="get" action="' . $site_config['paths']['baseurl'] . '/forums.php" name="jump" accept-charset="utf-8">
+        <form method="get" action="' . $baseUrl . '/forums.php" name="jump" accept-charset="utf-8">
             <span>
                 <input type="hidden" name="action" value="view_forum">
                 <select name="forum_id" onchange="if (this.options[this.selectedIndex].value != -1) {forms[\'jump\'].submit()}">

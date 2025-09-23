@@ -1,17 +1,19 @@
 <?php
 declare(strict_types=1);
+
 require_once dirname(__DIR__) . '/bootstrap_web.php';
-
-$db = $container->get(Database::class);
-
-
-
-
 
 use DI\DependencyException;
 use DI\NotFoundException;
+use Pu239\Config\ConfigRepository;
 use Pu239\Database;
 use Pu239\User;
+
+global $container;
+/** @var ConfigRepository $config */
+$config = $container->get(ConfigRepository::class);
+/** @var Database $db */
+$db = $container->get(Database::class);
 
 require_once __DIR__ . '/../include/bittorrent.php';
 $user = check_user_status();
@@ -37,7 +39,7 @@ $HTMLOUT = '';
  */
 function sharetable($res, $userid, $user, $variant = 'index')
 {
-    global $container, $site_config;
+    global $config;
     $HTMLOUT = "
         <div class='has-text-centered bottom20'>
             " . _('Icon Legend :') . "
@@ -50,6 +52,8 @@ function sharetable($res, $userid, $user, $variant = 'index')
         <tr>
             <th>Type</th>
             <th>Name</th>';
+    $imagesBaseUrl = (string) $config->get('paths.images_baseurl');
+    $baseUrl = (string) $config->get('paths.baseurl');
     //$userid=(int) $_GET['id'];
     if ($user['id'] === $userid) {
         $heading .= ($variant === 'index' ? '
@@ -99,7 +103,7 @@ function sharetable($res, $userid, $user, $variant = 'index')
         if (isset($row['cat_name'])) {
             $body .= "<a href='browse.php?cat=" . (int) $row['category'] . "'>";
             if (isset($row['cat_pic']) && $row['cat_pic'] != '') {
-                $body .= "<img src='{$site_config['paths']['images_baseurl']}caticons/" . get_category_icons() . "/{$row['cat_pic']}' alt='{$row['cat_name']}'>";
+                $body .= "<img src='{$imagesBaseUrl}caticons/" . get_category_icons() . "/{$row['cat_pic']}' alt='{$row['cat_name']}'>";
             } else {
                 $body .= $row['cat_name'];
             }
@@ -122,7 +126,7 @@ function sharetable($res, $userid, $user, $variant = 'index')
         $body .= "'><b>$dispname</b></a>&#160;</td>";
         $body .= ($variant === 'index' ? "
                         <td>
-                            <a href='{$site_config['paths']['baseurl']}/download.php?torrent={$id}' class='tooltipper' title='" . _('Download Bookmark!') . "'>
+                            <a href='{$baseUrl}/download.php?torrent={$id}' class='tooltipper' title='" . _('Download Bookmark!') . "'>
                                 <i class='icon-download icon'></i>
                             </a>
                         </td>" : '');
@@ -209,7 +213,8 @@ function sharetable($res, $userid, $user, $variant = 'index')
     return $HTMLOUT;
 }
 
-global $container, $site_config;
+global $config;
+$baseUrl = (string) $config->get('paths.baseurl');
 
 $userid = isset($_GET['id']) ? (int) $_GET['id'] : 0;
 if (!is_valid_id($userid)) {
@@ -220,7 +225,7 @@ $HTMLOUT .= '
         <h1>' . _fe('Sharemarks for {0}', format_username((int) $userid)) . '</h1>
         <div class="tabs is-centered">
             <ul>
-                <li><a href="' . $site_config['paths']['baseurl'] . '/bookmarks.php" class="is-link">My Bookmarks</a></li>
+                <li><a href="' . $baseUrl . '/bookmarks.php" class="is-link">My Bookmarks</a></li>
             </ul>
         </div>
     </div>';
