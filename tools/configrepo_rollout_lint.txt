@@ -565,3 +565,6 @@ No syntax errors detected in include/function_torrenttable.php
 >>>>>> master
 >>>>>> master
 >>>>>> master
+No syntax errors detected in public/clear_announcement.php
+No syntax errors detected in public/contactstaff.php
+No syntax errors detected in public/delete.php

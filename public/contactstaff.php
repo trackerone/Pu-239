@@ -1,12 +1,17 @@
 <?php
 declare(strict_types=1);
-require_once dirname(__DIR__) . '/bootstrap_web.php';
 
-use Pu239\Database;
 use Pu239\Cache;
+use Pu239\Config\ConfigRepository;
+use Pu239\Database;
 use Pu239\Session;
 
-global $container, $site_config;
+require_once dirname(__DIR__) . '/bootstrap_web.php';
+
+global $container;
+/** @var ConfigRepository $config */
+$config = $container->get(ConfigRepository::class);
+/** @var Database $db */
 $db = $container->get(Database::class);
 
 require_once __DIR__ . '/../include/bittorrent.php';
@@ -47,7 +52,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if ($stmt->rowCount()) {
             $cache->delete('staff_mess_');
             $session->set('is-success', _('Message was sent! Wait for staff to respond now!'));
-            header('Location: ' . $site_config['paths']['baseurl']);
+            header('Location: ' . $config->get('paths.baseurl'));
         } else {
             $session->set('is-warning', _('There was something wrong!'));
         }
