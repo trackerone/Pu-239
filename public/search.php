@@ -1,18 +1,22 @@
 <?php
 declare(strict_types=1);
+
 require_once dirname(__DIR__) . '/bootstrap_web.php';
 
-$db = $container->get(Database::class);
-
-
-
-
+use Pu239\Config\ConfigRepository;
 use Pu239\Database;
 use Pu239\Session;
 use Pu239\User;
 
+global $container;
+/** @var ConfigRepository $config */
+$config = $container->get(ConfigRepository::class);
+/** @var Database $db */
+$db = $container->get(Database::class);
+/** @var User $users_class */
+$users_class = $container->get(User::class);
+
 require_once __DIR__ . '/../include/bittorrent.php';
-global $container, $site_config;
 
 $data = array_merge($_GET, $_POST);
 $torrent_pass = $data['torrent_pass'];
@@ -20,12 +24,13 @@ $auth = $data['auth'];
 $bot = $data['bot'];
 $search = $data['search'];
 if (!empty($bot) && !empty($auth) && !empty($torrent_pass)) {
-    $users_class = $container->get(User::class);
     $userid = $users_class->get_bot_id($bot, $torrent_pass, $auth);
 } else {
+    /** @var Session $session */
     $session = $container->get(Session::class);
     $session->set('is-warning', _('The search page is a restricted page, bots only'));
-    header("Location: {$site_config['paths']['baseurl']}/browse.php");
+    $baseUrl = (string) $config->get('paths.baseurl');
+    header("Location: {$baseUrl}/browse.php");
     app_halt('Exit called');
 }
 
