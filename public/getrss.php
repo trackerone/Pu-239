@@ -2,11 +2,8 @@
 declare(strict_types=1);
 require_once dirname(__DIR__) . '/bootstrap_web.php';
 
-$db = $container->get(Database::class);
-
-
-
-
+use Pu239\Config\ConfigRepository;
+use Pu239\Database;
 
 require_once __DIR__ . '/../include/bittorrent.php';
 require_once CLASS_DIR . 'class_user_options_2.php';
@@ -16,7 +13,12 @@ $stdfoot = [
         get_file_name('categories_js'),
     ],
 ];
-global $site_config;
+global $container;
+/** @var ConfigRepository $config */
+$config = $container->get(ConfigRepository::class);
+/** @var Database $db */
+$db = $container->get(Database::class);
+$baseurl = (string) $config->get('paths.baseurl');
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $cats = !empty($_POST['cats']) ? array_map('intval', $_POST['cats']) : [];
@@ -30,7 +32,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         100,
     ];
     $count = isset($_POST['count']) && in_array((int) $_POST['count'], $counts) ? (int) $_POST['count'] : 15;
-    $rsslink = "{$site_config['paths']['baseurl']}/rss.php?cats=" . implode(',', $cats) . "&amp;type={$feed}&amp;torrent_pass={$user['torrent_pass']}&amp;count=$count&amp;bm=$bm";
+    $rsslink = "{$baseurl}/rss.php?cats=" . implode(',', $cats) . "&amp;type={$feed}&amp;torrent_pass={$user['torrent_pass']}&amp;count=$count&amp;bm=$bm";
     $HTMLOUT = "
         <div class='portlet has-text-centered w-100'>
             <h1>" . _('This is your link set up according to your selected categories') . "</h1>

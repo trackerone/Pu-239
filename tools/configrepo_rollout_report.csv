@@ -219,3 +219,119 @@ include/function_bonus.php,site_config(6),0,Replaced legacy config access with C
 include/function_books.php,site_config(3),0,Replaced legacy config access with ConfigRepository
 include/function_breadcrumbs.php,site_config(2),0,Replaced legacy config access with ConfigRepository
 include/function_categories.php,site_config(3),0,Replaced legacy config access with ConfigRepository
+acpmanage.php,site_config(1),0,Replaced legacy config access with ConfigRepository
+admin/allagents.php,site_config(1),0,Replaced legacy config access with ConfigRepository
+admin/banclient.php,site_config(2),0,Replaced legacy config access with ConfigRepository
+admin/bannedemails.php,site_config(2),0,Replaced legacy config access with ConfigRepository
+admin/bans.php,site_config(3),0,Replaced legacy config access with ConfigRepository
+admin/bonusmanage.php,site_config(2),0,Replaced legacy config access with ConfigRepository
+admin/categories.php,site_config(18),0,Replaced legacy config access with ConfigRepository
+admin/cheaters.php,site_config(4),0,Replaced legacy config access with ConfigRepository
+admin/class_config.php,site_config(2),0,Replaced legacy config access with ConfigRepository
+admin/cleanup_manager.php,site_config(14),0,Replaced legacy config access with ConfigRepository
+admin/cloudview.php,site_config(3),0,Replaced legacy config access with ConfigRepository
+admin/delacct.php,site_config(2),0,Replaced legacy config access with ConfigRepository
+admin/edit_moods.php,site_config(8),0,Replaced legacy config access with ConfigRepository
+admin/findnotconnectable.php,site_config(9),0,Replaced legacy config access with ConfigRepository
+admin/floodlimit.php,site_config(3),0,Replaced legacy config access with ConfigRepository
+admin/flush.php,site_config(1),0,Replaced legacy config access with ConfigRepository
+admin/forum_config.php,site_config(4),0,Replaced legacy config access with ConfigRepository
+admin/freeleech.php,site_config(4),0,Replaced legacy config access with ConfigRepository
+admin/freeusers.php,site_config(4),0,Replaced legacy config access with ConfigRepository
+admin/goaccess.php,site_config(1),0,Replaced legacy config access with ConfigRepository
+admin/grouppm.php,site_config(1),0,Replaced legacy config access with ConfigRepository
+admin/hit_and_run.php,site_config(29),0,Replaced legacy config access with ConfigRepository
+admin/hnrwarn.php,site_config(1),0,Replaced legacy config access with ConfigRepository
+admin/inactive.php,site_config(8),0,Replaced legacy config access with ConfigRepository
+admin/ipcheck.php,site_config(3),0,Replaced legacy config access with ConfigRepository
+admin/leechwarn.php,site_config(2),0,Replaced legacy config access with ConfigRepository
+admin/mega_search.php,site_config(16),0,Replaced legacy config access with ConfigRepository
+admin/modded_torrents.php,site_config(6),0,Replaced legacy config access with ConfigRepository
+admin/modtask.php,site_config(10),0,Replaced legacy config access with ConfigRepository
+admin/mysql_stats.php,site_config(1),0,Replaced legacy config access with ConfigRepository
+admin/news.php,site_config(10),0,Replaced legacy config access with ConfigRepository
+admin/polls_manager.php,site_config(13),0,Replaced legacy config access with ConfigRepository
+admin/site_settings.php,site_config(3),0,Replaced legacy config access with ConfigRepository
+admin/snatched_torrents.php,site_config(2),0,Replaced legacy config access with ConfigRepository
+admin/sysoplog.php,site_config(1),0,Replaced legacy config access with ConfigRepository
+admin/themes.php,site_config(10),0,Replaced legacy config access with ConfigRepository
+admin/trivia_config.php,site_config(3),0,Replaced legacy config access with ConfigRepository
+admin/uploader_info.php,site_config(1),0,Replaced legacy config access with ConfigRepository
+admin/user_hits.php,site_config(1),0,Replaced legacy config access with ConfigRepository
+admin/view_peers.php,site_config(3),0,Replaced legacy config access with ConfigRepository
+blocks/global/crazyhour.php,site_config(2),0,Replaced legacy config access with ConfigRepository
+blocks/global/demotion.php,site_config(2),0,Replaced legacy config access with ConfigRepository
+blocks/global/freeleech_contribution.php,site_config(2),0,Replaced legacy config access with ConfigRepository
+blocks/global/happyhour.php,site_config(4),0,Replaced legacy config access with ConfigRepository
+blocks/global/lottery.php,site_config(2),0,Replaced legacy config access with ConfigRepository
+blocks/global/message.php,site_config(4),0,Replaced legacy config access with ConfigRepository
+blocks/global/report.php,site_config(4),0,Replaced legacy config access with ConfigRepository
+blocks/global/staffmessages.php,site_config(4),0,Replaced legacy config access with ConfigRepository
+blocks/global/uploadapp.php,site_config(4),0,Replaced legacy config access with ConfigRepository
+blocks/index/active_24h_users.php,site_config(2),0,Replaced legacy config access with ConfigRepository
+blocks/index/active_birthday_users.php,site_config(1),0,Replaced legacy config access with ConfigRepository
+blocks/index/active_irc_users.php,site_config(1),0,Replaced legacy config access with ConfigRepository
+blocks/index/active_users.php,site_config(1),0,Replaced legacy config access with ConfigRepository
+blocks/index/advertise.php,site_config(1),0,Replaced legacy config access with ConfigRepository
+blocks/index/ajaxchat.php,site_config(1),0,Replaced legacy config access with ConfigRepository
+blocks/index/comments.php,site_config(2),0,Replaced legacy config access with ConfigRepository
+blocks/index/cooker.php,site_config(3),0,Replaced legacy config access with ConfigRepository
+blocks/index/disclaimer.php,site_config(1),0,Replaced legacy config access with ConfigRepository
+blocks/index/offers.php,site_config(4),0,Replaced legacy config access with ConfigRepository
+blocks/index/requests.php,site_config(4),0,Replaced legacy config access with ConfigRepository
+blocks/index/staff_picks.php,site_config(1),0,Replaced legacy config access with ConfigRepository
+blocks/index/stats.php,none,0,Removed unused \$site_config global; no replacements needed
+blocks/index/top_torrents.php,site_config(1),0,Replaced legacy config access with ConfigRepository
+blocks/index/trivia.php,site_config(1),0,Replaced legacy config access with ConfigRepository
+blocks/userdetails/completed.php,site_config(28),0,Replaced legacy config access with ConfigRepository
+blocks/userdetails/gender.php,site_config(1),0,Replaced legacy config access with ConfigRepository
+blocks/userdetails/report.php,site_config(1),0,Replaced legacy config access with ConfigRepository
+blocks/userdetails/seedbonus.php,site_config(1),0,Replaced legacy config access with ConfigRepository
+chat/lib/class/AJAXChatTemplate.php,none,0,String literal reference only; no config migration required
+config/app.php,none,0,Config already exposes announce URL and related settings
+include/function_chatbot.php,site_config(17),0,Replaced legacy config access with ConfigRepository
+include/function_comments.php,site_config(10),0,Replaced legacy config access with ConfigRepository
+include/function_common.php,site_config(18),0,Replaced legacy config access with ConfigRepository
+include/function_details.php,site_config(2),0,Replaced legacy config access with ConfigRepository
+include/function_fanart.php,site_config(10),0,Replaced legacy config access with ConfigRepository
+include/function_happyhour.php,site_config(7),0,Replaced legacy config access with ConfigRepository
+include/function_html.php,site_config(9),0,Replaced legacy config access with ConfigRepository
+include/function_imdb.php,site_config(12),0,Replaced legacy config access with ConfigRepository
+include/function_newsrss.php,site_config(9),0,Replaced legacy config access with ConfigRepository
+include/function_pager.php,site_config(2),0,Replaced legacy config access with ConfigRepository
+include/function_polls.php,site_config(6),0,Replaced legacy config access with ConfigRepository
+include/function_returnto.php,site_config(2),0,Replaced legacy config access with ConfigRepository
+include/function_searchcloud.php,site_config(2),0,Replaced legacy config access with ConfigRepository
+include/function_tfreak.php,site_config(3),0,Replaced legacy config access with ConfigRepository
+include/function_tmdb.php,site_config(17),0,Replaced legacy config access with ConfigRepository
+include/function_torrenttable.php,site_config(43),0,Replaced torrent table lookups with ConfigRepository access
+include/function_translate.php,site_config(1),0,Removed legacy site_config global and wired ConfigRepository bootstrap
+include/function_tvmaze.php,site_config(7),0,Switched TVMaze integration to ConfigRepository for anonymizer and time settings
+include/function_users.php,site_config(58),0,Rerouted user helper configuration access through ConfigRepository
+include/images_update.php,site_config(6),0,Updated image refresh cron to resolve categories and chatbot from ConfigRepository
+include/runtime_safe.php,none,0,Seeded ConfigRepository access alongside defensive runtime bootstrap
+include/stealth.php,site_config(4),0,Used ConfigRepository for cache TTLs and redirects in stealth toggle
+public/anatomy.php,site_config(1),0,Replaced breadcrumb base URL with ConfigRepository value
+public/announce.php,site_config(16),0,Migrated announce handler to ConfigRepository-configured intervals and flags
+public/announcement.php,site_config(5),0,Swapped announcement links and cache TTLs to ConfigRepository
+public/arcade.php,site_config(14),0,Resolved arcade settings and paths via ConfigRepository arrays
+public/arcade_top_scores.php,site_config(10),0,Used ConfigRepository for arcade leaderboard assets and links
+public/bjstats.php,site_config(3),0,Checked blackjack permissions using ConfigRepository class settings
+public/browse.php,site_config(6),0,Replaced browse redirects and pager links with ConfigRepository base URL
+public/bugs.php,site_config(10),0,Updated bug messaging templates and staff broadcasts to use ConfigRepository
+public/announce.php,site_config(0),0,Normalized ConfigRepository bootstrap usage after runtime_safe refactor
+include/function_torrenttable.php,none,0,Removed stray global reuse after ConfigRepository migration
+public/casino.php,site_config(9),0,Replaced casino permissions, ratio checks, autoshout toggles, and headings with ConfigRepository values
+public/catalog.php,site_config(5),0,Swapped catalog navigation assets and links to ConfigRepository paths
+public/categoryids.php,site_config(1),0,Updated category link builder to use ConfigRepository base URL
+public/chat.php,site_config(1),0,Removed legacy site_config global and built IRC breadcrumb from ConfigRepository
+public/getrss.php,site_config(2),0,Routed RSS feed builder to ConfigRepository and dropped legacy global
+public/happylog.php,site_config(3),0,Swapped happy log pager and torrent links to ConfigRepository base URLs
+public/login.php,site_config(10),0,Resolved login redirects and limits from ConfigRepository booleans and URLs
+public/logout.php,site_config(2),0,Redirected logout flow using ConfigRepository base URL
+public/movies.php,site_config(7),0,Loaded media schedules with ConfigRepository paths and default hour settings
+public/mybonus.php,site_config(20),0,Migrated bonus shop messaging and metrics to ConfigRepository arrays
+public/mytorrents.php,site_config(4),0,Rebuilt my torrents pager and rating thresholds via ConfigRepository
+public/needseed.php,site_config(9),0,Updated seeding helper tabs and category art to ConfigRepository paths
+public/new_announcement.php,site_config(2),0,Pointed announcement form actions at ConfigRepository base URL
+public/offers.php,site_config(11),0,Rewired offers CRUD paths and assets through ConfigRepository

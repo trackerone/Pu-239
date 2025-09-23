@@ -2,15 +2,15 @@
 declare(strict_types=1);
 require_once dirname(__DIR__) . '/bootstrap_web.php';
 
-$db = $container->get(Database::class);
+use Pu239\Config\ConfigRepository;
 
-
-
-
+global $container;
+/** @var ConfigRepository $config */
+$config = $container->get(ConfigRepository::class);
 
 require_once __DIR__ . '/../include/bittorrent.php';
 $user = check_user_status();
-global $site_config;
+$baseurl = (string) $config->get('paths.baseurl');
 
 $nick = $user ? $user['username'] : ('Guest_' . random_int(1000, 9999));
 $HTMLOUT = main_div("
@@ -19,6 +19,6 @@ $HTMLOUT = main_div("
 
 $title = _('IRC');
 $breadcrumbs = [
-    "<a href='{$_SERVER['PHP_SELF']}'>$title</a>",
+    "<a href='{$baseurl}/chat.php'>$title</a>",
 ];
 echo stdhead($title, [], 'page-wrapper', $breadcrumbs) . wrapper($HTMLOUT), stdfoot();

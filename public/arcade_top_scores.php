@@ -2,24 +2,31 @@
 declare(strict_types=1);
 require_once dirname(__DIR__) . '/bootstrap_web.php';
 
+use Pu239\Config\ConfigRepository;
+use Pu239\Database;
+
+global $container;
+/** @var ConfigRepository $config */
+$config = $container->get(ConfigRepository::class);
+/** @var Database $db */
 $db = $container->get(Database::class);
 
-
-
-
-
-use Pu239\Database;
+$siteName = (string) $config->get('site.name');
+$topScorePoints = (int) $config->get('arcade.top_score_points');
+$baseurl = (string) $config->get('paths.baseurl');
+$imagesBase = (string) $config->get('paths.images_baseurl');
+$gameNames = (array) $config->get('arcade.game_names');
+$games = (array) $config->get('arcade.games');
 
 require_once __DIR__ . '/../include/bittorrent.php';
 $user = check_user_status();
-global $container, $site_config;
 
 $HTMLOUT = "
-        <h1 class='has-text-centered'>" . _fe('{0} Arcade Top Scores!', $site_config['site']['name']) . "</h1>
+        <h1 class='has-text-centered'>" . _fe('{0} Arcade Top Scores!', $siteName) . "</h1>
         <div class='bottom10 has-text-centered'>
-            <div>" . _fe('Top Scores Earn {0} Karma Points', $site_config['arcade']['top_score_points']) . "</div>
+            <div>" . _fe('Top Scores Earn {0} Karma Points', $topScorePoints) . "</div>
             <div class='level-center top10'>
-                <a class='is-link' href='{$site_config['paths']['baseurl']}/arcade.php'>" . _('Back to the Arcade') . '</a>
+                <a class='is-link' href='{$baseurl}/arcade.php'>" . _('Back to the Arcade') . '</a>
             </div>
         </div>';
 
@@ -68,7 +75,7 @@ function get_highscore(string $game, array $highscore)
     return 0;
 }
 
-$list = $site_config['arcade']['game_names'];
+$list = $gameNames;
 sort($list);
 $heading = '
                     <tr>
@@ -78,8 +85,11 @@ $heading = '
                         <th>' . _('Score') . '</th>
                     </tr>';
 foreach ($list as $gname) {
-    $game_id = array_search($gname, $site_config['arcade']['game_names']);
-    $game = $site_config['arcade']['games'][$game_id];
+    $game_id = array_search($gname, $gameNames, true);
+    if ($game_id === false) {
+        continue;
+    }
+    $game = $games[$game_id] ?? '';
     $game_scores = get_scores($game, $scores);
     $body = '';
     if (!empty($game_scores)) {
@@ -123,8 +133,8 @@ foreach ($list as $gname) {
         $HTMLOUT .= "
         <div class='bg-00 round10 has-text-centered top20'>
             <a id='{$game}'></a>
-            <a href='{$site_config['paths']['baseurl']}/flash.php?gameURI={$game}.swf&amp;gamename={$game}&amp;game_id={$game_id}'>
-                <img src='{$site_config['paths']['images_baseurl']}games/{$game}.png' alt='{$gname}' class='round10 top20 w-50 min-250'>
+            <a href='{$baseurl}/flash.php?gameURI={$game}.swf&amp;gamename={$game}&amp;game_id={$game_id}'>
+                <img src='{$imagesBase}games/{$game}.png' alt='{$gname}' class='round10 top20 w-50 min-250'>
             </a>{$table}
         </div>";
     }
@@ -132,7 +142,7 @@ foreach ($list as $gname) {
 
 $title = _('Top Scores');
 $breadcrumbs = [
-    "<a href='{$site_config['paths']['baseurl']}/games.php'>" . _('Games') . '</a>',
+    "<a href='{$baseurl}/games.php'>" . _('Games') . '</a>',
     "<a href='{$_SERVER['PHP_SELF']}'>$title</a>",
 ];
 echo stdhead($title, [], 'page-wrapper', $breadcrumbs) . wrapper($HTMLOUT) . stdfoot();

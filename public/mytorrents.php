@@ -2,17 +2,19 @@
 declare(strict_types=1);
 require_once dirname(__DIR__) . '/bootstrap_web.php';
 
-$db = $container->get(Database::class);
+use Pu239\Config\ConfigRepository;
 
 
 
 
-
-use Pu239\Database;
 
 require_once __DIR__ . '/../include/bittorrent.php';
 $user = check_user_status();
-global $container, $site_config;
+global $container;
+/** @var ConfigRepository $config */
+$config = $container->get(ConfigRepository::class);
+$minVotes = (int) $config->get('site.minvotes');
+$baseurl = (string) $config->get('paths.baseurl');
 
 $HTMLOUT = '';
 // $fluent removed — use $this->db (ExtendedPdo)
@@ -21,7 +23,7 @@ $count = $fluent->from('torrents AS t')
                 ->select('COUNT(id) AS count');
 
 $select = $fluent->from('torrents AS t')
-                 ->select("IF(t.num_ratings < {$site_config['site']['minvotes']}, NULL, ROUND(t.rating_sum / t.num_ratings, 1)) AS rating")
+                 ->select("IF(t.num_ratings < {$minVotes}, NULL, ROUND(t.rating_sum / t.num_ratings, 1)) AS rating")
                  ->select('IF(s.to_go IS NOT NULL, (t.size - s.to_go) / t.size, -1) AS to_go')
                  ->select('u.class')
                  ->select('u.username')
@@ -76,7 +78,7 @@ if (!$count) {
         <h1 class='has-text-centered'>" . _('No torrents') . '</h1>' . main_div("
         <div class='has-text-centered'>" . _("You haven't uploaded any torrents yet.") . '</div>', null, 'padding20');
 } else {
-    $pager = pager(20, $count, "{$site_config['paths']['baseurl']}/mytorrents.php?{$pagerlink}");
+    $pager = pager(20, $count, "{$baseurl}/mytorrents.php?{$pagerlink}");
     $select = $select->limit($pager['pdo']['limit'])
                      ->offset($pager['pdo']['offset'])
                      ->fetchAll();
@@ -86,7 +88,7 @@ if (!$count) {
 }
 $title = _('My Torrents');
 $breadcrumbs = [
-    "<a href='{$site_config['paths']['baseurl']}/browse.php'>" . _('Browse Torrents') . '</a>',
+    "<a href='{$baseurl}/browse.php'>" . _('Browse Torrents') . '</a>',
     "<a href='{$_SERVER['PHP_SELF']}'>$title</a>",
 ];
 echo stdhead($title, [], 'page-wrapper', $breadcrumbs) . wrapper($HTMLOUT) . stdfoot();

@@ -1,12 +1,11 @@
 <?php
 declare(strict_types=1);
 
-$db = $container->get(Database::class);
-
 require_once __DIR__ . '/runtime_safe.php';
 
 use MatthiasMullie\Scrapbook\Exception\UnbegunTransaction;
 use Pu239\Cache;
+use Pu239\Config\ConfigRepository;
 use Pu239\Database;
 use Pu239\Image;
 use Pu239\Torrent;
@@ -15,6 +14,10 @@ use Spatie\Image\Exceptions\InvalidManipulation;
 require_once dirname(__FILE__) . DIRECTORY_SEPARATOR . 'bittorrent.php';
 
 global $container;
+/** @var ConfigRepository $config */
+$config = $container->get(ConfigRepository::class);
+/** @var Database $db */
+$db = $container->get(Database::class);
 $cache = $container->get(Cache::class);
 if (!empty($argv[1]) && $argv[1] === 'force') {
     $cache->delete('images_update_');
@@ -24,9 +27,8 @@ echo "===================================================\n";
 echo get_date((int) TIME_NOW, 'LONG', 1, 0) . "\n";
 
 $cleanup_check = $cache->get('images_update_');
-global $site_config;
 
-if (user_exists($site_config['chatbot']['id']) && ($cleanup_check === false || is_null($cleanup_check))) {
+if (user_exists((int) $config->get('chatbot.id')) && ($cleanup_check === false || is_null($cleanup_check))) {
     images_update();
 } else {
     $item_count = (int) $cache->get('item_count_');
@@ -41,7 +43,7 @@ if (user_exists($site_config['chatbot']['id']) && ($cleanup_check === false || i
  */
 function images_update()
 {
-    global $container, $BLOCKS, $site_config;
+    global $container, $BLOCKS, $config;
 
     require_once INCL_DIR . 'function_tmdb.php';
     require_once INCL_DIR . 'function_tvmaze.php';
@@ -404,14 +406,19 @@ $db->perform($sql, array_merge($set, ['imdb_id' => $imdbid['imdb_id']]));
     echo _f('%d torrents descr info cached', $count) . "\n";
 
     if ($BLOCKS['tvmaze_api_on']) {
-        $in = str_repeat('?,', count($site_config['categories']['tv']) - 1) . '?';
-        $torrents = $fluent->from('torrents')
-            ->select(null)
-            ->select('id')
-            ->select('name')
-            ->select('imdb_id')
-            ->select('poster')
-            ->where('category IN (' . $in . ')', $site_config['categories']['tv']);
+        $tvCategories = $config->get('categories.tv');
+        $tvCategories = is_array($tvCategories) ? $tvCategories : [];
+        $torrents = [];
+        if (!empty($tvCategories)) {
+            $placeholders = implode(',', array_fill(0, count($tvCategories), '?'));
+            $torrents = $fluent->from('torrents')
+                ->select(null)
+                ->select('id')
+                ->select('name')
+                ->select('imdb_id')
+                ->select('poster')
+                ->where('category IN (' . $placeholders . ')', $tvCategories);
+        }
 
         $count = 0;
         foreach ($torrents as $tor) {

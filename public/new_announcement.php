@@ -2,12 +2,10 @@
 declare(strict_types=1);
 require_once dirname(__DIR__) . '/bootstrap_web.php';
 
-$db = $container->get(Database::class);
+use Pu239\Config\ConfigRepository;
 
 
 
-
-use Pu239\Database;
 
 require_once __DIR__ . '/../include/bittorrent.php';
 $user = check_user_status();
@@ -21,7 +19,10 @@ $stdfoot = [
         get_file_name('sceditor_js'),
     ],
 ];
-global $site_config;
+global $container;
+/** @var ConfigRepository $config */
+$config = $container->get(ConfigRepository::class);
+$baseurl = (string) $config->get('paths.baseurl');
 
 if ($user['class'] < UC_MAX) {
     stderr(_('Error'), _("You're not authorized"));
@@ -82,7 +83,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
      <tr>
      <td class='embedded'><div class='has-text-centered'>
      <h1>Create Announcement for " . ($n_pms) . ' user' . ($n_pms > 1 ? 's' : '') . '&#160;!</h1>';
-    $HTMLOUT .= "<form name='compose' method='post' action='{$site_config['paths']['baseurl']}/new_announcement.php' enctype='multipart/form-data' accept-charset='utf-8'>
+    $HTMLOUT .= "<form name='compose' method='post' action='{$baseurl}/new_announcement.php' enctype='multipart/form-data' accept-charset='utf-8'>
      <table>
      <tr>
      <td colspan='2'><b>" . _('Subject') . ": </b>

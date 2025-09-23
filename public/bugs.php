@@ -13,6 +13,7 @@ use DI\DependencyException;
 use DI\NotFoundException;
 use MatthiasMullie\Scrapbook\Exception\UnbegunTransaction;
 use Pu239\Cache;
+use Pu239\Config\ConfigRepository;
 use Pu239\Database;
 use Pu239\Message;
 use Pu239\Session;
@@ -22,7 +23,13 @@ use Spatie\Image\Exceptions\InvalidManipulation;
 require_once __DIR__ . '/../include/bittorrent.php';
 $curuser = check_user_status();
 $HTMLOUT = '';
-global $container, $site_config;
+global $container;
+/** @var ConfigRepository $config */
+$config = $container->get(ConfigRepository::class);
+
+$siteName = (string) $config->get('site.name');
+$baseurl = (string) $config->get('paths.baseurl');
+$staffList = (array) $config->get('is_staff');
 
 $possible_actions = [
     'viewbug',
@@ -57,7 +64,7 @@ if ($action === 'viewbug') {
         $precomment = "\n[precode]{$comment}[/precode]";
         switch ($status) {
             case 'fixed':
-                $msg = _fe("Hello {0}\nYour bug: [b]{1}[/b][code]{2}[/code]has been fixed by one of our coders.\n\nWe would like to thank you and therefore we have added [b]2 GB[/b] to your upload total :].\n\nBest regards, {3}'s coders.", htmlsafechars($user['username']), htmlsafechars($bug['title']), htmlsafechars($bug['problem']), $site_config['site']['name']) . "\n\n$precomment";
+                $msg = _fe("Hello {0}\nYour bug: [b]{1}[/b][code]{2}[/code]has been fixed by one of our coders.\n\nWe would like to thank you and therefore we have added [b]2 GB[/b] to your upload total :].\n\nBest regards, {3}'s coders.", htmlsafechars($user['username']), htmlsafechars($bug['title']), htmlsafechars($bug['problem']), $siteName) . "\n\n$precomment";
                 $update = [
                     'uploaded' => $user['uploaded'] + (1024 * 1024 * 1024 * 2),
                 ];
@@ -65,11 +72,11 @@ if ($action === 'viewbug') {
                 break;
 
             case 'ignored':
-                $msg = _fe("Hello {0}.\nYour bug: [b]{1}[/b][code]{2}[/code]has been ignored by one of our coders.\n\nPossibly it was not a bug or has already been fixed.\n\nBest regards, {3}'s coders.", htmlsafechars($user['username']), htmlsafechars($bug['title']), htmlsafechars($bug['problem']), $site_config['site']['name']) . "\n\n$precomment";
+                $msg = _fe("Hello {0}.\nYour bug: [b]{1}[/b][code]{2}[/code]has been ignored by one of our coders.\n\nPossibly it was not a bug or has already been fixed.\n\nBest regards, {3}'s coders.", htmlsafechars($user['username']), htmlsafechars($bug['title']), htmlsafechars($bug['problem']), $siteName) . "\n\n$precomment";
                 break;
 
             case 'na':
-                $msg = _fe("Hello {0}.\nYour bug: [b]{1}[/b][code]{2}[/code]needs more information. Best regards, {3}'s coders.", htmlsafechars($user['username']), htmlsafechars($bug['title']), htmlsafechars($bug['problem']), $site_config['site']['name']) . "\n\n$precomment";
+                $msg = _fe("Hello {0}.\nYour bug: [b]{1}[/b][code]{2}[/code]needs more information. Best regards, {3}'s coders.", htmlsafechars($user['username']), htmlsafechars($bug['title']), htmlsafechars($bug['problem']), $siteName) . "\n\n$precomment";
         }
         $msgs_buffer[] = [
             'sender' => $curuser['id'],
@@ -202,7 +209,7 @@ $db->perform($sql, array_merge($update, ['id' => $id]));
                     ->select('COUNT(id) AS count')
                     ->fetch("count");
     $perpage = 25;
-    $pager = pager($perpage, $count, $site_config['paths']['baseurl'] . '/bugs.php?action=bugs&amp;');
+    $pager = pager($perpage, $count, $baseurl . '/bugs.php?action=bugs&amp;');
     $bugs = $fluent->from('bugs AS b')
                    ->select(null)
                    ->select('b.id')
@@ -287,7 +294,7 @@ $db->perform($sql, array_merge($update, ['id' => $id]));
         $HTMLOUT .= $count > $perpage ? $pager['pagerbottom'] : '';
     } else {
         $session->set('is-warning', _('There are no reported bugs :).'));
-        header('Location: ' . $site_config['paths']['baseurl']);
+        header('Location: ' . $baseurl);
         app_halt('Exit called');
     }
 } elseif ($action === 'add') {
@@ -367,15 +374,15 @@ $result = $db->perform($sql, $values);
  */
 function send_staff_message(array $values, int $bug_id)
 {
-    global $container, $site_config;
+    global $container, $baseurl, $staffList;
 
     $messages_class = $container->get(Message::class);
     $user_class = $container->get(User::class);
     $user = $user_class->getUserFromId($values['sender']);
-    $link = _('Posted By') . ": [url={$site_config['paths']['baseurl']}/userdetails.php?id={$values['sender']}]{$user['username']}[/url]";
+    $link = _('Posted By') . ": [url={$baseurl}/userdetails.php?id={$values['sender']}]{$user['username']}[/url]";
     $subject = _('New Bug Report');
-    $msg = "[url={$site_config['paths']['baseurl']}/bugs.php?action=viewbug&id={$bug_id}][h1]{$values['title']}[/h1][/url][code]{$values['problem']}[/code]\n{$link}";
-    foreach ($site_config['is_staff'] as $key => $userid) {
+    $msg = "[url={$baseurl}/bugs.php?action=viewbug&id={$bug_id}][h1]{$values['title']}[/h1][/url][code]{$values['problem']}[/code]\n{$link}";
+    foreach ($staffList as $key => $userid) {
         $msgs_buffer[] = [
             'receiver' => $userid,
             'added' => TIME_NOW,

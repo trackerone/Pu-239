@@ -2,21 +2,26 @@
 declare(strict_types=1);
 require_once dirname(__DIR__) . '/bootstrap_web.php';
 
-$db = $container->get(Database::class);
-
 
 
 
 use Pu239\Comment;
 use Pu239\Image;
 use Pu239\Offer;
+use Pu239\Config\ConfigRepository;
 use Pu239\Session;
 use Pu239\Torrent;
 use Rakit\Validation\Validator;
 
 require_once __DIR__ . '/../include/bittorrent.php';
 $user = check_user_status();
-global $container, $site_config;
+global $container;
+/** @var ConfigRepository $config */
+$config = $container->get(ConfigRepository::class);
+$baseurl = (string) $config->get('paths.baseurl');
+$imagesBaseurl = (string) $config->get('paths.images_baseurl');
+$movieCategories = $config->arr('categories.movie');
+$siteName = (string) $config->get('site.name');
 
 $stdhead = [];
 $stdfoot = [
@@ -74,7 +79,7 @@ if (isset($data['action'])) {
             $offer = $offer_class->get($comment['offer'], false);
             $edit_form = "
                 <h2 class='has-text-centered'>" . _('Editing a comment for') . ': ' . format_comment($offer['name']) . "</h2>
-                <form class='form-inline table-wrapper' method='post' action='{$site_config['paths']['baseurl']}/offers.php?action=edit_comment' accept-charset='utf-8'>
+                <form class='form-inline table-wrapper' method='post' action='{$baseurl}/offers.php?action=edit_comment' accept-charset='utf-8'>
                     <input type='hidden' name='id' value='{$comment['offer']}'>
                     <input type='hidden' name='cid' value='{$comment['id']}'>
                     <div class='columns is-marginless is-paddingless'>
@@ -99,7 +104,7 @@ if (isset($data['action'])) {
             $offer = $offer_class->get($id, false);
             $edit_form = "
                 <h2 class='has-text-centered'>" . _('Add Comment to') . ': ' . format_comment($offer['name']) . "</h2>
-                <form class='form-inline table-wrapper' method='post' action='{$site_config['paths']['baseurl']}/offers.php?action=post_comment' accept-charset='utf-8'>
+                <form class='form-inline table-wrapper' method='post' action='{$baseurl}/offers.php?action=post_comment' accept-charset='utf-8'>
                     <input type='hidden' name='id' value='{$id}'>
                     <div class='columns is-marginless is-paddingless'>
                         <div class='column is-one-quarter has-text-left'>" . _('Comment') . "</div>
@@ -251,7 +256,7 @@ $form = "
                 <div class='columns is-marginless is-paddingless'>
                     <div class='column is-one-quarter has-text-left'>" . _('Category') . "</div>
                     <div class='column'>
-                        " . category_dropdown($site_config['categories']['movie']) . "
+                        " . category_dropdown($movieCategories) . "
                     </div>
                 </div>
                 <div class='columns is-marginless is-paddingless'>
@@ -269,7 +274,7 @@ $form = "
                         <div id='droppable' class='droppable bg-03 top20'>
                             <span id='comment'>" . _('Drop images or click here to select images.') . "</span>
                             <div id='loader' class='is-hidden'>
-                                <img src='{$site_config['paths']['images_baseurl']}/forums/updating.svg' alt='Loading...'>
+                                <img src='{$imagesBaseurl}/forums/updating.svg' alt='Loading...'>
                             </div>
                         </div>
                         <div class='output-wrapper output'></div>
@@ -347,7 +352,7 @@ if ($view && is_valid_id($id)) {
                 </div>{$imdb_info}{$has_votes}
                 <div class='columns bg-03 top20 round10'>
                     <div class='has-text-centered padding20'>
-                        <a class='button is-small' href='{$site_config['paths']['baseurl']}/offers.php?action=add_comment&amp;id={$id}'>Add a comment</a>
+                        <a class='button is-small' href='{$baseurl}/offers.php?action=add_comment&amp;id={$id}'>Add a comment</a>
                     </div>
                 </div>";
     $comments = $comment_class->get_comment_by_column('offer', $id);
@@ -361,7 +366,7 @@ $HTMLOUT .= "
         <li><a href='{$_SERVER['PHP_SELF']}'>" . _('View Incomplete Offers') . '</a></li>' : "
         <li><a href='{$_SERVER['PHP_SELF']}?action=view_all'>" . _('View All Offers') . '</a></li>') . "
     </ul>
-    <h1 class='has-text-centered'>{$site_config['site']['name']}'s " . _('Offers') . '</h1>';
+    <h1 class='has-text-centered'>{$siteName}'s " . _('Offers') . '</h1>';
 
 if (!empty($edit_form)) {
     $HTMLOUT .= $edit_form;
@@ -392,7 +397,7 @@ if (!empty($edit_form)) {
     if (!empty($offers)) {
         foreach ($offers as $offer) {
             $has_full_access = $user['id'] === $offer['userid'] || has_access($user['class'], UC_STAFF, '') && $has_access;
-            $caticon = !empty($offer['image']) ? "<img src='{$site_config['paths']['images_baseurl']}caticons/" . get_category_icons() . '/' . format_comment($offer['image']) . "' class='tooltipper' alt='" . format_comment($offer['cat']) . "' title='" . format_comment($offer['cat']) . "' height='20px' width='auto'>" : format_comment($offer['cat']);
+            $caticon = !empty($offer['image']) ? "<img src='{$imagesBaseurl}caticons/" . get_category_icons() . '/' . format_comment($offer['image']) . "' class='tooltipper' alt='" . format_comment($offer['cat']) . "' title='" . format_comment($offer['cat']) . "' height='20px' width='auto'>" : format_comment($offer['cat']);
             $poster = !empty($offer['poster']) ? "<div class='has-text-centered'><img src='" . url_proxy($offer['poster'], true, 250) . "' alt='image' class='img-polaroid'></div>" : '';
             $background = $imdb_id = '';
             preg_match('#(tt\d{7,8})#', $offer['url'], $match);
@@ -401,7 +406,7 @@ if (!empty($edit_form)) {
                 $background = $images_class->find_images($imdb_id, $type = 'background');
                 $background = !empty($background) ? "style='background-image: url({$background});'" : '';
                 $poster = !empty($offer['poster']) ? $offer['poster'] : $images_class->find_images($imdb_id, $type = 'poster');
-                $poster = empty($poster) ? "<img src='{$site_config['paths']['images_baseurl']}noposter.png' alt='" . _('Poster') . "' class='tooltip-poster'>" : "<img src='" . url_proxy($poster, true, 250) . "' alt='" . _('Poster') . "' class='tooltip-poster'>";
+                $poster = empty($poster) ? "<img src='{$imagesBaseurl}noposter.png' alt='" . _('Poster') . "' class='tooltip-poster'>" : "<img src='" . url_proxy($poster, true, 250) . "' alt='" . _('Poster') . "' class='tooltip-poster'>";
             }
             $chef = format_username($offer['userid']);
             $plot = $torrent->get_plot($imdb_id);
@@ -418,7 +423,7 @@ if (!empty($edit_form)) {
             } else {
                 $plot = '';
             }
-            $hover = upcoming_hover($site_config['paths']['baseurl'] . '/offers.php?action=view_offer&amp;id=' . $offer['id'], 'upcoming_' . $offer['id'], $offer['name'], $background, $poster, get_date($offer['added'], 'MYSQL'), get_date($offer['added'], 'MYSQL'), $chef, $plot);
+            $hover = upcoming_hover($baseurl . '/offers.php?action=view_offer&amp;id=' . $offer['id'], 'upcoming_' . $offer['id'], $offer['name'], $background, $poster, get_date($offer['added'], 'MYSQL'), get_date($offer['added'], 'MYSQL'), $chef, $plot);
             $body .= "
                     <tr>
                         <td class='has-text-centered'>{$caticon}</td>
@@ -458,7 +463,7 @@ if (!empty($edit_form)) {
 
 $title = _('Offers');
 $breadcrumbs = [
-    "<a href='{$site_config['paths']['baseurl']}/browse.php'>" . _('Browse Torrents') . '</a>',
+    "<a href='{$baseurl}/browse.php'>" . _('Browse Torrents') . '</a>',
     "<a href='{$_SERVER['PHP_SELF']}'>$title</a>",
 ];
 echo stdhead($title, $stdhead, 'page-wrapper', $breadcrumbs) . wrapper($HTMLOUT) . stdfoot($stdfoot);

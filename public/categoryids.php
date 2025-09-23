@@ -2,17 +2,19 @@
 declare(strict_types=1);
 require_once dirname(__DIR__) . '/bootstrap_web.php';
 
-$db = $container->get(Database::class);
-
-
-
-
-
+use Pu239\Config\ConfigRepository;
 use Pu239\Database;
+
+global $container;
+/** @var ConfigRepository $config */
+$config = $container->get(ConfigRepository::class);
+/** @var Database $db */
+$db = $container->get(Database::class);
 
 require_once __DIR__ . '/../include/bittorrent.php';
 $user = check_user_status();
 $parents = genrelist(true);
+$baseurl = (string) $config->get('paths.baseurl');
 
 $heading = "
         <tr>
@@ -21,7 +23,6 @@ $heading = "
             <th class='has-text-centered w-25'>" . _('Torrents Uploaded') . '</th>
         </tr>';
 $body = '';
-global $container, $site_config;
 
 // $fluent removed — use $this->db (ExtendedPdo)
 $counts = $fluent->from('torrents')
@@ -47,7 +48,7 @@ foreach ($parents as $parent) {
         $body .= "
         <tr>
             <td class='has-text-centered'>{$child['id']}</td>
-            <td><a href='{$site_config['paths']['baseurl']}/browse.php?cats[]={$child['id']}'>{$parent['name']}::{$child['name']}</a></td>
+            <td><a href='{$baseurl}/browse.php?cats[]={$child['id']}'>{$parent['name']}::{$child['name']}</a></td>
             <td class='has-text-centered'>$count</td>
         </tr>";
     }

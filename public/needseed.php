@@ -2,18 +2,21 @@
 declare(strict_types=1);
 require_once dirname(__DIR__) . '/bootstrap_web.php';
 
-$db = $container->get(Database::class);
+use Pu239\Config\ConfigRepository;
 
 
 
 
 
-use Pu239\Database;
 
 require_once __DIR__ . '/../include/bittorrent.php';
 $user = check_user_status();
 $HTMLOUT = '';
-global $container, $site_config;
+global $container;
+/** @var ConfigRepository $config */
+$config = $container->get(ConfigRepository::class);
+$baseurl = (string) $config->get('paths.baseurl');
+$imagesBaseurl = (string) $config->get('paths.images_baseurl');
 
 $possible_actions = [
     'leechers',
@@ -42,7 +45,7 @@ if ($needed === 'leechers') {
                     <a href='#' class='active is-link'>" . _('Seeders in need') . "</a>
                 </li>
                 <li>
-                    <a href='{$site_config['paths']['baseurl']}/needseed.php?needed=seeders' class='is-link'>" . _('Torrents Needing Seeds') . '</a>
+                    <a href='{$baseurl}/needseed.php?needed=seeders' class='is-link'>" . _('Torrents Needing Seeds') . '</a>
                 </li>
             </ul>
         </div>';
@@ -85,7 +88,7 @@ if ($needed === 'leechers') {
             $needseed['cat_name'] = htmlsafechars($change[$arr['category']]['name']);
             $needseed['cat_pic'] = htmlsafechars($change[$arr['category']]['image']);
             if (!empty($needseed['cat_pic'])) {
-                $cat = "<img src='{$site_config['paths']['images_baseurl']}caticons/" . get_category_icons() . "/{$needseed['cat_pic']}' alt='{$needseed['cat_name']}' title='{$needseed['cat_name']}' class='tooltipper'>";
+                $cat = "<img src='{$imagesBaseurl}caticons/" . get_category_icons() . "/{$needseed['cat_pic']}' alt='{$needseed['cat_name']}' title='{$needseed['cat_name']}' class='tooltipper'>";
             } else {
                 $cat = $needseed['cat_name'];
             }
@@ -94,7 +97,7 @@ if ($needed === 'leechers') {
             $body .= '
                 <tr>
                     <td>' . format_username((int) $arr['id']) . ' (' . member_ratio((float) $arr['uploaded'], (float) $arr['downloaded']) . ")</td>
-                    <td><a href='{$site_config['paths']['baseurl']}/details.php?id=" . (int) $What_ID . "' title='{$torrname}' class='tooltipper'>{$torrname}</a></td>
+                    <td><a href='{$baseurl}/details.php?id=" . (int) $What_ID . "' title='{$torrname}' class='tooltipper'>{$torrname}</a></td>
                     <td>{$cat}</td>
                     <td>{$peers}</td>
                 </tr>";
@@ -106,7 +109,7 @@ if ($needed === 'leechers') {
 
     $title = _('Leechers in Need');
     $breadcrumbs = [
-        "<a href='{$site_config['paths']['baseurl']}/browse.php'>" . _('Browse Torrents') . '</a>',
+        "<a href='{$baseurl}/browse.php'>" . _('Browse Torrents') . '</a>',
         "<a href='{$_SERVER['PHP_SELF']}'>$title</a>",
     ];
     echo stdhead($title, [], 'page-wrapper', $breadcrumbs) . wrapper($HTMLOUT) . stdfoot();
@@ -115,7 +118,7 @@ if ($needed === 'leechers') {
         <div class='padding20'>
             <ul class='tabs'>
                 <li>
-                    <a href='{$site_config['paths']['baseurl']}/needseed.php?needed=leechers'  class='is-link'>" . _('Seeders in need') . "</a>
+                    <a href='{$baseurl}/needseed.php?needed=leechers'  class='is-link'>" . _('Seeders in need') . "</a>
                 </li>
                 <li>
                     <a href='#' class='active is-link'>" . _('Torrents Needing Seeds') . '</a>
@@ -152,7 +155,7 @@ if ($needed === 'leechers') {
             $needseed['cat_name'] = htmlsafechars($change[$arr['category']]['name']);
             $needseed['cat_pic'] = htmlsafechars($change[$arr['category']]['image']);
             if (!empty($needseed['cat_pic'])) {
-                $cat = "<img src='{$site_config['paths']['images_baseurl']}caticons/" . get_category_icons() . "/{$needseed['cat_pic']}' alt='{$needseed['cat_name']}' title='{$needseed['cat_name']}' class='tooltipper'>";
+                $cat = "<img src='{$imagesBaseurl}caticons/" . get_category_icons() . "/{$needseed['cat_pic']}' alt='{$needseed['cat_name']}' title='{$needseed['cat_name']}' class='tooltipper'>";
             } else {
                 $cat = $needseed['cat_name'];
             }
@@ -160,7 +163,7 @@ if ($needed === 'leechers') {
             $body .= "
                 <tr>
                     <td class='has-text-centered'>{$cat}</td>
-                    <td><a href='{$site_config['paths']['baseurl']}/details.php?id=" . (int) $arr['id'] . "&amp;hit=1' title='{$torrname}' class='tooltipper'>{$torrname}</a></td>
+                    <td><a href='{$baseurl}/details.php?id=" . (int) $arr['id'] . "&amp;hit=1' title='{$torrname}' class='tooltipper'>{$torrname}</a></td>
                     <td class='has-text-centered'><span>" . (int) $arr['seeders'] . "</span></td>
                     <td class='has-text-centered'>" . (int) $arr['leechers'] . '</td>
                 </tr>';
@@ -171,7 +174,7 @@ if ($needed === 'leechers') {
     }
     $title = _('Seeders in Need');
     $breadcrumbs = [
-        "<a href='{$site_config['paths']['baseurl']}/browse.php'>" . _('Browse Torrents') . '</a>',
+        "<a href='{$baseurl}/browse.php'>" . _('Browse Torrents') . '</a>',
         "<a href='{$_SERVER['PHP_SELF']}'>$title</a>",
     ];
     echo stdhead($title, [], 'page-wrapper', $breadcrumbs) . wrapper($HTMLOUT) . stdfoot();

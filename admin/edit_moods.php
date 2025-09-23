@@ -2,11 +2,14 @@
 declare(strict_types=1);
 require_once dirname(__DIR__) . '/bootstrap_web.php';
 
-use Pu239\Database;
 use Pu239\Cache;
+use Pu239\Config\ConfigRepository;
+use Pu239\Database;
 
 
-global $container, $site_config, $CURUSER;
+global $container, $CURUSER;
+/** @var ConfigRepository $config */
+$config = $container->get(ConfigRepository::class);
 
 /** @var Database $db */
 $db = $container->get(Database::class);
@@ -29,9 +32,9 @@ $bonus  = isset($edit_params['bonus']) ? 1 : 0;
 // Helpers
 function mood_row(string $name, string $image, int $bonus): string
 {
-    global $site_config;
+    global $config;
     return '<tr>'
-        . "<td><img src=\"{$site_config['paths']['images_baseurl']}smilies/" . htmlsafechars($image) . "\" alt=\"\"></td>"
+        . "<td><img src=\"" . (string) $config->get('paths.images_baseurl') . "smilies/" . htmlsafechars($image) . "\" alt=\"\"></td>"
         . '<td>' . htmlsafechars($name) . '</td>'
         . '<td>' . htmlsafechars($image) . '</td>'
         . '<td>' . ($bonus !== 0 ? _('Yes') : _('No')) . '</td>';
@@ -47,7 +50,7 @@ if ($action === 'added') {
         );
         $cache->delete('topmoods');
         if (function_exists('write_log')) {
-            write_log('<b>' . _('Mood Added') . '</b> ' . htmlsafechars($CURUSER['username']) . ' - ' . htmlsafechars($name) . '<img src="' . $site_config['paths']['images_baseurl'] . 'smilies/' . htmlsafechars($image) . '" alt="">');
+            write_log('<b>' . _('Mood Added') . '</b> ' . htmlsafechars($CURUSER['username']) . ' - ' . htmlsafechars($name) . '<img src="' . (string) $config->get('paths.images_baseurl') . 'smilies/' . htmlsafechars($image) . '" alt="">');
         }
     }
 } elseif ($action === 'edited') {
@@ -58,7 +61,7 @@ if ($action === 'added') {
         );
         $cache->delete('topmoods');
         if (function_exists('write_log')) {
-            write_log('<b>' . _('Mood Edited') . '</b> ' . htmlsafechars($CURUSER['username']) . ' - ' . htmlsafechars($name) . '<img src="' . $site_config['paths']['images_baseurl'] . 'smilies/' . htmlsafechars($image) . '" alt="">');
+            write_log('<b>' . _('Mood Edited') . '</b> ' . htmlsafechars($CURUSER['username']) . ' - ' . htmlsafechars($name) . '<img src="' . (string) $config->get('paths.images_baseurl') . 'smilies/' . htmlsafechars($image) . '" alt="">');
         }
     }
 }
@@ -133,11 +136,11 @@ if (!empty($rows)) {
     $color = true;
     foreach ($rows as $arr) {
         $HTMLOUT .= '<tr ' . (($color = !$color) ? ' style="background-color:#000000;"' : 'style="background-color:#0f0f0f;"') . '>
-            <td><img src="' . $site_config['paths']['images_baseurl'] . 'smilies/' . htmlsafechars((string) $arr['image']) . '" alt=""></td>
+            <td><img src="' . (string) $config->get('paths.images_baseurl') . 'smilies/' . htmlsafechars((string) $arr['image']) . '" alt=""></td>
             <td>' . htmlsafechars((string) $arr['name']) . '</td>
             <td>' . htmlsafechars((string) $arr['image']) . '</td>
             <td>' . ((int) $arr['bonus'] !== 0 ? _('Yes') : _('No')) . '</td>
-            <td><a style="color:#FF0000" href="' . $site_config['paths']['baseurl'] . '/staffpanel.php?tool=edit_moods&amp;id=' . (int) $arr['id'] . '&amp;action=edit">' . _('Edit') . '</a></td>
+            <td><a style="color:#FF0000" href="' . (string) $config->get('paths.baseurl') . '/staffpanel.php?tool=edit_moods&amp;id=' . (int) $arr['id'] . '&amp;action=edit">' . _('Edit') . '</a></td>
         </tr>';
     }
 }
@@ -145,7 +148,7 @@ $HTMLOUT .= '</table>';
 
 $title = _('Edit Moods');
 $breadcrumbs = [
-    "<a href='{$site_config['paths']['baseurl']}/staffpanel.php'>" . _('Staff Panel') . '</a>',
+    "<a href='" . (string) $config->get('paths.baseurl') . "/staffpanel.php'>" . _('Staff Panel') . '</a>',
     "<a href='{$_SERVER['PHP_SELF']}'>$title</a>",
 ];
 
