@@ -53,10 +53,14 @@ function linkcolor($num)
  */
 function torrenttable(array $torrents, array $curuser)
 {
+<<<<<< codex/refactor-legacy-config-constants-to-configrepository-yo5yw8
+    global $container, $config;
+=======
 <<<<<< codex/refactor-legacy-config-constants-to-configrepository-ca9ms9
     global $container, $config;
 =======
     global $container, $curuser, $config;
+>>>>>> master
 >>>>>> master
 
     $session = $container->get(Session::class);

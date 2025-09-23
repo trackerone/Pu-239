@@ -58,6 +58,8 @@ blocks/index/cooker.php
 blocks/index/disclaimer.php
 blocks/index/offers.php
 blocks/index/requests.php
+<<<<<< codex/refactor-legacy-config-constants-to-configrepository-yo5yw8
+=======
 <<<<<< codex/refactor-legacy-config-constants-to-configrepository-ca9ms9
 =======
 <<<<<< codex/refactor-legacy-config-constants-to-configrepository-htorra
@@ -77,6 +79,7 @@ blocks/userdetails/seedbonus.php
 chat/lib/class/AJAXChatTemplate.php
 config/app.php
 >>>>> master
+>>>>>> master
 >>>>>> master
 >>>>>> master
 >>>>>> master
@@ -114,16 +117,6 @@ include/runtime_safe.php
 include/stealth.php
 public/anatomy.php
 public/announce.php
-public/announcement.php
-public/arcade.php
-public/arcade_top_scores.php
-public/bjstats.php
-public/browse.php
-public/bugs.php
-public/casino.php
-public/catalog.php
-public/categoryids.php
-public/chat.php
 public/clear_announcement.php
 public/contactstaff.php
 public/delete.php
@@ -135,16 +128,6 @@ public/filelist.php
 public/flash.php
 public/forums.php
 public/games.php
-public/getrss.php
-public/happylog.php
-public/login.php
-public/logout.php
-public/movies.php
-public/mybonus.php
-public/mytorrents.php
-public/needseed.php
-public/new_announcement.php
-public/offers.php
 public/peerlist.php
 public/polls_take_vote.php
 public/recover.php

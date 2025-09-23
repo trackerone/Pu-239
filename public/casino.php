@@ -1,12 +1,7 @@
 <?php
 declare(strict_types=1);
 require_once dirname(__DIR__) . '/bootstrap_web.php';
-
-$db = $container->get(Database::class);
-
-
-
-
+use Pu239\Config\ConfigRepository;
 use Pu239\Cache;
 use Pu239\Casino;
 use Pu239\CasinoBets;
@@ -17,7 +12,17 @@ use Pu239\User;
 
 require_once __DIR__ . '/../include/bittorrent.php';
 $user = check_user_status();
-global $container, $site_config;
+global $container;
+/** @var ConfigRepository $config */
+$config = $container->get(ConfigRepository::class);
+/** @var Database $db */
+$db = $container->get(Database::class);
+$allowedPlay = (int) $config->get('allowed.play');
+$classNames = (array) $config->get('class_names');
+$siteName = (string) $config->get('site.name');
+$autoshoutChat = (bool) $config->get('site.autoshout_chat');
+$autoshoutIrc = (bool) $config->get('site.autoshout_irc');
+$ratioFreeSite = (bool) $config->get('site.ratio_free');
 
 //== Config
 $amnt = $nobits = $abcdefgh = 0;
@@ -53,8 +58,8 @@ $delold = 1; //== Clear bets once finished
 //== End of Config
 
 $min_text = mksize(100 * 1073741824);
-if ($user['class'] < $site_config['allowed']['play']) {
-    stderr(_('Error'), _fe('Sorry, you must be a {0} to play in the casino!', $site_config['class_names'][$site_config['allowed']['play']]), 'bottom20');
+if ($user['class'] < $allowedPlay) {
+    stderr(_('Error'), _fe('Sorry, you must be a {0} to play in the casino!', $classNames[$allowedPlay] ?? ''), 'bottom20');
 } elseif ($user['game_access'] !== 1 || $user['status'] !== 0) {
     stderr(_('Error'), _('Your gaming rights have been disabled.'), 'bottom20');
     app_halt('Exit called');
@@ -94,7 +99,7 @@ if ($user['downloaded'] > 0) {
 } else {
     $ratio = 0;
 }
-if (!$site_config['site']['ratio_free'] && $ratio < $required_ratio) {
+if (!$ratioFreeSite && $ratio < $required_ratio) {
     stderr(_('Sorry'), htmlsafechars($user['username']) . ' ' . _('your ratio is under') . " {$required_ratio}", 'bottom20');
 }
 $row = $casino->get_totals();
@@ -403,7 +408,7 @@ if (isset($color_options[$post_color], $number_options[$post_number]) || isset($
             'deposit' => $user_deposit,
         ];
         $casino->update_user($update, $user['id']);
-        if ($site_config['site']['autoshout_chat'] || $site_config['site']['autoshout_irc']) {
+        if ($autoshoutChat || $autoshoutIrc) {
             autoshout($message);
         }
     }
@@ -412,7 +417,7 @@ if (isset($color_options[$post_color], $number_options[$post_number]) || isset($
     $details = '';
     $blocks = [];
     $HTMLOUT = "
-            <h1 class='has-text-centered'>{$site_config['site']['name']} Casino</h1>";
+            <h1 class='has-text-centered'>{$siteName} Casino</h1>";
     if ($openbet < $maxusrbet) {
         if ($totbets >= $maxtotbet) {
             $HTMLOUT .= _('There are already') . " $maxtotbet " . _('bets open, take an open bet or wait till someone plays') . '!';
@@ -420,7 +425,7 @@ if (isset($color_options[$post_color], $number_options[$post_number]) || isset($
             $blocks[] = "
             <div class='has-text-centered w-40 bg-03 margin20 padding20 round10'>
                 <form name='p2p' method='post' action='{$_SERVER['PHP_SELF']}' enctype='multipart/form-data' accept-charset='utf-8'>
-                    <h1 class='has-text-centered'>{$site_config['site']['name']} " . _('Casino') . ' - ' . _('Bet P2P with other users') . ':</h1>
+                    <h1 class='has-text-centered'>{$siteName} " . _('Casino') . ' - ' . _('Bet P2P with other users') . ':</h1>
                     <div>' . _('Place Bet') . '</div>
                     <div>' . _('Amount to bet') . "</div>
                     <input type='text' name='amnt' size='5' value='1'>
@@ -572,7 +577,7 @@ if (isset($color_options[$post_color], $number_options[$post_number]) || isset($
             <div class='w-100'>
                 <div class='level-center flex-top'>
                     <div class='has-text-centered w-30 bg-03 margin20 padding20 round10'>
-                        <h2>User @ {$site_config['site']['name']} " . _('Casino') . '</h2>';
+                        <h2>User @ {$siteName} " . _('Casino') . '</h2>';
     $body = '
                         <tr>
                             <td>' . _('You can win') . '</td>

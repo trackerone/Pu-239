@@ -2,19 +2,24 @@
 declare(strict_types=1);
 require_once dirname(__DIR__) . '/bootstrap_web.php';
 
-$db = $container->get(Database::class);
-
 
 
 
 
 use Pu239\Cache;
+use Pu239\Config\ConfigRepository;
 
 require_once __DIR__ . '/../include/bittorrent.php';
 $user = check_user_status();
 $image = placeholder_image();
-global $site_config, $container;
+global $container;
+/** @var ConfigRepository $config */
+$config = $container->get(ConfigRepository::class);
+/** @var Cache $cache */
 $cache = $container->get(Cache::class);
+$baseurl = (string) $config->get('paths.baseurl');
+$imagesBaseurl = (string) $config->get('paths.images_baseurl');
+$defaultUse12Hour = (bool) $config->get('site.use_12_hour');
 
 $lists = [
     'upcoming',
@@ -83,9 +88,9 @@ switch ($list) {
                 $titles = $body = [];
                 foreach ($shows as $tv) {
                     if (!empty($tv['name']) && !in_array(strtolower($tv['name']), $titles)) {
-                        $poster = !empty($tv['image']['original']) ? $tv['image']['original'] : (!empty($tv['_embedded']['show']['image']['original']) ? $tv['_embedded']['show']['image']['original'] : $site_config['paths']['images_baseurl'] . 'noposter.png');
+                        $poster = !empty($tv['image']['original']) ? $tv['image']['original'] : (!empty($tv['_embedded']['show']['image']['original']) ? $tv['_embedded']['show']['image']['original'] : $imagesBaseurl . 'noposter.png');
                         $airtime = strtotime($tv['airstamp']);
-                        $use_12_hour = !empty($user['use_12_hour']) ? $user['use_12_hour'] : $site_config['site']['use_12_hour'];
+                        $use_12_hour = !empty($user['use_12_hour']) ? $user['use_12_hour'] : $defaultUse12Hour;
                         $body[] = [
                             'poster' => url_proxy($poster, true, 250),
                             'placeholder' => url_proxy($poster, true, 250, null, 20),
@@ -156,7 +161,7 @@ switch ($list) {
             foreach ($tvs as $tv) {
                 if (!empty($tv['name']) && !in_array(strtolower($tv['name']), $titles)) {
                     $imdb_id = get_imdbid($tv['id']);
-                    $poster = !empty($tv['poster_path']) ? "https://image.tmdb.org/t/p/original{$tv['poster_path']}" : $site_config['paths']['images_baseurl'] . 'noposter.png';
+                    $poster = !empty($tv['poster_path']) ? "https://image.tmdb.org/t/p/original{$tv['poster_path']}" : $imagesBaseurl . 'noposter.png';
                     $backdrop = !empty($tv['backdrop_path']) ? "https://image.tmdb.org/t/p/original{$tv['backdrop_path']}" : '';
 
                     $body[] = [
@@ -405,7 +410,7 @@ switch ($list) {
 }
 
 $breadcrumbs = [
-    "<a href='{$site_config['paths']['baseurl']}/browse.php'>" . _('Browse Torrents') . '</a>',
+    "<a href='{$baseurl}/browse.php'>" . _('Browse Torrents') . '</a>',
     "<a href='{$_SERVER['PHP_SELF']}'>$title</a>",
 ];
 echo stdhead($title, [], 'page-wrapper', $breadcrumbs) . wrapper($HTMLOUT) . stdfoot();
@@ -417,11 +422,11 @@ echo stdhead($title, [], 'page-wrapper', $breadcrumbs) . wrapper($HTMLOUT) . std
  */
 function generate_html(array $data)
 {
-    global $site_config;
+    global $baseurl;
     $html = "
      <div class='masonry-item-clean padding10 bg-04 round10'>
         <div class='dt-tooltipper-large has-text-centered vertical_spread h-100' data-tooltip-content='#movie_{$data['id']}_tooltip'>
-            <a href='{$site_config['paths']['baseurl']}browse.php?sna=" . urlencode($data['title']) . "'>
+            <a href='{$baseurl}browse.php?sna=" . urlencode($data['title']) . "'>
                 <img src='{$data['placeholder']}' data-src='{$data['poster']}' alt='Poster' class='lazy tooltip-poster'>
             </a>
             <div class='has-text-centered top10'>

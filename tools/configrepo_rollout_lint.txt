@@ -335,6 +335,8 @@ No syntax errors detected in admin/forum_config.php
 No syntax errors detected in admin/freeleech.php
 No syntax errors detected in admin/freeusers.php
 No syntax errors detected in admin/goaccess.php
+<<<<<< codex/refactor-legacy-config-constants-to-configrepository-yo5yw8
+=======
 <<<<<< codex/refactor-legacy-config-constants-to-configrepository-ca9ms9
 =======
 <<<<<< codex/refactor-legacy-config-constants-to-configrepository-htorra
@@ -357,6 +359,7 @@ No syntax errors detected in admin/goaccess.php
 >>>>>> master
 >>>>>> master
 >>>>>> master
+>>>>>> master
 admin/grouppm.php: OK
 admin/hit_and_run.php: OK
 admin/hnrwarn.php: OK
@@ -367,6 +370,8 @@ admin/mega_search.php: OK
 admin/modded_torrents.php: OK
 admin/modtask.php: OK
 admin/mysql_stats.php: OK
+<<<<<< codex/refactor-legacy-config-constants-to-configrepository-yo5yw8
+=======
 <<<<<< codex/refactor-legacy-config-constants-to-configrepository-ca9ms9
 =======
 <<<<<< codex/refactor-legacy-config-constants-to-configrepository-htorra
@@ -386,6 +391,7 @@ admin/mysql_stats.php: OK
 >>>>>> master
 >>>>>> master
 >>>>>> master
+>>>>>> master
 No syntax errors detected in admin/news.php
 No syntax errors detected in admin/polls_manager.php
 No syntax errors detected in admin/site_settings.php
@@ -396,6 +402,8 @@ No syntax errors detected in admin/trivia_config.php
 No syntax errors detected in admin/uploader_info.php
 No syntax errors detected in admin/user_hits.php
 No syntax errors detected in admin/view_peers.php
+<<<<<< codex/refactor-legacy-config-constants-to-configrepository-yo5yw8
+=======
 <<<<<< codex/refactor-legacy-config-constants-to-configrepository-ca9ms9
 =======
 <<<<<< codex/refactor-legacy-config-constants-to-configrepository-htorra
@@ -412,6 +420,7 @@ No syntax errors detected in admin/view_peers.php
 >>>>>> master
 >>>>>> master
 >>>>>> master
+>>>>>> master
 No syntax errors detected in blocks/global/crazyhour.php
 No syntax errors detected in blocks/global/demotion.php
 No syntax errors detected in blocks/global/freeleech_contribution.php
@@ -422,6 +431,8 @@ No syntax errors detected in blocks/global/report.php
 No syntax errors detected in blocks/global/staffmessages.php
 No syntax errors detected in blocks/global/uploadapp.php
 No syntax errors detected in blocks/index/active_24h_users.php
+<<<<<< codex/refactor-legacy-config-constants-to-configrepository-yo5yw8
+=======
 <<<<<< codex/refactor-legacy-config-constants-to-configrepository-ca9ms9
 =======
 <<<<<< codex/refactor-legacy-config-constants-to-configrepository-htorra
@@ -432,6 +443,7 @@ No syntax errors detected in blocks/index/active_24h_users.php
 =======
 *** codex/refactor-legacy-config-constants-to-configrepository-6lq2lf
 *** master
+>>>>>> master
 >>>>>> master
 >>>>>> master
 >>>>>> master
@@ -447,6 +459,8 @@ No syntax errors detected in blocks/index/offers.php
 No syntax errors detected in blocks/index/requests.php
 No syntax errors detected in config/expires.php
 No syntax errors detected in config/latest.php
+<<<<<< codex/refactor-legacy-config-constants-to-configrepository-yo5yw8
+=======
 <<<<<< codex/refactor-legacy-config-constants-to-configrepository-ca9ms9
 =======
 <<<<<< codex/refactor-legacy-config-constants-to-configrepository-htorra
@@ -454,6 +468,7 @@ No syntax errors detected in config/latest.php
 <<<<<< codex/refactor-legacy-config-constants-to-configrepository-bwhwqr
 =======
 *** codex/refactor-legacy-config-constants-to-configrepository-2wa1n8
+>>>>>> master
 >>>>>> master
 >>>>>> master
 >>>>>> master
@@ -465,11 +480,14 @@ No syntax errors detected in blocks/userdetails/completed.php
 No syntax errors detected in blocks/userdetails/gender.php
 No syntax errors detected in blocks/userdetails/report.php
 No syntax errors detected in blocks/userdetails/seedbonus.php
+<<<<<< codex/refactor-legacy-config-constants-to-configrepository-yo5yw8
+=======
 <<<<<< codex/refactor-legacy-config-constants-to-configrepository-ca9ms9
 =======
 <<<<<< codex/refactor-legacy-config-constants-to-configrepository-htorra
 =======
 <<<<<< codex/refactor-legacy-config-constants-to-configrepository-bwhwqr
+>>>>>> master
 >>>>>> master
 >>>>>> master
 No syntax errors detected in include/function_chatbot.php
@@ -487,9 +505,12 @@ No syntax errors detected in include/function_returnto.php
 No syntax errors detected in include/function_searchcloud.php
 No syntax errors detected in include/function_tfreak.php
 No syntax errors detected in include/function_tmdb.php
+<<<<<< codex/refactor-legacy-config-constants-to-configrepository-yo5yw8
+=======
 <<<<<< codex/refactor-legacy-config-constants-to-configrepository-ca9ms9
 =======
 <<<<<< codex/refactor-legacy-config-constants-to-configrepository-htorra
+>>>>>> master
 >>>>>> master
 No syntax errors detected in include/function_torrenttable.php
 No syntax errors detected in include/function_translate.php
@@ -507,6 +528,24 @@ No syntax errors detected in public/bjstats.php
 No syntax errors detected in public/browse.php
 No syntax errors detected in public/bugs.php
 No syntax errors detected in public/announce.php
+<<<<<< codex/refactor-legacy-config-constants-to-configrepository-yo5yw8
+No syntax errors detected in include/function_torrenttable.php
+No syntax errors detected in public/casino.php
+No syntax errors detected in public/catalog.php
+No syntax errors detected in public/categoryids.php
+No syntax errors detected in public/chat.php
+No syntax errors detected in public/getrss.php
+No syntax errors detected in public/happylog.php
+No syntax errors detected in public/login.php
+No syntax errors detected in public/logout.php
+No syntax errors detected in public/movies.php
+No syntax errors detected in public/mybonus.php
+No syntax errors detected in public/mytorrents.php
+No syntax errors detected in public/needseed.php
+No syntax errors detected in public/new_announcement.php
+No syntax errors detected in public/offers.php
+No syntax errors detected in public/needseed.php
+=======
 <<<<<< codex/refactor-legacy-config-constants-to-configrepository-ca9ms9
 No syntax errors detected in include/function_torrenttable.php
 =======
@@ -522,6 +561,7 @@ No syntax errors detected in include/function_torrenttable.php
 *** master
 *** master
 *** master
+>>>>>> master
 >>>>>> master
 >>>>>> master
 >>>>>> master

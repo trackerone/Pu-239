@@ -2,15 +2,13 @@
 declare(strict_types=1);
 require_once dirname(__DIR__) . '/bootstrap_web.php';
 
-$db = $container->get(Database::class);
-
 
 
 
 use Delight\Auth\Auth;
 
 use Pu239\Bonuslog;
-use Pu239\Database;
+use Pu239\Config\ConfigRepository;
 use Pu239\Message;
 use Pu239\Session;
 use Pu239\Snatched;
@@ -20,12 +18,18 @@ use Pu239\User;
 require_once __DIR__ . '/../include/bittorrent.php';
 require_once CLASS_DIR . 'class_user_options_2.php';
 $user = check_user_status();
-global $container, $site_config;
+global $container;
+/** @var ConfigRepository $config */
+$config = $container->get(ConfigRepository::class);
+$baseurl = (string) $config->get('paths.baseurl');
+$bonusConfig = $config->arr('bonus');
+$trackerConfig = $config->arr('tracker');
+$badwords = $config->arr('site.badwords');
 
 $auth = $container->get(Auth::class);
 $auth->isSuspended();
 
-if (!$site_config['bonus']['on']) {
+if (!$config->bool('bonus.on')) {
     stderr(_('Error'), _('The Karma bonus system is currently offline for maintainance work'));
 }
 
@@ -243,7 +247,7 @@ $db->perform($sql, array_merge($update, ['id' => $post['option']]));
                 $update_users = $pms = $robbed_user = [];
                 foreach ($query as $ar) {
                     $new_rep = $ar['reputation'] - $rep_to_steal;
-                    $robbed_users[] = sprintf('[url=' . $site_config['paths']['baseurl'] . '/userdetails.php?id=%d]%s[/url]', $ar['id'], $ar['username']);
+                    $robbed_users[] = sprintf('[url=' . $baseurl . '/userdetails.php?id=%d]%s[/url]', $ar['id'], $ar['username']);
                     $set = [
                         'reputation' => $new_rep,
                     ];
@@ -252,7 +256,7 @@ $db->perform($sql, array_merge($update, ['id' => $post['option']]));
                         'receiver' => $ar['id'],
                         'added' => $dt,
                         'subject' => _fe('You just got robbed by {0}', $user['username']),
-                        'msg' => _fe("Hey\nWe are sorry to announce that you have been robbed by {0}{1}{2}.\nNow your total reputation is [b]{3}[/b]\n[color=#ff0000]This is normal and you should not worry, if you have enough bonus points you can rob other people[/color]", "[url={$site_config['paths']['baseurl']}/userdetails.php?id={$user['id']}]", $user['username'], '[/url]', $new_rep),
+                        'msg' => _fe("Hey\nWe are sorry to announce that you have been robbed by {0}{1}{2}.\nNow your total reputation is [b]{3}[/b]\n[color=#ff0000]This is normal and you should not worry, if you have enough bonus points you can rob other people[/color]", "[url={$baseurl}/userdetails.php?id={$user['id']}]", $user['username'], '[/url]', $new_rep),
                     ];
                 }
                 if (isset($robbed_users)) {
@@ -523,7 +527,7 @@ $db->perform($sql, array_merge($update, ['id' => $post['option']]));
     } elseif ($art === 'title') {
         if ($options[$option]['enabled'] === 'yes') {
             if ($user['seedbonus'] >= $options[$option]['points']) {
-                foreach ($site_config['site']['badwords'] as $badword) {
+                foreach ($badwords as $badword) {
                     $title = str_replace($badword, '', $title);
                 }
                 if (empty($title)) {
@@ -710,7 +714,7 @@ foreach ($options as $gets) {
                             <h2 class='has-text-centered has-text-weight-bold'>" . format_comment($gets['bonusname']) . '</h2>' . format_comment($gets['description']) . "
                         </div>
                         <div>
-                            <form action='{$site_config['paths']['baseurl']}/mybonus.php' method='post' enctype='multipart/form-data' accept-charset='utf-8'>$additional_text
+                            <form action='{$baseurl}/mybonus.php' method='post' enctype='multipart/form-data' accept-charset='utf-8'>$additional_text
                                 <input type='hidden' name='option' value='" . $gets['id'] . "'>
                                 <input type='hidden' name='art' value='" . format_comment($gets['art']) . "'>
                                 <input type='hidden' name='menge' value='" . $gets['menge'] . "'>
@@ -728,13 +732,13 @@ foreach ($options as $gets) {
 
 $HTMLOUT .= main_div($items, 'top20', 'masonry padding20');
 
-$bpt = $site_config['bonus']['per_duration'];
-$bmt = $site_config['bonus']['max_torrents'];
+$bpt = $bonusConfig['per_duration'];
+$bmt = $bonusConfig['max_torrents'];
 $at = $fluent->from('peers')
              ->select(null)
              ->select('COUNT(*) AS count')
              ->where('seeder = ?', 'yes');
-if ($site_config['tracker']['connectable_check']) {
+if ($trackerConfig['connectable_check']) {
     $at = $at->where('connectable = "yes"');
 }
 $at = $at->where('connectable = ?', 'yes')
@@ -757,7 +761,7 @@ $HTMLOUT .= "
                 <p>
                     ' . _('If you save up enough of them, you can trade them in for goodies like bonus GB(s) to increase your upload stats, also to get more invites, or doing the real Karma booster... give them to another user!') . '<br>
                     ' . _fe('This is awarded on a per torrent basis (max of {0} even if there are no leechers on the Torrent you are seeding!', $bmt) . '<br>
-                    ' . _('Seeding') . ($site_config['tracker']['connectable_check'] ? ' ' . _('Torrents Based on Connectable Status') : '') . " = <span>
+                    ' . _('Seeding') . ($trackerConfig['connectable_check'] ? ' ' . _('Torrents Based on Connectable Status') : '') . " = <span>
                         <span class='tooltipper' title='" . _fe('Seeding {0} torrents', $atform) . "'> $atform </span>*
                         <span class='tooltipper' title='" . _fe('{0} per announce period', $bpt) . "'> $bpt </span>*
                         <span class='tooltipper' title='" . _('Two announce periods per hour') . "'> 2 </span>= $activet
@@ -770,13 +774,13 @@ $HTMLOUT .= "
             <div class='alt_bordered bg-04 padding20'>
                 <h2>" . _('Other things that will get you karma points') . ':</h2>
                 <p>
-                    ' . _fe('Uploading a new torrent = {0} points', $site_config['bonus']['per_upload']) . '<br>
-                    ' . _fe('Filling a request = {0} points', $site_config['bonus']['per_request']) . '<br>
-                    ' . _fe('Comment on torrent = {0} points', $site_config['bonus']['per_comment']) . '<br>
-                    ' . _fe('Saying thanks = {0} points', $site_config['bonus']['per_thanks']) . '<br>
-                    ' . _fe('Rating a torrent = {0} points', $site_config['bonus']['per_rating']) . '<br>
-                    ' . _fe('Making a post = {0} points', $site_config['bonus']['per_post']) . '<br>
-                    ' . _fe('Starting a topic = {0} points', $site_config['bonus']['per_topic']) . "
+                    ' . _fe('Uploading a new torrent = {0} points', $bonusConfig['per_upload']) . '<br>
+                    ' . _fe('Filling a request = {0} points', $bonusConfig['per_request']) . '<br>
+                    ' . _fe('Comment on torrent = {0} points', $bonusConfig['per_comment']) . '<br>
+                    ' . _fe('Saying thanks = {0} points', $bonusConfig['per_thanks']) . '<br>
+                    ' . _fe('Rating a torrent = {0} points', $bonusConfig['per_rating']) . '<br>
+                    ' . _fe('Making a post = {0} points', $bonusConfig['per_post']) . '<br>
+                    ' . _fe('Starting a topic = {0} points', $bonusConfig['per_topic']) . "
                 </p>
             </div>
         </div>
@@ -785,8 +789,8 @@ $HTMLOUT .= "
             <div class='alt_bordered bg-04 padding20'>
                 <h2>" . _('Some things that will cost you karma points') . ':</h2>
                 <p>
-                    ' . _fe('Deleting a torrent = -{0} points', $site_config['bonus']['per_delete']) . '<br>
-                    ' . _fe('Downloading a torrent = -{0} points', $site_config['bonus']['per_download']) . '<br>
+                    ' . _fe('Deleting a torrent = -{0} points', $bonusConfig['per_delete']) . '<br>
+                    ' . _fe('Downloading a torrent = -{0} points', $bonusConfig['per_download']) . '<br>
                     ' . _('Upload credit') . '<br>
                     ' . _('Custom title') . '<br>
                     ' . _('One month VIP status') . '<br>
@@ -815,7 +819,7 @@ $HTMLOUT .= "
                     ' . _('But keep in mind that everything that can get you karma can also be lost...') . '<br>
                 </p>
                 <p>
-                    ' . _fe('ie: If you up a torrent then delete it, you will gain and then lose {0} points, making a post and having it deleted will do the same... and there are other hidden bonus karma points all over the site which is another way to help out your ratio!', $site_config['bonus']['per_delete']) . '
+                    ' . _fe('ie: If you up a torrent then delete it, you will gain and then lose {0} points, making a post and having it deleted will do the same... and there are other hidden bonus karma points all over the site which is another way to help out your ratio!', $bonusConfig['per_delete']) . '
                 </p>
                 <span>
                     *' . _('Please note, the staff can give or take away points for breaking the rules, or doing good for the community.') . '

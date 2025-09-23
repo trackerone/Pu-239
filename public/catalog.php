@@ -2,21 +2,22 @@
 declare(strict_types=1);
 require_once dirname(__DIR__) . '/bootstrap_web.php';
 
-$db = $container->get(Database::class);
-
-
-
-
-
 use DI\DependencyException;
 use DI\NotFoundException;
+use Pu239\Config\ConfigRepository;
 use Pu239\Database;
 use Pu239\Image;
 use Spatie\Image\Exceptions\InvalidManipulation;
 
 require_once __DIR__ . '/../include/bittorrent.php';
 $user = check_user_status();
-global $container, $site_config;
+global $container;
+/** @var ConfigRepository $config */
+$config = $container->get(ConfigRepository::class);
+/** @var Database $db */
+$db = $container->get(Database::class);
+$baseurl = (string) $config->get('paths.baseurl');
+$imagesBase = (string) $config->get('paths.images_baseurl');
 
 /**
  *
@@ -194,7 +195,7 @@ for ($i = 97; $i < 123; ++$i) {
     $active = !empty($letter) && $letter == chr($i) ? "class='active'" : '';
     $div .= "
             <li>
-                <a href='{$site_config['paths']['baseurl']}/catalog.php?letter=" . chr($i) . "' {$active}>" . chr($i - 32) . '</a>
+                <a href='{$baseurl}/catalog.php?letter=" . chr($i) . "' {$active}>" . chr($i - 32) . '</a>
             </li>';
 }
 $div .= '
@@ -222,7 +223,7 @@ if (!empty($rows)) {
                 <div>" . ($row['poster'] ? "
                     <img src='" . url_proxy($row['poster'], true, 250) . "' alt='Poster' class='tooltip-poster'>
                 </div>" : "
-                    <img src='{$site_config['paths']['images_baseurl']}noposter.png' alt='" . _('No Poster') . "' class='tooltip-poster'>
+                    <img src='{$imagesBase}noposter.png' alt='" . _('No Poster') . "' class='tooltip-poster'>
                 </div>") . "
             </div  >
             <div class='column'>";
@@ -237,7 +238,7 @@ if (!empty($rows)) {
                     </tr>';
         $body = "
                     <tr>
-                        <td class='w-50'><a href='{$site_config['paths']['baseurl']}/details.php?id=" . (int) $row['id'] . "&amp;hit=1'><div class='torrent-name min-150'>" . format_comment($row['name']) . '</div></a></td>
+                        <td class='w-50'><a href='{$baseurl}/details.php?id=" . (int) $row['id'] . "&amp;hit=1'><div class='torrent-name min-150'>" . format_comment($row['name']) . '</div></a></td>
                         <td>' . get_date((int) $row['added'], 'LONG', 0, 1) . "</td>
                         <td nowrap='nowrap'>" . (mksize($row['size'])) . "</td>
                         <td nowrap='nowrap'>" . ($row['snatched'] > 0 ? ($row['snatched'] == 1 ? (int) $row['snatched'] . ' time' : (int) $row['snatched'] . ' times') : 0) . '</td>
@@ -251,7 +252,7 @@ if (!empty($rows)) {
                 </tr>';
         $body = "
                 <tr>
-                    <td><div class='readmore'>" . readMore(format_comment($row['descr'], true, true, false), 1000, "{$site_config['paths']['baseurl']}/details.php?id={$row['id']}") . '</div></td>
+                    <td><div class='readmore'>" . readMore(format_comment($row['descr'], true, true, false), 1000, "{$baseurl}/details.php?id={$row['id']}") . '</div></td>
                 </tr>';
         $div .= main_table($body, $heading, 'top20');
         $div .= "
@@ -275,7 +276,7 @@ if (!empty($rows)) {
 
 $title = _('Catalog');
 $breadcrumbs = [
-    "<a href='{$site_config['paths']['baseurl']}/browse.php'>" . _('Browse Torrents') . '</a>',
+    "<a href='{$baseurl}/browse.php'>" . _('Browse Torrents') . '</a>',
     "<a href='{$_SERVER['PHP_SELF']}'>$title</a>",
 ];
 echo stdhead($title, [], 'page-wrapper', $breadcrumbs) . wrapper($htmlout) . stdfoot();

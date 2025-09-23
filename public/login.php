@@ -2,12 +2,9 @@
 declare(strict_types=1);
 require_once dirname(__DIR__) . '/bootstrap_web.php';
 
-$db = $container->get(Database::class);
-
-
-
-
 use Delight\Auth\Auth;
+use Pu239\Config\ConfigRepository;
+use Pu239\Database;
 use Pu239\Ban;
 use Pu239\IP;
 use Pu239\Session;
@@ -15,11 +12,20 @@ use Pu239\User;
 use Rakit\Validation\Validator;
 
 require_once __DIR__ . '/../include/bittorrent.php';
-global $container, $site_config;
+global $container;
+/** @var ConfigRepository $config */
+$config = $container->get(ConfigRepository::class);
+/** @var Database $db */
+$db = $container->get(Database::class);
+$baseurl = (string) $config->get('paths.baseurl');
+$ipLogging = (bool) $config->get('site.ip_logging');
+$limitIps = (bool) $config->get('site.limit_ips');
+$limitIpsCount = (int) $config->get('site.limit_ips_count');
+$smtpEnabled = (bool) $config->get('mail.smtp_enable');
 
 $auth = $container->get(Auth::class);
 if ($auth->isLoggedIn()) {
-    header("Location: {$site_config['paths']['baseurl']}");
+    header("Location: {$baseurl}");
     app_halt('Exit called');
 }
 get_template();
@@ -46,16 +52,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if ($user_class->login($post['email'], $post['password'], (int) isset($post['remember']) ? 1 : 0)) {
         $userid = $auth->getUserId();
         $user = $user_class->getUserFromId($userid);
-        if ($site_config['site']['ip_logging'] || !($user['perms'] & PERMS_NO_IP)) {
+        if ($ipLogging || !($user['perms'] & PERMS_NO_IP)) {
             insert_update_ip('login', $userid);
         }
-        if ($site_config['site']['limit_ips']) {
+        if ($limitIps) {
             $ips_class = $container->get(IP::class);
             $count = $ips_class->get_ip_count($userid, 3, 'login');
-            if ($count > $site_config['site']['limit_ips_count']) {
+            if ($count > $limitIpsCount) {
                 $user_class->logout($userid, false);
                 $session->set('is-danger', _('You have exceeded the maximum number of IPs allowed'));
-                stderr(_('Error'), _fe('You are allowed {0} in the previous 3 days. You have used {1} different IPs', $site_config['site']['limit_ips_count'], $count));
+                stderr(_('Error'), _fe('You are allowed {0} in the previous 3 days. You have used {1} different IPs', $limitIpsCount, $count));
             }
         }
         if (!empty($post['returnto'])) {
@@ -65,7 +71,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 app_halt('Exit called');
             }
         }
-        header("Location: {$site_config['paths']['baseurl']}");
+        header("Location: {$baseurl}");
         app_halt('Exit called');
     } else {
         unset($_POST, $_GET, $_FILES);
@@ -84,7 +90,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && !empty($_GET['returnto']) && !is_arr
 }
 
 $HTMLOUT = "
-            <form id='site_login' class='form-inline table-wrapper' method='post' action='{$site_config['paths']['baseurl']}/login.php' enctype='multipart/form-data' accept-charset='utf-8'>";
+            <form id='site_login' class='form-inline table-wrapper' method='post' action='{$baseurl}/login.php' enctype='multipart/form-data' accept-charset='utf-8'>";
 $body = "
                 <div class='columns level'>
                     <div class='column is-one-quarter'>" . _('Email Address') . "</div>
@@ -106,8 +112,8 @@ $body = "
                     <input id='login' type='submit' value='" . _('Login') . "' class='button is-small'>
                 </div>
                 <div class='level-center top20'>
-                    <a href='{$site_config['paths']['baseurl']}/signup.php'>" . _('Signup') . '</a>' . ($site_config['mail']['smtp_enable'] ? "
-                    <a href='{$site_config['paths']['baseurl']}/recover.php'>" . _('Forgot Password') . '</a>' : '') . '
+                    <a href='{$baseurl}/signup.php'>" . _('Signup') . '</a>' . ($smtpEnabled ? "
+                    <a href='{$baseurl}/recover.php'>" . _('Forgot Password') . '</a>' : '') . '
                 </div>';
 
 $HTMLOUT .= main_div($body, '', 'padding20') . '
