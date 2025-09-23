@@ -468,3 +468,6 @@ include/function_torrenttable.php,none,0,Removed stray global reuse after Config
 >>>>>> master
 >>>>>> master
 >>>>>> master
+public/clear_announcement.php,site_config,0,Replaced legacy site_config usage with ConfigRepository
+public/contactstaff.php,site_config,0,Replaced legacy site_config usage with ConfigRepository
+public/delete.php,site_config,0,Replaced legacy site_config usage with ConfigRepository
