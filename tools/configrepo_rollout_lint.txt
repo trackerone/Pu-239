@@ -568,9 +568,12 @@ No syntax errors detected in include/function_torrenttable.php
 No syntax errors detected in public/clear_announcement.php
 No syntax errors detected in public/contactstaff.php
 No syntax errors detected in public/delete.php
+<<<<<< codex/refactor-to-use-configrepository-2vghy5
+=======
 <<<<<< codex/refactor-to-use-configrepository-ett55m
 =======
 <<<<<< codex/refactor-to-use-configrepository-2d89fd
+>>>>>> master
 >>>>>> master
 No syntax errors detected in public/fastdelete.php
 No syntax errors detected in public/filelist.php
@@ -582,7 +585,10 @@ No syntax errors detected in public/polls_take_vote.php
 No syntax errors detected in public/recover.php
 No syntax errors detected in public/requests.php
 No syntax errors detected in public/restoreclass.php
+<<<<<< codex/refactor-to-use-configrepository-2vghy5
+=======
 <<<<<< codex/refactor-to-use-configrepository-ett55m
+>>>>>> master
 No syntax errors detected in public/rsstfreak.php
 No syntax errors detected in public/search.php
 No syntax errors detected in public/setclass.php
@@ -593,7 +599,36 @@ No syntax errors detected in public/subtitles.php
 No syntax errors detected in public/take_theme.php
 No syntax errors detected in public/takereseed.php
 No syntax errors detected in public/takethankyou.php
+<<<<<< codex/refactor-to-use-configrepository-2vghy5
+No syntax errors detected in public/takeupload.php
+No syntax errors detected in public/topmoods.php
+No syntax errors detected in public/topten.php
+No syntax errors detected in public/upload.php
+No syntax errors detected in public/user_blocks.php
+No syntax errors detected in public/user_unlocks.php
+No syntax errors detected in public/usercomment.php
+
+
+
+
+
+
+
+
+No syntax errors detected in public/userdetails.php
+No syntax errors detected in public/verify.php
+No syntax errors detected in public/takeupload.php
+No syntax errors detected in public/topmoods.php
+No syntax errors detected in public/topten.php
+No syntax errors detected in public/upload.php
+No syntax errors detected in public/user_blocks.php
+No syntax errors detected in public/user_unlocks.php
+No syntax errors detected in public/usercomment.php
+No syntax errors detected in public/userdetails.php
+No syntax errors detected in public/verify.php
 =======
 =======
+=======
+>>>>>> master
 >>>>>> master
 >>>>>> master

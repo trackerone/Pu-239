@@ -2,10 +2,9 @@
 declare(strict_types=1);
 require_once dirname(__DIR__) . '/bootstrap_web.php';
 
-use Pu239\Database;
-use Pu239\Config\ConfigRepository;
-
 use Pu239\Cache;
+use Pu239\Config\ConfigRepository;
+use Pu239\Database;
 
 require_once __DIR__ . '/../include/bittorrent.php';
 require_once CLASS_DIR . 'class_user_options_2.php';
@@ -13,7 +12,10 @@ $user = check_user_status();
 global $container;
 /** @var ConfigRepository $config */
 $config = $container->get(ConfigRepository::class);
+/** @var Database $db */
 $db = $container->get(Database::class);
+
+$userCacheTtl = (int) $config->get('expires.user_cache');
 
 $id = (isset($_GET['id']) ? $_GET['id'] : $user['id']);
 if (!is_valid_id($id) || $user['class'] < UC_STAFF) {
@@ -50,7 +52,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $cache = $container->get(Cache::class);
     $cache->update_row('user_' . $id, [
         'perms' => $row['perms'],
-    ], $site_config['expires']['user_cache']);
+    ], $userCacheTtl);
     header('Location: ' . $_SERVER['PHP_SELF']);
     app_halt('Exit called');
 }

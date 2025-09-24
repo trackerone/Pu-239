@@ -1,13 +1,11 @@
 <?php
 declare(strict_types=1);
+
 require_once dirname(__DIR__) . '/bootstrap_web.php';
 
-$db = $container->get(Database::class);
-
-
-
-
+use Envms\FluentPDO\Literal;
 use Pu239\Cache;
+use Pu239\Config\ConfigRepository;
 use Pu239\Database;
 use Pu239\Files;
 use Pu239\Message;
@@ -20,7 +18,22 @@ use Pu239\Usersachiev;
 
 require_once __DIR__ . '/../include/bittorrent.php';
 require_once CLASS_DIR . 'class.bencdec.php';
-global $container, $site_config;
+
+global $container;
+/** @var ConfigRepository $config */
+$config = $container->get(ConfigRepository::class);
+/** @var Database $db */
+$db = $container->get(Database::class);
+
+$baseUrl = (string) $config->get('paths.baseurl');
+$maxTorrentSize = (int) $config->get('site.max_torrent_size');
+$maxNfoSize = (int) $config->get('site.nfo_size');
+$youtubePattern = (string) $config->get('youtube.pattern');
+$bonusEnabled = (bool) $config->get('bonus.on');
+$bonusPerUpload = (float) $config->get('bonus.per_upload');
+$bonusPerRequest = (float) $config->get('bonus.per_request');
+$autoshoutChatEnabled = (bool) $config->get('site.autoshout_chat');
+$autoshoutIrcEnabled = (bool) $config->get('site.autoshout_irc');
 
 $data = $_POST;
 $torrent_pass = isset($data['torrent_pass']) ? $data['torrent_pass'] : '';
@@ -64,7 +77,7 @@ if (!empty($bot) && !empty($auth) && !empty($torrent_pass)) {
     $cache->set('user_upload_variables_' . $user['id'], json_encode($data), 3600);
 }
 $dt = TIME_NOW;
-ini_set('upload_max_filesize', (string) $site_config['site']['max_torrent_size']);
+ini_set('upload_max_filesize', (string) $maxTorrentSize);
 ini_set('memory_limit', '64M');
 $session = $container->get(Session::class);
 if (!$user['roles_mask'] & Roles::UPLOADER || $user['uploadpos'] != 1 || $user['status'] === 5) {
@@ -114,7 +127,7 @@ if (!empty($_FILES['nfo']) && !empty($_FILES['nfo']['name'])) {
     } elseif ($nfofile['size'] == 0) {
         $session->set('is-warning', _('0-byte NFO'));
         why_die(_('0-byte NFO'));
-    } elseif ($nfofile['size'] > $site_config['site']['nfo_size']) {
+    } elseif ($nfofile['size'] > $maxNfoSize) {
         $session->set('is-warning', _('NFO is too big! Max 65,535 bytes.'));
         why_die(_('NFO is too big! Max 65,535 bytes.'));
     } else {
@@ -188,7 +201,7 @@ $release_group_array = [
 ];
 $release_group = !empty($release_group) && !empty($release_group_array[$release_group]) ? $release_group : 'none';
 
-if (!empty($youtube) && preg_match('#' . $site_config['youtube']['pattern'] . '#i', $youtube, $temp_youtube)) {
+if (!empty($youtube) && preg_match('#' . $youtubePattern . '#i', $youtube, $temp_youtube)) {
     $youtube = $temp_youtube[0];
 }
 
@@ -221,7 +234,7 @@ if (!filesize($tmpname)) {
     $session->set('is-warning', _('Empty file!'));
     why_die(_('Empty file!'));
 }
-$dict = bencdec::decode_file($tmpname, $site_config['site']['max_torrent_size'], bencdec::OPTION_EXTENDED_VALIDATION);
+$dict = bencdec::decode_file($tmpname, $maxTorrentSize, bencdec::OPTION_EXTENDED_VALIDATION);
 if ($dict === false) {
     $session->set('is-warning', _('What did you upload? This is not a bencoded file!'));
     why_die(_('What did you upload? This is not a bencoded file!'));
@@ -437,32 +450,32 @@ try {
 } catch (Exception $e) {
     //TODO
 }
-if ($site_config['bonus']['on']) {
+if ($bonusEnabled) {
     $seedbonus = $user['seedbonus'];
     $update = [
-        'seedbonus' => $user['seedbonus'] + $site_config['bonus']['per_upload'],
+        'seedbonus' => $user['seedbonus'] + $bonusPerUpload,
         'numuploads' => $user['numuploads'] + 1,
     ];
     $users_class->update($update, $owner_id);
 }
 $cat_name = get_fullname_from_id($catid);
-if ($site_config['site']['autoshout_chat']) {
+if ($autoshoutChatEnabled) {
     if (!empty($uplver) && $uplver === 'yes') {
         $msg = get_anonymous_name() . " has just added a torrent in [color=lightgreen][b]{$cat_name}[/b][/color]
-        [url={$site_config['paths']['baseurl']}/details.php?id=$id&hit=1] [b][i]" . htmlsafechars($torrent) . '[/i][/b][/url]
+        [url={$baseUrl}/details.php?id=$id&hit=1] [b][i]" . htmlsafechars($torrent) . '[/i][/b][/url]
         [b]Size:[/b] ' . mksize($totallen) . (!empty($free_text) ? "
         $free_text" : '');
     } else {
         $msg = htmlsafechars($user['username']) . " has just added a torrent in [color=lightgreen][b]{$cat_name}[/b][/color]
-        [url={$site_config['paths']['baseurl']}/details.php?id=$id&hit=1] [b][i]" . htmlsafechars($torrent) . '[/i][/b][/url]
+        [url={$baseUrl}/details.php?id=$id&hit=1] [b][i]" . htmlsafechars($torrent) . '[/i][/b][/url]
         [b]Size:[/b] ' . mksize($totallen) . (!empty($free_text) ? "
         $free_text" : '');
     }
     autoshout($msg);
     autoshout($msg, 2, 0);
 }
-if ($site_config['site']['autoshout_irc']) {
-    $messages = "\0034New Torrent\0039 in \0038$cat_name\0039 $torrent \0034Uploaded By:\0039 $anon \0034Size:\0039 " . mksize($totallen) . "{$free_text_irc}\0034 Link:\0038 " . $site_config['paths']['baseurl'] . '/details.php?id=' . $id . '&hit=1';
+if ($autoshoutIrcEnabled) {
+    $messages = "\0034New Torrent\0039 in \0038$cat_name\0039 $torrent \0034Uploaded By:\0039 $anon \0034Size:\0039 " . mksize($totallen) . "{$free_text_irc}\0034 Link:\0038 " . $baseUrl . '/details.php?id=' . $id . '&hit=1';
     ircbot($messages);
 }
 $messages_class = $container->get(Message::class);
@@ -485,7 +498,7 @@ if ($recipe > 0) {
                           ->where('upcomingid = ?', $recipe)
                           ->fetchAll();
         $subject = _('A Recipe has just come out of the oven');
-        $msg = "Hi, \n An reciper you were interested in has been uploaded!!! \n\n Click  [url=" . $site_config['paths']['baseurl'] . '/details.php?id=' . $id . '&hit=1]' . htmlsafechars($torrent) . '[/url] to see the torrent details page!';
+        $msg = "Hi, \n An reciper you were interested in has been uploaded!!! \n\n Click  [url=" . $baseUrl . '/details.php?id=' . $id . '&hit=1]' . htmlsafechars($torrent) . '[/url] to see the torrent details page!';
         foreach ($recipes as $arr_recipe) {
             $msgs_buffer[] = [
                 'receiver' => $arr_recipe['userid'],
@@ -510,7 +523,7 @@ if ($offer > 0) {
                      ->where('offer_id = ?', $offer)
                      ->fetchAll();
     $subject = _('An offer you voted for has been uploaded!');
-    $msg = "Hi, \n An recipe you were interested in has been uploaded!!! \n\n Click  [url=" . $site_config['paths']['baseurl'] . '/details.php?id=' . $id . '&hit=1]' . htmlsafechars($torrent) . '[/url] to see the torrent details page!';
+    $msg = "Hi, \n An recipe you were interested in has been uploaded!!! \n\n Click  [url=" . $baseUrl . '/details.php?id=' . $id . '&hit=1]' . htmlsafechars($torrent) . '[/url] to see the torrent details page!';
     foreach ($offers as $arr_offer) {
         $msgs_buffer[] = [
             'receiver' => $arr_offer['user_id'],
@@ -542,7 +555,7 @@ if ($request > 0) {
                        ->fetchAll();
 
     $subject = _('A request you were interested in has been uploaded!');
-    $msg = "Hi :D \n A request you were interested in has been uploaded!!! \n\n Click  [url=" . $site_config['paths']['baseurl'] . '/details.php?id=' . $id . '&hit=1]' . htmlsafechars($torrent) . '[/url] to see the torrent details page!';
+    $msg = "Hi :D \n A request you were interested in has been uploaded!!! \n\n Click  [url=" . $baseUrl . '/details.php?id=' . $id . '&hit=1]' . htmlsafechars($torrent) . '[/url] to see the torrent details page!';
     foreach ($requests as $arr_req) {
         $msgs_buffer[] = [
             'receiver' => $arr_req['user_id'],
@@ -554,9 +567,9 @@ if ($request > 0) {
     if (!empty($msgs_buffer)) {
         $messages_class->insert($msgs_buffer);
     }
-    if ($site_config['bonus']['on']) {
+    if ($bonusEnabled) {
         $set = [
-            'seedbonus' => $update['seedbonus'] + $site_config['bonus']['per_request'],
+            'seedbonus' => $update['seedbonus'] + $bonusPerRequest,
         ];
         $users_class->update($set, $user['id']);
     }
@@ -583,7 +596,7 @@ if ($filled == 0) {
 $notify = $users_class->get_notifications($catid);
 if (!empty($notify)) {
     $subject = _('New Torrent Uploaded!');
-    $msg = "A torrent in one of your default categories has been uploaded! \n\n Click  [url=" . $site_config['paths']['baseurl'] . '/details.php?id=' . $id . ']' . htmlsafechars($torrent) . '[/url] to see the torrent details page!';
+    $msg = "A torrent in one of your default categories has been uploaded! \n\n Click  [url=" . $baseUrl . '/details.php?id=' . $id . ']' . htmlsafechars($torrent) . '[/url] to see the torrent details page!';
     foreach ($notify as $notif) {
         if (strpos($notif['notifs'], 'pmail') !== false) {
             $msgs_buffer[] = [
@@ -601,7 +614,7 @@ if (!empty($notify)) {
 
 $cache->delete('user_upload_variables_' . $owner_id);
 $session->set('is-success', _('Successfully uploaded!'));
-header("Location: {$site_config['paths']['baseurl']}/details.php?id=$id&uploaded=1");
+header("Location: {$baseUrl}/details.php?id=$id&uploaded=1");
 
 /**
  * @param string $why
