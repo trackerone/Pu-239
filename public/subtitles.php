@@ -1,20 +1,24 @@
 <?php
 declare(strict_types=1);
+
 require_once dirname(__DIR__) . '/bootstrap_web.php';
 
-$db = $container->get(Database::class);
-
-
-
-
-
+use Pu239\Config\ConfigRepository;
 use Pu239\Database;
+
+global $container;
+/** @var ConfigRepository $config */
+$config = $container->get(ConfigRepository::class);
+/** @var Database $db */
+$db = $container->get(Database::class);
 
 require_once __DIR__ . '/../include/bittorrent.php';
 $user = check_user_status();
-global $container, $site_config;
 
 $HTMLOUT = '';
+$subtitlesMaxSize = (int) $config->get('subtitles.max_size');
+$baseUrl = (string) $config->get('paths.baseurl');
+$imagesBaseUrl = (string) $config->get('paths.images_baseurl');
 
 $action = (isset($_GET['action']) ? htmlsafechars($_GET['action']) : (isset($_POST['action']) ? htmlsafechars($_POST['action']) : ''));
 $mode = (isset($_GET['mode']) ? htmlsafechars($_GET['mode']) : '');
@@ -48,7 +52,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             if (!isset($file)) {
                 stderr(_('Error'), _("The file can't be empty!"));
             }
-            if ($file['size'] > $site_config['subtitles']['max_size']) {
+            if ($file['size'] > $subtitlesMaxSize) {
                 stderr(_('Error'), _('Your file is too big.'));
             }
             $fname = $file['name'];
@@ -152,7 +156,7 @@ if ($mode === 'upload' || $mode === 'edit') {
         $body .= "
         <tr>
             <td colspan='2'>
-                <span class='has-text-danger'><b>" . _('Only .srt, .sub , .vtt or .txt files are accepted') . '<br>' . _('Max file size') . ': ' . mksize($site_config['subtitles']['max_size']) . '</b></span>
+                <span class='has-text-danger'><b>" . _('Only .srt, .sub , .vtt or .txt files are accepted') . '<br>' . _('Max file size') . ': ' . mksize($subtitlesMaxSize) . '</b></span>
             </td>
         </tr>';
     }
@@ -251,7 +255,7 @@ if ($mode === 'upload' || $mode === 'edit') {
     </form>';
     $title = $mode === 'upload' ? _('Upload New Subtitle') : _('Edit Subtitle');
     $breadcrumbs = [
-        "<a href='{$site_config['paths']['baseurl']}/browse.php'>" . _('Browse Torrents') . '</a>',
+        "<a href='{$baseUrl}/browse.php'>" . _('Browse Torrents') . '</a>',
         "<a href='{$_SERVER['PHP_SELF']}'>$title</a>",
     ];
     echo stdhead($title, [], 'page-wrapper', $breadcrumbs) . wrapper($HTMLOUT) . stdfoot();
@@ -268,7 +272,7 @@ if ($mode === 'upload' || $mode === 'edit') {
         }
         $sure = (isset($_GET['sure']) && $_GET['sure'] === 'yes') ? 'yes' : 'no';
         if ($sure === 'no') {
-            stderr(_('Sanity check...'), _fe('Your are about to delete subtitle <b>{0}</b>, Click {1}here{2} if you are sure.', format_comment($arr['name']) . "<a href='{$site_config['paths']['baseurl']}/subtitles.php?mode=delete&amp;id=$id&amp;sure=yes'>", '</a>'));
+            stderr(_('Sanity check...'), _fe('Your are about to delete subtitle <b>{0}</b>, Click {1}here{2} if you are sure.', format_comment($arr['name']) . "<a href='{$baseUrl}/subtitles.php?mode=delete&amp;id=$id&amp;sure=yes'>", '</a>'));
         } else {
             $sql = "DELETE FROM subtitles WHERE id = :id";
 $db->perform($sql, ['id' => $id]);
@@ -291,7 +295,7 @@ $db->perform($sql, ['id' => $id]);
         $langs = '<b>Unknown</b>';
         foreach ($subs as $sub) {
             if ($sub['id'] == $arr['lang']) {
-                $langs = "<img src='{$site_config['paths']['images_baseurl']}/{$sub['pic']}' alt='{$sub['name']}' class='tooltipper left10' title='{$sub['name']}'>";
+                $langs = "<img src='{$imagesBaseUrl}/{$sub['pic']}' alt='{$sub['name']}' class='tooltipper left10' title='{$sub['name']}'>";
                 break;
             }
         }
@@ -340,7 +344,7 @@ $db->perform($sql, ['id' => $id]);
         </div>';
         $title = _('Subtitle Details');
         $breadcrumbs = [
-            "<a href='{$site_config['paths']['baseurl']}/browse.php'>" . _('Browse Torrents') . '</a>',
+            "<a href='{$baseUrl}/browse.php'>" . _('Browse Torrents') . '</a>',
             "<a href='{$_SERVER['PHP_SELF']}'>$title</a>",
         ];
         echo stdhead($title, [], 'page-wrapper', $breadcrumbs) . wrapper($HTMLOUT) . stdfoot();
@@ -367,7 +371,7 @@ $db->perform($sql, ['id' => $id]);
     <div class='pre padding20'>" . $fileContent . '</div>');
         $title = ('Subtitle Preview');
         $breadcrumbs = [
-            "<a href='{$site_config['paths']['baseurl']}/browse.php'>" . _('Browse Torrents') . '</a>',
+            "<a href='{$baseUrl}/browse.php'>" . _('Browse Torrents') . '</a>',
             "<a href='{$_SERVER['PHP_SELF']}'>$title</a>",
         ];
         echo stdhead($title, [], 'page-wrapper', $breadcrumbs) . wrapper($HTMLOUT) . stdfoot();
@@ -393,7 +397,7 @@ $db->perform($sql, ['id' => $id]);
     $count = $count->fetch("count");
     $title = empty($s) ? _('Search') : _fe("Search result for <i>'{0}'</i>", format_comment($s));
     if ($count === 0 && !$s && !$w) {
-        stdmsg(_('Error'), _fe('There are no subtitles, go {0}here{1} and start uploading.', '<a href="' . $site_config['paths']['baseurl'] . '/subtitles.php?mode=upload">', '</a>'));
+        stdmsg(_('Error'), _fe('There are no subtitles, go {0}here{1} and start uploading.', '<a href="' . $baseUrl . '/subtitles.php?mode=upload">', '</a>'));
     }
     $perpage = 15;
     $pager = pager($perpage, $count, 'subtitles.php?' . $link);
@@ -454,17 +458,17 @@ $db->perform($sql, ['id' => $id]);
             $langs = '<b>' . _('Unknown') . '</b>';
             foreach ($subs as $sub) {
                 if ($sub['id'] == $arr['lang']) {
-                    $langs = "<img src='{$site_config['paths']['images_baseurl']}/{$sub['pic']}' alt='{$sub['name']}' class='tooltipper left10' title='{$sub['name']}'>";
+                    $langs = "<img src='{$imagesBaseUrl}/{$sub['pic']}' alt='{$sub['name']}' class='tooltipper left10' title='{$sub['name']}'>";
                     break;
                 }
             }
             $body .= "
     <tr>
         <td class='has-text-centered'>{$langs}</td>
-        <td><a href='{$site_config['paths']['baseurl']}/subtitles.php?mode=details&amp;id=" . $arr['id'] . "'>" . format_comment($arr['name']) . "</a></td>
+        <td><a href='{$baseUrl}/subtitles.php?mode=details&amp;id=" . $arr['id'] . "'>" . format_comment($arr['name']) . "</a></td>
         <td class='has-text-centered'>
             <a href='" . htmlsafechars($arr['imdb']) . "'  target='_blank'>
-                <img src='{$site_config['paths']['images_baseurl']}imdb.svg' alt='Imdb' title='Imdb' class='tooltipper' width='50px'>
+                <img src='{$imagesBaseUrl}imdb.svg' alt='Imdb' title='Imdb' class='tooltipper' width='50px'>
             </a>
         </td>
         <td class='has-text-centered'>" . get_date((int) $arr['added'], 'LONG', 0, 1) . "</td>
@@ -496,7 +500,7 @@ $db->perform($sql, ['id' => $id]);
     }
     $title = _('Subtitles');
     $breadcrumbs = [
-        "<a href='{$site_config['paths']['baseurl']}/browse.php'>" . _('Browse Torrents') . '</a>',
+        "<a href='{$baseUrl}/browse.php'>" . _('Browse Torrents') . '</a>',
         "<a href='{$_SERVER['PHP_SELF']}'>$title</a>",
     ];
     echo stdhead($title, [], 'page-wrapper', $breadcrumbs) . wrapper($HTMLOUT) . stdfoot();
