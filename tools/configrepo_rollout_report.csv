@@ -471,6 +471,13 @@ include/function_torrenttable.php,none,0,Removed stray global reuse after Config
 public/clear_announcement.php,site_config,0,Replaced legacy site_config usage with ConfigRepository
 public/contactstaff.php,site_config,0,Replaced legacy site_config usage with ConfigRepository
 public/delete.php,site_config,0,Replaced legacy site_config usage with ConfigRepository
+<<<<<< codex/refactor-to-use-configrepository-2vghy5
+=======
+<<<<<< codex/refactor-to-use-configrepository-ett55m
+=======
+<<<<<< codex/refactor-to-use-configrepository-2d89fd
+>>>>>> master
+>>>>>> master
 public/fastdelete.php,site_config,0,Replaced legacy site_config usage with ConfigRepository
 public/filelist.php,site_config,0,Replaced legacy site_config usage with ConfigRepository
 public/flash.php,site_config,0,Replaced legacy site_config usage with ConfigRepository
@@ -481,6 +488,10 @@ public/polls_take_vote.php,site_config,0,Replaced legacy site_config usage with 
 public/recover.php,site_config,0,Replaced legacy site_config usage with ConfigRepository
 public/requests.php,site_config,0,Replaced legacy site_config usage with ConfigRepository
 public/restoreclass.php,site_config,0,Replaced legacy site_config usage with ConfigRepository
+<<<<<< codex/refactor-to-use-configrepository-2vghy5
+=======
+<<<<<< codex/refactor-to-use-configrepository-ett55m
+>>>>>> master
 public/rsstfreak.php,site_config,0,Replaced legacy site_config usage with ConfigRepository
 public/search.php,site_config,0,Replaced legacy site_config usage with ConfigRepository
 public/setclass.php,site_config,0,Replaced legacy site_config usage with ConfigRepository
@@ -491,6 +502,7 @@ public/subtitles.php,site_config,0,Replaced legacy site_config usage with Config
 public/take_theme.php,site_config,0,Replaced legacy site_config usage with ConfigRepository
 public/takereseed.php,site_config,0,Replaced legacy site_config usage with ConfigRepository
 public/takethankyou.php,site_config,0,Replaced legacy site_config usage with ConfigRepository
+<<<<<< codex/refactor-to-use-configrepository-2vghy5
 public/takeupload.php,site_config,0,Replaced legacy site_config usage with ConfigRepository
 public/topmoods.php,site_config,0,Replaced legacy site_config usage with ConfigRepository
 public/topten.php,site_config,0,Replaced legacy site_config usage with ConfigRepository
@@ -500,3 +512,9 @@ public/user_unlocks.php,site_config,0,Replaced legacy site_config usage with Con
 public/usercomment.php,site_config,0,Replaced legacy site_config usage with ConfigRepository
 public/userdetails.php,site_config,0,Replaced legacy site_config usage with ConfigRepository
 public/verify.php,site_config,0,Replaced legacy site_config usage with ConfigRepository
+=======
+=======
+=======
+>>>>>> master
+>>>>>> master
+>>>>>> master
