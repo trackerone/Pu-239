@@ -2,17 +2,19 @@
 declare(strict_types=1);
 require_once dirname(__DIR__) . '/bootstrap_web.php';
 
-use Pu239\Database;
 use Pu239\Config\ConfigRepository;
+use Pu239\Database;
 
 require_once __DIR__ . '/../include/bittorrent.php';
 check_user_status();
+
 global $container;
 /** @var ConfigRepository $config */
 $config = $container->get(ConfigRepository::class);
+/** @var Database $db */
 $db = $container->get(Database::class);
 
-// TODO(2025): replace with $config->get(...) for site configuration lookups.
+$baseUrl = (string) $config->get('paths.baseurl');
 $fluent = $db; // alias
 $fluent = $container->get(Database::class);
 
@@ -48,9 +50,9 @@ $imgstartbar = '<img src="https://chart.googleapis.com/chart?cht=bvg&amp;chbh=a&
 $imgstartpie = '<img src="https://chart.googleapis.com/chart?cht=p3&amp;chbh=a&amp;chs=780x300&amp;chco=4D89F9&amp;chf=bg,s,000000';
 $HTMLOUT .= "
         <ul class='level-center bg-06'>
-            <li class='margin10'><a class='is-link tooltipper' href='{$site_config['paths']['baseurl']}/topten.php' title='Top 10 Users'>Users</a></li>
-            <li class='margin10'><a class='is-link tooltipper' href='{$site_config['paths']['baseurl']}/topten.php?view=t' title='Top 10 Torrents'>Torrents</a></li>
-            <li class='margin10'><a class='is-link tooltipper' href='{$site_config['paths']['baseurl']}/topten.php?view=c' title='Top 10 Countries'>Countries</a></li>
+            <li class='margin10'><a class='is-link tooltipper' href='{$baseUrl}/topten.php' title='Top 10 Users'>Users</a></li>
+            <li class='margin10'><a class='is-link tooltipper' href='{$baseUrl}/topten.php?view=t' title='Top 10 Torrents'>Torrents</a></li>
+            <li class='margin10'><a class='is-link tooltipper' href='{$baseUrl}/topten.php?view=c' title='Top 10 Countries'>Countries</a></li>
         </ul>";
 if (isset($_GET['view']) && $_GET['view'] === 't') {
     $view = isset($_GET['t']) ? strip_tags($_GET['t']) : '';

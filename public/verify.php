@@ -1,21 +1,25 @@
 <?php
 declare(strict_types=1);
+
 require_once dirname(__DIR__) . '/bootstrap_web.php';
-
-$db = $container->get(Database::class);
-
-
-
 
 use Delight\Auth\Auth;
 use Delight\Auth\NotLoggedInException;
 use Delight\Auth\TooManyRequestsException;
+use Pu239\Config\ConfigRepository;
+use Pu239\Database;
 use Pu239\Session;
 
 require_once __DIR__ . '/../include/bittorrent.php';
 
+global $container;
+/** @var ConfigRepository $config */
+$config = $container->get(ConfigRepository::class);
+/** @var Database $db */
+$db = $container->get(Database::class);
+
 $user = check_user_status();
-global $container, $site_config;
+$baseUrl = (string) $config->get('paths.baseurl');
 
 get_template();
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -24,7 +28,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $url = get_return_to($_POST['page']);
     if (empty($url)) {
         $session->set('is-warning', _('Invalid Page Requested.'));
-        header("Location: {$site_config['paths']['baseurl']}/index.php");
+        header("Location: {$baseUrl}/index.php");
         app_halt('Exit called');
     }
     try {
@@ -36,21 +40,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         } else {
             $auth->logOutEverywhere();
             $session->set('is-danger', _('Password verification failed.'));
-            header("Location: {$site_config['paths']['baseurl']}/login.php");
+            header("Location: {$baseUrl}/login.php");
             app_halt('Exit called');
         }
     } catch (NotLoggedInException $e) {
         $session->set('is-danger', _('The user is not signed in.'));
-        header("Location: {$site_config['paths']['baseurl']}/login.php");
+        header("Location: {$baseUrl}/login.php");
         app_halt('Exit called');
     } catch (TooManyRequestsException $e) {
         $session->set('is-danger', _('Too many requests from your IP..'));
-        header("Location: {$site_config['paths']['baseurl']}/index.php");
+        header("Location: {$baseUrl}/index.php");
         app_halt('Exit called');
     }
 }
 $HTMLOUT = "
-            <form id='site_login' class='form-inline table-wrapper' method='post' action='{$site_config['paths']['baseurl']}/verify.php' enctype='multipart/form-data' accept-charset='utf-8'>";
+            <form id='site_login' class='form-inline table-wrapper' method='post' action='{$baseUrl}/verify.php' enctype='multipart/form-data' accept-charset='utf-8'>";
 $body = "
                 <h1 class='has-text-centered'>" . _('Verify Your Identity') . "</h1>
                 <div class='columns'>

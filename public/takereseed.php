@@ -18,12 +18,17 @@ $name = $_POST['name'];
 global $container;
 /** @var ConfigRepository $config */
 $config = $container->get(ConfigRepository::class);
+/** @var Database $db */
 $db = $container->get(Database::class);
+
+$baseUrl = (string) $config->get('paths.baseurl');
+$torrentDetailsTtl = (int) $config->get('expires.torrent_details');
+$userCacheTtl = (int) $config->get('expires.user_cache');
+$bonusEnabled = (bool) $config->get('bonus.on');
 
 $dt = TIME_NOW;
 $subject = 'Request reseed!';
-$msg = "@{$user['username']} asked for a reseed on [url={$site_config['paths']['baseurl']}/details.php?id={$reseedid}][class=has-text-success]{$name}[/class][/url]![br][br]Thank You!";
-// TODO(2025): replace with $config->get(...) for site configuration lookups.
+$msg = "@{$user['username']} asked for a reseed on [url={$baseUrl}/details.php?id={$reseedid}][class=has-text-success]{$name}[/class][/url]![br][br]Thank You!";
 $msgs_buffer = [];
 if ($pm_what === 'last10') {
     $rows = $db->fetchAll('SELECT s.userid, s.torrentid FROM snatched AS s WHERE s.torrentid =' . sqlesc($reseedid) . " AND s.seeder = 'yes' LIMIT 10") or sqlerr(__FILE__, __LINE__);
@@ -56,13 +61,13 @@ $db->run('UPDATE torrents SET last_reseed = ' . $dt . ' WHERE id = :id', [':id' 
 $cache = $container->get(Cache::class);
 $cache->update_row('torrent_details_' . $reseedid, [
     'last_reseed' => $dt,
-], $site_config['expires']['torrent_details']);
-if ($site_config['bonus']['on']) {
+], $torrentDetailsTtl);
+if ($bonusEnabled) {
     sql_query('UPDATE users SET seedbonus = seedbonus-10.0 WHERE id=' . sqlesc($user['id'])) or sqlerr(__FILE__, __LINE__);
     $update['seedbonus'] = ($user['seedbonus'] - 10);
     $cache->update_row('user_' . $user['id'], [
         'seedbonus' => $update['seedbonus'],
-    ], $site_config['expires']['user_cache']);
+    ], $userCacheTtl);
 }
 
-header("Refresh: 0; url={$site_config['paths']['baseurl']}/details.php?id=$reseedid");
+header("Refresh: 0; url={$baseUrl}/details.php?id=$reseedid");

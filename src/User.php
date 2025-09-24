@@ -24,6 +24,7 @@ use MatthiasMullie\Scrapbook\Exception\UnbegunTransaction;
 use PDOStatement;
 use Psr\Container\ContainerInterface;
 use Spatie\Image\Exceptions\InvalidManipulation;
+use PU239\Config\ConfigRepository;
 use function urlencode;
 
 require_once __DIR__ . '/../include/runtime_safe.php';
@@ -36,13 +37,12 @@ class User
 {
     protected $fluent;
     protected $cache;
-    protected $site_config;
+    protected ConfigRepository $config;
     protected $session;
     protected $auth;
     protected $flash;
     protected $achieve;
     protected $container;
-    protected $settings;
     protected $userblock;
 
     /**
@@ -52,17 +52,16 @@ class User
      * @param Database           $fluent
      * @param Auth               $auth
      * @param Session            $session
-     * @param Settings           $settings
+     * @param ConfigRepository   $config
      * @param Usersachiev        $achieve
      * @param Userblock          $userblock
      * @param ContainerInterface $c
      *
      * @throws Exception
      */
-    public function __construct(Cache $cache, Database $fluent, Auth $auth, Session $session, Settings $settings, Usersachiev $achieve, Userblock $userblock, ContainerInterface $c)
+    public function __construct(Cache $cache, Database $fluent, Auth $auth, Session $session, ConfigRepository $config, Usersachiev $achieve, Userblock $userblock, ContainerInterface $c)
     {
-        $this->settings = $settings;
-        $this->site_config = $this->settings->get_settings();
+        $this->config = $config;
         $this->cache = $cache;
         $this->fluent = $fluent;
         $this->auth = $auth;
@@ -90,7 +89,8 @@ class User
                                  ->where('LOWER(username) = ?', strtolower($username))
                                  ->fetch('id');
 
-            $this->cache->set('userid_from_' . strtolower($username), $user, $this->site_config['expires']['user_cache']);
+            $userCacheTtl = (int) $this->config->get('expires.user_cache');
+            $this->cache->set('userid_from_' . strtolower($username), $user, $userCacheTtl);
         }
 
         return $user;
@@ -117,7 +117,7 @@ class User
                                   ->select("LOWER(REPLACE(classname, ' ', '_')) AS classname")
                                   ->innerJoin('class_config AS c ON u.class = c.id')
                                   ->where("u.acceptpms != 'no'")
-                                  ->where('u.username != ?', $this->site_config['chatbot']['name'])
+                                  ->where('u.username != ?', (string) $this->config->get('chatbot.name'))
                                   ->where('u.username LIKE ?', "$username%")
                                   ->where('c.classname != ""')
                                   ->orderBy('LOWER(u.username)')
@@ -181,7 +181,8 @@ class User
                 $user['seedbonus'] = (float) $user['seedbonus'];
                 $user['blocks'] = $this->userblock->get($userid);
 
-                $this->cache->set('user_' . $userid, $user, $this->site_config['expires']['user_cache']);
+                $userCacheTtl = (int) $this->config->get('expires.user_cache');
+                $this->cache->set('user_' . $userid, $user, $userCacheTtl);
             }
         }
 
@@ -260,9 +261,13 @@ class User
     {
         $userid = false;
         try {
-            if ($this->site_config['mail']['smtp_enable'] && $this->site_config['signup']['email_confirm'] && !isset($values['send_email'])) {
-                $userid = $this->auth->registerWithUniqueUsername(strip_tags(trim($values['email'])), strip_tags(trim($values['password'])), strip_tags(trim($values['username'])), function ($selector, $token) use ($values) {
-                    $body = doc_head(_fe('{0} Registration', $this->site_config['site']['name'], false));
+            $mailEnabled = (bool) $this->config->get('mail.smtp_enable');
+            $emailConfirm = (bool) $this->config->get('signup.email_confirm');
+            $siteName = (string) $this->config->get('site.name');
+            $baseUrl = (string) $this->config->get('paths.baseurl');
+            if ($mailEnabled && $emailConfirm && !isset($values['send_email'])) {
+                $userid = $this->auth->registerWithUniqueUsername(strip_tags(trim($values['email'])), strip_tags(trim($values['password'])), strip_tags(trim($values['username'])), function ($selector, $token) use ($values, $siteName, $baseUrl) {
+                    $body = doc_head(_fe('{0} Registration', $siteName, false));
                     $body .= _fe('
 </head>
 <body>
@@ -272,8 +277,8 @@ class User
     <p>{3}</p>
     <p>After you do this, you will be able to use your new account. If you fail to do this, your account will be deleted within 24 hours. We urge you to read the {4}RULES{5} and {6}FAQ{5} before you start using {0}.</p>
 </body>
-</html>', $this->site_config['site']['name'], strip_tags($values['email']), getip(0), $this->site_config['paths']['baseurl'] . '/verify_email.php?selector=' . htmlsafechars($selector) . '&token=' . urlencode($token), "<a href='{$this->site_config['paths']['baseurl']}/rules.php'>", '</a>', "<a href='{$this->site_config['paths']['baseurl']}/faq.php'>");
-                    send_mail(strip_tags($values['email']), "{$this->site_config['site']['name']} " . _('user registration confirmation'), $body, strip_tags($body));
+</html>', $siteName, strip_tags($values['email']), getip(0), $baseUrl . '/verify_email.php?selector=' . htmlsafechars($selector) . '&token=' . urlencode($token), "<a href='{$baseUrl}/rules.php'>", '</a>', "<a href='{$baseUrl}/faq.php'>");
+                    send_mail(strip_tags($values['email']), "{$siteName} " . _('user registration confirmation'), $body, strip_tags($body));
                     $this->session->set('is-success', 'We will send a confirmation email to ' . strip_tags($values['email']));
                 });
             } else {
@@ -294,15 +299,17 @@ class User
         }
         if ($userid !== false) {
             $dt = TIME_NOW;
+            $stylesheet = $this->config->get('site.stylesheet');
+            $uploadCredit = (int) $this->config->get('signup.upload_credit');
             $set = [
                 'personal_freeleech' => get_date($dt + 14 * 86400, 'MYSQL'),
                 'personal_doubleseed' => get_date($dt + 14 * 86400, 'MYSQL'),
                 'torrent_pass' => bin2hex(random_bytes(32)),
                 'auth' => bin2hex(random_bytes(32)),
                 'apikey' => bin2hex(random_bytes(32)),
-                'stylesheet' => $this->site_config['site']['stylesheet'],
+                'stylesheet' => is_string($stylesheet) ? $stylesheet : '',
                 'last_access' => $dt,
-                'uploaded' => $this->site_config['signup']['upload_credit'],
+                'uploaded' => $uploadCredit,
             ];
             if (!empty($values['invitedby'])) {
                 $set['invitedby'] = (int) $values['invitedby'];
@@ -317,17 +324,20 @@ class User
                 'is_staff_',
                 'all_users_',
             ]);
-            if ($userid > 2 && ($this->site_config['site']['autoshout_chat'] || $this->site_config['site']['autoshout_irc'])) {
+            $autoshoutChat = (bool) $this->config->get('site.autoshout_chat');
+            $autoshoutIrc = (bool) $this->config->get('site.autoshout_irc');
+            if ($userid > 2 && ($autoshoutChat || $autoshoutIrc)) {
                 require_once INCL_DIR . 'function_users.php';
                 $classname = get_user_class_name(UC_MIN, true);
-                $message = "Welcome New {$this->site_config['site']['name']} Member: [" . $classname . ']' . format_comment($values['username']) . '[/' . $classname . ']';
+                $message = "Welcome New {$siteName} Member: [" . $classname . ']' . format_comment($values['username']) . '[/' . $classname . ']';
                 autoshout($message);
             }
 
-            if (!$this->site_config['signup']['email_confirm']) {
+            if (!$emailConfirm) {
                 $this->session->set('is-success', 'You have successfully registered. Please login');
             }
-            $this->cache->set('latestuser_', $userid, $this->site_config['expires']['latestuser']);
+            $latestUserTtl = (int) $this->config->get('expires.latestuser');
+            $this->cache->set('latestuser_', $userid, $latestUserTtl);
             write_log('User account ' . $userid . ' (' . format_comment($values['username']) . ') was created');
         }
 
@@ -350,7 +360,8 @@ class User
         $sql = "UPDATE users SET /* columns */ WHERE id = :id";
 $result = $this->db->perform($sql, array_merge($set, ['id' => $userid]));
         if ($result && $persist) {
-            $this->cache->update_row('user_' . $userid, $set, $this->site_config['expires']['user_cache']);
+            $userCacheTtl = (int) $this->config->get('expires.user_cache');
+            $this->cache->update_row('user_' . $userid, $set, $userCacheTtl);
         } else {
             $this->cache->delete('user_' . $userid);
         }
@@ -449,7 +460,8 @@ $result = $this->db->perform($sql, array_merge($set, ['id' => $userid]));
                                    ->orderBy('id DESC')
                                    ->fetch('id');
 
-            $this->cache->set('latestuser_', $userid, $this->site_config['expires']['latestuser']);
+            $latestUserTtl = (int) $this->config->get('expires.latestuser');
+            $this->cache->set('latestuser_', $userid, $latestUserTtl);
         }
 
         return $userid;
@@ -478,7 +490,8 @@ $this->db->perform($sql, ['userID' => $userid]);
             $this->auth->destroySession();
         }
         if ($redirect) {
-            header('Location: ' . $this->site_config['paths']['baseurl'] . '/login.php');
+            $baseUrl = (string) $this->config->get('paths.baseurl');
+            header('Location: ' . $baseUrl . '/login.php');
             app_halt('Exit called');
         }
     }
@@ -504,7 +517,8 @@ $this->db->perform($sql, ['userID' => $userid]);
     {
         $duration = null;
         if ($remember === 1) {
-            $duration = (int) $this->site_config['expires']['remember_me'] * 60 * 60 * 24;
+            $rememberDays = (int) $this->config->get('expires.remember_me');
+            $duration = $rememberDays * 60 * 60 * 24;
         }
 
         try {
@@ -558,7 +572,8 @@ $this->db->perform($sql, ['userID' => $userid]);
             return true;
         }
         $this->session->set('is-success', _('Password has been reset'));
-        header('Location: ' . $this->site_config['paths']['baseurl']);
+        $baseUrl = (string) $this->config->get('paths.baseurl');
+        header('Location: ' . $baseUrl);
         app_halt('Exit called');
     }
 
@@ -576,8 +591,10 @@ $this->db->perform($sql, ['userID' => $userid]);
     public function create_reset(string $email)
     {
         try {
-            $this->auth->forgotPassword($email, function ($selector, $token) use ($email) {
-                $body = doc_head(_fe('{0} Reset Password Request', $this->site_config['site']['name'], false));
+            $siteName = (string) $this->config->get('site.name');
+            $baseUrl = (string) $this->config->get('paths.baseurl');
+            $this->auth->forgotPassword($email, function ($selector, $token) use ($email, $siteName, $baseUrl) {
+                $body = doc_head(_fe('{0} Reset Password Request', $siteName, false));
                 $body .= _fe('
 </head>
 <body>
@@ -591,8 +608,8 @@ $this->db->perform($sql, ['userID' => $userid]);
 <p>After you do this, you will be able to log with the new password.</p>
 <p>--{3}</p>
 </body>
-</html>', $email, getip(0), "{$this->site_config['paths']['baseurl']}/recover.php?selector=" . urlencode($selector) . '&token=' . urlencode($token), $this->site_config['site']['name']);
-                send_mail($email, "{$this->site_config['site']['name']} " . _('password reset confirmation'), $body, strip_tags($body));
+</html>', $email, getip(0), "{$baseUrl}/recover.php?selector=" . urlencode($selector) . '&token=' . urlencode($token), $siteName);
+                send_mail($email, "{$siteName} " . _('password reset confirmation'), $body, strip_tags($body));
             });
             stderr(_('Success'), _('If the email address exists, a confirmation email will be sent. Please allow a few minutes for the mail to arrive.'));
         } catch (InvalidEmailException $e) {
@@ -671,7 +688,7 @@ $this->db->perform($sql, ['userID' => $userid]);
      */
     public function get_inactives(int $registered, int $last_access, int $parked, int $class)
     {
-        $botid = $this->site_config['chatbot']['id'];
+        $botid = (int) $this->config->get('chatbot.id');
 
         $group1 = $this->fluent->from('users')
                                ->select(null)

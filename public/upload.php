@@ -1,22 +1,36 @@
 <?php
 declare(strict_types=1);
+
 require_once dirname(__DIR__) . '/bootstrap_web.php';
-
-$db = $container->get(Database::class);
-
-
-
-
 
 use Delight\Auth\Auth;
 use Pu239\Cache;
+use Pu239\Config\ConfigRepository;
 use Pu239\Database;
 use Pu239\Roles;
 use Pu239\Session;
 
 require_once __DIR__ . '/../include/bittorrent.php';
+
+global $container;
+/** @var ConfigRepository $config */
+$config = $container->get(ConfigRepository::class);
+/** @var Database $db */
+$db = $container->get(Database::class);
+
 $user = check_user_status();
-global $container, $site_config;
+
+$baseUrl = (string) $config->get('paths.baseurl');
+$imagesBaseUrl = (string) $config->get('paths.images_baseurl');
+$maxTorrentSize = (int) $config->get('site.max_torrent_size');
+$httpsOnly = (bool) $config->get('site.https_only');
+$trackerRadianceEnabled = (bool) $config->get('tracker.radiance');
+$trackerAnnouncePort = (int) $config->get('tracker.announce_port');
+$showTorrentPass = (bool) $config->get('upload.show_torrent_pass');
+$categoriesEbook = (array) $config->get('categories.ebook');
+$categoriesMovie = (array) $config->get('categories.movie');
+$categoriesTv = (array) $config->get('categories.tv');
+$torrentsDisableCommentsClass = (int) $config->get('allowed.torrents_disable_comments');
 
 $stdhead = [
     'css' => [
@@ -32,7 +46,7 @@ $stdfoot = [
 ];
 $auth = $container->get(Auth::class);
 if (!$auth->hasRole(Roles::UPLOADER) || $user['uploadpos'] != 1 || $user['status'] === 5) {
-    stderr(_('Error'), _fe('You are not authorized to upload torrents.  (See {0}Uploading{1} in the FAQ.)', "<a href='{$site_config['paths']['baseurl']}/faq.php#up'>", '</a>'));
+    stderr(_('Error'), _fe('You are not authorized to upload torrents.  (See {0}Uploading{1} in the FAQ.)', "<a href='{$baseUrl}/faq.php#up'>", '</a>'));
 }
 $cache = $container->get(Cache::class);
 $upload_vars = $cache->get('user_upload_variables_' . $user['id']);
@@ -157,17 +171,18 @@ if ($res_offers) {
             </tr>';
 }
 $session = $container->get(Session::class);
-$usessl = $session->get('scheme') === 'https' || $site_config['site']['https_only'] === true ? 'announce_url_ssl' : 'announce_url_nonssl';
-if ($site_config['tracker']['radiance']) {
-    $announce_url = "{$site_config['tracker'][$usessl][0]}:{$site_config['tracker']['announce_port']}" . ($site_config['upload']['show_torrent_pass'] ? "/{$user['torrent_pass']}/announce" : '');
+$usessl = $session->get('scheme') === 'https' || $httpsOnly === true ? 'announce_url_ssl' : 'announce_url_nonssl';
+$announceEndpoint = (string) $config->get("tracker.{$usessl}.0");
+if ($trackerRadianceEnabled) {
+    $announce_url = "{$announceEndpoint}:{$trackerAnnouncePort}" . ($showTorrentPass ? "/{$user['torrent_pass']}/announce" : '');
 } else {
-    $announce_url = "{$site_config['tracker'][$usessl][0]}/announce.php" . ($site_config['upload']['show_torrent_pass'] ? "?torrent_pass={$user['torrent_pass']}" : '');
+    $announce_url = "{$announceEndpoint}/announce.php" . ($showTorrentPass ? "?torrent_pass={$user['torrent_pass']}" : '');
 }
 
 $HTMLOUT .= "
-    <form id='upload_form' name='upload_form' action='{$site_config['paths']['baseurl']}/takeupload.php' method='post' enctype='multipart/form-data' accept-charset='utf-8'>
-        <input type='hidden' name='MAX_FILE_SIZE' value='{$site_config['site']['max_torrent_size']}'>
-        <input type='hidden' id='csrf' name='csrf' data-ebooks=" . json_encode($site_config['categories']['ebook']) . ' data-movies=' . json_encode(array_merge($site_config['categories']['movie'], $site_config['categories']['tv'])) . ">
+    <form id='upload_form' name='upload_form' action='{$baseUrl}/takeupload.php' method='post' enctype='multipart/form-data' accept-charset='utf-8'>
+        <input type='hidden' name='MAX_FILE_SIZE' value='{$maxTorrentSize}'>
+        <input type='hidden' id='csrf' name='csrf' data-ebooks=" . json_encode($categoriesEbook) . ' data-movies=' . json_encode(array_merge($categoriesMovie, $categoriesTv)) . ">
         <h1 class='has-text-centered'>" . _('Upload a Torrent') . "</h1>
         <div class='has-text-centered margin10'>" . _("The tracker's announce url is") . ":<br>
             <input type='text' class='has-text-centered w-100' readonly='readonly' value='{$announce_url}' id='announce_url' onClick=\"this.select();\">
@@ -229,7 +244,7 @@ $HTMLOUT .= "
                     <div id='droppable' class='droppable bg-03'>
                         <span id='comment'>" . _('Drop images or click here to select images.') . "</span>
                         <div id='loader' class='is-hidden'>
-                            <img src='{$site_config['paths']['images_baseurl']}forums/updating.svg' alt='Loading...'>
+                            <img src='{$imagesBaseUrl}forums/updating.svg' alt='Loading...'>
                         </div>
                     </div>
                     <div class='output-wrapper output'></div>
@@ -282,7 +297,7 @@ foreach ($subs as $s) {
     $subs_list .= "
                     <div class='w-15 margin10 tooltipper bordered level-center-center' title='" . htmlsafechars($s['name']) . "'>
                         <input name='subs[]' type='checkbox' value='{$s['name']}' " . (in_array($s['name'], $has_subs) ? 'checked' : '') . " class='margin20'>
-                        <img class='sub_flag' src='{$site_config['paths']['images_baseurl']}/{$s['pic']}' alt='" . htmlsafechars($s['name']) . "'>
+                        <img class='sub_flag' src='{$imagesBaseUrl}/{$s['pic']}' alt='" . htmlsafechars($s['name']) . "'>
                         <span class='has-text-centered margin20'>" . format_comment($s['name']) . '</span>
                     </div>';
 }
@@ -314,7 +329,7 @@ $rg = "
             </select>';
 $HTMLOUT .= tr(_('Category'), $rg, 1);
 $HTMLOUT .= tr(_('Anonymous Uploader'), "<div class='level-left'><input type='checkbox' name='uplver' id='uplver' value='1' " . ($uplver ? 'checked' : '') . "><label for='uplver' class='left5'>" . _("Don't show my username in 'Uploaded By' field in browse.") . '</label></div>', 1);
-if ($user['class'] >= $site_config['allowed']['torrents_disable_comments']) {
+if ($user['class'] >= $torrentsDisableCommentsClass) {
     $HTMLOUT .= tr(_('Allow Comments'), "
     <select name='allow_comments' class='w-100'>
         <option value='yes' " . ($allow_comments === 'yes' ? 'selected' : '') . '>' . _('Yes') . "</option>
@@ -370,7 +385,7 @@ $HTMLOUT .= "
 
 $title = _('Upload Torrent');
 $breadcrumbs = [
-    "<a href='{$site_config['paths']['baseurl']}/browse.php'>" . _('Browse Torrents') . '</a>',
+    "<a href='{$baseUrl}/browse.php'>" . _('Browse Torrents') . '</a>',
     "<a href='{$_SERVER['PHP_SELF']}'>$title</a>",
 ];
 echo stdhead($title, $stdhead, 'page-wrapper', $breadcrumbs) . wrapper($HTMLOUT) . stdfoot($stdfoot);

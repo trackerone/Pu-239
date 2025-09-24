@@ -1,15 +1,27 @@
 <?php
 declare(strict_types=1);
+
 require_once dirname(__DIR__) . '/bootstrap_web.php';
 
-$db = $container->get(Database::class);
-
-
-
+use Delight\Auth\Auth;
+use Pu239\Cache;
+use Pu239\Config\ConfigRepository;
+use Pu239\Database;
+use Pu239\Mood;
+use Pu239\Roles;
+use Pu239\Session;
+use Pu239\Snatched;
+use Pu239\User;
 
 require_once __DIR__ . '/../include/bittorrent.php';
 require_once CLASS_DIR . 'class_user_options.php';
 require_once CLASS_DIR . 'class_user_options_2.php';
+
+global $container;
+/** @var ConfigRepository $config */
+$config = $container->get(ConfigRepository::class);
+/** @var Database $db */
+$db = $container->get(Database::class);
 
 $viewer = check_user_status();
 $edit_profile = $friend_links = $shitty_link = $sharemark_link = '';
@@ -20,16 +32,12 @@ $stdfoot = [
     ],
 ];
 
-use Delight\Auth\Auth;
-use Pu239\Cache;
-use Pu239\Database;
-use Pu239\Mood;
-use Pu239\Roles;
-use Pu239\Session;
-use Pu239\Snatched;
-use Pu239\User;
-
-global $container, $site_config;
+$baseUrl = (string) $config->get('paths.baseurl');
+$imagesBaseUrl = (string) $config->get('paths.images_baseurl');
+$enableInvincibleClass = (int) $config->get('allowed.enable_invincible');
+$expiresUserFriends = (int) $config->get('expires.user_friends');
+$expiresUserBlocks = (int) $config->get('expires.user_blocks');
+$expiresShitList = (int) $config->get('expires.shit_list');
 
 $snatched = $container->get(Snatched::class);
 $cache = $container->get(Cache::class);
@@ -45,8 +53,8 @@ if (empty($user)) {
 } elseif ($user['verified'] === 0) {
     stderr(_('Error'), _('Pending'));
 } elseif ($user['paranoia'] === 3 && !has_access($viewer['class'], UC_STAFF, 'coder') && $user['id'] != $viewer['id']) {
-    stderr(_('Error'), '<span><img src="' . $site_config['paths']['images_baseurl'] . 'smilies/tinfoilhat.gif" alt="' . _('I wear a tin-foil hat!') . '" class="tooltipper" title="' . _('I wear a tin-foil hat!') . '">
-       ' . _('This members paranoia settings are at tinfoil hat levels!!!') . ' <img src="' . $site_config['paths']['images_baseurl'] . 'smilies/tinfoilhat.gif" alt="' . _('I wear a tin-foil hat!') . '" class="tooltipper" title="' . _('I wear a tin-foil hat!') . '"></span>');
+    stderr(_('Error'), '<span><img src="' . $imagesBaseUrl . 'smilies/tinfoilhat.gif" alt="' . _('I wear a tin-foil hat!') . '" class="tooltipper" title="' . _('I wear a tin-foil hat!') . '">
+       ' . _('This members paranoia settings are at tinfoil hat levels!!!') . ' <img src="' . $imagesBaseUrl . 'smilies/tinfoilhat.gif" alt="' . _('I wear a tin-foil hat!') . '" class="tooltipper" title="' . _('I wear a tin-foil hat!') . '"></span>');
     app_halt('Exit called');
 }
 if (isset($_GET['delete_hit_and_run']) && has_access($viewer['class'], UC_STAFF, 'coder')) {
@@ -84,7 +92,7 @@ if ($lastseen == 0 || $user['perms'] & PERMS_STEALTH) {
 } else {
     $lastseen = get_date((int) $user['last_access'], '', 0, 1);
 }
-if (has_access($viewer['class'], $site_config['allowed']['enable_invincible'], '') && isset($_GET['nologip'])) {
+if (has_access($viewer['class'], $enableInvincibleClass, '') && isset($_GET['nologip'])) {
     require_once INCL_DIR . 'nologip.php';
     if ($_GET['nologip'] === 'yes') {
         nologip($user['id'], true);
@@ -92,7 +100,7 @@ if (has_access($viewer['class'], $site_config['allowed']['enable_invincible'], '
         nologip($user['id'], false);
     }
 }
-if (has_access($viewer['class'], $site_config['allowed']['enable_invincible'], '') && isset($_GET['invincible'])) {
+if (has_access($viewer['class'], $enableInvincibleClass, '') && isset($_GET['invincible'])) {
     require_once INCL_DIR . 'invincible.php';
     if ($_GET['invincible'] === 'yes') {
         invincible($user['id'], true);
@@ -112,7 +120,7 @@ $country = '';
 $countries = countries();
 foreach ($countries as $cntry) {
     if ($cntry['id'] == $user['country']) {
-        $country = "<img src='{$site_config['paths']['images_baseurl']}flag/{$cntry['flagpic']}' alt='" . htmlsafechars((string) $cntry['name']) . "'>";
+        $country = "<img src='{$imagesBaseUrl}flag/{$cntry['flagpic']}' alt='" . htmlsafechars((string) $cntry['name']) . "'>";
         break;
     }
 }
@@ -147,7 +155,7 @@ if ($user['anonymous_until'] > TIME_NOW && (!has_access($viewer['class'], UC_STA
     $HTMLOUT .= "
             <tr>
                 <td colspan='3' class='has-text-centered'>
-                    <form method='get' action='{$site_config['paths']['baseurl']}/messages.php?action=send_message' enctype='multipart/form-data' accept-charset='utf-8'>
+                    <form method='get' action='{$baseUrl}/messages.php?action=send_message' enctype='multipart/form-data' accept-charset='utf-8'>
                         <input type='hidden' name='receiver' value='" . (int) $user['id'] . "'>
                         <input type='submit' value='" . _('Send Message') . "'>
                     </form>";
@@ -166,11 +174,11 @@ if ($user['anonymous_until'] > TIME_NOW && (!has_access($viewer['class'], UC_STA
 }
 $h1_thingie = ((isset($_GET['sn']) || isset($_GET['wu'])) ? '<h1>' . _('Member Updated') . '</h1>' : '');
 if ($viewer['id'] != $user['id'] && has_access($viewer['class'], UC_STAFF, 'coder')) {
-    $suspended .= ($user['status'] === 5 ? '  <img src="' . $site_config['paths']['images_baseurl'] . 'smilies/excl.gif" alt="' . _('Suspended') . '" class="tooltipper" title="' . _('Suspended') . '"> <b>' . _('This account has been suspended') . '</b> <img src="' . $site_config['paths']['images_baseurl'] . 'smilies/excl.gif" alt="' . _('Suspended') . '" class="tooltipper" title="' . _('Suspended') . '">' : '');
-    $watched_user .= ($user['watched_user'] == 0 ? '' : '  <img src="' . $site_config['paths']['images_baseurl'] . 'smilies/excl.gif" alt="' . _('Watched User') . '" class="tooltipper" title="' . _('Watched User') . '"> <b>' . _('This account is currently on the') . ' <a href="' . $site_config['paths']['baseurl'] . '/staffpanel.php?tool=watched_users">' . _('watched user list') . '</a></b> <img src="' . $site_config['paths']['images_baseurl'] . 'smilies/excl.gif" alt="' . _('Watched User') . '" class="tooltipper" title="' . _('Watched User') . '">');
+    $suspended .= ($user['status'] === 5 ? '  <img src="' . $imagesBaseUrl . 'smilies/excl.gif" alt="' . _('Suspended') . '" class="tooltipper" title="' . _('Suspended') . '"> <b>' . _('This account has been suspended') . '</b> <img src="' . $imagesBaseUrl . 'smilies/excl.gif" alt="' . _('Suspended') . '" class="tooltipper" title="' . _('Suspended') . '">' : '');
+    $watched_user .= ($user['watched_user'] == 0 ? '' : '  <img src="' . $imagesBaseUrl . 'smilies/excl.gif" alt="' . _('Watched User') . '" class="tooltipper" title="' . _('Watched User') . '"> <b>' . _('This account is currently on the') . ' <a href="' . $baseUrl . '/staffpanel.php?tool=watched_users">' . _('watched user list') . '</a></b> <img src="' . $imagesBaseUrl . 'smilies/excl.gif" alt="' . _('Watched User') . '" class="tooltipper" title="' . _('Watched User') . '">');
 }
-$perms .= (has_access($viewer['class'], UC_STAFF, 'coder') ? (($user['perms'] & PERMS_BYPASS_BAN) ? '  <img src="' . $site_config['paths']['images_baseurl'] . 'smilies/super.gif" alt="' . _('Invincible!') . '"  class="tooltipper" title="' . _('Invincible!') . '">' : '') : '');
-$stealth .= (has_access($viewer['class'], UC_STAFF, 'coder') ? (($user['perms'] & PERMS_STEALTH) ? '  <img src="' . $site_config['paths']['images_baseurl'] . 'smilies/ninja.gif" alt="' . _('Stealth mode!') . '"  class="tooltipper" title="' . _('Stealth mode!') . '">' : '') : '');
+$perms .= (has_access($viewer['class'], UC_STAFF, 'coder') ? (($user['perms'] & PERMS_BYPASS_BAN) ? '  <img src="' . $imagesBaseUrl . 'smilies/super.gif" alt="' . _('Invincible!') . '"  class="tooltipper" title="' . _('Invincible!') . '">' : '') : '');
+$stealth .= (has_access($viewer['class'], UC_STAFF, 'coder') ? (($user['perms'] & PERMS_STEALTH) ? '  <img src="' . $imagesBaseUrl . 'smilies/ninja.gif" alt="' . _('Stealth mode!') . '"  class="tooltipper" title="' . _('Stealth mode!') . '">' : '') : '');
 $enabled = $user['status'] === 0;
 $parked = $user['status'] === 1 ? _('This Account is Currently Parked!') : '';
 
@@ -187,7 +195,7 @@ if (!$enabled) {
                          ->where('userid = ?', $user['id'])
                          ->where('friendid = ?', $viewer['id'])
                          ->fetch("count");
-        $cache->set('Friends_' . $user['id'], $friend, $site_config['expires']['user_friends']);
+        $cache->set('Friends_' . $user['id'], $friend, $expiresUserFriends);
     }
     $block = $cache->get('Blocks_' . $user['id']);
     if ($block === false || is_null($block)) {
@@ -197,17 +205,17 @@ if (!$enabled) {
                         ->where('userid = ?', $user['id'])
                         ->where('blockid = ?', $viewer['id'])
                         ->fetch("count");
-        $cache->set('Blocks_' . $user['id'], $block, $site_config['expires']['user_blocks']);
+        $cache->set('Blocks_' . $user['id'], $block, $expiresUserBlocks);
     }
     if ($friend > 0) {
-        $friend_links .= "<li class='is-link margin10'><a href='{$site_config['paths']['baseurl']}/friends.php?action=delete&amp;type=friend&amp;targetid=${user['id']}'>" . _('Remove from Friends') . '</a></li>';
+        $friend_links .= "<li class='is-link margin10'><a href='{$baseUrl}/friends.php?action=delete&amp;type=friend&amp;targetid={$user['id']}'>" . _('Remove from Friends') . '</a></li>';
     } else {
-        $friend_links .= "<li class='is-link margin10'><a href='{$site_config['paths']['baseurl']}/friends.php?action=add&amp;type=friend&amp;targetid=${user['id']}'>" . _('Add to Friends') . '</a></li>';
+        $friend_links .= "<li class='is-link margin10'><a href='{$baseUrl}/friends.php?action=add&amp;type=friend&amp;targetid={$user['id']}'>" . _('Add to Friends') . '</a></li>';
     }
     if ($block > 0) {
-        $friend_links .= "<li class='is-link margin10'><a href='{$site_config['paths']['baseurl']}/friends.php?action=delete&amp;type=block&amp;targetid=${user['id']}'>" . _('Remove from Flocks') . '</a></li>';
+        $friend_links .= "<li class='is-link margin10'><a href='{$baseUrl}/friends.php?action=delete&amp;type=block&amp;targetid={$user['id']}'>" . _('Remove from Flocks') . '</a></li>';
     } else {
-        $friend_links .= "<li class='is-link margin10'><a href='{$site_config['paths']['baseurl']}/friends.php?action=add&amp;type=block&amp;targetid=${user['id']}'>" . _('Add to Blocks') . '</a></li>';
+        $friend_links .= "<li class='is-link margin10'><a href='{$baseUrl}/friends.php?action=add&amp;type=block&amp;targetid={$user['id']}'>" . _('Add to Blocks') . '</a></li>';
     }
 }
 
@@ -221,15 +229,15 @@ if (has_access($viewer['class'], UC_STAFF, 'coder')) {
                           ->where('userid = ?', $user['id'])
                           ->where('suspect = ?', $viewer['id'])
                           ->fetchAll();
-        $cache->set('shit_list_' . $user['id'], $shit_list, $site_config['expires']['shit_list']);
+        $cache->set('shit_list_' . $user['id'], $shit_list, $expiresShitList);
     }
     if ($shit_list > 0) {
-        $shitty_link = "<li class='is-link margin10'><a href='{$site_config['paths']['baseurl']}/staffpanel.php?tool=shit_list&amp;action=shit_list'>
+        $shitty_link = "<li class='is-link margin10'><a href='{$baseUrl}/staffpanel.php?tool=shit_list&amp;action=shit_list'>
                 Remove from your
-                <img class='tooltipper right5' src='{$site_config['paths']['images_baseurl']}smilies/shit.gif' alt='Shit' class='tooltipper' title='Shit'>
+                <img class='tooltipper right5' src='{$imagesBaseUrl}smilies/shit.gif' alt='Shit' class='tooltipper' title='Shit'>
             </a></li>";
     } elseif ($viewer['id'] != $user['id']) {
-        $shitty_link .= "<li class='is-link margin10'><a href='{$site_config['paths']['baseurl']}/staffpanel.php?tool=shit_list&amp;action=shit_list&amp;action2=new&amp;shit_list_id={$user['id']}&amp;return_to='{$_SERVER['PHP_SELF']}?id={$user['id']}'>
+        $shitty_link .= "<li class='is-link margin10'><a href='{$baseUrl}/staffpanel.php?tool=shit_list&amp;action=shit_list&amp;action2=new&amp;shit_list_id={$user['id']}&amp;return_to='{$_SERVER['PHP_SELF']}?id={$user['id']}'>
                 " . _('Add member to your shit list') . '
             </a></li>';
     }
@@ -242,16 +250,16 @@ if ($user['donor'] && $viewer['id'] == $user['id'] || has_access($viewer['class'
         $h1 .= "
             <div class='top20 has-text-centered'>
                 " . _('Donated Status Until') . ' - ' . get_date((int) $user['donoruntil'], 'DATE', 1, 0) . ' [ ' . mkprettytime($donoruntil - TIME_NOW) . ' ] ' . _('To go') . "...</b>
-                <br><span class='size_4'> " . _('To re-new your donation click') . " <a class='is-link' href='{$site_config['paths']['baseurl']}/donate.php'>" . _('here') . '</a>.</span>
+                <br><span class='size_4'> " . _('To re-new your donation click') . " <a class='is-link' href='{$baseUrl}/donate.php'>" . _('here') . '</a>.</span>
             </div>';
     }
 }
 if ($viewer['id'] == $user['id']) {
-    $edit_profile = "<li class='is-link margin10'><a href='{$site_config['paths']['baseurl']}/usercp.php?action=default'>" . _('Edit My Profile') . "</a></li>
-        <li class='is-link margin10'><a href='{$site_config['paths']['baseurl']}/view_announce_history.php'>" . _('View My Announcements') . '</a></li>';
+    $edit_profile = "<li class='is-link margin10'><a href='{$baseUrl}/usercp.php?action=default'>" . _('Edit My Profile') . "</a></li>
+        <li class='is-link margin10'><a href='{$baseUrl}/view_announce_history.php'>" . _('View My Announcements') . '</a></li>';
 }
 if ($viewer['id'] != $user['id']) {
-    $sharemark_link .= "<li class='is-link margin10'><a href='{$site_config['paths']['baseurl']}/sharemarks.php?id=${user['id']}'>" . _('View sharemarks') . '</a></li>';
+    $sharemark_link .= "<li class='is-link margin10'><a href='{$baseUrl}/sharemarks.php?id={$user['id']}'>" . _('View sharemarks') . '</a></li>';
 }
 $HTMLOUT .= "
     <div class='bottom20'>
@@ -271,7 +279,7 @@ $HTMLOUT .= (has_access($viewer['class'], UC_STAFF, 'coder') ? (($user['perms'] 
             <li class='margin10'><a class='is-link tooltipper' title='" . _('Stealth mode means that you can lurk with the expectation you will be invisible to all on the site including staff =]') . '<br>' . _('Blah blah blah.') . "' href='{$_SERVER['PHP_SELF']}?id={$user['id']}&amp;stealth=no'>" . _('De-Activate Stealth') . '</a></li>' : "
             <li class='margin10'><a class='is-link tooltipper' title='" . _('Stealth mode means that you can lurk with the expectation you will be invisible to all on the site including staff =]') . '<br>' . _('Blah blah blah.') . "' href='{$_SERVER['PHP_SELF']}?id={$user['id']}&amp;stealth=yes'>" . _('Activate Stealth') . '</a></li>') : '');
 $HTMLOUT .= has_access($viewer['class'], UC_SYSOP, 'coder') ? "
-            <li class='margin10'><a class='has-text-danger tooltipper' title='Reset this users password' href='{$site_config['paths']['baseurl']}/staffpanel.php?tool=reset&amp;username={$user['username']}&amp;userid={$user['id']}'>Reset Password</a></li>
+            <li class='margin10'><a class='has-text-danger tooltipper' title='Reset this users password' href='{$baseUrl}/staffpanel.php?tool=reset&amp;username={$user['username']}&amp;userid={$user['id']}'>Reset Password</a></li>
             <li class='margin10'><a class='has-text-danger tooltipper' title='Force this user to Logout' href='{$_SERVER['PHP_SELF']}?id={$user['id']}&amp;force_logout=yes'>Force Logout</a></li>" : '';
 $HTMLOUT .= '
         </ul>
@@ -306,18 +314,18 @@ if ($user['id'] === $viewer['id'] || has_access($viewer['class'], UC_ADMINISTRAT
             <td>
                 <ul class='level-left buttons'>
                     <li class='right10'>
-                        <a href='{$site_config['paths']['baseurl']}/download_multi.php?userid=${user['id']}' class='button is-small tooltipper' title='Download <i><b>all torrents</b></i> that you have previously snatched'>Snatched Torrents</a>
+                        <a href='{$baseUrl}/download_multi.php?userid={$user['id']}' class='button is-small tooltipper' title='Download <i><b>all torrents</b></i> that you have previously snatched'>Snatched Torrents</a>
                     </li>
                     <li class='right10'>
-                        <a href='{$site_config['paths']['baseurl']}/download_multi.php?owner=true&amp;userid=${user['id']}' class='button is-small tooltipper' title='Download <i><b>all torrents</b></i> that you have uploaded'>Uploaded Torrents</a>
+                        <a href='{$baseUrl}/download_multi.php?owner=true&amp;userid={$user['id']}' class='button is-small tooltipper' title='Download <i><b>all torrents</b></i> that you have uploaded'>Uploaded Torrents</a>
                     </li>";
     if ($user['id'] === $viewer['id'] && has_access($viewer['class'], UC_ADMINISTRATOR, 'coder')) {
         $table_data .= "
                     <li class='right10'>
-                        <a href='{$site_config['paths']['baseurl']}/download_multi.php?getall=yes' class='button is-small tooltipper' title='Download <i><b>all active</b></i> torrents'>Live Torrents</a>
+                        <a href='{$baseUrl}/download_multi.php?getall=yes' class='button is-small tooltipper' title='Download <i><b>all active</b></i> torrents'>Live Torrents</a>
                     </li>
                     <li class='right10'>
-                        <a href='{$site_config['paths']['baseurl']}/download_multi.php?getall=no' class='button is-small tooltipper' title='Download <i><b>all dead</b></i> torrents'>Dead Torrents</a>
+                        <a href='{$baseUrl}/download_multi.php?getall=no' class='button is-small tooltipper' title='Download <i><b>all dead</b></i> torrents'>Dead Torrents</a>
                     </li>";
     }
     $table_data .= '
@@ -357,7 +365,7 @@ $HTMLOUT .= "
 if ($viewer['id'] !== $user['id'] && has_access($viewer['class'], UC_STAFF, 'coder')) {
     $the_flip_box = "
         <a id='watched_user'></a>
-        <a class='is-link tooltipper' href='#watched_user' onclick=\"flipBox('3')\" title='" . _('Add - Edit - View Watched User') . "'>" . ($user['watched_user'] > 0 ? _('Add - Edit - View') : _('Add - View')) . "<img onclick=\"flipBox('3')\" src='{$site_config['paths']['images_baseurl']}panel_on.gif' id='b_3' width='8' height='8' alt='" . _('Add - Edit - View Watched User') . "' class='tooltipper' title='" . _('Add - Edit - View Watched User') . "'></a>";
+        <a class='is-link tooltipper' href='#watched_user' onclick=\"flipBox('3')\" title='" . _('Add - Edit - View Watched User') . "'>" . ($user['watched_user'] > 0 ? _('Add - Edit - View') : _('Add - View')) . "<img onclick=\"flipBox('3')\" src='{$imagesBaseUrl}panel_on.gif' id='b_3' width='8' height='8' alt='" . _('Add - Edit - View Watched User') . "' class='tooltipper' title='" . _('Add - Edit - View Watched User') . "'></a>";
     $HTMLOUT .= "
                         <tr>
                             <td class='rowhead'>" . _('Watched User') . "</td>
@@ -384,9 +392,9 @@ if ($viewer['id'] !== $user['id'] && has_access($viewer['class'], UC_STAFF, 'cod
                             </td>
                         </tr>";
 
-    $the_flip_box_4 = '[ <a id="staff_notes"></a><a class="is-link tooltipper" href="#staff_notes" onclick="flipBox(\'4\')" id="b_4" title="' . _('Open / Close Staff Notes') . '">view <img onclick="flipBox(\'4\')" src="' . $site_config['paths']['images_baseurl'] . 's/panel_on.gif" id="b_4" width="8" height="8" alt="' . _('Open / Close Staff Notes') . '" class="tooltipper" title="' . _('Open / Close Staff Notes') . '"></a> ]';
+    $the_flip_box_4 = '[ <a id="staff_notes"></a><a class="is-link tooltipper" href="#staff_notes" onclick="flipBox(\'4\')" id="b_4" title="' . _('Open / Close Staff Notes') . '">view <img onclick="flipBox(\'4\')" src="' . $imagesBaseUrl . 's/panel_on.gif" id="b_4" width="8" height="8" alt="' . _('Open / Close Staff Notes') . '" class="tooltipper" title="' . _('Open / Close Staff Notes') . '"></a> ]';
     $HTMLOUT .= '<tr><td class="rowhead">' . _('Staff Notes') . '</td><td class="has-text-left">
-                            <a class="is-link tooltipper" href="#staff_notes" onclick="flipBox(\'6\')" id="b_6" title="' . _('Add - Edit - View staff note') . '">' . ($user['staff_notes'] !== '' ? _('View - Add - Edit') . ' ' : _('Add') . ' ') . '<img onclick="flipBox(\'6\')" src="' . $site_config['paths']['images_baseurl'] . 'panel_on.gif" id="b_6" width="8" height="8" alt="' . _('Add - Edit - View staff note') . '" class="tooltipper" title="' . _('Add - Edit - View staff note') . '"></a>
+                            <a class="is-link tooltipper" href="#staff_notes" onclick="flipBox(\'6\')" id="b_6" title="' . _('Add - Edit - View staff note') . '">' . ($user['staff_notes'] !== '' ? _('View - Add - Edit') . ' ' : _('Add') . ' ') . '<img onclick="flipBox(\'6\')" src="' . $imagesBaseUrl . 'panel_on.gif" id="b_6" width="8" height="8" alt="' . _('Add - Edit - View staff note') . '" class="tooltipper" title="' . _('Add - Edit - View staff note') . '"></a>
                             <div class="has-text-left" id="box_6">
                                 <form method="post" action="ajax/member_input.php" name="notes_for_staff" accept-charset="utf-8">
                                     <input name="id" type="hidden" value="' . (int) $user['id'] . '">
@@ -398,7 +406,7 @@ if ($viewer['id'] !== $user['id'] && has_access($viewer['class'], UC_STAFF, 'cod
                                 </form>
                             </div> </td></tr>';
 
-    $the_flip_box_7 = '[ <a id="system_comments"></a><a class="is-link tooltipper" href="#system_comments" onclick="flipBox(\'7\')"  id="b_7" title="' . _('Open / Close System Comments') . ')"><img src="' . $site_config['paths']['images_baseurl'] . 'panel_on.gif" id="b_7" width="8" height="8" alt="' . _('Open / Close System Comments') . '" class="tooltipper" title="' . _('Open / Close System Comments') . '"></a> ]';
+    $the_flip_box_7 = '[ <a id="system_comments"></a><a class="is-link tooltipper" href="#system_comments" onclick="flipBox(\'7\')"  id="b_7" title="' . _('Open / Close System Comments') . ')"><img src="' . $imagesBaseUrl . 'panel_on.gif" id="b_7" width="8" height="8" alt="' . _('Open / Close System Comments') . '" class="tooltipper" title="' . _('Open / Close System Comments') . '"></a> ]';
     if (!empty($user['modcomment'])) {
         $HTMLOUT .= "<tr><td class='rowhead'>" . _('System Comments') . "</td><td class='has-text-left'>" . ($user['modcomment'] != '' ? $the_flip_box_7 . '<div class="has-text-left" id="box_7"><hr>' . format_comment($user['modcomment']) . '</div>' : '') . '</td></tr>';
     }
@@ -458,7 +466,7 @@ $moodname = (isset($moods['name'][$user['mood']]) ? format_comment($moods['name'
 $moodpic = (isset($moods['image'][$user['mood']]) ? format_comment($moods['image'][$user['mood']]) : 'noexpression.gif');
 $HTMLOUT .= '<tr><td class="rowhead">' . _('Current Mood') . '</td><td class="has-text-left"><span class="tool">
        <a href="javascript:;" onclick="PopUp(\'usermood.php\',\'' . _('Mood') . '\',530,500,1,1);">
-       <img src="' . $site_config['paths']['images_baseurl'] . 'smilies/' . $moodpic . '" alt="' . $moodname . '">
+       <img src="' . $imagesBaseUrl . 'smilies/' . $moodpic . '" alt="' . $moodname . '">
        <span class="tip">' . format_comment($user['username']) . ' ' . $moodname . ' !</span></a></span></td></tr>';
 if ($viewer['blocks']['userdetails_page'] & class_blocks_userdetails::SEEDBONUS && $BLOCKS['userdetails_seedbonus_on']) {
     require_once BLOCK_DIR . 'userdetails/seedbonus.php';
@@ -496,7 +504,7 @@ if ((has_access($viewer['class'], UC_STAFF, 'coder') && $user['class'] < $viewer
     <form method='post' action='./staffpanel.php?tool=modtask' enctype='multipart/form-data' accept-charset='utf-8'>
         <input type='hidden' name='action' value='edituser'>
         <input type='hidden' name='userid' value='{$user['id']}'>
-        <input type='hidden' name='returnto' value='{$_SERVER['PHP_SELF']}?id=${user['id']}'>
+        <input type='hidden' name='returnto' value='{$_SERVER['PHP_SELF']}?id={$user['id']}'>
         <table class='table table-bordered table-striped'>
         <tr>
             <td class='rowhead'>" . _('Title') . "</td><td colspan='3' class='has-text-left'>
@@ -1053,7 +1061,7 @@ if ((has_access($viewer['class'], UC_STAFF, 'coder') && $user['class'] < $viewer
          <td class='rowhead'>" . _('Change Upload') . "</td>
          <td class='has-text-centered'>
         <div class='level'>
-            <img src='{$site_config['paths']['images_baseurl']}plus.gif' alt='" . _('Change Ratio') . "' class='tooltipper' title='" . _('Change Ratio') . "!' id='uppic' onclick=\"togglepic('{$site_config['paths']['baseurl']}', 'uppic','upchange')\">
+            <img src='{$imagesBaseUrl}plus.gif' alt='" . _('Change Ratio') . "' class='tooltipper' title='" . _('Change Ratio') . "!' id='uppic' onclick=\"togglepic('{$baseUrl}', 'uppic','upchange')\">
             <input type='text' name='amountup' class='w-75'>
         </div>
          </td>
@@ -1068,7 +1076,7 @@ if ((has_access($viewer['class'], UC_STAFF, 'coder') && $user['class'] < $viewer
          <td class='rowhead'>" . _('Change Download') . "</td>
          <td class='has-text-centered'>
         <div class='level'>
-            <img src='{$site_config['paths']['images_baseurl']}plus.gif' alt='" . _('Change Ratio') . "' class='tooltipper' title='" . _('Change Ratio') . "!' id='downpic' onclick=\"togglepic('{$site_config['paths']['baseurl']}','downpic','downchange')\">
+            <img src='{$imagesBaseUrl}plus.gif' alt='" . _('Change Ratio') . "' class='tooltipper' title='" . _('Change Ratio') . "!' id='downpic' onclick=\"togglepic('{$baseUrl}','downpic','downchange')\">
             <input type='text' name='amountdown' class='w-75'>
         </div>
          </td>

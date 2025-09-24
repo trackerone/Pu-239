@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace Pu239;
 
 use Envms\FluentPDO\Exception;
+use PU239\Config\ConfigRepository;
 
 require_once __DIR__ . '/../include/runtime_safe.php';
 require_once __DIR__ . '/../include/bootstrap_pdo.php';
@@ -15,24 +16,22 @@ class Userblock
 {
     protected $fluent;
     protected $cache;
-    protected $site_config;
-    protected $settings;
+    protected ConfigRepository $config;
 
     /**
      * Userblock constructor.
      *
-     * @param Cache    $cache
-     * @param Database $fluent
-     * @param Settings $settings
+     * @param Cache             $cache
+     * @param Database          $fluent
+     * @param ConfigRepository  $config
      *
      * @throws Exception
      */
-    public function __construct(Cache $cache, Database $fluent, Settings $settings)
+    public function __construct(Cache $cache, Database $fluent, ConfigRepository $config)
     {
-        $this->settings = $settings;
-        $this->site_config = $this->settings->get_settings();
         $this->fluent = $fluent;
         $this->cache = $cache;
+        $this->config = $config;
     }
 
     /**
@@ -58,7 +57,11 @@ class Userblock
                     }
                 }
 
-                $this->cache->set('userblocks_' . $userid, $blocks, $this->site_config['expires']['u_status']);
+                $this->cache->set(
+                    'userblocks_' . $userid,
+                    $blocks,
+                    (int) $this->config->get('expires.user_blocks', 0),
+                );
             }
         } catch (\Exception $e) {
             return $e->getMessage();

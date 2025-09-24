@@ -15,7 +15,6 @@ class Ach_bonus
     protected $env;
     protected $limit;
     protected $settings;
-    protected $site_config;
 
     /**
      * Ach_bonus constructor.

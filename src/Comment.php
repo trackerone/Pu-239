@@ -7,6 +7,7 @@ use Envms\FluentPDO\Exception;
 use Envms\FluentPDO\Queries\Select;
 use PDOStatement;
 use Psr\Container\ContainerInterface;
+use PU239\Config\ConfigRepository;
 
 require_once __DIR__ . '/../include/runtime_safe.php';
 require_once __DIR__ . '/../include/bootstrap_pdo.php';
@@ -21,7 +22,7 @@ class Comment
     protected $env;
     protected $image;
     protected $container;
-    protected $site_config;
+    protected ConfigRepository $config;
 
     /**
      * Comment constructor.
@@ -29,16 +30,16 @@ class Comment
      * @param Cache              $cache
      * @param Database           $fluent
      * @param Image              $image
-     * @param Settings           $settings
+     * @param ConfigRepository   $config
      * @param ContainerInterface $c
      *
      * @throws Exception
      */
-    public function __construct(Cache $cache, Database $fluent, Image $image, Settings $settings, ContainerInterface $c)
+    public function __construct(Cache $cache, Database $fluent, Image $image, ConfigRepository $config, ContainerInterface $c)
     {
         $this->container = $c;
         $this->env = $this->container->get('env');
-        $this->site_config = $settings->get_settings();
+        $this->config = $config;
         $this->fluent = $fluent;
         $this->image = $image;
         $this->cache = $cache;
@@ -127,7 +128,8 @@ class Comment
                 }
                 $comments[] = $torrent;
             }
-            $this->cache->set('latest_comments_', $comments, $this->site_config['expires']['latestcomments']);
+            $latestCommentsTtl = (int) $this->config->get('expires.latestcomments');
+            $this->cache->set('latest_comments_', $comments, $latestCommentsTtl);
         }
         foreach ($comments as $comment) {
             if (empty($comment['poster']) && !empty($comment['imdb_id'])) {
