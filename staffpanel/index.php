@@ -9,11 +9,21 @@ use Pu239\Database;
 use Pu239\Radiance;
 use Pu239\Session;
 use Pu239\Uglify\UglifyService;
+use PU239\Config\ConfigRepository;
 
-global $container, $site_config;
+global $container;
 
 /** @var Database $db */
 $db = $container->get(Database::class);
+/** @var ConfigRepository $config */
+$config = $container->get(ConfigRepository::class);
+$baseUrl = (string) $config->get('paths.baseurl', '');
+$imagesBaseUrl = (string) $config->get('paths.images_baseurl', '');
+$trackerConfigPath = (string) $config->get('tracker.config_path', '');
+// TODO(2025): map legacy key "tracker.config_path" to appropriate config path
+$cacheDriver = (string) $config->get('cache.default.driver', 'memory');
+$radianceEnabled = $config->bool('tracker.radiance', false);
+// TODO(2025): map legacy key "tracker.radiance" to appropriate config path
 
 require_once __DIR__ . '/../include/bittorrent.php';
 require_once BIN_DIR . 'functions.php';
@@ -39,12 +49,13 @@ $sanitize = static fn(mixed $value): string => htmlspecialchars((string) $value,
 
 class_check(UC_STAFF);
 
-if (!$site_config['site']['staffpanel_online']) {
+// TODO(2025): map legacy key "site.staffpanel_online" to appropriate config path
+if (!$config->bool('site.staffpanel_online', true)) {
     stderr(_('Information'), _('The staffpanel is currently offline for maintenance work'));
 }
 
-if ($site_config['tracker']['radiance'] && !file_exists($site_config['tracker']['config_path'])) {
-    $session->set('is-danger', "{$site_config['tracker']['config_path']} does not exist. Please set the path correctly in the site settings -> tracker.");
+if ($radianceEnabled && $trackerConfigPath !== '' && !file_exists($trackerConfigPath)) {
+    $session->set('is-danger', "{$trackerConfigPath} does not exist. Please set the path correctly in the site settings -> tracker.");
 }
 
 $stdhead = [
@@ -155,7 +166,7 @@ if (in_array($tool, $staff_tools, true) && file_exists(ADMIN_DIR . $staff_tools[
         if ($result >= 1) {
             if ($user['class'] <= UC_MAX) {
                 $page = _('Page') . " '[color=#" . get_user_class_color((int) $arr['av_class']) . "]{$arr['page_name']}[/color]'";
-                $user_bbcode = "[url={$site_config['paths']['baseurl']}/userdetails.php?id={$user['id']}][color=#" . get_user_class_color($user['class']) . "]{$user['username']}[/color][/url]";
+                $user_bbcode = "[url={$baseUrl}/userdetails.php?id={$user['id']}][color=#" . get_user_class_color($user['class']) . "]{$user['username']}[/color][/url]";
                 write_log("$page " . _('in the staff panel was') . " $action by $user_bbcode");
             }
             header('Location: ' . $_SERVER['PHP_SELF']);
@@ -165,7 +176,7 @@ if (in_array($tool, $staff_tools, true) && file_exists(ADMIN_DIR . $staff_tools[
         stderr(_('Error'), _('There was a database error, please retry.'));
     } elseif ($action === 'flush' && has_access($user['class'], UC_SYSOP, 'coder')) {
         $cache->flushDB();
-        $session->set('is-success', _fe('You flushed the {0} cache', ucfirst($site_config['cache']['driver'])));
+        $session->set('is-success', _fe('You flushed the {0} cache', ucfirst($cacheDriver)));
         header('Location: ' . $_SERVER['PHP_SELF']);
         app_halt('Exit called');
     } elseif ($action === 'uglify' && has_access($user['class'], UC_SYSOP, 'coder')) {
@@ -179,7 +190,7 @@ if (in_array($tool, $staff_tools, true) && file_exists(ADMIN_DIR . $staff_tools[
                 $session->set('is-info', $info);
             }
             $cache->flushDB();
-            $session->set('is-success', _fe('You flushed the {0} cache', ucfirst($site_config['cache']['driver'])));
+            $session->set('is-success', _fe('You flushed the {0} cache', ucfirst($cacheDriver)));
         } else {
             $errors = $result['errors'] ?? [];
             $message = empty($errors) ? _('uglify.php failed') : _fe('uglify.php failed: {0}', $sanitize($errors[0]));
@@ -209,7 +220,8 @@ if (in_array($tool, $staff_tools, true) && file_exists(ADMIN_DIR . $staff_tools[
         header('Location: ' . $_SERVER['PHP_SELF']);
         app_halt('Exit called');
     } elseif ($action === 'toggle_status' && has_access($user['class'], UC_SYSOP, 'coder')) {
-        if (toggle_site_status($site_config['site']['online'])) {
+        // TODO(2025): map legacy key "site.online" to appropriate config path
+        if (toggle_site_status($config->bool('site.online', true))) {
             $session->set('is-success', _('Site is Online.'));
         } else {
             $session->set('is-success', _('Site is Offline.'));
@@ -351,7 +363,7 @@ if (in_array($tool, $staff_tools, true) && file_exists(ADMIN_DIR . $staff_tools[
                     if ($user['class'] <= UC_MAX) {
                         $page = _('Page') . " '[color=#" . get_user_class_color((int) $_POST['av_class']) . "]{$page_name}[/color]'";
                         $what = $action === 'add' ? 'added' : 'edited';
-                        $user_bbcode = "[url={$site_config['paths']['baseurl']}/userdetails.php?id={$user['id']}][color=#" . get_user_class_color($user['class']) . "]{$user['username']}[/color][/url]";
+                        $user_bbcode = "[url={$baseUrl}/userdetails.php?id={$user['id']}][color=#" . get_user_class_color($user['class']) . "]{$user['username']}[/color][/url]";
                         write_log("$page " . _('in the staff panel was') . " $what by $user_bbcode");
                     }
 
@@ -490,7 +502,7 @@ if (in_array($tool, $staff_tools, true) && file_exists(ADMIN_DIR . $staff_tools[
                     </li>
                     <li class='margin10'>
                         <a href='{$_SERVER['PHP_SELF']}?action=flush' class='tooltipper' title='" . _('Flush Cache') . "'>" . _('Flush Cache') . "</a>
-                    </li>" . ($site_config['tracker']['radiance'] ? (empty($radiance->check_status()) ? "
+                    </li>" . ($radianceEnabled ? (empty($radiance->check_status()) ? "
                     <li class='margin10'>
                         <a href='{$_SERVER['PHP_SELF']}?action=radiance_start' class='tooltipper' title='" . _('Start Radiance Server') . "'>" . _('Start Radiance') . "</a>
                     </li>" : "
@@ -554,7 +566,7 @@ if (in_array($tool, $staff_tools, true) && file_exists(ADMIN_DIR . $staff_tools[
                     <tr>
                         <td>
                             <div class='size_4'>
-                                <a href='{$site_config['paths']['baseurl']}/" . htmlsafechars($arr['file_name']) . "' class='tooltipper' title='" . htmlsafechars($arr['description'] . '<br>' . $arr['file_name']) . "'>" . ucwords(htmlsafechars($arr['page_name'])) . "</a>
+                                <a href='{$baseUrl}/" . htmlsafechars($arr['file_name']) . "' class='tooltipper' title='" . htmlsafechars($arr['description'] . '<br>' . $arr['file_name']) . "'>" . ucwords(htmlsafechars($arr['page_name'])) . "</a>
                             </div>
                         </td>
                         <td>
