@@ -1,15 +1,19 @@
 <?php
 declare(strict_types=1);
-require_once dirname(__DIR__) . '/bootstrap_web.php';
 
-$db = $container->get(Database::class);
-
-
-
-
-
+use Pu239\Config\ConfigRepository;
 use Pu239\Database;
 use Pu239\Torrent;
+
+require_once dirname(__DIR__) . '/bootstrap_web.php';
+
+global $container;
+/** @var ConfigRepository $config */
+$config = $container->get(ConfigRepository::class);
+/** @var Database $db */
+$db = $container->get(Database::class);
+$baseUrl = (string) $config->get('paths.baseurl');
+$ratioFree = (bool) $config->get('site.ratio_free');
 
 require_once __DIR__ . '/../include/bittorrent.php';
 $user = check_user_status();
@@ -30,7 +34,7 @@ $HTMLOUT = '';
  */
 function dltable($name, $arr, $torrent, $user)
 {
-    global $site_config;
+    global $ratioFree;
 
     if (!count($arr)) {
         return $htmlout = main_div('<div><b>' . _fe('No {0} data available', $name) . '</b></div>', '', 'padding20 has-text-centered');
@@ -40,8 +44,8 @@ function dltable($name, $arr, $torrent, $user)
             <th>' . _('User/IP') . '</th>
             <th>' . _('Connectable') . '</th>
             <th>' . _('Uploaded') . '</th>
-            <th>' . _('Rate') . '</th>' . ($site_config['site']['ratio_free'] ? '' : '
-            <th>' . _('Downloaded') . '</th>') . ($site_config['site']['ratio_free'] ? '' : '
+            <th>' . _('Rate') . '</th>' . ($ratioFree ? '' : '
+            <th>' . _('Downloaded') . '</th>') . ($ratioFree ? '' : '
             <th>' . _('Rate') . '</th>') . '
             <th>' . _('Ratio') . '</th>
             <th>' . _('Complete') . '</th>
@@ -72,11 +76,11 @@ function dltable($name, $arr, $torrent, $user)
         $body .= '<td>' . ($e['connectable'] === 'yes' ? _('Yes') : "<span class='has-text-danger'>" . _('No') . '</span>') . "</td>\n";
         $body .= '<td>' . mksize($e['uploaded']) . "</td>\n";
         $body .= '<td><span style="white-space: nowrap;">' . mksize(($e['uploaded'] - $e['uploadoffset']) / $secs) . "/s</span></td>\n";
-        $body .= ($site_config['site']['ratio_free'] ? '' : '<td>' . mksize($e['downloaded']) . '</td>') . "\n";
+        $body .= ($ratioFree ? '' : '<td>' . mksize($e['downloaded']) . '</td>') . "\n";
         if ($e['seeder'] === 'no') {
-            $body .= ($site_config['site']['ratio_free'] ? '' : '<td><span style="white-space: nowrap;">' . mksize(($e['downloaded'] - $e['downloadoffset']) / $secs) . '/s</span></td>') . "\n";
+            $body .= ($ratioFree ? '' : '<td><span style="white-space: nowrap;">' . mksize(($e['downloaded'] - $e['downloadoffset']) / $secs) . '/s</span></td>') . "\n";
         } else {
-            $body .= ($site_config['site']['ratio_free'] ? '' : '<td><span style="white-space: nowrap;">' . mksize(($e['downloaded'] - $e['downloadoffset']) / max(1, $e['finishedat'] - $e['st'])) . '/s</span></td>') . "\n";
+            $body .= ($ratioFree ? '' : '<td><span style="white-space: nowrap;">' . mksize(($e['downloaded'] - $e['downloadoffset']) / max(1, $e['finishedat'] - $e['st'])) . '/s</span></td>') . "\n";
         }
         $body .= '<td>' . member_ratio($e['uploaded'], $e['downloaded']) . "</td>\n";
         $body .= '<td>' . sprintf('%.2f%%', 100 * (1 - ($e['to_go'] / $torrent['size']))) . "</td>\n";
@@ -89,8 +93,6 @@ function dltable($name, $arr, $torrent, $user)
 
     return $htmlout;
 }
-
-global $container, $site_config;
 
 $torrents_class = $container->get(Torrent::class);
 $torrent = $torrents_class->get($id);
@@ -183,7 +185,7 @@ function seed_sort($a, $b)
 usort($seeders, 'seed_sort');
 usort($downloaders, 'leech_sort');
 $HTMLOUT .= "
-    <h1 class='has-text-centered'>" . _fe('Peerlist for {0}{1}{2}', "<a href='{$site_config['paths']['baseurl']}/details.php?id=$id'>", format_comment($torrent['name']), '</a>') . '</h1>';
+    <h1 class='has-text-centered'>" . _fe('Peerlist for {0}{1}{2}', "<a href='{$baseUrl}/details.php?id=$id'>", format_comment($torrent['name']), '</a>') . '</h1>';
 $HTMLOUT .= dltable(_('Seeder') . "<a id='seeders'></a>", $seeders, $torrent, $user);
 $HTMLOUT .= '<br>' . dltable(_('Leecher') . "<a id='leechers'></a>", $downloaders, $torrent, $user);
 $title = _('Peerlist');

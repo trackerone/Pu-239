@@ -565,3 +565,52 @@ No syntax errors detected in include/function_torrenttable.php
 >>>>>> master
 >>>>>> master
 >>>>>> master
+No syntax errors detected in public/clear_announcement.php
+No syntax errors detected in public/contactstaff.php
+No syntax errors detected in public/delete.php
+No syntax errors detected in public/fastdelete.php
+No syntax errors detected in public/filelist.php
+No syntax errors detected in public/flash.php
+No syntax errors detected in public/forums.php
+No syntax errors detected in public/games.php
+No syntax errors detected in public/peerlist.php
+No syntax errors detected in public/polls_take_vote.php
+No syntax errors detected in public/recover.php
+No syntax errors detected in public/requests.php
+No syntax errors detected in public/restoreclass.php
+No syntax errors detected in public/rsstfreak.php
+No syntax errors detected in public/search.php
+No syntax errors detected in public/setclass.php
+No syntax errors detected in public/sharemarks.php
+No syntax errors detected in public/snatches.php
+No syntax errors detected in public/staff.php
+No syntax errors detected in public/subtitles.php
+No syntax errors detected in public/take_theme.php
+No syntax errors detected in public/takereseed.php
+No syntax errors detected in public/takethankyou.php
+No syntax errors detected in public/takeupload.php
+No syntax errors detected in public/topmoods.php
+No syntax errors detected in public/topten.php
+No syntax errors detected in public/upload.php
+No syntax errors detected in public/user_blocks.php
+No syntax errors detected in public/user_unlocks.php
+No syntax errors detected in public/usercomment.php
+
+
+
+
+
+
+
+
+No syntax errors detected in public/userdetails.php
+No syntax errors detected in public/verify.php
+No syntax errors detected in public/takeupload.php
+No syntax errors detected in public/topmoods.php
+No syntax errors detected in public/topten.php
+No syntax errors detected in public/upload.php
+No syntax errors detected in public/user_blocks.php
+No syntax errors detected in public/user_unlocks.php
+No syntax errors detected in public/usercomment.php
+No syntax errors detected in public/userdetails.php
+No syntax errors detected in public/verify.php
