@@ -8,6 +8,7 @@ No syntax errors detected in admin/class_config.php
 No syntax errors detected in admin/cloudview.php
 No syntax errors detected in admin/datareset.php
 No syntax errors detected in admin/deathrow.php
+<<<<<< codex/enforce-csrf-and-output-escaping-hb2amy
 No syntax errors detected in admin/delacct.php
 No syntax errors detected in admin/editlog.php
 No syntax errors detected in admin/findnotconnectable.php
@@ -18,3 +19,5 @@ No syntax errors detected in admin/freeleech.php
 No syntax errors detected in admin/grouppm.php
 No syntax errors detected in admin/hit_and_run_settings.php
 No syntax errors detected in admin/hnrwarn.php
+=======
+>>>>>> master
