@@ -19,6 +19,11 @@ $session = $container->get(Session::class);
 $class = get_access(basename($_SERVER['REQUEST_URI']));
 class_check($class);
 
+$s = $s ?? static fn($v) => htmlspecialchars((string) $v, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
+$self = $s($_SERVER['PHP_SELF'] ?? '');
+$baseurlRaw = (string) $config->get('paths.baseurl');
+$baseurl = $s($baseurlRaw);
+
 $HTMLOUT = '';
 $record_mail = true;
 $days = 30;
@@ -27,6 +32,7 @@ $days = 30;
 $threshold = TIME_NOW - ($days * 86400);
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    // TODO(2025): csrf
     $action = isset($_POST['action']) ? (string) $_POST['action'] : '';
     $ids = isset($_POST['userid']) && is_array($_POST['userid']) ? array_values(array_unique(array_map('intval', $_POST['userid']))) : [];
 
@@ -136,7 +142,7 @@ $countRow = $db->fetch(
 $count = (int) ($countRow['count'] ?? 0);
 
 $perpage = 15;
-$pager = pager($perpage, $count, (string) $config->get('paths.baseurl') . '/staffpanel.php?tool=inactive&amp;');
+$pager = pager($perpage, $count, $baseurlRaw . '/staffpanel.php?tool=inactive&amp;');
 
 // Fetch inactive page
 $rows = [];
@@ -177,7 +183,7 @@ if ($count > 0) {
     $HTMLOUT .= "
     <div class='row'><div class='col-md-12'>
     <h1 class='has-text-centered'>" . _fe('{0} accounts inactive for longer than {1} days.', $count, $days) . "</h1>
-    <form method='post' action='staffpanel.php?tool=inactive&amp;action=inactive' enctype='multipart/form-data' accept-charset='utf-8'>
+    <form method='post' action='{$baseurl}/staffpanel.php?tool=inactive&amp;action=inactive' enctype='multipart/form-data' accept-charset='utf-8'>
     <table class='table table-bordered'>
     <tr>
         <td class='colhead'>" . _('Username') . "</td>
@@ -247,7 +253,7 @@ if ($count > 0) {
 
 $title = _('Inactive Users');
 $breadcrumbs = [
-    "<a href='" . (string) $config->get('paths.baseurl') . "/staffpanel.php'>" . _('Staff Panel') . '</a>',
-    "<a href='{$_SERVER['PHP_SELF']}'>$title</a>",
+    "<a href='{$baseurl}/staffpanel.php'>" . _('Staff Panel') . '</a>',
+    "<a href='{$self}'>" . $s($title) . '</a>',
 ];
 echo stdhead($title, [], 'page-wrapper', $breadcrumbs) . wrapper($HTMLOUT) . stdfoot();
