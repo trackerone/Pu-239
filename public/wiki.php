@@ -2,19 +2,23 @@
 declare(strict_types=1);
 require_once dirname(__DIR__) . '/bootstrap_web.php';
 
-$db = $container->get(Database::class);
-
-
-
-
 use DI\DependencyException;
 use DI\NotFoundException;
+use Pu239\Config\ConfigRepository;
 use Pu239\Session;
 use Pu239\Wiki;
 use Rakit\Validation\Validator;
 use Spatie\Image\Exceptions\InvalidManipulation;
 
 require_once __DIR__ . '/../include/bittorrent.php';
+global $container;
+/** @var ConfigRepository $config */
+$config = $container->get(ConfigRepository::class);
+
+$wiki = $container->get(Wiki::class);
+$session = $container->get(Session::class);
+$baseUrl = (string) $config->get('paths.baseurl');
+$imagesBaseUrl = (string) $config->get('paths.images_baseurl');
 $user = check_user_status();
 $HTMLOUT = '';
 $stdhead = [
@@ -33,8 +37,9 @@ $stdfoot = [
  */
 function navmenu()
 {
-    global $site_config;
+    global $config;
 
+    $baseUrl = (string) $config->get('paths.baseurl');
     $url = $_SERVER['REQUEST_URI'];
     $parsed_url = parse_url($url);
     $action = 'index';
@@ -47,18 +52,18 @@ function navmenu()
     <div id="wiki-navigation">
         <div class="tabs is-centered">
             <ul>
-                <li><a href="' . $site_config['paths']['baseurl'] . '/wiki.php" class="' . ($action === 'index' ? 'active ' : '') . 'is-link margin10">' . _('Index') . '</a></li>
-                <li><a href="' . $site_config['paths']['baseurl'] . '/wiki.php?action=add" class="' . ($action === 'add' ? 'active ' : '') . 'is-link margin10">' . _('Add') . '</a></li>
+                <li><a href="' . $baseUrl . '/wiki.php" class="' . ($action === 'index' ? 'active ' : '') . 'is-link margin10">' . _('Index') . '</a></li>
+                <li><a href="' . $baseUrl . '/wiki.php?action=add" class="' . ($action === 'add' ? 'active ' : '') . 'is-link margin10">' . _('Add') . '</a></li>
             </ul>
         </div>';
     $div = '
         <form action="wiki.php" method="post" accept-charset="utf-8">
             <div class="tabs is-centered is-small padtop10">
                 <ul>
-                    <li><a href="' . $site_config['paths']['baseurl'] . '/wiki.php?action=sort&amp;letter=a">A</a></li>';
+                    <li><a href="' . $baseUrl . '/wiki.php?action=sort&amp;letter=a">A</a></li>';
     for ($i = 0; $i < 25; ++$i) {
         $active = !empty($_GET['letter']) && $_GET['letter'] === chr($i + 98) ? "class='active'" : '';
-        $div .= " <li><a href='{$site_config['paths']['baseurl']}/wiki.php?action=sort&amp;letter=" . chr($i + 98) . "' $active> " . chr($i + 66) . '</a></li>';
+        $div .= " <li><a href='{$baseUrl}/wiki.php?action=sort&amp;letter=" . chr($i + 98) . "' $active> " . chr($i + 66) . '</a></li>';
     }
     $value = !empty($_POST['article']) ? $_POST['article'] : '';
     $div .= " </ul>
@@ -84,10 +89,10 @@ function navmenu()
  */
 function wikimenu()
 {
-    global $container, $site_config;
+    global $config, $wiki;
 
-    $wiki = $container->get(Wiki::class);
     $name = $wiki->get_last();
+    $baseUrl = (string) $config->get('paths.baseurl');
 
     return main_div("
         <div class='padding20'>
@@ -97,12 +102,12 @@ function wikimenu()
             <li>' . _('Write: User') . '</li>
             <li>' . _('Edit: Staff') . "/Author</li><br>
             <span class='size_6'>" . _('Latest Article:') . "</span>
-            <li><a href='{$site_config['paths']['baseurl']}/wiki.php?action=article&amp;name=" . urlencode($name) . "'> " . format_comment($name) . '</a></li>
+            <li><a href='{$baseUrl}/wiki.php?action=article&amp;name=" . urlencode($name) . "'> " . format_comment($name) . '</a></li>
             </ul>
         </div>');
 }
 
-global $site_config, $container;
+global $container;
 
 $wiki = $container->get(Wiki::class);
 $session = $container->get(Session::class);
@@ -145,7 +150,7 @@ $HTMLOUT .= "
         <div class='level-center'>
             <h1>
             <span class='level-left'>
-                <img src='{$site_config['paths']['images_baseurl']}wiki.png' alt='' title='" . _('Wiki') . "' class='tooltipper' width='25'>
+                <img src='{$imagesBaseUrl}wiki.png' alt='' title='" . _('Wiki') . "' class='tooltipper' width='25'>
                 <span class='left10'>" . _('Wiki') . "</span>
             </span>
             </h1>
@@ -192,15 +197,15 @@ if ($action === 'article') {
             }
             $div = '
                     <h1 class="has-text-centered">
-                        <a href="' . $site_config['paths']['baseurl'] . '/wiki.php?action=article&amp;name=' . urlencode($result['name']) . '">' . format_comment($result['name']) . '</a>
+                        <a href="' . $baseUrl . '/wiki.php?action=article&amp;name=' . urlencode($result['name']) . '">' . format_comment($result['name']) . '</a>
                     </h1>
                     <div class="bg-02 padding10 round10">' . ($result['userid'] > 0 ? " <div class='left10 bottom20'>" . _('Article added by ') . ': ' . format_username((int) $result['userid']) . '</div>' : '') . '
                         <div class="w-100 padding20 round10 bg-02">' . format_comment($result['body']) . '</div>
                     </div>' . $edit;
             $div .= (has_access($user['class'], UC_STAFF, 'coder') || $user['id'] === $result['userid'] ? '
                     <div class="has-text-centered">
-                        <a href="' . $site_config['paths']['baseurl'] . '/wiki.php?action=edit&amp;id=' . $result['id'] . '" class="button is-small margin20">' . _('Edit') . '</a>
-                        <a href="' . $site_config['paths']['baseurl'] . '/wiki.php?action=delete&amp;id=' . $result['id'] . '" class="button is-small margin20">' . _('Delete') . '</a>
+                        <a href="' . $baseUrl . '/wiki.php?action=edit&amp;id=' . $result['id'] . '" class="button is-small margin20">' . _('Edit') . '</a>
+                        <a href="' . $baseUrl . '/wiki.php?action=delete&amp;id=' . $result['id'] . '" class="button is-small margin20">' . _('Delete') . '</a>
                     </div>' : '');
             $HTMLOUT .= main_div($div, 'bottom20');
         }
@@ -216,7 +221,7 @@ if ($action === 'article') {
             foreach ($results as $result) {
                 $HTMLOUT .= main_div('
                     <div class="padding20">
-                        <h2><a href="' . $site_config['paths']['baseurl'] . '/wiki.php?action=article&amp;name=' . urlencode($result['name']) . '">' . format_comment($result['name']) . ' </a></h2>
+                        <h2><a href="' . $baseUrl . '/wiki.php?action=article&amp;name=' . urlencode($result['name']) . '">' . format_comment($result['name']) . ' </a></h2>
                         <div>' . _('Added by') . ': ' . format_username((int) $result['userid']) . '</div>
                         <div>Added on: ' . get_date((int) $result['time'], 'LONG') . '</div>' . (!empty($result['lastedit']) ? '
                         <div>Last Edited on: ' . get_date((int) $result['lastedit'], 'LONG') . '</div>
@@ -272,7 +277,7 @@ if ($action === 'add') {
         foreach ($results as $result) {
             $div .= '
             <div class="padding20 bottom10 round10 bg-02">
-                <h2><a href="' . $site_config['paths']['baseurl'] . '/wiki.php?action=article&amp;name=' . urlencode($result['name']) . '">' . format_comment($result['name']) . '</a></h2>
+                <h2><a href="' . $baseUrl . '/wiki.php?action=article&amp;name=' . urlencode($result['name']) . '">' . format_comment($result['name']) . '</a></h2>
                 <div>' . _('Added by') . ': ' . format_username((int) $result['userid']) . '</div>
                 <div>Added on: ' . get_date((int) $result['time'], 'LONG') . '</div>' . (!empty($result['lastedit']) ? '
                 <div>Last Edited on: ' . get_date((int) $result['lastedit'], 'LONG') . '</div>' : '') . '

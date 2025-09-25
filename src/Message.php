@@ -7,6 +7,7 @@ use Envms\FluentPDO\Exception;
 use Envms\FluentPDO\Queries\Select;
 use PDOStatement;
 use Psr\Container\ContainerInterface;
+use PU239\Config\ConfigRepository;
 
 require_once __DIR__ . '/../include/runtime_safe.php';
 require_once __DIR__ . '/../include/bootstrap_pdo.php';
@@ -21,7 +22,7 @@ class Message
     protected $env;
     protected $limit;
     protected $container;
-    protected $site_config;
+    protected ConfigRepository $config;
     protected $users;
 
     /**
@@ -29,17 +30,17 @@ class Message
      *
      * @param Cache              $cache
      * @param Database           $fluent
-     * @param Settings           $settings
+     * @param ConfigRepository   $config
      * @param User               $users
      * @param ContainerInterface $c
      *
      * @throws Exception
      */
-    public function __construct(Cache $cache, Database $fluent, Settings $settings, User $users, ContainerInterface $c)
+    public function __construct(Cache $cache, Database $fluent, ConfigRepository $config, User $users, ContainerInterface $c)
     {
         $this->container = $c;
         $this->env = $this->container->get('env');
-        $this->site_config = $settings->get_settings();
+        $this->config = $config;
         $this->fluent = $fluent;
         $this->cache = $cache;
         $this->users = $users;
@@ -73,16 +74,18 @@ class Message
 $result = $this->db->perform($sql, $t);
         }
 
+        $mailEnabled = (bool) $this->config->get('mail.smtp_enable');
+        $baseUrl = (string) $this->config->get('paths.baseurl');
         foreach ($values as $user) {
             $ids[] = 'inbox_' . $user['receiver'];
             $ids[] = 'message_count_' . $user['receiver'];
-            if ($send_email && $this->site_config['mail']['smtp_enable']) {
+            if ($send_email && $mailEnabled) {
                 $emailer = $this->users->getUserFromId((int) $user['receiver']);
                 if (!empty($emailer['notifs']) && preg_match('#email|pm#', $emailer['notifs'])) {
                     $message_id = $this->get_last_message((int) $user['receiver'], isset($user['sender']) ? (int) $user['sender'] : 2);
                     $message = !empty($message_id) ? "&id={$message_id}" : '';
                     $msg_body = '<h1>' . format_comment($user['subject']) . '</h1><br><br>' . format_comment($user['msg']) . "<br>
-                    <a href='{$this->site_config['paths']['baseurl']}/messages.php?action=view_message{$message}'>View Message</a>";
+                    <a href='{$baseUrl}/messages.php?action=view_message{$message}'>View Message</a>";
                     send_mail(strip_tags($emailer['email']), 'You have received a Private Message', $msg_body, strip_tags($msg_body));
                 }
             }
@@ -205,16 +208,19 @@ $result = $this->db->perform($sql, array_merge($set, ['id' => $id]));
     public function get_count(int $userid, int $location, bool $unread)
     {
         $pmCount = false;
-        if ($location === $this->site_config['pm']['inbox'] && $unread) {
+        $inboxLocation = (int) $this->config->get('pm.inbox');
+        $sentLocation = (int) $this->config->get('pm.sent');
+        $unreadTtl = (int) $this->config->get('expires.unread');
+        if ($location === $inboxLocation && $unread) {
             $pmCount = $this->cache->get('inbox_' . $userid);
         }
         if ($pmCount === false || is_null($pmCount)) {
             $pmCount = $this->fluent->from('messages')
                                     ->select(null)
                                     ->select('COUNT(id) AS count');
-            if ($location === $this->site_config['pm']['sent']) {
+            if ($location === $sentLocation) {
                 $pmCount = $pmCount->where('sender = ?', $userid)
-                                   ->where('location = ?', $this->site_config['pm']['inbox']);
+                                   ->where('location = ?', $inboxLocation);
             } else {
                 $pmCount = $pmCount->where('receiver = ?', $userid)
                                    ->where('location = ?', $location);
@@ -224,8 +230,8 @@ $result = $this->db->perform($sql, array_merge($set, ['id' => $id]));
             }
             $pmCount = $pmCount->where('draft = "no"')
                                ->fetch("count");
-            if ($location === $this->site_config['pm']['inbox'] && $unread) {
-                $this->cache->set('inbox_' . $userid, $pmCount, $this->site_config['expires']['unread']);
+            if ($location === $inboxLocation && $unread) {
+                $this->cache->set('inbox_' . $userid, $pmCount, $unreadTtl);
             }
         }
 
@@ -250,7 +256,8 @@ $result = $this->db->perform($sql, array_merge($set, ['id' => $id]));
                                     ->where('receiver = ?', $userid)
                                     ->fetch("count");
 
-            $this->cache->set('message_count_' . $userid, $pmCount, $this->site_config['expires']['unread']);
+            $unreadTtl = (int) $this->config->get('expires.unread');
+            $this->cache->set('message_count_' . $userid, $pmCount, $unreadTtl);
         }
 
         return $pmCount;
@@ -266,25 +273,27 @@ $result = $this->db->perform($sql, array_merge($set, ['id' => $id]));
      */
     public function delete_old_messages(int $dt)
     {
+        $deletedLocation = (int) $this->config->get('pm.deleted');
+        $inboxLocation = (int) $this->config->get('pm.inbox');
         $messages_1 = $this->fluent->from('messages')
                                    ->select(null)
                                    ->select('receiver')
-                                   ->where('location = ?', $this->site_config['pm']['deleted'])
+                                   ->where('location = ?', $deletedLocation)
                                    ->where('added <= ?', $dt);
 
         $this->fluent->delete('messages')
-                     ->where('location = ?', $this->site_config['pm']['deleted'])
+                     ->where('location = ?', $deletedLocation)
                      ->where('added <= ?', $dt)
                      ->execute();
 
         $messages_2 = $this->fluent->from('messages')
                                    ->select(null)
                                    ->select('receiver')
-                                   ->where('location = ?', $this->site_config['pm']['inbox'])
+                                   ->where('location = ?', $inboxLocation)
                                    ->where('added <= ?', $dt);
 
         $this->fluent->delete('messages')
-                     ->where('location = ?', $this->site_config['pm']['inbox'])
+                     ->where('location = ?', $inboxLocation)
                      ->where('added <= ?', $dt)
                      ->execute();
 
@@ -316,9 +325,11 @@ $result = $this->db->perform($sql, array_merge($set, ['id' => $id]));
     public function get_messages(int $userid, int $location, int $limit, int $offset, string $orderby)
     {
         $messages = $this->fluent->from('messages AS m');
-        if ($location === $this->site_config['pm']['sent']) {
+        $sentLocation = (int) $this->config->get('pm.sent');
+        $inboxLocation = (int) $this->config->get('pm.inbox');
+        if ($location === $sentLocation) {
             $messages = $messages->where('sender = ?', $userid)
-                                 ->where('location = ?', $this->site_config['pm']['inbox']);
+                                 ->where('location = ?', $inboxLocation);
         } else {
             $messages = $messages->where('receiver = ?', $userid)
                                  ->where('location = ?', $location);
@@ -335,7 +346,7 @@ $result = $this->db->perform($sql, array_merge($set, ['id' => $id]));
                              ->select('f.id AS friend')
                              ->select('b.id AS blocked')
                              ->select('u.id');
-        if ($location === $this->site_config['pm']['sent']) {
+        if ($location === $sentLocation) {
             $messages = $messages->leftJoin('users AS u ON m.receiver = u.id');
         } else {
             $messages = $messages->leftJoin('users AS u ON m.sender = u.id');

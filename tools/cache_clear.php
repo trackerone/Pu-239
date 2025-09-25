@@ -1,8 +1,16 @@
 <?php
 declare(strict_types=1);
+
+use PU239\Config\ConfigRepository;
+
 $root = dirname(__DIR__);
 require_once $root . '/bootstrap.php';
-$cacheDir = $site_config['paths']['cache'] ?? ($root . '/storage/cache');
+
+global $container;
+/** @var ConfigRepository $config */
+$config = $container->get(ConfigRepository::class);
+
+$cacheDir = (string) ($config->get('paths.cache') ?? ($root . '/storage/cache'));
 $keep = ['.gitignore', 'README.md'];
 $it = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($cacheDir, FilesystemIterator::SKIP_DOTS), RecursiveIteratorIterator::CHILD_FIRST);
 $n = 0;

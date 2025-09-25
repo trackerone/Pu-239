@@ -1,30 +1,34 @@
 <?php
 declare(strict_types=1);
-require_once dirname(__DIR__) . '/bootstrap_web.php';
-
-$db = $container->get(Database::class);
-
-
-
 
 use Delight\Auth\Auth;
 use Delight\Auth\InvalidSelectorTokenPairException;
 use Delight\Auth\ResetDisabledException;
 use Delight\Auth\TokenExpiredException;
 use Delight\Auth\TooManyRequestsException;
+use Pu239\Config\ConfigRepository;
 use Pu239\User;
 use Rakit\Validation\Validator;
 
+require_once dirname(__DIR__) . '/bootstrap_web.php';
+
+global $container;
+/** @var ConfigRepository $config */
+$config = $container->get(ConfigRepository::class);
+$baseUrl = (string) $config->get('paths.baseurl');
+$smtpEnable = (bool) $config->get('mail.smtp_enable');
+$smtpPassword = (string) $config->get('mail.smtp_password');
+$smtpUsername = (string) $config->get('mail.smtp_username');
+
 require_once __DIR__ . '/../include/bittorrent.php';
-global $container, $site_config;
 
 get_template();
 $auth = $container->get(Auth::class);
 if ($auth->isLoggedIn()) {
-    header("Location: {$site_config['paths']['baseurl']}");
+    header("Location: {$baseUrl}");
     app_halt('Exit called');
 }
-if (!$site_config['mail']['smtp_enable'] || $site_config['mail']['smtp_password'] === 'gmail password' || $site_config['mail']['smtp_username'] === 'gmail username') {
+if (!$smtpEnable || $smtpPassword === 'gmail password' || $smtpUsername === 'gmail username') {
     stderr(_('Error'), _('Mail functions have not been enabled.'));
 }
 $stdfoot = [];
@@ -80,7 +84,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && !isset($_POST['selector'])) {
             ],
         ]);
         $HTMLOUT = "
-    <form method='post' action='{$site_config['paths']['baseurl']}/recover.php' enctype='multipart/form-data' accept-charset='utf-8'>
+    <form method='post' action='{$baseUrl}/recover.php' enctype='multipart/form-data' accept-charset='utf-8'>
         <div class='has-text-centered'>
             <h2 class='has-text-centered'>" . _('Set New Password') . '</h2>';
 

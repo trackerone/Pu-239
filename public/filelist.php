@@ -1,18 +1,21 @@
 <?php
 declare(strict_types=1);
+
+use Pu239\Config\ConfigRepository;
+use Pu239\Database;
+
 require_once dirname(__DIR__) . '/bootstrap_web.php';
 
+global $container;
+/** @var ConfigRepository $config */
+$config = $container->get(ConfigRepository::class);
+/** @var Database $db */
 $db = $container->get(Database::class);
-
-
-
-
-
-use Pu239\Database;
+$baseUrl = (string) $config->get('paths.baseurl');
+$imagesBaseUrl = (string) $config->get('paths.images_baseurl');
 
 require_once __DIR__ . '/../include/bittorrent.php';
 check_user_status();
-global $container, $site_config;
 
 $id = isset($_GET['id']) ? (int) $_GET['id'] : 0;
 if (!is_valid_id($id)) {
@@ -26,7 +29,7 @@ $count = $fluent->from('files')
                 ->where('torrent = ?', $id)
                 ->fetch("count");
 $perpage = 50;
-$pager = pager($perpage, $count, "{$site_config['paths']['baseurl']}/filelist.php?id=$id&amp;");
+$pager = pager($perpage, $count, $baseUrl . "/filelist.php?id={$id}&amp;");
 $HTMLOUT = '';
 if ($count > $perpage) {
     $HTMLOUT .= $pager['pagertop'];
@@ -54,7 +57,7 @@ foreach ($files as $subrow) {
     $body .= "
             <tr>
                 <td class='has-text-centered'>
-                    <img src='{$site_config['paths']['images_baseurl']}icons/" . htmlsafechars($ext) . ".png' class='tooltipper icon' alt='" . htmlsafechars($ext) . " file' title='" . _fe('{0} file', format_comment($ext)) . "'></td>
+                    <img src='{$imagesBaseUrl}icons/" . htmlsafechars($ext) . ".png' class='tooltipper icon' alt='" . htmlsafechars($ext) . " file' title='" . _fe('{0} file', format_comment($ext)) . "'></td>
                 <td>" . htmlsafechars($subrow['filename']) . "</td>
                 <td class='has-text-right'>" . mksize($subrow['size']) . '</td>
             </tr>';

@@ -1,4 +1,5 @@
-<?php declare(strict_types=1);
+<?php
+declare(strict_types=1);
 /**
  * Batch 43.7 — Admin full rewrite (no TODOs) — Robust header and DB init placement.
  *

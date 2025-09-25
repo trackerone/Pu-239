@@ -5,6 +5,7 @@ namespace Pu239;
 
 use Envms\FluentPDO\Exception;
 use PDOStatement;
+use PU239\Config\ConfigRepository;
 
 require_once __DIR__ . '/../include/runtime_safe.php';
 require_once __DIR__ . '/../include/bootstrap_pdo.php';
@@ -15,25 +16,22 @@ require_once __DIR__ . '/../include/bootstrap_pdo.php';
 class Usersachiev
 {
     protected $fluent;
-    protected $env;
     protected $limit;
-    protected $settings;
-    protected $site_config;
+    protected ConfigRepository $config;
 
     /**
      * Usersachiev constructor.
      *
-     * @param Database $fluent
-     * @param Settings $settings
+     * @param Database          $fluent
+     * @param ConfigRepository  $config
      *
      * @throws Exception
      */
-    public function __construct(Database $fluent, Settings $settings)
+    public function __construct(Database $fluent, ConfigRepository $config)
     {
         $this->fluent = $fluent;
-        $this->settings = $settings;
-        $this->site_config = $this->settings->get_settings();
-        $this->limit = $this->site_config['db']['query_limit'];
+        $this->config = $config;
+        $this->limit = (int) $this->config->get('database.query_limit', 65536);
     }
 
     /**

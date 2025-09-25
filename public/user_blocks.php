@@ -1,22 +1,25 @@
 <?php
 declare(strict_types=1);
+
 require_once dirname(__DIR__) . '/bootstrap_web.php';
 
-$db = $container->get(Database::class);
-
-
-
-
 use Delight\Auth\Auth;
-
 use Pu239\Cache;
+use Pu239\Config\ConfigRepository;
 use Pu239\Database;
 use Pu239\Session;
 use Pu239\User;
 
 require_once __DIR__ . '/../include/bittorrent.php';
+
+global $container, $BLOCKS;
+/** @var ConfigRepository $config */
+$config = $container->get(ConfigRepository::class);
+/** @var Database $db */
+$db = $container->get(Database::class);
+
 $curuser = check_user_status();
-global $container, $site_config, $BLOCKS;
+$baseUrl = (string) $config->get('paths.baseurl');
 
 $auth = $container->get(Auth::class);
 $session = $container->get(Session::class);
@@ -30,7 +33,7 @@ if (isset($_GET['id']) && is_valid_id((int) $_GET['id']) && $curuser['class'] >=
 $user = $users_class->getUserFromId($id);
 if ($user['class'] < UC_STAFF && $user['got_blocks'] === 'no') {
     $session->set('is-link', 'You will have to unlock this before you can access it.');
-    header('Location: ' . $site_config['paths']['baseurl'] . '/index.php');
+    header('Location: ' . $baseUrl . '/index.php');
     app_halt('Exit called');
 }
 

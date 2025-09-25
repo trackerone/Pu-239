@@ -10,9 +10,14 @@ use DI\NotFoundException;
 use Pu239\Cache;
 use Pu239\Database;
 use Pu239\Roles;
+use PU239\Config\ConfigRepository;
 
 global $container;
+/** @var Database $db */
 $db = $container->get(Database::class);
+/** @var ConfigRepository $config */
+$config = $container->get(ConfigRepository::class);
+$baseUrl = (string) $config->get('paths.baseurl', '');
 
 /**
  * @throws Exception
@@ -21,12 +26,16 @@ $db = $container->get(Database::class);
  */
 function navbar()
 {
-    global $container, $CURUSER, $site_config, $BLOCKS;
+    global $container, $CURUSER, $BLOCKS, $config, $baseUrl;
 
     $auth = $container->get(Auth::class);
     $navbar = '';
     $staff_links = staff_panel();
     if ($CURUSER) {
+        $siteName = (string) $config->get('site.name', 'Pu-239');
+        // TODO(2025): map legacy key "site.name" to appropriate config path
+        $bucketAllowed = $config->bool('storage.bucket.allowed', false);
+        // TODO(2025): map legacy key "bucket.allowed" to appropriate config path
         $navbar = "
 <div class='spacer'>
     <header id='navbar'>
@@ -38,94 +47,94 @@ function navbar()
                 <div id='menuWrapper'>
                     <ul class='level'>
                         <li>
-                            <a href='{$site_config['paths']['baseurl']}' class='is-flex'>
+                            <a href='{$baseUrl}' class='is-flex'>
                                 <i class='icon-home size_6'></i>
-                                <span class='home'>{$site_config['site']['name']}</span>
+                                <span class='home'>{$siteName}</span>
                             </a>
                         </li>" . ($BLOCKS['bluray_com_api_on'] || $BLOCKS['imdb_api_on'] || $BLOCKS['tvmaze_api_on'] ? "
                         <li id='movies_links' class='clickable'>
                             <a href='#' class='has-text-weight-bold'>" . _('Movies & TV') . "</a>
                             <ul class='ddFade ddFadeFast'>" . ($BLOCKS['bluray_com_api_on'] ? "
                                 <li class='hide-mobile'><span class='left10 has-text-weight-bold'>" . _('Blu-Ray.com') . "</span></li>
-                                <li class='hide-mobile'><a href='{$site_config['paths']['baseurl']}/movies.php?list=bluray'>" . _('Bluray Releases') . '</a></li>' : '') . ($BLOCKS['imdb_api_on'] ? "
+                                <li class='hide-mobile'><a href='{$baseUrl}/movies.php?list=bluray'>" . _('Bluray Releases') . '</a></li>' : '') . ($BLOCKS['imdb_api_on'] ? "
                                 <li class='hide-mobile'><span class='left10 has-text-weight-bold'>" . _('IMDb') . "</span></li>
-                                <li class='hide-mobile'><a href='{$site_config['paths']['baseurl']}/movies.php?list=imdb_top_movies'>" . _('Top Movies') . "</a></li>
-                                <li class='hide-mobile'><a href='{$site_config['paths']['baseurl']}/movies.php?list=imdb_top_oscar'>" . _('Top Oscar Winners') . "</a></li>
-                                <li class='hide-mobile'><a href='{$site_config['paths']['baseurl']}/movies.php?list=imdb_top_tv'>" . _('Top TV Shows') . "</a></li>
-                                <li class='hide-mobile'><a href='{$site_config['paths']['baseurl']}/movies.php?list=imdb_top_anime'>" . _('Top Anime') . "</a></li>
-                                <li class='hide-mobile'><a href='{$site_config['paths']['baseurl']}/movies.php?list=imdb_theaters'>" . _('In Theaters') . "</a></li>
-                                <li class='hide-mobile'><a href='{$site_config['paths']['baseurl']}/movies.php?list=upcoming'>" . _('Upcoming') . '</a></li>' : '') . ($BLOCKS['tmdb_api_on'] ? "
+                                <li class='hide-mobile'><a href='{$baseUrl}/movies.php?list=imdb_top_movies'>" . _('Top Movies') . "</a></li>
+                                <li class='hide-mobile'><a href='{$baseUrl}/movies.php?list=imdb_top_oscar'>" . _('Top Oscar Winners') . "</a></li>
+                                <li class='hide-mobile'><a href='{$baseUrl}/movies.php?list=imdb_top_tv'>" . _('Top TV Shows') . "</a></li>
+                                <li class='hide-mobile'><a href='{$baseUrl}/movies.php?list=imdb_top_anime'>" . _('Top Anime') . "</a></li>
+                                <li class='hide-mobile'><a href='{$baseUrl}/movies.php?list=imdb_theaters'>" . _('In Theaters') . "</a></li>
+                                <li class='hide-mobile'><a href='{$baseUrl}/movies.php?list=upcoming'>" . _('Upcoming') . '</a></li>' : '') . ($BLOCKS['tmdb_api_on'] ? "
                                 <li class='hide-mobile'><span class='left10 has-text-weight-bold'>" . _('TMDb') . "</span></li>
-                                <li class='hide-mobile'><a href='{$site_config['paths']['baseurl']}/movies.php?list=tmdb_top_movies'>" . _('Top Movies') . "</a></li>
-                                <li class='hide-mobile'><a href='{$site_config['paths']['baseurl']}/movies.php?list=tmdb_theaters'>" . _('In Theaters') . "</a></li>
-                                <li class='hide-mobile'><a href='{$site_config['paths']['baseurl']}/movies.php?list=tv'>" . _('TV Airing') . '</a></li>' : '') . ($BLOCKS['tvmaze_api_on'] ? "
+                                <li class='hide-mobile'><a href='{$baseUrl}/movies.php?list=tmdb_top_movies'>" . _('Top Movies') . "</a></li>
+                                <li class='hide-mobile'><a href='{$baseUrl}/movies.php?list=tmdb_theaters'>" . _('In Theaters') . "</a></li>
+                                <li class='hide-mobile'><a href='{$baseUrl}/movies.php?list=tv'>" . _('TV Airing') . '</a></li>' : '') . ($BLOCKS['tvmaze_api_on'] ? "
                                 <li class='hide-mobile'><span class='left10 has-text-weight-bold'>" . _('TVMaze') . "</span></li>
-                                <li class='hide-mobile'><a href='{$site_config['paths']['baseurl']}/movies.php?list=tvmaze'>" . _('TV Airing') . '</a></li>' : '') . '
+                                <li class='hide-mobile'><a href='{$baseUrl}/movies.php?list=tvmaze'>" . _('TV Airing') . '</a></li>' : '') . '
                             </ul>
                         </li>' : '') . "
                         <li id='torrents_links' class='clickable'>
                             <a href='#' class='has-text-weight-bold'>" . _('Torrent') . "</a>
                             <ul class='ddFade ddFadeFast'>
-                                <li class='hide-mobile'><a href='{$site_config['paths']['baseurl']}/browse.php'>" . _('Browse Torrents') . "</a></li>
-                                <li class='hide-mobile'><a href='{$site_config['paths']['baseurl']}/catalog.php'>" . _('Catalog') . "</a></li>
-                                <li class='hide-mobile'><a href='{$site_config['paths']['baseurl']}/upcoming.php'>" . _('Cooker') . "</a></li>
-                                <li class='hide-mobile'><a href='{$site_config['paths']['baseurl']}/tmovies.php'>" . _('Movies') . "</a></li>
-                                <li class='hide-mobile'><a href='{$site_config['paths']['baseurl']}/needseed.php?needed=seeders'><span class='has-text-weight-bold has-text-danger'>" . _('Needs Seeds') . "</span></a></li>
-                                <li class='hide-mobile'><a href='{$site_config['paths']['baseurl']}/browse.php?today=1' class='has-text-weight-bold has-text-green'>" . _('New Torrents Today') . "</a></li>
-                                <li class='hide-mobile'><a href='{$site_config['paths']['baseurl']}/offers.php'>" . _('Offers') . "</a></li>
-                                <li class='hide-mobile'><a href='{$site_config['paths']['baseurl']}/requests.php'>" . _('Requests') . "</a></li>
-                                <li class='hide-mobile'><a href='{$site_config['paths']['baseurl']}/subtitles.php'>" . _('Subtitles') . "</a></li>
-                                <li class='hide-mobile'><a href='{$site_config['paths']['baseurl']}/tvshows.php'>" . _('TV Shows') . '</a></li>' . (!$auth->hasRole(Roles::UPLOADER) ? "
-                                <li class='hide-mobile'><a href='{$site_config['paths']['baseurl']}/uploadapp.php'>" . _('Uploader Application') . '</a></li>' : "
-                                <li class='hide-mobile'><a href='{$site_config['paths']['baseurl']}/upload.php'>" . _('Upload') . '</a></li>') . "
+                                <li class='hide-mobile'><a href='{$baseUrl}/browse.php'>" . _('Browse Torrents') . "</a></li>
+                                <li class='hide-mobile'><a href='{$baseUrl}/catalog.php'>" . _('Catalog') . "</a></li>
+                                <li class='hide-mobile'><a href='{$baseUrl}/upcoming.php'>" . _('Cooker') . "</a></li>
+                                <li class='hide-mobile'><a href='{$baseUrl}/tmovies.php'>" . _('Movies') . "</a></li>
+                                <li class='hide-mobile'><a href='{$baseUrl}/needseed.php?needed=seeders'><span class='has-text-weight-bold has-text-danger'>" . _('Needs Seeds') . "</span></a></li>
+                                <li class='hide-mobile'><a href='{$baseUrl}/browse.php?today=1' class='has-text-weight-bold has-text-green'>" . _('New Torrents Today') . "</a></li>
+                                <li class='hide-mobile'><a href='{$baseUrl}/offers.php'>" . _('Offers') . "</a></li>
+                                <li class='hide-mobile'><a href='{$baseUrl}/requests.php'>" . _('Requests') . "</a></li>
+                                <li class='hide-mobile'><a href='{$baseUrl}/subtitles.php'>" . _('Subtitles') . "</a></li>
+                                <li class='hide-mobile'><a href='{$baseUrl}/tvshows.php'>" . _('TV Shows') . '</a></li>' . (!$auth->hasRole(Roles::UPLOADER) ? "
+                                <li class='hide-mobile'><a href='{$baseUrl}/uploadapp.php'>" . _('Uploader Application') . '</a></li>' : "
+                                <li class='hide-mobile'><a href='{$baseUrl}/upload.php'>" . _('Upload') . '</a></li>') . "
                             </ul>
                         </li>
                         <li id='general_links' class='clickable'>
                             <a href='#' class='has-text-weight-bold'>" . _('General') . "</a>
-                            <ul class='ddFade ddFadeFast'>" . ($site_config['bucket']['allowed'] ? "
-                                <li class='hide-mobile'><a href='{$site_config['paths']['baseurl']}/bitbucket.php'>" . _('BitBucket') . '</a></li>' : '') . "
-                                <li class='hide-mobile'><a href='{$site_config['paths']['baseurl']}/bot_triggers.php'>" . _('Bot Triggers') . "</a></li>
-                                <li class='hide-mobile'><a href='{$site_config['paths']['baseurl']}/faq.php'>" . _('FAQ') . "</a></li>
-                                <li class='hide-mobile'><a href='{$site_config['paths']['baseurl']}/chat.php'>" . _('IRC') . "</a></li>
-                                <li class='hide-mobile'><a href='{$site_config['paths']['baseurl']}/mybonus.php'>" . _('Karma Store') . "</a></li>
-                                <li class='hide-mobile'><a href='{$site_config['paths']['baseurl']}/getrss.php'>" . _('Get RSS') . "</a></li>
-                                <li class='hide-mobile'><a href='{$site_config['paths']['baseurl']}/rules.php'>" . _('Rules') . "</a></li>
-                                <li class='hide-mobile'><a href='{$site_config['paths']['baseurl']}/announcement.php'>" . _('Site Announcements') . "</a></li>
-                                <li class='hide-mobile'><a href='{$site_config['paths']['baseurl']}/topten.php'>" . _('Statistics') . '</a></li>' . ($BLOCKS['torrentfreak_on'] ? "
-                                <li class='hide-mobile'><a href='{$site_config['paths']['baseurl']}/rsstfreak.php'>" . _('Torrent Freak') . '</a></li>' : '') . "
-                                <li class='hide-mobile'><a href='{$site_config['paths']['baseurl']}/wiki.php'>" . _('Wiki') . "</a></li>
+                            <ul class='ddFade ddFadeFast'>" . ($bucketAllowed ? "
+                                <li class='hide-mobile'><a href='{$baseUrl}/bitbucket.php'>" . _('BitBucket') . '</a></li>' : '') . "
+                                <li class='hide-mobile'><a href='{$baseUrl}/bot_triggers.php'>" . _('Bot Triggers') . "</a></li>
+                                <li class='hide-mobile'><a href='{$baseUrl}/faq.php'>" . _('FAQ') . "</a></li>
+                                <li class='hide-mobile'><a href='{$baseUrl}/chat.php'>" . _('IRC') . "</a></li>
+                                <li class='hide-mobile'><a href='{$baseUrl}/mybonus.php'>" . _('Karma Store') . "</a></li>
+                                <li class='hide-mobile'><a href='{$baseUrl}/getrss.php'>" . _('Get RSS') . "</a></li>
+                                <li class='hide-mobile'><a href='{$baseUrl}/rules.php'>" . _('Rules') . "</a></li>
+                                <li class='hide-mobile'><a href='{$baseUrl}/announcement.php'>" . _('Site Announcements') . "</a></li>
+                                <li class='hide-mobile'><a href='{$baseUrl}/topten.php'>" . _('Statistics') . '</a></li>' . ($BLOCKS['torrentfreak_on'] ? "
+                                <li class='hide-mobile'><a href='{$baseUrl}/rsstfreak.php'>" . _('Torrent Freak') . '</a></li>' : '') . "
+                                <li class='hide-mobile'><a href='{$baseUrl}/wiki.php'>" . _('Wiki') . "</a></li>
                             </ul>
                         </li>
                         <li id='games_links' class='clickable'>
                             <a href='#' class='has-text-weight-bold'>" . _('Games') . "</a>
                             <ul class='ddFade ddFadeFast'>
-                                <li class='hide-mobile'><a href='{$site_config['paths']['baseurl']}/arcade.php'>" . _('Arcade') . "</a></li>
-                                <li class='hide-mobile'><a href='{$site_config['paths']['baseurl']}/games.php'>" . _('Games') . "</a></li>
-                                <li class='hide-mobile'><a href='{$site_config['paths']['baseurl']}/lottery.php'>" . _('Lottery') . "</a></li>
+                                <li class='hide-mobile'><a href='{$baseUrl}/arcade.php'>" . _('Arcade') . "</a></li>
+                                <li class='hide-mobile'><a href='{$baseUrl}/games.php'>" . _('Games') . "</a></li>
+                                <li class='hide-mobile'><a href='{$baseUrl}/lottery.php'>" . _('Lottery') . "</a></li>
                             </ul>
                         </li>
                         <li id='user_links' class='clickable'>
                             <a href='#' class='has-text-weight-bold'>" . _('Users') . "</a>
                             <ul class='ddFade ddFadeFast'>
-                                <li class='hide-mobile'><a href='{$site_config['paths']['baseurl']}/bookmarks.php'>" . _('Bookmarks') . "</a></li>
-                                <li class='hide-mobile'><a href='{$site_config['paths']['baseurl']}/categoryids.php'>" . _("Category ID's") . "</a></li>
-                                <li class='hide-mobile'><a href='{$site_config['paths']['baseurl']}/friends.php'>" . _('Friends') . "</a></li>
-                                <li class='hide-mobile'><a href='{$site_config['paths']['baseurl']}/hnrs.php'>" . _("Hit 'n Runs") . "</a></li>
-                                <li class='hide-mobile'><a href='{$site_config['paths']['baseurl']}/invite.php?do=view_page'>" . _('Invites') . "</a></li>
-                                <li class='hide-mobile'><a href='{$site_config['paths']['baseurl']}/messages.php'>" . _('Messages') . "</a></li>
-                                <li class='hide-mobile'><a href='{$site_config['paths']['baseurl']}/port_check.php'>" . _('Port Check') . "</a></li>
-                                <li class='hide-mobile'><a href='{$site_config['paths']['baseurl']}/users.php'>" . _('Search Users') . "</a></li>
-                                <li class='hide-mobile'><a href='{$site_config['paths']['baseurl']}/usercp.php?action=default' class='has-text-weight-bold'>" . _('User Control Panel') . "</a></li>
+                                <li class='hide-mobile'><a href='{$baseUrl}/bookmarks.php'>" . _('Bookmarks') . "</a></li>
+                                <li class='hide-mobile'><a href='{$baseUrl}/categoryids.php'>" . _("Category ID's") . "</a></li>
+                                <li class='hide-mobile'><a href='{$baseUrl}/friends.php'>" . _('Friends') . "</a></li>
+                                <li class='hide-mobile'><a href='{$baseUrl}/hnrs.php'>" . _("Hit 'n Runs") . "</a></li>
+                                <li class='hide-mobile'><a href='{$baseUrl}/invite.php?do=view_page'>" . _('Invites') . "</a></li>
+                                <li class='hide-mobile'><a href='{$baseUrl}/messages.php'>" . _('Messages') . "</a></li>
+                                <li class='hide-mobile'><a href='{$baseUrl}/port_check.php'>" . _('Port Check') . "</a></li>
+                                <li class='hide-mobile'><a href='{$baseUrl}/users.php'>" . _('Search Users') . "</a></li>
+                                <li class='hide-mobile'><a href='{$baseUrl}/usercp.php?action=default' class='has-text-weight-bold'>" . _('User Control Panel') . "</a></li>
                             </ul>
                         </li>
                         <li id='forum_links' class='clickable'>
                             <a href='#' class='has-text-weight-bold'>" . _('Forums') . "</a>
                             <ul class='ddFade ddFadeFast'>
                                 <li class='hide-mobile'>
-                                    <a href='{$site_config['paths']['baseurl']}/forums.php'>" . _('Forums') . "</a>
+                                    <a href='{$baseUrl}/forums.php'>" . _('Forums') . "</a>
                                 </li>
                                 <li class='hide-mobile'>
-                                    <a href='{$site_config['paths']['baseurl']}/forums.php?action=view_unread_posts'>" . _('Unread Posts') . "</a>
+                                    <a href='{$baseUrl}/forums.php?action=view_unread_posts'>" . _('Unread Posts') . "</a>
                                 </li>
                             </ul>
                         </li>
@@ -133,16 +142,16 @@ function navbar()
                         <li id='staff_links' class='clickable'>
                             <a href='#' class='has-text-weight-bold'>" . _('Help') . "</a>
                             <ul class='ddFade ddFadeFast'>
-                                <li class='hide-mobile'><a href='{$site_config['paths']['baseurl']}/bugs.php?action=add'>" . _('Bug Report') . "</a></li>
-                                <li class='hide-mobile'><a href='{$site_config['paths']['baseurl']}/contactstaff.php'>" . _('Contact Staff') . "</a></li>
-                                <li class='hide-mobile'><a href='{$site_config['paths']['baseurl']}/staff.php'>" . _('Staff List') . '</a></li>
+                                <li class='hide-mobile'><a href='{$baseUrl}/bugs.php?action=add'>" . _('Bug Report') . "</a></li>
+                                <li class='hide-mobile'><a href='{$baseUrl}/contactstaff.php'>" . _('Contact Staff') . "</a></li>
+                                <li class='hide-mobile'><a href='{$baseUrl}/staff.php'>" . _('Staff List') . '</a></li>
                             </ul>
                         </li>' : '') . ($BLOCKS['global_staff_menu_on'] ? $staff_links : (has_access($CURUSER['class'], UC_STAFF, 'coder') ? "
                         <li>
-                            <a href='{$site_config['paths']['baseurl']}/staffpanel.php'>" . _('Staff Panel') . '</a>
+                            <a href='{$baseUrl}/staffpanel.php'>" . _('Staff Panel') . '</a>
                         </li>' : '')) . "
                         <li>
-                            <a href='{$site_config['paths']['baseurl']}/logout.php' class='is-flex'>
+                            <a href='{$baseUrl}/logout.php' class='is-flex'>
                             <i class='icon-logout size_6' aria-hidden='true'></i>
                             </a>
                         </li>
@@ -164,10 +173,10 @@ function navbar()
  */
 function make_link(array $value)
 {
-    global $site_config;
+    global $baseUrl;
 
     return "
-                            <li class='hide-mobile'><a href='{$site_config['paths']['baseurl']}/" . htmlsafechars($value['file_name']) . "'>" . _($value['page_name']) . '</a></li>';
+                            <li class='hide-mobile'><a href='{$baseUrl}/" . htmlsafechars($value['file_name']) . "'>" . _($value['page_name']) . '</a></li>';
 }
 
 /**
@@ -179,12 +188,14 @@ function make_link(array $value)
  */
 function staff_panel()
 {
-    global $BLOCKS, $CURUSER, $container, $site_config, $db;
+    global $BLOCKS, $CURUSER, $container, $config, $db, $baseUrl;
 
     $cache = $container->get(Cache::class);
     $panel = '';
     $panels = [];
     if ($BLOCKS['global_staff_menu_on'] && has_access($CURUSER['class'], UC_STAFF, 'coder')) {
+        $adminerAllowedIds = (array) $config->get('adminer.allowed_ids', []);
+        // TODO(2025): map legacy key "adminer.allowed_ids" to appropriate config path
         $user_class = $CURUSER['class'] >= UC_STAFF ? $CURUSER['class'] : UC_MAX;
         $staff_panel = $cache->get('staff_panels_' . $user_class);
         if ($staff_panel === false || is_null($staff_panel)) {
@@ -204,7 +215,7 @@ function staff_panel()
             'added' => 1546167296,
             'navbar' => 1,
         ];
-        if (in_array($CURUSER['id'], $site_config['adminer']['allowed_ids'])) {
+        if (in_array($CURUSER['id'], $adminerAllowedIds)) {
             $staff_panel[] = [
                 'page_name' => _('Adminer'),
                 'file_name' => 'view_sql.php',
