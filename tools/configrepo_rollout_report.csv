@@ -471,6 +471,8 @@ include/function_torrenttable.php,none,0,Removed stray global reuse after Config
 public/clear_announcement.php,site_config,0,Replaced legacy site_config usage with ConfigRepository
 public/contactstaff.php,site_config,0,Replaced legacy site_config usage with ConfigRepository
 public/delete.php,site_config,0,Replaced legacy site_config usage with ConfigRepository
+<<<<<< codex/refactor-to-use-configrepository-hlc5ev
+=======
 <<<<<< codex/refactor-to-use-configrepository-p4w0ba
 =======
 <<<<<< codex/refactor-to-use-configrepository-6hc6qq
@@ -487,6 +489,7 @@ public/delete.php,site_config,0,Replaced legacy site_config usage with ConfigRep
 >>>>>> master
 >>>>>> master
 >>>>>> master
+>>>>>> master
 public/fastdelete.php,site_config,0,Replaced legacy site_config usage with ConfigRepository
 public/filelist.php,site_config,0,Replaced legacy site_config usage with ConfigRepository
 public/flash.php,site_config,0,Replaced legacy site_config usage with ConfigRepository
@@ -497,6 +500,8 @@ public/polls_take_vote.php,site_config,0,Replaced legacy site_config usage with 
 public/recover.php,site_config,0,Replaced legacy site_config usage with ConfigRepository
 public/requests.php,site_config,0,Replaced legacy site_config usage with ConfigRepository
 public/restoreclass.php,site_config,0,Replaced legacy site_config usage with ConfigRepository
+<<<<<< codex/refactor-to-use-configrepository-hlc5ev
+=======
 <<<<<< codex/refactor-to-use-configrepository-p4w0ba
 =======
 <<<<<< codex/refactor-to-use-configrepository-6hc6qq
@@ -506,6 +511,7 @@ public/restoreclass.php,site_config,0,Replaced legacy site_config usage with Con
 <<<<<< codex/refactor-to-use-configrepository-2vghy5
 =======
 <<<<<< codex/refactor-to-use-configrepository-ett55m
+>>>>>> master
 >>>>>> master
 >>>>>> master
 >>>>>> master
@@ -520,6 +526,8 @@ public/subtitles.php,site_config,0,Replaced legacy site_config usage with Config
 public/take_theme.php,site_config,0,Replaced legacy site_config usage with ConfigRepository
 public/takereseed.php,site_config,0,Replaced legacy site_config usage with ConfigRepository
 public/takethankyou.php,site_config,0,Replaced legacy site_config usage with ConfigRepository
+<<<<<< codex/refactor-to-use-configrepository-hlc5ev
+=======
 <<<<<< codex/refactor-to-use-configrepository-p4w0ba
 =======
 <<<<<< codex/refactor-to-use-configrepository-6hc6qq
@@ -527,6 +535,7 @@ public/takethankyou.php,site_config,0,Replaced legacy site_config usage with Con
 <<<<<< codex/refactor-to-use-configrepository-0h6ofb
 =======
 <<<<<< codex/refactor-to-use-configrepository-2vghy5
+>>>>>> master
 >>>>>> master
 >>>>>> master
 >>>>>> master
@@ -539,11 +548,14 @@ public/user_unlocks.php,site_config,0,Replaced legacy site_config usage with Con
 public/usercomment.php,site_config,0,Replaced legacy site_config usage with ConfigRepository
 public/userdetails.php,site_config,0,Replaced legacy site_config usage with ConfigRepository
 public/verify.php,site_config,0,Replaced legacy site_config usage with ConfigRepository
+<<<<<< codex/refactor-to-use-configrepository-hlc5ev
+=======
 <<<<<< codex/refactor-to-use-configrepository-p4w0ba
 =======
 <<<<<< codex/refactor-to-use-configrepository-6hc6qq
 =======
 <<<<<< codex/refactor-to-use-configrepository-0h6ofb
+>>>>>> master
 >>>>>> master
 >>>>>> master
 public/view_announce_history.php,site_config,0,Injected ConfigRepository bootstrap and removed legacy site_config global
@@ -555,9 +567,12 @@ src/Comment.php,site_config,0,Replaced cache TTL with ConfigRepository access
 src/Message.php,site_config,0,Replaced messaging configuration with ConfigRepository
 src/Upcoming.php,site_config,0,Removed unused site_config dependency
 src/User.php,site_config,0,Migrated user service configuration to ConfigRepository
+<<<<<< codex/refactor-to-use-configrepository-hlc5ev
+=======
 <<<<<< codex/refactor-to-use-configrepository-p4w0ba
 =======
 <<<<<< codex/refactor-to-use-configrepository-6hc6qq
+>>>>>> master
 >>>>>> master
 src/Userblock.php,site_config,0,Replaced user block cache TTL with ConfigRepository lookup
 src/Usersachiev.php,site_config,0,Switched users achievements query limit to ConfigRepository
@@ -568,6 +583,11 @@ templates/1/template.php,site_config|paths|banners|tagline|cache,14,Refactored l
 tools/batch-43_3-admin-fix.php,none,0,No legacy usage (comment reference only)
 tools/batch-43_5-admin-audit.php,none,0,No legacy usage (comment reference only)
 tools/batch-43_6-admin-fix-from-report.php,none,0,No legacy usage (comment reference only)
+<<<<<< codex/refactor-to-use-configrepository-hlc5ev
+tools/batch-43_7-admin-rewrite.php,none,0,Normalized header to standard declare format
+tools/batch-43_7B-admin-autofix.php,none,0,No legacy configuration usage detected in slice audit
+tools/cache_clear.php,site_config|paths,0,Migrated cache directory lookup to ConfigRepository with fallback
+=======
 <<<<<< codex/refactor-to-use-configrepository-p4w0ba
 tools/batch-43_7-admin-rewrite.php,none,0,Normalized header to standard declare format
 tools/batch-43_7B-admin-autofix.php,none,0,No legacy configuration usage detected in slice audit
@@ -578,6 +598,7 @@ tools/cache_clear.php,site_config|paths,0,Migrated cache directory lookup to Con
 =======
 =======
 =======
+>>>>>> master
 >>>>>> master
 >>>>>> master
 >>>>>> master
