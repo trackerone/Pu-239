@@ -16,8 +16,13 @@ $db = $container->get(Database::class);
 $class = get_access(basename($_SERVER['REQUEST_URI']));
 class_check($class);
 
+$s = $s ?? static fn($v) => htmlspecialchars((string) $v, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
+$self = $s($_SERVER['PHP_SELF'] ?? '');
+$baseurl = $s($config->get('paths.baseurl'));
+
 $file = (string) $config->get('paths.flood_file');
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    // TODO(2025): csrf
     $limits = isset($_POST['limit']) && is_array($_POST['limit']) ? $_POST['limit'] : [];
     foreach ($limits as $class => $limit) {
         if ((int) $limit === 0) {
@@ -36,7 +41,7 @@ if (!file_exists($file) || !is_array($limit = json_decode(file_get_contents($fil
     $limit = [];
 }
 $out = "
-        <form method='post' action='' enctype='multipart/form-data' accept-charset='utf-8'>";
+        <form method='post' action='{$self}?tool=floodlimit&amp;action=floodlimit' enctype='multipart/form-data' accept-charset='utf-8'>";
 $heading = '
         <tr>
             <th>' . _('User class') . '</th>
@@ -44,10 +49,11 @@ $heading = '
         </tr>';
 $body = '';
 for ($i = UC_MIN; $i <= UC_MAX; ++$i) {
-    $body .= '
+    $limitValue = $s((string) ($limit[$i] ?? 0));
+    $body .= "
         <tr>
-            <td>' . get_user_class_name((int) $i) . "</td>
-            <td><input name='limit[$i]' type='text' class='w-100' value='" . (isset($limit[$i]) ? $limit[$i] : 0) . "'></td>
+            <td>" . get_user_class_name((int) $i) . "</td>
+            <td><input name='limit[$i]' type='text' class='w-100' value='{$limitValue}'></td>
         </tr>";
 }
 $out .= main_table($body, $heading) . "
@@ -58,7 +64,7 @@ $out .= main_table($body, $heading) . "
         </form>";
 $title = _('Flood Limit');
 $breadcrumbs = [
-    "<a href='" . (string) $config->get('paths.baseurl') . "/staffpanel.php'>" . _('Staff Panel') . '</a>',
-    "<a href='{$_SERVER['PHP_SELF']}'>$title</a>",
+    "<a href='{$baseurl}/staffpanel.php'>" . _('Staff Panel') . '</a>',
+    "<a href='{$self}'>" . $s($title) . '</a>',
 ];
 echo stdhead($title, [], 'page-wrapper', $breadcrumbs) . wrapper($out) . stdfoot();

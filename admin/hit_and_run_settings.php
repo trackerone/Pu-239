@@ -16,7 +16,12 @@ $db = $container->get(Database::class);
 $class = get_access(basename($_SERVER['REQUEST_URI']));
 class_check($class);
 
+$s = $s ?? static fn($v) => htmlspecialchars((string) $v, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
+$self = $s($_SERVER['PHP_SELF'] ?? '');
+$baseurl = $s($config->get('paths.baseurl'));
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    // TODO(2025): csrf
     $session = $container->get(Session::class);
     // $fluent removed — use $this->db (ExtendedPdo)
     $updated = false;
@@ -41,7 +46,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 $HTMLOUT .= "
 <h1 class='has-text-centered'>" . _('Hit And Run Settings') . "</h1>
-<form action='staffpanel.php?tool=hit_and_run_settings' method='post' enctype='multipart/form-data' accept-charset='utf-8'>";
+<form action='{$self}?tool=hit_and_run_settings' method='post' enctype='multipart/form-data' accept-charset='utf-8'>";
 
 $HTMLOUT .= main_table("
     <tr><td class='w-50'>" . _('Hit And Run Online:') . '</td><td>' . _('Yes') . "<input type='radio' name='hnr_online' value='1' " . ($config->get('hnr_config.hnr_online') ? 'checked' : '') . '> ' . _('No') . "<input type='radio' name='hnr_online' value='0' " . (!$config->get('hnr_config.hnr_online') ? 'checked' : '') . "></td></tr>
@@ -85,7 +90,7 @@ $HTMLOUT .= main_table("
 
 $title = _('HnR Settings');
 $breadcrumbs = [
-    "<a href='{$config->get('paths.baseurl')}/staffpanel.php'>" . _('Staff Panel') . '</a>',
-    "<a href='{$_SERVER['PHP_SELF']}'>$title</a>",
+    "<a href='{$baseurl}/staffpanel.php'>" . _('Staff Panel') . '</a>',
+    "<a href='{$self}'>" . $s($title) . '</a>',
 ];
 echo stdhead($title, [], 'page-wrapper', $breadcrumbs) . wrapper($HTMLOUT) . stdfoot();
