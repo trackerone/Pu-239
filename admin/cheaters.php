@@ -17,6 +17,10 @@ $cache = $container->get(Cache::class);
 $class = get_access(basename($_SERVER['REQUEST_URI']));
 class_check($class);
 
+$s = $s ?? static fn($v) => htmlspecialchars((string) $v, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
+$self = $s($_SERVER['PHP_SELF'] ?? '');
+$baseurl = $s($config->get('paths.baseurl'));
+
 $stdfoot = [
     'js' => [
         get_file_name('cheaters_js'),
@@ -26,6 +30,7 @@ $stdfoot = [
 $dt = TIME_NOW;
 
 if (isset($_POST['nowarned']) && $_POST['nowarned'] === 'nowarned') {
+    // TODO(2025): csrf
     $ids_remove = !empty($_POST['remove']) ? array_map('intval', (array) $_POST['remove']) : [];
     $ids_disable = !empty($_POST['desact']) ? array_map('intval', (array) $_POST['desact']) : [];
 
@@ -72,7 +77,7 @@ if ($count > 0) {
     $pager = pager($perpage, $count, (string) $config->get('paths.baseurl') . '/staffpanel.php?tool=cheaters&amp;action=cheaters&amp;');
 
     $HTMLOUT .= "
-    <form action='{$_SERVER['PHP_SELF']}?tool=cheaters&amp;action=cheaters' method='post' enctype='multipart/form-data' accept-charset='utf-8'>";
+    <form action='{$self}?tool=cheaters&amp;action=cheaters' method='post' enctype='multipart/form-data' accept-charset='utf-8'>";
 
     if ($count > $perpage) {
         $HTMLOUT .= $pager['pagertop'];
@@ -96,31 +101,40 @@ if ($count > 0) {
 
     $body = '';
     foreach ($rows as $arr) {
-        $id       = (int) $arr['cid'];
-        $userid   = (int) $arr['userid'];
-        $torrname = htmlsafechars(CutName($arr['tname'], 80));
+        $id = (int) $arr['cid'];
+        $userid = (int) $arr['userid'];
+        $idDisplay = $s((string) $id);
+        $userIdDisplay = $s((string) $userid);
+        $torrentName = $s(CutName($arr['tname'], 80));
+        $client = $s($arr['client']);
+        $userIp = $s($arr['userip']);
+        $uploaded = $s(mksize((int) $arr['upthis']));
+        $speed = $s(mksize((int) $arr['rate']));
+        $timeDiff = $s((string) $arr['timediff']);
+        $tid = $s((string) (int) $arr['tid']);
+        $detailsLink = "{$baseurl}/details.php?id={$tid}";
 
         $cheater = format_username($userid) . ' ' . _(' has been flagged with an abnormally high upload speed!') . '<br>'
-            . _('On torrent') . " <a href='" . (string) $config->get('paths.baseurl') . "/details.php?id=" . (int) $arr['tid'] . "' title='{$torrname}'>{$torrname}</a><br>"
-            . _('Uploaded') . ' ' . mksize((int) $arr['upthis']) . '<br>'
-            . _('Speed') . ' ' . mksize((int) $arr['rate']) . '/s<br>'
-            . _('Within') . ' ' . (int) $arr['timediff'] . ' ' . _('Seconds') . '<br>'
-            . _('Using Client:') . ' ' . htmlsafechars($arr['client']) . '<br>'
-            . _('Ip Address') . ' ' . htmlsafechars($arr['userip']);
+            . _('On torrent') . " <a href='{$detailsLink}' title='{$torrentName}'>{$torrentName}</a><br>"
+            . _('Uploaded') . ' ' . $uploaded . '<br>'
+            . _('Speed') . ' ' . $speed . '/s<br>'
+            . _('Within') . ' ' . $timeDiff . ' ' . _('Seconds') . '<br>'
+            . _('Using Client:') . ' ' . $client . '<br>'
+            . _('Ip Address') . ' ' . $userIp;
 
         $cheaters = "
-        <div class='dt-tooltipper-large' data-tooltip-content='#cheater_{$id}_tooltip'>" . format_username($userid, true, false) . "
+        <div class='dt-tooltipper-large' data-tooltip-content='#cheater_{$idDisplay}_tooltip'>" . format_username($userid, true, false) . "
             <div class='tooltip_templates'>
-                <div id='cheater_{$id}_tooltip'>$cheater</div>
+                <div id='cheater_{$idDisplay}_tooltip'>$cheater</div>
             </div>
         </div>";
 
         $body .= "
         <tr>
-            <td class='has-text-centered'>{$id}</td>
+            <td class='has-text-centered'>{$idDisplay}</td>
             <td>{$cheaters}</td>
-            <td class='has-text-centered'><input type='checkbox' name='desact[]' value='{$userid}'></td>
-            <td class='has-text-centered'><input type='checkbox' name='remove[]' value='{$id}'></td>
+            <td class='has-text-centered'><input type='checkbox' name='desact[]' value='{$userIdDisplay}'></td>
+            <td class='has-text-centered'><input type='checkbox' name='remove[]' value='{$idDisplay}'></td>
         </tr>";
     }
 
@@ -144,8 +158,8 @@ if ($count > 0) {
 
 $title = _('Ratio Cheats');
 $breadcrumbs = [
-    "<a href='" . (string) $config->get('paths.baseurl') . "/staffpanel.php'>" . _('Staff Panel') . '</a>',
-    "<a href='{$_SERVER['PHP_SELF']}'>$title</a>",
+    "<a href='{$baseurl}/staffpanel.php'>" . _('Staff Panel') . '</a>',
+    "<a href='{$self}'>" . $s($title) . '</a>',
 ];
 
 echo stdhead($title, [], 'page-wrapper', $breadcrumbs) . wrapper($HTMLOUT) . stdfoot();

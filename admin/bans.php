@@ -19,6 +19,9 @@ class_check($class);
 $session = $container->get(Session::class);
 $db = $container->get(Database::class);
 $fluent = $db;
+$s = $s ?? static fn($v) => htmlspecialchars((string) $v, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
+$self = $s($_SERVER['PHP_SELF'] ?? '');
+$baseurl = $s($config->get('paths.baseurl'));
 $remove = isset($_GET['remove']) ? (int) $_GET['remove'] : 0;
 if ($remove > 0) {
     $res = $fluent->from('bans')
@@ -43,6 +46,7 @@ $db->perform($sql, ['id' => $remove]);
     }
 }
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && $CURUSER['class'] >= UC_MAX) {
+    // TODO(2025): csrf
     $first = htmlsafechars($_POST['first']);
     $last = htmlsafechars($_POST['last']);
     $comment = htmlsafechars($_POST['comment']);
@@ -108,14 +112,19 @@ if ($count == 0) {
                 </tr>';
     $body = '';
     foreach ($bans as $banned) {
-        $body .= '
+        $addedOn = $s(get_date((int) $banned['added'], ''));
+        $firstIp = $s($banned['first']);
+        $lastIp = $s($banned['last']);
+        $comment = $s($banned['comment']);
+        $banId = $s((string) $banned['id']);
+        $body .= "
                 <tr>
-                    <td>' . get_date((int) $banned['added'], '') . '</td>
-                    <td>' . htmlsafechars($banned['first']) . '</td>
-                    <td>' . htmlsafechars($banned['last']) . '</td>
-                    <td>' . format_username((int) $banned['addedby']) . '</td>
-                    <td>' . htmlsafechars($banned['comment']) . "</td>
-                    <td><a href='" . (string) $config->get('paths.baseurl') . '/staffpanel.php?tool=bans&amp;remove=' . $banned['id'] . "'><i class='icon-trash-empty icon tooltipper has-text-danger' title='" . _('Remove') . "'></i></a></td>
+                    <td>{$addedOn}</td>
+                    <td>{$firstIp}</td>
+                    <td>{$lastIp}</td>
+                    <td>" . format_username((int) $banned['addedby']) . "</td>
+                    <td>{$comment}</td>
+                    <td><a href='{$baseurl}/staffpanel.php?tool=bans&amp;remove={$banId}'><i class='icon-trash-empty icon tooltipper has-text-danger' title='" . _('Remove') . "'></i></a></td>
                </tr>";
     }
     $HTMLOUT .= main_table($body, $header);
@@ -153,7 +162,7 @@ if ($CURUSER['class'] >= UC_MAX) {
 }
 $title = _('Bans');
 $breadcrumbs = [
-    "<a href='" . (string) $config->get('paths.baseurl') . "/staffpanel.php'>" . _('Staff Panel') . '</a>',
-    "<a href='{$_SERVER['PHP_SELF']}'>$title</a>",
+    "<a href='{$baseurl}/staffpanel.php'>" . _('Staff Panel') . '</a>',
+    "<a href='{$self}'>" . $s($title) . '</a>',
 ];
 echo stdhead($title, [], 'page-wrapper', $breadcrumbs) . wrapper($HTMLOUT) . stdfoot();

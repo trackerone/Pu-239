@@ -1,0 +1,11 @@
+file,csrf_enforced,csrf_todo,escaped_outputs,json_hardened,notes
+admin/acpmanage.php,false,true,11,false,
+admin/backup.php,false,true,8,false,
+admin/bannedemails.php,false,true,7,false,
+admin/bans.php,false,true,8,false,
+admin/bonusmanage.php,false,true,6,false,
+admin/cheaters.php,false,true,12,false,
+admin/class_config.php,false,true,6,false,
+admin/cloudview.php,false,true,6,false,
+admin/datareset.php,false,true,6,false,
+admin/deathrow.php,false,true,7,false,
