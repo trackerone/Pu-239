@@ -1,9 +1,15 @@
 admin/acpmanage.php
+<<<<<< codex/enforce-csrf-and-output-escaping-m17p9q
 admin/adduser.php
 admin/backup.php
 admin/bannedemails.php
 admin/bans.php
 admin/block.settings.php
+=======
+admin/backup.php
+admin/bannedemails.php
+admin/bans.php
+>>>>>> master
 admin/bonusmanage.php
 admin/cheaters.php
 admin/class_config.php
@@ -41,7 +47,10 @@ admin/traceroute.php
 admin/trivia_config.php
 admin/upgrade_database.php
 admin/uploadapps.php
+<<<<<< codex/enforce-csrf-and-output-escaping-m17p9q
 admin/usersearch.php
+=======
+>>>>>> master
 admin/watched_users.php
 public/achievementlist.php
 public/ajax/autocomplete.php
@@ -72,7 +81,10 @@ public/ajax/tvmaze_lookup.php
 public/ajax/usersearch.php
 public/bitbucket.php
 public/blackjack.php
+<<<<<< codex/enforce-csrf-and-output-escaping-m17p9q
 public/bot_triggers.php
+=======
+>>>>>> master
 public/browse.php
 public/bugs.php
 public/casino.php
@@ -84,7 +96,10 @@ public/forums.php
 public/getrss.php
 public/hnrs.php
 public/index.php
+<<<<<< codex/enforce-csrf-and-output-escaping-m17p9q
 public/login.php
+=======
+>>>>>> master
 public/new_announcement.php
 public/offers.php
 public/polls_take_vote.php
