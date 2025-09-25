@@ -20,6 +20,10 @@ $session = $container->get(Session::class);
 $class = get_access(basename($_SERVER['REQUEST_URI']));
 class_check($class);
 
+$s = $s ?? static fn($v) => htmlspecialchars((string) $v, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
+$self = $s($_SERVER['PHP_SELF'] ?? '');
+$baseurl = $s($config->get('paths.baseurl'));
+
 $stdhead = [
     'css' => [get_file_name('sceditor_css')],
 ];
@@ -45,6 +49,7 @@ function classes2name(int $min, int $max): void
 }
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    // TODO(2025): csrf
     $groups  = isset($_POST['groups']) && is_array($_POST['groups']) ? $_POST['groups'] : [];
     $subject = isset($_POST['subject']) ? trim((string) $_POST['subject']) : '';
     // Get raw body (allow BBCode), but normalize &amp; -> & as original code intended
@@ -218,7 +223,7 @@ if (!empty($errors)) {
 // Render form
 $HTMLOUT .= "
     <h1 class='has-text-centered'>" . _('Group message') . "</h1>
-    <form action='staffpanel.php?tool=grouppm&amp;action=grouppm' method='post' enctype='multipart/form-data' accept-charset='utf-8'>
+    <form action='{$self}?tool=grouppm&amp;action=grouppm' method='post' enctype='multipart/form-data' accept-charset='utf-8'>
       <table class='table table-bordered table-striped'>
         <tr>
           <td colspan='2'>" . _('Subject') . "
@@ -242,8 +247,8 @@ $HTMLOUT .= "
 
 $title = _('Group PM');
 $breadcrumbs = [
-    "<a href='" . (string) $config->get('paths.baseurl') . "/staffpanel.php'>" . _('Staff Panel') . '</a>',
-    "<a href='{$_SERVER['PHP_SELF']}'>$title</a>",
+    "<a href='{$baseurl}/staffpanel.php'>" . _('Staff Panel') . '</a>',
+    "<a href='{$self}'>" . $s($title) . '</a>',
 ];
 
 echo stdhead($title, $stdhead, 'page-wrapper', $breadcrumbs) . wrapper($HTMLOUT) . stdfoot($stdfoot);

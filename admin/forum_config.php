@@ -16,6 +16,11 @@ $db = $container->get(Database::class);
 $class = get_access(basename($_SERVER['REQUEST_URI']));
 class_check($class);
 
+$s = $s ?? static fn($v) => htmlspecialchars((string) $v, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
+$self = $s($_SERVER['PHP_SELF'] ?? '');
+$selfRaw = $_SERVER['PHP_SELF'] ?? '';
+$baseurl = $s($config->get('paths.baseurl'));
+
 $HTMLOUT = $time_drop_down = $accepted_file_extension = $accepted_file_types = $member_class_drop_down = '';
 $settings_saved = false;
 $config_id = 1;
@@ -23,6 +28,7 @@ $fluent = $db; // alias
 // $fluent removed — use $this->db (ExtendedPdo)
 $cache = $container->get(Cache::class);
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['do_it'])) {
+    // TODO(2025): csrf
     $update = [
         'delete_for_real' => isset($_POST['delete_for_real']) ? (int) $_POST['delete_for_real'] : 0,
         'min_delete_view_class' => isset($_POST['min_delete_view_class']) && valid_class((int) $_POST['min_delete_view_class']) ? (int) $_POST['min_delete_view_class'] : 0,
@@ -35,17 +41,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['do_it'])) {
     $sql = "UPDATE forum_config SET /* columns */ WHERE id = :id";
 $db->perform($sql, array_merge($update, ['id' => $config_id]));
     $cache->delete('forum_config_');
-    header('Location: ' . $_SERVER['PHP_SELF'] . '?tool=forum_config');
+    header('Location: ' . $selfRaw . '?tool=forum_config');
     app_halt('Exit called');
 }
 $main_links = "
             <div class='bottom20'>
                 <ul class='level-center bg-06'>
                     <li class='is-link margin10'>
-                        <a href='" . (string) $config->get('paths.baseurl') . "/staffpanel.php?tool=over_forums&amp;action=over_forums'>" . _('Over Forums') . "</a>
+                        <a href='{$baseurl}/staffpanel.php?tool=over_forums&amp;action=over_forums'>" . _('Over Forums') . "</a>
                     </li>
                     <li class='is-link margin10'>
-                        <a href='" . (string) $config->get('paths.baseurl') . "/staffpanel.php?tool=forum_manage&amp;action=forum_manage'>" . _('Forum Manager') . "</a>
+                        <a href='{$baseurl}/staffpanel.php?tool=forum_manage&amp;action=forum_manage'>" . _('Forum Manager') . "</a>
                     </li>
                 </ul>
             </div>
@@ -61,7 +67,7 @@ for ($i = 7; $i <= 365; $i = $i + 7) {
 }
 $accepted_file_extension = (!empty($arr['accepted_file_extension'])) ? str_replace('|', ' ', $arr['accepted_file_extension']) : [];
 $accepted_file_types = (!empty($arr['accepted_file_types'])) ? str_replace('|', ' ', $arr['accepted_file_types']) : [];
-$HTMLOUT .= $main_links . '<form method="post" action="staffpanel.php?tool=forum_config" accept-charset="utf-8">
+$HTMLOUT .= $main_links . '<form method="post" action="' . $self . '?tool=forum_config&amp;action=forum_config" accept-charset="utf-8">
             <input type="hidden" name="do_it" value="1">
         <table class="table table-bordered table-striped">
         <tr>
@@ -128,7 +134,7 @@ function member_class_drop_down($member_class)
 }
 $title = _('Config Forums');
 $breadcrumbs = [
-    "<a href='" . (string) $config->get('paths.baseurl') . "/staffpanel.php'>" . _('Staff Panel') . '</a>',
-    "<a href='{$_SERVER['PHP_SELF']}'>$title</a>",
+    "<a href='{$baseurl}/staffpanel.php'>" . _('Staff Panel') . '</a>',
+    "<a href='{$self}'>" . $s($title) . '</a>',
 ];
 echo stdhead($title, [], 'page-wrapper', $breadcrumbs) . wrapper($HTMLOUT) . stdfoot();
