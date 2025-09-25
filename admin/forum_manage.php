@@ -15,6 +15,11 @@ $db = $container->get(Database::class);
 $class = get_access(basename($_SERVER['REQUEST_URI']));
 class_check($class);
 
+$s = $s ?? static fn($v) => htmlspecialchars((string) $v, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
+$self = $s($_SERVER['PHP_SELF'] ?? '');
+$selfRaw = $_SERVER['PHP_SELF'] ?? '';
+$baseurl = $s($config->get('paths.baseurl'));
+
 $HTMLOUT = $options = $options_2 = $options_3 = $options_4 = $options_5 = $options_6 = $option_7 = $option_8 = $option_9 = $option_10 = $option_11 = $option_12 = $count = $forums_stuff = '';
 $row = 0;
 $maxclass = $CURUSER['class'];
@@ -27,14 +32,19 @@ $over_forums = isset($_POST['over_forums']) ? (int) $_POST['over_forums'] : 0;
 $min_class_read = isset($_POST['min_class_read']) ? (int) $_POST['min_class_read'] : 0;
 $min_class_write = isset($_POST['min_class_write']) ? (int) $_POST['min_class_write'] : 0;
 $min_class_create = isset($_POST['min_class_create']) ? (int) $_POST['min_class_create'] : 0;
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    // TODO(2025): csrf
+}
+
 $main_links = "
             <div class='bottom20'>
                 <ul class='level-center bg-06'>
                     <li class='is-link margin10'>
-                        <a href='{$config->get('paths.baseurl')}/staffpanel.php?tool=over_forums&amp;action=over_forums'>" . _('Over Forums') . "</a>
+                        <a href='{$baseurl}/staffpanel.php?tool=over_forums&amp;action=over_forums'>" . _('Over Forums') . "</a>
                     </li>
                     <li class='is-link margin10'>
-                        <a href='{$config->get('paths.baseurl')}/staffpanel.php?tool=forum_config&amp;action=forum_config'>" . _('Configure Forums') . "</a>
+                        <a href='{$baseurl}/staffpanel.php?tool=forum_config&amp;action=forum_config'>" . _('Configure Forums') . "</a>
                     </li>
                 </ul>
             </div>
@@ -53,17 +63,17 @@ $forum_class = $container->get(Forum::class);
 switch ($action) {
     case 'delete':
         if (!$id) {
-            header('Location: ' . $_SERVER['PHP_SELF'] . '?tool=forum_manage&action=forum_manage');
+            header('Location: ' . $selfRaw . '?tool=forum_manage&action=forum_manage');
             app_halt('Exit called');
         }
         $forum_class->delete($id);
-        header('Location: ' . $_SERVER['PHP_SELF'] . '?tool=forum_manage&action=forum_manage');
+        header('Location: ' . $selfRaw . '?tool=forum_manage&action=forum_manage');
         app_halt('Exit called');
         break;
 
     case 'edit_forum':
         if (!$name && !$desc && !$id) {
-            header('Location: ' . $_SERVER['PHP_SELF'] . '?tool=forum_manage&action=forum_manage');
+            header('Location: ' . $selfRaw . '?tool=forum_manage&action=forum_manage');
             app_halt('Exit called');
         }
         $set = [
@@ -77,13 +87,13 @@ switch ($action) {
             'min_class_create' => $min_class_create,
         ];
         $forum_class->update($set, $id);
-        header('Location: ' . $_SERVER['PHP_SELF'] . '?tool=forum_manage&action=forum_manage');
+        header('Location: ' . $selfRaw . '?tool=forum_manage&action=forum_manage');
         app_halt('Exit called');
         break;
 
     case 'add_forum':
         if (!$name && !$desc) {
-            header('Location: ' . $_SERVER['PHP_SELF'] . '?tool=forum_manage&action=forum_manage');
+            header('Location: ' . $selfRaw . '?tool=forum_manage&action=forum_manage');
             app_halt('Exit called');
         }
         $values = [
@@ -97,7 +107,7 @@ switch ($action) {
             'forum_id' => $over_forums,
         ];
         $forum_class->add($values);
-        header('Location: ' . $_SERVER['PHP_SELF'] . '?tool=forum_manage&action=forum_manage');
+        header('Location: ' . $selfRaw . '?tool=forum_manage&action=forum_manage');
         app_halt('Exit called');
         break;
 
@@ -105,7 +115,7 @@ switch ($action) {
         $forum = $forum_class->get_forum($id);
         if (!empty($forum)) {
             $HTMLOUT .= $main_links . '
-            <form method="post" action="' . $_SERVER['PHP_SELF'] . '?tool=forum_manage&amp;action=forum_manage" accept-charset="utf-8">';
+            <form method="post" action="' . $self . '?tool=forum_manage&amp;action=forum_manage" accept-charset="utf-8">';
             $body = "
                     <tr>
                         <td colspan='2'>" . _('Edit forum:') . ' ' . htmlsafechars($forum['name']) . '</td>
@@ -239,9 +249,11 @@ foreach ($forums as $row) {
     $name = !empty($row['parent_name']) ? htmlsafechars($row['parent_name']) : '';
     $subforum = $row['parent_forum'];
     $subforum_name = !empty($row['subforum_name']) ? htmlsafechars($row['subforum_name']) : '';
+    $forumUrl = $baseurl . '/forums.php?action=view_forum&amp;forum_id=' . (int) $row['id'];
+    $editUrl = $baseurl . '/staffpanel.php?tool=forum_manage&amp;action=forum_manage&amp;action2=edit_forum_page&amp;id=' . (int) $row['id'];
     $body .= '
         <tr>
-            <td><a class="is-link" href="' . $config->get('paths.baseurl') . '/forums.php?action=view_forum&amp;forum_id=' . (int) $row['id'] . '">
+            <td><a class="is-link" href="' . $forumUrl . '">
                 <span>' . htmlsafechars($row['name']) . '</span></a><br>
                     ' . htmlsafechars($row['description']) . '
             </td>
@@ -253,7 +265,7 @@ foreach ($forums as $row) {
             <td class="has-text-centered">
                 <span class="level-center">
                     <span class="left10 tooltipper" title="Edit">
-                        <a href="' . $config->get('paths.baseurl') . '/staffpanel.php?tool=forum_manage&amp;action=forum_manage&amp;action2=edit_forum_page&amp;id=' . (int) $row['id'] . '">
+                        <a href="' . $editUrl . '">
                             <i class="icon-edit icon has-text-info" aria-hidden="true"></i>
                         </a>
                     </span>
@@ -268,7 +280,7 @@ foreach ($forums as $row) {
 }
 
 $HTMLOUT .= main_table($body, $heading) . '<br><br>
-            <form method="post" action="' . $_SERVER['PHP_SELF'] . '?tool=forum_manage&amp;action=forum_manage" accept-charset="utf-8">';
+            <form method="post" action="' . $self . '?tool=forum_manage&amp;action=forum_manage" accept-charset="utf-8">';
 $body = '
             <tr>
                 <td colspan="2">' . _('Make new forum') . '</td>
@@ -381,7 +393,7 @@ $HTMLOUT .= main_table($body) . '
     </script>';
 $title = _('Forum Manager');
 $breadcrumbs = [
-    "<a href='{$config->get('paths.baseurl')}/staffpanel.php'>" . _('Staff Panel') . '</a>',
-    "<a href='{$_SERVER['PHP_SELF']}'>$title</a>",
+    "<a href='{$baseurl}/staffpanel.php'>" . _('Staff Panel') . '</a>',
+    "<a href='{$self}'>" . $s($title) . '</a>',
 ];
 echo stdhead($title, [], 'page-wrapper', $breadcrumbs) . wrapper($HTMLOUT) . stdfoot();
