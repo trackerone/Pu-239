@@ -2,15 +2,17 @@
 declare(strict_types=1);
 require_once dirname(__DIR__) . '/bootstrap_web.php';
 
+use Pu239\Config\ConfigRepository;
+use Pu239\Database;
+
+global $container;
+/** @var ConfigRepository $config */
+$config = $container->get(ConfigRepository::class);
+/** @var Database $db */
 $db = $container->get(Database::class);
-
-
-
-
 
 require_once __DIR__ . '/../include/bittorrent.php';
 check_user_status();
-global $site_config;
 
 $html = '';
 $use_limit = true;
@@ -50,7 +52,8 @@ $html = str_replace([
 ], "'", $html);
 
 $html = str_replace('–', '-', $html);
-$html = str_replace('href="', 'href="' . $site_config['site']['anonymizer_url'], $html);
+$anonymizerUrl = (string) $config->get('site.anonymizer_url');
+$html = str_replace('href="', 'href="' . $anonymizerUrl, $html);
 $html = str_replace('="/images/', '="https://torrentfreak.com/images/', $html);
 $html = str_replace([
     '</img>',

@@ -1,19 +1,27 @@
 <?php
 declare(strict_types=1);
+
 require_once dirname(__DIR__) . '/bootstrap_web.php';
 
-$db = $container->get(Database::class);
-
-
-
-
-
+use Pu239\Cache;
+use Pu239\Config\ConfigRepository;
 use Pu239\Database;
 
 require_once __DIR__ . '/../include/bittorrent.php';
+
 check_user_status();
+
+global $container;
+/** @var ConfigRepository $config */
+$config = $container->get(ConfigRepository::class);
+/** @var Database $db */
+$db = $container->get(Database::class);
+/** @var Cache $cache */
+$cache = $container->get(Cache::class);
+
+$baseUrl = (string) $config->get('paths.baseurl');
+$imagesBaseUrl = (string) $config->get('paths.images_baseurl');
 $HTMLOUT = '';
-global $site_config;
 
 $abba = '
         <h1 class="has-text-centered">Top Moods</h1>
@@ -29,8 +37,8 @@ if ($topmoods === false || is_null($topmoods)) {
     $rows = $db->fetchAll('SELECT moods.*, users.mood, COUNT(users.mood) as moodcount ' . 'FROM users LEFT JOIN moods ON (users.mood = moods.id) GROUP BY users.mood ' . 'ORDER BY moodcount DESC, moods.id');
     foreach ($rows as $arr) {
         $topmoods .= '<tr><td>' . (int) $arr['moodcount'] . '</td>
-                 <td>' . htmlsafechars($arr['name']) . ' ' . ($arr['bonus'] == 1 ? '<a href="' . $site_config['paths']['baseurl'] . '/mybonus.php">(bonus)</a>' : '') . '</td>
-                 <td><img src="' . $site_config['paths']['images_baseurl'] . 'smilies/' . htmlsafechars($arr['image']) . '" alt=""></td>
+                 <td>' . htmlsafechars($arr['name']) . ' ' . ($arr['bonus'] == 1 ? '<a href="' . $baseUrl . '/mybonus.php">(bonus)</a>' : '') . '</td>
+                 <td><img src="' . $imagesBaseUrl . 'smilies/' . htmlsafechars($arr['image']) . '" alt=""></td>
                  </tr>';
     }
     $cache->set($key, $topmoods, 0);

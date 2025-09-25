@@ -13,9 +13,15 @@ use Pu239\Cache;
 use Pu239\Database;
 use Pu239\Session;
 use Spatie\Image\Exceptions\InvalidManipulation;
+use PU239\Config\ConfigRepository;
 
 global $container;
+/** @var Database $db */
 $db = $container->get(Database::class);
+/** @var ConfigRepository $config */
+$config = $container->get(ConfigRepository::class);
+$baseUrl = (string) $config->get('paths.baseurl', '');
+$imagesBaseUrl = (string) $config->get('paths.images_baseurl', '');
 
 /**
  *
@@ -37,7 +43,7 @@ $db = $container->get(Database::class);
  */
 function stdhead(string $title, array $stdhead, string $class, array $breadcrumbs)
 {
-    global $container, $site_config;
+    global $container, $config, $baseUrl, $imagesBaseUrl;
 
     $curuser = check_user_status('login');
     $session = $container->get(Session::class);
@@ -46,10 +52,12 @@ function stdhead(string $title, array $stdhead, string $class, array $breadcrumb
     require_once INCL_DIR . 'function_html.php';
     require_once 'navbar.php';
 
+    $siteName = (string) $config->get('site.name', 'Pu-239');
+    // TODO(2025): map legacy key "site.name" to appropriate config path
     if (empty($title)) {
-        $title = $site_config['site']['name'];
+        $title = $siteName;
     } else {
-        $title = $site_config['site']['name'] . ' :: ' . format_comment($title);
+        $title = $siteName . ' :: ' . format_comment($title);
     }
     $tmp = [
         'css' => [
@@ -65,11 +73,11 @@ function stdhead(string $title, array $stdhead, string $class, array $breadcrumb
         }
     }
     $htmlout = doc_head($title) . "
-    <link rel='apple-touch-icon' sizes='180x180' href='{$site_config['paths']['baseurl']}/apple-touch-icon.png'>
-    <link rel='icon' type='image/png' sizes='32x32' href='{$site_config['paths']['baseurl']}/favicon-32x32.png'>
-    <link rel='icon' type='image/png' sizes='16x16' href='{$site_config['paths']['baseurl']}/favicon-16x16.png'>
-    <link rel='manifest' href='{$site_config['paths']['baseurl']}/manifest.json'>
-    <link rel='mask-icon' href='{$site_config['paths']['baseurl']}/safari-pinned-tab.svg' color='#5bbad5'>
+    <link rel='apple-touch-icon' sizes='180x180' href='{$baseUrl}/apple-touch-icon.png'>
+    <link rel='icon' type='image/png' sizes='32x32' href='{$baseUrl}/favicon-32x32.png'>
+    <link rel='icon' type='image/png' sizes='16x16' href='{$baseUrl}/favicon-16x16.png'>
+    <link rel='manifest' href='{$baseUrl}/manifest.json'>
+    <link rel='mask-icon' href='{$baseUrl}/safari-pinned-tab.svg' color='#5bbad5'>
     <meta name='theme-color' content='#fff'>{$css_incl}
     <link rel='stylesheet' href='" . get_file_name('main_css') . "'>";
     $htmlout .= "
@@ -79,33 +87,43 @@ function stdhead(string $title, array $stdhead, string $class, array $breadcrumb
         <div class='$class'>";
     global $BLOCKS;
 
+    $bannersVideo = $config->arr('banners.video', []);
+    // TODO(2025): map legacy key "banners.video" to appropriate config path
+    $bannersImage = $config->arr('banners.image', []);
+    // TODO(2025): map legacy key "banners.image" to appropriate config path
+    $taglineBanner = (string) $config->get('tagline.banner', '');
+    // TODO(2025): map legacy key "tagline.banner" to appropriate config path
+    $taglineTagline = (string) $config->get('tagline.tagline', '');
+    // TODO(2025): map legacy key "tagline.tagline" to appropriate config path
+
     if (!empty($curuser['id'])) {
         $htmlout .= navbar() . "
             <div id='inner-page-wrapper'>";
-        if (empty($site_config['banners']['video'])) {
-            if (empty($site_config['banners']['image'])) {
+        if (empty($bannersVideo)) {
+            if (empty($bannersImage)) {
                 $banner = "
                     <div class='left50'>
-                        <h1>{$site_config['tagline']['banner']}</h1>
-                        <p class='description text-shadow left20'><i>{$site_config['tagline']['tagline']}</i></p>
+                        <h1>{$taglineBanner}</h1>
+                        <p class='description text-shadow left20'><i>{$taglineTagline}</i></p>
                     </div>";
             } else {
+                $imageBanner = $bannersImage[array_rand($bannersImage)];
                 $banner = "
-                    <img src='" . $site_config['paths']['images_baseurl'] . $site_config['banners']['image'][array_rand($site_config['banners']['image'])] . "' class='w-100'>";
+                    <img src='{$imagesBaseUrl}{$imageBanner}' class='w-100'>";
             }
             $htmlout .= "
                 <div id='logo' class='logo columns level is-marginless bg-04'>
                     <div class='column is-paddingless'>{$banner}</div>
                 </div>";
         } else {
-            $banner = $site_config['banners']['video'][array_rand($site_config['banners']['video'])];
+            $banner = $bannersVideo[array_rand($bannersVideo)];
             $htmlout .= "
                 <div id='base_contents_video'>
                     <div class='base_header_video'>
-                        <video class='object-fit-video' loop muted autoplay playsinline poster='{$site_config['paths']['images_baseurl']}banner.png'>
-                            <source src='{$site_config['paths']['images_baseurl']}{$banner}.mp4' type='video/mp4'>
-                            <source src='{$site_config['paths']['images_baseurl']}{$banner}.webm' type='video/webm'>
-                            <img src='{$site_config['paths']['images_baseurl']}banner.png' title='Your browser does not support the <video> tag' alt='Logo'>
+                        <video class='object-fit-video' loop muted autoplay playsinline poster='{$imagesBaseUrl}banner.png'>
+                            <source src='{$imagesBaseUrl}{$banner}.mp4' type='video/mp4'>
+                            <source src='{$imagesBaseUrl}{$banner}.webm' type='video/webm'>
+                            <img src='{$imagesBaseUrl}banner.png' title='Your browser does not support the <video> tag' alt='Logo'>
                         </video>
                     </div>
                 </div>";
@@ -168,7 +186,9 @@ function stdhead(string $title, array $stdhead, string $class, array $breadcrumb
     if ($BLOCKS['global_flash_messages_on']) {
         $htmlout .= "
                             <div class='notification-wrapper'>";
-        foreach ($site_config['site']['notifications'] as $notif) {
+        $siteNotifications = $config->arr('site.notifications', []);
+        // TODO(2025): map legacy key "site.notifications" to appropriate config path
+        foreach ($siteNotifications as $notif) {
             $messages = $session->get($notif);
             if (!empty($messages)) {
                 foreach ($messages as $message) {
@@ -203,52 +223,71 @@ function stdhead(string $title, array $stdhead, string $class, array $breadcrumb
 function stdfoot(array $stdfoot = [])
 {
     require_once INCL_DIR . 'function_bbcode.php';
-    global $site_config, $starttime, $querytime, $container, $CURUSER;
+    global $config, $starttime, $querytime, $container, $CURUSER;
 
     $cache = $container->get(Cache::class);
     $session_id = session_id();
     $query_stats = $cache->get('query_stats_' . $session_id);
-    $use_12_hour = !empty($CURUSER['use_12_hour']) ? $CURUSER['use_12_hour'] : $site_config['site']['use_12_hour'];
+    $use_12_hour = !empty($CURUSER['use_12_hour']) ? $CURUSER['use_12_hour'] : $config->bool('site.use_12_hour', false);
+    // TODO(2025): map legacy key "site.use_12_hour" to appropriate config path
     $header = $uptime = $htmlfoot = $now = '';
-    $debug = $site_config['db']['debug'] && !empty($CURUSER['id']) && has_access($CURUSER['class'], UC_STAFF, 'coder') ? true : false;
+    $debug = $config->bool('database.debug', false) && !empty($CURUSER['id']) && has_access($CURUSER['class'], UC_STAFF, 'coder');
     $queries = !empty($query_stats) ? count($query_stats) : 0;
     $seconds = microtime(true) - $starttime;
     $r_seconds = round($seconds, 5);
+    $cacheDriver = (string) $config->get('cache.default.driver', 'memory');
+    // TODO(2025): map legacy key "cache.default.driver" to appropriate config path
+    $redisDatabase = $config->int('cache.redis.database', 0);
+    // TODO(2025): map legacy key "redis.database" to appropriate config path
+    $memcachedUseSocket = $config->bool('cache.memcached.use_socket', false);
+    // TODO(2025): map legacy key "memcached.use_socket" to appropriate config path
+    $memcachedHost = (string) $config->get('cache.memcached.host', '127.0.0.1');
+    $memcachedPort = (int) $config->get('cache.memcached.port', 11211);
+    $memcachedSocket = (string) $config->get('cache.memcached.socket', '/dev/shm/memcached.sock');
+    // TODO(2025): map legacy key "memcached.host" to appropriate config path
+    $filesPath = (string) $config->get('storage.filesystem.path', '');
+    // TODO(2025): map legacy key "files.path" to appropriate config path
     if (isset($CURUSER) && has_access($CURUSER['class'], UC_STAFF, 'coder') && $debug) {
         $querytime = $querytime === null ? 0 : $querytime;
-        if ($site_config['cache']['driver'] === 'apcu' && extension_loaded('apcu')) {
+        if ($cacheDriver === 'apcu' && extension_loaded('apcu')) {
             $stats = apcu_cache_info();
             if (is_array($stats) && !empty($stats)) {
                 $stats['Hits'] = number_format($stats['num_hits'] / ($stats['num_hits'] + $stats['num_misses']) * 100, 3);
                 $header = _('APC(u) Hits: ') . $stats['Hits'] . _('% Misses: ') . number_format((100 - $stats['Hits']), 3) . _('% Items: ') . number_format($stats['num_entries']) . _(' Memory: ') . mksize($stats['mem_size']);
             }
-        } elseif ($site_config['cache']['driver'] === 'redis' && extension_loaded('redis')) {
+        } elseif ($cacheDriver === 'redis' && extension_loaded('redis')) {
             $client = $container->get(Redis::class);
             $stats = $client->info();
             if (is_array($stats) && !empty($stats)) {
                 $stats['Hits'] = number_format($stats['keyspace_hits'] / ($stats['keyspace_hits'] + $stats['keyspace_misses']) * 100, 3);
-                $db = 'db' . $site_config['redis']['database'];
+                $db = 'db' . $redisDatabase;
                 preg_match('/keys=(\d+)/', $stats[$db], $keys);
                 $header = _('Redis Hits: ') . "{$stats['Hits']}" . _('% Misses: ') . number_format((100 - (float) $stats['Hits']), 3) . _('% Items: ') . number_format((float) $keys[1]) . _(' Memory: ') . "{$stats['used_memory_human']}";
             }
-        } elseif ($site_config['cache']['driver'] === 'memcached' && extension_loaded('memcached')) {
+        } elseif ($cacheDriver === 'memcached' && extension_loaded('memcached')) {
             $client = $container->get(Memcached::class);
             $stats = $client->getStats();
-            if (!$site_config['memcached']['use_socket']) {
-                $stats = !empty($stats["{$site_config['memcached']['host']}:{$site_config['memcached']['port']}"]) ? $stats["{$site_config['memcached']['host']}:{$site_config['memcached']['port']}"] : null;
+            if (!$memcachedUseSocket) {
+                $index = "{$memcachedHost}:{$memcachedPort}";
+                $stats = !empty($stats[$index]) ? $stats[$index] : null;
             } else {
-                $stats = !empty($stats["{$site_config['memcached']['socket']}:0"]) ? $stats["{$site_config['memcached']['socket']}:0"] : (!empty($stats["{$site_config['memcached']['socket']}:{$site_config['memcached']['port']}"]) ? $stats["{$site_config['memcached']['socket']}:{$site_config['memcached']['port']}"] : null);
+                $socketIndex = "{$memcachedSocket}:0";
+                $stats = !empty($stats[$socketIndex]) ? $stats[$socketIndex] : null;
+                if ($stats === null) {
+                    $socketPortIndex = "{$memcachedSocket}:{$memcachedPort}";
+                    $stats = !empty($stats[$socketPortIndex]) ? $stats[$socketPortIndex] : null;
+                }
             }
             if (is_array($stats) && !empty($stats['get_hits']) && !empty($stats['cmd_get'])) {
                 $stats['Hits'] = number_format(($stats['get_hits'] / $stats['cmd_get']) * 100, 3);
                 $header = _('Memcached Hits: ') . $stats['Hits'] . _('% Misses: ') . number_format((100 - $stats['Hits']), 3) . _('% Items: ') . number_format($stats['curr_items']) . _(' Memory: ') . mksize($stats['bytes']);
             }
-        } elseif ($site_config['cache']['driver'] === 'file') {
-            $files_info = GetDirectorySize($site_config['files']['path'], true, true);
-            $header = _('Flysystem Cache') . ": {$site_config['files']['path']} " . _('Count') . ": {$files_info[1]} " . _('File size') . ": {$files_info[0]}";
-        } elseif ($site_config['cache']['driver'] === 'memory') {
+        } elseif ($cacheDriver === 'file') {
+            $files_info = GetDirectorySize($filesPath, true, true);
+            $header = _('Flysystem Cache') . ": {$filesPath} " . _('Count') . ": {$files_info[1]} " . _('File size') . ": {$files_info[0]}";
+        } elseif ($cacheDriver === 'memory') {
             $header = _('Memory Cache: Nothing cached beyond the current request');
-        } elseif ($site_config['cache']['driver'] === 'couchbase') {
+        } elseif ($cacheDriver === 'couchbase') {
             $header = _('Using Couchbase Cache');
         }
         if (!empty($query_stats)) {
@@ -312,6 +351,8 @@ function stdfoot(array $stdfoot = [])
             }
             $php_version = show_php_version();
         }
+        $sourceName = (string) $config->get('sourcecode.name', 'Pu-239');
+        // TODO(2025): map legacy key "sourcecode.name" to appropriate config path
         $htmlfoot .= "
                             <div class='bg-00 round10 top20'>" . main_div("
                                 <div class='level-wide portlet'>
@@ -332,7 +373,7 @@ function stdfoot(array $stdfoot = [])
                                     </div>
                                     <div class='size_4 padding20'>
                                         <p class='is-marginless'>" . _fe('Server Time: {0}', $now) . "</p>
-                                        <p class='is-marginless'>" . _fe('Powered By: {0}', "<a href='" . url_proxy('https://github.com/darkalchemy/Pu-239', false) . "' target='_blank'>{$site_config['sourcecode']['name']}</a>") . "</p>
+                                        <p class='is-marginless'>" . _fe('Powered By: {0}', "<a href='" . url_proxy('https://github.com/darkalchemy/Pu-239', false) . "' target='_blank'>{$sourceName}</a>") . "</p>
                                         <p class='is-marginless'>" . _fe('Using Valid CSS3, HTML5 & PHP {0}', $php_version) . '</p>
                                     </div>
                                 </div>', 'bg-05') . '
@@ -349,7 +390,8 @@ function stdfoot(array $stdfoot = [])
     ];
     $details = in_array(basename($_SERVER['PHP_SELF']), $pages);
     $bg_image = '';
-    if ($CURUSER && ($site_config['site']['backgrounds_on_all_pages'] || $details)) {
+    if ($CURUSER && ($config->bool('site.backgrounds_on_all_pages', false) || $details)) {
+        // TODO(2025): map legacy key "site.backgrounds_on_all_pages" to appropriate config path
         $background = get_body_image($details);
         if (!empty($background)) {
             $bg_image = "var body_image = '" . url_proxy($background, true) . "'";
@@ -449,7 +491,7 @@ function StatusBar()
  */
 function platform_menu()
 {
-    global $container, $CURUSER, $site_config, $db;
+    global $container, $CURUSER, $config, $db, $baseUrl;
 
     $cache = $container->get(Cache::class);
 
@@ -481,7 +523,7 @@ function platform_menu()
             } else {
                 $styles .= "
                         <li class='margin10'>
-                            <a href='{$site_config['paths']['baseurl']}/take_theme.php?id={$ar['id']}'>{$ar['name']}</a>
+                            <a href='{$baseUrl}/take_theme.php?id={$ar['id']}'>{$ar['name']}</a>
                         </li>";
             }
         }
@@ -492,30 +534,32 @@ function platform_menu()
     }
     $buttons = "
                             <li class='tooltipper has-text-info' title='" . _('Movies') . "'>
-                                <a href='{$site_config['paths']['baseurl']}/tmovies.php'>
+                                <a href='{$baseUrl}/tmovies.php'>
                                     <i class='icon-video icon' aria-hidden='true'></i>
                                 </a>
                             </li>
                             <li class='tooltipper has-text-info' title='" . _('TV Shows') . "'>
-                                <a href='{$site_config['paths']['baseurl']}/tvshows.php'>
+                                <a href='{$baseUrl}/tvshows.php'>
                                     <i class='icon-television icon' aria-hidden='true'></i>
                                 </a>
                             </li>
                             <li class='tooltipper has-text-info' title='" . _('Forums') . "'>
-                                <a href='{$site_config['paths']['baseurl']}/forums.php'>
+                                <a href='{$baseUrl}/forums.php'>
                                     <i class='icon-chat-empty icon' aria-hidden='true'></i>
                                 </a>
                             </li>
                             <li class='tooltipper has-text-info' title='" . _('Messages') . "'>
-                                <a href='{$site_config['paths']['baseurl']}/messages.php'>
+                                <a href='{$baseUrl}/messages.php'>
                                     <i class='icon-comment-empty icon' aria-hidden='true'></i>
                                 </a>
                             </li>
                             <li class='tooltipper has-text-info' title='" . _('My Blocks') . "'>
-                                <a href='{$site_config['paths']['baseurl']}/user_blocks.php'>
+                                <a href='{$baseUrl}/user_blocks.php'>
                                     <i class='icon-cubes icon' aria-hidden='true'></i>
                                 </a>
                             </li>";
+    $sourceVersion = (string) $config->get('sourcecode.version', '');
+    // TODO(2025): map legacy key "sourcecode.version" to appropriate config path
     return "
         <div id='platform-menu' class='platform-menu'>
             <div class='platform-wrapper'>
@@ -524,7 +568,7 @@ function platform_menu()
                         <ul class='level-left size_3'>" . (PRODUCTION ? $buttons : "
                             <li>
                                 <a href='" . url_proxy('https://github.com/darkalchemy/Pu-239') . "'>
-                                    Pu-239 {$site_config['sourcecode']['version']}
+                                    Pu-239 {$sourceVersion}
                                 </a>
                             </li>") . "
                         </ul>
@@ -532,7 +576,7 @@ function platform_menu()
                     <div class='column middle is-paddingless'>
                         <ul class='level-center-center right10'>
                             <li>
-                                <form action='{$site_config['paths']['baseurl']}/browse.php'>
+                                <form action='{$baseUrl}/browse.php'>
                                     <div class='search round5 middle bg-light'>
                                         <input type='text' name='sn' id='search-title' placeholder='&#xe811; " . _('Search') . "' class='fontello-fonts bg-none has-text-black min-150' onfocus=\"toggle_buttons('user-buttons')\" onblur=\"toggle_buttons('user-buttons')\" autocomplete='off'>
                                     </div>

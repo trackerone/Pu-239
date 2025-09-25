@@ -2,12 +2,16 @@
 declare(strict_types=1);
 require_once dirname(__DIR__) . '/bootstrap_web.php';
 
+use Pu239\Config\ConfigRepository;
 use Pu239\Database;
 
 require_once __DIR__ . '/../include/bittorrent.php';
 $user = check_user_status();
-global $container, $site_config;
+global $container;
+/** @var ConfigRepository $config */
+$config = $container->get(ConfigRepository::class);
 
+/** @var Database $db */
 $db = $container->get(Database::class);
 
 stderr(_('Error'), 'This page is not completed.');

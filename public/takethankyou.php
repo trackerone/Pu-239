@@ -1,18 +1,23 @@
 <?php
 declare(strict_types=1);
+
 require_once dirname(__DIR__) . '/bootstrap_web.php';
 
-$db = $container->get(Database::class);
-
-
-
-
+use Pu239\Config\ConfigRepository;
 use Pu239\Database;
 use Pu239\Session;
 
+global $container;
+/** @var ConfigRepository $config */
+$config = $container->get(ConfigRepository::class);
+/** @var Database $db */
+$db = $container->get(Database::class);
+
 require_once __DIR__ . '/../include/bittorrent.php';
 $user = check_user_status();
-global $container, $site_config;
+
+$bonusEnabled = (bool) $config->get('bonus.on');
+$bonusPerComment = (float) $config->get('bonus.per_comment');
 
 if (empty($_POST['id']) && empty($_GET['id'])) {
     app_halt('Exit called');
@@ -72,9 +77,9 @@ $cache->deleteMulti([
     'latest_comments_',
     'torrent_details_' . $id,
 ]);
-if ($site_config['bonus']['on']) {
+if ($bonusEnabled) {
     $set = [
-        'seedbonus' => new Literal('seedbonus + ' . $site_config['bonus']['per_comment']),
+        'seedbonus' => new Literal('seedbonus + ' . $bonusPerComment),
     ];
     $sql = "UPDATE users SET /* columns */ WHERE id = :id";
 $db->perform($sql, array_merge($set, ['id' => $user['id']]));
