@@ -16,8 +16,15 @@ $class = get_access(basename($_SERVER['REQUEST_URI']));
 class_check($class);
 
 $s = $s ?? static fn($v) => htmlspecialchars((string) $v, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
+<<<<<< codex/enforce-csrf-and-output-escaping-ism9l3
+$selfPath = $_SERVER['PHP_SELF'] ?? '';
+$baseurlRaw = (string) $config->get('paths.baseurl');
+$self = $s($selfPath);
+$baseurl = $s($baseurlRaw);
+=======
 $self = $s($_SERVER['PHP_SELF'] ?? '');
 $baseurl = $s($config->get('paths.baseurl'));
+>>>>>> master
 
 $HTMLOUT = $count = '';
 $rows = $db->fetchAll('SELECT * FROM bonus ORDER BY orderid, bonusname');
@@ -49,7 +56,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
 
         if ($sql) {
+<<<<<< codex/enforce-csrf-and-output-escaping-ism9l3
+            header("Location: {$selfPath}?tool=bonusmanage");
+=======
             header("Location: {$self}?tool=bonusmanage");
+>>>>>> master
             app_halt('Exit called');
         } else {
             stderr(_('Error'), _('Something went wrong with the sql query'));
