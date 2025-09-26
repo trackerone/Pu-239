@@ -8,6 +8,19 @@ No syntax errors detected in admin/class_config.php
 No syntax errors detected in admin/cloudview.php
 No syntax errors detected in admin/datareset.php
 No syntax errors detected in admin/deathrow.php
+<<<<<< codex/enforce-csrf-and-output-escaping-9ffaz0
+======
+<<<<<< codex/enforce-csrf-and-output-escaping-y3qyza
+======
+<<<<<< codex/enforce-csrf-and-output-escaping-ism9l3
+======
+<<<<<< codex/enforce-csrf-and-output-escaping-m17p9q
+======
+<<<<<< codex/enforce-csrf-and-output-escaping-hb2amy
+>>>>>> master
+>>>>>> master
+>>>>>> master
+>>>>>> master
 No syntax errors detected in admin/delacct.php
 No syntax errors detected in admin/editlog.php
 No syntax errors detected in admin/findnotconnectable.php
@@ -18,11 +31,22 @@ No syntax errors detected in admin/freeleech.php
 No syntax errors detected in admin/grouppm.php
 No syntax errors detected in admin/hit_and_run_settings.php
 No syntax errors detected in admin/hnrwarn.php
+<<<<<< codex/enforce-csrf-and-output-escaping-9ffaz0
+======
+<<<<<< codex/enforce-csrf-and-output-escaping-y3qyza
+======
+<<<<<< codex/enforce-csrf-and-output-escaping-ism9l3
+======
+<<<<<< codex/enforce-csrf-and-output-escaping-m17p9q
+>>>>>> master
+>>>>>> master
+>>>>>> master
 No syntax errors detected in admin/hit_and_run_settings.php
 No syntax errors detected in admin/hnrwarn.php
 No syntax errors detected in admin/inactive.php
 No syntax errors detected in admin/invite_tree.php
 No syntax errors detected in admin/leechwarn.php
+<<<<<< codex/enforce-csrf-and-output-escaping-9ffaz0
 No syntax errors detected in admin/bonusmanage.php
 No syntax errors detected in admin/categories.php
 No syntax errors detected in admin/bonusmanage.php
@@ -30,3 +54,20 @@ No syntax errors detected in admin/bonusmanage.php
 No syntax errors detected in admin/categories.php
 No syntax errors detected in admin/bonusmanage.php
 No syntax errors detected in admin/categories.php
+======
+<<<<<< codex/enforce-csrf-and-output-escaping-y3qyza
+No syntax errors detected in admin/bonusmanage.php
+No syntax errors detected in admin/categories.php
+No syntax errors detected in admin/bonusmanage.php
+======
+<<<<<< codex/enforce-csrf-and-output-escaping-ism9l3
+No syntax errors detected in admin/bonusmanage.php
+No syntax errors detected in admin/categories.php
+======
+======
+======
+>>>>>> master
+>>>>>> master
+>>>>>> master
+>>>>>> master
+>>>>>> master

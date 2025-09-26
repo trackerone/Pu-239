@@ -9,6 +9,19 @@ admin/class_config.php,false,true,6,false,
 admin/cloudview.php,false,true,6,false,
 admin/datareset.php,false,true,6,false,
 admin/deathrow.php,false,true,7,false,
+<<<<<< codex/enforce-csrf-and-output-escaping-9ffaz0
+======
+<<<<<< codex/enforce-csrf-and-output-escaping-y3qyza
+======
+<<<<<< codex/enforce-csrf-and-output-escaping-ism9l3
+======
+<<<<<< codex/enforce-csrf-and-output-escaping-m17p9q
+======
+<<<<<< codex/enforce-csrf-and-output-escaping-hb2amy
+>>>>>> master
+>>>>>> master
+>>>>>> master
+>>>>>> master
 admin/delacct.php,false,true,3,false,
 admin/editlog.php,false,true,4,false,
 admin/findnotconnectable.php,false,true,7,false,
@@ -19,13 +32,41 @@ admin/freeleech.php,false,true,6,false,
 admin/grouppm.php,false,true,3,false,
 admin/hit_and_run_settings.php,false,true,3,false,
 admin/hnrwarn.php,false,true,4,false,
+<<<<<< codex/enforce-csrf-and-output-escaping-9ffaz0
+======
+<<<<<< codex/enforce-csrf-and-output-escaping-y3qyza
+======
+<<<<<< codex/enforce-csrf-and-output-escaping-ism9l3
+======
+<<<<<< codex/enforce-csrf-and-output-escaping-m17p9q
+>>>>>> master
+>>>>>> master
+>>>>>> master
 admin/hit_and_run_settings.php,false,true,0,false,reviewed in batch offset 20 - existing TODO retained
 admin/hnrwarn.php,false,true,0,false,reviewed in batch offset 20 - existing TODO retained
 admin/inactive.php,false,true,3,false,added escaping helpers and csrf TODO marker
 admin/invite_tree.php,false,true,5,false,normalized escaping for staff panel outputs
 admin/leechwarn.php,false,true,4,false,added escaping helpers and csrf TODO marker
+<<<<<< codex/enforce-csrf-and-output-escaping-9ffaz0
 admin/bonusmanage.php,false,true,2,false,normalized self/base URLs and retained csrf TODO
 admin/categories.php,false,true,14,false,added helper + sanitized forms/lists (batch offset 25)
 admin/bonusmanage.php,false,true,6,false,escaped form attribute values for batch offset 25 slice
 admin/bonusmanage.php,false,true,3,false,switched display strings to shared $s() helper (batch offset 28)
 admin/categories.php,false,true,12,false,escaped category forms and selectors via $s() helper (batch offset 28)
+======
+<<<<<< codex/enforce-csrf-and-output-escaping-y3qyza
+admin/bonusmanage.php,false,true,2,false,normalized self/base URLs and retained csrf TODO
+admin/categories.php,false,true,14,false,added helper + sanitized forms/lists (batch offset 25)
+admin/bonusmanage.php,false,true,6,false,escaped form attribute values for batch offset 25 slice
+======
+<<<<<< codex/enforce-csrf-and-output-escaping-ism9l3
+admin/bonusmanage.php,false,true,2,false,normalized self/base URLs and retained csrf TODO
+admin/categories.php,false,true,14,false,added helper + sanitized forms/lists (batch offset 25)
+======
+======
+======
+>>>>>> master
+>>>>>> master
+>>>>>> master
+>>>>>> master
+>>>>>> master
