@@ -71,3 +71,5 @@ No syntax errors detected in admin/categories.php
 >>>>>> master
 >>>>>> master
 >>>>>> master
+No syntax errors detected in public/ajax/tvmaze_lookup.php
+No syntax errors detected in public/ajax/checkport.php

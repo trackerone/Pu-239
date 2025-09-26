@@ -70,3 +70,5 @@ admin/categories.php,false,true,14,false,added helper + sanitized forms/lists (b
 >>>>>> master
 >>>>>> master
 >>>>>> master
+public/ajax/tvmaze_lookup.php,false,true,0,true,json response hardened
+public/ajax/checkport.php,false,true,0,true,json response hardened
