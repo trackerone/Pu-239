@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 require_once dirname(__DIR__) . '/bootstrap_web.php';
@@ -6,6 +7,14 @@ require_once dirname(__DIR__) . '/bootstrap_web.php';
 use PU239\Config\ConfigRepository;
 use Pu239\ImageProxy;
 
+<<<<<< codex/enforce-csrf-and-escape-output-hay3lv
+=======
+<<<<<< codex/enforce-csrf-and-escape-output-dxtuor
+=======
+require_once dirname(__DIR__) . '/bootstrap_web.php';
+
+>>>>>> master
+>>>>>> master
 /** @var ConfigRepository $config */
 $config = $container->get(ConfigRepository::class);
 
@@ -17,6 +26,7 @@ header('Content-Type: application/json; charset=utf-8');
 
 if (!isset($user['id'])) {
     echo json_encode(['msg' => _('Invalid ID')], JSON_THROW_ON_ERROR);
+<<<<<< codex/enforce-csrf-and-escape-output-hay3lv
     app_halt('Exit called');
 }
 
@@ -28,6 +38,19 @@ if ($fileCount <= 0) {
     app_halt('Exit called');
 }
 
+=======
+    app_halt('Exit called');
+}
+
+// TODO(2025): csrf
+$fileCount = (int) ($_POST['nbr_files'] ?? 0);
+
+if ($fileCount <= 0) {
+    echo json_encode(['msg' => _('No files selected')], JSON_THROW_ON_ERROR);
+    app_halt('Exit called');
+}
+
+>>>>>> master
 $SaLty = (string) $config->get('salt.two');
 $maxsize = (int) $config->get('bucket.maxsize');
 $folders = date('Y/m');
@@ -52,6 +75,7 @@ for ($i = 0; $i < $fileCount; ++$i) {
 
     if ($maxsize > 0 && $fileSize > $maxsize) {
         echo json_encode(['msg' => _('File exceeds the maximum allowed size.')], JSON_THROW_ON_ERROR);
+<<<<<< codex/enforce-csrf-and-escape-output-hay3lv
         app_halt('Exit called');
     }
 
@@ -63,6 +87,19 @@ for ($i = 0; $i < $fileCount; ++$i) {
         app_halt('Exit called');
     }
 
+=======
+        app_halt('Exit called');
+    }
+
+    $cleanName = preg_replace('`[^a-z0-9\-_.]`i', '', $fileName);
+    $type = @exif_imagetype($tmpName);
+
+    if ($type === false || !in_array($type, (array) $config->get('images.exif'), true)) {
+        echo json_encode(['msg' => _('Invalid file extension. jpg, gif, png and webp only.')], JSON_THROW_ON_ERROR);
+        app_halt('Exit called');
+    }
+
+>>>>>> master
     $cleanName = strtolower($cleanName ?? '');
     $random = make_password();
     $path = $bucketdir . $USERSALT . '_' . $random . $cleanName;
