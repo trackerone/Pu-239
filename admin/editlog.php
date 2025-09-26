@@ -2,7 +2,7 @@
 declare(strict_types=1);
 require_once dirname(__DIR__) . '/bootstrap_web.php';
 
-use PU239\Config\ConfigRepository;
+use Pu239\Config\ConfigRepository;
 use Pu239\Database;
 use Pu239\Session;
 
@@ -113,7 +113,7 @@ foreach ($current as $x) {
     if ($x['status'] === 'new') {
         $HTMLOUT .= '
                 <tr>
-                    <td>' . htmlsafechars(str_replace(ROOT_DIR, '', $x['name'])) . '
+                    <td>' . $s(str_replace(ROOT_DIR, '', $x['name'])) . '
                     </td>
                     <td>' . get_date((int) $x['modify'], 'DATE', 0, 1) . '
                     </td>
@@ -144,7 +144,7 @@ foreach ($current as $x) {
     if ($x['status'] === 'modified') {
         $HTMLOUT .= '
                 <tr>
-                    <td>' . htmlsafechars(str_replace(ROOT_DIR, '', $x['name'])) . '
+                    <td>' . $s(str_replace(ROOT_DIR, '', $x['name'])) . '
                     </td>
                     <td>' . get_date((int) $x['modify'], 'DATE', 0, 1) . '
                     </td>
@@ -175,7 +175,7 @@ foreach ($current as $x) {
     if ($x['status'] === 'deleted') {
         $HTMLOUT .= '
                 <tr>
-                    <td>' . htmlsafechars(str_replace(ROOT_DIR, '', $x['name'])) . '
+                    <td>' . $s(str_replace(ROOT_DIR, '', $x['name'])) . '
                     </td>
                     <td>' . get_date((int) $x['modify'], 'DATE', 0, 1) . '
                     </td>

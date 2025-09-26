@@ -6,7 +6,6 @@ use Pu239\Config\ConfigRepository;
 use Pu239\Database;
 use Pu239\Session;
 
-
 global $container, $CURUSER;
 /** @var ConfigRepository $config */
 $config = $container->get(ConfigRepository::class);
