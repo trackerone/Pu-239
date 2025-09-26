@@ -73,8 +73,17 @@ No syntax errors detected in admin/categories.php
 >>>>>> master
 No syntax errors detected in public/ajax/tvmaze_lookup.php
 No syntax errors detected in public/ajax/checkport.php
+<<<<<< codex/enforce-csrf-and-escape-output-bbpkil
 No syntax errors detected in public/bugs.php
 No syntax errors detected in admin/reputation_settings.php
 No syntax errors detected in public/subtitles.php
 No syntax errors detected in admin/delacct.php
 No syntax errors detected in admin/editlog.php
+=======
+<<<<<< codex/enforce-csrf-and-escape-output-o8hj4w
+No syntax errors detected in public/bugs.php
+No syntax errors detected in admin/reputation_settings.php
+No syntax errors detected in public/subtitles.php
+======
+>>>>>> master
+>>>>>> master
