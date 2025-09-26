@@ -15,7 +15,7 @@ $url = htmlsafechars((string) ($_POST['url'] ?? ''));
 $tid = !empty($_POST['tid']) ? (int) htmlsafechars($_POST['tid']) : null;
 $image = !empty($_POST['image']) ? htmlsafechars($_POST['image']) : null;
 // TODO(2025): csrf on POST where missing
-header('content-type: application/json');
+header('Content-Type: application/json; charset=utf-8');
 
 $imdb = '';
 if (!empty($url)) {
@@ -37,14 +37,13 @@ if (!empty($imdb)) {
     }
     $movie_info = get_imdb_info($imdb, true, false, $tid, $poster);
     if (!empty($movie_info)) {
-        $output = json_encode([
+        echo json_encode([
             'content' => $movie_info[0],
-        ]);
-        echo $output;
+        ], JSON_THROW_ON_ERROR);
         app_halt('Exit called');
     }
 }
 echo json_encode([
     'fail' => 'invalid',
-]);
+], JSON_THROW_ON_ERROR);
 app_halt('Exit called');

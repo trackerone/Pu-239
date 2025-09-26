@@ -10,12 +10,16 @@ global $container;
 /** @var ConfigRepository $config */
 $config = $container->get(ConfigRepository::class);
 $db = $container->get(Database::class);
+$s = $s ?? static fn($v) => htmlspecialchars((string) $v, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
+$self = $_SERVER['PHP_SELF'] ?? '';
+$escapedSelf = $s($self);
 
 $class = get_access(basename($_SERVER['REQUEST_URI']));
 class_check($class);
 
 $rep_set_cache = CACHE_DIR . 'rep_settings_cache.php';
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    // TODO(2025): csrf
     unset($_POST['submit']);
     //debug_log($_POST);
     rep_cache();
@@ -74,7 +78,7 @@ if (!file_exists($rep_set_cache)) {
 $HTMLOUT = "
     <h1 class='has-text-centered'>" . _('Reputation System Settings') . "</h1>
     <p class='has-text-centered'>" . _('This section allows you to configure the User Reputation system.') . "</p>
-    <form action='{$_SERVER['PHP_SELF']}?tool=reputation_settings' name='repoptions' method='post' enctype='multipart/form-data' accept-charset='utf-8'>
+    <form action='{$escapedSelf}?tool=reputation_settings' name='repoptions' method='post' enctype='multipart/form-data' accept-charset='utf-8'>
     <h2 class='has-text-centered'>" . _('Reputation On/Off') . '</h2>';
 $body = '
             <tr>
@@ -193,7 +197,7 @@ $HTMLOUT = preg_replace_callback(' |<#(.*?)#>|', 'template_out', $HTMLOUT);
 $title = _('Reputation Manager');
 $breadcrumbs = [
     "<a href='{$config->get('paths.baseurl')}/staffpanel.php'>" . _('Staff Panel') . '</a>',
-    "<a href='{$_SERVER['PHP_SELF']}'>$title</a>",
+    "<a href='{$escapedSelf}'>$title</a>",
 ];
 echo stdhead($title, [], 'page-wrapper', $breadcrumbs) . wrapper($HTMLOUT) . stdfoot();
 
