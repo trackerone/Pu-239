@@ -73,6 +73,8 @@ No syntax errors detected in admin/categories.php
 >>>>>> master
 No syntax errors detected in public/ajax/tvmaze_lookup.php
 No syntax errors detected in public/ajax/checkport.php
+<<<<<< codex/enforce-csrf-and-escape-output-ysog5w
+=======
 <<<<<< codex/enforce-csrf-and-escape-output-1ejsd3
 =======
 <<<<<< codex/enforce-csrf-and-escape-output-ls3ug3
@@ -80,14 +82,18 @@ No syntax errors detected in public/ajax/checkport.php
 <<<<<< codex/enforce-csrf-and-escape-output-bbpkil
 >>>>>> master
 >>>>>> master
+>>>>>> master
 No syntax errors detected in public/bugs.php
 No syntax errors detected in admin/reputation_settings.php
 No syntax errors detected in public/subtitles.php
 No syntax errors detected in admin/delacct.php
 No syntax errors detected in admin/editlog.php
+<<<<<< codex/enforce-csrf-and-escape-output-ysog5w
+=======
 <<<<<< codex/enforce-csrf-and-escape-output-1ejsd3
 =======
 <<<<<< codex/enforce-csrf-and-escape-output-ls3ug3
+>>>>>> master
 >>>>>> master
 No syntax errors detected in public/ajax/autocomplete.php
 No syntax errors detected in public/ajax/bookmarks.php
@@ -96,7 +102,10 @@ No syntax errors detected in public/ajax/cooker_notify.php
 No syntax errors detected in public/ajax/descr_format.php
 No syntax errors detected in public/achievementlist.php
 No syntax errors detected in admin/watched_users.php
+<<<<<< codex/enforce-csrf-and-escape-output-ysog5w
+=======
 <<<<<< codex/enforce-csrf-and-escape-output-1ejsd3
+>>>>>> master
 No syntax errors detected in public/ajax/ebook_lookup.php
 No syntax errors detected in public/ajax/imdb_lookup.php
 No syntax errors detected in public/ajax/isbn_lookup.php
@@ -107,6 +116,19 @@ No syntax errors detected in public/ajax/offer_vote.php
 No syntax errors detected in public/ajax/rating.php
 No syntax errors detected in public/ajax/request_notify.php
 No syntax errors detected in public/ajax/member_input.php
+<<<<<< codex/enforce-csrf-and-escape-output-ysog5w
+No syntax errors detected in public/ajax/request_vote.php
+No syntax errors detected in public/ajax/show_in_navbar.php
+No syntax errors detected in public/ajax/staff_picks.php
+No syntax errors detected in public/ajax/take_upload.php
+No syntax errors detected in public/ajax/take_url_upload.php
+No syntax errors detected in public/ajax/thanks.php
+No syntax errors detected in public/ajax/torrents_lookup.php
+No syntax errors detected in public/ajax/trivia_answers.php
+No syntax errors detected in public/ajax/tvmaze_lookup.php
+No syntax errors detected in public/ajax/usersearch.php
+No syntax errors detected in public/ajax/thanks.php
+=======
 =======
 =======
 =======
@@ -115,6 +137,7 @@ No syntax errors detected in public/bugs.php
 No syntax errors detected in admin/reputation_settings.php
 No syntax errors detected in public/subtitles.php
 ======
+>>>>>> master
 >>>>>> master
 >>>>>> master
 >>>>>> master
