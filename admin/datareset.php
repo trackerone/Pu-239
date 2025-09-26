@@ -17,9 +17,14 @@ $db = $container->get(Database::class);
 $class = get_access(basename($_SERVER['REQUEST_URI']));
 class_check($class);
 
+$s = $s ?? static fn($v) => htmlspecialchars((string) $v, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
+$self = $s($_SERVER['PHP_SELF'] ?? '');
+$baseurl = $s($config->get('paths.baseurl'));
+
 $HTMLOUT = '';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    // TODO(2025): csrf
     $tid = (isset($_POST['tid']) ? (int) $_POST['tid'] : 0);
     if ($tid === 0) {
         stderr(_('Error'), _('Invalid ID.'));
@@ -55,10 +60,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     foreach ($row as $a) {
         $hash = $a['info_hash'];
         $newd = $a['ud'] > 0 && $a['ud'] > $a['sd'] ? $a['ud'] - $a['sd'] : 0;
-        $tname = htmlsafechars($a['name']);
+        $tname = $s($a['name']);
         if (!empty($a['uid'])) {
-            $msg = _fe('Hey, {0}', htmlsafechars($a['username'])) . "\n";
-            $msg .= _fe('Looks like torrent {0} has been nuked and we want to take back the data you downloaded!', htmlsafechars($a['name']));
+            $msg = _fe('Hey, {0}', $s($a['username'])) . "\n";
+            $msg .= _fe('Looks like torrent {0} has been nuked and we want to take back the data you downloaded!', $tname);
             $msg .= _fe('So you downloaded {0} your new download will be {1}', mksize($a['sd']), mksize($newd)) . "\n";
             if ($a['owner'] === $a['uid']) {
                 $update = [
@@ -88,12 +93,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $torrents_class->delete_by_id($tid);
     $torrents_class->remove_torrent($hash);
 
-    write_log(_fe('Torrent {0} was deleted by {1} and all users were Re-Paid Download credit.', $tname, htmlsafechars($CURUSER['username'])));
+    write_log(_fe('Torrent {0} was deleted by {1} and all users were Re-Paid Download credit.', $tname, $s($CURUSER['username'])));
     header('Refresh: 3; url=staffpanel.php?tool=datareset');
     stderr(_('Success'), _fe('It worked! Long live {0} - Please wait while you are re-directed!', $config->get('site.name')));
 } else {
     $form = "
-    <form action='{$_SERVER['PHP_SELF']}?tool=datareset&amp;action=datareset' method='post' enctype='multipart/form-data' accept-charset='utf-8'>
+    <form action='{$self}?tool=datareset&amp;action=datareset' method='post' enctype='multipart/form-data' accept-charset='utf-8'>
     <div class='has-text-centered'>
         <h1>" . _('Reset Ratio for nuked torrents') . "</h1>
         <label for='tid'>" . _('Torrent id') . "</label>
@@ -112,8 +117,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $HTMLOUT .= main_div($form);
     $title = _('Data Reset Manager');
     $breadcrumbs = [
-        "<a href='{$config->get('paths.baseurl')}/staffpanel.php'>" . _('Staff Panel') . '</a>',
-        "<a href='{$_SERVER['PHP_SELF']}'>$title</a>",
+        "<a href='{$baseurl}/staffpanel.php'>" . _('Staff Panel') . '</a>',
+        "<a href='{$self}'>" . $s($title) . '</a>',
     ];
     echo stdhead($title, [], 'page-wrapper', $breadcrumbs) . wrapper($HTMLOUT) . stdfoot();
 }

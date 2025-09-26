@@ -14,6 +14,10 @@ $db = $container->get(Database::class);
 $class = get_access(basename($_SERVER['REQUEST_URI']));
 class_check($class);
 
+$s = $s ?? static fn($v) => htmlspecialchars((string) $v, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
+$self = $s($_SERVER['PHP_SELF'] ?? '');
+$baseurl = $s($config->get('paths.baseurl'));
+
 $stdhead = [];
 $stdfoot = [];
 $HTMLOUT = '';
@@ -24,6 +28,7 @@ $id = (int) ($_GET['id'] ?? 0);
 switch ($action) {
     case 'add':
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            // TODO(2025): csrf
             $name = trim($_POST['name'] ?? '');
             $value = trim($_POST['value'] ?? '');
             if ($name === '' || $value === '') {
@@ -40,6 +45,7 @@ switch ($action) {
 
     case 'edit':
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            // TODO(2025): csrf
             $name = trim($_POST['name'] ?? '');
             $value = trim($_POST['value'] ?? '');
             if ($id === 0 || $name === '' || $value === '') {
@@ -74,14 +80,15 @@ switch ($action) {
             </tr>';
         $body = '';
         foreach ($rows as $r) {
+            $configId = $s((string) $r['id']);
             $body .= "
                 <tr>
-                    <td>{$r['id']}</td>
-                    <td>" . htmlsafechars($r['name']) . "</td>
-                    <td>" . htmlsafechars($r['value']) . "</td>
+                    <td>{$configId}</td>
+                    <td>" . $s($r['name']) . "</td>
+                    <td>" . $s($r['value']) . "</td>
                     <td>
-                        <a href='?tool=class_config&amp;action=edit&amp;id={$r['id']}'>Edit</a> |
-                        <a href='?tool=class_config&amp;action=delete&amp;id={$r['id']}'>Delete</a>
+                        <a href='?tool=class_config&amp;action=edit&amp;id={$configId}'>Edit</a> |
+                        <a href='?tool=class_config&amp;action=delete&amp;id={$configId}'>Delete</a>
                     </td>
                 </tr>";
         }
@@ -91,7 +98,7 @@ switch ($action) {
 
 $title = _('Configuration');
 $breadcrumbs = [
-    "<a href='" . (string) $config->get('paths.baseurl') . "/staffpanel.php'>" . _('Staff Panel') . '</a>',
-    "<a href='{$_SERVER['PHP_SELF']}'>$title</a>",
+    "<a href='{$baseurl}/staffpanel.php'>" . _('Staff Panel') . '</a>',
+    "<a href='{$self}'>" . $s($title) . '</a>',
 ];
 echo stdhead($title, [], 'page-wrapper', $breadcrumbs) . wrapper($HTMLOUT) . stdfoot();

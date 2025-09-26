@@ -22,6 +22,10 @@ $db = $container->get(Database::class);
 $class = get_access(basename($_SERVER['REQUEST_URI']));
 class_check($class);
 
+$s = $s ?? static fn($v) => htmlspecialchars((string) $v, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
+$self = $s($_SERVER['PHP_SELF'] ?? '');
+$baseurl = $s($config->get('paths.baseurl'));
+
 
 $HTMLOUT = '';
 
@@ -101,6 +105,7 @@ $db->perform($sql, array_merge($set, ['tid' => $torrent['id']]));
 }
 
 if (!empty($_POST['remove'])) {
+    // TODO(2025): csrf
     $deleted = notify_owner($_POST['remove']);
     $session = $container->get(Session::class);
     if ($deleted) {
@@ -253,14 +258,17 @@ if ($count) {
             $reason = _fe('no seeder activity within {0} on new torrent', calctime($z_time));
         }
         $id = (int) $queued['tid'];
+        $idAttr = $s((string) $id);
+        $reasonText = $s($reason);
+        $notified = $s(get_date((int) $queued['notified'], 'LONG', 0, 1));
         $body .= '
         <tr>' . ($CURUSER['class'] >= UC_STAFF ? '
             <td>' . format_username((int) $queued['uid']) . '</td>' : '
             <td>' . _('Hidden') . '</td>') . "
-            <td><a href='{$config->get('paths.baseurl')}/details.php?id={$id}&amp;hit=1'>" . format_comment($queued['torrent_name']) . "</a></td>
-            <td>{$reason}</td>
-            <td>" . get_date((int) $queued['notified'], 'LONG', 0, 1) . "</td>
-            <td><input type='checkbox' name='remove[]' value='{$id}' class='tooltipper' title='" . _('Delete') . "'></td>
+            <td><a href='{$baseurl}/details.php?id={$idAttr}&amp;hit=1'>" . format_comment($queued['torrent_name']) . "</a></td>
+            <td>{$reasonText}</td>
+            <td>{$notified}</td>
+            <td><input type='checkbox' name='remove[]' value='{$idAttr}' class='tooltipper' title='" . _('Delete') . "'></td>
         </tr>";
     }
     $HTMLOUT .= main_table($body, $heading) . ($count > $perpage ? $pager['pagerbottom'] : '');
@@ -271,8 +279,8 @@ if ($count) {
         </form>";
     $title = _('Deatchrow');
     $breadcrumbs = [
-        "<a href='{$config->get('paths.baseurl')}/staffpanel.php'>" . _('Staff Panel') . '</a>',
-        "<a href='{$_SERVER['PHP_SELF']}'>$title</a>",
+        "<a href='{$baseurl}/staffpanel.php'>" . _('Staff Panel') . '</a>',
+        "<a href='{$self}'>" . $s($title) . '</a>',
     ];
     echo stdhead($title, [], 'page-wrapper', $breadcrumbs) . wrapper($HTMLOUT) . stdfoot();
 } else {
@@ -280,8 +288,8 @@ if ($count) {
     $HTMLOUT .= stdmsg(_('Awesome'), _('There are not torrents on deathrow'));
     $title = _('Deathrow');
     $breadcrumbs = [
-        "<a href='{$config->get('paths.baseurl')}/staffpanel.php'>" . _('Staff Panel') . '</a>',
-        "<a href='{$_SERVER['PHP_SELF']}'>$title</a>",
+        "<a href='{$baseurl}/staffpanel.php'>" . _('Staff Panel') . '</a>',
+        "<a href='{$self}'>" . $s($title) . '</a>',
     ];
     echo stdhead($title, [], 'page-wrapper', $breadcrumbs) . wrapper($HTMLOUT) . stdfoot();
 }

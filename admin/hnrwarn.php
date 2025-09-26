@@ -20,11 +20,17 @@ $cache = $container->get(Cache::class);
 $class = get_access(basename($_SERVER['REQUEST_URI']));
 class_check($class);
 
+$s = $s ?? static fn($v) => htmlspecialchars((string) $v, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
+$self = $s($_SERVER['PHP_SELF'] ?? '');
+$baseurl = $s($config->get('paths.baseurl'));
+
 $HTMLOUT = '';
 $this_url = $_SERVER['SCRIPT_NAME'] ?? '';
+$requestUri = $s($_SERVER['REQUEST_URI'] ?? '');
 $do = (isset($_GET['do']) && $_GET['do'] === 'disabled') ? 'disabled' : 'hnrwarn';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    // TODO(2025): csrf
     $r = isset($_POST['ref']) ? (string) $_POST['ref'] : $this_url;
     $uids = isset($_POST['users']) && is_array($_POST['users']) ? array_map('intval', $_POST['users']) : [];
 
@@ -128,7 +134,7 @@ $count = count($rows);
 if ($count === 0) {
     $HTMLOUT .= stdmsg(_('Hey'), _('There are no ') . strtolower($title));
 } else {
-    $HTMLOUT .= "<form action='staffpanel.php?tool=hnrwarn&amp;action=hnrwarn' method='post' enctype='multipart/form-data' accept-charset='utf-8'>
+    $HTMLOUT .= "<form action='{$self}?tool=hnrwarn&amp;action=hnrwarn' method='post' enctype='multipart/form-data' accept-charset='utf-8'>
         <table id='checkbox_container' style='border-collapse:separate;'>
         <tr>
             <td class='colhead'>" . _('User') . "</td>
@@ -163,7 +169,7 @@ if ($count === 0) {
                 </select>
                 &raquo;
                 <input type='submit' value='" . _('Apply') . "'>
-                <input type='hidden' value='" . htmlsafechars($_SERVER['REQUEST_URI']) . "' name='ref'>
+                <input type='hidden' value='{$requestUri}' name='ref'>
             </td>
             </tr>
             </table>
@@ -172,7 +178,7 @@ if ($count === 0) {
 
 $title = $title ?? _('HnR Warn');
 $breadcrumbs = [
-    "<a href='" . (string) $config->get('paths.baseurl') . "/staffpanel.php'>" . _('Staff Panel') . '</a>',
-    "<a href='{$_SERVER['PHP_SELF']}'>$title</a>",
+    "<a href='{$baseurl}/staffpanel.php'>" . _('Staff Panel') . '</a>',
+    "<a href='{$self}'>" . $s($title) . '</a>',
 ];
 echo stdhead($title, [], 'page-wrapper', $breadcrumbs) . wrapper($HTMLOUT) . stdfoot();

@@ -11,6 +11,8 @@ global $container, $CURUSER;
 $config = $container->get(ConfigRepository::class);
 $db     = $container->get(Database::class);
 $fluent = $db;
+$s = $s ?? static fn($v) => htmlspecialchars((string) $v, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
+$self = $s($_SERVER['PHP_SELF'] ?? '');
 
 $class = get_access(basename($_SERVER['REQUEST_URI']));
 class_check($class);
@@ -23,6 +25,7 @@ $stdfoot = [
 
 $HTMLOUT = '';
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['ids'])) {
+    // TODO(2025): csrf
     $ids = $_POST['ids'];
     foreach ($ids as $id) {
         $id = (int) $id;
@@ -96,7 +99,7 @@ if (!empty($rows)) {
     if ($count > $perpage) {
         $HTMLOUT .= $pager['pagertop'];
     }
-    $HTMLOUT .= "<form action='{$_SERVER['PHP_SELF']}?tool=acpmanage&amp;action=acpmanage' method='post' enctype='multipart/form-data' accept-charset='utf-8'>";
+    $HTMLOUT .= "<form action='{$self}?tool=acpmanage&amp;action=acpmanage' method='post' enctype='multipart/form-data' accept-charset='utf-8'>";
     $HTMLOUT .= begin_table();
     $HTMLOUT .= "<tr><td class='colhead'>
       <input class='is-marginless' type='checkbox' title='" . _('Mark All') . "' value='" . _('Mark All') . "' onclick=\"this.value=check(form);\"></td>
@@ -126,17 +129,17 @@ if (!empty($rows)) {
         $HTMLOUT .= "
         <tr>
             <td>
-                <input type='checkbox' name='ids[]' value='{$arr['id']}'>
+                <input type='checkbox' name='ids[]' value='" . $s((string) $arr['id']) . "'>
             </td>
             <td>" . format_username((int) $arr['id']) . "</td>
-            <td class='has-no-wrap'>{$added}</td>
-            <td class='has-no-wrap'>{$last_access}</td>
-            <td>{$class}</td>
-            <td>{$downloaded}</td>
-            <td>{$uploaded}</td>
-            <td>{$ratio}</td>
-            <td>{$status}</td>
-            <td>{$enabled}</td>
+            <td class='has-no-wrap'>" . $s($added) . "</td>
+            <td class='has-no-wrap'>" . $s($last_access) . "</td>
+            <td>" . $s($class) . "</td>
+            <td>" . $s($downloaded) . "</td>
+            <td>" . $s($uploaded) . "</td>
+            <td>" . $ratio . "</td>
+            <td>" . $s($status) . "</td>
+            <td>" . $s($enabled) . "</td>
         </tr>";
     }
     if (($CURUSER['class'] >= UC_MAX)) {
@@ -154,8 +157,9 @@ if (!empty($rows)) {
     $HTMLOUT = stdmsg('<h2>' . _('Sorry') . '</h2>', '<p>' . _('Nothing found!') . '</p>');
 }
 $title = _('Account Manager');
+$baseurl = $s($config->get('paths.baseurl'));
 $breadcrumbs = [
-    "<a href='{$config->get('paths.baseurl')}/staffpanel.php'>" . _('Staff Panel') . '</a>',
-    "<a href='{$_SERVER['PHP_SELF']}'>$title</a>",
+    "<a href='{$baseurl}/staffpanel.php'>" . _('Staff Panel') . '</a>',
+    "<a href='{$self}'>" . $s($title) . '</a>',
 ];
 echo stdhead($title, [], 'page-wrapper', $breadcrumbs) . wrapper($HTMLOUT) . stdfoot();

@@ -16,7 +16,12 @@ $db = $container->get(Database::class);
 $class = get_access(basename($_SERVER['REQUEST_URI']));
 class_check($class);
 
+$s = $s ?? static fn($v) => htmlspecialchars((string) $v, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
+$self = $s($_SERVER['PHP_SELF'] ?? '');
+$baseurl = $s($config->get('paths.baseurl'));
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    // TODO(2025): csrf
     $userid = (int) trim($_POST['userid']);
     $username = trim(htmlsafechars((string) $_POST['username']));
     if (empty($username) || empty($userid)) {
@@ -57,7 +62,7 @@ $HTMLOUT = "
 <div class='row'>
     <div class='col-md-12'>
         <h1 class='has-text-centered'>" . _('Delete account') . "</h1>
-            <form method='post' action='{$_SERVER['PHP_SELF']}?tool=delacct&amp;action=delacct' onsubmit='return deleteConfirm();' enctype='multipart/form-data' accept-charset='utf-8'>
+            <form method='post' action='{$self}?tool=delacct&amp;action=delacct' onsubmit='return deleteConfirm();' enctype='multipart/form-data' accept-charset='utf-8'>
                 <table class='table table-bordered'>
                     <tr>
                         <td class='rowhead'>" . _('User ID') . "</td>
@@ -76,7 +81,7 @@ $HTMLOUT = "
 </div>";
 $title = _('Delete Account');
 $breadcrumbs = [
-    "<a href='" . (string) $config->get('paths.baseurl') . "/staffpanel.php'>" . _('Staff Panel') . '</a>',
-    "<a href='{$_SERVER['PHP_SELF']}'>$title</a>",
+    "<a href='{$baseurl}/staffpanel.php'>" . _('Staff Panel') . '</a>',
+    "<a href='{$self}'>" . $s($title) . '</a>',
 ];
 echo stdhead($title, [], 'page-wrapper', $breadcrumbs) . wrapper($HTMLOUT) . stdfoot();
