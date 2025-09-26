@@ -15,19 +15,25 @@ $class = get_access(basename($_SERVER['REQUEST_URI']));
 class_check($class);
 
 $s = $s ?? static fn($v) => htmlspecialchars((string) $v, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
+<<<<<< codex/enforce-csrf-and-output-escaping-9ffaz0
+=======
 <<<<<< codex/enforce-csrf-and-output-escaping-y3qyza
 =======
 <<<<<< codex/enforce-csrf-and-output-escaping-ism9l3
+>>>>>> master
 >>>>>> master
 $selfPath = $_SERVER['PHP_SELF'] ?? '';
 $baseurlRaw = (string) $config->get('paths.baseurl');
 $self = $s($selfPath);
 $baseurl = $s($baseurlRaw);
+<<<<<< codex/enforce-csrf-and-output-escaping-9ffaz0
+======
 <<<<<< codex/enforce-csrf-and-output-escaping-y3qyza
-=======
-=======
+======
+======
 $self = $s($_SERVER['PHP_SELF'] ?? '');
 $baseurl = $s($config->get('paths.baseurl'));
+>>>>>> master
 >>>>>> master
 >>>>>> master
 
@@ -61,13 +67,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
 
         if ($sql) {
+<<<<<< codex/enforce-csrf-and-output-escaping-9ffaz0
+            header("Location: {$selfPath}?tool=bonusmanage");
+======
 <<<<<< codex/enforce-csrf-and-output-escaping-y3qyza
             header("Location: {$selfPath}?tool=bonusmanage");
-=======
+======
 <<<<<< codex/enforce-csrf-and-output-escaping-ism9l3
             header("Location: {$selfPath}?tool=bonusmanage");
-=======
+======
             header("Location: {$self}?tool=bonusmanage");
+>>>>>> master
 >>>>>> master
 >>>>>> master
             app_halt('Exit called');
@@ -110,14 +120,26 @@ foreach ($rows as $arr) {
     $pointsPool = (int) $arr['pointspool'];
     $minPoints = (int) $arr['minpoints'];
     $minClass = (int) $arr['minclass'];
+<<<<<< codex/enforce-csrf-and-output-escaping-9ffaz0
+======
 <<<<<< codex/enforce-csrf-and-output-escaping-y3qyza
+>>>>>> master
     $idAttr = $s((string) $id);
     $orderIdAttr = $s((string) $orderId);
     $bonusPointsAttr = $s((string) $bonusPoints);
     $pointsPoolAttr = $s((string) $pointsPool);
     $minPointsAttr = $s((string) $minPoints);
     $minClassAttr = $s((string) $minClass);
-=======
+<<<<<< codex/enforce-csrf-and-output-escaping-9ffaz0
+    $enabledAttribute = $arr['enabled'] === 'yes' ? "checked='checked'" : '';
+    $bonusName = $s((string) $arr['bonusname']);
+    $description = $s((string) $arr['description']);
+    $art = $s((string) $arr['art']);
+    $body .= <<<HTML
+        <tr>
+            <form name='bonusmanage' method='post' action='{$self}?tool=bonusmanage&amp;action=bonusmanage' enctype='multipart/form-data' accept-charset='utf-8'>
+======
+======
 >>>>>> master
     $enabledAttribute = $arr['enabled'] === 'yes' ? "checked='checked'" : '';
     $bonusName = format_comment($arr['bonusname']);
@@ -127,6 +149,7 @@ foreach ($rows as $arr) {
         <tr>
             <form name='bonusmanage' method='post' action='{$self}?tool=bonusmanage&amp;action=bonusmanage' enctype='multipart/form-data' accept-charset='utf-8'>
 <<<<<< codex/enforce-csrf-and-output-escaping-y3qyza
+>>>>>> master
                 <td><input name='id' type='hidden' value='{$idAttr}'>{$idAttr}</td>
                 <td><input type='number' name='orderid' value='{$orderIdAttr}' class='w-100'></td>
                 <td><input name='enabled' type='checkbox' {$enabledAttribute}></td>
@@ -135,7 +158,9 @@ foreach ($rows as $arr) {
                 <td><input type='number' name='pointspool' value='{$pointsPoolAttr}' class='w-100'></td>
                 <td><input type='number' name='minpoints' value='{$minPointsAttr}' class='w-100'></td>
                 <td><input type='number' name='minclass' value='{$minClassAttr}' class='w-100'></td>
-=======
+<<<<<< codex/enforce-csrf-and-output-escaping-9ffaz0
+======
+======
                 <td><input name='id' type='hidden' value='{$id}'>{$id}</td>
                 <td><input type='number' name='orderid' value='{$orderId}' class='w-100'></td>
                 <td><input name='enabled' type='checkbox' {$enabledAttribute}></td>
@@ -144,6 +169,7 @@ foreach ($rows as $arr) {
                 <td><input type='number' name='pointspool' value='{$pointsPool}' class='w-100'></td>
                 <td><input type='number' name='minpoints' value='{$minPoints}' class='w-100'></td>
                 <td><input type='number' name='minclass' value='{$minClass}' class='w-100'></td>
+>>>>>> master
 >>>>>> master
                 <td><textarea name='description' rows='4' class='w-100'>{$description}</textarea></td>
                 <td>{$art}</td>

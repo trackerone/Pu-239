@@ -147,8 +147,13 @@ function move_cat_form($params)
 
     $actionUrl = "{$baseurl}/staffpanel.php?tool=categories";
     $currentCatId = $s((string) $current_cat['id']);
+<<<<<< codex/enforce-csrf-and-output-escaping-9ffaz0
+    $currentParentName = $s((string) ($current_cat['parent_name'] ?? ''));
+    $currentName = $s((string) ($current_cat['name'] ?? ''));
+======
     $currentParentName = $current_cat['parent_name'];
     $currentName = $current_cat['name'];
+>>>>>> master
 
     $select = "
             <select name='new_cat_id'>
@@ -158,8 +163,13 @@ function move_cat_form($params)
         foreach ($cat['children'] as $child) {
             if ((int) $child['id'] !== (int) $current_cat['id']) {
                 $childId = $s((string) $child['id']);
+<<<<<< codex/enforce-csrf-and-output-escaping-9ffaz0
+                $parentName = $s((string) ($cat['name'] ?? ''));
+                $childName = $s((string) ($child['name'] ?? ''));
+======
                 $parentName = format_comment($cat['name']);
                 $childName = format_comment($child['name']);
+>>>>>> master
                 $select .= "
                 <option value='{$childId}'>{$parentName}::{$childName}</option>";
             }
@@ -175,7 +185,11 @@ function move_cat_form($params)
             <h3 class='has-text-centered'>" . _('Note: This tool will move ALL torrents FROM one category to ANOTHER category only! It will NOT delete any categories or torrents.') . '</h3>';
     $body = "
             <div class='w-50 has-text-centered padding20'>
+<<<<<< codex/enforce-csrf-and-output-escaping-9ffaz0
+                <p class='has-text-danger level'>" . _('Old Category Name') . ": <span class='has-text-primary'>{$currentParentName}::{$currentName}</span></p>
+=======
                 <p class='has-text-danger level'>" . _('Old Category Name') . ": <span class='has-text-primary'>" . $currentParentName . '::' . $currentName . "</span></p>
+>>>>>> master
                 <p class='is-success level'>" . _('Select a new category') . ": $select</p>
                 <div class='has-text-centered'>
                     <input type='submit' class='button is-small right20' value='" . _('Move') . "'>
@@ -313,6 +327,13 @@ function delete_cat_form($params)
     }
 
     $catId = $s((string) $cat['id']);
+<<<<<< codex/enforce-csrf-and-output-escaping-9ffaz0
+    $catName = $s((string) ($cat['name'] ?? ''));
+    $parentName = $s((string) ($cat['parent_name'] ?? ''));
+    $catDesc = $s((string) ($cat['cat_desc'] ?? ''));
+    $catImage = $s((string) ($cat['image'] ?? ''));
+=======
+>>>>>> master
 
     $htmlout = "
         <form action='{$self}?tool=categories' method='post' enctype='multipart/form-data' accept-charset='utf-8'>
@@ -320,11 +341,11 @@ function delete_cat_form($params)
             <input type='hidden' name='id' value='{$catId}'>";
     $htmlout .= main_div("
             <div class='w-50 has-text-centered padding20'>
-                <h2 class='has-text-centered'>" . _('You are about to delete category') . ": {$cat['name']}</h2>
-                <p class='has-text-danger level'>" . _('Cat Name') . ": <span class='has-text-primary'>{$cat['name']}</span></p>
-                <p class='has-text-danger level'>" . _('Parent Name') . ": <span class='has-text-primary'>{$cat['parent_name']}</span></p>
-                <p class='has-text-danger level'>" . _('Description') . ": <span class='has-text-primary'>{$cat['cat_desc']}</span></p>
-                <p class='has-text-danger level'>" . _('Image') . ": <span class='has-text-primary'>{$cat['image']}</span></p>
+                <h2 class='has-text-centered'>" . _('You are about to delete category') . ": {$catName}</h2>
+                <p class='has-text-danger level'>" . _('Cat Name') . ": <span class='has-text-primary'>{$catName}</span></p>
+                <p class='has-text-danger level'>" . _('Parent Name') . ": <span class='has-text-primary'>{$parentName}</span></p>
+                <p class='has-text-danger level'>" . _('Description') . ": <span class='has-text-primary'>{$catDesc}</span></p>
+                <p class='has-text-danger level'>" . _('Image') . ": <span class='has-text-primary'>{$catImage}</span></p>
                 <input type='submit' class='button is-small right20' value='" . _('Delete') . "'>
                 <input type='button' class='button is-small' value='" . _('Cancel') . "' onclick=\"history.go(-1)\">
             </div>");
@@ -421,6 +442,11 @@ function edit_cat_form($params)
     $select = get_images($cat);
     $catId = $s((string) $cat['id']);
     $ordered = $s((string) $cat['ordered']);
+<<<<<< codex/enforce-csrf-and-output-escaping-9ffaz0
+    $catName = $s((string) ($cat['name'] ?? ''));
+    $catDesc = $s((string) ($cat['cat_desc'] ?? ''));
+=======
+>>>>>> master
 
     $htmlout = "
         <form action='{$self}?tool=categories' method='post' enctype='multipart/form-data' accept-charset='utf-8'>
@@ -429,7 +455,7 @@ function edit_cat_form($params)
     $htmlout .= main_div("
             <div class='w-100 has-text-centered padding20'>
                 <h2>" . _('Edit Category') . "</h2>
-                <p class='is-success level'>" . _('New Cat Name') . ": <input type='text' name='cat_name' class='w-75' value='{$cat['name']}' required></p>
+                <p class='is-success level'>" . _('New Cat Name') . ": <input type='text' name='cat_name' class='w-75' value='{$catName}' required></p>
                 <div class='is-success level-wide'>
                     " . _('Hidden') . "
                     <select name='cat_hidden' class='w-75' required>
@@ -441,7 +467,11 @@ function edit_cat_form($params)
                 <div class='has-text-info has-text-centered top10 bottom20'>" . _('If a parent is hidden, then all of the children are also hidden') . "</div>
                 $parents
                 <p class='is-success level'>" . _('New Order ID') . ": <input type='number' min='0' max='1000' name='order_id' class='w-75' value='{$ordered}' required></p>
+<<<<<< codex/enforce-csrf-and-output-escaping-9ffaz0
+                <p class='is-success level'>" . _('Description') . ": <textarea class='w-75' rows='5' name='cat_desc'>{$catDesc}</textarea></p>
+=======
                 <p class='is-success level'>" . _('Description') . ": <textarea class='w-75' rows='5' name='cat_desc'>{$cat['cat_desc']}</textarea></p>
+>>>>>> master
                 $select
                 <input type='submit' class='button is-small right10' value='" . _('Edit') . "'>
                 <input type='button' class='button is-small' value='" . _('Cancel') . "' onclick=\"history.go(-1)\">
@@ -513,12 +543,11 @@ function show_categories()
         </tr>';
     $cats = genrelist(true);
     foreach ($cats as $cat) {
-        $parent_name = '';
-        $body .= build_table($cat, $parent_name);
+        $body .= build_table($cat, (string) ($cat['name'] ?? ''));
         foreach ($cat['children'] as $child) {
-            $parent_name = format_comment($cat['name']);
-            $child['name'] = format_comment($cat['name']) . '::' . format_comment($child['name']);
-            $body .= build_table($child, $parent_name);
+            $childData = $child;
+            $childData['name'] = (string) ($cat['name'] ?? '') . '::' . (string) ($child['name'] ?? '');
+            $body .= build_table($childData, (string) ($cat['name'] ?? ''));
         }
     }
     $htmlout .= main_table($body, $heading);
@@ -602,12 +631,6 @@ function get_parents(array $cat)
                       ->orderBy('ordered')
                       ->fetchAll();
 
-    foreach ($parents as $parent) {
-        $parent['name'] = format_comment($parent['name']);
-        $parent['cat_desc'] = format_comment($parent['cat_desc']);
-        $parent['image'] = format_comment($parent['image']);
-    }
-
     $out = "
             <p class='is-success level'>" . _('Select Parent Category') . "
                 <select class='w-75' name='parent_id'>
@@ -616,8 +639,14 @@ function get_parents(array $cat)
         $selected = !empty($cat) && $parent['id'] === $cat['parent_id'] ? 'selected' : '';
         $parentId = $s((string) $parent['id']);
         $selectedAttr = $selected !== '' ? 'selected' : '';
+<<<<<< codex/enforce-csrf-and-output-escaping-9ffaz0
+        $parentName = $s((string) ($parent['name'] ?? ''));
+        $out .= "
+                    <option value='{$parentId}' {$selectedAttr}>{$parentName}</option>";
+=======
         $out .= "
                     <option value='{$parentId}' {$selectedAttr}>{$parent['name']}</option>";
+>>>>>> master
     }
     $out .= '
                 </select>
@@ -723,8 +752,14 @@ function get_images(array $cat)
             $selected = !empty($cat) && $file == $cat['image'] ? 'selected' : '';
             $fileName = $s((string) $file);
             $selectedAttr = $selected !== '' ? 'selected' : '';
+<<<<<< codex/enforce-csrf-and-output-escaping-9ffaz0
+            $fileLabel = $s((string) $file);
+            $select .= "
+                    <option value='{$fileName}' {$selectedAttr}>{$fileLabel}</option>";
+=======
             $select .= "
                     <option value='{$fileName}' {$selectedAttr}>" . format_comment($file) . '</option>';
+>>>>>> master
         }
         $infoMessage = $s(_fe('Info: If you want a new image, you have to upload it to each of the {0} directories first.', realpath(IMAGES_DIR) . '/caticons/'));
         $select .= "
@@ -760,16 +795,12 @@ function get_cat(int $id)
                   ->where('id = ?', $id)
                   ->fetch();
 
-    $current_cat['parent_name'] = $fluent->from('categories')
-                                         ->select(null)
-                                         ->select('name')
-                                         ->where('id = ?', $cat['parent_id'])
-                                         ->fetch('name');
-
-    $cat['name'] = format_comment($cat['name']);
-    $cat['cat_desc'] = format_comment($cat['cat_desc']);
-    $cat['image'] = format_comment($cat['image']);
-    $cat['parent_name'] = !empty($cat['parent_name']) ? format_comment($cat['parent_name']) : '';
+    $cat['parent_name'] = $fluent->from('categories')
+                                ->select(null)
+                                ->select('name')
+                                ->where('id = ?', $cat['parent_id'])
+                                ->fetch('name');
+    $cat['parent_name'] = $cat['parent_name'] ?? '';
 
     return $cat;
 }
