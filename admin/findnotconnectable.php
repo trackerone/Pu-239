@@ -17,18 +17,23 @@ $db = $container->get(Database::class);
 $class = get_access(basename($_SERVER['REQUEST_URI']));
 class_check($class);
 
+$s = $s ?? static fn($v) => htmlspecialchars((string) $v, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
+$self = $s($_SERVER['PHP_SELF'] ?? '');
+$baseurl = $s($config->get('paths.baseurl'));
+$action1 = isset($_GET['action1']) ? (string) $_GET['action1'] : '';
+
 $HTMLOUT = '';
 
-if (isset($_GET['action1']) && htmlsafechars($_GET['action1']) === 'list') {
+if ($action1 === 'list') {
     $res2 = sql_query("SELECT userid, seeder, torrent, agent FROM peers WHERE connectable = 'no' ORDER BY userid DESC") or sqlerr(__FILE__, __LINE__);
 
     $HTMLOUT .= "
     <ul class='level-center bg-06'>
         <li class='is-link margin10'>
-            <a href='" . (string) $config->get('paths.baseurl') . "/staffpanel.php?tool=findnotconnectable&amp;action=findnotconnectable&amp;action1=sendpm'>" . _('Send All not connectable Users A PM') . "</a>
+            <a href='{$baseurl}/staffpanel.php?tool=findnotconnectable&amp;action=findnotconnectable&amp;action1=sendpm'>" . _('Send All not connectable Users A PM') . "</a>
         </li>
         <li class='is-link margin10'>
-            <a href='" . (string) $config->get('paths.baseurl') . "/staffpanel.php?tool=findnotconnectable&amp;action=findnotconnectable'>" . _('View the Log (Check this before PMing users)') . "</a>
+            <a href='{$baseurl}/staffpanel.php?tool=findnotconnectable&amp;action=findnotconnectable'>" . _('View the Log (Check this before PMing users)') . "</a>
         </li>
     </ul>
     <h1 class='has-text-centered'>" . _('Peers that are Not Connectable') . '</h1>';
@@ -38,11 +43,12 @@ if (isset($_GET['action1']) && htmlsafechars($_GET['action1']) === 'list') {
     if (mysqli_num_rows($res2) == 0) {
         $HTMLOUT .= stdmsg(_('Error'), _('All Peers Are Connectable!'));
     } else {
+        $countDisplay = $s((string) $count);
         $HTMLOUT .= '
         ' . _('This is only users that are active on the torrents right now.') . "<br>
         <p>
-            <span class='has-text-danger'>*</span> " . _('means the user is seeding.') . "<br>
-            $count " . _('unique users that are not connectable.') . '
+            <span class='has-text-danger'>*</span> " . _('means the user is seeding.') . '<br>
+            ' . $countDisplay . ' ' . _('unique users that are not connectable.') . '
         </p>';
         $heading = '
             <tr>
@@ -52,22 +58,27 @@ if (isset($_GET['action1']) && htmlsafechars($_GET['action1']) === 'list') {
             </tr>';
         $body = '';
         while ($arr2 = mysqli_fetch_assoc($res2)) {
-            $body .= '
+            $torrentId = (int) $arr2['torrent'];
+            $torrentDisplay = $s((string) $torrentId);
+            $torrentLink = $baseurl . '/details.php?id=' . $torrentId . '&amp;dllist=1#seeders';
+            $username = format_username((int) $arr2['userid']);
+            $body .= "
             <tr>
-                <td>' . format_username((int) $arr2['userid']) . "</td>
-                <td><a href='" . (string) $config->get('paths.baseurl') . "/details.php?id={$arr2['torrent']}&amp;dllist=1#seeders'>{$arr2['torrent']}</a>";
+                <td>{$username}</td>
+                <td><a href='{$torrentLink}'>{$torrentDisplay}</a>";
             if ($arr2['seeder'] === 'yes') {
                 $body .= "<span class='has-text-danger'>*</span>";
             }
-            $body .= '
+            $body .= "
                 </td>
-                <td>' . htmlsafechars($arr2['agent']) . '</td>
+                <td>" . htmlsafechars($arr2['agent']) . '</td>
             </tr>';
         }
         $HTMLOUT .= main_table($body, $heading);
     }
 }
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    // TODO(2025): csrf
     $dt = TIME_NOW;
     $msg = htmlsafechars($_POST['body']);
     if (!$msg) {
@@ -97,27 +108,28 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             'date' => $dt,
         ];
         $sql = "INSERT INTO notconnectablepmlog (/* columns */) VALUES (/* values */)";
-$db->perform($sql, $values);
+        $db->perform($sql, $values);
         $session->set('is-success', _('PM Sent to all non connectable peers'));
     } else {
         $session->set('is-warning', _('No non-connectable peers'));
     }
 }
-if (isset($_GET['action1']) && htmlsafechars($_GET['action1']) === 'sendpm') {
+if ($action1 === 'sendpm') {
     $HTMLOUT .= "
     <ul class='level-center bg-06'>
         <li class='is-link margin10'>
-            <a href='" . (string) $config->get('paths.baseurl') . "/staffpanel.php?tool=findnotconnectable&amp;action=findnotconnectable'>" . _('View the Log (Check this before PMing users)') . "</a>
+            <a href='{$baseurl}/staffpanel.php?tool=findnotconnectable&amp;action=findnotconnectable'>" . _('View the Log (Check this before PMing users)') . "</a>
         </li>
         <li class='is-link margin10'>
-            <a href='" . (string) $config->get('paths.baseurl') . "/staffpanel.php?tool=findnotconnectable&amp;action=findnotconnectable&amp;action1=list'>" . _('List Unconnectable Users') . "</a>
+            <a href='{$baseurl}/staffpanel.php?tool=findnotconnectable&amp;action=findnotconnectable&amp;action1=list'>" . _('List Unconnectable Users') . "</a>
         </li>
     </ul>
     <div>
         <h1 class='has-text-centered'>" . _('Mass Message to All Non Connectable Users') . "</h1>
-        <form method='post' action='{$_SERVER['PHP_SELF']}?tool=findnotconnectable&amp;action=findnotconnectable' enctype='multipart/form-data' accept-charset='utf-8'>";
+        <form method='post' action='{$self}?tool=findnotconnectable&amp;action=findnotconnectable' enctype='multipart/form-data' accept-charset='utf-8'>";
     if (isset($_GET['returnto']) || isset($_SERVER['HTTP_REFERER'])) {
-        $HTMLOUT .= "<input type='hidden' name='returnto' value='" . (isset($_GET['returnto']) ? htmlsafechars($_GET['returnto']) : htmlsafechars($_SERVER['HTTP_REFERER'])) . "'>";
+        $returnTo = isset($_GET['returnto']) ? (string) $_GET['returnto'] : ($_SERVER['HTTP_REFERER'] ?? '');
+        $HTMLOUT .= "<input type='hidden' name='returnto' value='" . $s($returnTo) . "'>";
     }
     $receiver = '';
     $body = _('The tracker has determined that you are firewalled or NATed and cannot accept incoming connections. 
@@ -136,15 +148,15 @@ Thank You');
         </form>
     </div>';
 }
-if (isset($_GET['action1']) == '') {
+if ($action1 === '') {
     $getlog = sql_query('SELECT * FROM `notconnectablepmlog` ORDER BY date DESC LIMIT 20') or sqlerr(__FILE__, __LINE__);
     $HTMLOUT .= "
     <ul class='level-center bg-06'>
         <li class='is-link margin10'>
-            <a href='" . (string) $config->get('paths.baseurl') . "/staffpanel.php?tool=findnotconnectable&amp;action=findnotconnectable&amp;action1=sendpm'>" . _('Send All not connectable Users A PM') . "</a>
+            <a href='{$baseurl}/staffpanel.php?tool=findnotconnectable&amp;action=findnotconnectable&amp;action1=sendpm'>" . _('Send All not connectable Users A PM') . "</a>
         </li>
         <li class='is-link margin10'>
-            <a href='" . (string) $config->get('paths.baseurl') . "/staffpanel.php?tool=findnotconnectable&amp;action=findnotconnectable&amp;action1=list'>" . _('List Unconnectable Users') . "</a>
+            <a href='{$baseurl}/staffpanel.php?tool=findnotconnectable&amp;action=findnotconnectable&amp;action1=list'>" . _('List Unconnectable Users') . "</a>
         </li>
     </ul>
     <h1 class='has-text-centered'>" . _('Unconnectable Peers Mass PM Log') . '</h1>';
@@ -160,11 +172,12 @@ if (isset($_GET['action1']) == '') {
         $body = '';
         while ($arr2 = mysqli_fetch_assoc($getlog)) {
             $elapsed = get_date((int) $arr2['date'], '', 0, 1);
+            $elapsedSafe = $s($elapsed);
             $body .= '
         <tr>
             <td>' . format_username((int) $arr2['user']) . '</td>
             <td>' . get_date((int) $arr2['date'], '') . "</td>
-            <td>$elapsed</td>
+            <td>{$elapsedSafe}</td>
         </tr>";
         }
         $HTMLOUT .= main_table($body, $heading);
@@ -174,7 +187,7 @@ if (isset($_GET['action1']) == '') {
 }
 $title = _('Non Connectables');
 $breadcrumbs = [
-    "<a href='" . (string) $config->get('paths.baseurl') . "/staffpanel.php'>" . _('Staff Panel') . '</a>',
-    "<a href='{$_SERVER['PHP_SELF']}'>$title</a>",
+    "<a href='{$baseurl}/staffpanel.php'>" . _('Staff Panel') . '</a>',
+    "<a href='{$self}'>" . $s($title) . '</a>',
 ];
 echo stdhead($title, [], 'page-wrapper', $breadcrumbs) . wrapper($HTMLOUT) . stdfoot();

@@ -20,6 +20,16 @@ $db = $container->get(Database::class);
 $class = get_access(basename($_SERVER['REQUEST_URI']));
 class_check($class);
 
+$s = $s ?? static fn($v) => htmlspecialchars((string) $v, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
+$selfPath = $_SERVER['PHP_SELF'] ?? '';
+$baseurlRaw = (string) $config->get('paths.baseurl');
+$self = $s($selfPath);
+$baseurl = $s($baseurlRaw);
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    // TODO(2025): csrf
+}
+
 $params              = array_merge($_GET, $_POST);
 $params['mode']      = isset($params['mode']) ? $params['mode'] : '';
 $params['parent_id'] = !empty($params['parent_id']) ? (int) $params['parent_id'] : 0;
@@ -70,7 +80,7 @@ switch ($params['mode']) {
  */
 function move_cat($params)
 {
-    global $container;
+    global $container, $selfPath;
 
     if ((!isset($params['id']) || !is_valid_id((int) $params['id'])) || (!isset($params['new_cat_id']) || !is_valid_id((int) $params['new_cat_id']))) {
         stderr(_('Error'), _('No category ID selected'));
@@ -105,7 +115,7 @@ $results = $db->perform($sql, array_merge($set, ['category' => $params['id']]));
     $cache->delete('genrelist_ordered_');
     $cache->delete('categories');
     if ($results) {
-        header("Location: {$_SERVER['PHP_SELF']}?tool=categories");
+        header("Location: {$selfPath}?tool=categories");
         app_halt('Exit called');
     } else {
         stderr(_('Error'), _('There was an error deleting the category'));
@@ -123,7 +133,7 @@ $results = $db->perform($sql, array_merge($set, ['category' => $params['id']]));
  */
 function move_cat_form($params)
 {
-    global $config;
+    global $config, $s, $baseurl, $self;
 
     if (!isset($params['id']) || !is_valid_id((int) $params['id'])) {
         stderr(_('Error'), _('No category ID selected'));
@@ -135,27 +145,37 @@ function move_cat_form($params)
         stderr(_('Error'), _('That category does not exist or has been deleted'));
     }
 
+    $actionUrl = "{$baseurl}/staffpanel.php?tool=categories";
+    $currentCatId = $s((string) $current_cat['id']);
+    $currentParentName = $s((string) ($current_cat['parent_name'] ?? ''));
+    $currentName = $s((string) ($current_cat['name'] ?? ''));
+
     $select = "
             <select name='new_cat_id'>
                 <option value='0'>" . _('Select Category') . '</option>';
     $cats = genrelist(true);
     foreach ($cats as $cat) {
         foreach ($cat['children'] as $child) {
-            $select .= ($child['id'] != $current_cat['id']) ? "
-                <option value='{$child['id']}'>{$cat['name']}::" . format_comment($child['name']) . '</option>' : '';
+            if ((int) $child['id'] !== (int) $current_cat['id']) {
+                $childId = $s((string) $child['id']);
+                $parentName = $s((string) ($cat['name'] ?? ''));
+                $childName = $s((string) ($child['name'] ?? ''));
+                $select .= "
+                <option value='{$childId}'>{$parentName}::{$childName}</option>";
+            }
         }
     }
     $select .= '
             </select>';
     $htmlout = "
-        <form action='" . (string) $config->get('paths.baseurl') . "/staffpanel.php?tool=categories' method='post' enctype='multipart/form-data' accept-charset='utf-8'>
+        <form action='{$actionUrl}' method='post' enctype='multipart/form-data' accept-charset='utf-8'>
             <input type='hidden' name='mode' value='takemove_cat'>
-            <input type='hidden' name='id' value='{$current_cat['id']}'>
-            <h2 class='has-text-centered'>" . _fe('You are about to move category: {0}', format_comment($current_cat['name'])) . "</h2>
+            <input type='hidden' name='id' value='{$currentCatId}'>
+            <h2 class='has-text-centered'>" . _fe('You are about to move category: {0}', $currentName) . "</h2>
             <h3 class='has-text-centered'>" . _('Note: This tool will move ALL torrents FROM one category to ANOTHER category only! It will NOT delete any categories or torrents.') . '</h3>';
     $body = "
             <div class='w-50 has-text-centered padding20'>
-                <p class='has-text-danger level'>" . _('Old Category Name') . ": <span class='has-text-primary'>" . htmlsafechars($current_cat['parent_name']) . '::' . htmlsafechars($current_cat['name']) . "</span></p>
+                <p class='has-text-danger level'>" . _('Old Category Name') . ": <span class='has-text-primary'>{$currentParentName}::{$currentName}</span></p>
                 <p class='is-success level'>" . _('Select a new category') . ": $select</p>
                 <div class='has-text-centered'>
                     <input type='submit' class='button is-small right20' value='" . _('Move') . "'>
@@ -166,8 +186,8 @@ function move_cat_form($params)
         </form>';
     $title = _('Move Category');
     $breadcrumbs = [
-        "<a href='" . (string) $config->get('paths.baseurl') . "/staffpanel.php'>" . _('Staff Panel') . '</a>',
-        "<a href='{$_SERVER['PHP_SELF']}'>$title</a>",
+        "<a href='{$baseurl}/staffpanel.php'>" . _('Staff Panel') . '</a>',
+        "<a href='{$self}'>$title</a>",
     ];
     echo stdhead($title, [], 'page-wrapper', $breadcrumbs) . wrapper($htmlout) . stdfoot();
 }
@@ -179,7 +199,7 @@ function move_cat_form($params)
  */
 function add_cat($params)
 {
-    global $container;
+    global $container, $selfPath;
 
     foreach ([
         'new_cat_name',
@@ -211,7 +231,7 @@ $insert = $db->perform($sql, $values);
     if (!$insert) {
         stderr(_('Error'), _('That category does not exist or has been deleted'));
     } else {
-        header("Location: {$_SERVER['PHP_SELF']}?tool=categories");
+        header("Location: {$selfPath}?tool=categories");
         app_halt('Exit called');
     }
 }
@@ -225,7 +245,7 @@ $insert = $db->perform($sql, $values);
  */
 function delete_cat($params)
 {
-    global $container;
+    global $container, $selfPath;
 
     $cache = $container->get(Cache::class);
     if (!isset($params['id']) || !is_valid_id((int) $params['id'])) {
@@ -256,7 +276,7 @@ $results = $db->perform($sql, ['id' => $params['id']]);
     $cache->delete('genrelist_ordered_');
     $cache->delete('categories');
     if ($results) {
-        header("Location: {$_SERVER['PHP_SELF']}?tool=categories");
+        header("Location: {$selfPath}?tool=categories");
         app_halt('Exit called');
     } else {
         stderr(_('Error'), _('There was an error deleting the category'));
@@ -271,7 +291,7 @@ $results = $db->perform($sql, ['id' => $params['id']]);
  */
 function delete_cat_form($params)
 {
-    global $container, $config;
+    global $container, $config, $self, $baseurl, $s;
 
     if (!isset($params['id']) || !is_valid_id((int) $params['id'])) {
         stderr(_('Error'), _('No category ID selected'));
@@ -292,17 +312,23 @@ function delete_cat_form($params)
         stderr(_('Error'), _('There are still torrents assigned to this category'));
     }
 
+    $catId = $s((string) $cat['id']);
+    $catName = $s((string) ($cat['name'] ?? ''));
+    $parentName = $s((string) ($cat['parent_name'] ?? ''));
+    $catDesc = $s((string) ($cat['cat_desc'] ?? ''));
+    $catImage = $s((string) ($cat['image'] ?? ''));
+
     $htmlout = "
-        <form action='{$_SERVER['PHP_SELF']}?tool=categories' method='post' enctype='multipart/form-data' accept-charset='utf-8'>
+        <form action='{$self}?tool=categories' method='post' enctype='multipart/form-data' accept-charset='utf-8'>
             <input type='hidden' name='mode' value='takedel_cat'>
-            <input type='hidden' name='id' value='{$cat['id']}'>";
+            <input type='hidden' name='id' value='{$catId}'>";
     $htmlout .= main_div("
             <div class='w-50 has-text-centered padding20'>
-                <h2 class='has-text-centered'>" . _('You are about to delete category') . ": {$cat['name']}</h2>
-                <p class='has-text-danger level'>" . _('Cat Name') . ": <span class='has-text-primary'>{$cat['name']}</span></p>
-                <p class='has-text-danger level'>" . _('Parent Name') . ": <span class='has-text-primary'>{$cat['parent_name']}</span></p>
-                <p class='has-text-danger level'>" . _('Description') . ": <span class='has-text-primary'>{$cat['cat_desc']}</span></p>
-                <p class='has-text-danger level'>" . _('Image') . ": <span class='has-text-primary'>{$cat['image']}</span></p>
+                <h2 class='has-text-centered'>" . _('You are about to delete category') . ": {$catName}</h2>
+                <p class='has-text-danger level'>" . _('Cat Name') . ": <span class='has-text-primary'>{$catName}</span></p>
+                <p class='has-text-danger level'>" . _('Parent Name') . ": <span class='has-text-primary'>{$parentName}</span></p>
+                <p class='has-text-danger level'>" . _('Description') . ": <span class='has-text-primary'>{$catDesc}</span></p>
+                <p class='has-text-danger level'>" . _('Image') . ": <span class='has-text-primary'>{$catImage}</span></p>
                 <input type='submit' class='button is-small right20' value='" . _('Delete') . "'>
                 <input type='button' class='button is-small' value='" . _('Cancel') . "' onclick=\"history.go(-1)\">
             </div>");
@@ -311,8 +337,8 @@ function delete_cat_form($params)
 
     $title = _('Delete Category');
     $breadcrumbs = [
-        "<a href='" . (string) $config->get('paths.baseurl') . "/staffpanel.php'>" . _('Staff Panel') . '</a>',
-        "<a href='{$_SERVER['PHP_SELF']}'>$title</a>",
+        "<a href='{$baseurl}/staffpanel.php'>" . _('Staff Panel') . '</a>',
+        "<a href='{$self}'>$title</a>",
     ];
     echo stdhead($title, [], 'page-wrapper', $breadcrumbs) . wrapper($htmlout) . stdfoot();
 }
@@ -325,7 +351,7 @@ function delete_cat_form($params)
  */
 function edit_cat($params)
 {
-    global $container;
+    global $container, $selfPath;
 
     $cache = $container->get(Cache::class);
     if (!isset($params['id']) || !is_valid_id((int) $params['id'])) {
@@ -364,10 +390,10 @@ $update = $db->perform($sql, array_merge($set, ['id' => $params['id']]));
         $cache->delete('genrelist_grouped_');
         $cache->delete('genrelist_ordered_');
         $cache->delete('categories');
-        header("Location: {$_SERVER['PHP_SELF']}?tool=categories");
+        header("Location: {$selfPath}?tool=categories");
         app_halt('Exit called');
     } else {
-        header("Location: {$_SERVER['PHP_SELF']}?tool=categories");
+        header("Location: {$selfPath}?tool=categories");
         app_halt('Exit called');
     }
 }
@@ -383,7 +409,7 @@ $update = $db->perform($sql, array_merge($set, ['id' => $params['id']]));
  */
 function edit_cat_form($params)
 {
-    global $config;
+    global $config, $s, $self, $baseurl;
 
     if (!isset($params['id']) || !is_valid_id((int) $params['id'])) {
         stderr(_('Error'), _('No category ID selected'));
@@ -397,14 +423,19 @@ function edit_cat_form($params)
 
     $parents = get_parents($cat);
     $select = get_images($cat);
+    $catId = $s((string) $cat['id']);
+    $ordered = $s((string) $cat['ordered']);
+    $catName = $s((string) ($cat['name'] ?? ''));
+    $catDesc = $s((string) ($cat['cat_desc'] ?? ''));
+
     $htmlout = "
-        <form action='{$_SERVER['PHP_SELF']}?tool=categories' method='post' enctype='multipart/form-data' accept-charset='utf-8'>
+        <form action='{$self}?tool=categories' method='post' enctype='multipart/form-data' accept-charset='utf-8'>
             <input type='hidden' name='mode' value='takeedit_cat'>
-            <input type='hidden' name='id' value='{$cat['id']}'>";
+            <input type='hidden' name='id' value='{$catId}'>";
     $htmlout .= main_div("
             <div class='w-100 has-text-centered padding20'>
                 <h2>" . _('Edit Category') . "</h2>
-                <p class='is-success level'>" . _('New Cat Name') . ": <input type='text' name='cat_name' class='w-75' value='{$cat['name']}' required></p>
+                <p class='is-success level'>" . _('New Cat Name') . ": <input type='text' name='cat_name' class='w-75' value='{$catName}' required></p>
                 <div class='is-success level-wide'>
                     " . _('Hidden') . "
                     <select name='cat_hidden' class='w-75' required>
@@ -415,8 +446,8 @@ function edit_cat_form($params)
                 </div>
                 <div class='has-text-info has-text-centered top10 bottom20'>" . _('If a parent is hidden, then all of the children are also hidden') . "</div>
                 $parents
-                <p class='is-success level'>" . _('New Order ID') . ": <input type='number' min='0' max='1000' name='order_id' class='w-75' value='{$cat['ordered']}' required></p>
-                <p class='is-success level'>" . _('Description') . ": <textarea class='w-75' rows='5' name='cat_desc'>{$cat['cat_desc']}</textarea></p>
+                <p class='is-success level'>" . _('New Order ID') . ": <input type='number' min='0' max='1000' name='order_id' class='w-75' value='{$ordered}' required></p>
+                <p class='is-success level'>" . _('Description') . ": <textarea class='w-75' rows='5' name='cat_desc'>{$catDesc}</textarea></p>
                 $select
                 <input type='submit' class='button is-small right10' value='" . _('Edit') . "'>
                 <input type='button' class='button is-small' value='" . _('Cancel') . "' onclick=\"history.go(-1)\">
@@ -425,8 +456,8 @@ function edit_cat_form($params)
         </form>';
     $title = _('Edit Category');
     $breadcrumbs = [
-        "<a href='" . (string) $config->get('paths.baseurl') . "/staffpanel.php'>" . _('Staff Panel') . '</a>',
-        "<a href='{$_SERVER['PHP_SELF']}'>$title</a>",
+        "<a href='{$baseurl}/staffpanel.php'>" . _('Staff Panel') . '</a>',
+        "<a href='{$self}'>$title</a>",
     ];
     echo stdhead($title, [], 'page-wrapper', $breadcrumbs) . wrapper($htmlout) . stdfoot();
 }
@@ -437,12 +468,12 @@ function edit_cat_form($params)
  */
 function show_categories()
 {
-    global $config;
+    global $config, $baseurl, $self;
 
     $parents = get_parents([]);
     $select = get_images([]);
     $htmlout = "
-        <form action='" . (string) $config->get('paths.baseurl') . "/staffpanel.php?tool=categories' method='post' enctype='multipart/form-data' accept-charset='utf-8'>";
+        <form action='{$baseurl}/staffpanel.php?tool=categories' method='post' enctype='multipart/form-data' accept-charset='utf-8'>";
     $htmlout .= main_div("
             <input type='hidden' name='mode' value='takeadd_cat'>
             <div class='has-text-centered padding20'>
@@ -488,19 +519,18 @@ function show_categories()
         </tr>';
     $cats = genrelist(true);
     foreach ($cats as $cat) {
-        $parent_name = '';
-        $body .= build_table($cat, $parent_name);
+        $body .= build_table($cat, (string) ($cat['name'] ?? ''));
         foreach ($cat['children'] as $child) {
-            $parent_name = format_comment($cat['name']);
-            $child['name'] = format_comment($cat['name']) . '::' . format_comment($child['name']);
-            $body .= build_table($child, $parent_name);
+            $childData = $child;
+            $childData['name'] = (string) ($cat['name'] ?? '') . '::' . (string) ($child['name'] ?? '');
+            $body .= build_table($childData, (string) ($cat['name'] ?? ''));
         }
     }
     $htmlout .= main_table($body, $heading);
     $title = _('Admin Categories');
     $breadcrumbs = [
-        "<a href='" . (string) $config->get('paths.baseurl') . "/staffpanel.php'>" . _('Staff Panel') . '</a>',
-        "<a href='{$_SERVER['PHP_SELF']}'>$title</a>",
+        "<a href='{$baseurl}/staffpanel.php'>" . _('Staff Panel') . '</a>',
+        "<a href='{$self}'>$title</a>",
     ];
     echo stdhead($title, [], 'page-wrapper', $breadcrumbs) . wrapper($htmlout) . stdfoot();
 }
@@ -513,36 +543,46 @@ function show_categories()
  */
 function build_table(array $data, string $parent_name)
 {
-    global $config;
+    global $config, $baseurl, $s;
 
-    $cat_image = !empty($data['image']) && file_exists(IMAGES_DIR . 'caticons/1/' . $data['image']) ? "
-            <img src='" . (string) $config->get('paths.images_baseurl') . "caticons/1/" . htmlsafechars($data['image']) . "' alt='{$data['id']}'>" : _('No Image');
+    $catId = $s((string) $data['id']);
+    $ordered = $s((string) $data['ordered']);
+    $catName = $s((string) $data['name']);
+    $parent = $s($parent_name);
+    $catDesc = $s((string) $data['cat_desc']);
+    $isHidden = $data['hidden'] === 1 ? 'true' : 'false';
+    $imageName = $s((string) $data['image']);
+    $imageBase = $s((string) $config->get('paths.images_baseurl'));
+    $catImage = !empty($data['image']) && file_exists(IMAGES_DIR . 'caticons/1/' . $data['image']) ? "<img src='{$imageBase}caticons/1/{$imageName}' alt='{$catId}'>" : $s(_('No Image'));
+    $manageBase = "{$baseurl}/staffpanel.php?tool=categories";
+    $editTitle = $s(_('Edit'));
+    $deleteTitle = $s(_('Delete'));
+    $moveTitle = $s(_('Move'));
 
-    $row = "
+    return <<<HTML
         <tr>
-            <td class='has-text-centered'>{$data['id']}</td>
-            <td class='has-text-centered'>{$data['ordered']}</td>
-            <td>" . htmlsafechars($data['name']) . "</td>
-            <td class='has-text-centered'>{$parent_name}</td>
-            <td class='has-text-centered'>" . ($data['hidden'] === 1 ? 'true' : 'false') . "</td>
-            <td class='has-text-centered'>{$data['cat_desc']}</td>
-            <td class='has-text-centered'>{$cat_image}</td>
+            <td class='has-text-centered'>{$catId}</td>
+            <td class='has-text-centered'>{$ordered}</td>
+            <td>{$catName}</td>
+            <td class='has-text-centered'>{$parent}</td>
+            <td class='has-text-centered'>{$isHidden}</td>
+            <td class='has-text-centered'>{$catDesc}</td>
+            <td class='has-text-centered'>{$catImage}</td>
             <td>
                 <div class='level-center'>
-                    <a href='" . (string) $config->get('paths.baseurl') . "/staffpanel.php?tool=categories&amp;mode=edit_cat&amp;id={$data['id']}'>
-                        <i class='icon-edit icon has-text-info tooltipper' title='" . _('Edit') . "'></i>
+                    <a href='{$manageBase}&amp;mode=edit_cat&amp;id={$catId}'>
+                        <i class='icon-edit icon has-text-info tooltipper' title='{$editTitle}'></i>
                     </a>
-                    <a href='" . (string) $config->get('paths.baseurl') . "/staffpanel.php?tool=categories&amp;mode=del_cat&amp;id={$data['id']}'>
-                        <i class='icon-trash-empty icon has-text-danger tooltipper' aria-hidden='true' title='" . _('Delete') . "'></i>
+                    <a href='{$manageBase}&amp;mode=del_cat&amp;id={$catId}'>
+                        <i class='icon-trash-empty icon has-text-danger tooltipper' aria-hidden='true' title='{$deleteTitle}'></i>
                     </a>
-                    <a href='" . (string) $config->get('paths.baseurl') . "/staffpanel.php?tool=categories&amp;mode=move_cat&amp;id={$data['id']}'>
-                        <i class='icon-plus icon has-text-success tooltipper' aria-hidden='true' title='" . _('Move') . "'></i>
+                    <a href='{$manageBase}&amp;mode=move_cat&amp;id={$catId}'>
+                        <i class='icon-plus icon has-text-success tooltipper' aria-hidden='true' title='{$moveTitle}'></i>
                     </a>
                 </div>
             </td>
-        </tr>";
-
-    return $row;
+        </tr>
+    HTML;
 }
 
 /**
@@ -558,7 +598,7 @@ function build_table(array $data, string $parent_name)
  */
 function get_parents(array $cat)
 {
-    global $container;
+    global $container, $s;
 
     // $fluent removed — use $this->db (ExtendedPdo)
     $parents = $fluent->from('categories')
@@ -567,20 +607,17 @@ function get_parents(array $cat)
                       ->orderBy('ordered')
                       ->fetchAll();
 
-    foreach ($parents as $parent) {
-        $parent['name'] = format_comment($parent['name']);
-        $parent['cat_desc'] = format_comment($parent['cat_desc']);
-        $parent['image'] = format_comment($parent['image']);
-    }
-
     $out = "
             <p class='is-success level'>" . _('Select Parent Category') . "
                 <select class='w-75' name='parent_id'>
                     <option value=''>" . _('Select Parent Category') . '</option>';
     foreach ($parents as $parent) {
         $selected = !empty($cat) && $parent['id'] === $cat['parent_id'] ? 'selected' : '';
+        $parentId = $s((string) $parent['id']);
+        $selectedAttr = $selected !== '' ? 'selected' : '';
+        $parentName = $s((string) ($parent['name'] ?? ''));
         $out .= "
-                    <option value='{$parent['id']}' {$selected}>{$parent['name']}</option>";
+                    <option value='{$parentId}' {$selectedAttr}>{$parentName}</option>";
     }
     $out .= '
                 </select>
@@ -599,7 +636,7 @@ function get_parents(array $cat)
  */
 function reorder_cats(bool $redirect = true)
 {
-    global $container;
+    global $container, $selfPath;
 
     // $fluent removed — use $this->db (ExtendedPdo)
 
@@ -623,7 +660,7 @@ $db->perform($sql, array_merge($set, ['id' => $cat['id']]));
     $cache->delete('categories');
 
     if ($redirect) {
-        header("Location: {$_SERVER['PHP_SELF']}?tool=categories");
+        header("Location: {$selfPath}?tool=categories");
         app_halt('Exit called');
     }
 }
@@ -663,7 +700,7 @@ function set_ordered(array $params)
  */
 function get_images(array $cat)
 {
-    global $config;
+    global $config, $s;
 
     $path = IMAGES_DIR . 'caticons/1/';
     $objects = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($path, RecursiveDirectoryIterator::SKIP_DOTS), RecursiveIteratorIterator::SELF_FIRST);
@@ -684,16 +721,21 @@ function get_images(array $cat)
                     <option value='0'>" . _('Select Image') . '</option>';
         foreach ($files as $file) {
             $selected = !empty($cat) && $file == $cat['image'] ? 'selected' : '';
+            $fileName = $s((string) $file);
+            $selectedAttr = $selected !== '' ? 'selected' : '';
+            $fileLabel = $s((string) $file);
             $select .= "
-                    <option value='" . htmlsafechars($file) . "' {$selected}>" . format_comment($file) . '</option>';
+                    <option value='{$fileName}' {$selectedAttr}>{$fileLabel}</option>";
         }
+        $infoMessage = $s(_fe('Info: If you want a new image, you have to upload it to each of the {0} directories first.', realpath(IMAGES_DIR) . '/caticons/'));
         $select .= "
                 </select>
             </p>
-            <p class='has-text-danger has-text-centered'>" . _fe('Info: If you want a new image, you have to upload it to each of the {0} directories first.', realpath(IMAGES_DIR) . '/caticons/') . '</p>';
+            <p class='has-text-danger has-text-centered'>{$infoMessage}</p>";
     } else {
+        $warningMessage = $s(_fe('Warning: There are no images in the directory {0}, please upload one.', realpath(IMAGES_DIR) . '/caticons/1/'));
         $select = "
-            <p class='has-text-danger has-text-centered'>" . _fe('Warning: There are no images in the directory {0}, please upload one.', realpath(IMAGES_DIR) . '/caticons/1/') . '</p>';
+            <p class='has-text-danger has-text-centered'>{$warningMessage}</p>";
     }
 
     return $select;
@@ -719,16 +761,12 @@ function get_cat(int $id)
                   ->where('id = ?', $id)
                   ->fetch();
 
-    $current_cat['parent_name'] = $fluent->from('categories')
-                                         ->select(null)
-                                         ->select('name')
-                                         ->where('id = ?', $cat['parent_id'])
-                                         ->fetch('name');
-
-    $cat['name'] = format_comment($cat['name']);
-    $cat['cat_desc'] = format_comment($cat['cat_desc']);
-    $cat['image'] = format_comment($cat['image']);
-    $cat['parent_name'] = !empty($cat['parent_name']) ? format_comment($cat['parent_name']) : '';
+    $cat['parent_name'] = $fluent->from('categories')
+                                ->select(null)
+                                ->select('name')
+                                ->where('id = ?', $cat['parent_id'])
+                                ->fetch('name');
+    $cat['parent_name'] = $cat['parent_name'] ?? '';
 
     return $cat;
 }

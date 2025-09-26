@@ -17,11 +17,16 @@ $db = $container->get(Database::class);
 $class = get_access(basename($_SERVER['REQUEST_URI']));
 class_check($class);
 
+$s = $s ?? static fn($v) => htmlspecialchars((string) $v, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
+$self = $s($_SERVER['PHP_SELF'] ?? '');
+$baseurl = $s($config->get('paths.baseurl'));
+
 $HTMLOUT          = '';
 $seachcloud_class = $container->get(Searchcloud::class);
 $cache            = $container->get(Cache::class);
 
 if (isset($_POST['delcloud'])) {
+    // TODO(2025): csrf
     $seachcloud_class->delete($_POST['delcloud']);
     $cache->delete('searchcloud_');
     stderr(
@@ -38,7 +43,7 @@ if ($count > $perpage) {
 }
 $searches = $seachcloud_class->get($pager['pdo']);
 $HTMLOUT .= "
-<form id='checkbox_container' method='post' action='{$_SERVER['PHP_SELF']}?tool=cloudview&amp;action=cloudview' enctype='multipart/form-data' accept-charset='utf-8'>";
+<form id='checkbox_container' method='post' action='{$self}?tool=cloudview&amp;action=cloudview' enctype='multipart/form-data' accept-charset='utf-8'>";
 $heading = '
     <tr>
         <th>' . _('Searched phrase') . '</th>
@@ -47,13 +52,15 @@ $heading = '
     </tr>";
 $body = '';
 foreach ($searches as $arr) {
-    $search_phrase = htmlsafechars($arr['searchedfor']);
+    $search_phrase = $s($arr['searchedfor']);
+    $searchId = $s((string) $arr['id']);
+    $hits = $s((string) $arr['howmuch']);
     $body .= "
     <tr>
         <td>$search_phrase</td>
-        <td>{$arr['howmuch']}</td>
-     
-        <td><input type='checkbox' name='delcloud[]' title='" . _('Mark') . "' value='" . (int) $arr['id'] . "'></td>
+        <td>{$hits}</td>
+
+        <td><input type='checkbox' name='delcloud[]' title='" . _('Mark') . "' value='{$searchId}'></td>
     </tr>";
 }
 if (!empty($body)) {
@@ -74,7 +81,7 @@ if ($count > $perpage) {
 $HTMLOUT = '<h1 class="has-text-centered">Cloud Search Terms</h1>' . $HTMLOUT;
 $title = _('Cloud View');
 $breadcrumbs = [
-    "<a href='" . (string) $config->get('paths.baseurl') . "/staffpanel.php'>" . _('Staff Panel') . '</a>',
-    "<a href='{$_SERVER['PHP_SELF']}'>$title</a>",
+    "<a href='{$baseurl}/staffpanel.php'>" . _('Staff Panel') . '</a>',
+    "<a href='{$self}'>" . $s($title) . '</a>',
 ];
 echo stdhead($title, [], 'page-wrapper', $breadcrumbs) . wrapper($HTMLOUT) . stdfoot();

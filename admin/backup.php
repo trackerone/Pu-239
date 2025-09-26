@@ -10,6 +10,9 @@ global $container, $CURUSER;
 /** @var ConfigRepository $config */
 $config = $container->get(ConfigRepository::class);
 $db = $container->get(Database::class);
+$s = $s ?? static fn($v) => htmlspecialchars((string) $v, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
+$self = $s($_SERVER['PHP_SELF'] ?? '');
+$baseurl = $s($config->get('paths.baseurl'));
 
 $class = get_access(basename($_SERVER['REQUEST_URI']));
 class_check($class);
@@ -37,7 +40,7 @@ if (empty($mode)) {
 
     if ($backups) {
         $HTMLOUT .= "
-            <form method='post' action='{$_SERVER['PHP_SELF']}?tool=backup&amp;mode=delete' enctype='multipart/form-data' accept-charset='utf-8'>
+            <form method='post' action='{$self}?tool=backup&amp;mode=delete' enctype='multipart/form-data' accept-charset='utf-8'>
                 <input type='hidden' name='action' value='delete'>
                 <h1 class='has-text-centered'>" . _fe('Welcome {0}, to the Database Backup Manager.', $CURUSER['username']) . "</h1>
                 <table id='checkbox_container' class='table table-bordered table-striped top20 bottom20'>
@@ -53,19 +56,19 @@ if (empty($mode)) {
         foreach ($backups as $arr) {
             $HTMLOUT .= "
                         <tr>
-                            <td><a href='{$_SERVER['PHP_SELF']}?tool=backup&amp;mode=download&amp;id=" . $arr['id'] . "'>" . htmlsafechars($arr['name']) . '</a></td>
-                            <td class="has-text-centered">' . get_date((int) $arr['added'], 'LONG', 1, 0) . '</td>
+                            <td><a href='{$self}?tool=backup&amp;mode=download&amp;id=" . $s((string) $arr['id']) . "'>" . $s($arr['name']) . '</a></td>
+                            <td class="has-text-centered">' . $s(get_date((int) $arr['added'], 'LONG', 1, 0)) . '</td>
                             <td class="has-text-centered">';
             if (!empty($arr['userid'])) {
                 $HTMLOUT .= format_username((int) $arr['userid']);
             } else {
                 $HTMLOUT .= '
-                                unknown[' . $arr['userid'] . ']';
+                                unknown[' . $s((string) $arr['userid']) . ']';
             }
             $HTMLOUT .= "
                             </td>
                             <td class='has-text-centered'>
-                                <input type='checkbox' name='ids[]' class='tooltipper' title='" . _('Mark') . "' value='" . $arr['id'] . "'>
+                                <input type='checkbox' name='ids[]' class='tooltipper' title='" . _('Mark') . "' value='" . $s((string) $arr['id']) . "'>
                             </td>
                         </tr>";
         }
@@ -74,7 +77,7 @@ if (empty($mode)) {
                     </tbody>
                 </table>
                 <div class='has-text-centered top20 bottom20 level-center flex-center'>
-                    <a class='button is-small' href='{$_SERVER['PHP_SELF']}?tool=backup&amp;mode=backup'>" . _('Backup Database') . "</a>
+                    <a class='button is-small' href='{$self}?tool=backup&amp;mode=backup'>" . _('Backup Database') . "</a>
                     <input type='submit' class='button is-small' value='" . _('Delete Selected') . "' onclick=\"return confirm('" . _('Are you sure you want to delete the selected backups?') . "');\">
                 </div>
             </form>
@@ -127,7 +130,7 @@ if (empty($mode)) {
                 <div class='padding20 has-text-centered'>
                     " . _('Nothing Found') . "
                     <div class='top20'>
-                        <a class='button is-small' href='{$_SERVER['PHP_SELF']}?tool=backup&amp;mode=backup'>" . _('Backup Database') . '</a>
+                        <a class='button is-small' href='{$self}?tool=backup&amp;mode=backup'>" . _('Backup Database') . '</a>
                     </div>
                 </div>');
     }
@@ -141,8 +144,8 @@ if (empty($mode)) {
     }
     $title = _('Backup Manager');
     $breadcrumbs = [
-        "<a href='{$config->get('paths.baseurl')}/staffpanel.php'>" . _('Staff Panel') . '</a>',
-        "<a href='{$_SERVER['PHP_SELF']}'>$title</a>",
+        "<a href='{$baseurl}/staffpanel.php'>" . _('Staff Panel') . '</a>',
+        "<a href='{$self}'>" . $s($title) . '</a>',
     ];
     echo stdhead($title, [], 'page-wrapper', $breadcrumbs) . wrapper($HTMLOUT) . stdfoot();
 } elseif ($mode === 'backup') {
@@ -173,6 +176,7 @@ $db->perform($sql, $values);
     header('Location: ' . $_SERVER['PHP_SELF'] . '?tool=backup');
     app_halt('Exit called');
 } elseif ($mode === 'delete') {
+    // TODO(2025): csrf
     $ids = (isset($_POST['ids']) ? $_POST['ids'] : (isset($_GET['id']) ? [
         $_GET['id'],
     ] : []));

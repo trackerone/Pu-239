@@ -1,0 +1,568 @@
+admin/acpmanage.php:27:if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['ids'])) {
+admin/acpmanage.php:29:    $ids = $_POST['ids'];
+admin/acpmanage.php:36:    $do = isset($_POST['do']) ? htmlsafechars($_POST['do']) : '';
+admin/adduser.php:31:if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+admin/backup.php:180:    $ids = (isset($_POST['ids']) ? $_POST['ids'] : (isset($_GET['id']) ? [
+admin/backup.php:33:$mode = (isset($_GET['mode']) ? $_GET['mode'] : (isset($_POST['mode']) ? $_POST['mode'] : ''));
+admin/bannedemails.php:28:if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+admin/bannedemails.php:30:    $email = htmlsafechars($_POST['email']);
+admin/bannedemails.php:31:    $comment = htmlsafechars($_POST['comment']);
+admin/bans.php:48:if ($_SERVER['REQUEST_METHOD'] === 'POST' && $CURUSER['class'] >= UC_MAX) {
+admin/bans.php:50:    $first = htmlsafechars($_POST['first']);
+admin/bans.php:51:    $last = htmlsafechars($_POST['last']);
+admin/bans.php:52:    $comment = htmlsafechars($_POST['comment']);
+admin/block.settings.php:100:if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+admin/bonusmanage.php:25:if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+admin/bonusmanage.php:27:    if (isset($_POST['id']) || isset($_POST['orderid']) || isset($_POST['points']) || isset($_POST['pointspool']) || isset($_POST['minpoints']) || isset($_POST['description']) || isset($_POST['enabled']) || isset($_POST['minclass'])) {
+admin/bonusmanage.php:28:        $id = (int) $_POST['id'];
+admin/bonusmanage.php:29:        $points = (int) $_POST['bonuspoints'];
+admin/bonusmanage.php:30:        $pointspool = (int) $_POST['pointspool'];
+admin/bonusmanage.php:31:        $minpoints = (int) $_POST['minpoints'];
+admin/bonusmanage.php:32:        $minclass = (int) $_POST['minclass'];
+admin/bonusmanage.php:33:        $descr = htmlsafechars($_POST['description']);
+admin/bonusmanage.php:35:        if (empty($_POST['enabled'])) {
+admin/bonusmanage.php:38:        $orderid = (int) $_POST['orderid'];
+admin/categories.php:29:if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+admin/cheaters.php:32:if (isset($_POST['nowarned']) && $_POST['nowarned'] === 'nowarned') {
+admin/cheaters.php:34:    $ids_remove = !empty($_POST['remove']) ? array_map('intval', (array) $_POST['remove']) : [];
+admin/cheaters.php:35:    $ids_disable = !empty($_POST['desact']) ? array_map('intval', (array) $_POST['desact']) : [];
+admin/class_config.php:30:        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+admin/class_config.php:32:            $name = trim($_POST['name'] ?? '');
+admin/class_config.php:33:            $value = trim($_POST['value'] ?? '');
+admin/class_config.php:47:        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+admin/class_config.php:49:            $name = trim($_POST['name'] ?? '');
+admin/class_config.php:50:            $value = trim($_POST['value'] ?? '');
+admin/cloudview.php:28:if (isset($_POST['delcloud'])) {
+admin/cloudview.php:30:    $seachcloud_class->delete($_POST['delcloud']);
+admin/datareset.php:26:if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+admin/datareset.php:28:    $tid = (isset($_POST['tid']) ? (int) $_POST['tid'] : 0);
+admin/deathrow.php:107:if (!empty($_POST['remove'])) {
+admin/deathrow.php:109:    $deleted = notify_owner($_POST['remove']);
+admin/delacct.php:23:if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+admin/delacct.php:25:    $userid = (int) trim($_POST['userid']);
+admin/delacct.php:26:    $username = trim(htmlsafechars((string) $_POST['username']));
+admin/editlog.php:26:if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+admin/editlog.php:58:if (!$exist || (isset($_POST['update']) && ($_POST['update'] === 'Update'))) {
+admin/findnotconnectable.php:80:if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+admin/findnotconnectable.php:83:    $msg = htmlsafechars($_POST['body']);
+admin/floodlimit.php:24:if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+admin/floodlimit.php:26:    $limits = isset($_POST['limit']) && is_array($_POST['limit']) ? $_POST['limit'] : [];
+admin/forum_config.php:30:if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['do_it'])) {
+admin/forum_config.php:33:        'delete_for_real' => isset($_POST['delete_for_real']) ? (int) $_POST['delete_for_real'] : 0,
+admin/forum_config.php:34:        'min_delete_view_class' => isset($_POST['min_delete_view_class']) && valid_class((int) $_POST['min_delete_view_class']) ? (int) $_POST['min_delete_view_class'] : 0,
+admin/forum_config.php:35:        'readpost_expiry' => isset($_POST['readpost_expiry']) ? (int) $_POST['readpost_expiry'] : 0,
+admin/forum_config.php:36:        'min_upload_class' => isset($_POST['min_upload_class']) && valid_class((int) $_POST['min_upload_class']) ? (int) $_POST['min_upload_class'] : 0,
+admin/forum_config.php:37:        'accepted_file_extension' => isset($_POST['accepted_file_extension']) ? preg_replace('/\s+/', '|', trim($_POST['accepted_file_extension'])) : '',
+admin/forum_config.php:38:        'accepted_file_types' => isset($_POST['accepted_file_types']) ? preg_replace('/\s+/', '|', trim($_POST['accepted_file_types'])) : '',
+admin/forum_config.php:39:        'max_file_size' => isset($_POST['max_file_size']) ? (int) $_POST['max_file_size'] : 0,
+admin/forum_manage.php:26:$id = isset($_GET['id']) ? (int) $_GET['id'] : (isset($_POST['id']) ? (int) $_POST['id'] : 0);
+admin/forum_manage.php:27:$name = isset($_POST['name']) ? htmlsafechars($_POST['name']) : '';
+admin/forum_manage.php:28:$desc = isset($_POST['desc']) ? htmlsafechars($_POST['desc']) : '';
+admin/forum_manage.php:29:$sort = isset($_POST['sort']) ? (int) $_POST['sort'] : 0;
+admin/forum_manage.php:30:$parent_forum = isset($_POST['parent_forum']) ? (int) $_POST['parent_forum'] : 0;
+admin/forum_manage.php:31:$over_forums = isset($_POST['over_forums']) ? (int) $_POST['over_forums'] : 0;
+admin/forum_manage.php:32:$min_class_read = isset($_POST['min_class_read']) ? (int) $_POST['min_class_read'] : 0;
+admin/forum_manage.php:33:$min_class_write = isset($_POST['min_class_write']) ? (int) $_POST['min_class_write'] : 0;
+admin/forum_manage.php:34:$min_class_create = isset($_POST['min_class_create']) ? (int) $_POST['min_class_create'] : 0;
+admin/forum_manage.php:36:if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+admin/forum_manage.php:53:$posted_action = (isset($_GET['action2']) ? htmlsafechars($_GET['action2']) : (isset($_POST['action2']) ? htmlsafechars($_POST['action2']) : ''));
+admin/freeleech.php:26:if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+admin/freeleech.php:28:    if (isset($_POST['remove'])) {
+admin/freeleech.php:29:        update_event((int) $_POST['expires'], TIME_NOW);
+admin/freeleech.php:33:    $fl['modifier'] = isset($_POST['modifier']) ? (int) $_POST['modifier'] : false;
+admin/freeleech.php:34:    if (isset($_POST['expires']) && (int) $_POST['expires'] === 255) {
+admin/freeleech.php:37:        $fl['expires'] = isset($_POST['expires']) ? $_POST['expires'] * 86400 + TIME_NOW : false;
+admin/freeleech.php:39:    $fl['setby'] = isset($_POST['setby']) ? htmlsafechars($_POST['setby']) : false;
+admin/freeleech.php:40:    $fl['title'] = isset($_POST['title']) ? htmlsafechars($_POST['title']) : false;
+admin/grouppm.php:51:if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+admin/grouppm.php:53:    $groups  = isset($_POST['groups']) && is_array($_POST['groups']) ? $_POST['groups'] : [];
+admin/grouppm.php:54:    $subject = isset($_POST['subject']) ? trim((string) $_POST['subject']) : '';
+admin/grouppm.php:56:    $msg_raw = isset($_POST['body']) ? (string) $_POST['body'] : '';
+admin/grouppm.php:59:    $sender = (isset($_POST['system']) && $_POST['system'] === 'yes') ? 2 : (int) $CURUSER['id'];
+admin/hit_and_run_settings.php:23:if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+admin/hit_and_run_settings.php:29:        if (isset($_POST[$c_name]) && $_POST[$c_name] != $c_value) {
+admin/hit_and_run_settings.php:31:                   ->set(['value' => $_POST[$c_name]])
+admin/hnrwarn.php:32:if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+admin/hnrwarn.php:34:    $r = isset($_POST['ref']) ? (string) $_POST['ref'] : $this_url;
+admin/hnrwarn.php:35:    $uids = isset($_POST['users']) && is_array($_POST['users']) ? array_map('intval', $_POST['users']) : [];
+admin/hnrwarn.php:42:    $act = isset($_POST['action']) && in_array($_POST['action'], $valid, true) ? (string) $_POST['action'] : '';
+admin/inactive.php:34:if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+admin/inactive.php:36:    $action = isset($_POST['action']) ? (string) $_POST['action'] : '';
+admin/inactive.php:37:    $ids = isset($_POST['userid']) && is_array($_POST['userid']) ? array_values(array_unique(array_map('intval', $_POST['userid']))) : [];
+admin/invite_tree.php:25:$id = isset($_GET['id']) ? (int) $_GET['id'] : (isset($_POST['id']) ? (int) $_POST['id'] : 0);
+admin/leechwarn.php:35:if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+admin/leechwarn.php:37:    $r = isset($_POST['ref']) ? (string) $_POST['ref'] : $this_url;
+admin/leechwarn.php:38:    $uids = isset($_POST['users']) && is_array($_POST['users']) ? array_values(array_unique(array_map('intval', $_POST['users']))) : [];
+admin/leechwarn.php:43:    $act = isset($_POST['action']) && in_array($_POST['action'], $valid, true) ? (string) $_POST['action'] : '';
+admin/log_viewer.php:21:if ($_SERVER['REQUEST_METHOD'] === 'POST' && $_POST['delete'] === 'Delete') {
+admin/log_viewer.php:22:    foreach ($_POST['logs'] as $log) {
+admin/manage_images.php:24:if ($_SERVER['REQUEST_METHOD'] === 'POST' && !empty($_POST['delete']) && $_POST['delete'] === 'Delete') {
+admin/manage_images.php:25:    foreach ($_POST['images'] as $url) {
+admin/manage_images.php:46:if ($_SERVER['REQUEST_METHOD'] === 'POST' && !empty($_POST['terms'])) {
+admin/manage_images.php:47:    $terms = strip_tags($_POST['terms']);
+admin/mass_bonus_for_members.php:101:$action = !empty($_POST['bonus_options_1']) && in_array($_POST['bonus_options_1'], $good_stuff, true)
+admin/mass_bonus_for_members.php:102:    ? (string) $_POST['bonus_options_1']
+admin/mass_bonus_for_members.php:105:$class_ids = !empty($_POST['free_for_classes']) && is_array($_POST['free_for_classes'])
+admin/mass_bonus_for_members.php:106:    ? array_map('intval', $_POST['free_for_classes'])
+admin/mass_bonus_for_members.php:116:        $GB = isset($_POST['GB']) ? (int) $_POST['GB'] : 0; // value in bytes from <select>
+admin/mass_bonus_for_members.php:144:        $karma_points = isset($_POST['karma']) ? (int) $_POST['karma'] : 0;
+admin/mass_bonus_for_members.php:170:        $freeslots = isset($_POST['freeslots']) ? (int) $_POST['freeslots'] : 0;
+admin/mass_bonus_for_members.php:195:        $invites = isset($_POST['invites']) ? (int) $_POST['invites'] : 0;
+admin/mass_bonus_for_members.php:220:        $subject = isset($_POST['subject']) ? trim((string) $_POST['subject']) : '';
+admin/mass_bonus_for_members.php:221:        $body = isset($_POST['body']) ? (string) $_POST['body'] : '';
+admin/mass_bonus_for_members.php:305:$subject = isset($_POST['subject']) ? htmlsafechars((string) $_POST['subject']) : _('Mass PM');
+admin/mass_bonus_for_members.php:306:$body = isset($_POST['body']) ? htmlsafechars((string) $_POST['body']) : _('Your text here');
+admin/mega_search.php:143:if (isset($_POST['msg_to_analyze'])) {
+admin/mega_search.php:144:    $email_search = $_POST['msg_to_analyze'];
+admin/mega_search.php:18:$msg_to_analyze = (isset($_POST['msg_to_analyze']) ? htmlsafechars($_POST['msg_to_analyze']) : '');
+admin/mega_search.php:19:$invite_code = (isset($_POST['invite_code']) ? htmlsafechars($_POST['invite_code']) : '');
+admin/mega_search.php:20:$user_names = (isset($_POST['user_names']) ? $_POST['user_names'] : '');
+admin/mega_search.php:265:    $ip_history = $_POST['msg_to_analyze'];
+admin/mega_search.php:351:if (isset($_POST['invite_code'])) {
+admin/modded_torrents.php:231:} elseif ($_SERVER['REQUEST_METHOD'] === 'POST') {
+admin/modded_torrents.php:235:    $whom = !empty($_POST['username']) ? $_POST['username'] : false;
+admin/modded_torrents.php:236:    $when = !empty($_POST['time']) && $_POST['time'] > 0 && $_POST['time'] < $last_day ? (int) $_POST['time'] : false;
+admin/modded_torrents.php:237:    $date = isset($_POST['date']) ? $_POST['date'] : false;
+admin/modded_torrents.php:260:            $text = _fe('by {0} on {1}', $_POST['username'], $date);
+admin/modded_torrents.php:261:            $title = _fe('{0}: Modded Torrents on {1}', $_POST['username'], $date);
+admin/modded_torrents.php:291:            $text = _pfe('by {1} within the last {0} day', 'by {1} within the last {0} days', $_POST['time'], $_POST['username']);
+admin/modded_torrents.php:292:            $title = _pfe('{1}: Modded Torrents from {0} day ago', '{1}: Modded Torrents from {0} days ago', $_POST['time'], $_POST['username']);
+admin/modded_torrents.php:304:            $text = _pf('from the past {0} day.', 'from the past {0} days.', $_POST['time']);
+admin/modded_torrents.php:305:            $title = _pfe('{1}: Modded Torrents from {0}, number day ago', '{1}: Modded Torrents from {0}, number days ago', $_POST['time'], $_POST['username']);
+admin/modded_torrents.php:318:            $text = _fe('by {0}', $_POST['username']);
+admin/modded_torrents.php:319:            $title = _fe('{0}: Modded Torrents', $_POST['username']);
+admin/modtask.php:39:if (!empty($_POST) && $_POST['action'] === 'edituser') {
+admin/news.php:112:    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+admin/news.php:113:        $body = isset($_POST['body']) ? htmlsafechars($_POST['body']) : '';
+admin/news.php:114:        $sticky = isset($_POST['sticky']) ? htmlsafechars($_POST['sticky']) : 'yes';
+admin/news.php:115:        $anonymous = isset($_POST['anonymous']) ? htmlsafechars($_POST['anonymous']) : '1';
+admin/news.php:119:        $title = htmlsafechars($_POST['title']);
+admin/news.php:69:    $body = isset($_POST['body']) ? htmlsafechars($_POST['body']) : '';
+admin/news.php:70:    $sticky = isset($_POST['sticky']) ? htmlsafechars($_POST['sticky']) : 'yes';
+admin/news.php:71:    $anonymous = isset($_POST['anonymous']) ? htmlsafechars($_POST['anonymous']) : '0';
+admin/news.php:75:    $title = htmlsafechars($_POST['title']);
+admin/news.php:79:    $added = isset($_POST['added']) ? $_POST['added'] : '';
+admin/over_forums.php:31:$id = isset($_GET['id']) ? (int) $_GET['id'] : (isset($_POST['id']) ? (int) $_POST['id'] : 0);
+admin/over_forums.php:33:$name = isset($_POST['name']) ? htmlsafechars($_POST['name']) : '';
+admin/over_forums.php:34:$desc = isset($_POST['desc']) ? htmlsafechars($_POST['desc']) : '';
+admin/over_forums.php:35:$sort = isset($_POST['sort']) ? (int) $_POST['sort'] : 0;
+admin/over_forums.php:36:$min_class_view = isset($_POST['min_class_view']) ? (int) $_POST['min_class_view'] : 0;
+admin/over_forums.php:37:$posted_action = isset($_GET['action2']) ? htmlsafechars($_GET['action2']) : (isset($_POST['action2']) ? htmlsafechars($_POST['action2']) : '');
+admin/polls_manager.php:112:    if (!isset($_POST['pid']) || !is_valid_id((int) $_POST['pid'])) {
+admin/polls_manager.php:115:    $pid = intval($_POST['pid']);
+admin/polls_manager.php:116:    if (!isset($_POST['poll_question']) || empty($_POST['poll_question'])) {
+admin/polls_manager.php:119:    $poll_title = htmlsafechars(strip_tags($_POST['poll_question']));
+admin/polls_manager.php:154:    if (!isset($_POST['poll_question']) || empty($_POST['poll_question'])) {
+admin/polls_manager.php:157:    $poll_title = htmlsafechars(strip_tags($_POST['poll_question']));
+admin/polls_manager.php:426:    if (isset($_POST['question']) && is_array($_POST['question']) && count($_POST['question'])) {
+admin/polls_manager.php:427:        foreach ($_POST['question'] as $id => $q) {
+admin/polls_manager.php:434:    if (isset($_POST['multi']) && is_array($_POST['multi']) && count($_POST['multi'])) {
+admin/polls_manager.php:435:        foreach ($_POST['multi'] as $id => $q) {
+admin/polls_manager.php:442:    if (isset($_POST['choice']) && is_array($_POST['choice']) && count($_POST['choice'])) {
+admin/polls_manager.php:443:        foreach ($_POST['choice'] as $mainid => $choice) {
+admin/polls_manager.php:454:            $_POST['votes'] = isset($_POST['votes']) ? $_POST['votes'] : 0;
+admin/polls_manager.php:455:            $questions[$question_id]['votes'][$choice_id] = intval($_POST['votes'][$question_id . '_' . $choice_id]);
+admin/polls_manager.php:472:    if (isset($_POST['mode']) && $_POST['mode'] == 'poll_update') {
+admin/promo.php:25:$do = isset($_GET['do']) ? $_GET['do'] : (isset($_POST['do']) ? $_POST['do'] : '');
+admin/promo.php:26:$id = isset($_GET['id']) ? (int) $_GET['id'] : (isset($_POST['id']) ? (int) $_POST['id'] : '0');
+admin/promo.php:27:$link = isset($_GET['link']) ? $_GET['link'] : (isset($_POST['link']) ? $_POST['link'] : '');
+admin/promo.php:29:if ($_SERVER['REQUEST_METHOD'] === 'POST' && $do === 'addpromo') {
+admin/promo.php:30:    $promoname = isset($_POST['promoname']) ? $_POST['promoname'] : '';
+admin/promo.php:34:    $days_valid = isset($_POST['days_valid']) ? (int) $_POST['days_valid'] : 0;
+admin/promo.php:38:    $max_users = isset($_POST['max_users']) ? (int) $_POST['max_users'] : 0;
+admin/promo.php:42:    $bonus_upload = isset($_POST['bonus_upload']) ? (int) $_POST['bonus_upload'] : 0;
+admin/promo.php:43:    $bonus_invites = isset($_POST['bonus_invites']) ? (int) $_POST['bonus_invites'] : 0;
+admin/promo.php:44:    $bonus_karma = isset($_POST['bonus_karma']) ? (int) $_POST['bonus_karma'] : 0;
+admin/reputation_settings.php:18:if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+admin/reputation_settings.php:19:    unset($_POST['submit']);
+admin/reset.php:24:if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+admin/reset.php:26:    $username = htmlsafechars($_POST['username']);
+admin/reset.php:27:    $uid = (int) $_POST['uid'];
+admin/site_settings.php:31:if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+admin/sysoplog.php:18:$search = isset($_POST['search']) ? strip_tags($_POST['search']) : '';
+admin/themes.php:170:        if (!isset($_POST['id'])) {
+admin/themes.php:173:        if (!isset($_POST['uri'])) {
+admin/themes.php:176:        if (!isset($_POST['title'])) {
+admin/themes.php:179:        $tid = (int) $_POST['tid'];
+admin/themes.php:180:        $id = (int) $_POST['id'];
+admin/themes.php:181:        $uri = $_POST['uri'];
+admin/themes.php:182:        $min_class = $_POST['class'];
+admin/themes.php:183:        $name = htmlsafechars($_POST['title']);
+admin/themes.php:247:        if (!isset($_POST['id'])) {
+admin/themes.php:250:        if (!isset($_POST['uri'])) {
+admin/themes.php:253:        if (!isset($_POST['name'])) {
+admin/themes.php:256:        if (!file_exists(TEMPLATE_DIR . $_POST['id'] . '/template.php')) {
+admin/themes.php:257:            stderr(_('Error'), _fe('Template file does not exist. Continue? {0}Yes{1} {2}No{3}', "<a href='{$config->get('paths.baseurl')}/staffpanel.php?tool=themes&amp;action=themes&amp;act=7&amp;id=" . (int) $_POST['id'] . '&amp;uri=' . $_POST['uri'] . '&amp;name=' . htmlsafechars($_POST['name']) . "'><span class='has-text-success left5'>", '</span></a>', "<a href='{$config->get('paths.baseurl')}/staffpanel.php?tool=themes'><span class='has-text-danger left5'>", '</span></a>'));
+admin/themes.php:259:        if (!isset($_POST['class'])) {
+admin/themes.php:264:            'id' => $_POST['id'],
+admin/themes.php:265:            'uri' => $_POST['uri'],
+admin/themes.php:266:            'name' => htmlsafechars($_POST['name']),
+admin/themes.php:267:            'min_class_to_view' => $_POST['class'],
+admin/traceroute.php:35:    $action = isset($_POST['action']) ? $_POST['action'] : '';
+admin/traceroute.php:36:    $host = isset($_POST['host']) ? $_POST['host'] : '';
+admin/trivia_config.php:24:if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+admin/trivia_config.php:40:        if (isset($_POST[$type])) {
+admin/trivia_config.php:57:            } elseif ($type === 'delete' && isset($_POST['id']) && is_numeric($_POST['id'])) {
+admin/trivia_config.php:59:$db->perform($sql, ['qid' => $_POST['id']]);
+admin/trivia_config.php:60:                $session->set('is-success', _fe('Trivia Question #{0} was deleted.', $_POST['id']));
+admin/trivia_config.php:80:                $search = $_POST['keywords'];
+admin/upgrade_database.php:25:if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+admin/upgrade_database.php:26:    if (!empty($_POST['id']) && !empty($_POST['submit'])) {
+admin/upgrade_database.php:27:        $id = $_POST['id'];
+admin/upgrade_database.php:28:        $submit = $_POST['submit'];
+admin/uploadapps.php:117:    $id = (int) $_POST['id'];
+admin/uploadapps.php:128:    $reason = htmlsafechars($_POST['reason']);
+admin/uploadapps.php:43:    if (empty($_POST['deleteapp'])) {
+admin/uploadapps.php:46:        $ids = $_POST['deleteapp'];
+admin/uploadapps.php:59:    $id = (int) $_POST['id'];
+admin/uploadapps.php:73:    $note = htmlsafechars($_POST['note']);
+admin/watched_users.php:24:    $ids = $_POST['wu'] ?? ($_GET['wu'] ?? []);
+admin/watched_users.php:74:        $watched_user_reason = htmlsafechars($_POST['reason'] ?? '');
+public/achievementlist.php:22:if ($_SERVER['REQUEST_METHOD'] === 'POST' && $user['class'] >= UC_MAX) {
+public/achievementlist.php:25:        'achievename' => htmlsafechars(trim($_POST['achievename'] ?? '')),
+public/achievementlist.php:26:        'notes' => htmlsafechars(trim($_POST['notes'] ?? '')),
+public/achievementlist.php:27:        'clienticon' => htmlsafechars(trim($_POST['clienticon'] ?? '')),
+public/ajax/autocomplete.php:21:$keyword = trim((string) ($_POST['keyword'] ?? ''));
+public/ajax/bookmarks.php:24:$torrentId = (int) ($_POST['tid'] ?? 0);
+public/ajax/bookmarks.php:25:$togglePrivate = ($_POST['private'] ?? '') === 'true';
+public/ajax/bookmarks.php:26:$remove = $_POST['remove'] ?? 'false';
+public/ajax/checkport.php:19:if (empty($_POST['ip']) || empty($_POST['port'])) {
+public/ajax/checkport.php:22:$ip = $_POST['ip'];
+public/ajax/checkport.php:23:$port = (int) $_POST['port'];
+public/ajax/checkports.php:15:$requestedUserId = (int) ($_POST['uid'] ?? 0);
+public/ajax/cooker_notify.php:22:$upcomingId = (int) ($_POST['id'] ?? 0);
+public/ajax/cooker_notify.php:23:$notified = filter_var($_POST['notified'] ?? false, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE);
+public/ajax/descr_format.php:16:$tid = (int) ($_POST['tid'] ?? 0);
+public/ajax/ebook_lookup.php:28:$tid = (int) ($_POST['tid'] ?? 0);
+public/ajax/ebook_lookup.php:32:$isbn = !empty($_POST['isbn']) ? $_POST['isbn'] : '000000';
+public/ajax/ebook_lookup.php:33:$title = htmlsafechars($_POST['name']);
+public/ajax/imdb_lookup.php:14:$url = htmlsafechars((string) ($_POST['url'] ?? ''));
+public/ajax/imdb_lookup.php:15:$tid = !empty($_POST['tid']) ? (int) htmlsafechars($_POST['tid']) : null;
+public/ajax/imdb_lookup.php:16:$image = !empty($_POST['image']) ? htmlsafechars($_POST['image']) : null;
+public/ajax/isbn_lookup.php:25:$book_info = get_book_info($_POST['isbn'], '', 0, '');
+public/ajax/like.php:43:    $id = (int) ($_POST['id'] ?? 0);
+public/ajax/like.php:44:    $type = mb_substr(trim((string) ($_POST['type'] ?? '')), 0, 12);
+public/ajax/like.php:45:    $current = mb_substr(trim((string) ($_POST['current'] ?? '')), 0, 10);
+public/ajax/member_input.php:23:$posted_action = isset($_POST['action']) ? htmlsafechars($_POST['action']) : (isset($_GET['action']) ? htmlsafechars($_GET['action']) : '');
+public/ajax/member_input.php:39:$id = $curuser['class'] < UC_STAFF ? $curuser['id'] : (int) ($_POST['id'] ?? 0);
+public/ajax/member_input.php:77:        $posted_notes = htmlsafechars((string) ($_POST['new_staff_note'] ?? ''));
+public/ajax/member_input.php:93:        $posted = htmlsafechars((string) ($_POST['watched_reason'] ?? ''));
+public/ajax/member_input.php:95:            $addToWatched = $_POST['add_to_watched_users'] ?? '';
+public/ajax/offer_notify.php:22:$offerId = (int) ($_POST['id'] ?? 0);
+public/ajax/offer_notify.php:23:$notified = filter_var($_POST['notified'] ?? false, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE);
+public/ajax/offer_status.php:22:$offerId = (int) ($_POST['id'] ?? 0);
+public/ajax/offer_status.php:23:$currentStatus = $_POST['status'] ?? '';
+public/ajax/offer_vote.php:22:$offerId = (int) ($_POST['id'] ?? 0);
+public/ajax/offer_vote.php:23:$currentVote = $_POST['voted'] ?? '';
+public/ajax/rating.php:23:$id = (int) ($_POST['id'] ?? 0);
+public/ajax/rating.php:24:$rate = (int) ($_POST['rate'] ?? 0);
+public/ajax/rating.php:26:$ajax = isset($_POST['ajax']) && (int) $_POST['ajax'] === 1;
+public/ajax/rating.php:27:$what = ($_POST['what'] ?? '') === 'torrent' ? 'torrent' : 'topic';
+public/ajax/rating.php:28:$ref = $_POST['ref'] ?? ($what === 'torrent' ? 'details.php' : 'forums/view_topic.php');
+public/ajax/request_notify.php:21:$id = (int) $_POST['id'];
+public/ajax/request_notify.php:22:$notified = (bool) $_POST['notified'];
+public/ajax/request_vote.php:21:$id = (int) $_POST['id'];
+public/ajax/request_vote.php:22:$voted = $_POST['voted'];
+public/ajax/show_in_navbar.php:24:if (!isset($_POST['show']) || empty($_POST['id'])) {
+public/ajax/show_in_navbar.php:29:$show = $_POST['show'] == 0 ? 1 : 0;
+public/ajax/show_in_navbar.php:35:$result = $db->perform($sql, array_merge($set, ['id' => $_POST['id']]));
+public/ajax/staff_picks.php:22:$pick = (int) $_POST['pick'];
+public/ajax/staff_picks.php:23:$id = (int) $_POST['id'];
+public/ajax/take_upload.php:39:for ($i = 0; $i < $_POST['nbr_files']; ++$i) {
+public/ajax/take_url_upload.php:24:$url = $_POST['url'];
+public/ajax/thanks.php:35:$tid = (int) ($_POST['tid'] ?? ($_GET['tid'] ?? 0));
+public/ajax/thanks.php:36:$do = htmlsafechars($_POST['action'] ?? ($_GET['action'] ?? 'list'));
+public/ajax/thanks.php:37:$ajax = isset($_POST['ajax']) && (int) $_POST['ajax'] === 1;
+public/ajax/torrents_lookup.php:25:$uid = $user['class'] < UC_STAFF ? $user['id'] : (int) $_POST['uid'];
+public/ajax/torrents_lookup.php:26:$type = $_POST['type'];
+public/ajax/trivia_answers.php:18:$gamenum = (int) $_POST['gamenum'];
+public/ajax/trivia_answers.php:19:$qid = (int) $_POST['qid'];
+public/ajax/trivia_answers.php:20:$answer = $_POST['answer'];
+public/ajax/tvmaze_lookup.php:14:$tvmazeid = !empty($_POST['tvmazeid']) ? (int) strip_tags($_POST['tvmazeid']) : 0;
+public/ajax/tvmaze_lookup.php:15:$tid = !empty($_POST['tid']) ? (int) strip_tags($_POST['tid']) : 0;
+public/ajax/tvmaze_lookup.php:16:$name = !empty($_POST['name']) ? htmlsafechars($_POST['name']) : null;
+public/ajax/usersearch.php:17:$term = htmlsafechars(strtolower(strip_tags($_POST['keyword'])));
+public/bitbucket.php:164:    $bucketlink2 = ((isset($_POST['avy']) || (isset($_GET['images']) && $_GET['images'] == 2)) ? 'avatar/' : $folder_name . DIRECTORY_SEPARATOR);
+public/blackjack.php:120:$game = isset($_POST['game']) ? htmlsafechars($_POST['game']) : '';
+public/blackjack.php:121:$start_ = isset($_POST['start_']) ? htmlsafechars($_POST['start_']) : '';
+public/blackjack.php:208:    if ($_POST['game'] === 'hit') {
+public/blackjack.php:369:        } elseif (($start_ != 'yes' && isset($_POST['continue']) != 'yes') && !$gameover) {
+public/blackjack.php:711:    } elseif ($_POST['game'] == 'stop') {
+public/blackjack.php:84:if (isset($_POST['ddown']) && $_POST['ddown'] === 'ddown') {
+public/browse.php:209:        if (!empty($_POST['search']) && ($search === 'sns' || $search === 'sna')) {
+public/browse.php:210:            $cleaned = searchfield($_POST['search']);
+public/bugs.php:301:    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+public/bugs.php:302:        $title = htmlsafechars($_POST['title']);
+public/bugs.php:303:        $priority = htmlsafechars($_POST['priority']);
+public/bugs.php:304:        $problem = htmlsafechars($_POST['problem']);
+public/bugs.php:39:$action = isset($_GET['action']) ? htmlsafechars($_GET['action']) : (isset($_POST['action']) ? htmlsafechars($_POST['action']) : 'bugs');
+public/bugs.php:50:    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+public/bugs.php:54:        $id = isset($_POST['id']) ? (int) $_POST['id'] : 0;
+public/bugs.php:55:        $status = isset($_POST['status']) ? htmlsafechars($_POST['status']) : '';
+public/bugs.php:56:        $comment = !empty($_POST['comment']) ? htmlsafechars($_POST['comment']) : '';
+public/bugs.php:92:            'comment' => !empty($_POST['comment']) ? htmlsafechars($_POST['comment']) : '',
+public/casino.php:168:$post_color = isset($_POST['color']) ? $_POST['color'] : '';
+public/casino.php:169:$post_number = isset($_POST['number']) ? $_POST['number'] : '';
+public/casino.php:170:$post_betmb = isset($_POST['betmb']) ? $_POST['betmb'] : '';
+public/casino.php:174:    $betmb = $_POST['betmb'];
+public/casino.php:175:    if (isset($_POST['number'])) {
+public/casino.php:178:        $winner_was = (int) $_POST['number'];
+public/casino.php:180:        $winner_was = htmlsafechars($_POST['color']);
+public/casino.php:199:        if (isset($_POST['number'])) {
+public/casino.php:202:            } while ($_POST['number'] == $fake_winner);
+public/casino.php:204:            if ($_POST['color'] === 'black') {
+public/casino.php:224:    if (isset($_POST['unit'])) {
+public/casino.php:225:        if ((int) $_POST['unit'] === 1) {
+public/casino.php:357:    if (isset($_POST['unit'])) {
+public/casino.php:358:        if ((int) $_POST['unit'] === 1) {
+public/casino.php:359:            $nobits = (int) $_POST['amnt'] * $mb_basic;
+public/casino.php:361:            $nobits = (int) $_POST['amnt'] * $mb_basic * $mib;
+public/casino.php:364:    if (isset($_POST['unit'])) {
+public/contactstaff.php:35:if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+public/contactstaff.php:36:    $msg = isset($_POST['body']) ? htmlsafechars($_POST['body']) : '';
+public/contactstaff.php:37:    $subject = isset($_POST['subject']) ? htmlsafechars($_POST['subject']) : '';
+public/contactstaff.php:38:    $returnto = isset($_POST['returnto']) ? htmlsafechars($_POST['returnto']) : $_SERVER['PHP_SELF'];
+public/details.php:110:    } elseif (isset($_POST['rechecked']) && $_POST['rechecked'] == $id) {
+public/details.php:120:    } elseif (isset($_POST['clearchecked']) && $_POST['clearchecked'] == $id) {
+public/details.php:130:    } elseif (isset($_POST['clear_cache']) && $_POST['clear_cache'] == $id) {
+public/details.php:95:    if (isset($_POST['checked']) && $_POST['checked'] == $id) {
+public/downloadsub.php:12:$action = isset($_POST['action']) ? htmlsafechars($_POST['action']) : '';
+public/downloadsub.php:14:    $id = isset($_POST['sid']) ? (int) $_POST['sid'] : 0;
+public/edit.php:39:    if (isset($_POST['returnto'])) {
+public/edit.php:40:        $returl .= '&returnto=' . urlencode($_POST['returnto']);
+public/forums.php:195:$poll_starts = isset($_POST['poll_starts']) ? (int) $_POST['poll_starts'] : 0;
+public/forums.php:196:$poll_ends = isset($_POST['poll_ends']) ? (int) $_POST['poll_ends'] : 1356048000;
+public/forums.php:197:$change_vote = (isset($_POST['change_vote']) && $_POST['change_vote'] === 'yes') ? 'yes' : 'no';
+public/forums.php:198:$multi_options = isset($_POST['multi_options']) ? (int) $_POST['multi_options'] : 1;
+public/forums.php:207:<div id="staff_tools" ' . ((isset($_POST['poll_question']) && $_POST['poll_question'] !== '') ? '' : 'style="display:none"') . '>' . main_table(($user['class'] < $minUploadClass ? '' : '<tr>
+public/forums.php:229:<td><input type="text" name="poll_question" class="w-100" value="' . (isset($_POST['poll_question']) ? strip_tags($_POST['poll_question']) : '') . '"></td>
+public/forums.php:234:<td><textarea cols="30" rows="4" name="poll_answers" class="text_area_small">' . (isset($_POST['poll_answers']) ? strip_tags($_POST['poll_answers']) : '') . '</textarea><br>' . _('One option per line. There is a minimum of 2 options, and a maximun of 20 options. BBcode is enabled.') . '</td>
+public/forums.php:284:$forum_id = isset($_GET['forum_id']) ? (int) $_GET['forum_id'] : (isset($_POST['forum_id']) ? (int) $_POST['forum_id'] : 0);
+public/forums.php:50:$posted_action = isset($_GET['action']) ? htmlsafechars($_GET['action']) : (isset($_POST['action']) ? htmlsafechars($_POST['action']) : '');
+public/getrss.php:23:if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+public/getrss.php:24:    $cats = !empty($_POST['cats']) ? array_map('intval', $_POST['cats']) : [];
+public/getrss.php:25:    $feed = !empty($_POST['feed']) && $_POST['feed'] === 'dl' ? 'dl' : 'web';
+public/getrss.php:26:    $bm = isset($_POST['bm']) ? (int) $_POST['bm'] : 0;
+public/getrss.php:34:    $count = isset($_POST['count']) && in_array((int) $_POST['count'], $counts) ? (int) $_POST['count'] : 15;
+public/hnrs.php:100:            $snatched_class->update($set, (int) $_POST['tid'], (int) $_POST['userid']);
+public/hnrs.php:101:            $bonuscomment = get_date((int) TIME_NOW, 'DATE', 1) . ' - ' . _fe('{0} upload credit for a ratio fix on torrent: {1} => {2}', mksize($bytes), $_POST['tid'], format_comment($torrent['name'])) . ".\n{$user_stuff['bonuscomment']}";
+public/hnrs.php:106:            $users_class->update($set, (int) $_POST['userid']);
+public/hnrs.php:49:if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+public/hnrs.php:50:    if (empty($_POST['sid']) || empty($_POST['tid']) || empty($_POST['userid'])) {
+public/hnrs.php:54:        $torrent = $torrents_class->get((int) $_POST['tid']);
+public/hnrs.php:61:        $snatched = $snatched_class->get_snatched((int) $_POST['userid'], (int) $_POST['tid']);
+public/hnrs.php:62:        if (!$snatched || $snatched['id'] != $_POST['sid']) {
+public/hnrs.php:67:        if (!empty($_POST['seed'])) {
+public/hnrs.php:76:                'seedtime' => $_POST['seed'],
+public/hnrs.php:78:            $snatched_class->update($set, (int) $_POST['tid'], (int) $_POST['userid']);
+public/hnrs.php:79:            $bonuscomment = get_date((int) TIME_NOW, 'DATE', 1) . ' - ' . _fe('{0} Points for a seedtime fix on torrent: {1} => {2}', $cost, $_POST['tid'], format_comment($torrent['name'])) . ".\n{$user_stuff['bonuscomment']}";
+public/hnrs.php:84:            $users_class->update($set, (int) $_POST['userid']);
+public/hnrs.php:87:        } elseif (!empty($_POST['bytes'])) {
+public/index.php:32:if ((isset($_GET['act']) && $_GET['act'] === 'Arcade' && isset($_POST['gname'])) || (isset($_POST['module']) && $_POST['module'] === 'pnFlashGames')) {
+public/login.php:36:if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+public/mybonus.php:58:if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+public/new_announcement.php:31:if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+public/new_announcement.php:41:    $n_pms = isset($_POST['n_pms']) ? (int) $_POST['n_pms'] : 0;
+public/new_announcement.php:42:    $ann_query = isset($_POST['ann_query']) ? rawurldecode(trim($_POST['ann_query'])) : '';
+public/new_announcement.php:50:    $body = trim((isset($_POST['body']) ? $_POST['body'] : ''));
+public/new_announcement.php:51:    $subject = trim((isset($_POST['subject']) ? $_POST['subject'] : ''));
+public/new_announcement.php:52:    $expiry = (int) (isset($_POST['expiry']) ? $_POST['expiry'] : 0);
+public/new_announcement.php:53:    if ((isset($_POST['buttonval']) && $_POST['buttonval'] === 'Submit')) {
+public/offers.php:155:if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+public/offers.php:167:        $id = isset($_POST['id']) ? (int) $_POST['id'] : 0;
+public/offers.php:169:            'text' => htmlsafechars($_POST['body']),
+public/offers.php:196:        $cid = isset($_POST['cid']) ? (int) $_POST['cid'] : 0;
+public/offers.php:199:            'text' => htmlsafechars($_POST['body']),
+public/offers.php:210:        $id = isset($_POST['id']) ? (int) $_POST['id'] : 0;
+public/offers.php:228:            'category' => (int) $_POST['type'],
+public/offers.php:229:            'name' => htmlsafechars($_POST['name']),
+public/offers.php:230:            'poster' => htmlsafechars($_POST['poster']),
+public/offers.php:231:            'url' => htmlsafechars($_POST['url']),
+public/offers.php:234:            'description' => htmlsafechars($_POST['body']),
+public/offers.php:239:                $session->set('is-success', _fe('Offer: {0} Added', format_comment($_POST['name'])));
+public/offers.php:246:            if ($offer_class->update($values, (int) $_POST['id'])) {
+public/offers.php:247:                $session->set('is-success', _fe('Offer: {0} Updated', format_comment($_POST['name'])));
+public/polls_take_vote.php:26:$_POST['choice'] = isset($_POST['choice']) ? $_POST['choice'] : [];
+public/polls_take_vote.php:41:$_POST['nullvote'] = isset($_POST['nullvote']) ? $_POST['nullvote'] : 0;
+public/polls_take_vote.php:43:if (!$_POST['nullvote']) {
+public/polls_take_vote.php:44:    if (is_array($_POST['choice']) && count($_POST['choice'])) {
+public/polls_take_vote.php:45:        foreach ($_POST['choice'] as $question_id => $choice_id) {
+public/polls_take_vote.php:54:            if ($_POST[$k] == 1) {
+public/recover.php:39:if ($_SERVER['REQUEST_METHOD'] === 'POST' && !isset($_POST['selector'])) {
+public/recover.php:52:} elseif ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['selector'])) {
+public/report.php:35:$id = !empty($_GET['id']) ? (int) $_GET['id'] : (!empty($_POST['id']) ? (int) $_POST['id'] : 0);
+public/report.php:39:$type = isset($_GET['type']) ? htmlsafechars($_GET['type']) : (!empty($_POST['type']) ? htmlsafechars($_POST['type']) : '');
+public/report.php:54:if (isset($_POST['do_it'])) {
+public/report.php:55:    $id = !empty($_POST['id']) ? (int) $_POST['id'] : 0;
+public/report.php:56:    $id_2 = !empty($_POST['id_2']) ? (int) $_POST['id_2'] : 0;
+public/report.php:57:    $do_it = !empty($_POST['do_it']) ? (int) $_POST['do_it'] : 0;
+public/report.php:62:    $reason = !empty($_POST['body']) ? htmlsafechars($_POST['body']) : '';
+public/requests.php:168:if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+public/requests.php:179:        $id = isset($_POST['id']) ? (int) $_POST['id'] : 0;
+public/requests.php:205:        $id = isset($_POST['id']) ? (int) $_POST['id'] : 0;
+public/requests.php:206:        $bounty = isset($_POST['bounty']) ? (int) $_POST['bounty'] : 0;
+public/requests.php:227:        $id = isset($_POST['id']) ? (int) $_POST['id'] : 0;
+public/requests.php:229:            'text' => htmlsafechars($_POST['body']),
+public/requests.php:256:        $cid = isset($_POST['cid']) ? (int) $_POST['cid'] : 0;
+public/requests.php:259:            'text' => htmlsafechars($_POST['body']),
+public/requests.php:270:        $id = isset($_POST['id']) ? (int) $_POST['id'] : 0;
+public/requests.php:288:            'category' => (int) $_POST['type'],
+public/requests.php:289:            'name' => htmlsafechars($_POST['name']),
+public/requests.php:290:            'poster' => htmlsafechars($_POST['poster']),
+public/requests.php:291:            'url' => htmlsafechars($_POST['url']),
+public/requests.php:294:            'description' => htmlsafechars($_POST['body']),
+public/requests.php:299:                $session->set('is-success', _fe('Request: {0} Added', format_comment($_POST['name'])));
+public/requests.php:306:            if ($request_class->update($values, (int) $_POST['id'])) {
+public/requests.php:307:                $session->set('is-success', _fe('Request: {0} Updated', format_comment($_POST['name'])));
+public/signup.php:34:if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+public/signup.php:38:        'username' => $_POST['username'],
+public/signup.php:39:        'email' => $_POST['email'],
+public/subtitles.php:23:$action = (isset($_GET['action']) ? htmlsafechars($_GET['action']) : (isset($_POST['action']) ? htmlsafechars($_POST['action']) : ''));
+public/subtitles.php:27:if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+public/subtitles.php:29:        $langs = isset($_POST['language']) ? htmlsafechars($_POST['language']) : '';
+public/subtitles.php:33:        $releasename = isset($_POST['releasename']) ? htmlsafechars($_POST['releasename']) : '';
+public/subtitles.php:37:        $url = strip_tags(isset($_POST['imdb']) ? trim($_POST['imdb']) : '');
+public/subtitles.php:46:        $comment = isset($_POST['comment']) ? htmlsafechars($_POST['comment']) : '';
+public/subtitles.php:47:        $poster = isset($_POST['poster']) ? htmlsafechars($_POST['poster']) : '';
+public/subtitles.php:48:        $fps = isset($_POST['fps']) ? htmlsafechars($_POST['fps']) : '';
+public/subtitles.php:49:        $cd = isset($_POST['cd']) ? (int) $_POST['cd'] : '';
+public/subtitles.php:92:            $id = isset($_POST['id']) ? (int) $_POST['id'] : 0;
+public/tags.php:81:$test = isset($_POST['test']) ? $_POST['test'] : '';
+public/takereseed.php:14:$pm_what = isset($_POST['pm_what']) && $_POST['pm_what'] === 'last10' ? 'last10' : 'owner';
+public/takereseed.php:15:$reseedid = (int) $_POST['reseedid'];
+public/takereseed.php:16:$uploader = (int) $_POST['uploader'];
+public/takereseed.php:17:$name = $_POST['name'];
+public/takethankyou.php:22:if (empty($_POST['id']) && empty($_GET['id'])) {
+public/takethankyou.php:25:$id = !empty($_GET['id']) ? (int) $_GET['id'] : (int) $_POST['id'];
+public/tenpercent.php:31:if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+public/tenpercent.php:35:    $sure = (isset($_POST['sure']) ? intval($_POST['sure']) : '');
+public/upcoming.php:61:if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+public/upcoming.php:78:        'category' => (int) $_POST['type'],
+public/upcoming.php:79:        'name' => htmlsafechars($_POST['name']),
+public/upcoming.php:80:        'poster' => htmlsafechars($_POST['poster']),
+public/upcoming.php:81:        'status' => htmlsafechars($_POST['status']),
+public/upcoming.php:82:        'url' => htmlsafechars($_POST['url']),
+public/upcoming.php:83:        'expected' => date('Y-m-d H:i:s', strtotime($_POST['expected'])),
+public/upcoming.php:90:            $session->set('is-success', _fe('Recipe: {0} Added', format_comment($_POST['name'])));
+public/upcoming.php:95:        if ($cooker_class->update($values, (int) $_POST['id'])) {
+public/upcoming.php:96:            $session->set('is-success', _fe('Recipe: {0} Updated', format_comment($_POST['name'])));
+public/uploadapp.php:100:        'creating' => htmlsafechars($_POST['creating']),
+public/uploadapp.php:101:        'seeding' => htmlsafechars($_POST['seeding']),
+public/uploadapp.php:56:if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+public/uploadapp.php:57:    if (!is_valid_id((int) $_POST['userid'])) {
+public/uploadapp.php:60:    if (!$_POST['speed']) {
+public/uploadapp.php:63:    if (!$_POST['offer']) {
+public/uploadapp.php:66:    if (!$_POST['reason']) {
+public/uploadapp.php:69:    if ($_POST['sites'] === 'yes' && empty($_POST['sitenames'])) {
+public/uploadapp.php:72:    check_status($fluent, $_POST['userid']);
+public/uploadapp.php:90:        'userid' => (int) $_POST['userid'],
+public/uploadapp.php:92:        'connectable' => htmlsafechars($_POST['connectable']),
+public/uploadapp.php:93:        'speed' => htmlsafechars($_POST['speed']),
+public/uploadapp.php:94:        'offer' => htmlsafechars($_POST['offer']),
+public/uploadapp.php:95:        'reason' => htmlsafechars($_POST['reason']),
+public/uploadapp.php:96:        'sites' => htmlsafechars($_POST['sites']),
+public/uploadapp.php:97:        'sitenames' => htmlsafechars($_POST['sitenames']),
+public/uploadapp.php:98:        'scene' => htmlsafechars($_POST['scene']),
+public/user_blocks.php:104:    if (isset($_POST['disclaimer'])) {
+public/user_blocks.php:109:    if (isset($_POST['latest_user'])) {
+public/user_blocks.php:114:    if (isset($_POST['latestcomments'])) {
+public/user_blocks.php:120:    if (isset($_POST['forumposts'])) {
+public/user_blocks.php:125:    if (isset($_POST['staff_picks'])) {
+public/user_blocks.php:130:    if (isset($_POST['latest_torrents'])) {
+public/user_blocks.php:135:    if (isset($_POST['latest_movies'])) {
+public/user_blocks.php:140:    if (isset($_POST['latest_tv'])) {
+public/user_blocks.php:145:    if (isset($_POST['latest_torrents_scroll'])) {
+public/user_blocks.php:150:    if (isset($_POST['latest_torrents_slider'])) {
+public/user_blocks.php:155:    if (isset($_POST['announcement'])) {
+public/user_blocks.php:160:    if (isset($_POST['donation_progress'])) {
+public/user_blocks.php:165:    if (isset($_POST['advertisements'])) {
+public/user_blocks.php:170:    if (isset($_POST['torrentfreak'])) {
+public/user_blocks.php:175:    if (isset($_POST['christmas_gift'])) {
+public/user_blocks.php:180:    if (isset($_POST['active_poll'])) {
+public/user_blocks.php:185:    if (isset($_POST['movie_ofthe_week'])) {
+public/user_blocks.php:191:    if (isset($_POST['stdhead_freeleech'])) {
+public/user_blocks.php:196:    if (isset($_POST['stdhead_demotion'])) {
+public/user_blocks.php:201:    if (isset($_POST['stdhead_newpm'])) {
+public/user_blocks.php:206:    if (isset($_POST['stdhead_staff_message'])) {
+public/user_blocks.php:211:    if (isset($_POST['stdhead_reports'])) {
+public/user_blocks.php:216:    if (isset($_POST['stdhead_uploadapp'])) {
+public/user_blocks.php:221:    if (isset($_POST['stdhead_happyhour'])) {
+public/user_blocks.php:226:    if (isset($_POST['stdhead_crazyhour'])) {
+public/user_blocks.php:231:    if (isset($_POST['stdhead_bugmessage'])) {
+public/user_blocks.php:236:    if (isset($_POST['stdhead_freeleech_contribution'])) {
+public/user_blocks.php:242:    if (isset($_POST['userdetails_flush'])) {
+public/user_blocks.php:247:    if (isset($_POST['userdetails_joined'])) {
+public/user_blocks.php:252:    if (isset($_POST['userdetails_online_time'])) {
+public/user_blocks.php:257:    if (isset($_POST['userdetails_browser'])) {
+public/user_blocks.php:262:    if (isset($_POST['userdetails_reputation'])) {
+public/user_blocks.php:267:    if (isset($_POST['userdetails_user_hits'])) {
+public/user_blocks.php:272:    if (isset($_POST['userdetails_birthday'])) {
+public/user_blocks.php:277:    if (isset($_POST['userdetails_birthday'])) {
+public/user_blocks.php:282:    if (isset($_POST['userdetails_contact_info'])) {
+public/user_blocks.php:288:    if (isset($_POST['userdetails_avatar'])) {
+public/user_blocks.php:293:    if (isset($_POST['userdetails_iphistory'])) {
+public/user_blocks.php:298:    if (isset($_POST['userdetails_traffic'])) {
+public/user_blocks.php:303:    if (isset($_POST['userdetails_share_ratio'])) {
+public/user_blocks.php:308:    if (isset($_POST['userdetails_seedtime_ratio'])) {
+public/user_blocks.php:313:    if (isset($_POST['userdetails_seedbonus'])) {
+public/user_blocks.php:318:    if (isset($_POST['userdetails_irc_stats'])) {
+public/user_blocks.php:323:    if (isset($_POST['userdetails_connectable_port'])) {
+public/user_blocks.php:328:    if (isset($_POST['userdetails_userclass'])) {
+public/user_blocks.php:333:    if (isset($_POST['userdetails_gender'])) {
+public/user_blocks.php:338:    if (isset($_POST['userdetails_freestuffs'])) {
+public/user_blocks.php:343:    if (isset($_POST['userdetails_comments'])) {
+public/user_blocks.php:348:    if (isset($_POST['userdetails_forumposts'])) {
+public/user_blocks.php:353:    if (isset($_POST['userdetails_invitedby'])) {
+public/user_blocks.php:358:    if (isset($_POST['userdetails_torrents_block'])) {
+public/user_blocks.php:363:    if (isset($_POST['userdetails_completed'])) {
+public/user_blocks.php:368:    if (isset($_POST['userdetails_snatched_staff'])) {
+public/user_blocks.php:373:    if (isset($_POST['userdetails_userinfo'])) {
+public/user_blocks.php:378:    if (isset($_POST['userdetails_showpm'])) {
+public/user_blocks.php:383:    if (isset($_POST['userdetails_report_user'])) {
+public/user_blocks.php:388:    if (isset($_POST['userdetails_user_status'])) {
+public/user_blocks.php:393:    if (isset($_POST['userdetails_user_comments'])) {
+public/user_blocks.php:398:    if (isset($_POST['userdetails_show_friends'])) {
+public/user_blocks.php:40:if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+public/user_blocks.php:44:    if (isset($_POST['ie_alert'])) {
+public/user_blocks.php:49:    if (isset($_POST['news'])) {
+public/user_blocks.php:54:    if (isset($_POST['ajaxchat'])) {
+public/user_blocks.php:59:    if (isset($_POST['trivia'])) {
+public/user_blocks.php:64:    if (isset($_POST['active_users'])) {
+public/user_blocks.php:69:    if (isset($_POST['last_24_active_users'])) {
+public/user_blocks.php:74:    if (isset($_POST['irc_active_users'])) {
+public/user_blocks.php:79:    if (isset($_POST['cooker'])) {
+public/user_blocks.php:84:    if (isset($_POST['requests'])) {
+public/user_blocks.php:89:    if (isset($_POST['offers'])) {
+public/user_blocks.php:94:    if (isset($_POST['birthday_active_users'])) {
+public/user_blocks.php:99:    if (isset($_POST['stats'])) {
+public/user_unlocks.php:29:if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+public/user_unlocks.php:32:    if (isset($_POST['unlock_user_moods'])) {
+public/user_unlocks.php:38:    if (isset($_POST['perms_stealth'])) {
+public/usercomment.php:106:    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+public/usercomment.php:107:        $commentid = (int) $_POST['cid'];
+public/usercomment.php:126:    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+public/usercomment.php:127:        $body = htmlsafechars($_POST['body']);
+public/usercomment.php:128:        $returnto = htmlsafechars($_POST['returnto']);
+public/usercomment.php:37:    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+public/usercomment.php:38:        $userid = (int) $_POST['userid'];
+public/usercomment.php:46:        $body = isset($_POST['body']) ? htmlsafechars($_POST['body']) : '';
+public/verify.php:25:if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+public/verify.php:28:    $url = get_return_to($_POST['page']);
+public/verify.php:35:        if ($auth->reconfirmPassword($_POST['password'])) {
+public/wiki.php:117:if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+public/wiki.php:119:    if (isset($_POST['article-add'])) {
+public/wiki.php:126:                'name' => htmlsafechars($_POST['article-name']),
+public/wiki.php:127:                'body' => htmlsafechars($_POST['body']),
+public/wiki.php:134:    } elseif (isset($_POST['article-edit'])) {
+public/wiki.php:135:        $id = (int) $_POST['article-id'];
+public/wiki.php:137:            'name' => htmlsafechars($_POST['article-name']),
+public/wiki.php:138:            'body' => htmlsafechars($_POST['body']),
+public/wiki.php:144:    } elseif (isset($_POST['wiki'])) {
+public/wiki.php:145:        $name = htmlsafechars(urldecode($_POST['article']));
+public/wiki.php:68:    $value = !empty($_POST['article']) ? $_POST['article'] : '';
+staffpanel/index.php:256:            ${$name} = (isset($_POST[$name]) ? $_POST[$name] : ($action === 'edit' ? $arr[$name] : ''));
+staffpanel/index.php:263:        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+staffpanel/index.php:280:            if (!in_array((int) $_POST['av_class'], $staff_classes, true)) {
+staffpanel/index.php:306:                        ':av_class' => (int) $_POST['av_class'],
+staffpanel/index.php:338:                        ':av_class' => (int) $_POST['av_class'],
+staffpanel/index.php:364:                        $page = _('Page') . " '[color=#" . get_user_class_color((int) $_POST['av_class']) . "]{$page_name}[/color]'";
