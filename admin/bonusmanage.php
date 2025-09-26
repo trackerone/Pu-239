@@ -5,7 +5,6 @@ require_once dirname(__DIR__) . '/bootstrap_web.php';
 use Pu239\Config\ConfigRepository;
 use Pu239\Database;
 
-
 global $container;
 /** @var ConfigRepository $config */
 $config = $container->get(ConfigRepository::class);
@@ -16,14 +15,20 @@ $class = get_access(basename($_SERVER['REQUEST_URI']));
 class_check($class);
 
 $s = $s ?? static fn($v) => htmlspecialchars((string) $v, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
+<<<<<< codex/enforce-csrf-and-output-escaping-y3qyza
+=======
 <<<<<< codex/enforce-csrf-and-output-escaping-ism9l3
+>>>>>> master
 $selfPath = $_SERVER['PHP_SELF'] ?? '';
 $baseurlRaw = (string) $config->get('paths.baseurl');
 $self = $s($selfPath);
 $baseurl = $s($baseurlRaw);
+<<<<<< codex/enforce-csrf-and-output-escaping-y3qyza
+=======
 =======
 $self = $s($_SERVER['PHP_SELF'] ?? '');
 $baseurl = $s($config->get('paths.baseurl'));
+>>>>>> master
 >>>>>> master
 
 $HTMLOUT = $count = '';
@@ -56,10 +61,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
 
         if ($sql) {
+<<<<<< codex/enforce-csrf-and-output-escaping-y3qyza
+            header("Location: {$selfPath}?tool=bonusmanage");
+=======
 <<<<<< codex/enforce-csrf-and-output-escaping-ism9l3
             header("Location: {$selfPath}?tool=bonusmanage");
 =======
             header("Location: {$self}?tool=bonusmanage");
+>>>>>> master
 >>>>>> master
             app_halt('Exit called');
         } else {
@@ -101,6 +110,15 @@ foreach ($rows as $arr) {
     $pointsPool = (int) $arr['pointspool'];
     $minPoints = (int) $arr['minpoints'];
     $minClass = (int) $arr['minclass'];
+<<<<<< codex/enforce-csrf-and-output-escaping-y3qyza
+    $idAttr = $s((string) $id);
+    $orderIdAttr = $s((string) $orderId);
+    $bonusPointsAttr = $s((string) $bonusPoints);
+    $pointsPoolAttr = $s((string) $pointsPool);
+    $minPointsAttr = $s((string) $minPoints);
+    $minClassAttr = $s((string) $minClass);
+=======
+>>>>>> master
     $enabledAttribute = $arr['enabled'] === 'yes' ? "checked='checked'" : '';
     $bonusName = format_comment($arr['bonusname']);
     $description = format_comment($arr['description']);
@@ -108,6 +126,16 @@ foreach ($rows as $arr) {
     $body .= <<<HTML
         <tr>
             <form name='bonusmanage' method='post' action='{$self}?tool=bonusmanage&amp;action=bonusmanage' enctype='multipart/form-data' accept-charset='utf-8'>
+<<<<<< codex/enforce-csrf-and-output-escaping-y3qyza
+                <td><input name='id' type='hidden' value='{$idAttr}'>{$idAttr}</td>
+                <td><input type='number' name='orderid' value='{$orderIdAttr}' class='w-100'></td>
+                <td><input name='enabled' type='checkbox' {$enabledAttribute}></td>
+                <td>{$bonusName}</td>
+                <td><input type='number' name='bonuspoints' value='{$bonusPointsAttr}' class='w-100'></td>
+                <td><input type='number' name='pointspool' value='{$pointsPoolAttr}' class='w-100'></td>
+                <td><input type='number' name='minpoints' value='{$minPointsAttr}' class='w-100'></td>
+                <td><input type='number' name='minclass' value='{$minClassAttr}' class='w-100'></td>
+=======
                 <td><input name='id' type='hidden' value='{$id}'>{$id}</td>
                 <td><input type='number' name='orderid' value='{$orderId}' class='w-100'></td>
                 <td><input name='enabled' type='checkbox' {$enabledAttribute}></td>
@@ -116,6 +144,7 @@ foreach ($rows as $arr) {
                 <td><input type='number' name='pointspool' value='{$pointsPool}' class='w-100'></td>
                 <td><input type='number' name='minpoints' value='{$minPoints}' class='w-100'></td>
                 <td><input type='number' name='minclass' value='{$minClass}' class='w-100'></td>
+>>>>>> master
                 <td><textarea name='description' rows='4' class='w-100'>{$description}</textarea></td>
                 <td>{$art}</td>
                 <td>{$quantityDisplay}</td>
