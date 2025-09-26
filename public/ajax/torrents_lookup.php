@@ -9,94 +9,99 @@ use Pu239\Database;
 
 require_once dirname(__DIR__) . '/bootstrap_web.php';
 
-global $container;
 /** @var ConfigRepository $config */
 $config = $container->get(ConfigRepository::class);
 $db = $container->get(Database::class);
 
 require_once __DIR__ . '/../../include/bittorrent.php';
 $user = check_user_status();
-header('content-type: application/json');
+header('Content-Type: application/json; charset=utf-8');
 
-if (empty($user)) {
-    echo json_encode(['fail' => 'csrf']);
+// TODO(2025): csrf
+if ($user === false) {
+    echo json_encode(['fail' => 'csrf'], JSON_THROW_ON_ERROR);
     app_halt('Exit called');
 }
-$uid = $user['class'] < UC_STAFF ? $user['id'] : (int) $_POST['uid'];
-$type = $_POST['type'];
+$uid = $user['class'] < UC_STAFF ? (int) $user['id'] : (int) ($_POST['uid'] ?? 0);
+$type = (string) ($_POST['type'] ?? '');
+
+if ($uid <= 0 || $type === '') {
+    echo json_encode(['fail' => 'invalid'], JSON_THROW_ON_ERROR);
+    app_halt('Exit called');
+}
 if ($type === 'torrents') {
     $torrents = get_uploaded($uid);
     if (!$torrents) {
-        echo json_encode(['content' => main_div(_('You have not uploaded any torrents'), null, 'padding20')]);
+        echo json_encode(['content' => main_div(_('You have not uploaded any torrents'), null, 'padding20')], JSON_THROW_ON_ERROR);
         app_halt('Exit called');
     }
     $data = maketable($torrents);
     if (!empty($data)) {
-        echo json_encode(['content' => $data]);
+        echo json_encode(['content' => $data], JSON_THROW_ON_ERROR);
         app_halt('Exit called');
     } else {
-        echo json_encode(['content' => main_div(_('You have not uploaded any torrents'), null, 'padding20')]);
+        echo json_encode(['content' => main_div(_('You have not uploaded any torrents'), null, 'padding20')], JSON_THROW_ON_ERROR);
         app_halt('Exit called');
     }
 } elseif ($type === 'seeding') {
     $torrents = get_seeding($uid);
     if (!$torrents) {
-        echo json_encode(['content' => main_div(_('You are not seeding any torrents'), null, 'padding20')]);
+        echo json_encode(['content' => main_div(_('You are not seeding any torrents'), null, 'padding20')], JSON_THROW_ON_ERROR);
         app_halt('Exit called');
     }
     $data = maketable($torrents);
     if (!empty($data)) {
-        echo json_encode(['content' => $data]);
+        echo json_encode(['content' => $data], JSON_THROW_ON_ERROR);
         app_halt('Exit called');
     } else {
-        echo json_encode(['content' => main_div(_('You are not seeding any torrents'), null, 'padding20')]);
+        echo json_encode(['content' => main_div(_('You are not seeding any torrents'), null, 'padding20')], JSON_THROW_ON_ERROR);
         app_halt('Exit called');
     }
 } elseif ($type === 'leeching') {
     $torrents = get_leeching($uid);
     if (!$torrents) {
-        echo json_encode(['content' => main_div(_('You are not leeching any torrents'), null, 'padding20')]);
+        echo json_encode(['content' => main_div(_('You are not leeching any torrents'), null, 'padding20')], JSON_THROW_ON_ERROR);
         app_halt('Exit called');
     }
     $data = maketable($torrents);
     if (!empty($data)) {
-        echo json_encode(['content' => $data]);
+        echo json_encode(['content' => $data], JSON_THROW_ON_ERROR);
         app_halt('Exit called');
     } else {
-        echo json_encode(['content' => main_div(_('You are not leeching any torrents'), null, 'padding20')]);
+        echo json_encode(['content' => main_div(_('You are not leeching any torrents'), null, 'padding20')], JSON_THROW_ON_ERROR);
         app_halt('Exit called');
     }
 } elseif ($type === 'snatched') {
     $torrents = get_snatched($uid);
     if (!$torrents) {
-        echo json_encode(['content' => main_div(_('You have not downloaded any torrents'), null, 'padding20')]);
+        echo json_encode(['content' => main_div(_('You have not downloaded any torrents'), null, 'padding20')], JSON_THROW_ON_ERROR);
         app_halt('Exit called');
     }
     $data = snatchtable($torrents);
     if (!empty($data)) {
-        echo json_encode(['content' => $data]);
+        echo json_encode(['content' => $data], JSON_THROW_ON_ERROR);
         app_halt('Exit called');
     } else {
-        echo json_encode(['content' => main_div(_('You have not downloaded any torrents'), null, 'padding20')]);
+        echo json_encode(['content' => main_div(_('You have not downloaded any torrents'), null, 'padding20')], JSON_THROW_ON_ERROR);
         app_halt('Exit called');
     }
 } elseif ($type === 'snatched_staff' && $user['class'] >= UC_STAFF) {
     $torrents = get_snatched_staff($uid);
     if (!$torrents) {
-        echo json_encode(['content' => main_div(_('You have not downloaded any torrents'), null, 'padding20')]);
+        echo json_encode(['content' => main_div(_('You have not downloaded any torrents'), null, 'padding20')], JSON_THROW_ON_ERROR);
         app_halt('Exit called');
     }
     $data = staff_snatchtable($torrents, $uid);
     if (!empty($data)) {
-        echo json_encode(['content' => $data]);
+        echo json_encode(['content' => $data], JSON_THROW_ON_ERROR);
         app_halt('Exit called');
     } else {
-        echo json_encode(['content' => main_div(_('You have not downloaded any torrents'), null, 'padding20')]);
+        echo json_encode(['content' => main_div(_('You have not downloaded any torrents'), null, 'padding20')], JSON_THROW_ON_ERROR);
         app_halt('Exit called');
     }
 }
 
-echo json_encode(['fail' => 'invalid']);
+echo json_encode(['fail' => 'invalid'], JSON_THROW_ON_ERROR);
 app_halt('Exit called');
 
 /**
@@ -111,8 +116,7 @@ app_halt('Exit called');
  */
 function get_uploaded(int $userid)
 {
-    global $container;
-
+    
     $torrents = [];
     // $fluent removed — use $this->db (ExtendedPdo)
     $count = $fluent->from('torrents')
@@ -174,8 +178,7 @@ function get_uploaded(int $userid)
  */
 function get_seeding(int $userid)
 {
-    global $container;
-
+    
     // $fluent removed — use $this->db (ExtendedPdo)
     $count = $fluent->from('peers')
                     ->select(null)
@@ -227,8 +230,7 @@ function get_seeding(int $userid)
  */
 function get_leeching(int $userid)
 {
-    global $container;
-
+    
     // $fluent removed — use $this->db (ExtendedPdo)
     $count = $fluent->from('peers')
                     ->select(null)
@@ -280,8 +282,7 @@ function get_leeching(int $userid)
  */
 function get_snatched(int $userid)
 {
-    global $container;
-
+    
     // $fluent removed — use $this->db (ExtendedPdo)
     $count = $fluent->from('snatched')
                     ->select(null)
@@ -321,8 +322,7 @@ function get_snatched(int $userid)
  */
 function get_snatched_staff(int $userid)
 {
-    global $container;
-
+    
     // $fluent removed — use $this->db (ExtendedPdo)
     $count = $fluent->from('snatched')
                     ->select(null)

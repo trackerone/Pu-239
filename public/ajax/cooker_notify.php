@@ -11,19 +11,19 @@ $db = $container->get(Database::class);
 require_once __DIR__ . '/../../include/bittorrent.php';
 $user = check_user_status();
 
-header('content-type: application/json');
+header('Content-Type: application/json; charset=utf-8');
 
 if ($user === false) {
-    echo json_encode(['notify' => 'invalid']);
+    echo json_encode(['notify' => 'invalid'], JSON_THROW_ON_ERROR);
     app_halt('Exit called');
 }
 
-// TODO(2025): csrf on POST where missing
+// TODO(2025): csrf
 $upcomingId = (int) ($_POST['id'] ?? 0);
 $notified = filter_var($_POST['notified'] ?? false, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE);
 
 if ($upcomingId <= 0 || $notified === null) {
-    echo json_encode(['notify' => 'invalid']);
+    echo json_encode(['notify' => 'invalid'], JSON_THROW_ON_ERROR);
     app_halt('Exit called');
 }
 
@@ -38,7 +38,7 @@ if ($notified) {
         $params
     );
 
-    echo json_encode(['notify' => 0]);
+    echo json_encode(['notify' => 0], JSON_THROW_ON_ERROR);
     app_halt('Exit called');
 }
 
@@ -49,5 +49,5 @@ $db->run(
 
 $insertId = (int) $db->fetchValue('SELECT LAST_INSERT_ID()');
 
-echo json_encode(['notify' => $insertId]);
+echo json_encode(['notify' => $insertId], JSON_THROW_ON_ERROR);
 app_halt('Exit called');

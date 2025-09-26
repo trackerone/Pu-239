@@ -1,47 +1,51 @@
 <?php
+
 declare(strict_types=1);
-require_once dirname(__DIR__) . '/bootstrap_web.php';
-
-$db = $container->get(Database::class);
-
-
-
 
 use Pu239\Cache;
 use Pu239\Database;
 
+require_once dirname(__DIR__) . '/bootstrap_web.php';
+
+$cache = $container->get(Cache::class);
+$db = $container->get(Database::class);
+
 require_once __DIR__ . '/../../include/bittorrent.php';
+
 $user = check_user_status();
-header('content-type: application/json');
-global $container;
 
-if (empty($user) || $user['class'] < UC_STAFF) {
-    echo json_encode(['pick' => 'csrf']);
-    app_halt('Exit called');
-}
-$pick = (int) $_POST['pick'];
-$id = (int) $_POST['id'];
-if (!isset($pick) || empty($id)) {
-    echo json_encode(['pick' => 'invalid']);
+header('Content-Type: application/json; charset=utf-8');
+
+if ($user === false || $user['class'] < UC_STAFF) {
+    echo json_encode(['pick' => 'class'], JSON_THROW_ON_ERROR);
     app_halt('Exit called');
 }
 
-$staff_picks = $pick === 0 ? TIME_NOW : 0;
-$set = [
-    'staff_picks' => $staff_picks,
-];
-// $fluent removed — use $this->db (ExtendedPdo)
-$sql = "UPDATE torrents SET /* columns */ WHERE id = :id";
-$result = $db->perform($sql, array_merge($set, ['id' => $id]));
+// TODO(2025): csrf
+$pick = (int) ($_POST['pick'] ?? -1);
+$torrentId = (int) ($_POST['id'] ?? 0);
 
-if ($result) {
-    $cache = $container->get(Cache::class);
+if ($pick < 0 || $torrentId <= 0) {
+    echo json_encode(['pick' => 'invalid'], JSON_THROW_ON_ERROR);
+    app_halt('Exit called');
+}
+
+$newValue = $pick === 0 ? TIME_NOW : 0;
+
+$statement = $db->run(
+    'UPDATE torrents SET staff_picks = :staff_picks WHERE id = :id',
+    [
+        'staff_picks' => [$newValue, \PDO::PARAM_INT],
+        'id' => [$torrentId, \PDO::PARAM_INT],
+    ]
+);
+
+if ($statement->rowCount() > 0) {
     $cache->delete('staff_picks_');
-    $data['staff_pick'] = $staff_picks;
-    echo json_encode($data);
-    app_halt('Exit called');
-} else {
-    $data['staff_pick'] = 'fail';
-    echo json_encode($data);
+
+    echo json_encode(['pick' => $newValue], JSON_THROW_ON_ERROR);
     app_halt('Exit called');
 }
+
+echo json_encode(['pick' => 'fail'], JSON_THROW_ON_ERROR);
+app_halt('Exit called');

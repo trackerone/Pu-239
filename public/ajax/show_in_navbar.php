@@ -1,47 +1,51 @@
 <?php
+
 declare(strict_types=1);
-require_once dirname(__DIR__) . '/bootstrap_web.php';
-
-$db = $container->get(Database::class);
-
-
-
 
 use Pu239\Cache;
 use Pu239\Database;
 
+require_once dirname(__DIR__) . '/bootstrap_web.php';
+
+$cache = $container->get(Cache::class);
+$db = $container->get(Database::class);
+
 require_once __DIR__ . '/../../include/bittorrent.php';
+
 $user = check_user_status();
 
-header('content-type: application/json');
-global $container;
+header('Content-Type: application/json; charset=utf-8');
 
-if (empty($user) || $user['class'] < UC_STAFF) {
-    echo json_encode(['show_in_navbar' => 'class']);
+if ($user === false || $user['class'] < UC_STAFF) {
+    echo json_encode(['show_in_navbar' => 'class'], JSON_THROW_ON_ERROR);
     app_halt('Exit called');
 }
 
-if (!isset($_POST['show']) || empty($_POST['id'])) {
-    echo json_encode(['show_in_navbar' => 'invalid']);
+// TODO(2025): csrf
+$panelId = (int) ($_POST['id'] ?? 0);
+$currentValue = $_POST['show'] ?? null;
+
+if ($panelId <= 0 || $currentValue === null) {
+    echo json_encode(['show_in_navbar' => 'invalid'], JSON_THROW_ON_ERROR);
     app_halt('Exit called');
 }
 
-$show = $_POST['show'] == 0 ? 1 : 0;
-$set = [
-    'navbar' => $show,
-];
-// $fluent removed — use $this->db (ExtendedPdo)
-$sql = "UPDATE staffpanel SET /* columns */ WHERE id = :id";
-$result = $db->perform($sql, array_merge($set, ['id' => $_POST['id']]));
+$nextValue = (int) $currentValue === 0 ? 1 : 0;
 
-if ($result) {
-    $cache = $container->get(Cache::class);
-    $cache->delete('staff_panels_' . $class);
-    $data['show_in_navbar'] = $show;
-    echo json_encode($data);
-    app_halt('Exit called');
-} else {
-    $data['show_in_navbar'] = 'fail';
-    echo json_encode($data);
+$statement = $db->run(
+    'UPDATE staffpanel SET navbar = :navbar WHERE id = :id',
+    [
+        'navbar' => [$nextValue, \PDO::PARAM_INT],
+        'id' => [$panelId, \PDO::PARAM_INT],
+    ]
+);
+
+if ($statement->rowCount() > 0) {
+    $cache->delete('staff_panels_' . (int) $user['class']);
+
+    echo json_encode(['show_in_navbar' => $nextValue], JSON_THROW_ON_ERROR);
     app_halt('Exit called');
 }
+
+echo json_encode(['show_in_navbar' => 'fail'], JSON_THROW_ON_ERROR);
+app_halt('Exit called');

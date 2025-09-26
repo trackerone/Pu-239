@@ -1,67 +1,86 @@
 <?php
+
 declare(strict_types=1);
-require_once dirname(__DIR__) . '/bootstrap_web.php';
-
-$db = $container->get(Database::class);
-
-
-
 
 use Pu239\Cache;
 use Pu239\Database;
 
+require_once dirname(__DIR__) . '/bootstrap_web.php';
+
+$cache = $container->get(Cache::class);
+$db = $container->get(Database::class);
+
 require_once __DIR__ . '/../../include/bittorrent.php';
+
 $user = check_user_status();
-global $container;
 
-header('content-type: application/json');
-$gamenum = (int) $_POST['gamenum'];
-$qid = (int) $_POST['qid'];
-$answer = $_POST['answer'];
-$userid = $user['id'];
-// $fluent removed — use $this->db (ExtendedPdo)
-$correct_answer = $fluent->from('triviaq')
-                         ->select('canswer')
-                         ->where('qid = ?', $qid)
-                         ->fetch('canswer');
+header('Content-Type: application/json; charset=utf-8');
 
-$user = $fluent->from('triviausers')
-               ->where('user_id = ?', $userid)
-               ->where('qid = ?', $qid)
-               ->where('gamenum = ?', $gamenum)
-               ->fetch();
+if ($user === false) {
+    echo json_encode(['fail' => 'invalid'], JSON_THROW_ON_ERROR);
+    app_halt('Exit called');
+}
 
-$cleanup = trivia_time();
+// TODO(2025): csrf
+$gameNumber = (int) ($_POST['gamenum'] ?? 0);
+$questionId = (int) ($_POST['qid'] ?? 0);
+$answer = (string) ($_POST['answer'] ?? '');
+$userId = (int) $user['id'];
 
-if (!empty($user)) {
-    if ($user['correct'] == 1) {
-        $answered = "<h3 class='has-text-success top20'>" . _('Awesome, that was the correct answer') . '</h3>';
-    } else {
-        $answered = "<h3 class='has-text-danger top20'>" . _('Sorry, that was not the correct answer') . '</h3>';
-    }
+if ($gameNumber <= 0 || $questionId <= 0 || $answer === '') {
+    echo json_encode(['fail' => 'invalid'], JSON_THROW_ON_ERROR);
+    app_halt('Exit called');
+}
+
+$correctAnswer = $db->fetch(
+    'SELECT canswer FROM triviaq WHERE qid = :qid',
+    ['qid' => [$questionId, \PDO::PARAM_INT]]
+);
+
+if ($correctAnswer === false) {
+    echo json_encode(['fail' => 'invalid'], JSON_THROW_ON_ERROR);
+    app_halt('Exit called');
+}
+
+$existing = $db->fetch(
+    'SELECT correct FROM triviausers WHERE user_id = :uid AND qid = :qid AND gamenum = :gamenum',
+    [
+        'uid' => [$userId, \PDO::PARAM_INT],
+        'qid' => [$questionId, \PDO::PARAM_INT],
+        'gamenum' => [$gameNumber, \PDO::PARAM_INT],
+    ]
+);
+
+if ($existing !== false) {
+    $answered = (int) ($existing['correct'] ?? 0) === 1
+        ? "<h3 class='has-text-success top20'>" . _('Awesome, that was the correct answer') . '</h3>'
+        : "<h3 class='has-text-danger top20'>" . _('Sorry, that was not the correct answer') . '</h3>';
 } else {
     $values = [
-        'user_id' => $userid,
-        'gamenum' => $gamenum,
-        'qid' => $qid,
-        'date' => date('Y-m-d H:i:s'),
+        'user_id' => [$userId, \PDO::PARAM_INT],
+        'gamenum' => [$gameNumber, \PDO::PARAM_INT],
+        'qid' => [$questionId, \PDO::PARAM_INT],
+        'date' => [date('Y-m-d H:i:s'), \PDO::PARAM_STR],
+        'correct' => [$answer === ($correctAnswer['canswer'] ?? '') ? 1 : 0, \PDO::PARAM_INT],
     ];
-    if ($correct_answer === $answer) {
-        $answered = "<h3 class='has-text-success top20'>" . _('Awesome, that was the correct answer') . '</h3>';
-        $values['correct'] = 1;
-    } else {
-        $answered = "<h3 class='has-text-danger top20'>" . _('Sorry, that was not the correct answer') . '</h3>';
-        $values['correct'] = 0;
-    }
-    $sql = "INSERT INTO triviausers (/* columns */) VALUES (/* values */)";
-$db->perform($sql, $values);
+
+    $answered = $values['correct'][0] === 1
+        ? "<h3 class='has-text-success top20'>" . _('Awesome, that was the correct answer') . '</h3>'
+        : "<h3 class='has-text-danger top20'>" . _('Sorry, that was not the correct answer') . '</h3>';
+
+    $db->run(
+        'INSERT INTO triviausers (user_id, gamenum, qid, date, correct) VALUES (:user_id, :gamenum, :qid, :date, :correct)',
+        $values
+    );
 }
-$cache = $container->get(Cache::class);
+
 $cache->delete('triviaq_');
 $table = trivia_table();
+$cleanup = trivia_time();
+
 echo json_encode([
-    'content' => $table['table'] . $answered . trivia_clocks(),
-    'round' => $cleanup['round'],
-    'game' => $cleanup['game'],
-]);
+    'content' => ($table['table'] ?? '') . $answered . trivia_clocks(),
+    'round' => $cleanup['round'] ?? 0,
+    'game' => $cleanup['game'] ?? 0,
+], JSON_THROW_ON_ERROR);
 app_halt('Exit called');
