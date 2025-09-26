@@ -11,10 +11,10 @@ $db = $container->get(Database::class);
 require_once __DIR__ . '/../../include/bittorrent.php';
 $user = check_user_status();
 
-header('content-type: application/json');
+header('Content-Type: application/json; charset=utf-8');
 
 if ($user === false) {
-    echo json_encode(['voted' => 'invalid']);
+    echo json_encode(['voted' => 'invalid'], JSON_THROW_ON_ERROR);
     app_halt('Exit called');
 }
 
@@ -23,7 +23,7 @@ $offerId = (int) ($_POST['id'] ?? 0);
 $currentVote = $_POST['voted'] ?? '';
 
 if ($offerId <= 0 || $currentVote === '') {
-    echo json_encode(['voted' => 'invalid']);
+    echo json_encode(['voted' => 'invalid'], JSON_THROW_ON_ERROR);
     app_halt('Exit called');
 }
 
@@ -38,7 +38,7 @@ if ($currentVote === 'yes') {
         $params + ['vote' => 'no']
     );
 
-    echo json_encode(['voted' => 'no']);
+    echo json_encode(['voted' => 'no'], JSON_THROW_ON_ERROR);
     app_halt('Exit called');
 }
 
@@ -48,7 +48,7 @@ if ($currentVote === 'no') {
         $params
     );
 
-    echo json_encode(['voted' => 0]);
+    echo json_encode(['voted' => 0], JSON_THROW_ON_ERROR);
     app_halt('Exit called');
 }
 
@@ -60,5 +60,5 @@ $db->run(
     ]
 );
 
-echo json_encode(['voted' => 'yes']);
+echo json_encode(['voted' => 'yes'], JSON_THROW_ON_ERROR);
 app_halt('Exit called');

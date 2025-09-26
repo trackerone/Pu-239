@@ -72,16 +72,22 @@ admin/categories.php,false,true,14,false,added helper + sanitized forms/lists (b
 >>>>>> master
 public/ajax/tvmaze_lookup.php,false,true,0,true,json response hardened
 public/ajax/checkport.php,false,true,0,true,json response hardened
+<<<<<< codex/enforce-csrf-and-escape-output-1ejsd3
+=======
 <<<<<< codex/enforce-csrf-and-escape-output-ls3ug3
 =======
 <<<<<< codex/enforce-csrf-and-escape-output-bbpkil
+>>>>>> master
 >>>>>> master
 public/bugs.php,false,true,4,false,added helper for self links and noted csrf gap in view/add handlers (batch offset 36)
 admin/reputation_settings.php,false,true,2,false,normalized form/breadcrumb escaping with csrf TODO (batch offset 36)
 public/subtitles.php,false,true,12,false,escaped form fields, filters, and language badges plus csrf TODO (batch offset 36)
 admin/delacct.php,false,true,0,false,documented csrf follow-up for deletion flow (batch offset 41)
 admin/editlog.php,false,true,3,false,escaped coder log file names and logged csrf TODO (batch offset 41)
+<<<<<< codex/enforce-csrf-and-escape-output-1ejsd3
+=======
 <<<<<< codex/enforce-csrf-and-escape-output-ls3ug3
+>>>>>> master
 public/ajax/autocomplete.php,false,true,3,false,
 public/ajax/bookmarks.php,false,true,0,true,
 public/ajax/checkports.php,false,true,3,true,
@@ -89,6 +95,18 @@ public/ajax/cooker_notify.php,false,true,0,true,
 public/ajax/descr_format.php,false,true,0,true,
 public/achievementlist.php,false,true,4,false,
 admin/watched_users.php,false,true,5,false,
+<<<<<< codex/enforce-csrf-and-escape-output-1ejsd3
+public/ajax/ebook_lookup.php,false,true,0,true,json headers + JSON_THROW_ON_ERROR responses (batch offset 56)
+public/ajax/imdb_lookup.php,false,true,0,true,json headers + JSON_THROW_ON_ERROR responses (batch offset 56)
+public/ajax/isbn_lookup.php,false,true,0,true,json headers + JSON_THROW_ON_ERROR responses (batch offset 56)
+public/ajax/like.php,false,true,0,true,json payloads hardened and header normalized (batch offset 56)
+public/ajax/member_input.php,false,true,0,false,reviewed staff actions remain TODO for CSRF follow-up (batch offset 56)
+public/ajax/offer_notify.php,false,true,0,true,json responses normalized + insert/delete handling tightened (batch offset 56)
+public/ajax/offer_status.php,false,true,0,true,json responses normalized (batch offset 56)
+public/ajax/offer_vote.php,false,true,0,true,json responses normalized (batch offset 56)
+public/ajax/rating.php,false,true,2,false,added $s helper for rating tooltip/style escapes and noted csrf gap (batch offset 56)
+public/ajax/request_notify.php,false,true,0,true,reworked notification toggles with bound params + JSON_THROW_ON_ERROR (batch offset 56)
+=======
 =======
 =======
 <<<<<< codex/enforce-csrf-and-escape-output-o8hj4w
@@ -96,6 +114,7 @@ public/bugs.php,false,true,4,false,added helper for self links and noted csrf ga
 admin/reputation_settings.php,false,true,2,false,normalized form/breadcrumb escaping with csrf TODO (batch offset 36)
 public/subtitles.php,false,true,12,false,escaped form fields, filters, and language badges plus csrf TODO (batch offset 36)
 ======
+>>>>>> master
 >>>>>> master
 >>>>>> master
 >>>>>> master

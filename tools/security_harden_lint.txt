@@ -73,16 +73,22 @@ No syntax errors detected in admin/categories.php
 >>>>>> master
 No syntax errors detected in public/ajax/tvmaze_lookup.php
 No syntax errors detected in public/ajax/checkport.php
+<<<<<< codex/enforce-csrf-and-escape-output-1ejsd3
+=======
 <<<<<< codex/enforce-csrf-and-escape-output-ls3ug3
 =======
 <<<<<< codex/enforce-csrf-and-escape-output-bbpkil
+>>>>>> master
 >>>>>> master
 No syntax errors detected in public/bugs.php
 No syntax errors detected in admin/reputation_settings.php
 No syntax errors detected in public/subtitles.php
 No syntax errors detected in admin/delacct.php
 No syntax errors detected in admin/editlog.php
+<<<<<< codex/enforce-csrf-and-escape-output-1ejsd3
+=======
 <<<<<< codex/enforce-csrf-and-escape-output-ls3ug3
+>>>>>> master
 No syntax errors detected in public/ajax/autocomplete.php
 No syntax errors detected in public/ajax/bookmarks.php
 No syntax errors detected in public/ajax/checkports.php
@@ -90,6 +96,18 @@ No syntax errors detected in public/ajax/cooker_notify.php
 No syntax errors detected in public/ajax/descr_format.php
 No syntax errors detected in public/achievementlist.php
 No syntax errors detected in admin/watched_users.php
+<<<<<< codex/enforce-csrf-and-escape-output-1ejsd3
+No syntax errors detected in public/ajax/ebook_lookup.php
+No syntax errors detected in public/ajax/imdb_lookup.php
+No syntax errors detected in public/ajax/isbn_lookup.php
+No syntax errors detected in public/ajax/like.php
+No syntax errors detected in public/ajax/offer_notify.php
+No syntax errors detected in public/ajax/offer_status.php
+No syntax errors detected in public/ajax/offer_vote.php
+No syntax errors detected in public/ajax/rating.php
+No syntax errors detected in public/ajax/request_notify.php
+No syntax errors detected in public/ajax/member_input.php
+=======
 =======
 =======
 <<<<<< codex/enforce-csrf-and-escape-output-o8hj4w
@@ -97,6 +115,7 @@ No syntax errors detected in public/bugs.php
 No syntax errors detected in admin/reputation_settings.php
 No syntax errors detected in public/subtitles.php
 ======
+>>>>>> master
 >>>>>> master
 >>>>>> master
 >>>>>> master

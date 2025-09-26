@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 use PU239\Config\ConfigRepository;
@@ -13,9 +14,12 @@ $config = $container->get(ConfigRepository::class);
 $db = $container->get(Database::class);
 $cache = $container->get(Cache::class);
 
+$s = $s ?? static fn($v) => htmlspecialchars((string) $v, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
+
 require_once __DIR__ . '/../../include/bittorrent.php';
 $user = check_user_status();
 
+// TODO(2025): csrf
 if (empty($_POST)) {
     return null;
 }
@@ -117,10 +121,18 @@ $cache->set($keys, $rating_cache, 86400);
 
 if (!empty($rating_cache['count']) && $rating_cache['count'] > 0) {
     $rated = number_format($rating_cache['sum'] / $rating_cache['count'] / 5 * 100, 0) . '%';
+    $ratingText = _pfe(
+        'Rating: {0}. You rate this {1} {2, number} star',
+        'Rating: {0}. You rate this {1} {2, number} stars',
+        $rated,
+        $what,
+        $rating_cache['rating'] ?? 0
+    );
+    $title = $s($ratingText);
+    $width = $s($rated);
+
     echo "
-            <div class='star-ratings-css-top tooltipper' title='" .
-        _pfe('Rating: {0}. You rate this {1} {2, number} star', 'Rating: {0}. You rate this {1} {2, number} stars', $rated, $what, $rating_cache['rating'] ?? 0) .
-        "' style='width: $rated;'>
+            <div class='star-ratings-css-top tooltipper' title='{$title}' style='width: {$width};'>
                 <span>&#9733;</span>
                 <span>&#9733;</span>
                 <span>&#9733;</span>

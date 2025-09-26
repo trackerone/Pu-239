@@ -1,55 +1,51 @@
 <?php
+
 declare(strict_types=1);
+
+use Pu239\Database;
+
 require_once dirname(__DIR__) . '/bootstrap_web.php';
 
 $db = $container->get(Database::class);
 
-
-
-
-use Pu239\Database;
-
 require_once __DIR__ . '/../../include/bittorrent.php';
 $user = check_user_status();
-header('content-type: application/json');
-global $container;
 
-if (empty($user)) {
-    echo json_encode(['notify' => 'invalid']);
+header('Content-Type: application/json; charset=utf-8');
+
+if ($user === false) {
+    echo json_encode(['notify' => 'invalid'], JSON_THROW_ON_ERROR);
     app_halt('Exit called');
 }
-$id = (int) $_POST['id'];
-$notified = (bool) $_POST['notified'];
-if (empty($id) || !isset($notified)) {
-    echo json_encode(['notify' => 'invalid']);
+
+// TODO(2025): csrf
+$requestId = (int) ($_POST['id'] ?? 0);
+$notified = filter_var($_POST['notified'] ?? null, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE);
+
+if ($requestId <= 0 || $notified === null) {
+    echo json_encode(['notify' => 'invalid'], JSON_THROW_ON_ERROR);
     app_halt('Exit called');
 }
-$fluent = $container->get(Database::class);
+
+$params = [
+    'userid' => (int) $user['id'],
+    'requestid' => $requestId,
+];
+
 if ($notified) {
-    try {
-        $fluent->deleteFrom('request_notify')
-               ->where('userid = ?', $user['id'])
-               ->where('requestid = ?', $id)
-               ->execute();
-        echo json_encode(['notify' => 0]);
-        app_halt('Exit called');
-    } catch (Exception $e) {
-        // TODO
-    }
-} else {
-    $values = [
-        'userid' => $user['id'],
-        'requestid' => $id,
-    ];
-    try {
-        $sql = "INSERT INTO request_notify (/* columns */) VALUES (/* values */)";
-$notify_id = $db->perform($sql, $values);
+    $db->run(
+        'DELETE FROM request_notify WHERE userid = :userid AND requestid = :requestid',
+        $params
+    );
 
-        echo json_encode(['notify' => $notify_id]);
-        app_halt('Exit called');
-    } catch (Exception $e) {
-        // TODO
-    }
+    echo json_encode(['notify' => 0], JSON_THROW_ON_ERROR);
+    app_halt('Exit called');
 }
-echo json_encode(['notify' => 'invalid']);
+
+$insertId = (int) $db->insert(
+    'INSERT INTO request_notify (userid, requestid, added) VALUES (:userid, :requestid, :added)',
+    $params + ['added' => [TIME_NOW, \PDO::PARAM_INT]]
+);
+
+echo json_encode(['notify' => $insertId], JSON_THROW_ON_ERROR);
 app_halt('Exit called');
