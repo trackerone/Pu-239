@@ -1,21 +1,11 @@
 <?php
-
 declare(strict_types=1);
 
-use Pu239\Database;
-
 require_once dirname(__DIR__) . '/bootstrap_web.php';
-
-$db = $container->get(Database::class);
-
-
-
-
-
 require_once __DIR__ . '/../../include/bittorrent.php';
 
 check_user_status();
-// TODO(2025): csrf on POST where missing
+// TODO(2025): csrf
 if (empty($_POST['ip']) || empty($_POST['port'])) {
     return false;
 }
@@ -36,5 +26,7 @@ if (is_resource($connection)) {
     ];
 }
 $status = ['data' => $msg];
-header('content-type: application/json');
-echo json_encode($status);
+header('Content-Type: application/json; charset=utf-8');
+echo json_encode($status, JSON_THROW_ON_ERROR);
+app_halt('Exit called');
+return;

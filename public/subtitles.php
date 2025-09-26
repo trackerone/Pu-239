@@ -11,6 +11,9 @@ global $container;
 $config = $container->get(ConfigRepository::class);
 /** @var Database $db */
 $db = $container->get(Database::class);
+$s = $s ?? static fn($v) => htmlspecialchars((string) $v, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
+$self = $_SERVER['PHP_SELF'] ?? '';
+$escapedSelf = $s($self);
 
 require_once __DIR__ . '/../include/bittorrent.php';
 $user = check_user_status();
@@ -25,6 +28,7 @@ $mode = (isset($_GET['mode']) ? htmlsafechars($_GET['mode']) : '');
 // $fluent removed — use $this->db (ExtendedPdo)
 $subs = $container->get('subtitles');
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    // TODO(2025): csrf
     if ($action === 'upload' || $action === 'edit') {
         $langs = isset($_POST['language']) ? htmlsafechars($_POST['language']) : '';
         if (empty($langs)) {
@@ -148,6 +152,11 @@ if ($mode === 'upload' || $mode === 'edit') {
             }
         }
     }
+    $editName = $mode === 'edit' ? $s($arr['name']) : '';
+    $editImdb = $mode === 'edit' ? $s($arr['imdb']) : '';
+    $editPoster = $mode === 'edit' ? $s($arr['poster']) : '';
+    $editComment = $mode === 'edit' ? $s($arr['comment']) : '';
+    $editId = $mode === 'edit' ? (int) $arr['id'] : 0;
     $HTMLOUT .= "
     <h2 class='has-text-centered'>" . ($mode === 'upload' ? _('New Subtitle') . '</h2>' : _('Edit Subtitle') . '</h1><h2 class="has-text-centered">' . format_comment($arr['name']) . '</h2>') . "
     <form method='post' action='subtitles.php' enctype='multipart/form-data' accept-charset='utf-8'>";
@@ -167,8 +176,11 @@ if ($mode === 'upload' || $mode === 'edit') {
                 <select name='language' class='w-25' required>
                     <option value=''>" . _('Select') . '</option>';
     foreach ($subs as $sub) {
+        $optionId = (int) $sub['id'];
+        $optionName = $s($sub['name']);
+        $selectedAttr = $mode === 'edit' && (int) $arr['lang'] === $optionId ? ' selected' : '';
         $body .= "
-                    <option value='{$sub['id']}' " . ($mode === 'edit' && $arr['lang'] == $sub['id'] ? 'selected' : '') . ">{$sub['name']}</option>";
+                    <option value='{$optionId}'{$selectedAttr}>{$optionName}</option>";
     }
     $body .= "
                 </select>
@@ -177,13 +189,13 @@ if ($mode === 'upload' || $mode === 'edit') {
         <tr>
             <td class='rowhead'>" . _('Release Name') . "</td>
             <td>
-                <input type='text' name='releasename' value='" . ($mode === 'edit' ? $arr['name'] : '') . "'  placeholder='Avatar.2009.EXTENDED.1080p.BluRay.x264-BestHD' class='w-100' required>
+                <input type='text' name='releasename' value='{$editName}'  placeholder='Avatar.2009.EXTENDED.1080p.BluRay.x264-BestHD' class='w-100' required>
             </td>
         </tr>
         <tr>
             <td class='rowhead'>" . _('IMDb URL') . "</td>
             <td>
-                <input type='text' name='imdb' value='" . ($mode === 'edit' ? $arr['imdb'] : '') . "' placeholder='https://www.imdb.com/title/tt0499549/' class='w-100' pattern='.*[tt\d{7,8}]/' required>
+                <input type='text' name='imdb' value='{$editImdb}' placeholder='https://www.imdb.com/title/tt0499549/' class='w-100' pattern='.*[tt\d{7,8}]/' required>
             </td>
         </tr>";
     if ($mode === 'upload') {
@@ -199,13 +211,13 @@ if ($mode === 'upload' || $mode === 'edit') {
         <tr>
             <td class='rowhead'>" . _('Poster') . "</td>
             <td>
-                <input type='text' name='poster' value='" . ($mode === 'edit' ? $arr['poster'] : '') . "' placeholder='https://m.media-amazon.com/images/M/MV5BMTYwOTEwNjAzMl5BMl5BanBnXkFtZTcwODc5MTUwMw@@._V1_.jpg' class='w-100' required>
+                <input type='text' name='poster' value='{$editPoster}' placeholder='https://m.media-amazon.com/images/M/MV5BMTYwOTEwNjAzMl5BMl5BanBnXkFtZTcwODc5MTUwMw@@._V1_.jpg' class='w-100' required>
             </td>
         </tr>
         <tr>
             <td class='rowhead'>" . _('Comments') . "</td>
             <td>
-                <textarea rows='5' name='comment' title='Any specific details about this subtitle we need to know' class='w-100 tooltipper'>" . ($mode === 'edit' ? htmlsafechars($arr['comment']) : '') . "</textarea>
+                <textarea rows='5' name='comment' title='Any specific details about this subtitle we need to know' class='w-100 tooltipper'>{$editComment}</textarea>
             </td>
         </tr>
         <tr>
@@ -246,7 +258,7 @@ if ($mode === 'upload' || $mode === 'edit') {
         $body .= "
                 <input type='submit' value='" . _('Edit it') . "' class='button is-small'>
                 <input type='hidden' name='action' value='edit'>
-                <input type='hidden' name='id' value='" . $arr['id'] . "'>";
+                <input type='hidden' name='id' value='{$editId}'>";
     }
     $body .= '
             </td>
@@ -256,7 +268,7 @@ if ($mode === 'upload' || $mode === 'edit') {
     $title = $mode === 'upload' ? _('Upload New Subtitle') : _('Edit Subtitle');
     $breadcrumbs = [
         "<a href='{$baseUrl}/browse.php'>" . _('Browse Torrents') . '</a>',
-        "<a href='{$_SERVER['PHP_SELF']}'>$title</a>",
+        "<a href='{$escapedSelf}'>$title</a>",
     ];
     echo stdhead($title, [], 'page-wrapper', $breadcrumbs) . wrapper($HTMLOUT) . stdfoot();
 } elseif ($mode === 'delete') {
@@ -270,6 +282,7 @@ if ($mode === 'upload' || $mode === 'edit') {
         if (empty($arr)) {
             stderr(_('Error'), _('Invalid ID'));
         }
+        $detailId = (int) $arr['id'];
         $sure = (isset($_GET['sure']) && $_GET['sure'] === 'yes') ? 'yes' : 'no';
         if ($sure === 'no') {
             stderr(_('Sanity check...'), _fe('Your are about to delete subtitle <b>{0}</b>, Click {1}here{2} if you are sure.', format_comment($arr['name']) . "<a href='{$baseUrl}/subtitles.php?mode=delete&amp;id=$id&amp;sure=yes'>", '</a>'));
@@ -295,7 +308,9 @@ $db->perform($sql, ['id' => $id]);
         $langs = '<b>Unknown</b>';
         foreach ($subs as $sub) {
             if ($sub['id'] == $arr['lang']) {
-                $langs = "<img src='{$imagesBaseUrl}/{$sub['pic']}' alt='{$sub['name']}' class='tooltipper left10' title='{$sub['name']}'>";
+                $langPic = $s($sub['pic']);
+                $langName = $s($sub['name']);
+                $langs = "<img src='{$imagesBaseUrl}/{$langPic}' alt='{$langName}' class='tooltipper left10' title='{$langName}'>";
                 break;
             }
         }
@@ -336,16 +351,16 @@ $db->perform($sql, ['id' => $id]);
         </div>
         <div class='level-center-center'>
             <form action='downloadsub.php' method='post' enctype='multipart/form-data' accept-charset='utf-8'>
-                <input type='hidden' name='sid' value='" . $arr['id'] . "'>
+                <input type='hidden' name='sid' value='{$detailId}'>
                 <input type='submit' value='" . _('Download') . "' class='button is-small margin20'>
                 <input type='hidden' name='action' value='download'>
             </form>
-            <a href='subtitles.php?mode=preview&id={$arr['id']}' class='button is-small margin20'>" . _('Preview') . '</a>
+            <a href='subtitles.php?mode=preview&id={$detailId}' class='button is-small margin20'>" . _('Preview') . '</a>
         </div>';
         $title = _('Subtitle Details');
         $breadcrumbs = [
             "<a href='{$baseUrl}/browse.php'>" . _('Browse Torrents') . '</a>',
-            "<a href='{$_SERVER['PHP_SELF']}'>$title</a>",
+            "<a href='{$escapedSelf}'>$title</a>",
         ];
         echo stdhead($title, [], 'page-wrapper', $breadcrumbs) . wrapper($HTMLOUT) . stdfoot();
     }
@@ -372,31 +387,32 @@ $db->perform($sql, ['id' => $id]);
         $title = ('Subtitle Preview');
         $breadcrumbs = [
             "<a href='{$baseUrl}/browse.php'>" . _('Browse Torrents') . '</a>',
-            "<a href='{$_SERVER['PHP_SELF']}'>$title</a>",
+            "<a href='{$escapedSelf}'>$title</a>",
         ];
         echo stdhead($title, [], 'page-wrapper', $breadcrumbs) . wrapper($HTMLOUT) . stdfoot();
     }
 } else {
-    $s = isset($_GET['s']) ? htmlsafechars($_GET['s']) : '';
-    $w = isset($_GET['w']) ? htmlsafechars($_GET['w']) : '';
+    $searchTerm = isset($_GET['s']) ? trim((string) $_GET['s']) : '';
+    $searchFilter = isset($_GET['w']) ? trim((string) $_GET['w']) : '';
+    $searchTermEscaped = $s($searchTerm);
     $count = $fluent->from('subtitles')
                     ->select(null)
                     ->select('COUNT(id) AS count');
     $select = $fluent->from('subtitles AS s');
-    if ($s && $w === 'name') {
-        $count = $count->where('name LIKE ?', '%' . $s . '%');
-        $select = $select->where('s.name LIKE ?', '%' . $s . '%');
-    } elseif ($s && $w === 'imdb') {
-        $count = $count->where('imdb LIKE ?', '%' . $s . '%');
-        $select = $select->where('s.imdb LIKE ?', '%' . $s . '%');
-    } elseif ($s && $w === 'comment') {
-        $count = $count->where('comment LIKE ?', '%' . $s . '%');
-        $select = $select->where('s.comment LIKE ?', '%' . $s . '%');
+    if ($searchTerm !== '' && $searchFilter === 'name') {
+        $count = $count->where('name LIKE ?', '%' . $searchTerm . '%');
+        $select = $select->where('s.name LIKE ?', '%' . $searchTerm . '%');
+    } elseif ($searchTerm !== '' && $searchFilter === 'imdb') {
+        $count = $count->where('imdb LIKE ?', '%' . $searchTerm . '%');
+        $select = $select->where('s.imdb LIKE ?', '%' . $searchTerm . '%');
+    } elseif ($searchTerm !== '' && $searchFilter === 'comment') {
+        $count = $count->where('comment LIKE ?', '%' . $searchTerm . '%');
+        $select = $select->where('s.comment LIKE ?', '%' . $searchTerm . '%');
     }
-    $link = ($s && $w ? "s=$s&amp;w=$w&amp;" : '');
+    $link = ($searchTerm !== '' && $searchFilter !== '' ? 's=' . rawurlencode($searchTerm) . '&amp;w=' . rawurlencode($searchFilter) . '&amp;' : '');
     $count = $count->fetch("count");
-    $title = empty($s) ? _('Search') : _fe("Search result for <i>'{0}'</i>", format_comment($s));
-    if ($count === 0 && !$s && !$w) {
+    $title = $searchTerm === '' ? _('Search') : _fe("Search result for <i>'{0}'</i>", format_comment($searchTerm));
+    if ($count === 0 && $searchTerm === '' && $searchFilter === '') {
         stdmsg(_('Error'), _fe('There are no subtitles, go {0}here{1} and start uploading.', '<a href="' . $baseUrl . '/subtitles.php?mode=upload">', '</a>'));
     }
     $perpage = 15;
@@ -414,11 +430,11 @@ $db->perform($sql, ['id' => $id]);
     $body = "
         <form action='subtitles.php' method='get' enctype='multipart/form-data' accept-charset='utf-8'>
             <div class='has-text-centered'>
-                <input class='w-50 top20' value='" . $s . "' name='s' type='text'>
+                <input class='w-50 top20' value='{$searchTermEscaped}' name='s' type='text'>
                 <select name='w'>
-                    <option value='name' " . ($w === 'name' ? 'selected' : '') . '>' . _('Name') . "</option>
-                    <option value='imdb' " . ($w === 'imdb' ? 'selected' : '') . '>' . _('IMDb') . "</option>
-                    <option value='comment' " . ($w === 'comment' ? 'selected' : '') . '>' . _('Comments') . "</option>
+                    <option value='name' " . ($searchFilter === 'name' ? 'selected' : '') . '>' . _('Name') . "</option>
+                    <option value='imdb' " . ($searchFilter === 'imdb' ? 'selected' : '') . '>' . _('IMDb') . "</option>
+                    <option value='comment' " . ($searchFilter === 'comment' ? 'selected' : '') . '>' . _('Comments') . "</option>
                 </select>
             </div>
             <div class='has-text-centered'>
@@ -456,16 +472,19 @@ $db->perform($sql, ['id' => $id]);
         $body = '';
         foreach ($select as $arr) {
             $langs = '<b>' . _('Unknown') . '</b>';
+            $rowId = (int) $arr['id'];
             foreach ($subs as $sub) {
                 if ($sub['id'] == $arr['lang']) {
-                    $langs = "<img src='{$imagesBaseUrl}/{$sub['pic']}' alt='{$sub['name']}' class='tooltipper left10' title='{$sub['name']}'>";
+                    $langPic = $s($sub['pic']);
+                    $langName = $s($sub['name']);
+                    $langs = "<img src='{$imagesBaseUrl}/{$langPic}' alt='{$langName}' class='tooltipper left10' title='{$langName}'>";
                     break;
                 }
             }
             $body .= "
     <tr>
         <td class='has-text-centered'>{$langs}</td>
-        <td><a href='{$baseUrl}/subtitles.php?mode=details&amp;id=" . $arr['id'] . "'>" . format_comment($arr['name']) . "</a></td>
+        <td><a href='{$baseUrl}/subtitles.php?mode=details&amp;id={$rowId}'>" . format_comment($arr['name']) . "</a></td>
         <td class='has-text-centered'>
             <a href='" . htmlsafechars($arr['imdb']) . "'  target='_blank'>
                 <img src='{$imagesBaseUrl}imdb.svg' alt='Imdb' title='Imdb' class='tooltipper' width='50px'>
@@ -478,10 +497,10 @@ $db->perform($sql, ['id' => $id]);
             if ($arr['owner'] == $user['id'] || $user['class'] > UC_STAFF) {
                 $body .= "
         <td class='has-text-centered'>
-            <a href='subtitles.php?mode=edit&amp;id=" . $arr['id'] . "' title='" . _('Edit Subtitle') . "' class='tooltipper'>
+            <a href='subtitles.php?mode=edit&amp;id={$rowId}' title='" . _('Edit Subtitle') . "' class='tooltipper'>
                 <i class='icon icon-edit' aria-hidden='true'></i>
             </a>
-            <a href='subtitles.php?mode=delete&amp;id=" . $arr['id'] . "' title='" . _('Delete Subtitle') . "' class='tooltipper'>
+            <a href='subtitles.php?mode=delete&amp;id={$rowId}' title='" . _('Delete Subtitle') . "' class='tooltipper'>
                 <i class='icon icon-trash-empty has-text-danger' aria-hidden='true'></i>
             </a>
         </td>";
@@ -501,7 +520,7 @@ $db->perform($sql, ['id' => $id]);
     $title = _('Subtitles');
     $breadcrumbs = [
         "<a href='{$baseUrl}/browse.php'>" . _('Browse Torrents') . '</a>',
-        "<a href='{$_SERVER['PHP_SELF']}'>$title</a>",
+        "<a href='{$escapedSelf}'>$title</a>",
     ];
     echo stdhead($title, [], 'page-wrapper', $breadcrumbs) . wrapper($HTMLOUT) . stdfoot();
 }
