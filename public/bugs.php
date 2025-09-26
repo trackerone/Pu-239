@@ -3,9 +3,9 @@ declare(strict_types=1);
 require_once dirname(__DIR__) . '/bootstrap_web.php';
 
 $db = $container->get(Database::class);
-
-
-
+$s = $s ?? static fn($v) => htmlspecialchars((string) $v, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
+$self = $_SERVER['PHP_SELF'] ?? '';
+$escapedSelf = $s($self);
 
 use Delight\Auth\AuthError;
 use Delight\Auth\NotLoggedInException;
@@ -48,6 +48,7 @@ $cache = $container->get(Cache::class);
 $session = $container->get(Session::class);
 if ($action === 'viewbug') {
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+        // TODO(2025): csrf
         if (!has_access($curuser['class'], UC_MAX, 'coder')) {
             stderr(_('Error'), _('Only site-coders can do this!'));
         }
@@ -94,7 +95,7 @@ if ($action === 'viewbug') {
         $sql = "UPDATE bugs SET /* columns */ WHERE id = :id";
 $db->perform($sql, array_merge($update, ['id' => $id]));
         $cache->delete('bug_mess_');
-        header("location: {$_SERVER['PHP_SELF']}?action=bugs");
+        header('Location: ' . $self . '?action=bugs');
     }
     $id = isset($_GET['id']) ? (int) $_GET['id'] : 0;
     if (!$id || !is_valid_id($id)) {
@@ -159,7 +160,7 @@ $db->perform($sql, array_merge($update, ['id' => $id]));
             $by = format_username($bug['staff']) . ' <i>(' . get_user_class_name($bug['stclass']) . ')</i>';
     }
     $HTMLOUT .= "
-        <form method='post' action='{$_SERVER['PHP_SELF']}?action=viewbug' enctype='multipart/form-data' accept-charset='utf-8'>
+        <form method='post' action='{$escapedSelf}?action=viewbug' enctype='multipart/form-data' accept-charset='utf-8'>
             <input type='hidden' name='id' value='" . $bug['id'] . "'>
             <input type='hidden' name='problem' value='" . urlencode($bug['problem']) . "'>";
     $body = "
@@ -198,7 +199,7 @@ $db->perform($sql, array_merge($update, ['id' => $id]));
     $HTMLOUT .= main_table($body) . "
         </form>
         <div class='has-text-centered margin20'>
-            <a href='{$_SERVER['PHP_SELF']}?action=bugs' class='button is-small'>" . _('Go back') . '</a>
+            <a href='{$escapedSelf}?action=bugs' class='button is-small'>" . _('Go back') . '</a>
         </div>';
 } elseif ($action === 'bugs') {
     if (!has_access($curuser['class'], UC_STAFF, 'coder')) {
@@ -299,6 +300,7 @@ $db->perform($sql, array_merge($update, ['id' => $id]));
     }
 } elseif ($action === 'add') {
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+        // TODO(2025): csrf
         $title = htmlsafechars($_POST['title']);
         $priority = htmlsafechars($_POST['priority']);
         $problem = htmlsafechars($_POST['problem']);
@@ -330,7 +332,7 @@ $result = $db->perform($sql, $values);
         }
     }
     $HTMLOUT .= "
-    <form method='post' action='{$_SERVER['PHP_SELF']}?action=add' enctype='multipart/form-data' accept-charset='utf-8'>";
+    <form method='post' action='{$escapedSelf}?action=add' enctype='multipart/form-data' accept-charset='utf-8'>";
     $body = "
         <tr>
             <td class='rowhead'>" . _('Title') . ":</td>
@@ -397,6 +399,6 @@ function send_staff_message(array $values, int $bug_id)
 
 $title = _('Bugs');
 $breadcrumbs = [
-    "<a href='{$_SERVER['PHP_SELF']}'>$title</a>",
+    "<a href='{$escapedSelf}'>$title</a>",
 ];
 echo stdhead($title, [], 'page-wrapper', $breadcrumbs) . wrapper($HTMLOUT) . stdfoot();
