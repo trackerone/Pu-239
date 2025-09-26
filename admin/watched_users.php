@@ -11,12 +11,17 @@ global $container, $CURUSER;
 $config = $container->get(ConfigRepository::class);
 $db = $container->get(Database::class);
 
+$s = $s ?? static fn($v) => htmlspecialchars((string) $v, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
+$baseurl = $s($config->get('paths.baseurl'));
+$self = $s($_SERVER['PHP_SELF'] ?? '');
+
 $class = get_access(basename($_SERVER['REQUEST_URI']));
 class_check($class);
 
 $HTMLOUT = $H1_thingie = '';
 $count = 0;
 
+// TODO(2025): csrf
 if (isset($_GET['remove'])) {
     if ($CURUSER['class'] < UC_STAFF) {
         stderr(_('Error'), _('Only the Staff can remove members from the list!'));
@@ -56,29 +61,29 @@ if (isset($_GET['add'])) {
     if (is_valid_id($member)) {
         $user = $db->fetch('SELECT id, username, modcomment, watched_user, watched_user_reason FROM users WHERE id = :id', [':id' => $member]);
         if ($user['watched_user'] > 0) {
-            stderr(_('Error'), _fe("{0} is on the watched user list already! back to {1}'s profile", htmlsafechars($user['username']), format_username((int) $user['id'])));
+            stderr(_('Error'), _fe("{0} is on the watched user list already! back to {1}'s profile", $s($user['username']), format_username((int) $user['id'])));
         }
         if (isset($_GET['add']) && $_GET['add'] == 1) {
             $text = "
                 <form method='post' action='./staffpanel.php?tool=watched_users&amp;action=watched_users&amp;add=2&amp;id={$member}' enctype='multipart/form-data' accept-charset='utf-8'>
-                    <h2>" . _fe('Add {0} to the Watched Users List', $user['username']) . "</h2>
+                    <h2>" . _fe('Add {0} to the Watched Users List', $s($user['username'])) . "</h2>
                     <div class='has-text-centered'>
                         <span><b>" . _fe('please fill in the reason for adding {0} to the watched user list.', format_username((int) $member)) . "</b></span>
                     </div>
-                    <textarea class='w-100' rows='6' name='reason'>" . htmlsafechars($user['watched_user_reason']) . "</textarea>
+                    <textarea class='w-100' rows='6' name='reason'>" . $s($user['watched_user_reason']) . "</textarea>
                     <input type='submit' class='button is-small' value='" . _('add to watched users!') . "'>
                 </form>";
             $naughty_box = main_div($text);
             stderr('watched Users', $naughty_box);
         }
-        $watched_user_reason = htmlsafechars($_POST['reason'] ?? '');
+        $watched_user_reason = $s($_POST['reason'] ?? '');
         $modcomment = get_date((int) TIME_NOW, 'DATE', 1) . ' - ' . _fe('Added to watched users by {0}', $CURUSER['username']) . "\n" . $user['modcomment'];
         $stmt = $db->run('UPDATE users SET watched_user = :now, modcomment = :mc, watched_user_reason = :reason WHERE id = :id', [':now' => TIME_NOW, ':mc' => $modcomment, ':reason' => $watched_user_reason, ':id' => $member]);
         if ($stmt->rowCount()) {
             $cache = $container->get(Cache::class);
             $cache->update_row('user_' . $member, ['watched_user' => TIME_NOW, 'watched_user_reason' => $watched_user_reason, 'modcomment' => $modcomment], $config->get('expires.user_cache'));
             $H1_thingie = '<h1 class="has-text-centered">' . _fe('Success! {0} Added to the Watched Users List!', format_comment($user['username'])) . '</h1>';
-            write_log(_fe('{0} Added {1} to the {2} watched users list{4}.', format_username($CURUSER['id']), format_username((int) $member), "<a href='{$config->get('paths.baseurl')}/staffpanel.php?tool=watched_users&amp;action=watched_users' class='is-link'>", '</a>'));
+            write_log(_fe('{0} Added {1} to the {2} watched users list{4}.', format_username($CURUSER['id']), format_username((int) $member), "<a href='{$baseurl}/staffpanel.php?tool=watched_users&amp;action=watched_users' class='is-link'>", '</a>'));
         }
     }
 }
@@ -94,15 +99,15 @@ $rows = $db->fetchAll("SELECT id, username, registered, watched_user_reason, wat
 $HTMLOUT .= $H1_thingie;
 if (!empty($rows)) {
     $HTMLOUT .= "
-        <form action='{$_SERVER['PHP_SELF']}?tool=watched_users&amp;action=watched_users&amp;remove=1' method='post'  name='checkme' accept-charset='utf-8'>
+        <form action='{$self}?tool=watched_users&amp;action=watched_users&amp;remove=1' method='post'  name='checkme' accept-charset='utf-8'>
         <h1 class='has-text-centered'>" . _('Watched Users') . "[ {$watched_users} ]</h1>
     <table class='table table-bordered table-striped'>
     <tr>
-        <td><a href='{$config->get('paths.baseurl')}/staffpanel.php?tool=watched_users&amp;action=watched_users&amp;sort=watched_user&amp;ASC={$asc}'>" . _('Added') . "</a></td>
-        <td><a href='{$config->get('paths.baseurl')}/staffpanel.php?tool=watched_users&amp;action=watched_users&amp;sort=username&amp;ASC={$asc}'>" . _('Username') . "</a></td>
+        <td><a href='{$baseurl}/staffpanel.php?tool=watched_users&amp;action=watched_users&amp;sort=watched_user&amp;ASC={$asc}'>" . _('Added') . "</a></td>
+        <td><a href='{$baseurl}/staffpanel.php?tool=watched_users&amp;action=watched_users&amp;sort=username&amp;ASC={$asc}'>" . _('Username') . "</a></td>
         <td class='has-text-left'>" . _('Suspicion') . "</td>
         <td class='has-text-centered'>" . _('Stats') . "</td>
-        <td class='has-text-centered'><a href='{$config->get('paths.baseurl')}/staffpanel.php?tool=watched_users&amp;action=watched_users&amp;sort=invitedby&amp;ASC={$asc}'>" . _('Invited By') . "</a></td>" .
+        <td class='has-text-centered'><a href='{$baseurl}/staffpanel.php?tool=watched_users&amp;action=watched_users&amp;sort=invitedby&amp;ASC={$asc}'>" . _('Invited By') . "</a></td>" .
         ($CURUSER['class'] >= UC_STAFF ? "
         <td class='has-text-centered'>
             <input type='checkbox' id='checkThemAll' class='tooltipper' title='Select All'>
@@ -140,8 +145,8 @@ if (!empty($rows)) {
 
 $title = _('Watched Users');
 $breadcrumbs = [
-    "<a href='{$config->get('paths.baseurl')}/staffpanel.php'>" . _('Staff Panel') . '</a>',
-    "<a href='{$_SERVER['PHP_SELF']}'>$title</a>",
+    "<a href='{$baseurl}/staffpanel.php'>" . _('Staff Panel') . '</a>',
+    "<a href='{$self}'>$title</a>",
 ];
 echo stdhead($title, [], 'page-wrapper', $breadcrumbs) . wrapper($HTMLOUT) . stdfoot();
 
