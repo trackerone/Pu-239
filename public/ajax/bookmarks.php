@@ -13,20 +13,20 @@ $db = $container->get(Database::class);
 require_once __DIR__ . '/../../include/bittorrent.php';
 $user = check_user_status();
 
-header('content-type: application/json');
+header('Content-Type: application/json; charset=utf-8');
 
 if ($user === false) {
-    echo json_encode(['fail' => 'csrf']);
+    echo json_encode(['fail' => 'csrf'], JSON_THROW_ON_ERROR);
     app_halt('Exit called');
 }
 
-// TODO(2025): csrf on POST where missing
+// TODO(2025): csrf
 $torrentId = (int) ($_POST['tid'] ?? 0);
 $togglePrivate = ($_POST['private'] ?? '') === 'true';
 $remove = $_POST['remove'] ?? 'false';
 
 if ($torrentId <= 0) {
-    echo json_encode(['fail' => 'invalid']);
+    echo json_encode(['fail' => 'invalid'], JSON_THROW_ON_ERROR);
     app_halt('Exit called');
 }
 
@@ -42,7 +42,7 @@ if ($togglePrivate) {
     );
 
     if ($bookmark === null) {
-        echo json_encode(['fail' => 'missing']);
+        echo json_encode(['fail' => 'missing'], JSON_THROW_ON_ERROR);
         app_halt('Exit called');
     }
 
@@ -63,7 +63,7 @@ if ($togglePrivate) {
         'text' => $label,
         'tid' => $torrentId,
         'remove' => 'false',
-    ]);
+    ], JSON_THROW_ON_ERROR);
     app_halt('Exit called');
 }
 
@@ -81,7 +81,7 @@ if ($bookmark !== null) {
         'text' => _('Add Bookmark'),
         'tid' => $torrentId,
         'remove' => $remove,
-    ]);
+    ], JSON_THROW_ON_ERROR);
     app_halt('Exit called');
 }
 
@@ -102,5 +102,5 @@ echo json_encode([
     'text' => _('Delete Bookmark'),
     'tid' => $torrentId,
     'remove' => $remove,
-]);
+], JSON_THROW_ON_ERROR);
 app_halt('Exit called');

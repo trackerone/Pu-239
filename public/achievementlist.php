@@ -13,6 +13,8 @@ global $container;
 $config = $container->get(ConfigRepository::class);
 $db = $container->get(Database::class);
 
+$s = $s ?? static fn($v) => htmlspecialchars((string) $v, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
+
 require_once __DIR__ . '/../include/bittorrent.php';
 
 $HTMLOUT = '';
@@ -20,11 +22,11 @@ $user = check_user_status();
 $achievementlist = $container->get(Achievementlist::class);
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && $user['class'] >= UC_MAX) {
-    // TODO(2025): csrf on POST where missing
+    // TODO(2025): csrf
     $values = [
-        'achievename' => htmlsafechars(trim($_POST['achievename'] ?? '')),
-        'notes' => htmlsafechars(trim($_POST['notes'] ?? '')),
-        'clienticon' => htmlsafechars(trim($_POST['clienticon'] ?? '')),
+        'achievename' => $s(trim($_POST['achievename'] ?? '')),
+        'notes' => $s(trim($_POST['notes'] ?? '')),
+        'clienticon' => $s(trim($_POST['clienticon'] ?? '')),
     ];
     $achievementlist->add($values);
     $message = _fe('A New achievment has been added. Achievement: [{0}]', $values['achievename']);
@@ -63,15 +65,15 @@ if ($rows === []) {
             </tr>';
     $body = '';
     $images_baseurl = (string) $config->get('paths.images_baseurl');
+    $imagesBaseUrlEscaped = $s($images_baseurl);
     foreach ($rows as $arr) {
-        $notes = htmlsafechars($arr['notes']);
+        $notes = $s($arr['notes']);
         $count = (int) $arr['count'];
         $clienticon = '';
         if ($arr['clienticon'] !== '') {
-            $clienticon = "<img src='" . $images_baseurl . "achievements/" .
-                htmlsafechars($arr['clienticon']) .
-                "' class='tooltipper' title='" . htmlsafechars($arr['achievename']) .
-                "' alt='" . htmlsafechars($arr['achievename']) . "'>";
+            $iconPath = $imagesBaseUrlEscaped . 'achievements/' . $s($arr['clienticon']);
+            $title = $s($arr['achievename']);
+            $clienticon = "<img src='{$iconPath}' class='tooltipper' title='{$title}' alt='{$title}'>";
         }
         $body .= "
             <tr>
@@ -111,8 +113,9 @@ if ($user['class'] >= UC_MAX) {
 }
 
 $title = _('Achievements List');
+$self = $s($_SERVER['PHP_SELF'] ?? '');
 $breadcrumbs = [
-    "<a href='{$_SERVER['PHP_SELF']}'>$title</a>",
+    "<a href='{$self}'>$title</a>",
 ];
 
 echo stdhead($title, [], 'page-wrapper', $breadcrumbs) . wrapper($HTMLOUT, 'has-text-centered') . stdfoot();

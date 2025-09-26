@@ -72,17 +72,30 @@ admin/categories.php,false,true,14,false,added helper + sanitized forms/lists (b
 >>>>>> master
 public/ajax/tvmaze_lookup.php,false,true,0,true,json response hardened
 public/ajax/checkport.php,false,true,0,true,json response hardened
+<<<<<< codex/enforce-csrf-and-escape-output-ls3ug3
+=======
 <<<<<< codex/enforce-csrf-and-escape-output-bbpkil
+>>>>>> master
 public/bugs.php,false,true,4,false,added helper for self links and noted csrf gap in view/add handlers (batch offset 36)
 admin/reputation_settings.php,false,true,2,false,normalized form/breadcrumb escaping with csrf TODO (batch offset 36)
 public/subtitles.php,false,true,12,false,escaped form fields, filters, and language badges plus csrf TODO (batch offset 36)
 admin/delacct.php,false,true,0,false,documented csrf follow-up for deletion flow (batch offset 41)
 admin/editlog.php,false,true,3,false,escaped coder log file names and logged csrf TODO (batch offset 41)
+<<<<<< codex/enforce-csrf-and-escape-output-ls3ug3
+public/ajax/autocomplete.php,false,true,3,false,
+public/ajax/bookmarks.php,false,true,0,true,
+public/ajax/checkports.php,false,true,3,true,
+public/ajax/cooker_notify.php,false,true,0,true,
+public/ajax/descr_format.php,false,true,0,true,
+public/achievementlist.php,false,true,4,false,
+admin/watched_users.php,false,true,5,false,
+=======
 =======
 <<<<<< codex/enforce-csrf-and-escape-output-o8hj4w
 public/bugs.php,false,true,4,false,added helper for self links and noted csrf gap in view/add handlers (batch offset 36)
 admin/reputation_settings.php,false,true,2,false,normalized form/breadcrumb escaping with csrf TODO (batch offset 36)
 public/subtitles.php,false,true,12,false,escaped form fields, filters, and language badges plus csrf TODO (batch offset 36)
 ======
+>>>>>> master
 >>>>>> master
 >>>>>> master
