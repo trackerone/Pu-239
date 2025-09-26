@@ -12,7 +12,7 @@ $db = $container->get(Database::class);
 
 require_once __DIR__ . '/../../include/bittorrent.php';
 check_user_status();
-header('content-type: application/json');
+header('Content-Type: application/json; charset=utf-8');
 
 $validator = $container->get(Validator::class);
 $validation = $validator->validate($_POST, [
@@ -21,7 +21,7 @@ $validation = $validator->validate($_POST, [
     'name' => 'required',
 ]);
 if ($validation->fails()) {
-    echo json_encode(['content' => 'invalid']);
+    echo json_encode(['content' => 'invalid'], JSON_THROW_ON_ERROR);
     app_halt('Exit called');
 }
 // TODO(2025): csrf on POST where missing
@@ -33,9 +33,9 @@ $isbn = !empty($_POST['isbn']) ? $_POST['isbn'] : '000000';
 $title = htmlsafechars($_POST['name']);
 $book_info = get_book_info($isbn, $title, $tid, $poster);
 if (!empty($book_info)) {
-    echo json_encode(['content' => $book_info['ebook']]);
+    echo json_encode(['content' => $book_info['ebook']], JSON_THROW_ON_ERROR);
     app_halt('Exit called');
 }
 
-echo json_encode(['content' => 'Lookup Failed']);
+echo json_encode(['content' => 'Lookup Failed'], JSON_THROW_ON_ERROR);
 app_halt('Exit called');

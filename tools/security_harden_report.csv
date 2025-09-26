@@ -70,3 +70,56 @@ admin/categories.php,false,true,14,false,added helper + sanitized forms/lists (b
 >>>>>> master
 >>>>>> master
 >>>>>> master
+public/ajax/tvmaze_lookup.php,false,true,0,true,json response hardened
+public/ajax/checkport.php,false,true,0,true,json response hardened
+public/bugs.php,false,true,4,false,added helper for self links and noted csrf gap in view/add handlers (batch offset 36)
+admin/reputation_settings.php,false,true,2,false,normalized form/breadcrumb escaping with csrf TODO (batch offset 36)
+public/subtitles.php,false,true,12,false,escaped form fields, filters, and language badges plus csrf TODO (batch offset 36)
+admin/delacct.php,false,true,0,false,documented csrf follow-up for deletion flow (batch offset 41)
+admin/editlog.php,false,true,3,false,escaped coder log file names and logged csrf TODO (batch offset 41)
+public/ajax/autocomplete.php,false,true,3,false,
+public/ajax/bookmarks.php,false,true,0,true,
+public/ajax/checkports.php,false,true,3,true,
+public/ajax/cooker_notify.php,false,true,0,true,
+public/ajax/descr_format.php,false,true,0,true,
+public/achievementlist.php,false,true,4,false,
+admin/watched_users.php,false,true,5,false,
+public/ajax/ebook_lookup.php,false,true,0,true,json headers + JSON_THROW_ON_ERROR responses (batch offset 56)
+public/ajax/imdb_lookup.php,false,true,0,true,json headers + JSON_THROW_ON_ERROR responses (batch offset 56)
+public/ajax/isbn_lookup.php,false,true,0,true,json headers + JSON_THROW_ON_ERROR responses (batch offset 56)
+public/ajax/like.php,false,true,0,true,json payloads hardened and header normalized (batch offset 56)
+public/ajax/member_input.php,false,true,0,false,reviewed staff actions remain TODO for CSRF follow-up (batch offset 56)
+public/ajax/offer_notify.php,false,true,0,true,json responses normalized + insert/delete handling tightened (batch offset 56)
+public/ajax/offer_status.php,false,true,0,true,json responses normalized (batch offset 56)
+public/ajax/offer_vote.php,false,true,0,true,json responses normalized (batch offset 56)
+public/ajax/rating.php,false,true,2,false,added $s helper for rating tooltip/style escapes and noted csrf gap (batch offset 56)
+public/ajax/request_notify.php,false,true,0,true,reworked notification toggles with bound params + JSON_THROW_ON_ERROR (batch offset 56)
+public/ajax/request_vote.php,false,true,0,true,"toggle vote flow uses bound params"
+public/ajax/show_in_navbar.php,false,true,0,true,"staff navbar toggle via bound update"
+public/ajax/staff_picks.php,false,true,0,true,"staff pick timestamp toggle sanitized"
+public/ajax/take_upload.php,false,true,0,true,"bucket upload json errors hardened"
+public/ajax/take_url_upload.php,false,true,0,true,"remote image fetch validated"
+public/ajax/thanks.php,false,true,2,true,"ajax JSON gated; html uses $s helper"
+public/ajax/torrents_lookup.php,false,true,0,true,"batch responses normalized to JSON_THROW"
+public/ajax/trivia_answers.php,false,true,0,true,"records answer correctness with bound params"
+public/ajax/tvmaze_lookup.php,false,true,0,true,"tvmaze data fetch sanitized"
+public/ajax/usersearch.php,false,true,0,true,"user lookup returns JSON_THROW"
+public/ajax/request_vote.php,false,true,0,true,"header normalized; JSON_THROW maintained"
+public/ajax/show_in_navbar.php,false,true,0,true,"header normalized; navbar toggle JSON"
+public/ajax/staff_picks.php,false,true,0,true,"header normalized; staff pick JSON"
+public/ajax/take_upload.php,false,true,0,true,"header normalized; bucket upload JSON"
+public/ajax/take_url_upload.php,false,true,0,true,"header normalized; remote upload JSON"
+public/ajax/thanks.php,false,true,2,true,"header normalized; $s helper retained"
+public/ajax/torrents_lookup.php,false,true,0,true,"header normalized; JSON_THROW responses"
+public/ajax/trivia_answers.php,false,true,0,true,"header normalized; answer flow JSON"
+public/ajax/tvmaze_lookup.php,false,true,0,true,"header normalized; tvmaze JSON"
+public/ajax/usersearch.php,false,true,0,true,"header normalized; user search JSON"
+public/bitbucket.php,false,true,0,false,"bootstrap order normalized; TODO marker for avatar POST"
+public/blackjack.php,false,true,0,false,"helper added; TODO for gameplay POST"
+public/bot_triggers.php,false,true,7,false,"escaped form fields via $s helper; TODO marker"
+public/browse.php,false,true,0,false,"search POST TODO added"
+public/casino.php,false,true,0,false,"helper wired; TODO for bet submission"
+public/contactstaff.php,false,true,3,false,"form action + links escaped with $s; TODO marker"
+public/delete.php,false,true,0,false,"header normalized; TODO for delete flow"
+public/details.php,false,true,0,false,"moderator POST guarded with TODO"
+public/downloadsub.php,false,true,0,false,"subtitle POST TODO noted"

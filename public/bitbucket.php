@@ -1,15 +1,15 @@
 <?php
 declare(strict_types=1);
+
 require_once dirname(__DIR__) . '/bootstrap_web.php';
 
-$db = $container->get(Database::class);
-
-
-
-
 use PU239\Config\ConfigRepository;
+use Pu239\Database;
 use Pu239\Session;
 use Pu239\User;
+
+$db = $container->get(Database::class);
+$s = $s ?? static fn($v) => htmlspecialchars((string) $v, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
 
 require_once __DIR__ . '/../include/bittorrent.php';
 $user = check_user_status();
@@ -161,6 +161,7 @@ if (isset($_GET['images']) && $_GET['images'] == 1) {
 
 if (isset($_GET['images'])) {
     $folder_name = (!isset($_GET['year']) ? date('Y') . DIRECTORY_SEPARATOR : (int) $_GET['year'] . DIRECTORY_SEPARATOR) . $folder_month;
+    // TODO(2025): csrf
     $bucketlink2 = ((isset($_POST['avy']) || (isset($_GET['images']) && $_GET['images'] == 2)) ? 'avatar/' : $folder_name . DIRECTORY_SEPARATOR);
     $files = glob(BITBUCKET_DIR . $folder_name . DIRECTORY_SEPARATOR . $USERSALT . '_*');
     if (!empty($files)) {

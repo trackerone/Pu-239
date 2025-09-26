@@ -1,6 +1,8 @@
 <?php
 declare(strict_types=1);
+
 require_once dirname(__DIR__) . '/bootstrap_web.php';
+
 use Pu239\Config\ConfigRepository;
 use Pu239\Cache;
 use Pu239\Casino;
@@ -17,6 +19,7 @@ global $container;
 $config = $container->get(ConfigRepository::class);
 /** @var Database $db */
 $db = $container->get(Database::class);
+$s = $s ?? static fn($v) => htmlspecialchars((string) $v, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
 $allowedPlay = (int) $config->get('allowed.play');
 $classNames = (array) $config->get('class_names');
 $siteName = (string) $config->get('site.name');
@@ -165,6 +168,7 @@ $betmb_options = [
     $bet_value7 => 1,
     $bet_value8 => 1,
 ];
+// TODO(2025): csrf
 $post_color = isset($_POST['color']) ? $_POST['color'] : '';
 $post_number = isset($_POST['number']) ? $_POST['number'] : '';
 $post_betmb = isset($_POST['betmb']) ? $_POST['betmb'] : '';

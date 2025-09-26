@@ -14,17 +14,19 @@ $config = $container->get(ConfigRepository::class);
 $cache = $container->get(Cache::class);
 $db = $container->get(Database::class);
 
+$s = $s ?? static fn($v) => htmlspecialchars((string) $v, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
+
 require_once __DIR__ . '/../../include/bittorrent.php';
 check_user_status();
 
-// TODO(2025): csrf on POST where missing
+// TODO(2025): csrf
 $keyword = trim((string) ($_POST['keyword'] ?? ''));
 if ($keyword === '' || mb_strlen($keyword) < 2) {
     return false;
 }
 
 $keywordLower = strtolower($keyword);
-$keywordSafe = htmlsafechars($keywordLower);
+$keywordSafe = $s($keywordLower);
 $cacheKey = 'suggest_torrents_' . hash('sha256', $keywordLower);
 
 $results = $cache->get($cacheKey);
@@ -69,19 +71,19 @@ if ($results !== []) {
         </ul>';
 
     $rowIndex = 0;
+    $baseUrl = $s($config->get('paths.baseurl'));
     foreach ($results as $result) {
         $rowIndex++;
         $color = $result['visible'] === 'yes' ? 'is-success' : 'has-text-danger';
         $background = $rowIndex % 2 === 0 ? 'bg-04' : 'bg-03';
-        $name = htmlsafechars($result['name']);
+        $name = $s($result['name']);
         $seeders = (int) $result['seeders'];
         $leechers = (int) $result['leechers'];
         $torrentId = (int) $result['id'];
-
         $template .= "
         <ul class='columns {$background} round10'>
             <li class='column is-three-fifth'>
-                <a href='{$config->get('paths.baseurl')}/details.php?id={$torrentId}&amp;hit=1'>
+                <a href='{$baseUrl}/details.php?id={$torrentId}&amp;hit=1'>
                     <span class='{$color}'>{$name}</span>
                 </a>
             </li>

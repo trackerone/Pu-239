@@ -7,8 +7,10 @@ use Pu239\Database;
 require_once __DIR__ . '/../include/bittorrent.php';
 check_user_status();
 global $container;
-$db = $container->get(Database::class);;
+$db = $container->get(Database::class);
+$s = $s ?? static fn($v) => htmlspecialchars((string) $v, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
 
+// TODO(2025): csrf
 $action = isset($_POST['action']) ? htmlsafechars($_POST['action']) : '';
 if ($action === 'download') {
     $id = isset($_POST['sid']) ? (int) $_POST['sid'] : 0;

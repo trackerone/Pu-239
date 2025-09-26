@@ -1,11 +1,7 @@
 <?php
 declare(strict_types=1);
+
 require_once dirname(__DIR__) . '/bootstrap_web.php';
-
-$db = $container->get(Database::class);
-
-
-
 
 use Pu239\Cache;
 use Pu239\Coin;
@@ -13,6 +9,9 @@ use Pu239\Comment;
 use Pu239\Session;
 use Pu239\Torrent;
 use Pu239\User;
+
+$db = $container->get(Database::class);
+$s = $s ?? static fn($v) => htmlspecialchars((string) $v, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
 
 $time_start = microtime(true);
 require_once __DIR__ . '/../include/bittorrent.php';
@@ -92,6 +91,7 @@ if (has_access($user['class'], UC_STAFF, 'torrent_mod')) {
 }
 $cache = $container->get(Cache::class);
 if ($moderator) {
+    // TODO(2025): csrf
     if (isset($_POST['checked']) && $_POST['checked'] == $id) {
         $set = [
             'checked_by' => $user['id'],

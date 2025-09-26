@@ -1,15 +1,14 @@
 <?php
 declare(strict_types=1);
 
+require_once dirname(__DIR__) . '/bootstrap_web.php';
+
+use DI\DependencyException;
+use DI\NotFoundException;
 use PU239\Config\ConfigRepository;
 use Pu239\Cache;
 use Pu239\Database;
-use DI\DependencyException;
-use DI\NotFoundException;
 
-require_once dirname(__DIR__) . '/bootstrap_web.php';
-
-global $container;
 /** @var ConfigRepository $config */
 $config = $container->get(ConfigRepository::class);
 $db = $container->get(Database::class);
@@ -17,24 +16,32 @@ $cache = $container->get(Cache::class);
 $baseurl = (string) $config->get('paths.baseurl');
 
 require_once __DIR__ . '/../../include/bittorrent.php';
+
+$s = $s ?? static fn($v) => htmlspecialchars((string) $v, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
+
 $user = check_user_status();
 
-if (empty($_POST)) {
+if ($_POST === []) {
     stderr(_('Error'), _('Access Not Allowed'));
     header('Location: ' . $baseurl);
     app_halt('Exit called');
 }
 
-if (!isset($user)) {
+if ($user === false) {
     stderr(_('Error'), _("You can't add a thank you on your own torrent"));
     header('Location: ' . $baseurl);
     app_halt('Exit called');
 }
 
+// TODO(2025): csrf
 $uid = (int) $user['id'];
 $tid = (int) ($_POST['tid'] ?? ($_GET['tid'] ?? 0));
-$do = htmlsafechars($_POST['action'] ?? ($_GET['action'] ?? 'list'));
+$action = htmlsafechars($_POST['action'] ?? ($_GET['action'] ?? 'list'));
 $ajax = isset($_POST['ajax']) && (int) $_POST['ajax'] === 1;
+
+if ($ajax) {
+    header('Content-Type: application/json; charset=utf-8');
+}
 
 /**
  * @throws DependencyException
@@ -43,31 +50,41 @@ $ajax = isset($_POST['ajax']) && (int) $_POST['ajax'] === 1;
  */
 function print_list(int $uid, int $tid, bool $ajax)
 {
-    global $cache, $config, $db;
+    global $cache, $config, $db, $s;
 
     $baseurl = (string) $config->get('paths.baseurl');
 
     $rows = $db->fetchAll(
         'SELECT th.userid, u.username, u.seedbonus FROM thanks AS th INNER JOIN users AS u ON u.id = th.userid WHERE th.torrentid = :tid ORDER BY u.class DESC',
-        [':tid' => $tid]
+        ['tid' => [$tid, \PDO::PARAM_INT]]
     );
-    $list = $ids = [];
-    foreach ($rows as $a) {
-        $list[] = format_username((int) $a['userid']);
-        $ids[] = (int) $a['userid'];
+
+    $list = [];
+    $ids = [];
+
+    foreach ($rows as $row) {
+        $list[] = format_username((int) $row['userid']);
+        $ids[] = (int) $row['userid'];
     }
-    $hadTh = in_array($uid, $ids, true);
+
+    $hadThanks = in_array($uid, $ids, true);
 
     if ($ajax) {
         return json_encode([
-            'list' => (count($list) > 0 ? implode(', ', $list) : ''),
-            'hadTh' => $hadTh,
+            'list' => $list === [] ? '' : implode(', ', $list),
+            'hadTh' => $hadThanks,
             'status' => true,
-        ]);
+        ], JSON_THROW_ON_ERROR);
     }
 
-    $form = !$hadTh ? "<span class='left10'><form action='{$baseurl}/ajax/thanks.php' method='post'><input type='submit' class='button is-small details-button' name='submit' value='Say thanks'><input type='hidden' name='torrentid' value='{$tid}'><input type='hidden' name='action' value='add'></form></span enctype='multipart/form-data' accept-charset='utf-8'>" : '';
-    $out = (count($list) > 0 ? implode(', ', $list) : '');
+    $form = '';
+
+    if (!$hadThanks) {
+        $actionUrl = $s($baseurl) . '/ajax/thanks.php';
+        $form = "<span class='left10'><form action='" . $actionUrl . "' method='post' enctype='multipart/form-data' accept-charset='utf-8'><input type='submit' class='button is-small details-button' name='submit' value='Say thanks'><input type='hidden' name='torrentid' value='" . $s($tid) . "'><input type='hidden' name='action' value='add'></form></span>";
+    }
+
+    $out = $list === [] ? '' : implode(', ', $list);
 
     return <<<IFRAME
 <!doctype html>
@@ -110,51 +127,67 @@ padding:1px 3px;
 IFRAME;
 }
 
-switch ($do) {
+switch ($action) {
     case 'list':
-        print print_list($uid, $tid, $ajax);
+        echo print_list($uid, $tid, $ajax);
         break;
 
     case 'add':
         if ($uid > 0 && $tid > 0) {
-            $arr = $db->fetch(
-                'SELECT COUNT(id) AS c FROM thanks WHERE userid = :uid AND torrentid = :tid',
-                [':uid' => $uid, ':tid' => $tid]
+            $exists = $db->fetch(
+                'SELECT COUNT(id) AS count FROM thanks WHERE userid = :uid AND torrentid = :tid',
+                [
+                    'uid' => [$uid, \PDO::PARAM_INT],
+                    'tid' => [$tid, \PDO::PARAM_INT],
+                ]
             );
-            if ((int) ($arr['c'] ?? 0) === 0) {
+
+            if ((int) ($exists['count'] ?? 0) === 0) {
                 try {
                     $db->beginTransaction();
                     $db->run(
                         'INSERT INTO thanks (userid, torrentid) VALUES (:uid, :tid)',
-                        [':uid' => $uid, ':tid' => $tid]
+                        [
+                            'uid' => [$uid, \PDO::PARAM_INT],
+                            'tid' => [$tid, \PDO::PARAM_INT],
+                        ]
                     );
+
                     if ((bool) $config->get('bonus.on')) {
                         $db->run(
                             'UPDATE users SET seedbonus = seedbonus + :bonus WHERE id = :id',
                             [
-                                ':bonus' => (float) $config->get('bonus.per_thanks'),
-                                ':id' => $uid,
+                                'bonus' => [(float) $config->get('bonus.per_thanks'), \PDO::PARAM_STR],
+                                'id' => [$uid, \PDO::PARAM_INT],
                             ]
                         );
                     }
+
                     $db->commit();
                 } catch (\Throwable $e) {
                     $db->rollBack();
                     break;
                 }
+
                 if ((bool) $config->get('bonus.on')) {
-                    $User = $db->fetch('SELECT seedbonus FROM users WHERE id = :id', [':id' => $uid]);
+                    $updatedUser = $db->fetch(
+                        'SELECT seedbonus FROM users WHERE id = :id',
+                        ['id' => [$uid, \PDO::PARAM_INT]]
+                    );
+
                     $cache->update_row(
                         'user_' . $uid,
                         [
-                            'seedbonus' => (int) ($User['seedbonus'] ?? 0),
+                            'seedbonus' => (int) ($updatedUser['seedbonus'] ?? 0),
                         ],
                         (int) $config->get('expires.user_cache')
                     );
                 }
+
                 echo print_list($uid, $tid, $ajax);
             }
         }
         break;
 }
 
+app_halt('Exit called');

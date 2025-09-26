@@ -16,6 +16,7 @@ global $container;
 /** @var ConfigRepository $config */
 $config = $container->get(ConfigRepository::class);
 $db = $container->get(Database::class);
+$s = $s ?? static fn($v) => htmlspecialchars((string) $v, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
 
 $HTMLOUT = $debugout = '';
 if ($user['class'] < $config->get('allowed.play')) {
@@ -81,6 +82,7 @@ $debugout .= '
 
 $ddown = false;
 $update_ddown = "ddown = 'no'";
+// TODO(2025): csrf
 if (isset($_POST['ddown']) && $_POST['ddown'] === 'ddown') {
     $ddown = true;
     $update_ddown = "ddown = 'yes'";
