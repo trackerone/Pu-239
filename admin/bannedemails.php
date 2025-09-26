@@ -12,6 +12,9 @@ $config = $container->get(ConfigRepository::class);
 
 $db = $container->get(Database::class);
 $fluent = $db;
+$s = $s ?? static fn($v) => htmlspecialchars((string) $v, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
+$self = $s($_SERVER['PHP_SELF'] ?? '');
+$baseurl = $s($config->get('paths.baseurl'));
 
 $class = get_access(basename($_SERVER['REQUEST_URI']));
 class_check($class);
@@ -23,6 +26,7 @@ if (is_valid_id($remove)) {
     write_log(_fe('Email ban {0} was removed by {1}', $remove, $CURUSER['username']));
 }
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    // TODO(2025): csrf
     $email = htmlsafechars($_POST['email']);
     $comment = htmlsafechars($_POST['comment']);
     if (!$email || !$comment) {
@@ -86,14 +90,18 @@ if (empty($rows)) {
         </tr>';
     $body = '';
     foreach ($rows as $arr) {
-        $body .= '
+        $addedOn = $s(get_date((int) $arr['added'], ''));
+        $email = $s($arr['email']);
+        $comment = $s($arr['comment']);
+        $id = $s((string) $arr['id']);
+        $body .= "
         <tr>
-            <td>' . get_date((int) $arr['added'], '') . '</td>
-            <td>' . htmlsafechars($arr['email']) . '</td>
-            <td>' . format_username((int) $arr['addedby']) . '</td>
-            <td>' . htmlsafechars($arr['comment']) . "</td>
-            <td><a href='staffpanel.php?tool=bannedemails&amp;remove=" . (int) $arr['id'] . "'>" . _('Remove it') . '</a></td>
-        </tr>';
+            <td>{$addedOn}</td>
+            <td>{$email}</td>
+            <td>" . format_username((int) $arr['addedby']) . "</td>
+            <td>{$comment}</td>
+            <td><a href='staffpanel.php?tool=bannedemails&amp;remove={$id}'>" . _('Remove it') . "</a></td>
+        </tr>";
     }
     $HTMLOUT .= main_table($body, $heading);
 }
@@ -102,7 +110,7 @@ if ($count1 > $perpage) {
 }
 $title = _('Banned Emails');
 $breadcrumbs = [
-    "<a href='" . (string) $config->get('paths.baseurl') . "/staffpanel.php'>" . _('Staff Panel') . '</a>',
-    "<a href='{$_SERVER['PHP_SELF']}'>$title</a>",
+    "<a href='{$baseurl}/staffpanel.php'>" . _('Staff Panel') . '</a>',
+    "<a href='{$self}'>" . $s($title) . '</a>',
 ];
 echo stdhead($title, [], 'page-wrapper', $breadcrumbs) . wrapper($HTMLOUT) . stdfoot();

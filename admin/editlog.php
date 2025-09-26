@@ -15,7 +15,18 @@ $db = $container->get(Database::class);
 $class = get_access(basename($_SERVER['REQUEST_URI']));
 class_check($class);
 
+$s = $s ?? static fn($v) => htmlspecialchars((string) $v, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
+$self = $s($_SERVER['PHP_SELF'] ?? '');
+$baseurl = $s($config->get('paths.baseurl'));
+
+$extensionsList = $s(implode(', ', $config->get('coders.log_allowed_ext')));
+
 $HTMLOUT = '';
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    // TODO(2025): csrf
+}
+
 $file_data = ROOT_DIR . 'dir_list' . DIRECTORY_SEPARATOR . 'data_' . $CURUSER['username'] . '.txt';
 if (file_exists($file_data)) {
     $data = json_decode(file_get_contents($file_data), true);
@@ -83,7 +94,7 @@ $HTMLOUT .= "
         <h1 class='has-text-centered top20'>Coder's Log</h1>
         <div class='bordered bottom20'>
             <div class='alt_bordered bg-00 padding20'>
-                <div class='has-text-centered'>Tracking " . implode(', ', $config->get('coders.log_allowed_ext')) . " files only!</div>
+                <div class='has-text-centered'>Tracking {$extensionsList} files only!</div>
                 <div class='has-text-centered'>" . number_format(count($current)) . ' files have been added, modifed or deleted since your last update of the ' . number_format($i) . " files being tracked.</div>
             </div>
         </div>
@@ -188,7 +199,7 @@ $HTMLOUT .= "
         </form>";
 $title = _('File Edit Log');
 $breadcrumbs = [
-    "<a href='{$config->get('paths.baseurl')}/staffpanel.php'>" . _('Staff Panel') . '</a>',
-    "<a href='{$_SERVER['PHP_SELF']}'>$title</a>",
+    "<a href='{$baseurl}/staffpanel.php'>" . _('Staff Panel') . '</a>',
+    "<a href='{$self}'>" . $s($title) . '</a>',
 ];
 echo stdhead($title, [], 'page-wrapper', $breadcrumbs) . wrapper($HTMLOUT) . stdfoot();

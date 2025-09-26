@@ -22,11 +22,18 @@ $messages = $container->get(Message::class);
 $class = get_access(basename($_SERVER['REQUEST_URI']));
 class_check($class);
 
+$s = $s ?? static fn($v) => htmlspecialchars((string) $v, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
+$self = $s($_SERVER['PHP_SELF'] ?? '');
+$baseurlRaw = (string) $config->get('paths.baseurl');
+$baseurl = $s($baseurlRaw);
+
 $HTMLOUT = '';
 $this_url = $_SERVER['SCRIPT_NAME'] ?? '';
 $do = (isset($_GET['do']) && $_GET['do'] === 'disabled') ? 'disabled' : 'leechwarn';
+$requestUri = $s($_SERVER['REQUEST_URI'] ?? '');
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    // TODO(2025): csrf
     $r = isset($_POST['ref']) ? (string) $_POST['ref'] : $this_url;
     $uids = isset($_POST['users']) && is_array($_POST['users']) ? array_values(array_unique(array_map('intval', $_POST['users']))) : [];
     if (empty($uids)) {
@@ -97,7 +104,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 // -------------------------------------------
 // Views
 // -------------------------------------------
-$base = (string) $config->get('paths.baseurl');
+$base = $baseurl;
 switch ($do) {
     case 'disabled':
         $query = "SELECT id, username, class, downloaded, uploaded,
@@ -140,7 +147,7 @@ if ($count === 0) {
     $HTMLOUT .= stdmsg(_('Hey'), _('There is no ') . strtolower($title));
 } else {
     $HTMLOUT .= "
-    <form action='{$_SERVER['PHP_SELF']}?tool=leechwarn&amp;action=leechwarn' method='post' enctype='multipart/form-data' accept-charset='utf-8'>";
+    <form action='{$self}?tool=leechwarn&amp;action=leechwarn' method='post' enctype='multipart/form-data' accept-charset='utf-8'>";
     $heading = '
         <tr>
             <th>' . _('User') . '</th>
@@ -180,13 +187,13 @@ if ($count === 0) {
             </select>
                 &raquo;
             <input type='submit' value='" . _('Apply') . "' class='button is-small'>
-            <input type='hidden' value='" . htmlsafechars($_SERVER['REQUEST_URI']) . "' name='ref'>
+            <input type='hidden' value='{$requestUri}' name='ref'>
         </div>
     </form>";
 }
 
 $breadcrumbs = [
-    "<a href='" . (string) $config->get('paths.baseurl') . "/staffpanel.php'>" . _('Staff Panel') . '</a>',
-    "<a href='{$_SERVER['PHP_SELF']}'>$title</a>",
+    "<a href='{$baseurl}/staffpanel.php'>" . _('Staff Panel') . '</a>',
+    "<a href='{$self}'>" . $s($title) . '</a>',
 ];
 echo stdhead($title, [], 'page-wrapper', $breadcrumbs) . wrapper($HTMLOUT) . stdfoot();

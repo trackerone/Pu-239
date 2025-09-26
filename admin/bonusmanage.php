@@ -15,9 +15,16 @@ $db = $container->get(Database::class);
 $class = get_access(basename($_SERVER['REQUEST_URI']));
 class_check($class);
 
+$s = $s ?? static fn($v) => htmlspecialchars((string) $v, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
+$selfPath = $_SERVER['PHP_SELF'] ?? '';
+$baseurlRaw = (string) $config->get('paths.baseurl');
+$self = $s($selfPath);
+$baseurl = $s($baseurlRaw);
+
 $HTMLOUT = $count = '';
 $rows = $db->fetchAll('SELECT * FROM bonus ORDER BY orderid, bonusname');
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    // TODO(2025): csrf
     if (isset($_POST['id']) || isset($_POST['orderid']) || isset($_POST['points']) || isset($_POST['pointspool']) || isset($_POST['minpoints']) || isset($_POST['description']) || isset($_POST['enabled']) || isset($_POST['minclass'])) {
         $id = (int) $_POST['id'];
         $points = (int) $_POST['bonuspoints'];
@@ -44,7 +51,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
 
         if ($sql) {
-            header("Location: {$_SERVER['PHP_SELF']}?tool=bonusmanage");
+            header("Location: {$selfPath}?tool=bonusmanage");
             app_halt('Exit called');
         } else {
             stderr(_('Error'), _('Something went wrong with the sql query'));
@@ -72,30 +79,47 @@ $HTMLOUT = "
     <h1 class='has-text-centered'>" . _('Bonus Management') . '</h1>';
 
 $body = '';
+$submitLabel = $s(_('Submit'));
 foreach ($rows as $arr) {
-    $body .= "
+    $quantityDisplay = $s((string) $arr['menge']);
+    if (in_array($arr['art'], ['traffic', 'traffic2', 'gift_1', 'gift_2'], true)) {
+        $quantityValue = (float) $arr['menge'] / 1024 / 1024 / 1024;
+        $quantityDisplay = $s((string) $quantityValue) . ' GB';
+    }
+    $id = (int) $arr['id'];
+    $orderId = (int) $arr['orderid'];
+    $bonusPoints = (int) $arr['points'];
+    $pointsPool = (int) $arr['pointspool'];
+    $minPoints = (int) $arr['minpoints'];
+    $minClass = (int) $arr['minclass'];
+    $enabledAttribute = $arr['enabled'] === 'yes' ? "checked='checked'" : '';
+    $bonusName = format_comment($arr['bonusname']);
+    $description = format_comment($arr['description']);
+    $art = format_comment($arr['art']);
+    $body .= <<<HTML
         <tr>
-            <form name='bonusmanage' method='post' action='{$_SERVER['PHP_SELF']}?tool=bonusmanage&amp;action=bonusmanage' enctype='multipart/form-data' accept-charset='utf-8'>
-                <td><input name='id' type='hidden' value='" . (int) $arr['id'] . "'>" . (int) $arr['id'] . "</td>
-                <td><input type='number' name='orderid' value='" . (int) $arr['orderid'] . "' class='w-100'></td>
-                <td><input name='enabled' type='checkbox' " . ($arr['enabled'] === 'yes' ? 'checked' : '') . '></td>
-                <td>' . format_comment($arr['bonusname']) . "</td>
-                <td><input type='number' name='bonuspoints' value='" . (int) $arr['points'] . "' class='w-100'></td>
-                <td><input type='number' name='pointspool' value='" . (int) $arr['pointspool'] . "' class='w-100'></td>
-                <td><input type='number' name='minpoints' value='" . (int) $arr['minpoints'] . "' class='w-100'></td>
-                <td><input type='number' name='minclass' value='" . (int) $arr['minclass'] . "' class='w-100'></td>
-                <td><textarea name='description' rows='4' class='w-100'>" . format_comment($arr['description']) . '</textarea></td>
-                <td>' . format_comment($arr['art']) . '</td>
-                <td>' . (($arr['art'] === 'traffic' || $arr['art'] === 'traffic2' || $arr['art'] === 'gift_1' || $arr['art'] === 'gift_2') ? (htmlsafechars($arr['menge']) / 1024 / 1024 / 1024) . ' GB' : htmlsafechars($arr['menge'])) . "</td>
-                <td><input class='button is-small' type='submit' value='" . _('Submit') . "'></td>
+            <form name='bonusmanage' method='post' action='{$self}?tool=bonusmanage&amp;action=bonusmanage' enctype='multipart/form-data' accept-charset='utf-8'>
+                <td><input name='id' type='hidden' value='{$id}'>{$id}</td>
+                <td><input type='number' name='orderid' value='{$orderId}' class='w-100'></td>
+                <td><input name='enabled' type='checkbox' {$enabledAttribute}></td>
+                <td>{$bonusName}</td>
+                <td><input type='number' name='bonuspoints' value='{$bonusPoints}' class='w-100'></td>
+                <td><input type='number' name='pointspool' value='{$pointsPool}' class='w-100'></td>
+                <td><input type='number' name='minpoints' value='{$minPoints}' class='w-100'></td>
+                <td><input type='number' name='minclass' value='{$minClass}' class='w-100'></td>
+                <td><textarea name='description' rows='4' class='w-100'>{$description}</textarea></td>
+                <td>{$art}</td>
+                <td>{$quantityDisplay}</td>
+                <td><input class='button is-small' type='submit' value='{$submitLabel}'></td>
             </form>
-        </tr>";
+        </tr>
+    HTML;
 }
 
 $HTMLOUT .= main_table($body, $heading);
 $title = _('Bonus Manager');
 $breadcrumbs = [
-    "<a href='" . (string) $config->get('paths.baseurl') . "/staffpanel.php'>" . _('Staff Panel') . '</a>',
-    "<a href='{$_SERVER['PHP_SELF']}'>$title</a>",
+    "<a href='{$baseurl}/staffpanel.php'>" . _('Staff Panel') . '</a>',
+    "<a href='{$self}'>" . $s($title) . '</a>',
 ];
 echo stdhead($title, [], 'page-wrapper', $breadcrumbs) . wrapper($HTMLOUT) . stdfoot();

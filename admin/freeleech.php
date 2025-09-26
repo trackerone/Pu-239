@@ -15,13 +15,19 @@ $db = $container->get(Database::class);
 $class = get_access(basename($_SERVER['REQUEST_URI']));
 class_check($class);
 
+$s = $s ?? static fn($v) => htmlspecialchars((string) $v, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
+$self = $s($_SERVER['PHP_SELF'] ?? '');
+$baseurl = $s($config->get('paths.baseurl'));
+$baseurlRaw = (string) $config->get('paths.baseurl');
+
 $checked1 = $checked2 = $checked3 = $checked4 = $HTMLOUT = '';
 $free = get_event(true);
 $fl = $temp = [];
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    // TODO(2025): csrf
     if (isset($_POST['remove'])) {
         update_event((int) $_POST['expires'], TIME_NOW);
-        header('Location: ' . (string) $config->get('paths.baseurl') . '/staffpanel.php?tool=freeleech');
+        header('Location: ' . $baseurlRaw . '/staffpanel.php?tool=freeleech');
         app_halt('Exit called');
     }
     $fl['modifier'] = isset($_POST['modifier']) ? (int) $_POST['modifier'] : false;
@@ -43,7 +49,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         ++$i;
     }
     set_event($fl['modifier'], TIME_NOW, $fl['expires'], (int) $fl['setby'], $fl['title']);
-    header('Location: ' . (string) $config->get('paths.baseurl') . '/staffpanel.php?tool=freeleech');
+    header('Location: ' . $baseurlRaw . '/staffpanel.php?tool=freeleech');
     app_halt('Exit called');
 }
 $HTMLOUT .= '<h1 class="has-text-centered">' . _('Current Freeleech Status') . '</h1>';
@@ -87,16 +93,18 @@ if (isset($free) && (count($free) < 1)) {
             default:
                 $mode = _('Not Enabled');
         }
+        $titleText = $s((string) $fl['title']);
+        $expiresValue = $s((string) $fl['expires']);
         $body .= "
             <tr>
                 <td>$mode</td>
                 <td>" . get_date((int) $fl['begin'], 'LONG') . '</td>
                 <td>' . ($fl['expires'] != 'Inf.' && $fl['expires'] != 1 ? _('Until ') . get_date((int) $fl['expires'], 'LONG') . ' (' . mkprettytime($fl['expires'] - TIME_NOW) . _(' to go') . ')' : _('Unlimited') . '') . " </td>
                 <td>{$username}</td>
-                <td>{$fl['title']}</td>
+                <td>{$titleText}</td>
                 <td class='has-text-centered'>
-                    <form method='post' action='{$_SERVER['PHP_SELF']}?tool=freeleech&amp;action=remove' enctype='multipart/form-data' accept-charset='utf-8'>
-                        <input type='hidden' class='w-100' value ='" . $fl['expires'] . "' name='expires'>
+                    <form method='post' action='{$self}?tool=freeleech&amp;action=remove' enctype='multipart/form-data' accept-charset='utf-8'>
+                        <input type='hidden' class='w-100' value ='{$expiresValue}' name='expires'>
                         <input type='" . ($fl['expires'] > TIME_NOW ? 'submit' : 'hidden') . "' name='remove' value='" . _('Remove') . "' class='button is-small'>
                     </form>
                 </td>
@@ -109,7 +117,7 @@ $checked = 'checked';
 
 $HTMLOUT .= "
     <h2 class='has-text-centered'>" . _('Set Freeleech') . "</h2>
-    <form method='post' action='{$_SERVER['PHP_SELF']}?tool=freeleech&amp;action=freeleech' enctype='multipart/form-data' accept-charset='utf-8'>
+    <form method='post' action='{$self}?tool=freeleech&amp;action=freeleech' enctype='multipart/form-data' accept-charset='utf-8'>
     <table class='table table-bordered table-striped'>
     <tr><td class='rowhead'>" . _('Mode') . '</td>
     <td> <table>
@@ -146,14 +154,14 @@ $HTMLOUT .= "
     <td><span>' . format_username($CURUSER['id']) . "</span>
     </td></tr>
     <tr><td colspan='2' class='has-text-centered'>
-    <input type='hidden' class='w-100' value ='" . $CURUSER['id'] . "' name='setby'>
+    <input type='hidden' class='w-100' value ='" . $s((string) $CURUSER['id']) . "' name='setby'>
     <input type='submit' name='okay' value='" . _('Do it!') . "' class='button is-small'>
     </td></tr>
     </table></form>";
 
 $title = _('Freeleech Status');
 $breadcrumbs = [
-    "<a href='" . (string) $config->get('paths.baseurl') . "/staffpanel.php'>" . _('Staff Panel') . '</a>',
-    "<a href='{$_SERVER['PHP_SELF']}'>$title</a>",
+    "<a href='{$baseurl}/staffpanel.php'>" . _('Staff Panel') . '</a>',
+    "<a href='{$self}'>" . $s($title) . '</a>',
 ];
 echo stdhead($title, [], 'page-wrapper', $breadcrumbs) . wrapper($HTMLOUT) . stdfoot();
