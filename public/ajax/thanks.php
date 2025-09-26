@@ -1,14 +1,23 @@
 <?php
+
 declare(strict_types=1);
 
+<<<<<< codex/enforce-csrf-and-escape-output-dxtuor
 require_once dirname(__DIR__) . '/bootstrap_web.php';
 
+=======
+>>>>>> master
 use DI\DependencyException;
 use DI\NotFoundException;
 use PU239\Config\ConfigRepository;
 use Pu239\Cache;
 use Pu239\Database;
 
+<<<<<< codex/enforce-csrf-and-escape-output-dxtuor
+=======
+require_once dirname(__DIR__) . '/bootstrap_web.php';
+
+>>>>>> master
 /** @var ConfigRepository $config */
 $config = $container->get(ConfigRepository::class);
 $db = $container->get(Database::class);

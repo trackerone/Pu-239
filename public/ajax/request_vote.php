@@ -1,6 +1,12 @@
 <?php
+
 declare(strict_types=1);
 
+<<<<<< codex/enforce-csrf-and-escape-output-dxtuor
+=======
+use Pu239\Database;
+
+>>>>>> master
 require_once dirname(__DIR__) . '/bootstrap_web.php';
 
 use Pu239\Database;

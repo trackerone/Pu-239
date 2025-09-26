@@ -9,6 +9,11 @@ use DI\NotFoundException;
 use Pu239\Cache;
 use Pu239\Database;
 
+<<<<<< codex/enforce-csrf-and-escape-output-dxtuor
+=======
+require_once dirname(__DIR__) . '/bootstrap_web.php';
+
+>>>>>> master
 /** @var ConfigRepository $config */
 $config = $container->get(ConfigRepository::class);
 $db = $container->get(Database::class);
@@ -16,6 +21,7 @@ $db = $container->get(Database::class);
 require_once __DIR__ . '/../../include/bittorrent.php';
 $user = check_user_status();
 header('Content-Type: application/json; charset=utf-8');
+<<<<<< codex/enforce-csrf-and-escape-output-dxtuor
 
 // TODO(2025): csrf
 if ($user === false) {
@@ -25,6 +31,17 @@ if ($user === false) {
 $uid = $user['class'] < UC_STAFF ? (int) $user['id'] : (int) ($_POST['uid'] ?? 0);
 $type = (string) ($_POST['type'] ?? '');
 
+=======
+
+// TODO(2025): csrf
+if ($user === false) {
+    echo json_encode(['fail' => 'csrf'], JSON_THROW_ON_ERROR);
+    app_halt('Exit called');
+}
+$uid = $user['class'] < UC_STAFF ? (int) $user['id'] : (int) ($_POST['uid'] ?? 0);
+$type = (string) ($_POST['type'] ?? '');
+
+>>>>>> master
 if ($uid <= 0 || $type === '') {
     echo json_encode(['fail' => 'invalid'], JSON_THROW_ON_ERROR);
     app_halt('Exit called');
