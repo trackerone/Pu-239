@@ -1,15 +1,14 @@
 <?php
 declare(strict_types=1);
+
 require_once dirname(__DIR__) . '/bootstrap_web.php';
-
-$db = $container->get(Database::class);
-
-
-
 
 use Pu239\Config\ConfigRepository;
 use Pu239\Database;
 use Pu239\User;
+
+$db = $container->get(Database::class);
+$s = $s ?? static fn($v) => htmlspecialchars((string) $v, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
 
 require_once __DIR__ . '/../include/bittorrent.php';
 require_once CLASS_DIR . 'class_user_options.php';
@@ -206,6 +205,7 @@ if (!empty($cats)) {
 foreach ($valid_search as $search) {
     if (!empty($_GET[$search])) {
         $cleaned = searchfield($_GET[$search]);
+        // TODO(2025): csrf
         if (!empty($_POST['search']) && ($search === 'sns' || $search === 'sna')) {
             $cleaned = searchfield($_POST['search']);
         }

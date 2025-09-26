@@ -1,18 +1,21 @@
 <?php
 declare(strict_types=1);
 
+require_once dirname(__DIR__) . '/bootstrap_web.php';
+
 use Pu239\Cache;
 use Pu239\Config\ConfigRepository;
 use Pu239\Database;
 use Pu239\Session;
-
-require_once dirname(__DIR__) . '/bootstrap_web.php';
 
 global $container;
 /** @var ConfigRepository $config */
 $config = $container->get(ConfigRepository::class);
 /** @var Database $db */
 $db = $container->get(Database::class);
+$s = $s ?? static fn($v) => htmlspecialchars((string) $v, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
+$self = $_SERVER['PHP_SELF'] ?? '';
+$escapedSelf = $s($self);
 
 require_once __DIR__ . '/../include/bittorrent.php';
 $user = check_user_status();
@@ -33,9 +36,10 @@ $stdfoot = [
 
 $msg = '';
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    // TODO(2025): csrf
     $msg = isset($_POST['body']) ? htmlsafechars($_POST['body']) : '';
     $subject = isset($_POST['subject']) ? htmlsafechars($_POST['subject']) : '';
-    $returnto = isset($_POST['returnto']) ? htmlsafechars($_POST['returnto']) : $_SERVER['PHP_SELF'];
+    $returnto = isset($_POST['returnto']) ? htmlsafechars($_POST['returnto']) : $self;
     $fail = false;
     if (empty($msg)) {
         $session->set('is-warning', _("Your messages doesn't have a body"));
@@ -59,7 +63,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 } else {
     $HTMLOUT = "
-            <form method='post' name='message' action='" . $_SERVER['PHP_SELF'] . "' enctype='multipart/form-data' accept-charset='utf-8'>";
+            <form method='post' name='message' action='{$escapedSelf}' enctype='multipart/form-data' accept-charset='utf-8'>";
     $header = "
                     <tr>
                         <th colspan='2'>
@@ -101,7 +105,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             </form>';
     $title = _('Contact Staff');
     $breadcrumbs = [
-        "<a href='{$_SERVER['PHP_SELF']}'>$title</a>",
+        "<a href='{$escapedSelf}'>$title</a>",
     ];
     echo stdhead($title, $stdhead, 'page-wrapper', $breadcrumbs) . wrapper($HTMLOUT) . stdfoot($stdfoot);
 }

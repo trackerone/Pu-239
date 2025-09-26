@@ -14,6 +14,9 @@ global $container;
 /** @var ConfigRepository $config */
 $config = $container->get(ConfigRepository::class);
 $db = $container->get(Database::class);
+$s = $s ?? static fn($v) => htmlspecialchars((string) $v, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
+$self = $_SERVER['PHP_SELF'] ?? '';
+$escapedSelf = $s($self);
 
 require_once __DIR__ . '/../include/bittorrent.php';
 $user = check_user_status();
@@ -40,6 +43,7 @@ if (has_access($user['class'], UC_ADMINISTRATOR, 'coder') && isset($_GET['action
     $approved = true;
 }
 $data = array_merge($_POST, $_GET);
+// TODO(2025): csrf
 if (has_access($user['class'], UC_ADMINISTRATOR, 'coder') && !empty($data)) {
     $valid_actions = [
         'view_replies',
@@ -161,39 +165,39 @@ if (has_access($user['class'], UC_ADMINISTRATOR, 'coder') && !empty($data)) {
     } elseif ($action === 'add_reply') {
         $trigger = $trigger_class->get_by_id($phraseid);
         $form = main_div("
-			<form method='post' action='{$_SERVER['PHP_SELF']}?action=add_reply' enctype='multipart/form-data' accept-charset='utf-8'>
+			<form method='post' action='{$escapedSelf}?action=add_reply' enctype='multipart/form-data' accept-charset='utf-8'>
 				<div class='has-text-centered padding20'>" . _('BBCode and emoticons are allowed.') . "</div>
 				<div class='has-text-centered padding20 w-75'>
-				    <div class='has-text-left'><span class='padding20'>" . _('Add response for') . ":</span> <blockquote class='padding20 bg-00 round10'>$trigger</blockquote></div>
+				    <div class='has-text-left'><span class='padding20'>" . _('Add response for') . ":</span> <blockquote class='padding20 bg-00 round10'>{$s($trigger)}</blockquote></div>
 				</div>
 				<div class='padding20 level-center-center'>
 				    <input type='text' name='add_reply' class='w-50 right5'>
-				    <input type='hidden' name='id' value='{$data['id']}'>
+				    <input type='hidden' name='id' value='{$s($data['id'] ?? '')}'>
 				    <input type='submit' value='" . _('Add New Reply') . "' class='button is-small left5'>
 				</div>
 			</form>", 'has-text-centered');
     } elseif ($action === 'edit_trigger') {
         $trigger = $trigger_class->get_by_id($phraseid);
         $form = main_div("
-			<form method='post' action='{$_SERVER['PHP_SELF']}?action=edit_trigger' enctype='multipart/form-data' accept-charset='utf-8'>
+			<form method='post' action='{$escapedSelf}?action=edit_trigger' enctype='multipart/form-data' accept-charset='utf-8'>
 				<div class='has-text-centered padding20'>" . _('BBCode and emoticons are allowed.') . "</div>
 				<div class='has-text-centered padding20 w-75'>" . _('Edit Trigger') . ":</div>
 				<div class='padding20 level-center-center'>
-				    <input type='text' name='update_trigger' class='w-50 right5' value='{$trigger}'>
-				    <input type='hidden' name='id' value='{$data['id']}'>
+				    <input type='text' name='update_trigger' class='w-50 right5' value='{$s($trigger)}'>
+				    <input type='hidden' name='id' value='{$s($data['id'] ?? '')}'>
 				    <input type='submit' value='" . _('Edit Trigger') . "' class='button is-small left5'>
 				</div>
 			</form>", 'has-text-centered');
     } elseif ($action === 'edit_reply') {
         $reply = $replies_class->get_by_id($reply_id);
         $form = main_div("
-			<form method='post' action='{$_SERVER['PHP_SELF']}?action=edit_reply' enctype='multipart/form-data' accept-charset='utf-8'>
+			<form method='post' action='{$escapedSelf}?action=edit_reply' enctype='multipart/form-data' accept-charset='utf-8'>
 				<div class='has-text-centered padding20'>" . _('BBCode and emoticons are allowed.') . "</div>
 				<div class='has-text-centered padding20 w-75'>" . _('Edit Reply') . ":</div>
 				<div class='padding20 level-center-center'>
-				    <input type='text' name='update_reply' class='w-50 right5' value='{$reply}'>
-				    <input type='hidden' name='reply_id' value='{$data['reply_id']}'>
-				    <input type='hidden' name='id' value='{$data['id']}'>
+				    <input type='text' name='update_reply' class='w-50 right5' value='{$s($reply)}'>
+				    <input type='hidden' name='reply_id' value='{$s($data['reply_id'] ?? '')}'>
+				    <input type='hidden' name='id' value='{$s($data['id'] ?? '')}'>
 				    <input type='submit' value='" . _('Edit Reply') . "' class='button is-small left5'>
 				</div>
 			</form>", 'has-text-centered');
@@ -204,18 +208,18 @@ $HTMLOUT = "
 if (has_access($user['class'], UC_ADMINISTRATOR, 'coder')) {
     if ($approved) {
         $links = [
-            "<a class='is-link tooltipper' title='" . _('Show All Triggers') . "' href='{$_SERVER['PHP_SELF']}'>" . _('Show All') . '</a>',
-            "<a class='is-link tooltipper' title='" . _('Show Unapproved Triggers') . "' href='{$_SERVER['PHP_SELF']}?action=unapproved'>" . _('Show Unapproved') . '</a>',
+            "<a class='is-link tooltipper' title='" . _('Show All Triggers') . "' href='{$escapedSelf}'>" . _('Show All') . '</a>',
+            "<a class='is-link tooltipper' title='" . _('Show Unapproved Triggers') . "' href='{$escapedSelf}?action=unapproved'>" . _('Show Unapproved') . '</a>',
         ];
     } elseif ($unapproved) {
         $links = [
-            "<a class='is-link tooltipper' title='" . _('Show All Triggers') . "' href='{$_SERVER['PHP_SELF']}'>" . _('Show All') . '</a>',
-            "<a class='is-link tooltipper' title='" . _('Show Unapproved Triggers') . "' href='{$_SERVER['PHP_SELF']}?action=approved'>" . _('Show Approved') . '</a>',
+            "<a class='is-link tooltipper' title='" . _('Show All Triggers') . "' href='{$escapedSelf}'>" . _('Show All') . '</a>',
+            "<a class='is-link tooltipper' title='" . _('Show Unapproved Triggers') . "' href='{$escapedSelf}?action=approved'>" . _('Show Approved') . '</a>',
         ];
     } else {
         $links = [
-            "<a class='is-link tooltipper' title='" . _('Show Approved Triggers') . "' href='{$_SERVER['PHP_SELF']}?action=approved'>" . _('Show Approved') . '</a>',
-            "<a class='is-link tooltipper' title='" . _('Show Unapproved Triggers') . "' href='{$_SERVER['PHP_SELF']}?action=unapproved'>" . _('Show Unapproved') . '</a>',
+            "<a class='is-link tooltipper' title='" . _('Show Approved Triggers') . "' href='{$escapedSelf}?action=approved'>" . _('Show Approved') . '</a>',
+            "<a class='is-link tooltipper' title='" . _('Show Unapproved Triggers') . "' href='{$escapedSelf}?action=unapproved'>" . _('Show Unapproved') . '</a>',
         ];
     }
 
@@ -234,7 +238,7 @@ if (has_access($user['class'], UC_ADMINISTRATOR, 'coder')) {
 }
 if (!isset($form)) {
     $HTMLOUT .= main_div("
-			<form method='post' action='{$_SERVER['PHP_SELF']}?action=add_trigger' enctype='multipart/form-data' accept-charset='utf-8'>
+			<form method='post' action='{$escapedSelf}?action=add_trigger' enctype='multipart/form-data' accept-charset='utf-8'>
 				<div class='has-text-centered padding20'>" . _('BBCode and emoticons are allowed.') . "</div>
 				<div class='padding20 level-center-center'>
 				    <input type='text' name='add_trigger' class='w-50 right5'>
@@ -270,7 +274,7 @@ if (empty($triggers)) {
             $approved = format_username($trigger['approved_by']);
         } elseif (has_access($user['class'], UC_ADMINISTRATOR, 'coder') && $user['id'] != $trigger['userid']) {
             $approved = "
-				<form method='post' action='{$_SERVER['PHP_SELF']}' enctype='multipart/form-data' accept-charset='utf-8'>
+				<form method='post' action='{$escapedSelf}' enctype='multipart/form-data' accept-charset='utf-8'>
 					<label for='approve_trigger'>" . _('Approve') . "</label>
 					<input name='approve_trigger' id='approve_trigger' type='checkbox' value='{$trigger['id']}' onChange='this.form.submit()'>
 				</form>";
@@ -291,7 +295,7 @@ if (empty($triggers)) {
                     continue;
                 }
                 $each_checkbox = "
-                    <form method='post' action='{$_SERVER['PHP_SELF']}' enctype='multipart/form-data' accept-charset='utf-8'>
+                    <form method='post' action='{$escapedSelf}' enctype='multipart/form-data' accept-charset='utf-8'>
                         <label for='approve_reply'>" . _('Approve') . "</label>
                         <input name='approve_reply' id='approve_reply' type='checkbox' value='{$eaches['id']}' onChange='this.form.submit()'>
                     </form>";
@@ -327,20 +331,20 @@ if (empty($triggers)) {
         $body .= "
 					<tr>
 						<td>					
-						    <a href='{$_SERVER['PHP_SELF']}?action=view_replies&amp;id={$post_id}' class='tooltipper' title='" . _('View Replies') . "s'>{$trigger['phrase']}</a>							
+						    <a href='{$escapedSelf}?action=view_replies&amp;id={$post_id}' class='tooltipper' title='" . _('View Replies') . "s'>{$trigger['phrase']}</a>							
 						</td>
 						<td class='has-text-centered'>" . format_username($trigger['userid']) . "</td>
 						<td class='has-text-centered'>$approved</td>" . (has_access($user['class'], UC_ADMINISTRATOR, 'coder') ? "
 						<td class='has-text-centered'>
-						    <a href='{$_SERVER['PHP_SELF']}?action=edit_trigger&amp;id={$post_id}'>
+						    <a href='{$escapedSelf}?action=edit_trigger&amp;id={$post_id}'>
                                 <i class='icon-edit icon has-text-info tooltipper' aria-hidden='true' title='" . _('Edit Bot Trigger') . "'></i>
                             </a>
-                            <a href='{$_SERVER['PHP_SELF']}?action=delete_trigger&amp;id={$post_id}'>
+                            <a href='{$escapedSelf}?action=delete_trigger&amp;id={$post_id}'>
                                 <i class='icon-trash-empty icon has-text-danger tooltipper' aria-hidden='true' title='" . _('Delete Bot Trigger and all Replies') . "'></i>
                             </a>
                         </td>" : '') . "
 						<td class='has-text-centered'>
-						    <a href='{$_SERVER['PHP_SELF']}?action=add_reply&amp;id={$post_id}' class='button is-small'>" . _('Add Reply') . '</a>
+						    <a href='{$escapedSelf}?action=add_reply&amp;id={$post_id}' class='button is-small'>" . _('Add Reply') . '</a>
                         </td>
 					</tr>';
         if (!empty($replies)) {
@@ -357,7 +361,7 @@ if (empty($triggers)) {
                     continue;
                 }
                 $approve = $reply['userid'] != $user['id'] ? "
-                                <form method='post' action='{$_SERVER['PHP_SELF']}'>
+                                <form method='post' action='{$escapedSelf}'>
                                     <input type='hidden' name='id' value='{$post_id}'>
                                     <input type='submit' name='approve_reply' value='" . _('Approve') . "'>
                                 </form>" : _("You can't approve your replies!.");
@@ -367,10 +371,10 @@ if (empty($triggers)) {
                             <td class='has-text-centered'>" . format_username($reply['userid']) . "</td>
                             <td class='has-text-centered'>" . (!empty($reply['approved_by']) ? format_username($reply['approved_by']) : $approve) . '</td>' . (has_access($user['class'], UC_ADMINISTRATOR, 'coder') ? "
 						    <td class='has-text-centered'>
-						        <a href='{$_SERVER['PHP_SELF']}?action=edit_reply&amp;reply_id={$reply['id']}&amp;id={$post_id}'>
+						        <a href='{$escapedSelf}?action=edit_reply&amp;reply_id={$reply['id']}&amp;id={$post_id}'>
                                     <i class='icon-edit icon has-text-info tooltipper' aria-hidden='true' title='" . _('Edit Reply') . "'></i>
                                 </a>
-                                <a href='{$_SERVER['PHP_SELF']}?action=delete_reply&amp;reply_id={$reply['id']}&amp;id={$post_id}'>
+                                <a href='{$escapedSelf}?action=delete_reply&amp;reply_id={$reply['id']}&amp;id={$post_id}'>
                                     <i class='icon-trash-empty icon has-text-danger tooltipper' aria-hidden='true' title='" . _('Delete Reply') . "'></i>
                                 </a>
                             </td>" : '') . '
@@ -386,6 +390,6 @@ if (empty($triggers)) {
 
 $title = _('Bot Triggers');
 $breadcrumbs = [
-    "<a href='{$_SERVER['PHP_SELF']}'>$title</a>",
+    "<a href='{$escapedSelf}'>$title</a>",
 ];
 echo stdhead($title, [], 'page-wrapper', $breadcrumbs) . wrapper($HTMLOUT) . stdfoot();

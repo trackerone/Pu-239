@@ -2,10 +2,15 @@
 
 declare(strict_types=1);
 
+<<<<<< codex/enforce-csrf-and-escape-output-hay3lv
+require_once dirname(__DIR__) . '/bootstrap_web.php';
+
+=======
 <<<<<< codex/enforce-csrf-and-escape-output-dxtuor
 require_once dirname(__DIR__) . '/bootstrap_web.php';
 
 =======
+>>>>>> master
 >>>>>> master
 use DI\DependencyException;
 use DI\NotFoundException;
@@ -13,10 +18,13 @@ use PU239\Config\ConfigRepository;
 use Pu239\Cache;
 use Pu239\Database;
 
+<<<<<< codex/enforce-csrf-and-escape-output-hay3lv
+=======
 <<<<<< codex/enforce-csrf-and-escape-output-dxtuor
 =======
 require_once dirname(__DIR__) . '/bootstrap_web.php';
 
+>>>>>> master
 >>>>>> master
 /** @var ConfigRepository $config */
 $config = $container->get(ConfigRepository::class);
@@ -84,6 +92,7 @@ function print_list(int $uid, int $tid, bool $ajax)
             'hadTh' => $hadThanks,
             'status' => true,
         ], JSON_THROW_ON_ERROR);
+<<<<<< codex/enforce-csrf-and-escape-output-hay3lv
     }
 
     $form = '';
@@ -93,6 +102,17 @@ function print_list(int $uid, int $tid, bool $ajax)
         $form = "<span class='left10'><form action='" . $actionUrl . "' method='post' enctype='multipart/form-data' accept-charset='utf-8'><input type='submit' class='button is-small details-button' name='submit' value='Say thanks'><input type='hidden' name='torrentid' value='" . $s($tid) . "'><input type='hidden' name='action' value='add'></form></span>";
     }
 
+=======
+    }
+
+    $form = '';
+
+    if (!$hadThanks) {
+        $actionUrl = $s($baseurl) . '/ajax/thanks.php';
+        $form = "<span class='left10'><form action='" . $actionUrl . "' method='post' enctype='multipart/form-data' accept-charset='utf-8'><input type='submit' class='button is-small details-button' name='submit' value='Say thanks'><input type='hidden' name='torrentid' value='" . $s($tid) . "'><input type='hidden' name='action' value='add'></form></span>";
+    }
+
+>>>>>> master
     $out = $list === [] ? '' : implode(', ', $list);
 
     return <<<IFRAME

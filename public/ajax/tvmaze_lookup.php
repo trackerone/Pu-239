@@ -2,6 +2,15 @@
 <<<<<< codex/enforce-csrf-and-escape-output-ysog5w
 
 declare(strict_types=1);
+<<<<<< codex/enforce-csrf-and-escape-output-hay3lv
+
+require_once dirname(__DIR__) . '/bootstrap_web.php';
+
+use Pu239\Torrent;
+require_once __DIR__ . '/../../include/bittorrent.php';
+
+$user = check_user_status();
+=======
 <<<<<< codex/enforce-csrf-and-escape-output-dxtuor
 
 require_once dirname(__DIR__) . '/bootstrap_web.php';
@@ -14,9 +23,12 @@ $user = check_user_status();
 header('Content-Type: application/json; charset=utf-8');
 
 =======
+>>>>>> master
 
-use Pu239\Torrent;
+header('Content-Type: application/json; charset=utf-8');
 
+<<<<<< codex/enforce-csrf-and-escape-output-hay3lv
+=======
 require_once dirname(__DIR__) . '/bootstrap_web.php';
 require_once __DIR__ . '/../../include/bittorrent.php';
 
@@ -32,6 +44,7 @@ header('Content-Type: application/json; charset=utf-8');
 
 <<<<<< codex/enforce-csrf-and-escape-output-ysog5w
 >>>>>> master
+>>>>>> master
 // TODO(2025): csrf
 $tvmazeId = (int) ($_POST['tvmazeid'] ?? 0);
 $torrentId = (int) ($_POST['tid'] ?? 0);
@@ -41,6 +54,8 @@ if ($user === false || $tvmazeId <= 0 || $torrentId <= 0) {
     echo json_encode(['fail' => 'invalid'], JSON_THROW_ON_ERROR);
     app_halt('Exit called');
 }
+<<<<<< codex/enforce-csrf-and-escape-output-hay3lv
+=======
 <<<<<< codex/enforce-csrf-and-escape-output-dxtuor
 =======
 =======
@@ -51,6 +66,7 @@ $tvmazeid = !empty($_POST['tvmazeid']) ? (int) strip_tags($_POST['tvmazeid']) : 
 $tid = !empty($_POST['tid']) ? (int) strip_tags($_POST['tid']) : 0;
 $name = !empty($_POST['name']) ? htmlsafechars($_POST['name']) : null;
 header('Content-Type: application/json; charset=utf-8');
+>>>>>> master
 >>>>>> master
 >>>>>> master
 
@@ -64,9 +80,12 @@ $poster = $torrents->get_items(['poster'], $torrentId);
 if (empty($poster)) {
     $poster = get_image_by_id('tv', (string) $tvmazeId, 'poster', $season);
 }
+<<<<<< codex/enforce-csrf-and-escape-output-hay3lv
+=======
 <<<<<< codex/enforce-csrf-and-escape-output-dxtuor
 =======
 <<<<<< codex/enforce-csrf-and-escape-output-ysog5w
+>>>>>> master
 >>>>>> master
 
 $poster = $poster ?: '';
@@ -74,6 +93,8 @@ $tvmazeData = tvmaze($tvmazeId, $torrentId, $season, $episode, $poster);
 
 if (!empty($tvmazeData)) {
     echo json_encode(['content' => $tvmazeData], JSON_THROW_ON_ERROR);
+<<<<<< codex/enforce-csrf-and-escape-output-hay3lv
+=======
 <<<<<< codex/enforce-csrf-and-escape-output-dxtuor
 =======
 =======
@@ -83,15 +104,20 @@ if (!empty($tvmaze_data)) {
     echo json_encode(['content' => $tvmaze_data], JSON_THROW_ON_ERROR);
 >>>>>> master
 >>>>>> master
+>>>>>> master
     app_halt('Exit called');
     return;
 }
+<<<<<< codex/enforce-csrf-and-escape-output-hay3lv
+
+=======
 <<<<<< codex/enforce-csrf-and-escape-output-dxtuor
 
 =======
 <<<<<< codex/enforce-csrf-and-escape-output-ysog5w
 
 =======
+>>>>>> master
 >>>>>> master
 >>>>>> master
 echo json_encode(['fail' => 'invalid'], JSON_THROW_ON_ERROR);

@@ -1,20 +1,28 @@
 <?php
 <<<<<< codex/enforce-csrf-and-escape-output-dxtuor
 declare(strict_types=1);
+<<<<<< codex/enforce-csrf-and-escape-output-hay3lv
+
+require_once dirname(__DIR__) . '/bootstrap_web.php';
+=======
 
 require_once dirname(__DIR__) . '/bootstrap_web.php';
 =======
 
 declare(strict_types=1);
 >>>>>> master
+>>>>>> master
 
 use Pu239\Cache;
 use Pu239\Database;
 
+<<<<<< codex/enforce-csrf-and-escape-output-hay3lv
+=======
 <<<<<< codex/enforce-csrf-and-escape-output-dxtuor
 =======
 require_once dirname(__DIR__) . '/bootstrap_web.php';
 
+>>>>>> master
 >>>>>> master
 $cache = $container->get(Cache::class);
 $db = $container->get(Database::class);
