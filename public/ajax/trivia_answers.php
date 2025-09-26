@@ -2,11 +2,19 @@
 
 declare(strict_types=1);
 
+<<<<<< codex/enforce-csrf-and-escape-output-dxtuor
+require_once dirname(__DIR__) . '/bootstrap_web.php';
+
+use Pu239\Cache;
+use Pu239\Database;
+
+=======
 use Pu239\Cache;
 use Pu239\Database;
 
 require_once dirname(__DIR__) . '/bootstrap_web.php';
 
+>>>>>> master
 $cache = $container->get(Cache::class);
 $db = $container->get(Database::class);
 

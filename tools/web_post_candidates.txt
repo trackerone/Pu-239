@@ -1,8 +1,11 @@
+<<<<<< codex/enforce-csrf-and-escape-output-dxtuor
+=======
 <<<<<< codex/enforce-csrf-and-escape-output-ysog5w
 =======
 <<<<<< codex/enforce-csrf-and-escape-output-1ejsd3
 =======
 <<<<<< codex/enforce-csrf-and-escape-output-ls3ug3
+>>>>>> master
 >>>>>> master
 >>>>>> master
 admin/acpmanage.php
@@ -121,6 +124,8 @@ public/usercomment.php
 public/verify.php
 public/wiki.php
 staffpanel/index.php
+<<<<<< codex/enforce-csrf-and-escape-output-dxtuor
+=======
 <<<<<< codex/enforce-csrf-and-escape-output-ysog5w
 =======
 <<<<<< codex/enforce-csrf-and-escape-output-1ejsd3
@@ -1622,6 +1627,7 @@ public/forums.php:284:$forum_id = isset($_GET['forum_id']) ? (int) $_GET['forum_
 public/contactstaff.php:36:    $msg = isset($_POST['body']) ? htmlsafechars($_POST['body']) : '';
 public/contactstaff.php:37:    $subject = isset($_POST['subject']) ? htmlsafechars($_POST['subject']) : '';
 public/contactstaff.php:38:    $returnto = isset($_POST['returnto']) ? htmlsafechars($_POST['returnto']) : $_SERVER['PHP_SELF'];
+>>>>>> master
 >>>>>> master
 >>>>>> master
 >>>>>> master

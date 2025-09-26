@@ -2,11 +2,16 @@
 
 declare(strict_types=1);
 
+require_once dirname(__DIR__) . '/bootstrap_web.php';
+
 use PU239\Config\ConfigRepository;
 use Pu239\ImageProxy;
 
+<<<<<< codex/enforce-csrf-and-escape-output-dxtuor
+=======
 require_once dirname(__DIR__) . '/bootstrap_web.php';
 
+>>>>>> master
 /** @var ConfigRepository $config */
 $config = $container->get(ConfigRepository::class);
 
