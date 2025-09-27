@@ -1,0 +1,315 @@
+name: security-harden-sprint
+
+on:
+  workflow_dispatch:
+    inputs:
+      batch_size:
+        description: "Files per batch"
+        required: true
+        default: "12"
+      max_prs_per_run:
+        description: "Max PRs this run"
+        required: true
+        default: "8"
+      mode:
+        description: "turbo (multi-PR) or cautious (single-PR)"
+        required: true
+        default: "turbo"
+
+permissions:
+  contents: write
+  pull-requests: write
+
+concurrency:
+  group: security-harden-sprint
+  cancel-in-progress: false
+
+jobs:
+  sprint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.3'
+          coverage: none
+
+      - name: Install jq
+        run: sudo apt-get update && sudo apt-get install -y jq
+
+      - name: Ensure tools dir
+        run: mkdir -p tools
+
+      # GLOBAL SCAN (hele repo; ekskluder eksterne/artefakt-mapper)
+      - name: Discover POST handlers (build tools/web_post_candidates.txt)
+        run: |
+          set -euo pipefail
+          find . -type f -name "*.php" \
+            -not -path "./vendor/*" \
+            -not -path "./.git/*" \
+            -not -path "./_quarantine/*" \
+            -not -path "./node_modules/*" \
+            -not -path "./storage/*" \
+            -not -path "./cache/*" \
+            -not -path "./public/assets/*" \
+            > /tmp/all_php.txt
+
+          : > tools/web_post_candidates.txt
+          while IFS= read -r f; do
+            if grep -qE "\$_POST[[:space:]\[\],]|filter_input\(INPUT_POST|\\\$_SERVER\[['\"]REQUEST_METHOD['\"]\][[:space:]]*===?[[:space:]]*['\"]POST['\"]|HTTP_POST_VARS" "$f"; then
+              echo "$f" >> tools/web_post_candidates.txt
+            fi
+          done < /tmp/all_php.txt
+          sort -u tools/web_post_candidates.txt -o tools/web_post_candidates.txt
+          echo "Candidates: $(wc -l < tools/web_post_candidates.txt)"
+
+      - name: Exit if none
+        run: |
+          if [ ! -s tools/web_post_candidates.txt ]; then
+            echo "No POST handlers found. Nothing to do."; exit 0; fi
+
+      - name: Write tools/security-auto-harden.php
+        run: |
+          cat > tools/security-auto-harden.php <<'PHP'
+          <?php
+          declare(strict_types=1);
+
+          /**
+           * Global web hardening (batch):
+           * - Targets files listed in tools/web_post_candidates.txt
+           * - Ensures strict header + bootstrap_web.php
+           * - CSRF verify on POST (or TODO)
+           * - Injects $s() and wraps obvious user-controlled outputs:
+           *     echo/print/printf/sprintf + <?= … ?> for $_GET/$_POST/$_REQUEST/$_COOKIE
+           * - JSON harden: header + JSON_THROW_ON_ERROR
+           * - Lint + CSV report
+           * Usage: php tools/security-auto-harden.php --batch_size=12
+           */
+
+          $opt = getopt("", ["batch_size::"]);
+          $batch = max(1, (int)($opt["batch_size"] ?? 12));
+          $list  = __DIR__ . "/web_post_candidates.txt";
+          if (!is_file($list)) { fwrite(STDERR, "Missing candidates list\n"); exit(2); }
+          $cands = array_values(array_filter(array_map('trim', file($list)), 'strlen'));
+
+          $report = __DIR__ . '/security_harden_report.csv';
+          if (!file_exists($report)) file_put_contents($report, "file,csrf_enforced,csrf_todo,escaped_outputs,json_hardened,notes\n");
+          $lintLog = __DIR__ . '/security_harden_lint.txt';
+          if (!file_exists($lintLog)) file_put_contents($lintLog, "");
+
+          $changed = [];
+          $done = 0;
+
+          foreach ($cands as $path) {
+              if ($done >= $batch) break;
+              if (!is_file($path)) continue;
+
+              $code = file_get_contents($path);
+              $orig = $code;
+              $notes = [];
+              $csrfEnforced = false; $csrfTodo = false; $escapedCount = 0; $jsonHardened = false;
+
+              // 1) Strict header + bootstrap
+              if (strpos($code, 'declare(strict_types=1);') === false || strpos($code, 'bootstrap_web.php') === false) {
+                  if (preg_match('/^\s*<\?php/s', $code)) {
+                      $hdr = "<?php\n".
+                             "declare(strict_types=1);\n".
+                             "require_once dirname(__DIR__) . '/bootstrap_web.php';\n";
+                      $code = preg_replace('/^\s*<\?php\s*/', $hdr, $code, 1);
+                      $notes[] = 'header_fix';
+                  } else {
+                      $code = "<?php\ndeclare(strict_types=1);\nrequire_once dirname(__DIR__) . '/bootstrap_web.php';\n?>\n" . $code;
+                      $notes[] = 'header_prepend';
+                  }
+              }
+
+              // 2) CSRF verify if POST handler
+              $isPost = (bool) preg_match('/\$_POST[ \[\],]|filter_input\(INPUT_POST|\\$_SERVER\[[\'"]REQUEST_METHOD[\'"]\]\s*===?\s*[\'"]POST[\'"]|HTTP_POST_VARS/i', $code);
+              if ($isPost) {
+                  if (strpos($code, 'PU239\\Support\\Csrf') === false) {
+                      $code = preg_replace('/(<\?php\s+declare\(strict_types=1\);\s+require_once[^\n]*bootstrap_web\.php\'\);\s*)/s',
+                                           "$1use PU239\\Support\\Csrf;\n",
+                                           $code, 1, $u);
+                      if (!$u) $code = preg_replace('/<\?php\s*/', "<?php\nuse PU239\\Support\\Csrf;\n", $code, 1);
+                  }
+                  if (strpos($code, 'Csrf::verify(') === false) {
+                      $hasToken = (bool) preg_match('/\$_POST\[[\'"](?:csrf|token|_token)[\'"]\]/i', $code);
+                      $guard = $hasToken
+                        ? "\nif (!Csrf::verify(\$_POST['csrf'] ?? (\$_POST['token'] ?? (\$_POST['_token'] ?? '')))) {\n    http_response_code(419);\n    throw new \\RuntimeException('CSRF verification failed.');\n}\n"
+                        : "\n// TODO(2025): csrf\n";
+                      $code = preg_replace(
+                        '/(\$_SERVER\[[\'"]REQUEST_METHOD[\'"]\]\s*===?\s*[\'"]POST[\'"].*\n|filter_input\(INPUT_POST[^\n]*\n|\$_POST[^\n]*\n|HTTP_POST_VARS[^\n]*\n)/',
+                        "$0$guard", $code, 1, $g);
+                      if (!$g) {
+                          $code = preg_replace('/(require_once[^\n]*bootstrap_web\.php\'\);\s*(?:use[^\n]*;\s*)*)/s', "$1$guard", $code, 1, $h);
+                          $g = $h;
+                      }
+                      $csrfEnforced = $hasToken && (bool) $g;
+                      $csrfTodo = !$hasToken && (bool) $g;
+                  } else {
+                      $csrfEnforced = true;
+                  }
+              }
+
+              // 3) Inject $s() helper once
+              if (strpos($code, '$s = $s ?? static fn(') === false) {
+                  $code = preg_replace(
+                    '/(use\s+PU239\\\\Support\\\\Csrf;\s*)/s',
+                    "$1" . '$s = $s ?? static fn($v) => htmlspecialchars((string)$v, ENT_QUOTES | ENT_SUBSTITUTE, "UTF-8");' . "\n",
+                    $code, 1, $ins);
+                  if (!$ins) {
+                      $code = preg_replace('/(require_once[^\n]*bootstrap_web\.php\'\);\s*)/s',
+                        "$1" . '$s = $s ?? static fn($v) => htmlspecialchars((string)$v, ENT_QUOTES | ENT_SUBSTITUTE, "UTF-8");' . "\n",
+                        $code, 1);
+                  }
+                  $notes[] = 's_helper';
+              }
+
+              // 4) Escape obvious user-controlled outputs
+              // echo/print
+              $code = preg_replace_callback(
+                '/\b(echo|print)\s+((?:\$_(?:GET|POST|REQUEST|COOKIE)\[[^\]]+\][^;]*));/i',
+                function($m) use (&$escapedCount){ $escapedCount++; return $m[1].' $s('.$m[2].');'; },
+                $code
+              );
+              // printf / sprintf
+              $code = preg_replace_callback(
+                '/\b(print|printf|sprintf)\s*\(\s*("|\')(?:[^"\'\\]*(?:\\.[^"\'\\]*)*)\2\s*,\s*((?:\$_(?:GET|POST|REQUEST|COOKIE)\[[^\)]\)|[^)])+)\)/i',
+                function($m) use (&$escapedCount){ $escapedCount++; return $m[1].'('.$m[2].$m[2].', $s('.$m[3].'))'; },
+                $code
+              );
+              // Short echo tags <?= ... ?>
+              $code = preg_replace_callback(
+                '/<\?=\s*((?:\$_(?:GET|POST|REQUEST|COOKIE)\[[^\>]+))\s*\?>/i',
+                function($m) use (&$escapedCount){ $escapedCount++; return '<?= $s('.$m[1].') ?>'; },
+                $code
+              );
+              // Avoid double-escape: basic guard
+              $code = preg_replace('/\$s\(\s*\$s\(/', '$s(', $code);
+
+              // 5) JSON hardening
+              if (preg_match('/json_encode\s*\(/i', $code) || preg_match('/header\s*\(\s*[\'"]Content-Type:\s*application\/json/i', $code)) {
+                  if (strpos($code, "Content-Type: application/json") === false) {
+                      $code = "header('Content-Type: application/json; charset=utf-8');\n".$code;
+                  }
+                  $code = preg_replace('/(?:echo\s*)?json_encode\s*\(([^;]+)\);/i', 'echo json_encode($1, JSON_THROW_ON_ERROR);', $code, -1, $cj);
+                  if ($cj) $jsonHardened = true;
+              }
+
+              if ($code !== $orig) {
+                  file_put_contents($path, $code);
+                  $changed[] = $path;
+                  $done++;
+              }
+
+              // Lint + report
+              $out=[]; $rc=0; exec('php -l '.escapeshellarg($path).' 2>&1', $out, $rc);
+              file_put_contents($lintLog, $path." :: ".($rc===0?'OK':implode(' ',$out)).PHP_EOL, FILE_APPEND);
+              file_put_contents($report, sprintf("%s,%s,%s,%d,%s,%s\n",
+                  $path,
+                  $csrfEnforced?'true':'false',
+                  $csrfTodo?'true':'false',
+                  $escapedCount,
+                  $jsonHardened?'true':'false',
+                  $notes ? implode('|',$notes) : ''
+              ), FILE_APPEND);
+          }
+
+          file_put_contents(__DIR__ . '/_security_changed.txt', implode(PHP_EOL, $changed));
+          echo "Changed files: ".count($changed).PHP_EOL;
+          PHP
+
+      - name: Sprint loop → create draft PRs (+ label automerge)
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          REPO: ${{ github.repository }}
+          RUN_MODE: ${{ github.event.inputs.mode }}
+          BATCH: ${{ github.event.inputs.batch_size }}
+          MAX_PRS: ${{ github.event.inputs.max_prs_per_run }}
+        run: |
+          set -euo pipefail
+
+          sanitize() {
+            git ls-files -m -o --exclude-standard | while read -r f; do
+              if file "$f" | grep -qiE 'text'; then
+                sed -i -E 's/^>{6}([[:space:]].*)?$/>>>>>>> \1/' "$f"
+                sed -i -E 's/^<{6}([[:space:]].*)?$/<<<<<<< \1/' "$f"
+              fi
+            done
+            if grep -R -nE '^(<<<<<<<|=======|>>>>>>>)' -- . | grep -vE '^\.github/|^vendor/'; then
+              echo "ERROR: Real conflict markers present. Aborting." >&2
+              exit 1
+            fi
+          }
+
+          open_pr () {
+            local branch="$1" title="$2" body="$3"
+            curl -sS -X POST \
+              -H "Authorization: Bearer ${GH_TOKEN}" \
+              -H "Accept: application/vnd.github+json" \
+              "https://api.github.com/repos/${REPO}/pulls" \
+              -d "$(jq -n --arg head "$branch" --arg base "main" --arg title "$title" --arg body "$body" \
+                    '{head:$head, base:$base, title:$title, body:$body, draft:true, maintainer_can_modify:true}')" \
+              | jq -r '.number'
+          }
+
+          label_pr () {
+            local number="$1"
+            curl -sS -X POST \
+              -H "Authorization: Bearer ${GH_TOKEN}" \
+              -H "Accept: application/vnd.github+json" \
+              "https://api.github.com/repos/${REPO}/issues/${number}/labels" \
+              -d '{"labels":["automerge","security-harden"]}' >/dev/null
+          }
+
+          OPENED=0; ITER=0
+          while : ; do
+            ITER=$((ITER+1))
+            echo "::group::Batch #$ITER"
+            php tools/security-auto-harden.php --batch_size="${BATCH}" || true
+
+            if [ -s tools/_security_changed.txt ]; then
+              CHANGED_COUNT=$(wc -l < tools/_security_changed.txt | tr -d ' ')
+            else
+              CHANGED_COUNT=0
+            fi
+            if [ "$CHANGED_COUNT" -eq 0 ]; then
+              echo "No further changes. Done."; echo "::endgroup::"; break
+            fi
+
+            sanitize
+
+            BR="security/harden-global-batch-${ITER}-$(date +%s)"
+            git config user.name "pu239-bot"
+            git config user.email "pu239-bot@users.noreply.github.com"
+            git checkout -b "${BR}"
+            git add -A
+            git commit -m "feat: global CSRF + escaping (batch #${ITER}, size=${BATCH})"
+            git push "https://x-access-token:${GH_TOKEN}@github.com/${REPO}" "${BR}"
+
+            BODY=$(printf '%s\n%s\n%s\n' \
+              "Automated global hardening (CSRF + escaping) across the codebase." \
+              "" \
+              "Changed files:" )
+            BODY="$BODY"$'\n''```'$'\n'"$(cat tools/_security_changed.txt)"$'\n''```'
+
+            PR_NUM=$(open_pr "${BR}" "feat: global CSRF + escaping (batch #${ITER})" "${BODY}")
+            echo "Opened PR #$PR_NUM"
+            label_pr "$PR_NUM"
+            echo "::endgroup::"
+
+            [ "${RUN_MODE}" = "cautious" ] && { echo "Cautious mode → stop."; break; }
+            [ "${OPENED}" -ge "${MAX_PRS}" ] && { echo "Reached max_prs_per_run=${MAX_PRS} → stop."; break; }
+            OPENED=$((OPENED+1))
+
+            git checkout -q -
+            git reset --hard HEAD
+          done
+
+      - name: Summary
+        if: always()
+        run: |
+          echo "Sprint finished. Draft PRs labeled 'automerge' will merge when CI is green."
