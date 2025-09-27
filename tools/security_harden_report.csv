@@ -192,3 +192,13 @@ public/subtitles.php,false,true,12,false,escaped form fields, filters, and langu
 >>>>>> master
 >>>>>> master
 >>>>>> master
+public/bitbucket.php,false,true,0,false,"standardized CSRF TODO marker (batch offset=76)"
+public/blackjack.php,false,true,0,false,"standardized CSRF TODO marker (batch offset=76)"
+public/bot_triggers.php,false,true,0,false,"standardized CSRF TODO marker (batch offset=76)"
+public/browse.php,false,true,0,false,"standardized CSRF TODO marker (batch offset=76)"
+public/bugs.php,false,true,0,false,"standardized CSRF TODO marker (batch offset=76)"
+public/casino.php,false,true,0,false,"standardized CSRF TODO marker (batch offset=76)"
+public/contactstaff.php,false,true,0,false,"standardized CSRF TODO marker (batch offset=76)"
+public/delete.php,false,true,0,false,"standardized CSRF TODO marker (batch offset=76)"
+public/details.php,false,true,0,false,"standardized CSRF TODO marker (batch offset=76)"
+public/downloadsub.php,false,true,0,false,"standardized CSRF TODO marker (batch offset=76)"
