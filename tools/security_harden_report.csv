@@ -202,7 +202,10 @@ public/contactstaff.php,false,true,0,false,"standardized CSRF TODO marker (batch
 public/delete.php,false,true,0,false,"standardized CSRF TODO marker (batch offset=76)"
 public/details.php,false,true,0,false,"standardized CSRF TODO marker (batch offset=76)"
 public/downloadsub.php,false,true,0,false,"standardized CSRF TODO marker (batch offset=76)"
+<<<<<< codex/enforce-csrf-and-standardize-output-escaping-i6u0i6
 public/ajax/torrents_lookup.php,false,true,0,true,"cleaned merge artifacts; normalized CSRF TODO (batch offset=86)"
 public/ajax/trivia_answers.php,false,true,0,true,"cleaned merge artifacts; normalized CSRF TODO (batch offset=86)"
 public/ajax/tvmaze_lookup.php,false,true,0,true,"recreated handler; JSON responses hardened (batch offset=86)"
 public/ajax/usersearch.php,false,true,0,true,"recreated handler; JSON responses hardened (batch offset=86)"
+=======
+>>>>>> master
