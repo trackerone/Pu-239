@@ -192,3 +192,17 @@ public/subtitles.php,false,true,12,false,escaped form fields, filters, and langu
 >>>>>> master
 >>>>>> master
 >>>>>> master
+public/bitbucket.php,false,true,0,false,"standardized CSRF TODO marker (batch offset=76)"
+public/blackjack.php,false,true,0,false,"standardized CSRF TODO marker (batch offset=76)"
+public/bot_triggers.php,false,true,0,false,"standardized CSRF TODO marker (batch offset=76)"
+public/browse.php,false,true,0,false,"standardized CSRF TODO marker (batch offset=76)"
+public/bugs.php,false,true,0,false,"standardized CSRF TODO marker (batch offset=76)"
+public/casino.php,false,true,0,false,"standardized CSRF TODO marker (batch offset=76)"
+public/contactstaff.php,false,true,0,false,"standardized CSRF TODO marker (batch offset=76)"
+public/delete.php,false,true,0,false,"standardized CSRF TODO marker (batch offset=76)"
+public/details.php,false,true,0,false,"standardized CSRF TODO marker (batch offset=76)"
+public/downloadsub.php,false,true,0,false,"standardized CSRF TODO marker (batch offset=76)"
+public/ajax/torrents_lookup.php,false,true,0,true,"cleaned merge artifacts; normalized CSRF TODO (batch offset=86)"
+public/ajax/trivia_answers.php,false,true,0,true,"cleaned merge artifacts; normalized CSRF TODO (batch offset=86)"
+public/ajax/tvmaze_lookup.php,false,true,0,true,"recreated handler; JSON responses hardened (batch offset=86)"
+public/ajax/usersearch.php,false,true,0,true,"recreated handler; JSON responses hardened (batch offset=86)"
