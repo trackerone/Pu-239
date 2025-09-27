@@ -195,3 +195,13 @@ No syntax errors detected in public/subtitles.php
 >>>>>> master
 >>>>>> master
 >>>>>> master
+No syntax errors detected in public/bitbucket.php
+No syntax errors detected in public/blackjack.php
+No syntax errors detected in public/bot_triggers.php
+No syntax errors detected in public/browse.php
+No syntax errors detected in public/bugs.php
+No syntax errors detected in public/casino.php
+No syntax errors detected in public/contactstaff.php
+No syntax errors detected in public/delete.php
+No syntax errors detected in public/details.php
+No syntax errors detected in public/downloadsub.php

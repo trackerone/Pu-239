@@ -48,7 +48,7 @@ $cache = $container->get(Cache::class);
 $session = $container->get(Session::class);
 if ($action === 'viewbug') {
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-        // TODO(2025): csrf
+        // TODO(2025): add CSRF verification
         if (!has_access($curuser['class'], UC_MAX, 'coder')) {
             stderr(_('Error'), _('Only site-coders can do this!'));
         }
@@ -300,7 +300,7 @@ $db->perform($sql, array_merge($update, ['id' => $id]));
     }
 } elseif ($action === 'add') {
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-        // TODO(2025): csrf
+        // TODO(2025): add CSRF verification
         $title = htmlsafechars($_POST['title']);
         $priority = htmlsafechars($_POST['priority']);
         $problem = htmlsafechars($_POST['problem']);

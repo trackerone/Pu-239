@@ -161,7 +161,7 @@ if (isset($_GET['images']) && $_GET['images'] == 1) {
 
 if (isset($_GET['images'])) {
     $folder_name = (!isset($_GET['year']) ? date('Y') . DIRECTORY_SEPARATOR : (int) $_GET['year'] . DIRECTORY_SEPARATOR) . $folder_month;
-    // TODO(2025): csrf
+    // TODO(2025): add CSRF verification
     $bucketlink2 = ((isset($_POST['avy']) || (isset($_GET['images']) && $_GET['images'] == 2)) ? 'avatar/' : $folder_name . DIRECTORY_SEPARATOR);
     $files = glob(BITBUCKET_DIR . $folder_name . DIRECTORY_SEPARATOR . $USERSALT . '_*');
     if (!empty($files)) {

@@ -205,7 +205,7 @@ if (!empty($cats)) {
 foreach ($valid_search as $search) {
     if (!empty($_GET[$search])) {
         $cleaned = searchfield($_GET[$search]);
-        // TODO(2025): csrf
+        // TODO(2025): add CSRF verification
         if (!empty($_POST['search']) && ($search === 'sns' || $search === 'sna')) {
             $cleaned = searchfield($_POST['search']);
         }
