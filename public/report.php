@@ -1,14 +1,10 @@
 <?php
 declare(strict_types=1);
+
 require_once dirname(__DIR__) . '/bootstrap_web.php';
 
-$db = $container->get(Database::class);
-
-
-
-
-use PU239\Config\ConfigRepository;
 use Pu239\Cache;
+use Pu239\Config\ConfigRepository;
 use Pu239\Database;
 use Pu239\Session;
 
@@ -17,6 +13,12 @@ $user = check_user_status();
 global $container;
 /** @var ConfigRepository $config */
 $config = $container->get(ConfigRepository::class);
+$db = $container->get(Database::class);
+$s = $s ?? static fn($v) => htmlspecialchars((string) $v, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
+$baseUrl = (string) $config->get('paths.baseurl');
+$self = $s($_SERVER['PHP_SELF'] ?? '');
+$reportAction = $s($baseUrl . '/report.php');
+$rulesUrl = $s($baseUrl . '/rules.php');
 $stdhead = [
     'css' => [
         get_file_name('sceditor_css'),
@@ -52,6 +54,7 @@ if (!in_array($type, $typesallowed)) {
     stderr(_('Error'), _('Invalid action'));
 }
 if (isset($_POST['do_it'])) {
+    // TODO(2025): add CSRF verification
     $id = !empty($_POST['id']) ? (int) $_POST['id'] : 0;
     $id_2 = !empty($_POST['id_2']) ? (int) $_POST['id_2'] : 0;
     $do_it = !empty($_POST['do_it']) ? (int) $_POST['do_it'] : 0;
@@ -95,18 +98,19 @@ $db->perform($sql, $values);
     app_halt('Exit called');
 }
 
+$typeEsc = $s($type);
 $HTMLOUT .= main_div("
-    <form method='post' action='{$config->get('paths.baseurl')}/report.php' enctype='multipart/form-data' accept-charset='utf-8'>
+    <form method='post' action='{$reportAction}' enctype='multipart/form-data' accept-charset='utf-8'>
     <h1>" . _('Report') . ': ' . str_replace('_', ' ', $type) . '</h1>
-        ' . _fe('Are you sure you would like to report {0} with id {1} to the Staff for violation of the {2}rules{3}?', str_replace('_', ' ', $type), $id, "<a class='is-link' href='{$config->get('paths.baseurl')}/rules.php' target='_blank'>", '</a>') . "</td></tr>
+        ' . _fe('Are you sure you would like to report {0} with id {1} to the Staff for violation of the {2}rules{3}?', str_replace('_', ' ', $type), $id, "<a class='is-link' href='{$rulesUrl}' target='_blank'>", '</a>') . "</td></tr>
         <p class='top10'><b>" . _('Reason') . ': </b></p>' . BBcode('', 'w-100', 200) . "
         <input type='hidden' name='id' value='$id'>
-        <input type='hidden' name='type' value='$type'>
+        <input type='hidden' name='type' value='{$typeEsc}'>
         <input type='hidden' name='do_it' value='1'>
         <input type='submit' class='button is-small margin20' value='" . _('Confirm Report') . "'>
     </form>", '', 'padding20 has-text-centered');
 $title = _('Report');
 $breadcrumbs = [
-    "<a href='{$_SERVER['PHP_SELF']}'>$title</a>",
+    "<a href='{$self}'>$title</a>",
 ];
 echo stdhead($title, $stdhead, 'page-wrapper', $breadcrumbs) . wrapper($HTMLOUT) . stdfoot($stdfoot);

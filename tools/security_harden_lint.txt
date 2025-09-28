@@ -205,10 +205,21 @@ No syntax errors detected in public/contactstaff.php
 No syntax errors detected in public/delete.php
 No syntax errors detected in public/details.php
 No syntax errors detected in public/downloadsub.php
+<<<<<< codex/enforce-csrf-and-standardize-output-escaping-9pvety
+=======
 <<<<<< codex/enforce-csrf-and-standardize-output-escaping-i6u0i6
+>>>>>> master
 No syntax errors detected in public/ajax/torrents_lookup.php
 No syntax errors detected in public/ajax/trivia_answers.php
 No syntax errors detected in public/ajax/tvmaze_lookup.php
 No syntax errors detected in public/ajax/usersearch.php
+<<<<<< codex/enforce-csrf-and-standardize-output-escaping-9pvety
+No syntax errors detected in public/polls_take_vote.php
+No syntax errors detected in public/recover.php
+No syntax errors detected in public/report.php
+No syntax errors detected in public/requests.php
+No syntax errors detected in public/signup.php
 =======
+=======
+>>>>>> master
 >>>>>> master
