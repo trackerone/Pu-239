@@ -202,32 +202,95 @@ public/contactstaff.php,false,true,0,false,"standardized CSRF TODO marker (batch
 public/delete.php,false,true,0,false,"standardized CSRF TODO marker (batch offset=76)"
 public/details.php,false,true,0,false,"standardized CSRF TODO marker (batch offset=76)"
 public/downloadsub.php,false,true,0,false,"standardized CSRF TODO marker (batch offset=76)"
+<<<<<< codex/enforce-csrf-and-standardize-output-escaping-xgz5rh
+=======
+<<<<<< codex/enforce-csrf-and-standardize-output-escaping-lh777z
+=======
+<<<<<< codex/enforce-csrf-and-standardize-output-escaping-ijmfmb
+=======
+<<<<<< codex/enforce-csrf-and-standardize-output-escaping-27th0z
+=======
+<<<<<< codex/enforce-csrf-and-standardize-output-escaping-9pvety
+=======
+<<<<<< codex/enforce-csrf-and-standardize-output-escaping-i6u0i6
+>>>>>> master
+>>>>>> master
+>>>>>> master
+>>>>>> master
+>>>>>> master
 public/ajax/torrents_lookup.php,false,true,0,true,"cleaned merge artifacts; normalized CSRF TODO (batch offset=86)"
 public/ajax/trivia_answers.php,false,true,0,true,"cleaned merge artifacts; normalized CSRF TODO (batch offset=86)"
 public/ajax/tvmaze_lookup.php,false,true,0,true,"recreated handler; JSON responses hardened (batch offset=86)"
 public/ajax/usersearch.php,false,true,0,true,"recreated handler; JSON responses hardened (batch offset=86)"
+<<<<<< codex/enforce-csrf-and-standardize-output-escaping-xgz5rh
+=======
+<<<<<< codex/enforce-csrf-and-standardize-output-escaping-lh777z
+=======
+<<<<<< codex/enforce-csrf-and-standardize-output-escaping-ijmfmb
+=======
+<<<<<< codex/enforce-csrf-and-standardize-output-escaping-27th0z
+=======
+<<<<<< codex/enforce-csrf-and-standardize-output-escaping-9pvety
+>>>>>> master
+>>>>>> master
+>>>>>> master
+>>>>>> master
 public/polls_take_vote.php,false,true,0,false,"added CSRF TODO marker for poll voting entry"
 public/recover.php,false,true,4,true,"sanitized reset forms and upgraded JSON logging"
 public/report.php,false,true,4,false,"escaped report form targets and marked CSRF follow-up"
 public/requests.php,false,true,3,false,"introduced escaping helper and CSRF TODO for request workflows"
 public/signup.php,false,true,5,true,"hardened signup form escaping and JSON logging"
+<<<<<< codex/enforce-csrf-and-standardize-output-escaping-xgz5rh
+=======
+<<<<<< codex/enforce-csrf-and-standardize-output-escaping-lh777z
+=======
+<<<<<< codex/enforce-csrf-and-standardize-output-escaping-ijmfmb
+=======
+<<<<<< codex/enforce-csrf-and-standardize-output-escaping-27th0z
+>>>>>> master
+>>>>>> master
+>>>>>> master
 public/subtitles.php,false,true,0,false,"normalized CSRF TODO wording for upload/edit handlers (batch offset=95)"
 public/tags.php,false,true,1,false,"added escaping helper plus breadcrumbs sanitization with CSRF TODO (batch offset=95)"
 public/takereseed.php,false,true,0,false,"recorded CSRF TODO for reseed request notifications (batch offset=95)"
 public/takethankyou.php,false,true,0,false,"logged CSRF TODO for thank you handler (batch offset=95)"
 public/tenpercent.php,false,true,1,false,"added escaping helper, breadcrumbs sanitization, and CSRF TODO (batch offset=95)"
+<<<<<< codex/enforce-csrf-and-standardize-output-escaping-xgz5rh
+=======
+<<<<<< codex/enforce-csrf-and-standardize-output-escaping-lh777z
+=======
+<<<<<< codex/enforce-csrf-and-standardize-output-escaping-ijmfmb
+>>>>>> master
+>>>>>> master
 public/subtitles.php,false,true,0,false,"revalidated CSRF TODO coverage for upload/edit workflows (batch offset=95 rerun)"
 public/tags.php,false,true,1,false,"reconfirmed escaping helper and CSRF TODO at tags guide (batch offset=95 rerun)"
 public/takereseed.php,false,true,0,false,"relogged CSRF TODO for reseed notifications (batch offset=95 rerun)"
 public/takethankyou.php,false,true,0,false,"reaffirmed CSRF TODO for thank-you handler (batch offset=95 rerun)"
 public/tenpercent.php,false,true,1,false,"rechecked breadcrumbs escaping and CSRF TODO for 10 percent bonus (batch offset=95 rerun)"
+<<<<<< codex/enforce-csrf-and-standardize-output-escaping-xgz5rh
+=======
+<<<<<< codex/enforce-csrf-and-standardize-output-escaping-lh777z
+>>>>>> master
 public/signup.php,false,true,0,true,"revalidated signup CSRF TODO coverage for offset 95 follow-up"
 public/subtitles.php,false,true,0,false,"verified upload/edit POST handling still pending CSRF work (offset 95 follow-up)"
 public/tags.php,false,true,0,false,"confirmed tags guide escaping helper and CSRF TODO remain in place (offset 95 follow-up)"
 public/takereseed.php,false,true,0,false,"added POST guard wrapper and retained CSRF TODO for reseed requests (offset 95 follow-up)"
 public/takethankyou.php,false,true,0,false,"checked thank-you handler CSRF TODO stays queued (offset 95 follow-up)"
+<<<<<< codex/enforce-csrf-and-standardize-output-escaping-xgz5rh
 public/upcoming.php,false,true,2,false,"added offset 100 CSRF TODO and sanitized cooker breadcrumbs"
 public/uploadapp.php,false,true,1,false,"normalized uploader app bootstrap and logged CSRF TODO"
 public/user_blocks.php,false,true,1,false,"added CSRF TODO for blocks form and escaped breadcrumb link"
 public/user_unlocks.php,false,true,1,false,"marked unlock settings CSRF TODO and escaped breadcrumb"
 public/usercomment.php,false,true,3,false,"seeded helper + CSRF TODOs across user comment actions"
+=======
+=======
+=======
+=======
+=======
+=======
+>>>>>> master
+>>>>>> master
+>>>>>> master
+>>>>>> master
+>>>>>> master
+>>>>>> master
