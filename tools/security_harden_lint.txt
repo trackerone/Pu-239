@@ -373,6 +373,10 @@ No syntax errors detected in include/helpers/cookies.php
 No syntax errors detected in bootstrap_web.php
 No syntax errors detected in include/helpers/http.php
 No syntax errors detected in public/ajax/ajax_tooltips.php
+<<<<<< codex/add-security-headers-and-json-helper-ykgca0
+=======
+<<<<<< codex/add-security-headers-and-json-helper-huxuqp
+>>>>>> master
 No syntax errors detected in public/ajax/ajax_tooltips.php
 No syntax errors detected in public/ajax/bookmarks.php
 No syntax errors detected in public/ajax/checkport.php
@@ -384,6 +388,7 @@ No syntax errors detected in public/ajax/imdb_lookup.php
 No syntax errors detected in public/ajax/isbn_lookup.php
 No syntax errors detected in public/ajax/like.php
 No syntax errors detected in public/ajax/offer_notify.php
+<<<<<< codex/add-security-headers-and-json-helper-ykgca0
 No syntax errors detected in public/ajax/offer_status.php
 No syntax errors detected in public/ajax/offer_vote.php
 No syntax errors detected in public/ajax/request_notify.php
@@ -394,3 +399,7 @@ No syntax errors detected in public/ajax/take_upload.php
 No syntax errors detected in public/ajax/take_url_upload.php
 No syntax errors detected in public/ajax/thanks.php
 No syntax errors detected in public/ajax/torrents_lookup.php
+=======
+=======
+>>>>>> master
+>>>>>> master

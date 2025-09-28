@@ -20,10 +20,24 @@ $images_baseurl = (string) $config->get('paths.images_baseurl');
 $ratio_free = (bool) $config->get('site.ratio_free');
 
 if (!is_array($user)) {
+<<<<<< codex/add-security-headers-and-json-helper-ykgca0
+=======
+<<<<<< codex/add-security-headers-and-json-helper-huxuqp
+=======
+    // >>>>>> PU239:json-rewrite-4
+>>>>>> master
+>>>>>> master
     json_out('failed...');
 }
 
 if (empty($user)) {
+<<<<<< codex/add-security-headers-and-json-helper-ykgca0
+=======
+<<<<<< codex/add-security-headers-and-json-helper-huxuqp
+=======
+    // >>>>>> PU239:json-rewrite-5
+>>>>>> master
+>>>>>> master
     json_out('failed...');
 }
 
@@ -134,5 +148,12 @@ if (!empty($user)) {
         <span><a href='{$baseurl}/user_unlocks.php'>" . _('Click here') . '</a></span>' : '') . '
     </span>';
 
+<<<<<< codex/add-security-headers-and-json-helper-ykgca0
+=======
+<<<<<< codex/add-security-headers-and-json-helper-huxuqp
+=======
+    // >>>>>> PU239:json-rewrite-6
+>>>>>> master
+>>>>>> master
     json_out($StatusBar);
 }
