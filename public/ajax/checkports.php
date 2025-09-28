@@ -58,5 +58,4 @@ foreach ($ips as $peer) {
     </div>";
 }
 
-header('Content-Type: application/json; charset=utf-8');
-echo json_encode(['data' => $out], JSON_THROW_ON_ERROR);
+json_out(['data' => $out]);
