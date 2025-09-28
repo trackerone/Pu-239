@@ -349,3 +349,6 @@ public/wiki.php,false,true,2,false,"offset 110 run added wiki nav input escaping
 >>>>>> master
 >>>>>> master
 >>>>>> master
+bootstrap_web.php,0,false,0,Added cookie helper bootstrap include
+include/session_bootstrap.php,0,true,0,Forced session cookie ini defaults
+include/helpers/cookies.php,1,false,0,Created secure cookie helper

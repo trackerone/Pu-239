@@ -11,6 +11,7 @@ if (file_exists(__DIR__ . '/include/app.php')) {
 }
 require_once __DIR__ . '/include/bootstrap_pdo.php';
 require_once __DIR__ . '/include/config_compat.php';
+require_once __DIR__ . '/include/helpers/cookies.php';
 require_once __DIR__ . '/include/session_bootstrap.php';
 
 $cacheDir = __DIR__ . '/storage/cache';

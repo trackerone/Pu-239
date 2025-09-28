@@ -59,6 +59,14 @@ if (isset($sessionConfig['handler']) && is_string($sessionConfig['handler']) && 
 
 $startMode = is_string($sessionConfig['start_mode'] ?? null) ? $sessionConfig['start_mode'] : 'Strict';
 
+ini_set('session.use_strict_mode', '1');
+ini_set('session.cookie_secure', '1');
+ini_set('session.cookie_httponly', '1');
+ini_set('session.cookie_samesite', 'Lax');
+ini_set('session.use_only_cookies', '1');
+ini_set('session.cookie_lifetime', '0');
+// >>>>>> PU239:session-bootstrap-1
+
 if (session_status() !== PHP_SESSION_ACTIVE) {
     Session::start($startMode);
 }
