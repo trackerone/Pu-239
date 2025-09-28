@@ -431,3 +431,9 @@ No syntax errors detected in include/session_bootstrap.php
 >>>>>> master
 >>>>>> master
 >>>>>> master
+No syntax errors detected in include/helpers/audit.php
+No syntax errors detected in admin/acpmanage.php
+No syntax errors detected in admin/backup.php
+No syntax errors detected in admin/bannedemails.php
+No syntax errors detected in admin/bans.php
+No syntax errors detected in admin/block.settings.php

@@ -413,3 +413,9 @@ public/upload.php,false,false,0,true,no JSON responses to refactor
 >>>>>> master
 >>>>>> master
 >>>>>> master
+include/helpers/audit.php,0,,false,added audit helper
+admin/acpmanage.php,2,user.unban|user.ban,true,enabled/unban/delete actions logged
+admin/backup.php,2,config.update|config.update,true,backup create/delete logged
+admin/bannedemails.php,2,user.unban|user.ban,true,email ban management logged
+admin/bans.php,2,user.unban|user.ban,true,ip bans/unbans logged
+admin/block.settings.php,1,config.update,true,block settings updates logged
