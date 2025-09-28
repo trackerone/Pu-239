@@ -367,3 +367,6 @@ No syntax errors detected in public/wiki.php
 >>>>>> master
 >>>>>> master
 >>>>>> master
+No syntax errors detected in bootstrap_web.php
+No syntax errors detected in include/session_bootstrap.php
+No syntax errors detected in include/helpers/cookies.php
