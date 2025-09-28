@@ -437,6 +437,7 @@ No syntax errors detected in admin/backup.php
 No syntax errors detected in admin/bannedemails.php
 No syntax errors detected in admin/bans.php
 No syntax errors detected in admin/block.settings.php
+<<<<<< codex/add-centralized-audit-logging-2v4fcs
 No syntax errors detected in admin/class_config.php
 No syntax errors detected in admin/cleanup_manager.php
 No syntax errors detected in admin/cloudview.php
@@ -446,3 +447,5 @@ No syntax errors detected in admin/delacct.php
 No syntax errors detected in admin/doubleusers.php
 No syntax errors detected in admin/edit_moods.php
 No syntax errors detected in admin/editlog.php
+=======
+>>>>>> master
