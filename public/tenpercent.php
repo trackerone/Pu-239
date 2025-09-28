@@ -1,20 +1,27 @@
 <?php
 declare(strict_types=1);
+
 require_once dirname(__DIR__) . '/bootstrap_web.php';
 
-use PU239\Config\ConfigRepository;
 use Pu239\Cache;
+use Pu239\Config\ConfigRepository;
 use Pu239\Database;
 use Pu239\Message;
 
+require_once __DIR__ . '/../include/bittorrent.php';
 
 $user = check_user_status();
 global $container;
 /** @var ConfigRepository $config */
 $config = $container->get(ConfigRepository::class);
+/** @var Database $db */
 $db = $container->get(Database::class);
+/** @var Cache $cache */
 $cache = $container->get(Cache::class);
+/** @var Message $message_class */
 $message_class = $container->get(Message::class);
+
+$s = $s ?? static fn($v) => htmlspecialchars((string) $v, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
 
 $uploaded = $user['uploaded'];
 $downloaded = $user['downloaded'];
@@ -29,6 +36,7 @@ if ($downloaded > 0) {
     $ratio = $newratio = $ratiochange = '---';
 }
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    // TODO(2025): add CSRF verification
     if ($user['tenpercent'] === 'yes') {
         stderr('Used', 'It appears that you have already used your 10% addition.');
     }
@@ -115,7 +123,8 @@ $HTMLOUT .= "<h1 class='has-text-centered'>10&#37;</h1>" . main_div("
         </div>
     </form>");
 $title = _('Ten Percent');
+$self = $s($_SERVER['PHP_SELF'] ?? '');
 $breadcrumbs = [
-    "<a href='{$_SERVER['PHP_SELF']}'>$title</a>",
+    "<a href='{$self}'>$title</a>",
 ];
 echo stdhead($title, [], 'page-wrapper', $breadcrumbs) . wrapper($HTMLOUT) . stdfoot();
