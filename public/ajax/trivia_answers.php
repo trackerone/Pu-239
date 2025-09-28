@@ -13,11 +13,8 @@ require_once __DIR__ . '/../../include/bittorrent.php';
 
 $user = check_user_status();
 
-header('Content-Type: application/json; charset=utf-8');
-
 if ($user === false) {
-    echo json_encode(['fail' => 'invalid'], JSON_THROW_ON_ERROR);
-    app_halt('Exit called');
+    json_out(['fail' => 'invalid']);
 }
 
 // TODO(2025): add CSRF verification
@@ -27,8 +24,7 @@ $answer = (string) ($_POST['answer'] ?? '');
 $userId = (int) $user['id'];
 
 if ($gameNumber <= 0 || $questionId <= 0 || $answer === '') {
-    echo json_encode(['fail' => 'invalid'], JSON_THROW_ON_ERROR);
-    app_halt('Exit called');
+    json_out(['fail' => 'invalid']);
 }
 
 $correctAnswer = $db->fetch(
@@ -37,8 +33,7 @@ $correctAnswer = $db->fetch(
 );
 
 if ($correctAnswer === false) {
-    echo json_encode(['fail' => 'invalid'], JSON_THROW_ON_ERROR);
-    app_halt('Exit called');
+    json_out(['fail' => 'invalid']);
 }
 
 $existing = $db->fetch(
@@ -76,9 +71,8 @@ $cache->delete('triviaq_');
 $table = trivia_table();
 $cleanup = trivia_time();
 
-echo json_encode([
+json_out([
     'content' => ($table['table'] ?? '') . $answered . trivia_clocks(),
     'round' => $cleanup['round'] ?? 0,
     'game' => $cleanup['game'] ?? 0,
-], JSON_THROW_ON_ERROR);
-app_halt('Exit called');
+]);

@@ -38,8 +38,6 @@ function comment_like_unlike(array $fields, array $user)
 {
     global $container, $db;
 
-    header('Content-Type: application/json; charset=utf-8');
-
     $id = (int) ($_POST['id'] ?? 0);
     $type = mb_substr(trim((string) ($_POST['type'] ?? '')), 0, 12);
     $current = mb_substr(trim((string) ($_POST['current'] ?? '')), 0, 10);
@@ -47,13 +45,11 @@ function comment_like_unlike(array $fields, array $user)
     // TODO(2025): csrf on POST where missing
 
     if (!isset($fields[$type])) {
-        echo json_encode(['label' => _('Invalid Data Type')], JSON_THROW_ON_ERROR);
-        app_halt('Exit called');
+        json_out(['label' => _('Invalid Data Type')]);
     }
 
     if ($id <= 0) {
-        echo json_encode(['label' => _('Invalid ID')], JSON_THROW_ON_ERROR);
-        app_halt('Exit called');
+        json_out(['label' => _('Invalid ID')]);
     }
 
     if ($type === 'torrent') {
@@ -145,6 +141,5 @@ function comment_like_unlike(array $fields, array $user)
         $list = implode(', ', $names) . (!empty($list) ? ' and ' . $list : ' like' . plural(count($names)) . ' this');
     }
 
-    echo json_encode(['label' => $label, 'list' => $list, 'class' => "tot-$id"], JSON_THROW_ON_ERROR);
-    app_halt('Exit called');
+    json_out(['label' => $label, 'list' => $list, 'class' => "tot-$id"]);
 }

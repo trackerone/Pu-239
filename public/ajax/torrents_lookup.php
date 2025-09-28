@@ -15,94 +15,91 @@ $db = $container->get(Database::class);
 
 require_once __DIR__ . '/../../include/bittorrent.php';
 $user = check_user_status();
-header('Content-Type: application/json; charset=utf-8');
 
 // TODO(2025): add CSRF verification
 if ($user === false) {
-    echo json_encode(['fail' => 'csrf'], JSON_THROW_ON_ERROR);
-    app_halt('Exit called');
+    json_out(['fail' => 'csrf']);
 }
+
 $uid = $user['class'] < UC_STAFF ? (int) $user['id'] : (int) ($_POST['uid'] ?? 0);
 $type = (string) ($_POST['type'] ?? '');
 
 if ($uid <= 0 || $type === '') {
-    echo json_encode(['fail' => 'invalid'], JSON_THROW_ON_ERROR);
-    app_halt('Exit called');
-}
-if ($type === 'torrents') {
-    $torrents = get_uploaded($uid);
-    if (!$torrents) {
-        echo json_encode(['content' => main_div(_('You have not uploaded any torrents'), null, 'padding20')], JSON_THROW_ON_ERROR);
-        app_halt('Exit called');
-    }
-    $data = maketable($torrents);
-    if (!empty($data)) {
-        echo json_encode(['content' => $data], JSON_THROW_ON_ERROR);
-        app_halt('Exit called');
-    } else {
-        echo json_encode(['content' => main_div(_('You have not uploaded any torrents'), null, 'padding20')], JSON_THROW_ON_ERROR);
-        app_halt('Exit called');
-    }
-} elseif ($type === 'seeding') {
-    $torrents = get_seeding($uid);
-    if (!$torrents) {
-        echo json_encode(['content' => main_div(_('You are not seeding any torrents'), null, 'padding20')], JSON_THROW_ON_ERROR);
-        app_halt('Exit called');
-    }
-    $data = maketable($torrents);
-    if (!empty($data)) {
-        echo json_encode(['content' => $data], JSON_THROW_ON_ERROR);
-        app_halt('Exit called');
-    } else {
-        echo json_encode(['content' => main_div(_('You are not seeding any torrents'), null, 'padding20')], JSON_THROW_ON_ERROR);
-        app_halt('Exit called');
-    }
-} elseif ($type === 'leeching') {
-    $torrents = get_leeching($uid);
-    if (!$torrents) {
-        echo json_encode(['content' => main_div(_('You are not leeching any torrents'), null, 'padding20')], JSON_THROW_ON_ERROR);
-        app_halt('Exit called');
-    }
-    $data = maketable($torrents);
-    if (!empty($data)) {
-        echo json_encode(['content' => $data], JSON_THROW_ON_ERROR);
-        app_halt('Exit called');
-    } else {
-        echo json_encode(['content' => main_div(_('You are not leeching any torrents'), null, 'padding20')], JSON_THROW_ON_ERROR);
-        app_halt('Exit called');
-    }
-} elseif ($type === 'snatched') {
-    $torrents = get_snatched($uid);
-    if (!$torrents) {
-        echo json_encode(['content' => main_div(_('You have not downloaded any torrents'), null, 'padding20')], JSON_THROW_ON_ERROR);
-        app_halt('Exit called');
-    }
-    $data = snatchtable($torrents);
-    if (!empty($data)) {
-        echo json_encode(['content' => $data], JSON_THROW_ON_ERROR);
-        app_halt('Exit called');
-    } else {
-        echo json_encode(['content' => main_div(_('You have not downloaded any torrents'), null, 'padding20')], JSON_THROW_ON_ERROR);
-        app_halt('Exit called');
-    }
-} elseif ($type === 'snatched_staff' && $user['class'] >= UC_STAFF) {
-    $torrents = get_snatched_staff($uid);
-    if (!$torrents) {
-        echo json_encode(['content' => main_div(_('You have not downloaded any torrents'), null, 'padding20')], JSON_THROW_ON_ERROR);
-        app_halt('Exit called');
-    }
-    $data = staff_snatchtable($torrents, $uid);
-    if (!empty($data)) {
-        echo json_encode(['content' => $data], JSON_THROW_ON_ERROR);
-        app_halt('Exit called');
-    } else {
-        echo json_encode(['content' => main_div(_('You have not downloaded any torrents'), null, 'padding20')], JSON_THROW_ON_ERROR);
-        app_halt('Exit called');
-    }
+    json_out(['fail' => 'invalid']);
 }
 
-echo json_encode(['fail' => 'invalid'], JSON_THROW_ON_ERROR);
-app_halt('Exit called');
+switch ($type) {
+    case 'torrents':
+        $torrents = get_uploaded($uid);
+        if ($torrents === false) {
+            json_out(['content' => main_div(_('You have not uploaded any torrents'), null, 'padding20')]);
+        }
+
+        $data = maketable($torrents);
+        if (!empty($data)) {
+            json_out(['content' => $data]);
+        }
+
+        json_out(['content' => main_div(_('You have not uploaded any torrents'), null, 'padding20')]);
+
+    case 'seeding':
+        $torrents = get_seeding($uid);
+        if ($torrents === false) {
+            json_out(['content' => main_div(_('You are not seeding any torrents'), null, 'padding20')]);
+        }
+
+        $data = maketable($torrents);
+        if (!empty($data)) {
+            json_out(['content' => $data]);
+        }
+
+        json_out(['content' => main_div(_('You are not seeding any torrents'), null, 'padding20')]);
+
+    case 'leeching':
+        $torrents = get_leeching($uid);
+        if ($torrents === false) {
+            json_out(['content' => main_div(_('You are not leeching any torrents'), null, 'padding20')]);
+        }
+
+        $data = maketable($torrents);
+        if (!empty($data)) {
+            json_out(['content' => $data]);
+        }
+
+        json_out(['content' => main_div(_('You are not leeching any torrents'), null, 'padding20')]);
+
+    case 'snatched':
+        $torrents = get_snatched($uid);
+        if ($torrents === false) {
+            json_out(['content' => main_div(_('You have not downloaded any torrents'), null, 'padding20')]);
+        }
+
+        $data = snatchtable($torrents);
+        if (!empty($data)) {
+            json_out(['content' => $data]);
+        }
+
+        json_out(['content' => main_div(_('You have not downloaded any torrents'), null, 'padding20')]);
+
+    case 'snatched_staff':
+        if ($user['class'] < UC_STAFF) {
+            break;
+        }
+
+        $torrents = get_snatched_staff($uid);
+        if ($torrents === false) {
+            json_out(['content' => main_div(_('You have not downloaded any torrents'), null, 'padding20')]);
+        }
+
+        $data = staff_snatchtable($torrents, $uid);
+        if (!empty($data)) {
+            json_out(['content' => $data]);
+        }
+
+        json_out(['content' => main_div(_('You have not downloaded any torrents'), null, 'padding20')]);
+}
+
+json_out(['fail' => 'invalid']);
 
 /**
  *

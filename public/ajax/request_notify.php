@@ -11,11 +11,8 @@ $db = $container->get(Database::class);
 require_once __DIR__ . '/../../include/bittorrent.php';
 $user = check_user_status();
 
-header('Content-Type: application/json; charset=utf-8');
-
 if ($user === false) {
-    echo json_encode(['notify' => 'invalid'], JSON_THROW_ON_ERROR);
-    app_halt('Exit called');
+    json_out(['notify' => 'invalid']);
 }
 
 // TODO(2025): csrf
@@ -23,8 +20,7 @@ $requestId = (int) ($_POST['id'] ?? 0);
 $notified = filter_var($_POST['notified'] ?? null, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE);
 
 if ($requestId <= 0 || $notified === null) {
-    echo json_encode(['notify' => 'invalid'], JSON_THROW_ON_ERROR);
-    app_halt('Exit called');
+    json_out(['notify' => 'invalid']);
 }
 
 $params = [
@@ -38,8 +34,7 @@ if ($notified) {
         $params
     );
 
-    echo json_encode(['notify' => 0], JSON_THROW_ON_ERROR);
-    app_halt('Exit called');
+    json_out(['notify' => 0]);
 }
 
 $insertId = (int) $db->insert(
@@ -47,5 +42,4 @@ $insertId = (int) $db->insert(
     $params + ['added' => [TIME_NOW, \PDO::PARAM_INT]]
 );
 
-echo json_encode(['notify' => $insertId], JSON_THROW_ON_ERROR);
-app_halt('Exit called');
+json_out(['notify' => $insertId]);

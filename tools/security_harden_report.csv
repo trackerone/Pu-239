@@ -352,3 +352,31 @@ public/wiki.php,false,true,2,false,"offset 110 run added wiki nav input escaping
 bootstrap_web.php,0,false,0,Added cookie helper bootstrap include
 include/session_bootstrap.php,0,true,0,Forced session cookie ini defaults
 include/helpers/cookies.php,1,false,0,Created secure cookie helper
+bootstrap_web.php,true,false,0,true,centralized security headers
+include/helpers/http.php,false,true,0,true,added json_out helper
+public/ajax/ajax_tooltips.php,false,false,3,true,replaced echo json_encode with json_out
+public/ajax/bookmarks.php,false,false,6,true,
+public/ajax/checkport.php,false,false,1,true,
+public/ajax/checkports.php,false,false,1,true,
+public/ajax/cooker_notify.php,false,false,4,true,
+public/ajax/descr_format.php,false,false,2,true,
+public/ajax/ebook_lookup.php,false,false,3,true,
+public/ajax/imdb_lookup.php,false,false,2,true,
+public/ajax/isbn_lookup.php,false,false,3,true,
+public/ajax/like.php,false,false,3,true,
+public/ajax/offer_notify.php,false,false,4,true,
+public/ajax/offer_status.php,false,false,3,true,
+public/ajax/offer_vote.php,false,false,5,true,
+public/ajax/request_notify.php,false,false,4,true,
+public/ajax/request_vote.php,false,false,5,true,
+public/ajax/show_in_navbar.php,false,false,4,true,
+public/ajax/staff_picks.php,false,false,4,true,
+public/ajax/take_upload.php,false,false,8,true,
+public/ajax/take_url_upload.php,false,false,9,true,
+public/ajax/thanks.php,false,false,2,true,preserved HTML response for non-AJAX callers
+public/ajax/torrents_lookup.php,false,false,18,true,consolidated branch handling with json_out
+public/ajax/trivia_answers.php,false,false,4,true,
+public/ajax/trivia_lookup.php,false,false,5,true,replaced fluent query with Database::row
+public/ajax/tvmaze_lookup.php,false,false,3,true,
+public/ajax/usersearch.php,false,false,3,true,
+public/search.php,false,false,6,true,

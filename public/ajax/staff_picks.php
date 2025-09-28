@@ -1,29 +1,12 @@
 <?php
-<<<<<< codex/enforce-csrf-and-escape-output-dxtuor
-declare(strict_types=1);
-<<<<<< codex/enforce-csrf-and-escape-output-hay3lv
-
-require_once dirname(__DIR__) . '/bootstrap_web.php';
-=======
-
-require_once dirname(__DIR__) . '/bootstrap_web.php';
-=======
 
 declare(strict_types=1);
->>>>>> master
->>>>>> master
 
 use Pu239\Cache;
 use Pu239\Database;
 
-<<<<<< codex/enforce-csrf-and-escape-output-hay3lv
-=======
-<<<<<< codex/enforce-csrf-and-escape-output-dxtuor
-=======
 require_once dirname(__DIR__) . '/bootstrap_web.php';
 
->>>>>> master
->>>>>> master
 $cache = $container->get(Cache::class);
 $db = $container->get(Database::class);
 
@@ -31,11 +14,8 @@ require_once __DIR__ . '/../../include/bittorrent.php';
 
 $user = check_user_status();
 
-header('Content-Type: application/json; charset=utf-8');
-
 if ($user === false || $user['class'] < UC_STAFF) {
-    echo json_encode(['pick' => 'class'], JSON_THROW_ON_ERROR);
-    app_halt('Exit called');
+    json_out(['pick' => 'class']);
 }
 
 // TODO(2025): csrf
@@ -43,8 +23,7 @@ $pick = (int) ($_POST['pick'] ?? -1);
 $torrentId = (int) ($_POST['id'] ?? 0);
 
 if ($pick < 0 || $torrentId <= 0) {
-    echo json_encode(['pick' => 'invalid'], JSON_THROW_ON_ERROR);
-    app_halt('Exit called');
+    json_out(['pick' => 'invalid']);
 }
 
 $newValue = $pick === 0 ? TIME_NOW : 0;
@@ -60,9 +39,7 @@ $statement = $db->run(
 if ($statement->rowCount() > 0) {
     $cache->delete('staff_picks_');
 
-    echo json_encode(['pick' => $newValue], JSON_THROW_ON_ERROR);
-    app_halt('Exit called');
+    json_out(['pick' => $newValue]);
 }
 
-echo json_encode(['pick' => 'fail'], JSON_THROW_ON_ERROR);
-app_halt('Exit called');
+json_out(['pick' => 'fail']);

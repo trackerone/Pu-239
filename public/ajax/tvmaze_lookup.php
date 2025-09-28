@@ -9,16 +9,13 @@ require_once __DIR__ . '/../../include/bittorrent.php';
 
 $user = check_user_status();
 
-header('Content-Type: application/json; charset=utf-8');
-
 // TODO(2025): add CSRF verification
 $tvmazeId = (int) ($_POST['tvmazeid'] ?? 0);
 $torrentId = (int) ($_POST['tid'] ?? 0);
 $name = isset($_POST['name']) ? htmlsafechars((string) $_POST['name']) : null;
 
 if ($user === false || $tvmazeId <= 0 || $torrentId <= 0) {
-    echo json_encode(['fail' => 'invalid'], JSON_THROW_ON_ERROR);
-    app_halt('Exit called');
+    json_out(['fail' => 'invalid']);
 }
 
 preg_match('/S(\d+)E(\d+)/i', (string) $name, $match);
@@ -36,11 +33,7 @@ $poster = $poster ?: '';
 $tvmazeData = tvmaze($tvmazeId, $torrentId, $season, $episode, $poster);
 
 if (!empty($tvmazeData)) {
-    echo json_encode(['content' => $tvmazeData], JSON_THROW_ON_ERROR);
-    app_halt('Exit called');
-    return;
+    json_out(['content' => $tvmazeData]);
 }
 
-echo json_encode(['fail' => 'invalid'], JSON_THROW_ON_ERROR);
-app_halt('Exit called');
-return;
+json_out(['fail' => 'invalid']);
