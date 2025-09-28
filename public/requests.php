@@ -20,6 +20,12 @@ $baseUrl = (string) $config->get('paths.baseurl');
 $imagesBaseUrl = (string) $config->get('paths.images_baseurl');
 $siteName = (string) $config->get('site.name');
 $movieCategories = (array) $config->get('categories.movie');
+$s = $s ?? static fn($v) => htmlspecialchars((string) $v, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
+$selfRaw = $_SERVER['PHP_SELF'] ?? '';
+$self = $s($selfRaw);
+$requestsBase = $baseUrl . '/requests.php';
+$requestsAction = $s($requestsBase);
+$requestsUrl = static fn(string $suffix = '') => $s($requestsBase . $suffix);
 
 require_once __DIR__ . '/../include/bittorrent.php';
 $user = check_user_status();
@@ -87,9 +93,10 @@ if (isset($data['action'])) {
             $cid = isset($data['cid']) ? (int) $data['cid'] : 0;
             $comment = $comment_class->get_comment_by_id($cid);
             $request = $request_class->get($comment['request'], false, $user['id']);
+            $editCommentAction = $requestsUrl('?action=edit_comment');
             $edit_form = "
                 <h2 class='has-text-centered'>" . _('Editing a comment for :') . '' . htmlsafechars($request['name']) . "</h2>
-                <form class='form-inline table-wrapper' method='post' action='{$baseUrl}/requests.php?action=edit_comment' accept-charset='utf-8'>
+                <form class='form-inline table-wrapper' method='post' action='{$editCommentAction}' accept-charset='utf-8'>
                     <input type='hidden' name='id' value='{$comment['request']}'>
                     <input type='hidden' name='cid' value='{$comment['id']}'>
                     <div class='columns is-marginless is-paddingless'>
@@ -112,9 +119,10 @@ if (isset($data['action'])) {
             $add_comment = true;
             $id = isset($data['id']) ? (int) $data['id'] : 0;
             $request = $request_class->get($id, false, $user['id']);
+            $postCommentAction = $requestsUrl('?action=post_comment');
             $edit_form = "
                 <h2 class='has-text-centered'>" . _('Add Comment') . htmlsafechars($request['name']) . "</h2>
-                <form class='form-inline table-wrapper' method='post' action='{$baseUrl}/requests.php?action=post_comment' accept-charset='utf-8'>
+                <form class='form-inline table-wrapper' method='post' action='{$postCommentAction}' accept-charset='utf-8'>
                     <input type='hidden' name='id' value='{$id}'>
                     <div class='columns is-marginless is-paddingless'>
                         <div class='column is-one-quarter has-text-left'>" . _('Comment') . "</div>
@@ -166,6 +174,7 @@ if ($add || $edit || $edit_comment || $add_comment) {
     ];
 }
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    // TODO(2025): add CSRF verification
     $validator = $container->get(Validator::class);
     if ($pay_bounty) {
         $validation = $validator->validate($_POST, [
@@ -569,6 +578,6 @@ if (!empty($edit_form)) {
 $title = _('Requests');
 $breadcrumbs = [
     "<a href='{$baseUrl}/browse.php'>" . _('Browse Torrents') . '</a>',
-    "<a href='{$_SERVER['PHP_SELF']}'>$title</a>",
+    "<a href='{$self}'>$title</a>",
 ];
 echo stdhead($title, $stdhead, 'page-wrapper', $breadcrumbs) . wrapper($HTMLOUT) . stdfoot($stdfoot);

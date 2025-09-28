@@ -13,7 +13,9 @@ use Rakit\Validation\Validator;
 global $container;
 /** @var ConfigRepository $config */
 $config = $container->get(ConfigRepository::class);
+/** @var Database $db */
 $db = $container->get(Database::class);
+$s = $s ?? static fn($v) => htmlspecialchars((string) $v, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
 
 require_once __DIR__ . '/../include/bittorrent.php';
 $user = check_user_status();
@@ -59,6 +61,7 @@ if (isset($data['action'])) {
     }
 }
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    // TODO(2025): add CSRF verification
     $validator = $container->get(Validator::class);
     $validation = $validator->validate($_POST, [
         'type' => 'required|numeric',
@@ -275,7 +278,7 @@ if (!empty($add_new)) {
 
 $title = _('Cooker');
 $breadcrumbs = [
-    "<a href='{$config->get('paths.baseurl')}/browse.php'>" . _('Browse Torrents') . '</a>',
-    "<a href='{$_SERVER['PHP_SELF']}'>$title</a>",
+    sprintf("<a href='%s'>%s</a>", $s($config->get('paths.baseurl') . '/browse.php'), _('Browse Torrents')),
+    sprintf("<a href='%s'>%s</a>", $s($_SERVER['PHP_SELF'] ?? ''), $s($title)),
 ];
 echo stdhead($title, [], 'page-wrapper', $breadcrumbs) . wrapper($HTMLOUT) . stdfoot($stdfoot);

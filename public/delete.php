@@ -21,7 +21,7 @@ require_once __DIR__ . '/../include/bittorrent.php';
 require_once CLASS_DIR . 'class_user_options_2.php';
 $user = check_user_status();
 
-// TODO(2025): csrf
+// TODO(2025): add CSRF verification
 $data = array_merge($_GET, $_POST);
 if (empty($data['id'])) {
     stderr(_('Error'), _('missing form data'));

@@ -24,6 +24,11 @@ global $container;
 $config = $container->get(ConfigRepository::class);
 /** @var Database $db */
 $db = $container->get(Database::class);
+$s = $s ?? static fn($v) => htmlspecialchars((string) $v, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    // TODO(2025): add CSRF verification
+}
 
 $baseUrl = (string) $config->get('paths.baseurl');
 $maxTorrentSize = (int) $config->get('site.max_torrent_size');

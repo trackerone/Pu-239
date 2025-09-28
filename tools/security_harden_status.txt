@@ -1,0 +1,1 @@
+offset=105,batch_size=5: processed public/takethankyou.php, public/takeupload.php, public/tenpercent.php, public/upcoming.php, public/uploadapp.php
