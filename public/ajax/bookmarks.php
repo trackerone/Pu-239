@@ -13,11 +13,9 @@ $db = $container->get(Database::class);
 require_once __DIR__ . '/../../include/bittorrent.php';
 $user = check_user_status();
 
-header('Content-Type: application/json; charset=utf-8');
-
 if ($user === false) {
-    echo json_encode(['fail' => 'csrf'], JSON_THROW_ON_ERROR);
-    app_halt('Exit called');
+    // >>>>>> PU239:json-rewrite-4
+    json_out(['fail' => 'csrf']);
 }
 
 // TODO(2025): csrf
@@ -26,8 +24,8 @@ $togglePrivate = ($_POST['private'] ?? '') === 'true';
 $remove = $_POST['remove'] ?? 'false';
 
 if ($torrentId <= 0) {
-    echo json_encode(['fail' => 'invalid'], JSON_THROW_ON_ERROR);
-    app_halt('Exit called');
+    // >>>>>> PU239:json-rewrite-5
+    json_out(['fail' => 'invalid']);
 }
 
 $bindings = [
@@ -42,8 +40,8 @@ if ($togglePrivate) {
     );
 
     if ($bookmark === null) {
-        echo json_encode(['fail' => 'missing'], JSON_THROW_ON_ERROR);
-        app_halt('Exit called');
+        // >>>>>> PU239:json-rewrite-6
+        json_out(['fail' => 'missing']);
     }
 
     $current = $bookmark['private'] === 'yes';
@@ -57,14 +55,13 @@ if ($togglePrivate) {
 
     $cache->delete('bookmarks_' . $user['id']);
 
-    echo json_encode([
+    json_out([
         'bookmark' => $nextValue,
         'content' => 'private',
         'text' => $label,
         'tid' => $torrentId,
         'remove' => 'false',
-    ], JSON_THROW_ON_ERROR);
-    app_halt('Exit called');
+    ]);
 }
 
 $bookmark = $db->row(
@@ -76,13 +73,12 @@ if ($bookmark !== null) {
     $db->run('DELETE FROM bookmarks WHERE id = :id', ['id' => (int) $bookmark['id']]);
     $cache->delete('bookmarks_' . $user['id']);
 
-    echo json_encode([
+    json_out([
         'content' => 'deleted',
         'text' => _('Add Bookmark'),
         'tid' => $torrentId,
         'remove' => $remove,
-    ], JSON_THROW_ON_ERROR);
-    app_halt('Exit called');
+    ]);
 }
 
 $db->run(
@@ -97,10 +93,9 @@ $db->run(
 
 $cache->delete('bookmarks_' . $user['id']);
 
-echo json_encode([
+json_out([
     'content' => 'added',
     'text' => _('Delete Bookmark'),
     'tid' => $torrentId,
     'remove' => $remove,
-], JSON_THROW_ON_ERROR);
-app_halt('Exit called');
+]);

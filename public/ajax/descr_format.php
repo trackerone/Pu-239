@@ -11,7 +11,6 @@ $db = $container->get(Database::class);
 
 require_once __DIR__ . '/../../include/bittorrent.php';
 check_user_status();
-header('Content-Type: application/json; charset=utf-8');
 
 $tid = (int) ($_POST['tid'] ?? 0);
 // TODO(2025): csrf
@@ -19,11 +18,9 @@ if (!empty($tid)) {
     $torrents_class = $container->get(Torrent::class);
     $descr = $torrents_class->format_descr($tid);
     if (!empty($descr)) {
-        echo json_encode(['descr' => $descr], JSON_THROW_ON_ERROR);
-        app_halt('Exit called');
+        json_out(['descr' => $descr]);
     }
 }
-echo json_encode([
+json_out([
     'fail' => 'invalid',
-], JSON_THROW_ON_ERROR);
-app_halt('Exit called');
+]);
