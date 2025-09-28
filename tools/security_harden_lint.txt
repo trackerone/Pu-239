@@ -195,3 +195,57 @@ No syntax errors detected in public/subtitles.php
 >>>>>> master
 >>>>>> master
 >>>>>> master
+No syntax errors detected in public/bitbucket.php
+No syntax errors detected in public/blackjack.php
+No syntax errors detected in public/bot_triggers.php
+No syntax errors detected in public/browse.php
+No syntax errors detected in public/bugs.php
+No syntax errors detected in public/casino.php
+No syntax errors detected in public/contactstaff.php
+No syntax errors detected in public/delete.php
+No syntax errors detected in public/details.php
+No syntax errors detected in public/downloadsub.php
+No syntax errors detected in public/ajax/torrents_lookup.php
+No syntax errors detected in public/ajax/trivia_answers.php
+No syntax errors detected in public/ajax/tvmaze_lookup.php
+No syntax errors detected in public/ajax/usersearch.php
+No syntax errors detected in public/polls_take_vote.php
+No syntax errors detected in public/recover.php
+No syntax errors detected in public/report.php
+No syntax errors detected in public/requests.php
+No syntax errors detected in public/signup.php
+No syntax errors detected in public/subtitles.php
+No syntax errors detected in public/tags.php
+No syntax errors detected in public/takereseed.php
+No syntax errors detected in public/takethankyou.php
+No syntax errors detected in public/tenpercent.php
+No syntax errors detected in public/subtitles.php
+No syntax errors detected in public/tags.php
+No syntax errors detected in public/takereseed.php
+No syntax errors detected in public/takethankyou.php
+No syntax errors detected in public/tenpercent.php
+No syntax errors detected in public/signup.php
+No syntax errors detected in public/subtitles.php
+No syntax errors detected in public/tags.php
+No syntax errors detected in public/takereseed.php
+No syntax errors detected in public/takethankyou.php
+No syntax errors detected in public/upcoming.php
+
+No syntax errors detected in public/user_blocks.php
+No syntax errors detected in public/user_unlocks.php
+No syntax errors detected in public/usercomment.php
+No syntax errors detected in public/upcoming.php
+No syntax errors detected in public/uploadapp.php
+No syntax errors detected in public/user_blocks.php
+No syntax errors detected in public/user_unlocks.php
+No syntax errors detected in public/usercomment.php
+No syntax errors detected in public/upcoming.php
+No syntax errors detected in public/uploadapp.php
+No syntax errors detected in public/user_blocks.php
+No syntax errors detected in public/user_unlocks.php
+No syntax errors detected in public/usercomment.php
+No syntax errors detected in public/upcoming.php
+No syntax errors detected in public/uploadapp.php
+No syntax errors detected in public/user_blocks.php
+No syntax errors detected in public/user_unlocks.php
+No syntax errors detected in public/usercomment.php

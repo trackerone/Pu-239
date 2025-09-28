@@ -2,10 +2,9 @@
 declare(strict_types=1);
 require_once dirname(__DIR__) . '/bootstrap_web.php';
 
-use Pu239\Database;
-use Pu239\Config\ConfigRepository;
-
 use Pu239\Cache;
+use Pu239\Config\ConfigRepository;
+use Pu239\Database;
 use Pu239\Message;
 use Pu239\Session;
 
@@ -15,6 +14,10 @@ $pm_what = isset($_POST['pm_what']) && $_POST['pm_what'] === 'last10' ? 'last10'
 $reseedid = (int) $_POST['reseedid'];
 $uploader = (int) $_POST['uploader'];
 $name = $_POST['name'];
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    // TODO(2025): add CSRF verification
+}
 global $container;
 /** @var ConfigRepository $config */
 $config = $container->get(ConfigRepository::class);

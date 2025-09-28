@@ -1,5 +1,4 @@
 <?php
-<<<<<< codex/enforce-csrf-and-escape-output-hay3lv
 declare(strict_types=1);
 
 require_once dirname(__DIR__) . '/bootstrap_web.php';
@@ -21,7 +20,7 @@ if ($user === false) {
     app_halt('Exit called');
 }
 
-// TODO(2025): csrf
+// TODO(2025): add CSRF verification
 $gameNumber = (int) ($_POST['gamenum'] ?? 0);
 $questionId = (int) ($_POST['qid'] ?? 0);
 $answer = (string) ($_POST['answer'] ?? '');
@@ -50,69 +49,6 @@ $existing = $db->fetch(
         'gamenum' => [$gameNumber, \PDO::PARAM_INT],
     ]
 );
-
-=======
-
-declare(strict_types=1);
-
-<<<<<< codex/enforce-csrf-and-escape-output-dxtuor
-require_once dirname(__DIR__) . '/bootstrap_web.php';
-
-use Pu239\Cache;
-use Pu239\Database;
-
-=======
-use Pu239\Cache;
-use Pu239\Database;
-
-require_once dirname(__DIR__) . '/bootstrap_web.php';
-
->>>>>> master
-$cache = $container->get(Cache::class);
-$db = $container->get(Database::class);
-
-require_once __DIR__ . '/../../include/bittorrent.php';
-
-$user = check_user_status();
-
-header('Content-Type: application/json; charset=utf-8');
-
-if ($user === false) {
-    echo json_encode(['fail' => 'invalid'], JSON_THROW_ON_ERROR);
-    app_halt('Exit called');
-}
-
-// TODO(2025): csrf
-$gameNumber = (int) ($_POST['gamenum'] ?? 0);
-$questionId = (int) ($_POST['qid'] ?? 0);
-$answer = (string) ($_POST['answer'] ?? '');
-$userId = (int) $user['id'];
-
-if ($gameNumber <= 0 || $questionId <= 0 || $answer === '') {
-    echo json_encode(['fail' => 'invalid'], JSON_THROW_ON_ERROR);
-    app_halt('Exit called');
-}
-
-$correctAnswer = $db->fetch(
-    'SELECT canswer FROM triviaq WHERE qid = :qid',
-    ['qid' => [$questionId, \PDO::PARAM_INT]]
-);
-
-if ($correctAnswer === false) {
-    echo json_encode(['fail' => 'invalid'], JSON_THROW_ON_ERROR);
-    app_halt('Exit called');
-}
-
-$existing = $db->fetch(
-    'SELECT correct FROM triviausers WHERE user_id = :uid AND qid = :qid AND gamenum = :gamenum',
-    [
-        'uid' => [$userId, \PDO::PARAM_INT],
-        'qid' => [$questionId, \PDO::PARAM_INT],
-        'gamenum' => [$gameNumber, \PDO::PARAM_INT],
-    ]
-);
-
->>>>>> master
 if ($existing !== false) {
     $answered = (int) ($existing['correct'] ?? 0) === 1
         ? "<h3 class='has-text-success top20'>" . _('Awesome, that was the correct answer') . '</h3>'
