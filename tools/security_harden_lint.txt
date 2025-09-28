@@ -373,3 +373,17 @@ No syntax errors detected in include/helpers/cookies.php
 No syntax errors detected in bootstrap_web.php
 No syntax errors detected in include/helpers/http.php
 No syntax errors detected in public/ajax/ajax_tooltips.php
+<<<<<< codex/add-security-headers-and-json-helper-huxuqp
+No syntax errors detected in public/ajax/ajax_tooltips.php
+No syntax errors detected in public/ajax/bookmarks.php
+No syntax errors detected in public/ajax/checkport.php
+No syntax errors detected in public/ajax/checkports.php
+No syntax errors detected in public/ajax/cooker_notify.php
+No syntax errors detected in public/ajax/descr_format.php
+No syntax errors detected in public/ajax/ebook_lookup.php
+No syntax errors detected in public/ajax/imdb_lookup.php
+No syntax errors detected in public/ajax/isbn_lookup.php
+No syntax errors detected in public/ajax/like.php
+No syntax errors detected in public/ajax/offer_notify.php
+=======
+>>>>>> master
