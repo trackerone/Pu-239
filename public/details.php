@@ -91,7 +91,7 @@ if (has_access($user['class'], UC_STAFF, 'torrent_mod')) {
 }
 $cache = $container->get(Cache::class);
 if ($moderator) {
-    // TODO(2025): csrf
+    // TODO(2025): add CSRF verification
     if (isset($_POST['checked']) && $_POST['checked'] == $id) {
         $set = [
             'checked_by' => $user['id'],
