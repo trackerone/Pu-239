@@ -17,12 +17,16 @@ global $container;
 $config = $container->get(ConfigRepository::class);
 /** @var Database $db */
 $db = $container->get(Database::class);
+$s = $s ?? static fn($v) => htmlspecialchars((string) $v, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
 
 $user = check_user_status();
 $baseUrl = (string) $config->get('paths.baseurl');
 
+$page = $_GET['page'] ?? '';
+
 get_template();
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    // TODO(2025): add CSRF verification
     $session = $container->get(Session::class);
     $auth = $container->get(Auth::class);
     $url = get_return_to($_POST['page']);
@@ -61,7 +65,7 @@ $body = "
                     <div class='column is-one-quarter'>" . _('Password') . "</div>
                     <div class='column'>
                         <input type='password' class='w-100' name='password' autocomplete='on' placeholder='" . _('Password') . "' required>
-                        <input type='hidden' name='page' value='{$_GET['page']}'>
+                        <input type='hidden' name='page' value='" . $s($page) . "'>
                     </div>
                 </div>
                 <div class='has-text-centered'>
@@ -73,6 +77,6 @@ $HTMLOUT .= main_div($body, '', 'padding20') . '
         </form>';
 $title = _('Verify Identity');
 $breadcrumbs = [
-    "<a href='{$_SERVER['PHP_SELF']}'>$title</a>",
+    sprintf("<a href='%s'>%s</a>", $s($_SERVER['PHP_SELF'] ?? ''), $s($title)),
 ];
 echo stdhead($title, [], 'page-wrapper', $breadcrumbs) . wrapper($HTMLOUT) . stdfoot();

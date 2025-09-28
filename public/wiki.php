@@ -14,6 +14,7 @@ require_once __DIR__ . '/../include/bittorrent.php';
 global $container;
 /** @var ConfigRepository $config */
 $config = $container->get(ConfigRepository::class);
+$s = $s ?? static fn($v) => htmlspecialchars((string) $v, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
 
 $wiki = $container->get(Wiki::class);
 $session = $container->get(Session::class);
@@ -37,7 +38,7 @@ $stdfoot = [
  */
 function navmenu()
 {
-    global $config;
+    global $config, $s;
 
     $baseUrl = (string) $config->get('paths.baseurl');
     $url = $_SERVER['REQUEST_URI'];
@@ -69,7 +70,7 @@ function navmenu()
     $div .= " </ul>
             </div>
             <div class='has-text-centered padding20'>
-                <input type='text' name='article' value='$value'>
+                <input type='text' name='article' value='" . $s($value) . "'>
                 <input type='submit' class='button is-small' value='" . _('Search') . "' name='wiki'>
             </div>
         </form>";
@@ -115,6 +116,7 @@ $action = 'article';
 $mode = '';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    // TODO(2025): add CSRF verification
     $validator = $container->get(Validator::class);
     if (isset($_POST['article-add'])) {
         $validation = $validator->validate($_POST, [
@@ -294,6 +296,6 @@ $HTMLOUT .= '</div>';
 
 $title = _('Wiki');
 $breadcrumbs = [
-    "<a href='{$_SERVER['PHP_SELF']}'>$title</a>",
+    sprintf("<a href='%s'>%s</a>", $s($_SERVER['PHP_SELF'] ?? ''), $s($title)),
 ];
 echo stdhead($title, [], 'page-wrapper', $breadcrumbs) . wrapper($HTMLOUT) . stdfoot();
