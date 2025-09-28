@@ -14,6 +14,7 @@ global $container;
 $config = $container->get(ConfigRepository::class);
 /** @var Database $db */
 $db = $container->get(Database::class);
+$s = $s ?? static fn($v) => htmlspecialchars((string) $v, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
 
 $userCacheTtl = (int) $config->get('expires.user_cache');
 
@@ -27,6 +28,7 @@ if ($user['class'] < UC_STAFF && $got_moods) {
     app_halt('Exit called');
 }
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    // TODO(2025): add CSRF verification
     $updateset = [];
     $setbits = $clrbits = 0;
     if (isset($_POST['unlock_user_moods'])) {
@@ -92,6 +94,6 @@ $HTMLOUT = '
             </div>';
 $title = _('User Unlocks');
 $breadcrumbs = [
-    "<a href='{$_SERVER['PHP_SELF']}'>$title</a>",
+    sprintf("<a href='%s'>%s</a>", $s($_SERVER['PHP_SELF'] ?? ''), $s($title)),
 ];
 echo stdhead($title, [], 'page-wrapper', $breadcrumbs) . wrapper($HTMLOUT) . stdfoot();

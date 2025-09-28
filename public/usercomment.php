@@ -15,6 +15,8 @@ global $container;
 $config = $container->get(ConfigRepository::class);
 /** @var Database $db */
 $db = $container->get(Database::class);
+$fluent = $db;
+$s = $s ?? static fn($v) => htmlspecialchars((string) $v, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
 
 $user = check_user_status();
 
@@ -35,6 +37,7 @@ $action = isset($_GET['action']) ? htmlsafechars($_GET['action']) : '';
 $users_class = $container->get(User::class);
 if ($action === 'add') {
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+        // TODO(2025): add CSRF verification
         $userid = (int) $_POST['userid'];
         if (!is_valid_id($userid)) {
             stderr(_('Error'), _('Invalid ID'));
@@ -99,11 +102,12 @@ $newid = $db->perform($sql, $values);
     }
     $title = _('Add Comment');
     $breadcrumbs = [
-        "<a href='{$_SERVER['PHP_SELF']}'>$title</a>",
+        sprintf("<a href='%s'>%s</a>", $s($_SERVER['PHP_SELF'] ?? ''), $s($title)),
     ];
     echo stdhead($title, $stdhead, 'page-wrapper', $breadcrumbs) . wrapper($HTMLOUT) . stdfoot($stdfoot);
 } elseif ($action === 'edit') {
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+        // TODO(2025): add CSRF verification
         $commentid = (int) $_POST['cid'];
     } else {
         $commentid = (int) $_GET['cid'];
@@ -124,6 +128,7 @@ $newid = $db->perform($sql, $values);
         stderr(_('Error'), 'Permission denied.');
     }
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+        // TODO(2025): add CSRF verification
         $body = htmlsafechars($_POST['body']);
         $returnto = htmlsafechars($_POST['returnto']);
         if ($body == '') {
@@ -155,7 +160,7 @@ $db->perform($sql, array_merge($set, ['id' => $commentid]));
     </div></form>";
     $title = _('Edit Comment');
     $breadcrumbs = [
-        "<a href='{$_SERVER['PHP_SELF']}'>$title</a>",
+        sprintf("<a href='%s'>%s</a>", $s($_SERVER['PHP_SELF'] ?? ''), $s($title)),
     ];
     echo stdhead($title, $stdhead, 'page-wrapper', $breadcrumbs) . wrapper($HTMLOUT) . stdfoot($stdfoot);
 } elseif ($action === 'delete') {
@@ -227,7 +232,7 @@ $deleted = $db->perform($sql, ['id' => $commentid]);
     }
     $title = _('Original Comment');
     $breadcrumbs = [
-        "<a href='{$_SERVER['PHP_SELF']}'>$title</a>",
+        sprintf("<a href='%s'>%s</a>", $s($_SERVER['PHP_SELF'] ?? ''), $s($title)),
     ];
     echo stdhead($title, $stdhead, 'page-wrapper', $breadcrumbs) . wrapper($HTMLOUT) . stdfoot($stdfoot);
 } else {
