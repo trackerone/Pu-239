@@ -1,15 +1,12 @@
 <?php
 declare(strict_types=1);
 
+require_once dirname(__DIR__) . '/bootstrap_web.php';
+
 use PU239\Config\ConfigRepository;
 use Pu239\Database;
 use Pu239\Peer;
 
-require_once dirname(__DIR__) . '/bootstrap_web.php';
-
-$baseurl = '';
-$images_baseurl = '';
-$ratio_free = false;
 global $container;
 /** @var ConfigRepository $config */
 $config = $container->get(ConfigRepository::class);
@@ -22,8 +19,17 @@ $baseurl = (string) $config->get('paths.baseurl');
 $images_baseurl = (string) $config->get('paths.images_baseurl');
 $ratio_free = (bool) $config->get('site.ratio_free');
 
-header('Content-Type: application/json');
-if (!empty($user) && is_array($user)) {
+if (!is_array($user)) {
+    // >>>>>> PU239:json-rewrite-4
+    json_out('failed...');
+}
+
+if (empty($user)) {
+    // >>>>>> PU239:json-rewrite-5
+    json_out('failed...');
+}
+
+if (!empty($user)) {
     $upped = mksize($user['uploaded']);
     $downed = mksize($user['downloaded']);
     $peer = $container->get(Peer::class);
@@ -130,7 +136,6 @@ if (!empty($user) && is_array($user)) {
         <span><a href='{$baseurl}/user_unlocks.php'>" . _('Click here') . '</a></span>' : '') . '
     </span>';
 
-    echo json_encode($StatusBar);
-} else {
-    echo json_encode('failed...');
+    // >>>>>> PU239:json-rewrite-6
+    json_out($StatusBar);
 }

@@ -370,3 +370,6 @@ No syntax errors detected in public/wiki.php
 No syntax errors detected in bootstrap_web.php
 No syntax errors detected in include/session_bootstrap.php
 No syntax errors detected in include/helpers/cookies.php
+No syntax errors detected in bootstrap_web.php
+No syntax errors detected in include/helpers/http.php
+No syntax errors detected in public/ajax/ajax_tooltips.php
