@@ -36,7 +36,7 @@ $stdfoot = [
 
 $msg = '';
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    // TODO(2025): csrf
+    // TODO(2025): add CSRF verification
     $msg = isset($_POST['body']) ? htmlsafechars($_POST['body']) : '';
     $subject = isset($_POST['subject']) ? htmlsafechars($_POST['subject']) : '';
     $returnto = isset($_POST['returnto']) ? htmlsafechars($_POST['returnto']) : $self;

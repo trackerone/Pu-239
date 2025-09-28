@@ -43,7 +43,7 @@ if (has_access($user['class'], UC_ADMINISTRATOR, 'coder') && isset($_GET['action
     $approved = true;
 }
 $data = array_merge($_POST, $_GET);
-// TODO(2025): csrf
+// TODO(2025): add CSRF verification
 if (has_access($user['class'], UC_ADMINISTRATOR, 'coder') && !empty($data)) {
     $valid_actions = [
         'view_replies',

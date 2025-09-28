@@ -1,15 +1,10 @@
 <?php
 declare(strict_types=1);
+
 require_once dirname(__DIR__) . '/bootstrap_web.php';
 
-$db = $container->get(Database::class);
-
-
-
-
-use PU239\Config\ConfigRepository;
 use Delight\Auth\Auth;
-
+use Pu239\Config\ConfigRepository;
 use Pu239\Database;
 use Pu239\Message;
 use Pu239\Session;
@@ -20,10 +15,15 @@ require_once __DIR__ . '/../include/bittorrent.php';
 global $container;
 /** @var ConfigRepository $config */
 $config = $container->get(ConfigRepository::class);
+$db = $container->get(Database::class);
 $title = 'Join ' . $config->get('site.name');
 $session = $container->get(Session::class);
 // $fluent removed — use $this->db (ExtendedPdo)
 $auth = $container->get(Auth::class);
+$s = $s ?? static fn($v) => htmlspecialchars((string) $v, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
+$selfRaw = $_SERVER['PHP_SELF'] ?? '';
+$self = $s($selfRaw);
+$signupAction = $s($config->get('paths.baseurl') . '/signup.php');
 if ($auth->isLoggedIn()) {
     $auth->logOutEverywhere();
     $auth->destroySession();
@@ -32,13 +32,14 @@ if ($auth->isLoggedIn()) {
 }
 get_template();
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    // TODO(2025): add CSRF verification
     $user = $container->get(User::class);
     $validator = $container->get(Validator::class);
     $ses_vars = [
         'username' => $_POST['username'],
         'email' => $_POST['email'],
     ];
-    $session->set('signup_variables', json_encode($ses_vars));
+    $session->set('signup_variables', json_encode($ses_vars, JSON_THROW_ON_ERROR));
     $post = $_POST;
     unset($_POST, $_GET, $_FILES);
     $validation = $validator->validate($post, [
@@ -52,7 +53,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     ]);
     if ($validation->fails() || !valid_username($post['username'], false, true)) {
         $session->set('is-warning', _('Invalid information provided, please try again.'));
-        write_log(getip(0) . ' has used invalid data to signup. ' . json_encode($post, JSON_PRETTY_PRINT));
+        write_log(getip(0) . ' has used invalid data to signup. ' . json_encode($post, JSON_PRETTY_PRINT | JSON_THROW_ON_ERROR));
         header("Location: {$_SERVER['PHP_SELF']}");
         app_halt('Exit called');
     } else {
@@ -181,27 +182,30 @@ if (!empty($signup_vars)) {
         'email' => '',
     ];
 }
+$signupUsername = $s($signup_vars['username'] ?? '');
+$signupEmail = $s($signup_vars['email'] ?? '');
 
 $HTMLOUT = "
-    <form method='post' action='{$config->get('paths.baseurl')}/signup.php' enctype='multipart/form-data' accept-charset='utf-8'>";
+    <form method='post' action='{$signupAction}' enctype='multipart/form-data' accept-charset='utf-8'>";
 
 $disabled = !empty($email) ? 'disabled' : 'required';
 
 if (!empty($email)) {
-    $email_form = "<input type='hidden' name='email' class='w-100' value='{$email}'>{$email}";
+    $emailEsc = $s($email);
+    $email_form = "<input type='hidden' name='email' class='w-100' value='{$emailEsc}'>{$emailEsc}";
 } else {
-    $email_form = "<input type='email' name='email' id='email' class='w-100' onblur='check_email();' value='{$signup_vars['email']}' autocomplete='on' required>
+    $email_form = "<input type='email' name='email' id='email' class='w-100' onblur='check_email();' value='{$signupEmail}' autocomplete='on' required>
                    <div id='emailcheck'></div>" . ($config->get('signup.email_confirm') ? "
                    <div class='alt_bordered top10 padding10'>" . _('Username') . '</div>' : '');
-    $email_form = "<input type='email' name='email' id='email' class='w-100' onblur='check_email();' value='{$signup_vars['email']}' autocomplete='on' required>";
+    $email_form = "<input type='email' name='email' id='email' class='w-100' onblur='check_email();' value='{$signupEmail}' autocomplete='on' required>";
 }
 $email = !empty($email) ? $email : (!empty($signup_vars['email']) ? $signup_vars['email'] : '');
-$body = "          
+$body = "
             <h1 class='has-text-centered'>$title</h1>
-            <div class='columns level'>                    
+            <div class='columns level'>
                 <div class='column is-one-quarter has-text-left'>" . _('Desired Username') . "</div>
                 <div class='column'>
-                    <input type='text' name='username' id='username' class='w-100' onblur='check_name();' value='{$signup_vars['username']}' autocomplete='on' required pattern='[\p{L}\p{N}_-]{3,64}'>
+                    <input type='text' name='username' id='username' class='w-100' onblur='check_name();' value='{$signupUsername}' autocomplete='on' required pattern='[\p{L}\p{N}_-]{3,64}'>
                 </div>
             </div>
             <div id='namecheck'></div>
@@ -232,6 +236,6 @@ $HTMLOUT .= main_div($body, '', 'padding20') . '
 
 $title = _('Signup');
 $breadcrumbs = [
-    "<a href='{$_SERVER['PHP_SELF']}'>$title</a>",
+    "<a href='{$self}'>$title</a>",
 ];
 echo stdhead($title, [], 'w-50 min-350 has-text-centered', $breadcrumbs) . wrapper($HTMLOUT) . stdfoot($stdfoot);

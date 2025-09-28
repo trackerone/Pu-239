@@ -26,6 +26,10 @@ $id = !empty($_GET['id']) ? (int) $_GET['id'] : (int) $_POST['id'];
 if (!is_valid_id($id)) {
     stderr(_('Error'), _('Invalid ID'), 'bottom20');
 }
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    // TODO(2025): add CSRF verification
+}
 // $fluent removed — use $this->db (ExtendedPdo)
 $torrent = $fluent->from('torrents')
                   ->select(null)
