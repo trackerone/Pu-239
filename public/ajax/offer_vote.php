@@ -11,11 +11,8 @@ $db = $container->get(Database::class);
 require_once __DIR__ . '/../../include/bittorrent.php';
 $user = check_user_status();
 
-header('Content-Type: application/json; charset=utf-8');
-
 if ($user === false) {
-    echo json_encode(['voted' => 'invalid'], JSON_THROW_ON_ERROR);
-    app_halt('Exit called');
+    json_out(['voted' => 'invalid']);
 }
 
 // TODO(2025): csrf on POST where missing
@@ -23,8 +20,7 @@ $offerId = (int) ($_POST['id'] ?? 0);
 $currentVote = $_POST['voted'] ?? '';
 
 if ($offerId <= 0 || $currentVote === '') {
-    echo json_encode(['voted' => 'invalid'], JSON_THROW_ON_ERROR);
-    app_halt('Exit called');
+    json_out(['voted' => 'invalid']);
 }
 
 $params = [
@@ -38,8 +34,7 @@ if ($currentVote === 'yes') {
         $params + ['vote' => 'no']
     );
 
-    echo json_encode(['voted' => 'no'], JSON_THROW_ON_ERROR);
-    app_halt('Exit called');
+    json_out(['voted' => 'no']);
 }
 
 if ($currentVote === 'no') {
@@ -48,8 +43,7 @@ if ($currentVote === 'no') {
         $params
     );
 
-    echo json_encode(['voted' => 0], JSON_THROW_ON_ERROR);
-    app_halt('Exit called');
+    json_out(['voted' => 0]);
 }
 
 $db->run(
@@ -60,5 +54,4 @@ $db->run(
     ]
 );
 
-echo json_encode(['voted' => 'yes'], JSON_THROW_ON_ERROR);
-app_halt('Exit called');
+json_out(['voted' => 'yes']);

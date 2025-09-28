@@ -2,19 +2,11 @@
 
 declare(strict_types=1);
 
-require_once dirname(__DIR__) . '/bootstrap_web.php';
-
 use PU239\Config\ConfigRepository;
 use Pu239\ImageProxy;
 
-<<<<<< codex/enforce-csrf-and-escape-output-hay3lv
-=======
-<<<<<< codex/enforce-csrf-and-escape-output-dxtuor
-=======
 require_once dirname(__DIR__) . '/bootstrap_web.php';
 
->>>>>> master
->>>>>> master
 /** @var ConfigRepository $config */
 $config = $container->get(ConfigRepository::class);
 
@@ -22,35 +14,17 @@ require_once __DIR__ . '/../../include/bittorrent.php';
 
 $user = check_user_status();
 
-header('Content-Type: application/json; charset=utf-8');
-
 if (!isset($user['id'])) {
-    echo json_encode(['msg' => _('Invalid ID')], JSON_THROW_ON_ERROR);
-<<<<<< codex/enforce-csrf-and-escape-output-hay3lv
-    app_halt('Exit called');
+    json_out(['msg' => _('Invalid ID')]);
 }
 
 // TODO(2025): csrf
 $fileCount = (int) ($_POST['nbr_files'] ?? 0);
 
 if ($fileCount <= 0) {
-    echo json_encode(['msg' => _('No files selected')], JSON_THROW_ON_ERROR);
-    app_halt('Exit called');
+    json_out(['msg' => _('No files selected')]);
 }
 
-=======
-    app_halt('Exit called');
-}
-
-// TODO(2025): csrf
-$fileCount = (int) ($_POST['nbr_files'] ?? 0);
-
-if ($fileCount <= 0) {
-    echo json_encode(['msg' => _('No files selected')], JSON_THROW_ON_ERROR);
-    app_halt('Exit called');
-}
-
->>>>>> master
 $SaLty = (string) $config->get('salt.two');
 $maxsize = (int) $config->get('bucket.maxsize');
 $folders = date('Y/m');
@@ -74,45 +48,27 @@ for ($i = 0; $i < $fileCount; ++$i) {
     }
 
     if ($maxsize > 0 && $fileSize > $maxsize) {
-        echo json_encode(['msg' => _('File exceeds the maximum allowed size.')], JSON_THROW_ON_ERROR);
-<<<<<< codex/enforce-csrf-and-escape-output-hay3lv
-        app_halt('Exit called');
+        json_out(['msg' => _('File exceeds the maximum allowed size.')]);
     }
 
     $cleanName = preg_replace('`[^a-z0-9\-_.]`i', '', $fileName);
     $type = @exif_imagetype($tmpName);
 
     if ($type === false || !in_array($type, (array) $config->get('images.exif'), true)) {
-        echo json_encode(['msg' => _('Invalid file extension. jpg, gif, png and webp only.')], JSON_THROW_ON_ERROR);
-        app_halt('Exit called');
+        json_out(['msg' => _('Invalid file extension. jpg, gif, png and webp only.')]);
     }
 
-=======
-        app_halt('Exit called');
-    }
-
-    $cleanName = preg_replace('`[^a-z0-9\-_.]`i', '', $fileName);
-    $type = @exif_imagetype($tmpName);
-
-    if ($type === false || !in_array($type, (array) $config->get('images.exif'), true)) {
-        echo json_encode(['msg' => _('Invalid file extension. jpg, gif, png and webp only.')], JSON_THROW_ON_ERROR);
-        app_halt('Exit called');
-    }
-
->>>>>> master
     $cleanName = strtolower($cleanName ?? '');
     $random = make_password();
     $path = $bucketdir . $USERSALT . '_' . $random . $cleanName;
     $pathlink = $bucketlink . $USERSALT . '_' . $random . $cleanName;
 
     if (!move_uploaded_file($tmpName, $path)) {
-        echo json_encode(['msg' => _('Upload failed to save image.')], JSON_THROW_ON_ERROR);
-        app_halt('Exit called');
+        json_out(['msg' => _('Upload failed to save image.')]);
     }
 
     if (!file_exists($path)) {
-        echo json_encode(['msg' => _('Upload failed to save image.')], JSON_THROW_ON_ERROR);
-        app_halt('Exit called');
+        json_out(['msg' => _('Upload failed to save image.')]);
     }
 
     $imageProxy->optimize_image($path, '', false);
@@ -120,12 +76,10 @@ for ($i = 0; $i < $fileCount; ++$i) {
 }
 
 if ($images !== []) {
-    echo json_encode([
+    json_out([
         'msg' => _('Success! Paste the following url to Poster.'),
         'urls' => $images,
-    ], JSON_THROW_ON_ERROR);
-    app_halt('Exit called');
+    ]);
 }
 
-echo json_encode(['msg' => _('Unknown failure occurred')], JSON_THROW_ON_ERROR);
-app_halt('Exit called');
+json_out(['msg' => _('Unknown failure occurred')]);
