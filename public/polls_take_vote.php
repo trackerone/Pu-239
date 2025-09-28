@@ -1,18 +1,19 @@
 <?php
 declare(strict_types=1);
 
+require_once dirname(__DIR__) . '/bootstrap_web.php';
+
 use Pu239\Cache;
 use Pu239\Config\ConfigRepository;
 use Pu239\Database;
 use Pu239\PollVoter;
-
-require_once dirname(__DIR__) . '/bootstrap_web.php';
 
 global $container;
 /** @var ConfigRepository $config */
 $config = $container->get(ConfigRepository::class);
 /** @var Database $db */
 $db = $container->get(Database::class);
+$s = $s ?? static fn($v) => htmlspecialchars((string) $v, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
 $pollDataTtl = (int) $config->get('expires.poll_data', 0);
 $baseUrl = (string) $config->get('paths.baseurl');
 
@@ -24,6 +25,8 @@ if (!is_valid_id($poll_id)) {
 }
 $vote_cast = [];
 $_POST['choice'] = isset($_POST['choice']) ? $_POST['choice'] : [];
+
+// TODO(2025): add CSRF verification
 
 // $fluent removed — use $this->db (ExtendedPdo)
 $poll_data = $fluent->from('polls')

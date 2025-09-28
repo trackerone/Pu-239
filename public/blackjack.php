@@ -82,7 +82,7 @@ $debugout .= '
 
 $ddown = false;
 $update_ddown = "ddown = 'no'";
-// TODO(2025): csrf
+// TODO(2025): add CSRF verification
 if (isset($_POST['ddown']) && $_POST['ddown'] === 'ddown') {
     $ddown = true;
     $update_ddown = "ddown = 'yes'";
