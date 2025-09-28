@@ -2,30 +2,14 @@
 
 declare(strict_types=1);
 
-<<<<<< codex/enforce-csrf-and-escape-output-hay3lv
-require_once dirname(__DIR__) . '/bootstrap_web.php';
-
-=======
-<<<<<< codex/enforce-csrf-and-escape-output-dxtuor
-require_once dirname(__DIR__) . '/bootstrap_web.php';
-
-=======
->>>>>> master
->>>>>> master
 use DI\DependencyException;
 use DI\NotFoundException;
 use PU239\Config\ConfigRepository;
 use Pu239\Cache;
 use Pu239\Database;
 
-<<<<<< codex/enforce-csrf-and-escape-output-hay3lv
-=======
-<<<<<< codex/enforce-csrf-and-escape-output-dxtuor
-=======
 require_once dirname(__DIR__) . '/bootstrap_web.php';
 
->>>>>> master
->>>>>> master
 /** @var ConfigRepository $config */
 $config = $container->get(ConfigRepository::class);
 $db = $container->get(Database::class);
@@ -56,10 +40,6 @@ $tid = (int) ($_POST['tid'] ?? ($_GET['tid'] ?? 0));
 $action = htmlsafechars($_POST['action'] ?? ($_GET['action'] ?? 'list'));
 $ajax = isset($_POST['ajax']) && (int) $_POST['ajax'] === 1;
 
-if ($ajax) {
-    header('Content-Type: application/json; charset=utf-8');
-}
-
 /**
  * @throws DependencyException
  * @throws NotFoundException
@@ -87,12 +67,11 @@ function print_list(int $uid, int $tid, bool $ajax)
     $hadThanks = in_array($uid, $ids, true);
 
     if ($ajax) {
-        return json_encode([
+        return [
             'list' => $list === [] ? '' : implode(', ', $list),
             'hadTh' => $hadThanks,
             'status' => true,
-        ], JSON_THROW_ON_ERROR);
-<<<<<< codex/enforce-csrf-and-escape-output-hay3lv
+        ];
     }
 
     $form = '';
@@ -102,17 +81,6 @@ function print_list(int $uid, int $tid, bool $ajax)
         $form = "<span class='left10'><form action='" . $actionUrl . "' method='post' enctype='multipart/form-data' accept-charset='utf-8'><input type='submit' class='button is-small details-button' name='submit' value='Say thanks'><input type='hidden' name='torrentid' value='" . $s($tid) . "'><input type='hidden' name='action' value='add'></form></span>";
     }
 
-=======
-    }
-
-    $form = '';
-
-    if (!$hadThanks) {
-        $actionUrl = $s($baseurl) . '/ajax/thanks.php';
-        $form = "<span class='left10'><form action='" . $actionUrl . "' method='post' enctype='multipart/form-data' accept-charset='utf-8'><input type='submit' class='button is-small details-button' name='submit' value='Say thanks'><input type='hidden' name='torrentid' value='" . $s($tid) . "'><input type='hidden' name='action' value='add'></form></span>";
-    }
-
->>>>>> master
     $out = $list === [] ? '' : implode(', ', $list);
 
     return <<<IFRAME
@@ -158,7 +126,13 @@ IFRAME;
 
 switch ($action) {
     case 'list':
-        echo print_list($uid, $tid, $ajax);
+        $payload = print_list($uid, $tid, $ajax);
+
+        if ($ajax) {
+            json_out($payload);
+        }
+
+        echo $payload;
         break;
 
     case 'add':
@@ -213,7 +187,13 @@ switch ($action) {
                     );
                 }
 
-                echo print_list($uid, $tid, $ajax);
+                $payload = print_list($uid, $tid, $ajax);
+
+                if ($ajax) {
+                    json_out($payload);
+                }
+
+                echo $payload;
             }
         }
         break;

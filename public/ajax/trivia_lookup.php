@@ -1,55 +1,57 @@
 <?php
 declare(strict_types=1);
+
 require_once dirname(__DIR__) . '/bootstrap_web.php';
-
-$db = $container->get(Database::class);
-
-
-
 
 use Pu239\Cache;
 use Pu239\Database;
 
-require_once __DIR__ . '/../../include/bittorrent.php';
-$curuser = check_user_status();
 global $container;
 
-header('content-type: application/json');
+/** @var Database $db */
+$db = $container->get(Database::class);
+/** @var Cache $cache */
+$cache = $container->get(Cache::class);
+
+require_once __DIR__ . '/../../include/bittorrent.php';
+
+$curuser = check_user_status();
+
 if (empty($curuser)) {
-    echo json_encode(['fail' => 'csrf']);
-    app_halt('Exit called');
+    json_out(['fail' => 'csrf']);
 }
 
 $table = trivia_table();
 $qid = $table['qid'];
 $gamenum = $table['gamenum'];
 $table = $table['table'];
-$cache = $container->get(Cache::class);
 $data = $cache->get('trivia_current_question_');
+
 if (empty($data)) {
-    echo json_encode(['fail' => 'invalid']);
-    app_halt('Exit called');
+    json_out(['fail' => 'invalid']);
 }
 // $fluent removed — use $this->db (ExtendedPdo)
-$user = $fluent->from('triviausers')
-               ->where('user_id = ?', $curuser['id'])
-               ->where('qid = ?', $qid)
-               ->where('gamenum = ?', $gamenum)
-               ->fetch();
+$user = $db->row(
+    'SELECT correct FROM triviausers WHERE user_id = :uid AND qid = :qid AND gamenum = :gamenum',
+    [
+        'uid' => [$curuser['id'], \PDO::PARAM_INT],
+        'qid' => [$qid, \PDO::PARAM_INT],
+        'gamenum' => [$gamenum, \PDO::PARAM_INT],
+    ]
+);
 
 $cleanup = trivia_time();
 if (!empty($user)) {
-    if ($user['correct'] == 1) {
+    if ((int) ($user['correct'] ?? 0) === 1) {
         $answered = "<h3 class='has-text-success top20'>" . _('Awesome, that was the correct answer') . '</h3>';
     } else {
         $answered = "<h3 class='has-text-danger top20'>" . _('Sorry, that was not the correct answer') . '</h3>';
     }
-    echo json_encode([
+    json_out([
         'content' => $table . $answered . trivia_clocks(),
         'round' => $cleanup['round'],
         'game' => $cleanup['game'],
     ]);
-    app_halt('Exit called');
 }
 
 $question = $output = '';
@@ -72,13 +74,11 @@ foreach ($answers as $answer) {
 }
 if (!empty($output)) {
     $output = "<div class='level-center'>$output</div>";
-    echo json_encode([
+    json_out([
         'content' => $question . $output . trivia_clocks(),
         'round' => $cleanup['round'],
         'game' => $cleanup['game'],
     ]);
-    app_halt('Exit called');
 }
 
-echo json_encode(['fail' => 'invalid']);
-app_halt('Exit called');
+json_out(['fail' => 'invalid']);

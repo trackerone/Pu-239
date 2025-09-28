@@ -17,7 +17,6 @@ function set_app_cookie(
     $httponly = $opts['httponly'] ?? true;
     $samesite = $opts['samesite'] ?? 'Lax';
 
-    // >>>>>> PU239:cookie-helper-2
     // PHP 7.3+ array syntax for setcookie
     setcookie($name, $value, [
         'expires' => $expires,
@@ -27,8 +26,4 @@ function set_app_cookie(
         'httponly' => $httponly,
         'samesite' => $samesite,
     ]);
-    // >>>>>> PU239:cookie-use-3
-    // >>>>>> PU239:cookie-use-4
-    // >>>>>> PU239:cookie-use-5
-    // >>>>>> PU239:cookie-use-6
 }

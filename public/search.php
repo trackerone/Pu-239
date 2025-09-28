@@ -34,21 +34,16 @@ if (!empty($bot) && !empty($auth) && !empty($torrent_pass)) {
     app_halt('Exit called');
 }
 
-header('content-type: application/json');
 if (empty($userid)) {
-    echo json_encode(['msg' => _('invalid user credentials')]);
-    app_halt('Exit called');
+    json_out(['msg' => _('invalid user credentials')]);
 }
 $status = $users_class->get_item('status', $userid);
 if ($status === 5) {
-    echo json_encode(['msg' => _("Permission denied, you're account is suspended")]);
-    app_halt('Exit called');
+    json_out(['msg' => _("Permission denied, you're account is suspended")]);
 } elseif ($status === 2) {
-    echo json_encode(['msg' => _("Permission denied, you're account is disabled")]);
-    app_halt('Exit called');
+    json_out(['msg' => _("Permission denied, you're account is disabled")]);
 } elseif ($status === 1) {
-    echo json_encode(['msg' => _("Permission denied, you're account is parked")]);
-    app_halt('Exit called');
+    json_out(['msg' => _("Permission denied, you're account is parked")]);
 }
 if (!empty($search)) {
     // $fluent removed — use $this->db (ExtendedPdo)
@@ -61,10 +56,8 @@ if (!empty($search)) {
                       ->fetchAll();
 
     if ($results) {
-        echo json_encode($results);
-        app_halt('Exit called');
-    } else {
-        echo json_encode(['msg' => 'no results for: ' . $search]);
-        app_halt('Exit called');
+        json_out($results);
     }
+
+    json_out(['msg' => 'no results for: ' . $search]);
 }

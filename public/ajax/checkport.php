@@ -26,7 +26,4 @@ if (is_resource($connection)) {
     ];
 }
 $status = ['data' => $msg];
-header('Content-Type: application/json; charset=utf-8');
-echo json_encode($status, JSON_THROW_ON_ERROR);
-app_halt('Exit called');
-return;
+json_out($status);
