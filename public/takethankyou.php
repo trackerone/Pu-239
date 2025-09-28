@@ -12,6 +12,7 @@ global $container;
 $config = $container->get(ConfigRepository::class);
 /** @var Database $db */
 $db = $container->get(Database::class);
+$s = $s ?? static fn($v) => htmlspecialchars((string) $v, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
 
 require_once __DIR__ . '/../include/bittorrent.php';
 $user = check_user_status();
