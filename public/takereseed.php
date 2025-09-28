@@ -15,7 +15,13 @@ $reseedid = (int) $_POST['reseedid'];
 $uploader = (int) $_POST['uploader'];
 $name = $_POST['name'];
 
+<<<<<< codex/enforce-csrf-and-standardize-output-escaping-lh777z
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    // TODO(2025): add CSRF verification
+}
+=======
 // TODO(2025): add CSRF verification
+>>>>>> master
 global $container;
 /** @var ConfigRepository $config */
 $config = $container->get(ConfigRepository::class);
