@@ -1,7 +1,25 @@
 offset=105,batch_size=5: processed public/takethankyou.php, public/takeupload.php, public/tenpercent.php, public/upcoming.php, public/uploadapp.php
 2025-09-28T17:54:02Z, offset=0, size=3, changed=3, skipped=0, lint_fail=0, markers_used=6
 2025-09-28T19:05:27Z, offset=0, size=10, changed=3, skipped=7, lint_fail=0, markers_used=6
+<<<<<< codex/add-security-headers-and-json-helper-r4pmvi
 2025-09-28T19:22:45Z, offset=10, size=10, changed=10, skipped=0, lint_fail=0, markers_used=6
 2025-09-28T20:09:12Z, offset=20, size=10, changed=10, skipped=0, lint_fail=0, markers_used=6
 2025-09-28T20:40:32Z, offset=30, size=10, changed=5, skipped=5, lint_fail=0, markers_used=6
 2025-09-28T20:59:25Z, offset=40, size=3, changed=0, skipped=3, lint_fail=0, markers_used=6
+=======
+<<<<<< codex/add-security-headers-and-json-helper-bpb2k8
+2025-09-28T19:22:45Z, offset=10, size=10, changed=10, skipped=0, lint_fail=0, markers_used=6
+2025-09-28T20:09:12Z, offset=20, size=10, changed=10, skipped=0, lint_fail=0, markers_used=6
+2025-09-28T20:40:32Z, offset=30, size=10, changed=5, skipped=5, lint_fail=0, markers_used=6
+=======
+<<<<<< codex/add-security-headers-and-json-helper-ykgca0
+2025-09-28T19:22:45Z, offset=10, size=10, changed=10, skipped=0, lint_fail=0, markers_used=6
+2025-09-28T20:09:12Z, offset=20, size=10, changed=10, skipped=0, lint_fail=0, markers_used=6
+=======
+<<<<<< codex/add-security-headers-and-json-helper-huxuqp
+2025-09-28T19:22:45Z, offset=10, size=10, changed=10, skipped=0, lint_fail=0, markers_used=6
+=======
+>>>>>> master
+>>>>>> master
+>>>>>> master
+>>>>>> master
