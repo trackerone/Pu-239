@@ -168,7 +168,7 @@ $betmb_options = [
     $bet_value7 => 1,
     $bet_value8 => 1,
 ];
-// TODO(2025): csrf
+// TODO(2025): add CSRF verification
 $post_color = isset($_POST['color']) ? $_POST['color'] : '';
 $post_number = isset($_POST['number']) ? $_POST['number'] : '';
 $post_betmb = isset($_POST['betmb']) ? $_POST['betmb'] : '';

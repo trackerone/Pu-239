@@ -28,7 +28,7 @@ $mode = (isset($_GET['mode']) ? htmlsafechars($_GET['mode']) : '');
 // $fluent removed — use $this->db (ExtendedPdo)
 $subs = $container->get('subtitles');
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    // TODO(2025): csrf
+    // TODO(2025): add CSRF verification
     if ($action === 'upload' || $action === 'edit') {
         $langs = isset($_POST['language']) ? htmlsafechars($_POST['language']) : '';
         if (empty($langs)) {

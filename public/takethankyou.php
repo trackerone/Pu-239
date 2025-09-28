@@ -12,6 +12,7 @@ global $container;
 $config = $container->get(ConfigRepository::class);
 /** @var Database $db */
 $db = $container->get(Database::class);
+$s = $s ?? static fn($v) => htmlspecialchars((string) $v, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
 
 require_once __DIR__ . '/../include/bittorrent.php';
 $user = check_user_status();
@@ -25,6 +26,10 @@ if (empty($_POST['id']) && empty($_GET['id'])) {
 $id = !empty($_GET['id']) ? (int) $_GET['id'] : (int) $_POST['id'];
 if (!is_valid_id($id)) {
     stderr(_('Error'), _('Invalid ID'), 'bottom20');
+}
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    // TODO(2025): add CSRF verification
 }
 // $fluent removed — use $this->db (ExtendedPdo)
 $torrent = $fluent->from('torrents')

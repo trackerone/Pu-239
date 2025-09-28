@@ -17,6 +17,7 @@ global $container, $BLOCKS;
 $config = $container->get(ConfigRepository::class);
 /** @var Database $db */
 $db = $container->get(Database::class);
+$s = $s ?? static fn($v) => htmlspecialchars((string) $v, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
 
 $curuser = check_user_status();
 $baseUrl = (string) $config->get('paths.baseurl');
@@ -38,6 +39,7 @@ if ($user['class'] < UC_STAFF && $user['got_blocks'] === 'no') {
 }
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    // TODO(2025): add CSRF verification
     $addset = $removeset = [];
     $setbits_index_page = $clrbits_index_page = $setbits_global_stdhead = $clrbits_global_stdhead = $setbits_userdetails_page = $clrbits_userdetails_page = 0;
     //==Index
@@ -1252,6 +1254,6 @@ $form .= '
 $HTMLOUT = wrapper($form);
 $title = _('User Blocks');
 $breadcrumbs = [
-    "<a href='{$_SERVER['PHP_SELF']}'>$title</a>",
+    sprintf("<a href='%s'>%s</a>", $s($_SERVER['PHP_SELF'] ?? ''), $s($title)),
 ];
 echo stdhead($title, [], 'page-wrapper', $breadcrumbs) . wrapper($HTMLOUT) . stdfoot();

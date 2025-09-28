@@ -1,6 +1,8 @@
 <?php
 declare(strict_types=1);
 
+require_once dirname(__DIR__) . '/bootstrap_web.php';
+
 use Delight\Auth\Auth;
 use Delight\Auth\InvalidSelectorTokenPairException;
 use Delight\Auth\ResetDisabledException;
@@ -10,8 +12,6 @@ use Pu239\Config\ConfigRepository;
 use Pu239\User;
 use Rakit\Validation\Validator;
 
-require_once dirname(__DIR__) . '/bootstrap_web.php';
-
 global $container;
 /** @var ConfigRepository $config */
 $config = $container->get(ConfigRepository::class);
@@ -19,6 +19,9 @@ $baseUrl = (string) $config->get('paths.baseurl');
 $smtpEnable = (bool) $config->get('mail.smtp_enable');
 $smtpPassword = (string) $config->get('mail.smtp_password');
 $smtpUsername = (string) $config->get('mail.smtp_username');
+$s = $s ?? static fn($v) => htmlspecialchars((string) $v, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
+$self = $s($_SERVER['PHP_SELF'] ?? '');
+$recoverAction = $s($baseUrl . '/recover.php');
 
 require_once __DIR__ . '/../include/bittorrent.php';
 
@@ -37,19 +40,21 @@ $auth = $container->get(Auth::class);
 $user = $container->get(User::class);
 $validator = $container->get(Validator::class);
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && !isset($_POST['selector'])) {
+    // TODO(2025): add CSRF verification
     $post = $_POST;
     unset($_POST, $_GET, $_FILES);
     $validation = $validator->validate($post, [
         'email' => 'required|email',
     ]);
     if ($validation->fails()) {
-        write_log(_fe('{0} has tried to reset password using invalid data. ', getip(0)) . json_encode($post, JSON_PRETTY_PRINT));
+        write_log(_fe('{0} has tried to reset password using invalid data. ', getip(0)) . json_encode($post, JSON_PRETTY_PRINT | JSON_THROW_ON_ERROR));
         header("Location: {$_SERVER['PHP_SELF']}");
         app_halt('Exit called');
     }
     $email = trim($post['email']);
     $user->create_reset($email);
 } elseif ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['selector'])) {
+    // TODO(2025): add CSRF verification
     $post = $_POST;
     unset($_POST, $_GET, $_FILES);
     $validation = $validator->validate($post, [
@@ -59,7 +64,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && !isset($_POST['selector'])) {
         'confirm_password' => 'required|same:password',
     ]);
     if ($validation->fails()) {
-        write_log(_fe('{0} has tried to reset password using invalid data. ', getip(0)) . json_encode($post, JSON_PRETTY_PRINT));
+        write_log(_fe('{0} has tried to reset password using invalid data. ', getip(0)) . json_encode($post, JSON_PRETTY_PRINT | JSON_THROW_ON_ERROR));
         header("Location: {$_SERVER['PHP_SELF']}");
         app_halt('Exit called');
     }
@@ -72,7 +77,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && !isset($_POST['selector'])) {
         'token' => 'required|alpha_dash',
     ]);
     if ($validation->fails()) {
-        write_log(_fe('{0} has tried to reset password using invalid data. ', getip(0)) . json_encode($get, JSON_PRETTY_PRINT));
+        write_log(_fe('{0} has tried to reset password using invalid data. ', getip(0)) . json_encode($get, JSON_PRETTY_PRINT | JSON_THROW_ON_ERROR));
         header("Location: {$_SERVER['PHP_SELF']}");
         app_halt('Exit called');
     }
@@ -83,8 +88,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && !isset($_POST['selector'])) {
                 get_file_name('check_password_js'),
             ],
         ]);
+        $selector = $s($get['selector']);
+        $token = $s($get['token']);
         $HTMLOUT = "
-    <form method='post' action='{$baseUrl}/recover.php' enctype='multipart/form-data' accept-charset='utf-8'>
+    <form method='post' action='{$recoverAction}' enctype='multipart/form-data' accept-charset='utf-8'>
         <div class='has-text-centered'>
             <h2 class='has-text-centered'>" . _('Set New Password') . '</h2>';
 
@@ -94,8 +101,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && !isset($_POST['selector'])) {
             </div>
             <div>
                 <input type='password' id='confirm_password' name='confirm_password' class='w-100' autocomplete='on' placeholder='" . _('Password') . "' required minlength='8'>
-                <input type='hidden' name='selector' value='{$get['selector']}'>
-                <input type='hidden' name='token' value='{$get['token']}'>
+                <input type='hidden' name='selector' value='{$selector}'>
+                <input type='hidden' name='token' value='{$token}'>
             </div>
             <div class='has-text-centered padding10'>
                 <input id='signup' type='submit' value='" . _('Reset') . "' class='button is-small top20'>
@@ -106,7 +113,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && !isset($_POST['selector'])) {
 
         $title = _('Reset');
         $breadcrumbs = [
-            "<a href='{$_SERVER['PHP_SELF']}'>$title</a>",
+            "<a href='{$self}'>$title</a>",
         ];
         echo stdhead($title, [], 'w-50 min-350 has-text-centered', $breadcrumbs) . wrapper($HTMLOUT) . stdfoot($stdfoot);
     } catch (InvalidSelectorTokenPairException $e) {
@@ -120,7 +127,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && !isset($_POST['selector'])) {
     }
 } else {
     $HTMLOUT .= "
-        <form method='post' action='{$_SERVER['PHP_SELF']}' enctype='multipart/form-data' accept-charset='utf-8'>
+        <form method='post' action='{$self}' enctype='multipart/form-data' accept-charset='utf-8'>
             <h2 class='has-text-centered'>" . _('Enter your email address') . '</h2>';
     $HTMLOUT .= main_div("
             <div class='bottom20'>
@@ -133,7 +140,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && !isset($_POST['selector'])) {
 
     $title = _('Reset Password');
     $breadcrumbs = [
-        "<a href='{$_SERVER['PHP_SELF']}'>$title</a>",
+        "<a href='{$self}'>$title</a>",
     ];
     echo stdhead($title, [], 'w-50 min-350 has-text-centered', $breadcrumbs) . wrapper($HTMLOUT) . stdfoot($stdfoot);
 }

@@ -2,14 +2,8 @@
 declare(strict_types=1);
 require_once dirname(__DIR__) . '/bootstrap_web.php';
 
-$db = $container->get(Database::class);
-
-
-
-
-
-use PU239\Config\ConfigRepository;
 use Delight\Auth\Auth;
+use PU239\Config\ConfigRepository;
 use Pu239\Cache;
 use Pu239\Database;
 use Pu239\Message;
@@ -17,16 +11,21 @@ use Pu239\Roles;
 use Rakit\Validation\Validator;
 
 require_once __DIR__ . '/../include/bittorrent.php';
-$user = check_user_status();
+
 global $container;
+/** @var Database $db */
+$db = $container->get(Database::class);
+$fluent = $db;
 /** @var ConfigRepository $config */
 $config = $container->get(ConfigRepository::class);
+$s = $s ?? static fn($v) => htmlspecialchars((string) $v, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
 $HTMLOUT = '';
 
 // $fluent removed — use $this->db (ExtendedPdo)
 $cache = $container->get(Cache::class);
 $messages_class = $container->get(Message::class);
 $auth = $container->get(Auth::class);
+$user = check_user_status();
 if ($auth->hasRole(Roles::UPLOADER)) {
     stderr(_('Access Denied'), _('It appears you are already part of our uploading team.'));
 }
@@ -54,6 +53,7 @@ function check_status(Database $fluent, int $userid)
 check_status($fluent, $user['id']);
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    // TODO(2025): add CSRF verification
     if (!is_valid_id((int) $_POST['userid'])) {
         stderr(_('Error'), _fe('It appears something went wrong while sending your application. Please {0}try again{1}', "<a href='{$config->get('paths.baseurl')}/uploadapp.php'>", '</a>'));
     }
@@ -115,6 +115,7 @@ $res = $db->perform($sql, $values);
             ->where('class >= ?', UC_STAFF)
             ->fetchAll();
 
+        $msgs_buffer = [];
         foreach ($subres as $arr) {
             $msgs_buffer[] = [
                 'receiver' => $arr['id'],
@@ -255,6 +256,6 @@ $HTMLOUT .= '
         </form>";
 $title = _('Uploader Application');
 $breadcrumbs = [
-    "<a href='{$_SERVER['PHP_SELF']}'>$title</a>",
+    sprintf("<a href='%s'>%s</a>", $s($_SERVER['PHP_SELF'] ?? ''), $s($title)),
 ];
 echo stdhead($title, [], 'page-wrapper', $breadcrumbs) . wrapper($HTMLOUT) . stdfoot();
