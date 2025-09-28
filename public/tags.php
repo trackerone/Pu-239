@@ -1,19 +1,21 @@
 <?php
 declare(strict_types=1);
+
 require_once dirname(__DIR__) . '/bootstrap_web.php';
-
-$db = $container->get(Database::class);
-
-
-
-
 
 use DI\DependencyException;
 use DI\NotFoundException;
 use Spatie\Image\Exceptions\InvalidManipulation;
 
 require_once __DIR__ . '/../include/bittorrent.php';
+
 check_user_status();
+
+$s = $s ?? static fn($v) => htmlspecialchars((string) $v, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    // TODO(2025): add CSRF verification
+}
 
 $stdhead = [
     'css' => [
@@ -115,7 +117,8 @@ $HTMLOUT .= insert_tag(_('Youtube (alt. 1)'), _('Display youtube video.'), '[you
 $HTMLOUT .= insert_tag(_('Youtube (alt. 2)'), _('Display youtube video.'), '[youtube]<i>https://www.youtube.com/watch?v=u22BXhMu4tI</i>[/youtube]', '[youtube=https://www.youtube.com/watch?v=u22BXhMu4tI]', _('This format works everywhere, but does not display correctly in BBcode editor.'));
 
 $title = _('Tags');
+$self = $s($_SERVER['PHP_SELF'] ?? '');
 $breadcrumbs = [
-    "<a href='{$_SERVER['PHP_SELF']}'>$title</a>",
+    "<a href='{$self}'>$title</a>",
 ];
 echo stdhead($title, $stdhead, 'page-wrapper', $breadcrumbs) . wrapper($HTMLOUT) . stdfoot($stdfoot);
