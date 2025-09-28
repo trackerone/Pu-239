@@ -352,3 +352,6 @@ public/wiki.php,false,true,2,false,"offset 110 run added wiki nav input escaping
 bootstrap_web.php,0,false,0,Added cookie helper bootstrap include
 include/session_bootstrap.php,0,true,0,Forced session cookie ini defaults
 include/helpers/cookies.php,1,false,0,Created secure cookie helper
+bootstrap_web.php,true,false,0,true,centralized security headers
+include/helpers/http.php,false,true,0,true,added json_out helper
+public/ajax/ajax_tooltips.php,false,false,3,true,replaced echo json_encode with json_out

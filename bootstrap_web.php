@@ -12,7 +12,27 @@ if (file_exists(__DIR__ . '/include/app.php')) {
 require_once __DIR__ . '/include/bootstrap_pdo.php';
 require_once __DIR__ . '/include/config_compat.php';
 require_once __DIR__ . '/include/helpers/cookies.php';
+require_once __DIR__ . '/include/helpers/http.php';
 require_once __DIR__ . '/include/session_bootstrap.php';
+
+if (!function_exists('pu239_send_security_headers')) {
+    // >>>>>> PU239:headers-2
+    function pu239_send_security_headers(): void
+    {
+        static $sent = false;
+        if ($sent || headers_sent()) {
+            return;
+        }
+        // >>>>>> PU239:headers-1
+        header('X-Content-Type-Options: nosniff');
+        header('Referrer-Policy: no-referrer-when-downgrade');
+        header('X-Frame-Options: DENY');
+        // TODO(2025): consider enabling a baseline CSP with nonces (script-src 'self' 'nonce-<generated>')
+        $sent = true;
+    }
+}
+
+pu239_send_security_headers();
 
 $cacheDir = __DIR__ . '/storage/cache';
 $paths = [];
