@@ -6,6 +6,7 @@ use Pu239\Cache;
 use Pu239\Database;
 
 require_once dirname(__DIR__) . '/bootstrap_web.php';
+require_once dirname(__DIR__) . '/include/helpers/audit.php';
 
 $cache = $container->get(Cache::class);
 $db = $container->get(Database::class);
@@ -38,6 +39,14 @@ $statement = $db->run(
 
 if ($statement->rowCount() > 0) {
     $cache->delete('staff_panels_' . (int) $user['class']);
+    audit_log(
+        $user['id'] ?? null,
+        'config.update',
+        [
+            'keys' => ["staffpanel.navbar.{$panelId}"],
+            'value' => $nextValue,
+        ],
+    );
 
     json_out(['show_in_navbar' => $nextValue]);
 }

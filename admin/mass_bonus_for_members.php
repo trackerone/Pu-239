@@ -1,6 +1,7 @@
 <?php
 declare(strict_types=1);
 require_once dirname(__DIR__) . '/bootstrap_web.php';
+require_once dirname(__DIR__) . '/include/helpers/audit.php';
 
 use PU239\Config\ConfigRepository;
 use Pu239\Database;
@@ -135,6 +136,16 @@ switch ($action) {
         $body = _fe('You have been awarded {0} GB upload credit by staff.', (int) $gb_amount);
         mass_pm($messages_class, $ids, $subject, $body, $dt);
 
+        audit_log(
+            $CURUSER['id'] ?? null,
+            'config.update',
+            [
+                'op' => 'mass_bonus.upload_credit',
+                'classes' => array_values($class_ids),
+                'amount' => (int) $gb_amount,
+            ]
+        );
+
         header('Location: ' . $_SERVER['PHP_SELF'] . '?tool=mass_bonus_for_members&action=mass_bonus_for_members&GB=1');
         app_halt('Exit called');
         break;
@@ -161,6 +172,16 @@ switch ($action) {
         $body = _fe('You have been awarded {0} Karma Bonus Points by staff.', $karma_points);
         mass_pm($messages_class, $ids, $subject, $body, $dt);
 
+        audit_log(
+            $CURUSER['id'] ?? null,
+            'config.update',
+            [
+                'op' => 'mass_bonus.karma',
+                'classes' => array_values($class_ids),
+                'amount' => $karma_points,
+            ]
+        );
+
         header('Location: ' . $_SERVER['PHP_SELF'] . '?tool=mass_bonus_for_members&action=mass_bonus_for_members&karma=1');
         app_halt('Exit called');
         break;
@@ -185,6 +206,16 @@ switch ($action) {
         $subject = _('Freeleech Slot(s) Awarded');
         $body = _fe('You have been awarded {0} freeleech slot(s) by staff.', $freeslots);
         mass_pm($messages_class, $ids, $subject, $body, $dt);
+
+        audit_log(
+            $CURUSER['id'] ?? null,
+            'config.update',
+            [
+                'op' => 'mass_bonus.freeslots',
+                'classes' => array_values($class_ids),
+                'amount' => $freeslots,
+            ]
+        );
 
         header('Location: ' . $_SERVER['PHP_SELF'] . '?tool=mass_bonus_for_members&action=mass_bonus_for_members&freeslots=1');
         app_halt('Exit called');
@@ -211,6 +242,16 @@ switch ($action) {
         $body = _fe('You have been awarded {0} invite(s) by staff.', $invites);
         mass_pm($messages_class, $ids, $subject, $body, $dt);
 
+        audit_log(
+            $CURUSER['id'] ?? null,
+            'config.update',
+            [
+                'op' => 'mass_bonus.invites',
+                'classes' => array_values($class_ids),
+                'amount' => $invites,
+            ]
+        );
+
         header('Location: ' . $_SERVER['PHP_SELF'] . '?tool=mass_bonus_for_members&action=mass_bonus_for_members&invites=1');
         app_halt('Exit called');
         break;
@@ -232,6 +273,16 @@ switch ($action) {
         }
 
         mass_pm($messages_class, $ids, $subject, $body, $dt);
+
+        audit_log(
+            $CURUSER['id'] ?? null,
+            'config.update',
+            [
+                'op' => 'mass_bonus.pm',
+                'classes' => array_values($class_ids),
+                'subject' => $subject,
+            ]
+        );
 
         header('Location: ' . $_SERVER['PHP_SELF'] . '?tool=mass_bonus_for_members&action=mass_bonus_for_members&pm=1');
         app_halt('Exit called');

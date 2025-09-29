@@ -1,12 +1,13 @@
 <?php
 declare(strict_types=1);
 require_once dirname(__DIR__) . '/bootstrap_web.php';
+require_once dirname(__DIR__) . '/include/helpers/audit.php';
 
 use PU239\Config\ConfigRepository;
 use Pu239\Database;
 
 
-global $container;
+global $container, $CURUSER;
 /** @var ConfigRepository $config */
 $config = $container->get(ConfigRepository::class);
 $db = $container->get(Database::class);
@@ -22,6 +23,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // TODO(2025): csrf
     unset($_POST['submit']);
     //debug_log($_POST);
+    $changedKeys = array_keys($_POST);
+    audit_log($CURUSER['id'] ?? null, 'config.update', [
+        'keys' => $changedKeys,
+    ]);
     rep_cache();
 app_halt('Exit called');
 }

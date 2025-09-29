@@ -10,6 +10,7 @@ use Pu239\Snatched;
 use Pu239\User;
 
 require_once dirname(__DIR__) . '/bootstrap_web.php';
+require_once dirname(__DIR__) . '/include/helpers/audit.php';
 
 global $container;
 /** @var ConfigRepository $config */
@@ -68,6 +69,15 @@ switch ($action) {
                 'txt' => $values['txt'],
             ]
         );
+        audit_log(
+            $curuser['id'] ?? null,
+            'torrent.moderate',
+            [
+                'target' => $id,
+                'op' => 'user.flush_torrents',
+                'count' => $count,
+            ],
+        );
         break;
 
     case 'staff_notes':
@@ -93,12 +103,15 @@ switch ($action) {
         $posted = htmlsafechars((string) ($_POST['watched_reason'] ?? ''));
         if ($id !== $curuser['id'] || $curuser['class'] < $user['class']) {
             $addToWatched = $_POST['add_to_watched_users'] ?? '';
+            $watchedAction = null;
             if ($addToWatched === 'yes' && (int) $user['watched_user'] === 0) {
                 $update['watched_user'] = TIME_NOW;
                 write_log("{$curuser['username']} added member [url={$baseurl}/userdetails.php?id={$id}]{$user['username']}[/url] to watched users.");
+                $watchedAction = 'add';
             } elseif ($addToWatched === 'no' && (int) $user['watched_user'] > 0) {
                 $update['watched_user'] = 0;
                 write_log("{$curuser['username']} removed member [url={$baseurl}/userdetails.php?id={$id}]{$user['username']}[/url] from watched users. <br>{$user['username']} had been on the list since " . get_date((int) $user['watched_user'], 'LONG'));
+                $watchedAction = 'remove';
             }
             if (($posted) !== $user['watched_user_reason']) {
                 $update['watched_user_reason'] = $posted;
@@ -106,6 +119,24 @@ switch ($action) {
             }
             if (!empty($update)) {
                 $users_class->update($update, $id);
+                if ($watchedAction === 'add') {
+                    audit_log(
+                        $curuser['id'] ?? null,
+                        'user.ban',
+                        [
+                            'target' => $id,
+                            'reason' => $posted,
+                        ],
+                    );
+                } elseif ($watchedAction === 'remove') {
+                    audit_log(
+                        $curuser['id'] ?? null,
+                        'user.unban',
+                        [
+                            'target' => $id,
+                        ],
+                    );
+                }
             }
         }
         header('Location: ' . $referer);
