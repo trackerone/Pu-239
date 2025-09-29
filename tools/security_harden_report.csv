@@ -611,3 +611,5 @@ admin/bannedemails.php,2,user.unban|user.ban,true,retained audit hooks while rel
 >>>>>> master
 >>>>>> master
 >>>>>> master
+include/helpers/audit.php,0,[],false,helper markers adjusted
+public/login.php,1,[login.success],true,added audit log for login success
