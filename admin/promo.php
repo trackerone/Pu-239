@@ -1,6 +1,7 @@
 <?php
 declare(strict_types=1);
 require_once dirname(__DIR__) . '/bootstrap_web.php';
+require_once dirname(__DIR__) . '/include/helpers/audit.php';
 
 use PU239\Config\ConfigRepository;
 use Pu239\Database;
@@ -9,7 +10,7 @@ use Pu239\User;
 
 require_once __DIR__ . '/../include/bittorrent.php';
 
-global $container;
+global $container, $CURUSER;
 /** @var ConfigRepository $config */
 $config = $container->get(ConfigRepository::class);
 $db = $container->get(Database::class);
@@ -63,6 +64,11 @@ $promo_id = $db->perform($sql, $values);
         stderr(_('Error'), 'Something wrong happened, please retry');
     } else {
         $session->set('is-success', 'The promo link [b]' . htmlsafechars($promoname) . '[/b] was added!');
+        audit_log($user['id'] ?? $CURUSER['id'] ?? null, 'config.update', [
+            'keys' => ['promo.add'],
+            'id' => $promo_id,
+            'name' => $promoname,
+        ]);
         unset($_POST);
     }
 } elseif ($do === 'delete' && $id > 0) {
@@ -76,9 +82,14 @@ $promo_id = $db->perform($sql, $values);
         stderr('Sanity check...', 'You are about to delete promo <b>' . htmlsafechars($r) . '</b>, if you are sure click <a href="' . $_SERVER['PHP_SELF'] . '?tool=promo&amp;do=delete&amp;id=' . $id . '&amp;sure=yes"><span class="has-text-danger">here</span></a>');
     } elseif ($sure === 'yes') {
         $sql = "DELETE FROM promo WHERE id = :id";
-$deleted = $db->perform($sql, ['id' => $id]);
+        $deleted = $db->perform($sql, ['id' => $id]);
         if (!empty($deleted)) {
             $session->set('is-success', 'Promo was deleted!');
+            audit_log($user['id'] ?? $CURUSER['id'] ?? null, 'config.update', [
+                'keys' => ['promo.delete'],
+                'id' => $id,
+                'name' => $r,
+            ]);
         } else {
             $session->set('is-warning', 'Odd things happned!Contact your coder!');
         }

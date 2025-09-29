@@ -1,6 +1,7 @@
 <?php
 declare(strict_types=1);
 require_once dirname(__DIR__) . '/bootstrap_web.php';
+require_once dirname(__DIR__) . '/include/helpers/audit.php';
 
 use PU239\Config\ConfigRepository;
 use Pu239\Cache;
@@ -111,6 +112,15 @@ $db->perform($sql, array_merge($update, ['id' => $id]));
     }
     $cache->delete('new_uploadapp_');
     $session->set('is-success', _('The application was successfully accepted. The user has been promoted and has been sent a PM notification.'));
+    audit_log(
+        $CURUSER['id'] ?? null,
+        'role.change',
+        [
+            'target' => $arr['uid'] ?? null,
+            'from' => null,
+            'to' => 'Uploader',
+        ],
+    );
     $action = 'show';
 }
 if ($action === 'rejectapp') {

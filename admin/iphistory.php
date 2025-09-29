@@ -1,6 +1,7 @@
 <?php
 declare(strict_types=1);
 require_once dirname(__DIR__) . '/bootstrap_web.php';
+require_once dirname(__DIR__) . '/include/helpers/audit.php';
 
 use PU239\Config\ConfigRepository;
 use Pu239\Ban;
@@ -37,6 +38,15 @@ if (isset($_GET['remove'])) {
 if (isset($_GET['banthisuser'])) {
     $ip = htmlsafechars($_GET['banthisip']);
     $bans_class->add_ban($ip, $CURUSER['id'], 'Banned');
+    audit_log(
+        $CURUSER['id'] ?? null,
+        'user.ban',
+        [
+            'target' => $id,
+            'ip' => $ip,
+            'reason' => 'iphistory.ban',
+        ]
+    );
 }
 
 $users_class = $container->get(User::class);

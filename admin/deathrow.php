@@ -1,6 +1,7 @@
 <?php
 declare(strict_types=1);
 require_once dirname(__DIR__) . '/bootstrap_web.php';
+require_once dirname(__DIR__) . '/include/helpers/audit.php';
 
 use PU239\Config\ConfigRepository;
 use Delight\Auth\AuthError;
@@ -63,7 +64,7 @@ function calctime($val)
  */
 function notify_owner(array $tids)
 {
-    global $container, $config;
+    global $container, $config, $CURUSER;
 
     if (empty($tids)) {
         return false;
@@ -88,6 +89,7 @@ function notify_owner(array $tids)
             'msg' => $msg,
             'subject' => $subject,
         ];
+        audit_log($CURUSER['id'] ?? null, 'torrent.moderate', ['id' => (int) $torrent['id'], 'op' => 'deathrow.notify']);
         $set = [
             'notified' => $dt,
         ];

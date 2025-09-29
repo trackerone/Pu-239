@@ -1,14 +1,14 @@
 <?php
 declare(strict_types=1);
 require_once dirname(__DIR__) . '/bootstrap_web.php';
+require_once dirname(__DIR__) . '/include/helpers/audit.php';
 
 use PU239\Config\ConfigRepository;
 use Pu239\Cache;
 use Pu239\Database;
 use Pu239\Session;
 
-
-global $container;
+global $container, $CURUSER;
 /** @var ConfigRepository $config */
 $config = $container->get(ConfigRepository::class);
 $db = $container->get(Database::class);
@@ -28,6 +28,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $submit = $_POST['submit'];
         $qid = array_search($id, array_column($sql_updates, 'id'));
         $sql = $sql_updates[$qid]['query'];
+        $updateId = $sql_updates[$qid]['id'] ?? null;
 
         if (isset($qid) && $submit === 'Run Query') {
             $flush = $sql_updates[$qid]['flush'];
@@ -41,7 +42,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     'query' => $sql,
                 ];
                 $sql = "INSERT INTO database_updates (/* columns */) VALUES (/* values */)";
-$db->perform($sql, $values);
+                $db->perform($sql, $values);
 
                 if ($flush) {
                     $cache->flushDB();
@@ -56,6 +57,14 @@ $db->perform($sql, $values);
                     }
                 }
                 $session->set('is-success', "Query #$id ran without error");
+                audit_log(
+                    $CURUSER['id'] ?? null,
+                    'config.update',
+                    [
+                        'keys' => $updateId !== null ? [$updateId] : [],
+                        'action' => 'run',
+                    ],
+                );
             } catch (Exception $e) {
                 $code = $e->getCode();
                 $msg = $e->getMessage();
@@ -71,8 +80,16 @@ $db->perform($sql, $values);
                 'query' => $sql,
             ];
             $sql = "INSERT INTO database_updates (/* columns */) VALUES (/* values */)";
-$db->perform($sql, $values);
+            $db->perform($sql, $values);
             $session->set('is-success', "Query #$id has been ignored");
+            audit_log(
+                $CURUSER['id'] ?? null,
+                'config.update',
+                [
+                    'keys' => $updateId !== null ? [$updateId] : [],
+                    'action' => 'ignore',
+                ],
+            );
         }
     }
 }

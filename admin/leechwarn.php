@@ -1,6 +1,7 @@
 <?php
 declare(strict_types=1);
 require_once dirname(__DIR__) . '/bootstrap_web.php';
+require_once dirname(__DIR__) . '/include/helpers/audit.php';
 
 use Pu239\Cache;
 use Pu239\Config\ConfigRepository;
@@ -49,6 +50,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         // Clear leechwarn + reason and notify users
         $placeholders = implode(',', array_fill(0, count($uids), '?'));
         $db->run("UPDATE users SET leechwarn = 0, warn_reason = NULL WHERE id IN ($placeholders)", $uids);
+        foreach ($uids as $uid) {
+            audit_log(
+                $CURUSER['id'] ?? null,
+                'user.unban',
+                [
+                    'target' => (int) $uid,
+                    'reason' => 'leechwarn.remove',
+                ]
+            );
+        }
 
         $body = _fe('Hey, your Leech warning was removed by {0}. Please keep in your best behaviour from now on.', $CURUSER['username']);
         $sub  = _('Leech Warning Removed');
@@ -80,6 +91,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $db->run("UPDATE users SET status = 2, disable_reason = ?, leechwarn = 0 WHERE id IN ($placeholders)", $params);
         foreach ($uids as $uid) {
             $cache->delete('user_' . (int) $uid);
+            audit_log(
+                $CURUSER['id'] ?? null,
+                'user.ban',
+                [
+                    'target' => (int) $uid,
+                    'reason' => 'leechwarn.disable',
+                ]
+            );
         }
 
         header('Refresh: 2; url=' . $r);
@@ -92,6 +111,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $db->run("DELETE FROM users WHERE id IN ($placeholders)", $uids);
         foreach ($uids as $uid) {
             $cache->delete('user_' . (int) $uid);
+            audit_log(
+                $CURUSER['id'] ?? null,
+                'user.ban',
+                [
+                    'target' => (int) $uid,
+                    'reason' => 'leechwarn.delete',
+                ]
+            );
         }
 
         header('Refresh: 2; url=' . $r);

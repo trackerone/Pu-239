@@ -1,6 +1,7 @@
 <?php
 declare(strict_types=1);
 require_once dirname(__DIR__) . '/bootstrap_web.php';
+require_once dirname(__DIR__) . '/include/helpers/audit.php';
 
 use Pu239\Config\ConfigRepository;
 use Pu239\Database;
@@ -38,6 +39,7 @@ switch ($action) {
                 'name' => $name,
                 'value' => $value,
             ]);
+            audit_log($CURUSER['id'] ?? null, 'config.update', ['keys' => [$name]]);
             header('Location: ?tool=class_config');
             exit;
         }
@@ -56,6 +58,7 @@ switch ($action) {
                 'name' => $name,
                 'value' => $value,
             ]);
+            audit_log($CURUSER['id'] ?? null, 'config.update', ['keys' => [$name]]);
             header('Location: ?tool=class_config');
             exit;
         }
@@ -64,6 +67,7 @@ switch ($action) {
     case 'delete':
         if ($id > 0) {
             $db->perform('DELETE FROM config WHERE id = :id', ['id' => $id]);
+            audit_log($CURUSER['id'] ?? null, 'config.update', ['keys' => [$id]]);
             header('Location: ?tool=class_config');
             exit;
         }

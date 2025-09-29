@@ -1,6 +1,7 @@
 <?php
 declare(strict_types=1);
 require_once dirname(__DIR__) . '/bootstrap_web.php';
+require_once dirname(__DIR__) . '/include/helpers/audit.php';
 
 use Pu239\Config\ConfigRepository;
 use Pu239\Database;
@@ -52,6 +53,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         $username = (string) $u['username'];
                         if (account_delete($userid)) {
                             write_log("User: " . htmlsafechars($username) . " was deleted by {$CURUSER['username']}");
+                            audit_log(
+                                $CURUSER['id'] ?? null,
+                                'user.ban',
+                                [
+                                    'target' => $userid,
+                                    'reason' => 'inactive.delete',
+                                ]
+                            );
                         }
                     }
                     $session->set('is-success', _('You have successfully deleted the selected accounts!'));
@@ -63,6 +72,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $placeholders = implode(',', array_fill(0, count($ids), '?'));
                 $params = array_merge([$reason], $ids);
                 $db->run("UPDATE users SET status = 2, disable_reason = ? WHERE id IN ($placeholders)", $params);
+                foreach ($ids as $targetId) {
+                    audit_log(
+                        $CURUSER['id'] ?? null,
+                        'user.ban',
+                        [
+                            'target' => (int) $targetId,
+                            'reason' => 'inactive.disable',
+                        ]
+                    );
+                }
                 $session->set('is-success', _('You have successfully disabled the selected accounts!'));
             }
         } elseif ($action === 'mail') {

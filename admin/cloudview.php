@@ -1,6 +1,7 @@
 <?php
 declare(strict_types=1);
 require_once dirname(__DIR__) . '/bootstrap_web.php';
+require_once dirname(__DIR__) . '/include/helpers/audit.php';
 
 use Pu239\Cache;
 use Pu239\Config\ConfigRepository;
@@ -8,7 +9,7 @@ use Pu239\Database;
 use Pu239\Searchcloud;
 
 
-global $container;
+global $container, $CURUSER;
 /** @var ConfigRepository $config */
 $config = $container->get(ConfigRepository::class);
 
@@ -29,6 +30,7 @@ if (isset($_POST['delcloud'])) {
     // TODO(2025): csrf
     $seachcloud_class->delete($_POST['delcloud']);
     $cache->delete('searchcloud_');
+    audit_log($CURUSER['id'] ?? null, 'config.update', ['keys' => ['searchcloud']]);
     stderr(
         _('Success'),
         _('The obscene terms were successfully deleted!<br><br>You will be redirected shortly.')
