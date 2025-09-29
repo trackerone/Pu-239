@@ -26,7 +26,10 @@ if (is_valid_id($remove)) {
     $db->run('DELETE FROM bannedemails WHERE id = :id', [':id' => $remove]);
     write_log(_fe('Email ban {0} was removed by {1}', $remove, $CURUSER['username']));
     audit_log($CURUSER['id'] ?? null, 'user.unban', ['target' => $remove, 'type' => 'email']);
+<<<<<< codex/add-centralized-audit-logging-jhw01y
+=======
     // >>>>>> PU239:audit-hook-6
+>>>>>> master
 }
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // TODO(2025): csrf

@@ -1,6 +1,7 @@
 <?php
 declare(strict_types=1);
 require_once dirname(__DIR__) . '/bootstrap_web.php';
+require_once dirname(__DIR__) . '/include/helpers/audit.php';
 
 $db = $container->get(Database::class);
 
@@ -35,6 +36,8 @@ $id = (int) $id;
 $cache = $container->get(Cache::class);
 if ((isset($_GET['unedit']) && $_GET['unedit'] == 1) && $user['class'] >= UC_STAFF) {
     $cache->delete('editedby_' . $id);
+    audit_log($user['id'] ?? null, 'torrent.moderate', ['id' => $id, 'op' => 'unlock']);
+    // >>>>>> PU239:audit-hook-6
     $returl = "details.php?id=$id";
     if (isset($_POST['returnto'])) {
         $returl .= '&returnto=' . urlencode($_POST['returnto']);
