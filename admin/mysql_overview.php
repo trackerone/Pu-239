@@ -1,12 +1,12 @@
 <?php
 declare(strict_types=1);
 require_once dirname(__DIR__) . '/bootstrap_web.php';
+require_once dirname(__DIR__) . '/include/helpers/audit.php';
 
 use PU239\Config\ConfigRepository;
 use Pu239\Database;
 
-
-global $container;
+global $container, $CURUSER;
 /** @var ConfigRepository $config */
 $config = $container->get(ConfigRepository::class);
 $db = $container->get(Database::class);
@@ -25,6 +25,10 @@ if (isset($_GET['Do']) && $_GET['Do'] === 'optimize' && isset($_GET['table'])) {
         $query = $fluent->getPdo()
                         ->prepare($sql);
         $query->execute();
+        audit_log($CURUSER['id'] ?? null, 'config.update', [
+            'keys' => ['mysql.optimize'],
+            'table' => $table,
+        ]);
         header("Location: {$_SERVER['PHP_SELF']}?tool=mysql_overview&action=mysql_overview");
 app_halt('Exit called');
     }

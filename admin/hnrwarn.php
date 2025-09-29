@@ -1,6 +1,7 @@
 <?php
 declare(strict_types=1);
 require_once dirname(__DIR__) . '/bootstrap_web.php';
+require_once dirname(__DIR__) . '/include/helpers/audit.php';
 
 use Pu239\Cache;
 use Pu239\Config\ConfigRepository;
@@ -72,6 +73,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $messages->insert($buffer);
         }
 
+        audit_log(
+            $CURUSER['id'] ?? null,
+            'user.unban',
+            [
+                'target' => $uids,
+                'reason' => 'hnrwarn.remove',
+            ]
+        );
+
         header('Refresh: 2; url=' . $r);
         stderr(_('Success'), _pfe("{0} user's HnR warning removed", "{0} users' HnR warnings removed", count($uids)));
     } elseif ($act === 'disable') {
@@ -89,6 +99,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $cache->delete('user_' . (int) $id);
         }
 
+        audit_log(
+            $CURUSER['id'] ?? null,
+            'user.ban',
+            [
+                'target' => $uids,
+                'reason' => $reason,
+                'op' => 'hnr.disable',
+            ]
+        );
+
         header('Refresh: 2; url=' . $r);
         stderr(_('Success'), _pfe('{0} user disabled', '{0} users disabled', count($uids)));
     } elseif ($act === 'delete') {
@@ -100,6 +120,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         foreach ($uids as $id) {
             $cache->delete('user_' . (int) $id);
         }
+
+        audit_log(
+            $CURUSER['id'] ?? null,
+            'user.ban',
+            [
+                'target' => $uids,
+                'reason' => 'hnr.delete',
+                'op' => 'delete',
+            ]
+        );
 
         header('Refresh: 2; url=' . $r);
         stderr(_('Success'), _pfe('{0} user deleted', '{0} users deleted', count($uids)));
