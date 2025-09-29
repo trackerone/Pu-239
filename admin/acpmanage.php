@@ -48,6 +48,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['ids'])) {
                 'status' => 0,
             ], $config->get('expires.user_cache'));
             audit_log($CURUSER['id'] ?? null, 'user.unban', ['target' => (int) $id]);
+<<<<<< codex/add-centralized-audit-logging-jhw01y
+=======
+            // >>>>>> PU239:audit-hook-2
+>>>>>> master
         }
     } elseif ($do == 'confirm') {
         $placeholders = [];
@@ -69,6 +73,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['ids'])) {
                 write_log(_fe('User: {0} was deleted by {1}', $username, $CURUSER['username']));
                 $session->set('is-success', _('The account was deleted.'));
                 audit_log($CURUSER['id'] ?? null, 'user.ban', ['target' => (int) $id, 'reason' => 'account_delete']);
+<<<<<< codex/add-centralized-audit-logging-jhw01y
+=======
+                // >>>>>> PU239:audit-hook-3
+>>>>>> master
             } else {
                 stderr(_('Error'), _('Unable to delete the account.'));
             }
