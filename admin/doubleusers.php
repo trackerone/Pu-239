@@ -1,6 +1,7 @@
 <?php
 declare(strict_types=1);
 require_once dirname(__DIR__) . '/bootstrap_web.php';
+require_once dirname(__DIR__) . '/include/helpers/audit.php';
 
 use PU239\Config\ConfigRepository;
 use Pu239\Database;
@@ -47,6 +48,7 @@ if ($remove) {
             ':id'  => (int) $user['id'],
         ]
     );
+    audit_log($CURUSER['id'] ?? null, 'role.change', ['target' => (int) $user['id'], 'from' => 'double_seed', 'to' => null]);
 
     // Send PM
     /** @var Message $messages_class */

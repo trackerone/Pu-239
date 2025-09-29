@@ -1,12 +1,13 @@
 <?php
 declare(strict_types=1);
 require_once dirname(__DIR__) . '/bootstrap_web.php';
+require_once dirname(__DIR__) . '/include/helpers/audit.php';
 
 use PU239\Config\ConfigRepository;
 use Pu239\Database;
 
 
-global $container;
+global $container, $CURUSER;
 /** @var ConfigRepository $config */
 $config = $container->get(ConfigRepository::class);
 
@@ -30,7 +31,14 @@ if ($search !== '') {
 // Delete items older than 1 month
 $secs = 30 * 86400;
 $cutoff = TIME_NOW - $secs;
-$db->run('DELETE FROM infolog WHERE added < :cutoff', [':cutoff' => $cutoff]);
+$pruneStatement = $db->run('DELETE FROM infolog WHERE added < :cutoff', [':cutoff' => $cutoff]);
+$pruned = method_exists($pruneStatement, 'rowCount') ? $pruneStatement->rowCount() : null;
+if (!empty($pruned)) {
+    audit_log($CURUSER['id'] ?? null, 'config.update', [
+        'keys' => ['sysoplog.prune'],
+        'count' => $pruned,
+    ]);
+}
 
 $count = (int) $db->fetchValue("SELECT COUNT(id) FROM infolog $where", $params);
 $perpage = 30;

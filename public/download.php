@@ -1,6 +1,7 @@
 <?php
 declare(strict_types=1);
 require_once dirname(__DIR__) . '/bootstrap_web.php';
+require_once dirname(__DIR__) . '/include/helpers/audit.php';
 
 $db = $container->get(Database::class);
 
@@ -121,6 +122,8 @@ if (isset($_GET['slot'])) {
         $fluent->insertInto('freeslots', $values)
                ->onDuplicateKeyUpdate($update)
                ->execute();
+        audit_log($user['id'] ?? null, 'torrent.moderate', ['id' => $id, 'op' => 'slot.free']);
+        // >>>>>> PU239:audit-hook-5
     } elseif ($_GET['slot'] === 'double') {
         if ($used_slot && $slot['doubleup'] === 'yes') {
             show_error(_('Error'), _('Doubleseed slot already in use.'));
@@ -145,6 +148,7 @@ if (isset($_GET['slot'])) {
         $fluent->insertInto('freeslots', $values)
                ->onDuplicateKeyUpdate($update)
                ->execute();
+        audit_log($user['id'] ?? null, 'torrent.moderate', ['id' => $id, 'op' => 'slot.double']);
     } else {
         show_error(_('Error'), _('An unknown error has occurred.'));
     }

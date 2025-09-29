@@ -1,6 +1,7 @@
 <?php
 declare(strict_types=1);
 require_once dirname(__DIR__) . '/bootstrap_web.php';
+require_once dirname(__DIR__) . '/include/helpers/audit.php';
 
 use PU239\Config\ConfigRepository;
 use Pu239\Database;
@@ -168,7 +169,8 @@ if (empty($mode)) {
         'userid' => $CURUSER['id'],
     ];
     $sql = "INSERT INTO dbbackup (/* columns */) VALUES (/* values */)";
-$db->perform($sql, $values);
+    $db->perform($sql, $values);
+    audit_log($CURUSER['id'] ?? null, 'config.update', ['keys' => ['backup.create'], 'name' => $values['name'] ?? null]);
 
     if ($config->get('backup.write_to_log')) {
         write_log($CURUSER['username'] . '(' . get_user_class_name((int) $CURUSER['class']) . ') ' . _('successfully backed-up the database.'));
@@ -206,6 +208,7 @@ $db->perform($sql, $values);
             $fluent->deleteFrom('dbbackup')
                    ->where('id', $ids)
                    ->execute();
+            audit_log($CURUSER['id'] ?? null, 'config.update', ['keys' => ['backup.delete'], 'count' => $count, 'ids' => array_map('intval', $ids)]);
 
             if ($config->get('backup.write_to_log')) {
                 write_log($CURUSER['username'] . '(' . get_user_class_name((int) $CURUSER['class']) . ') ' . _('successfully deleted') . ' ' . $count . ' ' . ($count > 1 ? _('databases') : _('database')) . '.');

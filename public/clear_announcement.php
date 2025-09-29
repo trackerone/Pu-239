@@ -6,6 +6,7 @@ use Pu239\Config\ConfigRepository;
 use Pu239\Database;
 
 require_once dirname(__DIR__) . '/bootstrap_web.php';
+require_once dirname(__DIR__) . '/include/helpers/audit.php';
 
 global $container;
 /** @var ConfigRepository $config */
@@ -24,6 +25,7 @@ $db->run(
         ':id' => $user['id'],
     ],
 );
+audit_log($user['id'] ?? null, 'announcement.clear', []);
 
 $cache = $container->get(Cache::class);
 $cache->update_row(

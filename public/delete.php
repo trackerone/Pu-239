@@ -2,6 +2,7 @@
 declare(strict_types=1);
 
 require_once dirname(__DIR__) . '/bootstrap_web.php';
+require_once dirname(__DIR__) . '/include/helpers/audit.php';
 
 use Pu239\Config\ConfigRepository;
 use Pu239\Database;
@@ -72,6 +73,11 @@ $torrents_class->delete_by_id($row['id']);
 $torrents_class->remove_torrent($row['info_hash']);
 
 write_log(_fe('Torrent {0} ({1}) was deleted by {2} ({3})', $id, $row['name'], $user['username'], $reasonstr));
+audit_log($user['id'] ?? null, 'torrent.moderate', [
+    'id' => $row['id'],
+    'owner' => $row['owner'],
+    'reason' => $reasonstr,
+]);
 if ($config->get('bonus.on')) {
     $user_class = $container->get(User::class);
     $cutoff = $now - (14 * 86400);

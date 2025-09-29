@@ -1,6 +1,7 @@
 <?php
 declare(strict_types=1);
 require_once dirname(__DIR__) . '/bootstrap_web.php';
+require_once dirname(__DIR__) . '/include/helpers/audit.php';
 
 use Pu239\Cache;
 use Pu239\Config\ConfigRepository;
@@ -67,6 +68,7 @@ if ($user['id'] != $tid['owner']) {
     );
 }
 write_log(_fe('Torrent {0} was deleted by {1}', $tid['name'], $user['username']));
+audit_log($user['id'] ?? null, 'torrent.moderate', ['id' => $tid['id'] ?? null, 'op' => 'delete']);
 $cache = $container->get(Cache::class);
 if ($config->get('bonus.on')) {
     $dt = TIME_NOW - (14 * 86400);
