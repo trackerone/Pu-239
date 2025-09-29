@@ -55,6 +55,9 @@ if (isset($_GET['delete'])) {
     if ((($pi = pathinfo($myfile)) && preg_match('#^(' . $str . ')$#i', $pi['extension'])) && is_file($myfile)) {
         unlink($myfile);
         $session->set('is-success', _('Deleted Image ') . $delfile);
+        audit_log($user['id'] ?? null, 'bucket.delete', [
+            'file' => $delfile,
+        ]);
     } else {
         $session->set('is-danger', _('Image not found!'));
     }

@@ -2,6 +2,7 @@
 declare(strict_types=1);
 
 require_once dirname(__DIR__) . '/bootstrap_web.php';
+require_once dirname(__DIR__) . '/include/helpers/audit.php';
 
 use Pu239\Cache;
 use Pu239\Config\ConfigRepository;
@@ -56,6 +57,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if ($stmt->rowCount()) {
             $cache->delete('staff_mess_');
             $session->set('is-success', _('Message was sent! Wait for staff to respond now!'));
+            audit_log($user['id'] ?? null, 'contactstaff.send', [
+                'subject' => $subject,
+            ]);
             header('Location: ' . $config->get('paths.baseurl'));
         } else {
             $session->set('is-warning', _('There was something wrong!'));
