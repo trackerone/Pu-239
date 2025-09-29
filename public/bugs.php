@@ -1,6 +1,7 @@
 <?php
 declare(strict_types=1);
 require_once dirname(__DIR__) . '/bootstrap_web.php';
+require_once dirname(__DIR__) . '/include/helpers/audit.php';
 
 $db = $container->get(Database::class);
 $s = $s ?? static fn($v) => htmlspecialchars((string) $v, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
@@ -326,6 +327,10 @@ $result = $db->perform($sql, $values);
 
         if ($result) {
             send_staff_message($values, (int) $result);
+            audit_log($curuser['id'] ?? null, 'bug.report', [
+                'priority' => $priority,
+                'bug_id' => (int) $result,
+            ]);
             stderr(_('Success'), _fe('Your bug has been sent to our coders.<br>You have choosen priority: {0}', $priority));
         } else {
             stderr(_('Error'), _('Please try again.'));

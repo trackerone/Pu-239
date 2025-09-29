@@ -2,6 +2,7 @@
 declare(strict_types=1);
 
 require_once dirname(__DIR__) . '/bootstrap_web.php';
+require_once dirname(__DIR__) . '/include/helpers/audit.php';
 
 use PU239\Config\ConfigRepository;
 use Pu239\Database;
@@ -54,6 +55,9 @@ if (isset($_GET['delete'])) {
     if ((($pi = pathinfo($myfile)) && preg_match('#^(' . $str . ')$#i', $pi['extension'])) && is_file($myfile)) {
         unlink($myfile);
         $session->set('is-success', _('Deleted Image ') . $delfile);
+        audit_log($user['id'] ?? null, 'bucket.delete', [
+            'file' => $delfile,
+        ]);
     } else {
         $session->set('is-danger', _('Image not found!'));
     }

@@ -1,6 +1,7 @@
 <?php
 declare(strict_types=1);
 require_once dirname(__DIR__) . '/bootstrap_web.php';
+require_once dirname(__DIR__) . '/include/helpers/audit.php';
 
 use PU239\Config\ConfigRepository;
 use Pu239\BotReplies;
@@ -80,6 +81,8 @@ if (has_access($user['class'], UC_ADMINISTRATOR, 'coder') && !empty($data)) {
         $update_reply = isset($data['update_reply']) ? htmlsafechars($data['update_reply']) : '';
         $phraseid = isset($data['phraseid']) ? (int) $data['phraseid'] : 0;
         $reply_id = isset($data['reply_id']) ? (int) $data['reply_id'] : 0;
+        $approve_trigger = isset($data['approve_trigger']) ? (int) $data['approve_trigger'] : 0;
+        $approve_reply = isset($data['approve_reply']) ? (int) $data['approve_reply'] : 0;
         $action = isset($data['action']) ? htmlsafechars($data['action']) : '';
     } else {
         $errors = $validation->errors()
@@ -95,6 +98,10 @@ if (has_access($user['class'], UC_ADMINISTRATOR, 'coder') && !empty($data)) {
         ];
         if ($trigger_class->insert($values)) {
             $session->set('is-success', _fe('Trigger: {0} added successfully.', $add_trigger));
+            audit_log($user['id'] ?? null, 'config.update', [
+                'keys' => ['bot_triggers.add'],
+                'phrase' => $add_trigger,
+            ]);
         } else {
             $session->set('is-warning', _fe('Trigger: {0} failed to be added.', $add_trigger));
         }
@@ -105,6 +112,11 @@ if (has_access($user['class'], UC_ADMINISTRATOR, 'coder') && !empty($data)) {
         ];
         if ($trigger_class->update($values, $phraseid)) {
             $session->set('is-success', _fe('Trigger: {0} updated successfully.', $add_trigger));
+            audit_log($user['id'] ?? null, 'config.update', [
+                'keys' => ['bot_triggers.update'],
+                'phrase' => $update_trigger,
+                'id' => $phraseid,
+            ]);
         } else {
             $session->set('is-warning', _fe('Trigger: {0} failed to be updated.', $add_trigger));
         }
@@ -116,6 +128,11 @@ if (has_access($user['class'], UC_ADMINISTRATOR, 'coder') && !empty($data)) {
         ];
         if ($replies_class->insert($values)) {
             $session->set('is-success', _fe('Reply: {0} added successfully.', $add_reply));
+            audit_log($user['id'] ?? null, 'config.update', [
+                'keys' => ['bot_replies.add'],
+                'phrase' => $add_reply,
+                'trigger_id' => $phraseid,
+            ]);
         } else {
             $session->set('is-warning', _fe('Reply: {0} failed to be added.', $add_reply));
         }
@@ -126,6 +143,10 @@ if (has_access($user['class'], UC_ADMINISTRATOR, 'coder') && !empty($data)) {
         ];
         if ($replies_class->update($values, $reply_id)) {
             $session->set('is-success', _fe('Reply: {0} updated successfully.', $add_reply));
+            audit_log($user['id'] ?? null, 'config.update', [
+                'keys' => ['bot_replies.update'],
+                'reply_id' => $reply_id,
+            ]);
         } else {
             $session->set('is-warning', _fe('Reply: {0} failed to be updated.', $add_reply));
         }
@@ -135,6 +156,10 @@ if (has_access($user['class'], UC_ADMINISTRATOR, 'coder') && !empty($data)) {
         ];
         if ($trigger_class->update($update, $approve_trigger)) {
             $session->set('is-success', _('Trigger Approved.'));
+            audit_log($user['id'] ?? null, 'config.update', [
+                'keys' => ['bot_triggers.approve'],
+                'id' => $approve_trigger,
+            ]);
         } else {
             $session->set('is-warning', _('Trigger Approval Failed.'));
         }
@@ -144,18 +169,30 @@ if (has_access($user['class'], UC_ADMINISTRATOR, 'coder') && !empty($data)) {
         ];
         if ($replies_class->update($update, $approve_reply)) {
             $session->set('is-success', _('Reply Approved.'));
+            audit_log($user['id'] ?? null, 'config.update', [
+                'keys' => ['bot_replies.approve'],
+                'id' => $approve_reply,
+            ]);
         } else {
             $session->set('is-warning', _('Reply Approval Failed.'));
         }
     } elseif ($action === 'delete_trigger' && !empty($phraseid)) {
         if ($trigger_class->delete($phraseid)) {
             $session->set('is-success', _fe('Trigger: #{0} was deleted.', $phraseid));
+            audit_log($user['id'] ?? null, 'config.update', [
+                'keys' => ['bot_triggers.delete'],
+                'id' => $phraseid,
+            ]);
         } else {
             $session->set('is-success', _fe('Trigger: #{0} was [i]NOT[/] deleted.', $phraseid));
         }
     } elseif ($action === 'delete_reply' && !empty($reply_id)) {
         if ($replies_class->delete($reply_id)) {
             $session->set('is-success', _fe('Reply: #{0} was deleted.', $reply_id));
+            audit_log($user['id'] ?? null, 'config.update', [
+                'keys' => ['bot_replies.delete'],
+                'id' => $reply_id,
+            ]);
         } else {
             $session->set('is-success', _fe('Reply: #{0} was [i]NOT[/] deleted.', $phraseid));
             $session->set('is-warning', _fe('Reply #{0} was [i]NOT[/i] deleted.', $reply_id));

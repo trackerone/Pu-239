@@ -1,6 +1,7 @@
 <?php
 declare(strict_types=1);
 require_once dirname(__DIR__) . '/bootstrap_web.php';
+require_once dirname(__DIR__) . '/include/helpers/audit.php';
 
 use PU239\Config\ConfigRepository;
 use Pu239\Database;
@@ -8,7 +9,7 @@ use Pu239\Image;
 use Pu239\Session;
 
 
-global $container;
+global $container, $CURUSER;
 /** @var ConfigRepository $config */
 $config = $container->get(ConfigRepository::class);
 $db = $container->get(Database::class);
@@ -22,6 +23,7 @@ $image = $container->get(Image::class);
 $session = $container->get(Session::class);
 $terms = '';
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && !empty($_POST['delete']) && $_POST['delete'] === 'Delete') {
+    $deleted = [];
     foreach ($_POST['images'] as $url) {
         $item = $image->get_image($url);
         if (!empty($item)) {
@@ -40,7 +42,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && !empty($_POST['delete']) && $_POST[
             }
             $image->delete_image($item['url']);
             $session->set('is-success', _fe('{0} was deleted.', $item['url']));
+            $deleted[] = $item['url'];
         }
+    }
+    if (!empty($deleted)) {
+        audit_log(
+            $CURUSER['id'] ?? null,
+            'config.update',
+            [
+                'keys' => array_values($deleted),
+                'op' => 'images.delete',
+            ]
+        );
     }
 }
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && !empty($_POST['terms'])) {

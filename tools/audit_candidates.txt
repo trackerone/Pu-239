@@ -1,6 +1,9 @@
 admin/acpmanage.php
 admin/adduser.php
+<<<<<< codex/add-centralized-audit-logging-95hh7k
 admin/allagents.php
+=======
+>>>>>> master
 admin/backup.php
 admin/banclient.php
 admin/bannedemails.php
@@ -8,7 +11,10 @@ admin/bans.php
 admin/block.settings.php
 admin/bonusmanage.php
 admin/categories.php
+<<<<<< codex/add-centralized-audit-logging-95hh7k
 admin/changelog.php
+=======
+>>>>>> master
 admin/cheaters.php
 admin/class_config.php
 admin/cleanup_manager.php
@@ -16,7 +22,10 @@ admin/cloudview.php
 admin/datareset.php
 admin/deathrow.php
 admin/delacct.php
+<<<<<< codex/add-centralized-audit-logging-95hh7k
 admin/donations.php
+=======
+>>>>>> master
 admin/doubleusers.php
 admin/edit_moods.php
 admin/editlog.php
@@ -27,23 +36,33 @@ admin/forum_config.php
 admin/forum_manage.php
 admin/freeleech.php
 admin/freeusers.php
+<<<<<< codex/add-centralized-audit-logging-95hh7k
 admin/goaccess.php
+=======
+>>>>>> master
 admin/grouppm.php
 admin/hit_and_run.php
 admin/hit_and_run_settings.php
 admin/hnrwarn.php
 admin/inactive.php
+<<<<<< codex/add-centralized-audit-logging-95hh7k
 admin/invite_tree.php
 admin/ipcheck.php
 admin/iphistory.php
 admin/ipsearch.php
 admin/leechwarn.php
 admin/load.php
+=======
+admin/iphistory.php
+admin/ipsearch.php
+admin/leechwarn.php
+>>>>>> master
 admin/log_viewer.php
 admin/manage_images.php
 admin/mass_bonus_for_members.php
 admin/mega_search.php
 admin/memcache.php
+<<<<<< codex/add-centralized-audit-logging-95hh7k
 admin/modded_torrents.php
 admin/modtask.php
 admin/mysql_overview.php
@@ -69,11 +88,27 @@ admin/upgrade_database.php
 admin/uploadapps.php
 admin/uploader_info.php
 admin/user_hits.php
+=======
+admin/modtask.php
+admin/mysql_overview.php
+admin/news.php
+admin/over_forums.php
+admin/polls_manager.php
+admin/promo.php
+admin/reputation_settings.php
+admin/site_settings.php
+admin/sysoplog.php
+admin/themes.php
+admin/trivia_config.php
+admin/upgrade_database.php
+admin/uploadapps.php
+>>>>>> master
 admin/usersearch.php
 admin/view_peers.php
 admin/watched_users.php
 public/achievementbonus.php
 public/achievementhistory.php
+<<<<<< codex/add-centralized-audit-logging-95hh7k
 public/achievementlist.php
 public/ajax/adminer.css
 public/ajax/ajax_tooltips.php
@@ -90,6 +125,14 @@ public/ajax/isbn_lookup.php
 public/ajax/like.php
 public/ajax/member_input.php
 public/ajax/namecheck.php
+=======
+public/ajax/adminer.css
+public/ajax/bookmarks.php
+public/ajax/cooker_notify.php
+public/ajax/imdb_lookup.php
+public/ajax/like.php
+public/ajax/member_input.php
+>>>>>> master
 public/ajax/offer_notify.php
 public/ajax/offer_status.php
 public/ajax/offer_vote.php
@@ -103,6 +146,7 @@ public/ajax/take_url_upload.php
 public/ajax/thanks.php
 public/ajax/torrents_lookup.php
 public/ajax/trivia_answers.php
+<<<<<< codex/add-centralized-audit-logging-95hh7k
 public/ajax/trivia_lookup.php
 public/ajax/tvmaze_lookup.php
 public/ajax/usersearch.php
@@ -116,21 +160,33 @@ public/arcade.php
 public/arcade_top_scores.php
 public/bitbucket.php
 public/bjstats.php
+=======
+public/anatomy.php
+public/announce.php
+public/announcement.php
+public/bitbucket.php
+>>>>>> master
 public/blackjack.php
 public/bookmarks.php
 public/bot_triggers.php
 public/browse.php
+<<<<<< codex/add-centralized-audit-logging-95hh7k
 public/browserconfig.xml
 public/bugs.php
 public/casino.php
 public/catalog.php
 public/categoryids.php
 public/chat.php
+=======
+public/bugs.php
+public/casino.php
+>>>>>> master
 public/clear_announcement.php
 public/contactstaff.php
 public/delete.php
 public/details.php
 public/download.php
+<<<<<< codex/add-centralized-audit-logging-95hh7k
 public/download_multi.php
 public/downloadsub.php
 public/edit.php
@@ -159,32 +215,97 @@ public/peerlist.php
 public/polls_take_vote.php
 public/port_check.php
 public/recover.php
+=======
+public/edit.php
+public/faq.php
+public/fastdelete.php
+public/flash.php
+public/forums.php
+public/hnrs.php
+public/images/achievements/ul7.png
+public/images/anonymous_1.png
+public/images/flag/stlucia.gif
+public/images/games/asteroids.png
+public/images/games/autobahn.png
+public/images/smilies/starwars.gif
+public/images/smilies/yay.gif
+public/login.php
+public/media/flash_games/4wheelmadness.swf
+public/media/flash_games/DAbuddy_latest.swf
+public/media/flash_games/ExtremeRacing2.swf
+public/media/flash_games/Interactive_Buddy.swf
+public/media/flash_games/Solitaire.swf
+public/media/flash_games/SuperFlashMarioBrosSte.swf
+public/media/flash_games/alloyarena.swf
+public/media/flash_games/assin.swf
+public/media/flash_games/blackknight.swf
+public/media/flash_games/chainreactionGS.swf
+public/media/flash_games/demonicdefense.swf
+public/media/flash_games/galaga.swf
+public/media/flash_games/ghosts-and-goblins.swf
+public/media/flash_games/mario-cart.swf
+public/media/flash_games/mice_vs_hammers.swf
+public/media/flash_games/monster_mash.swf
+public/media/flash_games/monstermash.swf
+public/media/flash_games/psol.swf
+public/media/flash_games/sonicblox.swf
+public/media/flash_games/starcraft.swf
+public/media/flash_games/starcraftfa3.swf
+public/media/flash_games/summergames04.swf
+public/media/flash_games/supersplashBH.swf
+public/media/flash_games/trappedinawell.swf
+public/media/flash_games/yeti10.swf
+public/media/flash_games/yeti5pro.swf
+public/media/flash_games/yeti6.swf
+public/media/flash_games/yeti6snd.swf
+public/media/flash_games/yeti7.swf
+public/media/flash_games/yeti9v32JS.swf
+public/media/flash_games/yeti_sports_10.swf
+public/media/sounds/sound_2.mp3
+public/media/sounds/sound_3.wav
+public/media/sounds/sound_7.wav
+public/mybonus.php
+public/mytorrents.php
+public/offers.php
+public/polls_take_vote.php
+>>>>>> master
 public/report.php
 public/requests.php
 public/restoreclass.php
 public/rss.php
+<<<<<< codex/add-centralized-audit-logging-95hh7k
 public/rss_pdo_demo.php
 public/rsstfreak.php
 public/rules.php
 public/scrape.php
+=======
+public/rules.php
+>>>>>> master
 public/search.php
 public/setclass.php
 public/sharemarks.php
 public/signup.php
 public/snatches.php
+<<<<<< codex/add-centralized-audit-logging-95hh7k
 public/staff.php
 public/subtitles.php
 public/tags.php
+=======
+public/subtitles.php
+>>>>>> master
 public/take_theme.php
 public/takereseed.php
 public/takethankyou.php
 public/takeupload.php
 public/tenpercent.php
+<<<<<< codex/add-centralized-audit-logging-95hh7k
 public/tmovies.php
 public/topmoods.php
 public/topten.php
 public/trivia_results.php
 public/tvshows.php
+=======
+>>>>>> master
 public/upcoming.php
 public/upload.php
 public/uploadapp.php
@@ -195,10 +316,13 @@ public/usercomment.php
 public/userdetails.php
 public/userhistory.php
 public/verify.php
+<<<<<< codex/add-centralized-audit-logging-95hh7k
 public/verify_email.php
 public/videoformats.php
 public/view_announce_history.php
 public/view_sql.php
 public/viewnfo.php
+=======
+>>>>>> master
 public/wiki.php
 staffpanel/index.php

@@ -1,6 +1,7 @@
 <?php
 declare(strict_types=1);
 require_once dirname(__DIR__) . '/bootstrap_web.php';
+require_once dirname(__DIR__) . '/include/helpers/audit.php';
 
 $db = $container->get(Database::class);
 
@@ -9,6 +10,7 @@ $db = $container->get(Database::class);
 
 
 use PU239\Config\ConfigRepository;
+use Pu239\Database;
 use Delight\Auth\Auth;
 
 require_once __DIR__ . '/../include/bittorrent.php';

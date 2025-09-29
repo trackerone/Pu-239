@@ -1,6 +1,7 @@
 <?php
 declare(strict_types=1);
 require_once dirname(__DIR__) . '/bootstrap_web.php';
+require_once dirname(__DIR__) . '/include/helpers/audit.php';
 
 use Pu239\Config\ConfigRepository;
 use Pu239\Database;
@@ -24,6 +25,11 @@ $remove = isset($_GET['remove']) ? (int) $_GET['remove'] : 0;
 if (is_valid_id($remove)) {
     $db->run('DELETE FROM bannedemails WHERE id = :id', [':id' => $remove]);
     write_log(_fe('Email ban {0} was removed by {1}', $remove, $CURUSER['username']));
+    audit_log($CURUSER['id'] ?? null, 'user.unban', ['target' => $remove, 'type' => 'email']);
+<<<<<< codex/add-centralized-audit-logging-jhw01y
+=======
+    // >>>>>> PU239:audit-hook-6
+>>>>>> master
 }
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // TODO(2025): csrf
@@ -41,6 +47,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             ':email' => $email,
         ],
     );
+    audit_log($CURUSER['id'] ?? null, 'user.ban', ['target' => $email, 'type' => 'email']);
     header('Location: ' . $_SERVER['PHP_SELF'] . '?tool=bannedemails');
     app_halt('Exit called');
 }

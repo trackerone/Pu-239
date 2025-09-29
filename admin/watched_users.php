@@ -1,6 +1,7 @@
 <?php
 declare(strict_types=1);
 require_once dirname(__DIR__) . '/bootstrap_web.php';
+require_once dirname(__DIR__) . '/include/helpers/audit.php';
 
 use PU239\Config\ConfigRepository;
 use Pu239\Cache;
@@ -48,6 +49,13 @@ if (isset($_GET['remove'])) {
         $cache->update_row('user_' . $id, ['watched_user' => 0, 'modcomment' => $modcomment], $config->get('expires.user_cache'));
         ++$count;
         $removed_log .= ($removed_log === '' ? '' : ', ') . format_username($id);
+        audit_log(
+            $CURUSER['id'] ?? null,
+            'user.unban',
+            [
+                'target' => $id,
+            ],
+        );
     }
 
     if ($count > 0) {
@@ -84,6 +92,14 @@ if (isset($_GET['add'])) {
             $cache->update_row('user_' . $member, ['watched_user' => TIME_NOW, 'watched_user_reason' => $watched_user_reason, 'modcomment' => $modcomment], $config->get('expires.user_cache'));
             $H1_thingie = '<h1 class="has-text-centered">' . _fe('Success! {0} Added to the Watched Users List!', format_comment($user['username'])) . '</h1>';
             write_log(_fe('{0} Added {1} to the {2} watched users list{4}.', format_username($CURUSER['id']), format_username((int) $member), "<a href='{$baseurl}/staffpanel.php?tool=watched_users&amp;action=watched_users' class='is-link'>", '</a>'));
+            audit_log(
+                $CURUSER['id'] ?? null,
+                'user.ban',
+                [
+                    'target' => $member,
+                    'reason' => $watched_user_reason,
+                ],
+            );
         }
     }
 }

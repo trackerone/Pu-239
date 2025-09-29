@@ -1,6 +1,7 @@
 <?php
 declare(strict_types=1);
 require_once dirname(__DIR__) . '/bootstrap_web.php';
+require_once dirname(__DIR__) . '/include/helpers/audit.php';
 
 use DI\DependencyException;
 use DI\NotFoundException;
@@ -10,7 +11,7 @@ use Pu239\Database;
 use Pu239\Session;
 
 
-global $container;
+global $container, $CURUSER;
 /** @var ConfigRepository $config */
 $config = $container->get(ConfigRepository::class);
 
@@ -206,6 +207,11 @@ $update = $db->perform($sql, array_merge($set, ['id' => $tid]));
         if (!$update) {
             $session->set('is-danger', _('Something Went Wrong'));
         } else {
+            audit_log($CURUSER['id'] ?? null, 'config.update', [
+                'keys' => ['themes.update'],
+                'id' => $tid,
+                'name' => $name,
+            ]);
             clear_template_cache();
             $session->set('is-success', _('Successfully Edited'));
         }
@@ -230,14 +236,18 @@ $update = $db->perform($sql, array_merge($set, ['id' => $tid]));
         }
 
         $sql = "DELETE FROM stylesheets WHERE id = :id";
-$db->perform($sql, ['id' => $id]);
+        $db->perform($sql, ['id' => $id]);
 
         $set = [
             'stylesheet' => $config->get('site.stylesheet'),
         ];
         $sql = "UPDATE users SET /* columns */ WHERE stylesheet = :stylesheet";
-$db->perform($sql, array_merge($set, ['stylesheet' => $id]));
+        $db->perform($sql, array_merge($set, ['stylesheet' => $id]));
 
+        audit_log($CURUSER['id'] ?? null, 'config.update', [
+            'keys' => ['themes.delete'],
+            'id' => $id,
+        ]);
         clear_template_cache();
         $session->set('is-success', _('Successfully Deleted'));
         header("Location: {$config->get('paths.baseurl')}/staffpanel.php?tool=themes&action=themes");
@@ -267,8 +277,13 @@ $db->perform($sql, array_merge($set, ['stylesheet' => $id]));
             'min_class_to_view' => $_POST['class'],
         ];
         $sql = "INSERT INTO stylesheets (/* columns */) VALUES (/* values */)";
-$db->perform($sql, $values);
+        $db->perform($sql, $values);
 
+        audit_log($CURUSER['id'] ?? null, 'config.update', [
+            'keys' => ['themes.insert'],
+            'id' => (int) $_POST['id'],
+            'name' => $values['name'],
+        ]);
         clear_template_cache();
         $session->set('is-success', _('Successfully Edited'));
         header("Location: {$config->get('paths.baseurl')}/staffpanel.php?tool=themes&action=themes");
@@ -291,8 +306,13 @@ $db->perform($sql, $values);
             'name' => htmlsafechars($_GET['name']),
         ];
         $sql = "INSERT INTO stylesheets (/* columns */) VALUES (/* values */)";
-$db->perform($sql, $values);
+        $db->perform($sql, $values);
 
+        audit_log($CURUSER['id'] ?? null, 'config.update', [
+            'keys' => ['themes.insert'],
+            'id' => (int) $_GET['id'],
+            'name' => $values['name'],
+        ]);
         clear_template_cache();
         $session->set('is-success', _('Successfully Added'));
         header('Location: ' . $_SERVER['PHP_SELF'] . '?tool=themes&action=themes');

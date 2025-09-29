@@ -9,6 +9,7 @@ use Pu239\Cache;
 use Pu239\Database;
 
 require_once dirname(__DIR__) . '/bootstrap_web.php';
+require_once dirname(__DIR__) . '/include/helpers/audit.php';
 
 /** @var ConfigRepository $config */
 $config = $container->get(ConfigRepository::class);

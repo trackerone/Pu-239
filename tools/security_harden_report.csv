@@ -413,6 +413,7 @@ public/upload.php,false,false,0,true,no JSON responses to refactor
 >>>>>> master
 >>>>>> master
 >>>>>> master
+<<<<<< codex/add-centralized-audit-logging-95hh7k
 
 file,audit_hooks,hook_types,helper_defined,notes
 classes/Support/Audit.php,0,[],true,defined central audit logger
@@ -426,3 +427,203 @@ public/ajax/tvmaze_lookup.php,0,[],false,no applicable critical actions
 public/ajax/usersearch.php,0,[],false,no applicable critical actions
 public/ajax/view_sql.php,0,[],false,no applicable critical actions
 public/ajaxchat.php,0,[],false,no applicable critical actions
+=======
+include/helpers/audit.php,0,,false,added audit helper
+admin/acpmanage.php,2,user.unban|user.ban,true,enabled/unban/delete actions logged
+admin/backup.php,2,config.update|config.update,true,backup create/delete logged
+admin/bannedemails.php,2,user.unban|user.ban,true,email ban management logged
+admin/bans.php,2,user.unban|user.ban,true,ip bans/unbans logged
+admin/block.settings.php,1,config.update,true,block settings updates logged
+<<<<<< codex/add-centralized-audit-logging-jhw01y
+=======
+<<<<<< codex/add-centralized-audit-logging-ld3avv
+=======
+<<<<<< codex/add-centralized-audit-logging-d0fkuv
+=======
+<<<<<< codex/add-centralized-audit-logging-7f19gd
+=======
+<<<<<< codex/add-centralized-audit-logging-9kmcga
+=======
+<<<<<< codex/add-centralized-audit-logging-rufye2
+=======
+<<<<<< codex/add-centralized-audit-logging-4v67d4
+=======
+<<<<<< codex/add-centralized-audit-logging-2v4fcs
+>>>>>> master
+>>>>>> master
+>>>>>> master
+>>>>>> master
+>>>>>> master
+>>>>>> master
+>>>>>> master
+admin/class_config.php,3,config.update,true,logged add/edit/delete config changes
+admin/cleanup_manager.php,6,config.update,true,tracked cleanup task lifecycle updates
+admin/cloudview.php,1,config.update,true,recorded search cloud deletions
+admin/datareset.php,1,torrent.moderate,true,audited torrent data reset deletions
+admin/deathrow.php,1,torrent.moderate,true,logged deathrow owner notifications
+admin/delacct.php,1,user.ban,true,audited manual account deletions
+admin/doubleusers.php,1,role.change,true,logged double-seed revocations
+admin/edit_moods.php,2,config.update,true,captured mood add/edit changes
+admin/editlog.php,1,config.update,true,tracked coder log refreshes
+<<<<<< codex/add-centralized-audit-logging-jhw01y
+=======
+<<<<<< codex/add-centralized-audit-logging-ld3avv
+=======
+<<<<<< codex/add-centralized-audit-logging-d0fkuv
+=======
+<<<<<< codex/add-centralized-audit-logging-7f19gd
+=======
+<<<<<< codex/add-centralized-audit-logging-9kmcga
+=======
+<<<<<< codex/add-centralized-audit-logging-rufye2
+=======
+<<<<<< codex/add-centralized-audit-logging-4v67d4
+>>>>>> master
+>>>>>> master
+>>>>>> master
+>>>>>> master
+>>>>>> master
+>>>>>> master
+admin/floodlimit.php,1,config.update,true,captured staff flood limit adjustments
+admin/flush.php,1,torrent.moderate,true,logged tracker ghost flush operations
+admin/forum_config.php,1,config.update,true,recorded forum configuration saves
+admin/forum_manage.php,3,config.update,true,audited forum add/edit/delete actions
+admin/freeleech.php,2,config.update,true,tracked freeleech event changes
+admin/freeusers.php,1,config.update,true,logged personal freeleech removals
+admin/hit_and_run_settings.php,1,config.update,true,recorded HnR policy updates
+admin/hnrwarn.php,3,user.unban|user.ban,true,captured HnR unwarn disable and delete actions
+admin/inactive.php,2,user.ban,true,logged inactive account deletions and disables
+admin/iphistory.php,1,user.ban,true,captured staff IP bans
+admin/leechwarn.php,3,user.unban|user.ban,true,tracked leechwarn unwarn disable and deletes
+admin/log_viewer.php,1,config.update,true,audited manual log deletions
+admin/manage_images.php,1,config.update,true,recorded proxy image removals
+admin/mass_bonus_for_members.php,5,config.update,true,documented mass bonus awards and messages
+admin/memcache.php,2,config.update,true,logged cache key removals and flushes
+admin/modtask.php,6,role.change|user.ban|user.unban,true,tracked role edits and account status changes
+<<<<<< codex/add-centralized-audit-logging-jhw01y
+=======
+<<<<<< codex/add-centralized-audit-logging-ld3avv
+=======
+<<<<<< codex/add-centralized-audit-logging-d0fkuv
+=======
+<<<<<< codex/add-centralized-audit-logging-7f19gd
+=======
+<<<<<< codex/add-centralized-audit-logging-9kmcga
+=======
+<<<<<< codex/add-centralized-audit-logging-rufye2
+>>>>>> master
+>>>>>> master
+>>>>>> master
+>>>>>> master
+>>>>>> master
+admin/mysql_overview.php,1,config.update,true,logged MySQL table optimize actions
+admin/news.php,3,config.update,true,audited news add edit and delete operations
+admin/over_forums.php,3,config.update,true,tracked over forum add edit and deletes
+admin/polls_manager.php,3,config.update,true,recorded poll create update and delete events
+admin/promo.php,2,config.update,true,logged promo link creation and removal
+admin/reputation_settings.php,1,config.update,true,captured reputation settings saves
+admin/site_settings.php,1,config.update,true,aggregated site config add update and delete logs
+admin/sysoplog.php,1,config.update,true,noted sysop log pruning activity
+admin/themes.php,4,config.update,true,recorded theme update delete and insert flows
+admin/trivia_config.php,3,config.update,true,audited trivia question insert update and delete actions
+<<<<<< codex/add-centralized-audit-logging-jhw01y
+=======
+<<<<<< codex/add-centralized-audit-logging-ld3avv
+=======
+<<<<<< codex/add-centralized-audit-logging-d0fkuv
+=======
+<<<<<< codex/add-centralized-audit-logging-7f19gd
+=======
+<<<<<< codex/add-centralized-audit-logging-9kmcga
+>>>>>> master
+>>>>>> master
+>>>>>> master
+>>>>>> master
+admin/upgrade_database.php,2,config.update,true,logged database upgrade run and ignore actions
+admin/uploadapps.php,1,role.change,true,audited uploader promotion approvals
+admin/usersearch.php,0,,true,added audit helper include for search entrypoint
+admin/view_peers.php,1,torrent.moderate,true,logged manual peer deletions
+admin/watched_users.php,2,user.ban|user.unban,true,captured watched user add and remove flows
+public/achievementbonus.php,0,,true,bootstrapped audit helper for bonus redemption flow
+public/achievementhistory.php,0,,true,bootstrapped audit helper for achievement history view
+public/ajax/cooker_notify.php,0,,true,bootstrapped audit helper for cooker notify endpoint
+<<<<<< codex/add-centralized-audit-logging-jhw01y
+=======
+<<<<<< codex/add-centralized-audit-logging-ld3avv
+=======
+<<<<<< codex/add-centralized-audit-logging-d0fkuv
+=======
+<<<<<< codex/add-centralized-audit-logging-7f19gd
+>>>>>> master
+>>>>>> master
+>>>>>> master
+public/ajax/imdb_lookup.php,0,,true,bootstrapped audit helper for imdb lookup endpoint
+public/ajax/like.php,0,,true,bootstrapped audit helper for like/unlike endpoint
+public/ajax/member_input.php,3,torrent.moderate|user.ban|user.unban,true,tracked flush and watched user moderation updates
+public/ajax/offer_notify.php,0,,true,bootstrapped audit helper for offer notify toggle
+public/ajax/offer_status.php,1,torrent.moderate,true,logged staff offer status transitions
+public/ajax/offer_vote.php,0,,true,bootstrapped audit helper for offer voting endpoint
+public/ajax/rating.php,0,,true,bootstrapped audit helper for rating submission endpoint
+public/ajax/request_notify.php,0,,true,bootstrapped audit helper for request notify toggle
+public/ajax/request_vote.php,0,,true,bootstrapped audit helper for request voting endpoint
+public/ajax/show_in_navbar.php,1,config.update,true,recorded staffpanel navbar visibility toggles
+<<<<<< codex/add-centralized-audit-logging-jhw01y
+=======
+<<<<<< codex/add-centralized-audit-logging-ld3avv
+=======
+<<<<< codex/add-centralized-audit-logging-d0fkuv
+>>>>>> master
+>>>>>> master
+public/ajax/staff_picks.php,1,torrent.moderate,true,logged staff picks feature toggle moderation
+public/ajax/take_upload.php,0,,true,bootstrapped audit helper for image upload handler
+public/ajax/take_url_upload.php,0,,true,bootstrapped audit helper for remote image upload handler
+public/ajax/thanks.php,0,,true,bootstrapped audit helper for thanks listing endpoint
+public/ajax/torrents_lookup.php,0,,true,bootstrapped audit helper for torrent lookup ajax
+public/ajax/trivia_answers.php,0,,true,bootstrapped audit helper for trivia answer submissions
+public/anatomy.php,0,,true,bootstrapped audit helper for anatomy article page
+public/announce.php,0,,true,bootstrapped audit helper for tracker announce endpoint
+public/announcement.php,0,,true,bootstrapped audit helper for announcement workflow
+public/bitbucket.php,0,,true,bootstrapped audit helper for bitbucket management page
+<<<<<< codex/add-centralized-audit-logging-jhw01y
+=======
+<<<<<< codex/add-centralized-audit-logging-ld3avv
+>>>>>> master
+public/bitbucket.php,1,bucket.delete,true,logged user image deletions
+public/blackjack.php,0,,true,bootstrapped audit helper for blackjack game interface
+public/bookmarks.php,0,,true,bootstrapped audit helper for bookmarks listing
+public/bot_triggers.php,8,config.update(bot_triggers.add|bot_triggers.update|bot_replies.add|bot_replies.update|bot_triggers.approve|bot_replies.approve|bot_triggers.delete|bot_replies.delete),true,tracked bot trigger and reply lifecycle actions
+public/browse.php,1,browse.clear_new,true,recorded browse new-tag reset events
+public/bugs.php,1,bug.report,true,logged user bug report submissions
+public/casino.php,0,,true,bootstrapped audit helper for casino games hub
+public/clear_announcement.php,1,announcement.clear,true,logged announcement dismissals
+public/contactstaff.php,1,contactstaff.send,true,recorded staff contact messages
+public/delete.php,1,torrent.moderate,true,logged torrent deletions with reason metadata
+<<<<<< codex/add-centralized-audit-logging-jhw01y
+public/details.php,3,torrent.moderate,true,logged check/recheck/uncheck moderation events
+public/download.php,2,torrent.moderate,true,tracked free/double slot selections
+public/edit.php,1,torrent.moderate,true,audited staff unlock of editing lock
+public/faq.php,0,,true,bootstrapped audit helper for FAQ rendering
+public/fastdelete.php,1,torrent.moderate,true,recorded fastdelete torrent removals
+public/flash.php,0,,true,bootstrapped audit helper for arcade viewer
+public/forums.php,0,,true,bootstrapped audit helper for forum dispatcher
+public/hnrs.php,0,,true,bootstrapped audit helper for hnrs view
+admin/acpmanage.php,2,user.unban|user.ban,true,retained audit hooks while relocating review markers
+admin/backup.php,2,config.update,true,retained audit hooks while relocating review markers
+admin/bannedemails.php,2,user.unban|user.ban,true,retained audit hooks while relocating review markers
+=======
+=======
+=======
+=======
+=======
+=======
+=======
+=======
+>>>>>> master
+>>>>>> master
+>>>>>> master
+>>>>>> master
+>>>>>> master
+>>>>>> master
+>>>>>> master
+>>>>>> master
+>>>>>> master

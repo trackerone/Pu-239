@@ -1,6 +1,7 @@
 <?php
 declare(strict_types=1);
 require_once dirname(__DIR__) . '/bootstrap_web.php';
+require_once dirname(__DIR__) . '/include/helpers/audit.php';
 
 use Pu239\Cache;
 use Pu239\Config\ConfigRepository;
@@ -49,6 +50,7 @@ if ($action === 'added') {
             [':name' => $name, ':image' => $image, ':bonus' => (int) $bonus]
         );
         $cache->delete('topmoods');
+        audit_log($CURUSER['id'] ?? null, 'config.update', ['keys' => [$name]]);
         if (function_exists('write_log')) {
             write_log('<b>' . _('Mood Added') . '</b> ' . htmlsafechars($CURUSER['username']) . ' - ' . htmlsafechars($name) . '<img src="' . (string) $config->get('paths.images_baseurl') . 'smilies/' . htmlsafechars($image) . '" alt="">');
         }
@@ -60,6 +62,7 @@ if ($action === 'added') {
             [':name' => $name, ':image' => $image, ':bonus' => (int) $bonus, ':id' => (int) $id]
         );
         $cache->delete('topmoods');
+        audit_log($CURUSER['id'] ?? null, 'config.update', ['keys' => [$name]]);
         if (function_exists('write_log')) {
             write_log('<b>' . _('Mood Edited') . '</b> ' . htmlsafechars($CURUSER['username']) . ' - ' . htmlsafechars($name) . '<img src="' . (string) $config->get('paths.images_baseurl') . 'smilies/' . htmlsafechars($image) . '" alt="">');
         }

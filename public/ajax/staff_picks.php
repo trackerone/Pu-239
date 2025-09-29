@@ -6,6 +6,7 @@ use Pu239\Cache;
 use Pu239\Database;
 
 require_once dirname(__DIR__) . '/bootstrap_web.php';
+require_once dirname(__DIR__) . '/include/helpers/audit.php';
 
 $cache = $container->get(Cache::class);
 $db = $container->get(Database::class);
@@ -37,6 +38,12 @@ $statement = $db->run(
 );
 
 if ($statement->rowCount() > 0) {
+    $operation = $pick === 0 ? 'staff_picks.enable' : 'staff_picks.disable';
+    audit_log($user['id'] ?? null, 'torrent.moderate', [
+        'id' => $torrentId,
+        'op' => $operation,
+    ]);
+
     $cache->delete('staff_picks_');
 
     json_out(['pick' => $newValue]);
