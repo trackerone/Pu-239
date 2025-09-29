@@ -1,6 +1,7 @@
 <?php
 declare(strict_types=1);
 require_once dirname(__DIR__) . '/bootstrap_web.php';
+require_once dirname(__DIR__) . '/include/helpers/audit.php';
 
 use Pu239\Cache;
 use Pu239\Config\ConfigRepository;
@@ -169,7 +170,18 @@ if (!empty($_POST) && $_POST['action'] === 'edituser') {
             $modcomment = _fe("{0} - INTERNAL Role Removed by {1}\n", get_date($dt, 'DATE', 1), $CURUSER['username']) . $modcomment;
         }
         if ($setbits > 0 || $clrbits > 0) {
+            $newRolesMask = (($user['roles_mask'] | $setbits) & ~$clrbits);
             $update['roles_mask'] = new Literal('((roles_mask | ' . $setbits . ') & ~' . $clrbits . ')');
+            audit_log(
+                $CURUSER['id'] ?? null,
+                'role.change',
+                [
+                    'target' => $userid,
+                    'from' => (int) $user['roles_mask'],
+                    'to' => (int) $newRolesMask,
+                ]
+            );
+            $user['roles_mask'] = $newRolesMask;
         }
         if (isset($post['class']) && (($class = (int) $post['class']) !== $user['class'])) {
             if ($CURUSER['class'] !== UC_MAX && ($class === UC_MAX || $class >= $CURUSER['class'] || $user['class'] >= $CURUSER['class'])) {
@@ -189,6 +201,16 @@ if (!empty($_POST) && $_POST['action'] === 'edituser') {
             $update['class'] = $class;
             $useredit[] = _fe('{0} to {1}', $what, get_user_class_name($class));
             $modcomment = get_date($dt, 'DATE', 1) . ' - ' . _fe('{0} to {1} by {2}.', $what, get_user_class_name($class), $CURUSER['username']) . "\n" . $modcomment;
+            audit_log(
+                $CURUSER['id'] ?? null,
+                'role.change',
+                [
+                    'target' => $userid,
+                    'from' => (int) $user['class'],
+                    'to' => (int) $class,
+                ]
+            );
+            $user['class'] = $class;
         }
     }
     if ((isset($post['donated'])) && (($donated = (int) $post['donated']) !== $user['donated'])) {
@@ -840,6 +862,14 @@ $db->perform($sql, $values);
             $sql = "DELETE FROM ajax_chat_online WHERE userID = :userID";
 $db->perform($sql, ['userID' => $userid]);
             $cache->set('forced_logout_' . $userid, $dt);
+            audit_log(
+                $CURUSER['id'] ?? null,
+                'user.ban',
+                [
+                    'target' => $userid,
+                    'reason' => 'modtask.disable',
+                ]
+            );
         } elseif ($status === 5) {
             $update['status'] = 5;
             $suspended_reason = $post['suspended_reason'];
@@ -859,6 +889,14 @@ $db->perform($sql, ['userID' => $userid]);
                 'msg' => $msg,
                 'subject' => $subject,
             ];
+            audit_log(
+                $CURUSER['id'] ?? null,
+                'user.ban',
+                [
+                    'target' => $userid,
+                    'reason' => 'modtask.suspend',
+                ]
+            );
         } else {
             if ($userstatus === 1) {
                 $modcomment = get_date($dt, 'DATE', 1) . ' - ' . _('Account UnParked by ') . $CURUSER['username'] . ".\n" . $modcomment;
@@ -866,6 +904,14 @@ $db->perform($sql, ['userID' => $userid]);
             } elseif ($userstatus === 2) {
                 $modcomment = get_date($dt, 'DATE', 1) . ' ' . _('- Enabled by ') . ' ' . $CURUSER['username'] . ".\n" . $modcomment;
                 $useredit[] = _('Enabled = ') . 'yes';
+                audit_log(
+                    $CURUSER['id'] ?? null,
+                    'user.unban',
+                    [
+                        'target' => $userid,
+                        'reason' => 'modtask.enable',
+                    ]
+                );
             } elseif ($userstatus === 5) {
                 $modcomment = get_date($dt, 'DATE', 1) . ' - ' . _('This account has been Un-suspended by ') . $CURUSER['username'] . ".\n" . $modcomment;
                 $useredit[] = _('Account suspended = No');
@@ -878,6 +924,14 @@ $db->perform($sql, ['userID' => $userid]);
                     'msg' => $msg,
                     'subject' => $subject,
                 ];
+                audit_log(
+                    $CURUSER['id'] ?? null,
+                    'user.unban',
+                    [
+                        'target' => $userid,
+                        'reason' => 'modtask.unsuspend',
+                    ]
+                );
             }
         }
     }

@@ -1,12 +1,14 @@
 <?php
 declare(strict_types=1);
-use PU239\Config\ConfigRepository;
+require_once dirname(__DIR__) . '/bootstrap_web.php';
+require_once dirname(__DIR__) . '/include/helpers/audit.php';
 
-global $container;
+use PU239\Config\ConfigRepository;
+use Pu239\Database;
+
+global $container, $CURUSER;
 /** @var ConfigRepository $config */
 $config = $container->get(ConfigRepository::class);
-require_once dirname(__DIR__) . '/bootstrap_web.php';
-
 
 $db = $container->get(Database::class);
 
@@ -19,11 +21,26 @@ $perpage = 50;
 $state = 'div';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && $_POST['delete'] === 'Delete') {
+    $deletedLogs = [];
     foreach ($_POST['logs'] as $log) {
         $log = urldecode($log);
         if (file_exists($log)) {
             unlink($log);
+            $deletedLogs[] = $log;
         }
+    }
+    if (!empty($deletedLogs)) {
+        audit_log(
+            $CURUSER['id'] ?? null,
+            'config.update',
+            [
+                'keys' => array_map(
+                    static fn(string $path): string => basename($path),
+                    $deletedLogs
+                ),
+                'op' => 'log.delete',
+            ]
+        );
     }
 }
 if (!empty($_GET['action']) && $_GET['action'] === 'view') {

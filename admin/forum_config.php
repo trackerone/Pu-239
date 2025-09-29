@@ -1,13 +1,14 @@
 <?php
 declare(strict_types=1);
 require_once dirname(__DIR__) . '/bootstrap_web.php';
+require_once dirname(__DIR__) . '/include/helpers/audit.php';
 
 use Pu239\Cache;
 use Pu239\Config\ConfigRepository;
 use Pu239\Database;
 
 
-global $container;
+global $container, $CURUSER;
 /** @var ConfigRepository $config */
 $config = $container->get(ConfigRepository::class);
 
@@ -39,7 +40,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['do_it'])) {
         'max_file_size' => isset($_POST['max_file_size']) ? (int) $_POST['max_file_size'] : 0,
     ];
     $sql = "UPDATE forum_config SET /* columns */ WHERE id = :id";
-$db->perform($sql, array_merge($update, ['id' => $config_id]));
+    $db->perform($sql, array_merge($update, ['id' => $config_id]));
+    audit_log($CURUSER['id'] ?? null, 'config.update', ['keys' => array_keys($update)]);
     $cache->delete('forum_config_');
     header('Location: ' . $selfRaw . '?tool=forum_config');
     app_halt('Exit called');

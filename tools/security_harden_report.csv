@@ -413,3 +413,34 @@ public/upload.php,false,false,0,true,no JSON responses to refactor
 >>>>>> master
 >>>>>> master
 >>>>>> master
+include/helpers/audit.php,0,,false,added audit helper
+admin/acpmanage.php,2,user.unban|user.ban,true,enabled/unban/delete actions logged
+admin/backup.php,2,config.update|config.update,true,backup create/delete logged
+admin/bannedemails.php,2,user.unban|user.ban,true,email ban management logged
+admin/bans.php,2,user.unban|user.ban,true,ip bans/unbans logged
+admin/block.settings.php,1,config.update,true,block settings updates logged
+admin/class_config.php,3,config.update,true,logged add/edit/delete config changes
+admin/cleanup_manager.php,6,config.update,true,tracked cleanup task lifecycle updates
+admin/cloudview.php,1,config.update,true,recorded search cloud deletions
+admin/datareset.php,1,torrent.moderate,true,audited torrent data reset deletions
+admin/deathrow.php,1,torrent.moderate,true,logged deathrow owner notifications
+admin/delacct.php,1,user.ban,true,audited manual account deletions
+admin/doubleusers.php,1,role.change,true,logged double-seed revocations
+admin/edit_moods.php,2,config.update,true,captured mood add/edit changes
+admin/editlog.php,1,config.update,true,tracked coder log refreshes
+admin/floodlimit.php,1,config.update,true,captured staff flood limit adjustments
+admin/flush.php,1,torrent.moderate,true,logged tracker ghost flush operations
+admin/forum_config.php,1,config.update,true,recorded forum configuration saves
+admin/forum_manage.php,3,config.update,true,audited forum add/edit/delete actions
+admin/freeleech.php,2,config.update,true,tracked freeleech event changes
+admin/freeusers.php,1,config.update,true,logged personal freeleech removals
+admin/hit_and_run_settings.php,1,config.update,true,recorded HnR policy updates
+admin/hnrwarn.php,3,user.unban|user.ban,true,captured HnR unwarn disable and delete actions
+admin/inactive.php,2,user.ban,true,logged inactive account deletions and disables
+admin/iphistory.php,1,user.ban,true,captured staff IP bans
+admin/leechwarn.php,3,user.unban|user.ban,true,tracked leechwarn unwarn disable and deletes
+admin/log_viewer.php,1,config.update,true,audited manual log deletions
+admin/manage_images.php,1,config.update,true,recorded proxy image removals
+admin/mass_bonus_for_members.php,5,config.update,true,documented mass bonus awards and messages
+admin/memcache.php,2,config.update,true,logged cache key removals and flushes
+admin/modtask.php,6,role.change|user.ban|user.unban,true,tracked role edits and account status changes
