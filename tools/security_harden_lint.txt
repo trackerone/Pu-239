@@ -437,6 +437,10 @@ No syntax errors detected in admin/backup.php
 No syntax errors detected in admin/bannedemails.php
 No syntax errors detected in admin/bans.php
 No syntax errors detected in admin/block.settings.php
+<<<<<< codex/add-centralized-audit-logging-4v67d4
+=======
+<<<<<< codex/add-centralized-audit-logging-2v4fcs
+>>>>>> master
 No syntax errors detected in admin/class_config.php
 No syntax errors detected in admin/cleanup_manager.php
 No syntax errors detected in admin/cloudview.php
@@ -446,6 +450,7 @@ No syntax errors detected in admin/delacct.php
 No syntax errors detected in admin/doubleusers.php
 No syntax errors detected in admin/edit_moods.php
 No syntax errors detected in admin/editlog.php
+<<<<<< codex/add-centralized-audit-logging-4v67d4
 No syntax errors detected in admin/floodlimit.php
 No syntax errors detected in admin/flush.php
 No syntax errors detected in admin/forum_config.php
@@ -462,3 +467,7 @@ No syntax errors detected in admin/manage_images.php
 No syntax errors detected in admin/mass_bonus_for_members.php
 No syntax errors detected in admin/memcache.php
 No syntax errors detected in admin/modtask.php
+=======
+=======
+>>>>>> master
+>>>>>> master
