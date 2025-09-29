@@ -1,6 +1,7 @@
 <?php
 declare(strict_types=1);
 require_once dirname(__DIR__) . '/bootstrap_web.php';
+require_once dirname(__DIR__) . '/include/helpers/audit.php';
 
 use Pu239\Config\ConfigRepository;
 use Pu239\Database;
@@ -42,6 +43,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         write_log("User: $username Was deleted by {$CURUSER['username']}");
         $session = $container->get(Session::class);
         $session->set('is-success', _('The account was deleted.'));
+        audit_log($CURUSER['id'] ?? null, 'user.ban', ['target' => $id, 'reason' => 'delete_account']);
     } else {
         stderr(_('Error'), _('Unable to delete the account.'));
     }
