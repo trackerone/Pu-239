@@ -1,6 +1,7 @@
 <?php
 declare(strict_types=1);
 require_once dirname(__DIR__) . '/bootstrap_web.php';
+require_once dirname(__DIR__) . '/include/helpers/audit.php';
 
 use PU239\Config\ConfigRepository;
 use Pu239\Cache;
@@ -8,7 +9,7 @@ use Pu239\Database;
 use Pu239\Session;
 
 
-global $container;
+global $container, $CURUSER;
 /** @var ConfigRepository $config */
 $config = $container->get(ConfigRepository::class);
 $db = $container->get(Database::class);
@@ -25,6 +26,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $session = $container->get(Session::class);
     // $fluent removed — use $this->db (ExtendedPdo)
     $updated = false;
+    $changedKeys = [];
     foreach ($config->get('hnr_config') as $c_name => $c_value) {
         if (isset($_POST[$c_name]) && $_POST[$c_name] != $c_value) {
             $fluent->update('hit_and_run_settings')
@@ -33,6 +35,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                    ->execute();
 
             $updated = true;
+            $changedKeys[] = $c_name;
         }
     }
     if (!$updated) {
@@ -40,6 +43,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     } else {
         $cache = $container->get(Cache::class);
         $cache->delete('hnr_settings_');
+        audit_log($CURUSER['id'] ?? null, 'config.update', ['keys' => $changedKeys]);
         $session->set('is-success', 'Update Successful');
     }
 }
