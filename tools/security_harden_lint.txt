@@ -629,3 +629,5 @@ No syntax errors detected in public/hnrs.php
 >>>>>> master
 >>>>>> master
 >>>>>> master
+No syntax errors detected in include/helpers/audit.php
+No syntax errors detected in public/login.php
