@@ -419,9 +419,12 @@ admin/backup.php,2,config.update|config.update,true,backup create/delete logged
 admin/bannedemails.php,2,user.unban|user.ban,true,email ban management logged
 admin/bans.php,2,user.unban|user.ban,true,ip bans/unbans logged
 admin/block.settings.php,1,config.update,true,block settings updates logged
+<<<<<< codex/add-centralized-audit-logging-rufye2
+=======
 <<<<<< codex/add-centralized-audit-logging-4v67d4
 =======
 <<<<<< codex/add-centralized-audit-logging-2v4fcs
+>>>>>> master
 >>>>>> master
 admin/class_config.php,3,config.update,true,logged add/edit/delete config changes
 admin/cleanup_manager.php,6,config.update,true,tracked cleanup task lifecycle updates
@@ -432,7 +435,10 @@ admin/delacct.php,1,user.ban,true,audited manual account deletions
 admin/doubleusers.php,1,role.change,true,logged double-seed revocations
 admin/edit_moods.php,2,config.update,true,captured mood add/edit changes
 admin/editlog.php,1,config.update,true,tracked coder log refreshes
+<<<<<< codex/add-centralized-audit-logging-rufye2
+=======
 <<<<<< codex/add-centralized-audit-logging-4v67d4
+>>>>>> master
 admin/floodlimit.php,1,config.update,true,captured staff flood limit adjustments
 admin/flush.php,1,torrent.moderate,true,logged tracker ghost flush operations
 admin/forum_config.php,1,config.update,true,recorded forum configuration saves
@@ -449,7 +455,20 @@ admin/manage_images.php,1,config.update,true,recorded proxy image removals
 admin/mass_bonus_for_members.php,5,config.update,true,documented mass bonus awards and messages
 admin/memcache.php,2,config.update,true,logged cache key removals and flushes
 admin/modtask.php,6,role.change|user.ban|user.unban,true,tracked role edits and account status changes
+<<<<<< codex/add-centralized-audit-logging-rufye2
+admin/mysql_overview.php,1,config.update,true,logged MySQL table optimize actions
+admin/news.php,3,config.update,true,audited news add edit and delete operations
+admin/over_forums.php,3,config.update,true,tracked over forum add edit and deletes
+admin/polls_manager.php,3,config.update,true,recorded poll create update and delete events
+admin/promo.php,2,config.update,true,logged promo link creation and removal
+admin/reputation_settings.php,1,config.update,true,captured reputation settings saves
+admin/site_settings.php,1,config.update,true,aggregated site config add update and delete logs
+admin/sysoplog.php,1,config.update,true,noted sysop log pruning activity
+admin/themes.php,4,config.update,true,recorded theme update delete and insert flows
+admin/trivia_config.php,3,config.update,true,audited trivia question insert update and delete actions
 =======
 =======
+=======
+>>>>>> master
 >>>>>> master
 >>>>>> master

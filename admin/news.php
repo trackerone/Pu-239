@@ -1,6 +1,7 @@
 <?php
 declare(strict_types=1);
 require_once dirname(__DIR__) . '/bootstrap_web.php';
+require_once dirname(__DIR__) . '/include/helpers/audit.php';
 
 use PU239\Config\ConfigRepository;
 use Pu239\Cache;
@@ -60,7 +61,11 @@ if ($mode === 'delete') {
     }
 
     $sql = "DELETE FROM news WHERE id = :id";
-$db->perform($sql, ['id' => $newsid]);
+    $db->perform($sql, ['id' => $newsid]);
+    audit_log($CURUSER['id'] ?? null, 'config.update', [
+        'keys' => ['news.delete'],
+        'id' => $newsid,
+    ]);
     $cache->delete('latest_news_');
     $session->set('is-success', _('News entry deleted'));
     header("Location: {$config->get('paths.baseurl')}/staffpanel.php?tool=news&mode=news");
@@ -89,10 +94,14 @@ $db->perform($sql, ['id' => $newsid]);
         'anonymous' => $anonymous,
     ];
     $sql = "INSERT INTO news (/* columns */) VALUES (/* values */)";
-$results = $db->perform($sql, $values);
+    $results = $db->perform($sql, $values);
     if (!empty($results)) {
         $cache->delete('latest_news_');
         $session->set('is-success', _('News entry was added successfully.'));
+        audit_log($CURUSER['id'] ?? null, 'config.update', [
+            'keys' => ['news.add'],
+            'id' => $results,
+        ]);
     } else {
         $session->set('is-warning', _("Something's wrong!"));
     }
@@ -127,7 +136,11 @@ $results = $db->perform($sql, $values);
             'title' => $title,
         ];
         $sql = "UPDATE news SET /* columns */ WHERE id = :id";
-$db->perform($sql, array_merge($update, ['id' => $newsid]));
+        $db->perform($sql, array_merge($update, ['id' => $newsid]));
+        audit_log($CURUSER['id'] ?? null, 'config.update', [
+            'keys' => ['news.edit'],
+            'id' => $newsid,
+        ]);
         $cache->delete('latest_news_');
         $session->set('is-success', _('News item was edited successfully'));
         header("Location: {$config->get('paths.baseurl')}/staffpanel.php?tool=news&mode=news");

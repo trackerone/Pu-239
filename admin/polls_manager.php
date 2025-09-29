@@ -1,6 +1,7 @@
 <?php
 declare(strict_types=1);
 require_once dirname(__DIR__) . '/bootstrap_web.php';
+require_once dirname(__DIR__) . '/include/helpers/audit.php';
 
 use Delight\Auth\AuthError;
 use Delight\Auth\NotLoggedInException;
@@ -72,7 +73,7 @@ switch ($params['mode']) {
  */
 function delete_poll($stdfoot)
 {
-    global $container, $config;
+    global $container, $config, $CURUSER;
 
     $poll_stuffs = $container->get(Poll::class);
     $pollvoter_class = $container->get(PollVoter::class);
@@ -95,6 +96,10 @@ function delete_poll($stdfoot)
     $poll_stuffs->delete($pid);
     $pollvoter_class->delete($pid);
     $pollvoter_class->delete_users_cache();
+    audit_log($CURUSER['id'] ?? null, 'config.update', [
+        'keys' => ['poll.delete'],
+        'id' => $pid,
+    ]);
     show_poll_archive($stdfoot);
 }
 
@@ -131,6 +136,12 @@ function update_poll()
     ];
     $result = $poll_stuffs->update($set, $pid);
     $pollvoter_class->delete_users_cache();
+    if ($result) {
+        audit_log($CURUSER['id'] ?? null, 'config.update', [
+            'keys' => ['poll.update'],
+            'id' => $pid,
+        ]);
+    }
     if (!$result) {
         $msg = _('An Error Occured!');
     } else {
@@ -169,6 +180,12 @@ function insert_new_poll()
     ];
     $result = $poll_stuffs->insert($values);
     $pollvoter_class->delete_users_cache();
+    if ($result) {
+        audit_log($CURUSER['id'] ?? null, 'config.update', [
+            'keys' => ['poll.insert'],
+            'id' => $result,
+        ]);
+    }
     if (!$result) {
         $msg = _('An Error Occured!');
     } else {

@@ -1,13 +1,14 @@
 <?php
 declare(strict_types=1);
 require_once dirname(__DIR__) . '/bootstrap_web.php';
+require_once dirname(__DIR__) . '/include/helpers/audit.php';
 
 use PU239\Config\ConfigRepository;
 use Pu239\Database;
 use Pu239\Session;
 
 
-global $container;
+global $container, $CURUSER;
 /** @var ConfigRepository $config */
 $config = $container->get(ConfigRepository::class);
 
@@ -52,11 +53,23 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     $session->set('is-warning', _('No answer was set as the correct answer!'));
                 } else {
                     $sql = "UPDATE triviaq SET /* columns */ WHERE qid = :qid";
-$db->perform($sql, array_merge($set, ['qid' => $id]));
+                    $updated = $db->perform($sql, array_merge($set, ['qid' => $id]));
+                    if (!empty($updated)) {
+                        audit_log($CURUSER['id'] ?? null, 'config.update', [
+                            'keys' => ['trivia.update'],
+                            'id' => $id,
+                        ]);
+                    }
                 }
             } elseif ($type === 'delete' && isset($_POST['id']) && is_numeric($_POST['id'])) {
                 $sql = "DELETE FROM triviaq WHERE qid = :qid";
-$db->perform($sql, ['qid' => $_POST['id']]);
+                $deleted = $db->perform($sql, ['qid' => $_POST['id']]);
+                if (!empty($deleted)) {
+                    audit_log($CURUSER['id'] ?? null, 'config.update', [
+                        'keys' => ['trivia.delete'],
+                        'id' => (int) $_POST['id'],
+                    ]);
+                }
                 $session->set('is-success', _fe('Trivia Question #{0} was deleted.', $_POST['id']));
             } elseif ($type === 'insert') {
                 $values = $_POST;
@@ -71,8 +84,12 @@ $db->perform($sql, ['qid' => $_POST['id']]);
                     $session->set('is-warning', _('No answer was set as the correct answer!'));
                 } else {
                     $sql = "INSERT INTO triviaq (/* columns */) VALUES (/* values */)";
-$newid = $db->perform($sql, $values);
+                    $newid = $db->perform($sql, $values);
                     if (!empty($newid)) {
+                        audit_log($CURUSER['id'] ?? null, 'config.update', [
+                            'keys' => ['trivia.insert'],
+                            'id' => $newid,
+                        ]);
                         $session->set('is-success', _fe('Trivia Questions #{0} inserted correctly.', $newid));
                     }
                 }
