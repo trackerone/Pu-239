@@ -1,13 +1,14 @@
 <?php
 declare(strict_types=1);
 require_once dirname(__DIR__) . '/bootstrap_web.php';
+require_once dirname(__DIR__) . '/include/helpers/audit.php';
 
 use PU239\Config\ConfigRepository;
 use Pu239\Database;
 use Pu239\Session;
 
 
-global $container;
+global $container, $CURUSER;
 /** @var ConfigRepository $config */
 $config = $container->get(ConfigRepository::class);
 
@@ -33,6 +34,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $_post = $_POST;
     unset($_POST);
     $post = array_keys($_post);
+    $changedKeys = [];
     foreach ($post as $key) {
         preg_match('/([\d|Add]+)_id/', $key, $match);
         if (isset($match[1])) {
@@ -75,8 +77,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if (!isset($set['name'])) {
             if ($id != 0) {
                 $sql = "DELETE FROM site_config WHERE id = :id";
-$db->perform($sql, ['id' => $id]);
+                $db->perform($sql, ['id' => $id]);
                 $session->set('is-success', "$parentname " . _('Deleted'));
+                $changedKeys[] = "site_config.delete:{$parentname}";
             }
         } elseif ($id === 'Add') {
             if (isset($item) && $item !== '') {
@@ -87,18 +90,21 @@ $db->perform($sql, ['id' => $id]);
                        ->where('name = ?', $name)
                        ->execute();
                 $session->set('is-success', "$parentname " . _('Updated'));
+                $changedKeys[] = "site_config.extend:{$parentname}";
             } else {
                 if (!isset($item)) {
                     $sql = "INSERT INTO site_config (/* columns */) VALUES (/* values */)";
-$db->perform($sql, $set);
+                    $db->perform($sql, $set);
                     $session->set('is-success', "$parentname " . _('Added'));
+                    $changedKeys[] = "site_config.insert:{$parentname}";
                 }
             }
         } else {
             $sql = "UPDATE site_config SET /* columns */ WHERE id = :id";
-$results = $db->perform($sql, array_merge($set, ['id' => $id]));
+            $results = $db->perform($sql, array_merge($set, ['id' => $id]));
             if ($results) {
                 $session->set('is-success', "$parentname " . _('Updated'));
+                $changedKeys[] = "site_config.update:{$parentname}";
             }
         }
     }
@@ -107,6 +113,11 @@ $results = $db->perform($sql, array_merge($set, ['id' => $id]));
         'site_settings_',
         'chat_users_list_',
     ]);
+    if (!empty($changedKeys)) {
+        audit_log($CURUSER['id'] ?? null, 'config.update', [
+            'keys' => array_values(array_unique($changedKeys)),
+        ]);
+    }
 }
 
 $HTMLOUT .= "

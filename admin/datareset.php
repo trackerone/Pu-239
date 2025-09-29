@@ -1,6 +1,7 @@
 <?php
 declare(strict_types=1);
 require_once dirname(__DIR__) . '/bootstrap_web.php';
+require_once dirname(__DIR__) . '/include/helpers/audit.php';
 
 use PU239\Config\ConfigRepository;
 use Pu239\Database;
@@ -94,6 +95,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $torrents_class->remove_torrent($hash);
 
     write_log(_fe('Torrent {0} was deleted by {1} and all users were Re-Paid Download credit.', $tname, $s($CURUSER['username'])));
+    audit_log($CURUSER['id'] ?? null, 'torrent.moderate', ['id' => $tid, 'op' => 'datareset']);
     header('Refresh: 3; url=staffpanel.php?tool=datareset');
     stderr(_('Success'), _fe('It worked! Long live {0} - Please wait while you are re-directed!', $config->get('site.name')));
 } else {

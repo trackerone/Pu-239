@@ -1,6 +1,7 @@
 <?php
 declare(strict_types=1);
 require_once dirname(__DIR__) . '/bootstrap_web.php';
+require_once dirname(__DIR__) . '/include/helpers/audit.php';
 
 use PU239\Config\ConfigRepository;
 use Pu239\Database;
@@ -49,7 +50,11 @@ switch ($action) {
             stderr(_('Error'), _('Invalid ID'));
         }
         $sql = "DELETE FROM over_forums WHERE id = :id";
-$db->perform($sql, ['id' => $id]);
+        $db->perform($sql, ['id' => $id]);
+        audit_log($CURUSER['id'] ?? null, 'config.update', [
+            'keys' => ['over_forums.delete'],
+            'id' => $id,
+        ]);
         header('Location: ' . $_SERVER['PHP_SELF'] . '?tool=over_forums');
         app_halt('Exit called');
         break;
@@ -74,7 +79,12 @@ $db->perform($sql, ['id' => $id]);
             'min_class_view' => $min_class_view,
         ];
         $sql = "UPDATE over_forums SET /* columns */ WHERE id = :id";
-$db->perform($sql, array_merge($set, ['id' => $id]));
+        $db->perform($sql, array_merge($set, ['id' => $id]));
+        audit_log($CURUSER['id'] ?? null, 'config.update', [
+            'keys' => ['over_forums.update'],
+            'id' => $id,
+            'sort' => $sort,
+        ]);
         header('Location: ' . $_SERVER['PHP_SELF'] . '?tool=over_forums');
         app_halt('Exit called');
         break;
@@ -98,7 +108,12 @@ $db->perform($sql, array_merge($set, ['id' => $id]));
             'min_class_view' => $min_class_view,
         ];
         $sql = "INSERT INTO over_forums (/* columns */) VALUES (/* values */)";
-$db->perform($sql, $values);
+        $db->perform($sql, $values);
+        audit_log($CURUSER['id'] ?? null, 'config.update', [
+            'keys' => ['over_forums.insert'],
+            'id' => $id ?: null,
+            'sort' => $sort,
+        ]);
 
         header('Location: ' . $_SERVER['PHP_SELF'] . '?tool=over_forums');
         app_halt('Exit called');

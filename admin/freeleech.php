@@ -1,6 +1,7 @@
 <?php
 declare(strict_types=1);
 require_once dirname(__DIR__) . '/bootstrap_web.php';
+require_once dirname(__DIR__) . '/include/helpers/audit.php';
 
 use Pu239\Config\ConfigRepository;
 use Pu239\Database;
@@ -27,6 +28,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // TODO(2025): csrf
     if (isset($_POST['remove'])) {
         update_event((int) $_POST['expires'], TIME_NOW);
+        audit_log(
+            $CURUSER['id'] ?? null,
+            'config.update',
+            [
+                'keys' => ['freeleech.event'],
+                'op' => 'remove',
+                'expires' => (int) ($_POST['expires'] ?? 0),
+            ]
+        );
         header('Location: ' . $baseurlRaw . '/staffpanel.php?tool=freeleech');
         app_halt('Exit called');
     }
@@ -49,6 +59,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         ++$i;
     }
     set_event($fl['modifier'], TIME_NOW, $fl['expires'], (int) $fl['setby'], $fl['title']);
+    audit_log(
+        $CURUSER['id'] ?? null,
+        'config.update',
+        [
+            'keys' => ['freeleech.event'],
+            'op' => 'set',
+            'modifier' => $fl['modifier'],
+            'expires' => $fl['expires'],
+        ]
+    );
     header('Location: ' . $baseurlRaw . '/staffpanel.php?tool=freeleech');
     app_halt('Exit called');
 }
