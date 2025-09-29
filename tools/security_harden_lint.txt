@@ -437,6 +437,22 @@ No syntax errors detected in admin/backup.php
 No syntax errors detected in admin/bannedemails.php
 No syntax errors detected in admin/bans.php
 No syntax errors detected in admin/block.settings.php
+<<<<<< codex/add-centralized-audit-logging-d0fkuv
+=======
+<<<<<< codex/add-centralized-audit-logging-7f19gd
+=======
+<<<<<< codex/add-centralized-audit-logging-9kmcga
+=======
+<<<<<< codex/add-centralized-audit-logging-rufye2
+=======
+<<<<<< codex/add-centralized-audit-logging-4v67d4
+======
+<<<<<< codex/add-centralized-audit-logging-2v4fcs
+>>>>>> master
+>>>>>> master
+>>>>>> master
+>>>>>> master
+>>>>>> master
 No syntax errors detected in admin/class_config.php
 No syntax errors detected in admin/cleanup_manager.php
 No syntax errors detected in admin/cloudview.php
@@ -446,6 +462,19 @@ No syntax errors detected in admin/delacct.php
 No syntax errors detected in admin/doubleusers.php
 No syntax errors detected in admin/edit_moods.php
 No syntax errors detected in admin/editlog.php
+<<<<<< codex/add-centralized-audit-logging-d0fkuv
+=======
+<<<<<< codex/add-centralized-audit-logging-7f19gd
+=======
+<<<<<< codex/add-centralized-audit-logging-9kmcga
+=======
+<<<<<< codex/add-centralized-audit-logging-rufye2
+=======
+<<<<<< codex/add-centralized-audit-logging-4v67d4
+>>>>>> master
+>>>>>> master
+>>>>>> master
+>>>>>> master
 No syntax errors detected in admin/floodlimit.php
 No syntax errors detected in admin/flush.php
 No syntax errors detected in admin/forum_config.php
@@ -462,6 +491,16 @@ No syntax errors detected in admin/manage_images.php
 No syntax errors detected in admin/mass_bonus_for_members.php
 No syntax errors detected in admin/memcache.php
 No syntax errors detected in admin/modtask.php
+<<<<<< codex/add-centralized-audit-logging-d0fkuv
+=======
+<<<<<< codex/add-centralized-audit-logging-7f19gd
+=======
+<<<<<< codex/add-centralized-audit-logging-9kmcga
+=======
+<<<<<< codex/add-centralized-audit-logging-rufye2
+>>>>>> master
+>>>>>> master
+>>>>>> master
 No syntax errors detected in admin/mysql_overview.php
 No syntax errors detected in admin/news.php
 No syntax errors detected in admin/over_forums.php
@@ -472,6 +511,13 @@ No syntax errors detected in admin/site_settings.php
 No syntax errors detected in admin/sysoplog.php
 No syntax errors detected in admin/themes.php
 No syntax errors detected in admin/trivia_config.php
+<<<<<< codex/add-centralized-audit-logging-d0fkuv
+=======
+<<<<<< codex/add-centralized-audit-logging-7f19gd
+=======
+<<<<<< codex/add-centralized-audit-logging-9kmcga
+>>>>>> master
+>>>>>> master
 No syntax errors detected in admin/upgrade_database.php
 No syntax errors detected in admin/uploadapps.php
 No syntax errors detected in admin/usersearch.php
@@ -480,6 +526,10 @@ No syntax errors detected in admin/watched_users.php
 No syntax errors detected in public/achievementbonus.php
 No syntax errors detected in public/achievementhistory.php
 No syntax errors detected in public/ajax/cooker_notify.php
+<<<<<< codex/add-centralized-audit-logging-d0fkuv
+=======
+<<<<<< codex/add-centralized-audit-logging-7f19gd
+>>>>>> master
 No syntax errors detected in public/ajax/imdb_lookup.php
 No syntax errors detected in public/ajax/like.php
 No syntax errors detected in public/ajax/member_input.php
@@ -490,6 +540,7 @@ No syntax errors detected in public/ajax/rating.php
 No syntax errors detected in public/ajax/request_notify.php
 No syntax errors detected in public/ajax/request_vote.php
 No syntax errors detected in public/ajax/show_in_navbar.php
+<<<<<< codex/add-centralized-audit-logging-d0fkuv
 No syntax errors detected in public/ajax/staff_picks.php
 No syntax errors detected in public/ajax/take_upload.php
 No syntax errors detected in public/ajax/take_url_upload.php
@@ -500,3 +551,15 @@ No syntax errors detected in public/anatomy.php
 No syntax errors detected in public/announce.php
 No syntax errors detected in public/announcement.php
 No syntax errors detected in public/bitbucket.php
+=======
+=======
+=======
+=======
+=======
+=======
+>>>>>> master
+>>>>>> master
+>>>>>> master
+>>>>>> master
+>>>>>> master
+>>>>>> master
