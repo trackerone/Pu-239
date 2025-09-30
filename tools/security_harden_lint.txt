@@ -8,19 +8,6 @@ No syntax errors detected in admin/class_config.php
 No syntax errors detected in admin/cloudview.php
 No syntax errors detected in admin/datareset.php
 No syntax errors detected in admin/deathrow.php
-<<<<<< codex/enforce-csrf-and-output-escaping-9ffaz0
-======
-<<<<<< codex/enforce-csrf-and-output-escaping-y3qyza
-======
-<<<<<< codex/enforce-csrf-and-output-escaping-ism9l3
-======
-<<<<<< codex/enforce-csrf-and-output-escaping-m17p9q
-======
-<<<<<< codex/enforce-csrf-and-output-escaping-hb2amy
->>>>>> master
->>>>>> master
->>>>>> master
->>>>>> master
 No syntax errors detected in admin/delacct.php
 No syntax errors detected in admin/editlog.php
 No syntax errors detected in admin/findnotconnectable.php
@@ -31,22 +18,11 @@ No syntax errors detected in admin/freeleech.php
 No syntax errors detected in admin/grouppm.php
 No syntax errors detected in admin/hit_and_run_settings.php
 No syntax errors detected in admin/hnrwarn.php
-<<<<<< codex/enforce-csrf-and-output-escaping-9ffaz0
-======
-<<<<<< codex/enforce-csrf-and-output-escaping-y3qyza
-======
-<<<<<< codex/enforce-csrf-and-output-escaping-ism9l3
-======
-<<<<<< codex/enforce-csrf-and-output-escaping-m17p9q
->>>>>> master
->>>>>> master
->>>>>> master
 No syntax errors detected in admin/hit_and_run_settings.php
 No syntax errors detected in admin/hnrwarn.php
 No syntax errors detected in admin/inactive.php
 No syntax errors detected in admin/invite_tree.php
 No syntax errors detected in admin/leechwarn.php
-<<<<<< codex/enforce-csrf-and-output-escaping-9ffaz0
 No syntax errors detected in admin/bonusmanage.php
 No syntax errors detected in admin/categories.php
 No syntax errors detected in admin/bonusmanage.php
@@ -54,59 +30,18 @@ No syntax errors detected in admin/bonusmanage.php
 No syntax errors detected in admin/categories.php
 No syntax errors detected in admin/bonusmanage.php
 No syntax errors detected in admin/categories.php
-======
-<<<<<< codex/enforce-csrf-and-output-escaping-y3qyza
 No syntax errors detected in admin/bonusmanage.php
 No syntax errors detected in admin/categories.php
 No syntax errors detected in admin/bonusmanage.php
-======
-<<<<<< codex/enforce-csrf-and-output-escaping-ism9l3
 No syntax errors detected in admin/bonusmanage.php
 No syntax errors detected in admin/categories.php
-======
-======
-======
->>>>>> master
->>>>>> master
->>>>>> master
->>>>>> master
->>>>>> master
 No syntax errors detected in public/ajax/tvmaze_lookup.php
 No syntax errors detected in public/ajax/checkport.php
-<<<<<< codex/enforce-csrf-and-escape-output-hay3lv
-=======
-<<<<<< codex/enforce-csrf-and-escape-output-dxtuor
-=======
-<<<<<< codex/enforce-csrf-and-escape-output-ysog5w
-=======
-<<<<<< codex/enforce-csrf-and-escape-output-1ejsd3
-=======
-<<<<<< codex/enforce-csrf-and-escape-output-ls3ug3
-=======
-<<<<<< codex/enforce-csrf-and-escape-output-bbpkil
->>>>>> master
->>>>>> master
->>>>>> master
->>>>>> master
->>>>>> master
 No syntax errors detected in public/bugs.php
 No syntax errors detected in admin/reputation_settings.php
 No syntax errors detected in public/subtitles.php
 No syntax errors detected in admin/delacct.php
 No syntax errors detected in admin/editlog.php
-<<<<<< codex/enforce-csrf-and-escape-output-hay3lv
-=======
-<<<<<< codex/enforce-csrf-and-escape-output-dxtuor
-=======
-<<<<<< codex/enforce-csrf-and-escape-output-ysog5w
-=======
-<<<<<< codex/enforce-csrf-and-escape-output-1ejsd3
-=======
-<<<<<< codex/enforce-csrf-and-escape-output-ls3ug3
->>>>>> master
->>>>>> master
->>>>>> master
->>>>>> master
 No syntax errors detected in public/ajax/autocomplete.php
 No syntax errors detected in public/ajax/bookmarks.php
 No syntax errors detected in public/ajax/checkports.php
@@ -114,16 +49,6 @@ No syntax errors detected in public/ajax/cooker_notify.php
 No syntax errors detected in public/ajax/descr_format.php
 No syntax errors detected in public/achievementlist.php
 No syntax errors detected in admin/watched_users.php
-<<<<<< codex/enforce-csrf-and-escape-output-hay3lv
-=======
-<<<<<< codex/enforce-csrf-and-escape-output-dxtuor
-=======
-<<<<<< codex/enforce-csrf-and-escape-output-ysog5w
-=======
-<<<<<< codex/enforce-csrf-and-escape-output-1ejsd3
->>>>>> master
->>>>>> master
->>>>>> master
 No syntax errors detected in public/ajax/ebook_lookup.php
 No syntax errors detected in public/ajax/imdb_lookup.php
 No syntax errors detected in public/ajax/isbn_lookup.php
@@ -134,13 +59,6 @@ No syntax errors detected in public/ajax/offer_vote.php
 No syntax errors detected in public/ajax/rating.php
 No syntax errors detected in public/ajax/request_notify.php
 No syntax errors detected in public/ajax/member_input.php
-<<<<<< codex/enforce-csrf-and-escape-output-hay3lv
-=======
-<<<<<< codex/enforce-csrf-and-escape-output-dxtuor
-=======
-<<<<<< codex/enforce-csrf-and-escape-output-ysog5w
->>>>>> master
->>>>>> master
 No syntax errors detected in public/ajax/request_vote.php
 No syntax errors detected in public/ajax/show_in_navbar.php
 No syntax errors detected in public/ajax/staff_picks.php
@@ -152,10 +70,6 @@ No syntax errors detected in public/ajax/trivia_answers.php
 No syntax errors detected in public/ajax/tvmaze_lookup.php
 No syntax errors detected in public/ajax/usersearch.php
 No syntax errors detected in public/ajax/thanks.php
-<<<<<< codex/enforce-csrf-and-escape-output-hay3lv
-=======
-<<<<<< codex/enforce-csrf-and-escape-output-dxtuor
->>>>>> master
 No syntax errors detected in public/ajax/request_vote.php
 No syntax errors detected in public/ajax/show_in_navbar.php
 No syntax errors detected in public/ajax/staff_picks.php
@@ -166,7 +80,6 @@ No syntax errors detected in public/ajax/torrents_lookup.php
 No syntax errors detected in public/ajax/trivia_answers.php
 No syntax errors detected in public/ajax/tvmaze_lookup.php
 No syntax errors detected in public/ajax/usersearch.php
-<<<<<< codex/enforce-csrf-and-escape-output-hay3lv
 No syntax errors detected in public/bitbucket.php
 No syntax errors detected in public/blackjack.php
 No syntax errors detected in public/bot_triggers.php
@@ -177,24 +90,9 @@ No syntax errors detected in public/delete.php
 No syntax errors detected in public/details.php
 No syntax errors detected in public/downloadsub.php
 No syntax errors detected in public/contactstaff.php
-=======
-=======
-=======
-=======
-=======
-=======
-<<<<<< codex/enforce-csrf-and-escape-output-o8hj4w
 No syntax errors detected in public/bugs.php
 No syntax errors detected in admin/reputation_settings.php
 No syntax errors detected in public/subtitles.php
-======
->>>>>> master
->>>>>> master
->>>>>> master
->>>>>> master
->>>>>> master
->>>>>> master
->>>>>> master
 No syntax errors detected in public/bitbucket.php
 No syntax errors detected in public/blackjack.php
 No syntax errors detected in public/bot_triggers.php
@@ -205,117 +103,30 @@ No syntax errors detected in public/contactstaff.php
 No syntax errors detected in public/delete.php
 No syntax errors detected in public/details.php
 No syntax errors detected in public/downloadsub.php
-<<<<<< codex/enforce-csrf-and-standardize-output-escaping-qlbcfm
-=======
-<<<<<< codex/enforce-csrf-and-standardize-output-escaping-z1upk7
-=======
-<<<<<< codex/enforce-csrf-and-standardize-output-escaping-xgz5rh
-=======
-<<<<<< codex/enforce-csrf-and-standardize-output-escaping-lh777z
-=======
-<<<<<< codex/enforce-csrf-and-standardize-output-escaping-ijmfmb
-=======
-<<<<<< codex/enforce-csrf-and-standardize-output-escaping-27th0z
-=======
-<<<<<< codex/enforce-csrf-and-standardize-output-escaping-9pvety
-=======
-<<<<<< codex/enforce-csrf-and-standardize-output-escaping-i6u0i6
->>>>>> master
->>>>>> master
->>>>>> master
->>>>>> master
->>>>>> master
->>>>>> master
->>>>>> master
 No syntax errors detected in public/ajax/torrents_lookup.php
 No syntax errors detected in public/ajax/trivia_answers.php
 No syntax errors detected in public/ajax/tvmaze_lookup.php
 No syntax errors detected in public/ajax/usersearch.php
-<<<<<< codex/enforce-csrf-and-standardize-output-escaping-qlbcfm
-=======
-<<<<<< codex/enforce-csrf-and-standardize-output-escaping-z1upk7
-=======
-<<<<<< codex/enforce-csrf-and-standardize-output-escaping-xgz5rh
-=======
-<<<<<< codex/enforce-csrf-and-standardize-output-escaping-lh777z
-=======
-<<<<<< codex/enforce-csrf-and-standardize-output-escaping-ijmfmb
-=======
-<<<<<< codex/enforce-csrf-and-standardize-output-escaping-27th0z
-=======
-<<<<<< codex/enforce-csrf-and-standardize-output-escaping-9pvety
->>>>>> master
->>>>>> master
->>>>>> master
->>>>>> master
->>>>>> master
->>>>>> master
 No syntax errors detected in public/polls_take_vote.php
 No syntax errors detected in public/recover.php
 No syntax errors detected in public/report.php
 No syntax errors detected in public/requests.php
 No syntax errors detected in public/signup.php
-<<<<<< codex/enforce-csrf-and-standardize-output-escaping-qlbcfm
-=======
-<<<<<< codex/enforce-csrf-and-standardize-output-escaping-z1upk7
-=======
-<<<<<< codex/enforce-csrf-and-standardize-output-escaping-xgz5rh
-=======
-<<<<<< codex/enforce-csrf-and-standardize-output-escaping-lh777z
-=======
-<<<<<< codex/enforce-csrf-and-standardize-output-escaping-ijmfmb
-=======
-<<<<<< codex/enforce-csrf-and-standardize-output-escaping-27th0z
->>>>>> master
->>>>>> master
->>>>>> master
->>>>>> master
->>>>>> master
 No syntax errors detected in public/subtitles.php
 No syntax errors detected in public/tags.php
 No syntax errors detected in public/takereseed.php
 No syntax errors detected in public/takethankyou.php
 No syntax errors detected in public/tenpercent.php
-<<<<<< codex/enforce-csrf-and-standardize-output-escaping-qlbcfm
-=======
-<<<<<< codex/enforce-csrf-and-standardize-output-escaping-z1upk7
-=======
-<<<<<< codex/enforce-csrf-and-standardize-output-escaping-xgz5rh
-=======
-<<<<<< codex/enforce-csrf-and-standardize-output-escaping-lh777z
-=======
-<<<<<< codex/enforce-csrf-and-standardize-output-escaping-ijmfmb
->>>>>> master
->>>>>> master
->>>>>> master
->>>>>> master
 No syntax errors detected in public/subtitles.php
 No syntax errors detected in public/tags.php
 No syntax errors detected in public/takereseed.php
 No syntax errors detected in public/takethankyou.php
 No syntax errors detected in public/tenpercent.php
-<<<<<< codex/enforce-csrf-and-standardize-output-escaping-qlbcfm
-=======
-<<<<<< codex/enforce-csrf-and-standardize-output-escaping-z1upk7
-=======
-<<<<<< codex/enforce-csrf-and-standardize-output-escaping-xgz5rh
-=======
-<<<<<< codex/enforce-csrf-and-standardize-output-escaping-lh777z
->>>>>> master
->>>>>> master
->>>>>> master
 No syntax errors detected in public/signup.php
 No syntax errors detected in public/subtitles.php
 No syntax errors detected in public/tags.php
 No syntax errors detected in public/takereseed.php
 No syntax errors detected in public/takethankyou.php
-<<<<<< codex/enforce-csrf-and-standardize-output-escaping-qlbcfm
-=======
-<<<<<< codex/enforce-csrf-and-standardize-output-escaping-z1upk7
-=======
-<<<<<< codex/enforce-csrf-and-standardize-output-escaping-xgz5rh
->>>>>> master
->>>>>> master
 No syntax errors detected in public/upcoming.php
 
 No syntax errors detected in public/user_blocks.php
@@ -336,53 +147,22 @@ No syntax errors detected in public/uploadapp.php
 No syntax errors detected in public/user_blocks.php
 No syntax errors detected in public/user_unlocks.php
 No syntax errors detected in public/usercomment.php
-<<<<<< codex/enforce-csrf-and-standardize-output-escaping-qlbcfm
-=======
-<<<<<< codex/enforce-csrf-and-standardize-output-escaping-z1upk7
->>>>>> master
 No syntax errors detected in public/takethankyou.php
 No syntax errors detected in public/takeupload.php
 No syntax errors detected in public/tenpercent.php
 No syntax errors detected in public/upcoming.php
 No syntax errors detected in public/uploadapp.php
-<<<<<< codex/enforce-csrf-and-standardize-output-escaping-qlbcfm
 No syntax errors detected in public/user_blocks.php
 No syntax errors detected in public/user_unlocks.php
 No syntax errors detected in public/usercomment.php
 No syntax errors detected in public/verify.php
 No syntax errors detected in public/wiki.php
-=======
-=======
-=======
-=======
-=======
-=======
-=======
-=======
->>>>>> master
->>>>>> master
->>>>>> master
->>>>>> master
->>>>>> master
->>>>>> master
->>>>>> master
->>>>>> master
 No syntax errors detected in bootstrap_web.php
 No syntax errors detected in include/session_bootstrap.php
 No syntax errors detected in include/helpers/cookies.php
 No syntax errors detected in bootstrap_web.php
 No syntax errors detected in include/helpers/http.php
 No syntax errors detected in public/ajax/ajax_tooltips.php
-<<<<<< codex/add-security-headers-and-json-helper-r4pmvi
-=======
-<<<<<< codex/add-security-headers-and-json-helper-bpb2k8
-=======
-<<<<<< codex/add-security-headers-and-json-helper-ykgca0
-=======
-<<<<<< codex/add-security-headers-and-json-helper-huxuqp
->>>>>> master
->>>>>> master
->>>>>> master
 No syntax errors detected in public/ajax/ajax_tooltips.php
 No syntax errors detected in public/ajax/bookmarks.php
 No syntax errors detected in public/ajax/checkport.php
@@ -394,13 +174,6 @@ No syntax errors detected in public/ajax/imdb_lookup.php
 No syntax errors detected in public/ajax/isbn_lookup.php
 No syntax errors detected in public/ajax/like.php
 No syntax errors detected in public/ajax/offer_notify.php
-<<<<<< codex/add-security-headers-and-json-helper-r4pmvi
-=======
-<<<<<< codex/add-security-headers-and-json-helper-bpb2k8
-=======
-<<<<<< codex/add-security-headers-and-json-helper-ykgca0
->>>>>> master
->>>>>> master
 No syntax errors detected in public/ajax/offer_status.php
 No syntax errors detected in public/ajax/offer_vote.php
 No syntax errors detected in public/ajax/request_notify.php
@@ -411,18 +184,14 @@ No syntax errors detected in public/ajax/take_upload.php
 No syntax errors detected in public/ajax/take_url_upload.php
 No syntax errors detected in public/ajax/thanks.php
 No syntax errors detected in public/ajax/torrents_lookup.php
-<<<<<< codex/add-security-headers-and-json-helper-r4pmvi
-=======
-<<<<<< codex/add-security-headers-and-json-helper-bpb2k8
->>>>>> master
 No syntax errors detected in public/ajax/trivia_answers.php
 No syntax errors detected in public/ajax/trivia_lookup.php
 No syntax errors detected in public/ajax/tvmaze_lookup.php
 No syntax errors detected in public/ajax/usersearch.php
 No syntax errors detected in public/search.php
-<<<<<< codex/add-security-headers-and-json-helper-r4pmvi
 No syntax errors detected in include/helpers/cookies.php
 No syntax errors detected in include/session_bootstrap.php
+<<<<<< codex/add-centralized-audit-logging-95hh7k
 =======
 =======
 =======
@@ -434,34 +203,14 @@ No syntax errors detected in include/session_bootstrap.php
 <<<<<< codex/add-centralized-audit-logging-95hh7k
 classes/Support/Audit.php: OK
 =======
+=======
+>>>>>> master
 No syntax errors detected in include/helpers/audit.php
 No syntax errors detected in admin/acpmanage.php
 No syntax errors detected in admin/backup.php
 No syntax errors detected in admin/bannedemails.php
 No syntax errors detected in admin/bans.php
 No syntax errors detected in admin/block.settings.php
-<<<<<< codex/add-centralized-audit-logging-jhw01y
-=======
-<<<<<< codex/add-centralized-audit-logging-ld3avv
-=======
-<<<<<< codex/add-centralized-audit-logging-d0fkuv
-=======
-<<<<<< codex/add-centralized-audit-logging-7f19gd
-=======
-<<<<<< codex/add-centralized-audit-logging-9kmcga
-=======
-<<<<<< codex/add-centralized-audit-logging-rufye2
-=======
-<<<<<< codex/add-centralized-audit-logging-4v67d4
-======
-<<<<<< codex/add-centralized-audit-logging-2v4fcs
->>>>>> master
->>>>>> master
->>>>>> master
->>>>>> master
->>>>>> master
->>>>>> master
->>>>>> master
 No syntax errors detected in admin/class_config.php
 No syntax errors detected in admin/cleanup_manager.php
 No syntax errors detected in admin/cloudview.php
@@ -471,25 +220,6 @@ No syntax errors detected in admin/delacct.php
 No syntax errors detected in admin/doubleusers.php
 No syntax errors detected in admin/edit_moods.php
 No syntax errors detected in admin/editlog.php
-<<<<<< codex/add-centralized-audit-logging-jhw01y
-=======
-<<<<<< codex/add-centralized-audit-logging-ld3avv
-=======
-<<<<<< codex/add-centralized-audit-logging-d0fkuv
-=======
-<<<<<< codex/add-centralized-audit-logging-7f19gd
-=======
-<<<<<< codex/add-centralized-audit-logging-9kmcga
-=======
-<<<<<< codex/add-centralized-audit-logging-rufye2
-=======
-<<<<<< codex/add-centralized-audit-logging-4v67d4
->>>>>> master
->>>>>> master
->>>>>> master
->>>>>> master
->>>>>> master
->>>>>> master
 No syntax errors detected in admin/floodlimit.php
 No syntax errors detected in admin/flush.php
 No syntax errors detected in admin/forum_config.php
@@ -506,22 +236,6 @@ No syntax errors detected in admin/manage_images.php
 No syntax errors detected in admin/mass_bonus_for_members.php
 No syntax errors detected in admin/memcache.php
 No syntax errors detected in admin/modtask.php
-<<<<<< codex/add-centralized-audit-logging-jhw01y
-=======
-<<<<<< codex/add-centralized-audit-logging-ld3avv
-=======
-<<<<<< codex/add-centralized-audit-logging-d0fkuv
-=======
-<<<<<< codex/add-centralized-audit-logging-7f19gd
-=======
-<<<<<< codex/add-centralized-audit-logging-9kmcga
-=======
-<<<<<< codex/add-centralized-audit-logging-rufye2
->>>>>> master
->>>>>> master
->>>>>> master
->>>>>> master
->>>>>> master
 No syntax errors detected in admin/mysql_overview.php
 No syntax errors detected in admin/news.php
 No syntax errors detected in admin/over_forums.php
@@ -532,19 +246,6 @@ No syntax errors detected in admin/site_settings.php
 No syntax errors detected in admin/sysoplog.php
 No syntax errors detected in admin/themes.php
 No syntax errors detected in admin/trivia_config.php
-<<<<<< codex/add-centralized-audit-logging-jhw01y
-=======
-<<<<<< codex/add-centralized-audit-logging-ld3avv
-=======
-<<<<<< codex/add-centralized-audit-logging-d0fkuv
-=======
-<<<<<< codex/add-centralized-audit-logging-7f19gd
-=======
-<<<<<< codex/add-centralized-audit-logging-9kmcga
->>>>>> master
->>>>>> master
->>>>>> master
->>>>>> master
 No syntax errors detected in admin/upgrade_database.php
 No syntax errors detected in admin/uploadapps.php
 No syntax errors detected in admin/usersearch.php
@@ -553,16 +254,6 @@ No syntax errors detected in admin/watched_users.php
 No syntax errors detected in public/achievementbonus.php
 No syntax errors detected in public/achievementhistory.php
 No syntax errors detected in public/ajax/cooker_notify.php
-<<<<<< codex/add-centralized-audit-logging-jhw01y
-=======
-<<<<<< codex/add-centralized-audit-logging-ld3avv
-=======
-<<<<<< codex/add-centralized-audit-logging-d0fkuv
-=======
-<<<<<< codex/add-centralized-audit-logging-7f19gd
->>>>>> master
->>>>>> master
->>>>>> master
 No syntax errors detected in public/ajax/imdb_lookup.php
 No syntax errors detected in public/ajax/like.php
 No syntax errors detected in public/ajax/member_input.php
@@ -573,13 +264,6 @@ No syntax errors detected in public/ajax/rating.php
 No syntax errors detected in public/ajax/request_notify.php
 No syntax errors detected in public/ajax/request_vote.php
 No syntax errors detected in public/ajax/show_in_navbar.php
-<<<<<< codex/add-centralized-audit-logging-jhw01y
-=======
-<<<<<< codex/add-centralized-audit-logging-ld3avv
-=======
-<<<<<< codex/add-centralized-audit-logging-d0fkuv
->>>>>> master
->>>>>> master
 No syntax errors detected in public/ajax/staff_picks.php
 No syntax errors detected in public/ajax/take_upload.php
 No syntax errors detected in public/ajax/take_url_upload.php
@@ -590,10 +274,6 @@ No syntax errors detected in public/anatomy.php
 No syntax errors detected in public/announce.php
 No syntax errors detected in public/announcement.php
 No syntax errors detected in public/bitbucket.php
-<<<<<< codex/add-centralized-audit-logging-jhw01y
-=======
-<<<<<< codex/add-centralized-audit-logging-ld3avv
->>>>>> master
 No syntax errors detected in public/bitbucket.php
 No syntax errors detected in public/blackjack.php
 No syntax errors detected in public/bookmarks.php
@@ -604,7 +284,6 @@ No syntax errors detected in public/casino.php
 No syntax errors detected in public/clear_announcement.php
 No syntax errors detected in public/contactstaff.php
 No syntax errors detected in public/delete.php
-<<<<<< codex/add-centralized-audit-logging-jhw01y
 No syntax errors detected in admin/acpmanage.php
 No syntax errors detected in admin/backup.php
 No syntax errors detected in admin/bannedemails.php
@@ -616,6 +295,12 @@ No syntax errors detected in public/fastdelete.php
 No syntax errors detected in public/flash.php
 No syntax errors detected in public/forums.php
 No syntax errors detected in public/hnrs.php
+<<<<<< codex/add-centralized-audit-logging-and-hooks-izpa7d
+No syntax errors detected in include/helpers/audit.php
+No syntax errors detected in public/login.php
+No syntax errors detected in include/helpers/audit.php
+offset 120: no PHP files to lint
+=======
 =======
 =======
 =======
@@ -631,5 +316,8 @@ No syntax errors detected in public/hnrs.php
 >>>>>> master
 >>>>>> master
 >>>>>> master
+>>>>>> master
+No syntax errors detected in include/helpers/audit.php
+No syntax errors detected in public/login.php
 >>>>>> master
 >>>>>> master
