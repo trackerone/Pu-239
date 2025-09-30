@@ -12,6 +12,7 @@ use Pu239\User;
 use Rakit\Validation\Validator;
 
 require_once dirname(__DIR__) . '/bootstrap_web.php';
+require_once dirname(__DIR__) . '/include/helpers/audit.php';
 
 global $container;
 /** @var ConfigRepository $config */
@@ -382,6 +383,15 @@ if ($has_access) {
         $update = main_div($update, 'has-text-centered w-75 min-350', 'padding20');
     } elseif ($delete && is_valid_id($id)) {
         if ($request_class->delete($id, $user['class'] >= UC_STAFF, $user['id']) === 1) {
+            audit_log(
+                $user['id'] ?? null,
+                'torrent.moderate',
+                [
+                    'id' => $id,
+                    'op' => 'request.delete',
+                ],
+            );
+            // >>>>>> PU239:audit-hook-5
             $session->set('is-success', _('Request Deleted'));
         } else {
             $session->set('is-warning', _('Request was NOT Deleted'));
