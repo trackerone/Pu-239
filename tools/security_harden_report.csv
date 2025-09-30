@@ -277,6 +277,7 @@ public/hnrs.php,0,,true,bootstrapped audit helper for hnrs view
 admin/acpmanage.php,2,user.unban|user.ban,true,retained audit hooks while relocating review markers
 admin/backup.php,2,config.update,true,retained audit hooks while relocating review markers
 admin/bannedemails.php,2,user.unban|user.ban,true,retained audit hooks while relocating review markers
+<<<<<< codex/add-centralized-audit-logging-and-hooks-izpa7d
 include/helpers/audit.php,0,[],false,helper markers adjusted
 public/login.php,1,[login.success],true,added audit log for login success
 public/media/flash_games/SuperFlashMarioBrosSte.swf,0,[],false,non-PHP asset skipped in batch offset 110
@@ -299,3 +300,23 @@ public/media/flash_games/summergames04.swf,0,[],false,non-PHP asset skipped in b
 public/media/flash_games/supersplashBH.swf,0,[],false,non-PHP asset skipped in batch offset 120
 public/media/flash_games/trappedinawell.swf,0,[],false,non-PHP asset skipped in batch offset 120
 public/media/flash_games/yeti10.swf,0,[],false,non-PHP asset skipped in batch offset 120
+=======
+=======
+=======
+=======
+=======
+=======
+=======
+=======
+=======
+>>>>>> master
+>>>>>> master
+>>>>>> master
+>>>>>> master
+>>>>>> master
+>>>>>> master
+>>>>>> master
+>>>>>> master
+include/helpers/audit.php,0,[],false,helper markers adjusted
+public/login.php,1,[login.success],true,added audit log for login success
+>>>>>> master

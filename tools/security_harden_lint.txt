@@ -281,7 +281,28 @@ No syntax errors detected in public/fastdelete.php
 No syntax errors detected in public/flash.php
 No syntax errors detected in public/forums.php
 No syntax errors detected in public/hnrs.php
+<<<<<< codex/add-centralized-audit-logging-and-hooks-izpa7d
 No syntax errors detected in include/helpers/audit.php
 No syntax errors detected in public/login.php
 No syntax errors detected in include/helpers/audit.php
 offset 120: no PHP files to lint
+=======
+=======
+=======
+=======
+=======
+=======
+=======
+=======
+=======
+>>>>>> master
+>>>>>> master
+>>>>>> master
+>>>>>> master
+>>>>>> master
+>>>>>> master
+>>>>>> master
+>>>>>> master
+No syntax errors detected in include/helpers/audit.php
+No syntax errors detected in public/login.php
+>>>>>> master
