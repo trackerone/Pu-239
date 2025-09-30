@@ -2,7 +2,6 @@
 declare(strict_types=1);
 
 require_once dirname(__DIR__) . '/bootstrap_web.php';
-require_once dirname(__DIR__) . '/include/helpers/audit.php';
 
 use Pu239\Database;
 use Pu239\Cache;
@@ -11,6 +10,7 @@ use Pu239\Comment;
 use Pu239\Session;
 use Pu239\Torrent;
 use Pu239\User;
+use PU239\Support\Audit;
 
 $db = $container->get(Database::class);
 $s = $s ?? static fn($v) => htmlspecialchars((string) $v, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
@@ -103,8 +103,7 @@ if ($moderator) {
         $torrent['checked_by'] = $user['id'];
         $torrent['checked_when'] = $dt;
         write_log(_fe('Torrent {0}({1}){2} was checked by {3}', "[url={$site_config['paths']['baseurl']}details.php?id=$id]", htmlsafechars((string) $torrent['name']), '[/url]', $user['username']));
-        audit_log($user['id'] ?? null, 'torrent.moderate', ['id' => $id, 'op' => 'checked']);
-        // >>>>>> PU239:audit-hook-2
+        Audit::log($user['id'] ?? null, 'torrent.moderate', ['id' => $id, 'op' => 'checked']);
         if (!empty($_GET['returnto'])) {
             $returnto = str_replace('&amp;', '&', $_GET['returnto']);
             header("Location: {$site_config['paths']['baseurl']}" . urldecode($returnto));
@@ -120,8 +119,7 @@ if ($moderator) {
         $torrent['checked_by'] = $user['id'];
         $torrent['checked_when'] = $dt;
         write_log("Torrent [url={$site_config['paths']['baseurl']}details.php?id=$id](" . htmlsafechars((string) $torrent['name']) . ")[/url] was re-checked by {$user['username']}");
-        audit_log($user['id'] ?? null, 'torrent.moderate', ['id' => $id, 'op' => 'rechecked']);
-        // >>>>>> PU239:audit-hook-3
+        Audit::log($user['id'] ?? null, 'torrent.moderate', ['id' => $id, 'op' => 'rechecked']);
         $session->set('is-success', "Torrents has been 'Re-Checked'");
     } elseif (isset($_POST['clearchecked']) && $_POST['clearchecked'] == $id) {
         $set = [
@@ -132,8 +130,7 @@ if ($moderator) {
         $torrent['checked_by'] = 0;
         $torrent['checked_when'] = 0;
         write_log("Torrent [url={$site_config['paths']['baseurl']}details.php?id=$id](" . htmlsafechars((string) $torrent['name']) . ")[/url] was un-checked by {$user['username']}");
-        audit_log($user['id'] ?? null, 'torrent.moderate', ['id' => $id, 'op' => 'unchecked']);
-        // >>>>>> PU239:audit-hook-4
+        Audit::log($user['id'] ?? null, 'torrent.moderate', ['id' => $id, 'op' => 'unchecked']);
         $session->set('is-success', "Torrents has been 'Un-Checked'");
     } elseif (isset($_POST['clear_cache']) && $_POST['clear_cache'] == $id) {
         $cache->deleteMulti([

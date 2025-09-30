@@ -1,10 +1,10 @@
 <?php
 declare(strict_types=1);
 require_once dirname(__DIR__) . '/bootstrap_web.php';
-require_once dirname(__DIR__) . '/include/helpers/audit.php';
 
 use PU239\Config\ConfigRepository;
 use Pu239\Database;
+use PU239\Support\Audit;
 
 
 global $container, $CURUSER;
@@ -34,7 +34,7 @@ $cutoff = TIME_NOW - $secs;
 $pruneStatement = $db->run('DELETE FROM infolog WHERE added < :cutoff', [':cutoff' => $cutoff]);
 $pruned = method_exists($pruneStatement, 'rowCount') ? $pruneStatement->rowCount() : null;
 if (!empty($pruned)) {
-    audit_log($CURUSER['id'] ?? null, 'config.update', [
+    Audit::log($CURUSER['id'] ?? null, 'config.update', [
         'keys' => ['sysoplog.prune'],
         'count' => $pruned,
     ]);
@@ -111,4 +111,3 @@ $breadcrumbs = [
     "<a href='{$_SERVER['PHP_SELF']}'>$title</a>",
 ];
 echo stdhead($title, [], 'page-wrapper', $breadcrumbs) . wrapper($HTMLOUT) . stdfoot();
-

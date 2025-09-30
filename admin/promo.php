@@ -1,12 +1,12 @@
 <?php
 declare(strict_types=1);
 require_once dirname(__DIR__) . '/bootstrap_web.php';
-require_once dirname(__DIR__) . '/include/helpers/audit.php';
 
 use PU239\Config\ConfigRepository;
 use Pu239\Database;
 use Pu239\Session;
 use Pu239\User;
+use PU239\Support\Audit;
 
 require_once __DIR__ . '/../include/bittorrent.php';
 
@@ -64,7 +64,7 @@ $promo_id = $db->perform($sql, $values);
         stderr(_('Error'), 'Something wrong happened, please retry');
     } else {
         $session->set('is-success', 'The promo link [b]' . htmlsafechars($promoname) . '[/b] was added!');
-        audit_log($user['id'] ?? $CURUSER['id'] ?? null, 'config.update', [
+        Audit::log($user['id'] ?? $CURUSER['id'] ?? null, 'config.update', [
             'keys' => ['promo.add'],
             'id' => $promo_id,
             'name' => $promoname,
@@ -85,7 +85,7 @@ $promo_id = $db->perform($sql, $values);
         $deleted = $db->perform($sql, ['id' => $id]);
         if (!empty($deleted)) {
             $session->set('is-success', 'Promo was deleted!');
-            audit_log($user['id'] ?? $CURUSER['id'] ?? null, 'config.update', [
+            Audit::log($user['id'] ?? $CURUSER['id'] ?? null, 'config.update', [
                 'keys' => ['promo.delete'],
                 'id' => $id,
                 'name' => $r,

@@ -1,7 +1,6 @@
 <?php
 declare(strict_types=1);
 require_once dirname(__DIR__) . '/bootstrap_web.php';
-require_once dirname(__DIR__) . '/include/helpers/audit.php';
 
 $db = $container->get(Database::class);
 
@@ -12,6 +11,7 @@ use Delight\Auth\Auth;
 use Pu239\Cache;
 use Pu239\Database;
 use Pu239\Roles;
+use PU239\Support\Audit;
 
 require_once __DIR__ . '/../include/bittorrent.php';
 $user = check_user_status();
@@ -36,8 +36,7 @@ $id = (int) $id;
 $cache = $container->get(Cache::class);
 if ((isset($_GET['unedit']) && $_GET['unedit'] == 1) && $user['class'] >= UC_STAFF) {
     $cache->delete('editedby_' . $id);
-    audit_log($user['id'] ?? null, 'torrent.moderate', ['id' => $id, 'op' => 'unlock']);
-    // >>>>>> PU239:audit-hook-6
+    Audit::log($user['id'] ?? null, 'torrent.moderate', ['id' => $id, 'op' => 'unlock']);
     $returl = "details.php?id=$id";
     if (isset($_POST['returnto'])) {
         $returl .= '&returnto=' . urlencode($_POST['returnto']);

@@ -5,7 +5,6 @@ declare(strict_types=1);
 use Pu239\Database;
 
 require_once dirname(__DIR__) . '/bootstrap_web.php';
-require_once dirname(__DIR__, 2) . '/include/helpers/audit.php';
 
 $db = $container->get(Database::class);
 

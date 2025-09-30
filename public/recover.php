@@ -9,12 +9,15 @@ use Delight\Auth\ResetDisabledException;
 use Delight\Auth\TokenExpiredException;
 use Delight\Auth\TooManyRequestsException;
 use Pu239\Config\ConfigRepository;
+use Pu239\Database;
 use Pu239\User;
+use PU239\Support\Audit;
 use Rakit\Validation\Validator;
 
 global $container;
 /** @var ConfigRepository $config */
 $config = $container->get(ConfigRepository::class);
+$db = $container->get(Database::class);
 $baseUrl = (string) $config->get('paths.baseurl');
 $smtpEnable = (bool) $config->get('mail.smtp_enable');
 $smtpPassword = (string) $config->get('mail.smtp_password');
@@ -68,7 +71,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && !isset($_POST['selector'])) {
         header("Location: {$_SERVER['PHP_SELF']}");
         app_halt('Exit called');
     }
+    $userIdRow = $db->fetch(
+        'SELECT user FROM users_resets WHERE selector = :selector',
+        [
+            ':selector' => $post['selector'],
+        ],
+    );
+    $targetId = $userIdRow['user'] ?? null;
     $user->reset_password($post, false);
+    Audit::log(
+        $targetId !== null ? (int) $targetId : null,
+        'password.change',
+        [
+            'target' => $targetId !== null ? (int) $targetId : null,
+        ],
+    );
 } elseif ($_SERVER['REQUEST_METHOD'] === 'GET' && !empty($_GET)) {
     $get = $_GET;
     unset($_POST, $_GET, $_FILES);

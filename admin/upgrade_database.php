@@ -1,12 +1,12 @@
 <?php
 declare(strict_types=1);
 require_once dirname(__DIR__) . '/bootstrap_web.php';
-require_once dirname(__DIR__) . '/include/helpers/audit.php';
 
 use PU239\Config\ConfigRepository;
 use Pu239\Cache;
 use Pu239\Database;
 use Pu239\Session;
+use PU239\Support\Audit;
 
 global $container, $CURUSER;
 /** @var ConfigRepository $config */
@@ -57,7 +57,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     }
                 }
                 $session->set('is-success', "Query #$id ran without error");
-                audit_log(
+                Audit::log(
                     $CURUSER['id'] ?? null,
                     'config.update',
                     [
@@ -82,7 +82,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $sql = "INSERT INTO database_updates (/* columns */) VALUES (/* values */)";
             $db->perform($sql, $values);
             $session->set('is-success', "Query #$id has been ignored");
-            audit_log(
+            Audit::log(
                 $CURUSER['id'] ?? null,
                 'config.update',
                 [

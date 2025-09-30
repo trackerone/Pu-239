@@ -1,7 +1,6 @@
 <?php
 declare(strict_types=1);
 require_once dirname(__DIR__) . '/bootstrap_web.php';
-require_once dirname(__DIR__) . '/include/helpers/audit.php';
 
 $db = $container->get(Database::class);
 $s = $s ?? static fn($v) => htmlspecialchars((string) $v, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
@@ -20,6 +19,7 @@ use Pu239\Message;
 use Pu239\Session;
 use Pu239\User;
 use Spatie\Image\Exceptions\InvalidManipulation;
+use PU239\Support\Audit;
 
 require_once __DIR__ . '/../include/bittorrent.php';
 $curuser = check_user_status();
@@ -327,7 +327,7 @@ $result = $db->perform($sql, $values);
 
         if ($result) {
             send_staff_message($values, (int) $result);
-            audit_log($curuser['id'] ?? null, 'bug.report', [
+            Audit::log($curuser['id'] ?? null, 'bug.report', [
                 'priority' => $priority,
                 'bug_id' => (int) $result,
             ]);

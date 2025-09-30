@@ -1,11 +1,11 @@
 <?php
 declare(strict_types=1);
 require_once dirname(__DIR__) . '/bootstrap_web.php';
-require_once dirname(__DIR__) . '/include/helpers/audit.php';
 
 use PU239\Config\ConfigRepository;
 use Pu239\Database;
 use Pu239\Session;
+use PU239\Support\Audit;
 
 
 global $container, $CURUSER;
@@ -823,7 +823,7 @@ switch ($_GET['op']) {
         list($h, $p) = explode(':', $theserver);
         $r = sendMemcacheCommand($h, $p, 'delete ' . $theKey);
         $session->set('is-success', "Deleting $theKey: " . json_encode($r, JSON_PRETTY_PRINT));
-        audit_log(
+        Audit::log(
             $CURUSER['id'] ?? null,
             'config.update',
             [
@@ -839,7 +839,7 @@ switch ($_GET['op']) {
         $theserver = $MEMCACHE_SERVERS[(int) $_GET['server']];
         $r = flushServer($theserver);
         $session->set('is-success', "Flushing $theserver: " . json_encode($r, JSON_PRETTY_PRINT));
-        audit_log(
+        Audit::log(
             $CURUSER['id'] ?? null,
             'config.update',
             [

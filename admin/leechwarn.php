@@ -1,12 +1,12 @@
 <?php
 declare(strict_types=1);
 require_once dirname(__DIR__) . '/bootstrap_web.php';
-require_once dirname(__DIR__) . '/include/helpers/audit.php';
 
 use Pu239\Cache;
 use Pu239\Config\ConfigRepository;
 use Pu239\Database;
 use Pu239\Message;
+use PU239\Support\Audit;
 
 
 global $container, $CURUSER;
@@ -51,7 +51,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $placeholders = implode(',', array_fill(0, count($uids), '?'));
         $db->run("UPDATE users SET leechwarn = 0, warn_reason = NULL WHERE id IN ($placeholders)", $uids);
         foreach ($uids as $uid) {
-            audit_log(
+            Audit::log(
                 $CURUSER['id'] ?? null,
                 'user.unban',
                 [
@@ -91,7 +91,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $db->run("UPDATE users SET status = 2, disable_reason = ?, leechwarn = 0 WHERE id IN ($placeholders)", $params);
         foreach ($uids as $uid) {
             $cache->delete('user_' . (int) $uid);
-            audit_log(
+            Audit::log(
                 $CURUSER['id'] ?? null,
                 'user.ban',
                 [
@@ -111,7 +111,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $db->run("DELETE FROM users WHERE id IN ($placeholders)", $uids);
         foreach ($uids as $uid) {
             $cache->delete('user_' . (int) $uid);
-            audit_log(
+            Audit::log(
                 $CURUSER['id'] ?? null,
                 'user.ban',
                 [

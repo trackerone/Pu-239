@@ -1,12 +1,12 @@
 <?php
 declare(strict_types=1);
 require_once dirname(__DIR__) . '/bootstrap_web.php';
-require_once dirname(__DIR__) . '/include/helpers/audit.php';
 
 use Pu239\Cache;
 use Pu239\Config\ConfigRepository;
 use Pu239\Database;
 use Pu239\Message;
+use PU239\Support\Audit;
 
 
 global $container, $CURUSER;
@@ -73,7 +73,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $messages->insert($buffer);
         }
 
-        audit_log(
+        Audit::log(
             $CURUSER['id'] ?? null,
             'user.unban',
             [
@@ -99,7 +99,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $cache->delete('user_' . (int) $id);
         }
 
-        audit_log(
+        Audit::log(
             $CURUSER['id'] ?? null,
             'user.ban',
             [
@@ -121,7 +121,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $cache->delete('user_' . (int) $id);
         }
 
-        audit_log(
+        Audit::log(
             $CURUSER['id'] ?? null,
             'user.ban',
             [

@@ -1,7 +1,6 @@
 <?php
 declare(strict_types=1);
 require_once dirname(__DIR__) . '/bootstrap_web.php';
-require_once dirname(__DIR__) . '/include/helpers/audit.php';
 
 use PU239\Config\ConfigRepository;
 use Delight\Auth\AuthError;
@@ -13,6 +12,7 @@ use Pu239\Database;
 use Pu239\Message;
 use Pu239\Session;
 use Spatie\Image\Exceptions\InvalidManipulation;
+use PU239\Support\Audit;
 
 
 global $container, $CURUSER;
@@ -89,7 +89,7 @@ function notify_owner(array $tids)
             'msg' => $msg,
             'subject' => $subject,
         ];
-        audit_log($CURUSER['id'] ?? null, 'torrent.moderate', ['id' => (int) $torrent['id'], 'op' => 'deathrow.notify']);
+        Audit::log($CURUSER['id'] ?? null, 'torrent.moderate', ['id' => (int) $torrent['id'], 'op' => 'deathrow.notify']);
         $set = [
             'notified' => $dt,
         ];

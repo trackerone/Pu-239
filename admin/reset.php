@@ -2,10 +2,11 @@
 declare(strict_types=1);
 require_once dirname(__DIR__) . '/bootstrap_web.php';
 
-use PU239\Config\ConfigRepository;
 use Delight\Auth\Auth;
+use Pu239\Config\ConfigRepository;
 use Pu239\Database;
 use Pu239\User;
+use PU239\Support\Audit;
 
 
 global $container, $CURUSER;
@@ -28,13 +29,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $user = $user_class->getUserFromId($uid);
     $password = bin2hex(random_bytes(12));
     $auth = $container->get(Auth::class);
-    $auth->forgotPassword($user['email'], function ($selector, $token) use ($password, $CURUSER, $username, $user_class) {
+    $auth->forgotPassword($user['email'], function ($selector, $token) use ($password, $CURUSER, $username, $user_class, $uid) {
         $details = [
             'selector' => $selector,
             'token' => $token,
             'password' => $password,
         ];
         if ($user_class->reset_password($details, true)) {
+            Audit::log(
+                $CURUSER['id'] ?? null,
+                'password.change',
+                [
+                    'target' => $uid,
+                ],
+            );
             write_log(_fe('Password reset for {0} by {1}', $username, htmlsafechars($CURUSER['username'])));
             stderr(_('Success'), _fe('The password for account {0} is now {1}', $username, format_comment($password)) . '</b>.');
         } else {

@@ -1,13 +1,13 @@
 <?php
 declare(strict_types=1);
 require_once dirname(__DIR__) . '/bootstrap_web.php';
-require_once dirname(__DIR__) . '/include/helpers/audit.php';
 
 use PU239\Config\ConfigRepository;
 use Pu239\Ban;
 use Pu239\Database;
 use Pu239\IP;
 use Pu239\User;
+use PU239\Support\Audit;
 
 require_once INCL_DIR . 'geoip.inc';
 require_once INCL_DIR . 'geoipcity.inc';
@@ -38,7 +38,7 @@ if (isset($_GET['remove'])) {
 if (isset($_GET['banthisuser'])) {
     $ip = htmlsafechars($_GET['banthisip']);
     $bans_class->add_ban($ip, $CURUSER['id'], 'Banned');
-    audit_log(
+    Audit::log(
         $CURUSER['id'] ?? null,
         'user.ban',
         [

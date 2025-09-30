@@ -1,7 +1,6 @@
 <?php
 declare(strict_types=1);
 require_once dirname(__DIR__) . '/bootstrap_web.php';
-require_once dirname(__DIR__) . '/include/helpers/audit.php';
 
 use Pu239\Cache;
 use Pu239\Config\ConfigRepository;
@@ -10,6 +9,7 @@ use Pu239\Message;
 use Pu239\Roles;
 use Pu239\Session;
 use Pu239\User;
+use PU239\Support\Audit;
 
 require_once CLASS_DIR . 'class_user_options.php';
 require_once CLASS_DIR . 'class_user_options_2.php';
@@ -172,7 +172,7 @@ if (!empty($_POST) && $_POST['action'] === 'edituser') {
         if ($setbits > 0 || $clrbits > 0) {
             $newRolesMask = (($user['roles_mask'] | $setbits) & ~$clrbits);
             $update['roles_mask'] = new Literal('((roles_mask | ' . $setbits . ') & ~' . $clrbits . ')');
-            audit_log(
+            Audit::log(
                 $CURUSER['id'] ?? null,
                 'role.change',
                 [
@@ -201,7 +201,7 @@ if (!empty($_POST) && $_POST['action'] === 'edituser') {
             $update['class'] = $class;
             $useredit[] = _fe('{0} to {1}', $what, get_user_class_name($class));
             $modcomment = get_date($dt, 'DATE', 1) . ' - ' . _fe('{0} to {1} by {2}.', $what, get_user_class_name($class), $CURUSER['username']) . "\n" . $modcomment;
-            audit_log(
+            Audit::log(
                 $CURUSER['id'] ?? null,
                 'role.change',
                 [
@@ -862,7 +862,7 @@ $db->perform($sql, $values);
             $sql = "DELETE FROM ajax_chat_online WHERE userID = :userID";
 $db->perform($sql, ['userID' => $userid]);
             $cache->set('forced_logout_' . $userid, $dt);
-            audit_log(
+            Audit::log(
                 $CURUSER['id'] ?? null,
                 'user.ban',
                 [
@@ -889,7 +889,7 @@ $db->perform($sql, ['userID' => $userid]);
                 'msg' => $msg,
                 'subject' => $subject,
             ];
-            audit_log(
+            Audit::log(
                 $CURUSER['id'] ?? null,
                 'user.ban',
                 [
@@ -904,7 +904,7 @@ $db->perform($sql, ['userID' => $userid]);
             } elseif ($userstatus === 2) {
                 $modcomment = get_date($dt, 'DATE', 1) . ' ' . _('- Enabled by ') . ' ' . $CURUSER['username'] . ".\n" . $modcomment;
                 $useredit[] = _('Enabled = ') . 'yes';
-                audit_log(
+                Audit::log(
                     $CURUSER['id'] ?? null,
                     'user.unban',
                     [
@@ -924,7 +924,7 @@ $db->perform($sql, ['userID' => $userid]);
                     'msg' => $msg,
                     'subject' => $subject,
                 ];
-                audit_log(
+                Audit::log(
                     $CURUSER['id'] ?? null,
                     'user.unban',
                     [

@@ -12,6 +12,7 @@ use Pu239\Config\ConfigRepository;
 use Pu239\Session;
 use Pu239\Torrent;
 use Rakit\Validation\Validator;
+use PU239\Support\Audit;
 
 require_once __DIR__ . '/../include/bittorrent.php';
 $user = check_user_status();
@@ -63,6 +64,15 @@ if (isset($data['action'])) {
                         'comments' => new Literal('comments - 1'),
                     ];
                     $offer_class->update($update, $tid);
+                    Audit::log(
+                        $user['id'] ?? null,
+                        'torrent.moderate',
+                        [
+                            'id' => $cid,
+                            'op' => 'offer.comment.delete',
+                        ],
+                    );
+                    // >>>>>> PU239:audit-hook-6
                     $session->set('is-success', _('Comment Deleted'));
                 } else {
                     $session->set('is-warning', _('Comment Not Deleted'));
@@ -313,6 +323,14 @@ if ($has_access) {
         $update = main_div($update, 'has-text-centered w-75 min-350', 'padding20');
     } elseif ($delete && is_valid_id($id)) {
         if ($offer_class->delete($id, $user['class'] >= UC_STAFF, $user['id']) === 1) {
+            Audit::log(
+                $user['id'] ?? null,
+                'torrent.moderate',
+                [
+                    'id' => $id,
+                    'op' => 'offer.delete',
+                ],
+            );
             $session->set('is-success', _('Offer Deleted'));
         } else {
             $session->set('is-warning', _('Offer was NOT Deleted'));

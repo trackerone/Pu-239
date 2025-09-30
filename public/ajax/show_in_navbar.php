@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 use Pu239\Cache;
 use Pu239\Database;
+use PU239\Support\Audit;
 
 require_once dirname(__DIR__) . '/bootstrap_web.php';
-require_once dirname(__DIR__) . '/include/helpers/audit.php';
 
 $cache = $container->get(Cache::class);
 $db = $container->get(Database::class);
@@ -39,7 +39,7 @@ $statement = $db->run(
 
 if ($statement->rowCount() > 0) {
     $cache->delete('staff_panels_' . (int) $user['class']);
-    audit_log(
+    Audit::log(
         $user['id'] ?? null,
         'config.update',
         [

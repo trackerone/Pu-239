@@ -5,6 +5,7 @@ use Pu239\Cache;
 use Pu239\Config\ConfigRepository;
 use Pu239\Database;
 use Pu239\User;
+use PU239\Support\Audit;
 
 require_once dirname(__DIR__) . '/bootstrap_web.php';
 
@@ -21,8 +22,19 @@ $user = check_user_status();
 $set = [
     'override_class' => 255,
 ];
+$previousOverride = $user['override_class'] ?? null;
 $users_class = $container->get(User::class);
 $users_class->update($set, $user['id']);
+Audit::log(
+    $user['id'] ?? null,
+    'role.change',
+    [
+        'target' => $user['id'] ?? null,
+        'from' => $previousOverride,
+        'to' => $set['override_class'],
+    ],
+);
+// >>>>>> PU239:audit-hook-3
 // $fluent removed — use $this->db (ExtendedPdo)
 $sql = "DELETE FROM ajax_chat_online WHERE userID = :userID";
 $db->perform($sql, ['userID' => $user['id']]);

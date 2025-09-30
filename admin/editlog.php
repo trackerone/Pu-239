@@ -1,11 +1,11 @@
 <?php
 declare(strict_types=1);
 require_once dirname(__DIR__) . '/bootstrap_web.php';
-require_once dirname(__DIR__) . '/include/helpers/audit.php';
 
 use Pu239\Config\ConfigRepository;
 use Pu239\Database;
 use Pu239\Session;
+use PU239\Support\Audit;
 
 
 global $container, $CURUSER;
@@ -61,7 +61,7 @@ if (!$exist || (isset($_POST['update']) && ($_POST['update'] === 'Update'))) {
     $session = $container->get(Session::class);
     if (file_put_contents($file_data, $data)) {
         $session->set('is-success', _fe("Coder's Log was updated for {0}", $CURUSER['username']));
-        audit_log($CURUSER['id'] ?? null, 'config.update', ['keys' => ['coders.log']]);
+        Audit::log($CURUSER['id'] ?? null, 'config.update', ['keys' => ['coders.log']]);
     } else {
         $session->set('is-warning', _fe('Could not save data to: [p]{0}[/p]', $file_data));
     }

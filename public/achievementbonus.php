@@ -9,7 +9,6 @@ use Pu239\User;
 use Pu239\Usersachiev;
 
 require_once dirname(__DIR__) . '/bootstrap_web.php';
-require_once dirname(__DIR__) . '/include/helpers/audit.php';
 
 $baseurl = '';
 global $container;

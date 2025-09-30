@@ -1,7 +1,6 @@
 <?php
 declare(strict_types=1);
 require_once dirname(__DIR__) . '/bootstrap_web.php';
-require_once dirname(__DIR__) . '/include/helpers/audit.php';
 
 use DI\DependencyException;
 use DI\NotFoundException;
@@ -9,6 +8,7 @@ use PU239\Config\ConfigRepository;
 use Pu239\Cache;
 use Pu239\Database;
 use Pu239\Session;
+use PU239\Support\Audit;
 
 
 global $container, $CURUSER;
@@ -207,7 +207,7 @@ $update = $db->perform($sql, array_merge($set, ['id' => $tid]));
         if (!$update) {
             $session->set('is-danger', _('Something Went Wrong'));
         } else {
-            audit_log($CURUSER['id'] ?? null, 'config.update', [
+            Audit::log($CURUSER['id'] ?? null, 'config.update', [
                 'keys' => ['themes.update'],
                 'id' => $tid,
                 'name' => $name,
@@ -244,7 +244,7 @@ $update = $db->perform($sql, array_merge($set, ['id' => $tid]));
         $sql = "UPDATE users SET /* columns */ WHERE stylesheet = :stylesheet";
         $db->perform($sql, array_merge($set, ['stylesheet' => $id]));
 
-        audit_log($CURUSER['id'] ?? null, 'config.update', [
+        Audit::log($CURUSER['id'] ?? null, 'config.update', [
             'keys' => ['themes.delete'],
             'id' => $id,
         ]);
@@ -279,7 +279,7 @@ $update = $db->perform($sql, array_merge($set, ['id' => $tid]));
         $sql = "INSERT INTO stylesheets (/* columns */) VALUES (/* values */)";
         $db->perform($sql, $values);
 
-        audit_log($CURUSER['id'] ?? null, 'config.update', [
+        Audit::log($CURUSER['id'] ?? null, 'config.update', [
             'keys' => ['themes.insert'],
             'id' => (int) $_POST['id'],
             'name' => $values['name'],
@@ -308,7 +308,7 @@ $update = $db->perform($sql, array_merge($set, ['id' => $tid]));
         $sql = "INSERT INTO stylesheets (/* columns */) VALUES (/* values */)";
         $db->perform($sql, $values);
 
-        audit_log($CURUSER['id'] ?? null, 'config.update', [
+        Audit::log($CURUSER['id'] ?? null, 'config.update', [
             'keys' => ['themes.insert'],
             'id' => (int) $_GET['id'],
             'name' => $values['name'],

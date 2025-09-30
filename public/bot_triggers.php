@@ -1,7 +1,6 @@
 <?php
 declare(strict_types=1);
 require_once dirname(__DIR__) . '/bootstrap_web.php';
-require_once dirname(__DIR__) . '/include/helpers/audit.php';
 
 use PU239\Config\ConfigRepository;
 use Pu239\BotReplies;
@@ -10,6 +9,7 @@ use Pu239\Cache;
 use Pu239\Database;
 use Pu239\Session;
 use Rakit\Validation\Validator;
+use PU239\Support\Audit;
 
 global $container;
 /** @var ConfigRepository $config */
@@ -98,7 +98,7 @@ if (has_access($user['class'], UC_ADMINISTRATOR, 'coder') && !empty($data)) {
         ];
         if ($trigger_class->insert($values)) {
             $session->set('is-success', _fe('Trigger: {0} added successfully.', $add_trigger));
-            audit_log($user['id'] ?? null, 'config.update', [
+            Audit::log($user['id'] ?? null, 'config.update', [
                 'keys' => ['bot_triggers.add'],
                 'phrase' => $add_trigger,
             ]);
@@ -112,7 +112,7 @@ if (has_access($user['class'], UC_ADMINISTRATOR, 'coder') && !empty($data)) {
         ];
         if ($trigger_class->update($values, $phraseid)) {
             $session->set('is-success', _fe('Trigger: {0} updated successfully.', $add_trigger));
-            audit_log($user['id'] ?? null, 'config.update', [
+            Audit::log($user['id'] ?? null, 'config.update', [
                 'keys' => ['bot_triggers.update'],
                 'phrase' => $update_trigger,
                 'id' => $phraseid,
@@ -128,7 +128,7 @@ if (has_access($user['class'], UC_ADMINISTRATOR, 'coder') && !empty($data)) {
         ];
         if ($replies_class->insert($values)) {
             $session->set('is-success', _fe('Reply: {0} added successfully.', $add_reply));
-            audit_log($user['id'] ?? null, 'config.update', [
+            Audit::log($user['id'] ?? null, 'config.update', [
                 'keys' => ['bot_replies.add'],
                 'phrase' => $add_reply,
                 'trigger_id' => $phraseid,
@@ -143,7 +143,7 @@ if (has_access($user['class'], UC_ADMINISTRATOR, 'coder') && !empty($data)) {
         ];
         if ($replies_class->update($values, $reply_id)) {
             $session->set('is-success', _fe('Reply: {0} updated successfully.', $add_reply));
-            audit_log($user['id'] ?? null, 'config.update', [
+            Audit::log($user['id'] ?? null, 'config.update', [
                 'keys' => ['bot_replies.update'],
                 'reply_id' => $reply_id,
             ]);
@@ -156,7 +156,7 @@ if (has_access($user['class'], UC_ADMINISTRATOR, 'coder') && !empty($data)) {
         ];
         if ($trigger_class->update($update, $approve_trigger)) {
             $session->set('is-success', _('Trigger Approved.'));
-            audit_log($user['id'] ?? null, 'config.update', [
+            Audit::log($user['id'] ?? null, 'config.update', [
                 'keys' => ['bot_triggers.approve'],
                 'id' => $approve_trigger,
             ]);
@@ -169,7 +169,7 @@ if (has_access($user['class'], UC_ADMINISTRATOR, 'coder') && !empty($data)) {
         ];
         if ($replies_class->update($update, $approve_reply)) {
             $session->set('is-success', _('Reply Approved.'));
-            audit_log($user['id'] ?? null, 'config.update', [
+            Audit::log($user['id'] ?? null, 'config.update', [
                 'keys' => ['bot_replies.approve'],
                 'id' => $approve_reply,
             ]);
@@ -179,7 +179,7 @@ if (has_access($user['class'], UC_ADMINISTRATOR, 'coder') && !empty($data)) {
     } elseif ($action === 'delete_trigger' && !empty($phraseid)) {
         if ($trigger_class->delete($phraseid)) {
             $session->set('is-success', _fe('Trigger: #{0} was deleted.', $phraseid));
-            audit_log($user['id'] ?? null, 'config.update', [
+            Audit::log($user['id'] ?? null, 'config.update', [
                 'keys' => ['bot_triggers.delete'],
                 'id' => $phraseid,
             ]);
@@ -189,7 +189,7 @@ if (has_access($user['class'], UC_ADMINISTRATOR, 'coder') && !empty($data)) {
     } elseif ($action === 'delete_reply' && !empty($reply_id)) {
         if ($replies_class->delete($reply_id)) {
             $session->set('is-success', _fe('Reply: #{0} was deleted.', $reply_id));
-            audit_log($user['id'] ?? null, 'config.update', [
+            Audit::log($user['id'] ?? null, 'config.update', [
                 'keys' => ['bot_replies.delete'],
                 'id' => $reply_id,
             ]);

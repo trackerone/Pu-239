@@ -1,7 +1,6 @@
 <?php
 declare(strict_types=1);
 require_once dirname(__DIR__) . '/bootstrap_web.php';
-require_once dirname(__DIR__) . '/include/helpers/audit.php';
 
 use Delight\Auth\AuthError;
 use Delight\Auth\NotLoggedInException;
@@ -14,6 +13,7 @@ use Pu239\Poll;
 use Pu239\PollVoter;
 use Pu239\Session;
 use Spatie\Image\Exceptions\InvalidManipulation;
+use PU239\Support\Audit;
 
 
 global $container;
@@ -96,10 +96,11 @@ function delete_poll($stdfoot)
     $poll_stuffs->delete($pid);
     $pollvoter_class->delete($pid);
     $pollvoter_class->delete_users_cache();
-    audit_log($CURUSER['id'] ?? null, 'config.update', [
+    Audit::log($CURUSER['id'] ?? null, 'config.update', [
         'keys' => ['poll.delete'],
         'id' => $pid,
     ]);
+    // >>>>>> PU239:audit-hook-5
     show_poll_archive($stdfoot);
 }
 
@@ -137,7 +138,7 @@ function update_poll()
     $result = $poll_stuffs->update($set, $pid);
     $pollvoter_class->delete_users_cache();
     if ($result) {
-        audit_log($CURUSER['id'] ?? null, 'config.update', [
+        Audit::log($CURUSER['id'] ?? null, 'config.update', [
             'keys' => ['poll.update'],
             'id' => $pid,
         ]);
@@ -181,7 +182,7 @@ function insert_new_poll()
     $result = $poll_stuffs->insert($values);
     $pollvoter_class->delete_users_cache();
     if ($result) {
-        audit_log($CURUSER['id'] ?? null, 'config.update', [
+        Audit::log($CURUSER['id'] ?? null, 'config.update', [
             'keys' => ['poll.insert'],
             'id' => $result,
         ]);

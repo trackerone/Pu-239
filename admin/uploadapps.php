@@ -1,7 +1,6 @@
 <?php
 declare(strict_types=1);
 require_once dirname(__DIR__) . '/bootstrap_web.php';
-require_once dirname(__DIR__) . '/include/helpers/audit.php';
 
 use PU239\Config\ConfigRepository;
 use Pu239\Cache;
@@ -10,6 +9,7 @@ use Pu239\Message;
 use Pu239\Roles;
 use Pu239\Session;
 use Pu239\User;
+use PU239\Support\Audit;
 
 
 global $container, $CURUSER;
@@ -112,7 +112,7 @@ $db->perform($sql, array_merge($update, ['id' => $id]));
     }
     $cache->delete('new_uploadapp_');
     $session->set('is-success', _('The application was successfully accepted. The user has been promoted and has been sent a PM notification.'));
-    audit_log(
+    Audit::log(
         $CURUSER['id'] ?? null,
         'role.change',
         [

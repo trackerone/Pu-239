@@ -1,11 +1,11 @@
 <?php
 declare(strict_types=1);
 require_once dirname(__DIR__) . '/bootstrap_web.php';
-require_once dirname(__DIR__) . '/include/helpers/audit.php';
 
 use Pu239\Cache;
 use Pu239\Config\ConfigRepository;
 use Pu239\Database;
+use PU239\Support\Audit;
 
 
 global $container, $CURUSER;
@@ -41,7 +41,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['do_it'])) {
     ];
     $sql = "UPDATE forum_config SET /* columns */ WHERE id = :id";
     $db->perform($sql, array_merge($update, ['id' => $config_id]));
-    audit_log($CURUSER['id'] ?? null, 'config.update', ['keys' => array_keys($update)]);
+    Audit::log($CURUSER['id'] ?? null, 'config.update', ['keys' => array_keys($update)]);
     $cache->delete('forum_config_');
     header('Location: ' . $selfRaw . '?tool=forum_config');
     app_halt('Exit called');

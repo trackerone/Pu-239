@@ -10,6 +10,7 @@ use Pu239\Session;
 use Pu239\Torrent;
 use Pu239\User;
 use Rakit\Validation\Validator;
+use PU239\Support\Audit;
 
 require_once dirname(__DIR__) . '/bootstrap_web.php';
 
@@ -382,6 +383,14 @@ if ($has_access) {
         $update = main_div($update, 'has-text-centered w-75 min-350', 'padding20');
     } elseif ($delete && is_valid_id($id)) {
         if ($request_class->delete($id, $user['class'] >= UC_STAFF, $user['id']) === 1) {
+            Audit::log(
+                $user['id'] ?? null,
+                'torrent.moderate',
+                [
+                    'id' => $id,
+                    'op' => 'request.delete',
+                ],
+            );
             $session->set('is-success', _('Request Deleted'));
         } else {
             $session->set('is-warning', _('Request was NOT Deleted'));

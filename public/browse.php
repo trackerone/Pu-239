@@ -2,11 +2,11 @@
 declare(strict_types=1);
 
 require_once dirname(__DIR__) . '/bootstrap_web.php';
-require_once dirname(__DIR__) . '/include/helpers/audit.php';
 
 use Pu239\Config\ConfigRepository;
 use Pu239\Database;
 use Pu239\User;
+use PU239\Support\Audit;
 
 $db = $container->get(Database::class);
 $s = $s ?? static fn($v) => htmlspecialchars((string) $v, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
@@ -42,7 +42,7 @@ if (isset($_GET['clear_new']) && $_GET['clear_new'] == 1) {
         'last_browse' => TIME_NOW,
     ];
     $users_class->update($set, $user['id']);
-    audit_log($user['id'] ?? null, 'browse.clear_new', []);
+    Audit::log($user['id'] ?? null, 'browse.clear_new', []);
     header("Location: {$baseurl}/browse.php");
     app_halt('Exit called');
 }

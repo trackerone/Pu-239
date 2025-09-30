@@ -11,7 +11,6 @@ use Pu239\Torrent;
 use Pu239\User;
 
 require_once dirname(__DIR__) . '/bootstrap_web.php';
-require_once dirname(__DIR__) . '/include/helpers/audit.php';
 
 global $container;
 /** @var Database $db */

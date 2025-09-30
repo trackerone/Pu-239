@@ -15,6 +15,7 @@ use Pu239\Session;
 use Pu239\Torrent;
 use Pu239\User;
 use Pu239\Usersachiev;
+use PU239\Support\Audit;
 
 require_once __DIR__ . '/../include/bittorrent.php';
 require_once CLASS_DIR . 'class.bencdec.php';
@@ -413,6 +414,16 @@ if (!$id) {
     $session->set('is-warning', _('Upload failed!'));
     why_die(_('Upload failed!'));
 }
+
+Audit::log(
+    $owner_id ?? null,
+    'torrent.moderate',
+    [
+        'id' => $id,
+        'op' => 'upload',
+        'anonymous' => $anonymous === 1,
+    ]
+);
 
 $torrents_class->remove_torrent($infohash);
 $torrents_class->get_torrent_from_hash($infohash);

@@ -1,12 +1,12 @@
 <?php
 declare(strict_types=1);
 require_once dirname(__DIR__) . '/bootstrap_web.php';
-require_once dirname(__DIR__) . '/include/helpers/audit.php';
 
 use PU239\Config\ConfigRepository;
 use Pu239\Database;
 use Pu239\Image;
 use Pu239\Session;
+use PU239\Support\Audit;
 
 
 global $container, $CURUSER;
@@ -46,7 +46,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && !empty($_POST['delete']) && $_POST[
         }
     }
     if (!empty($deleted)) {
-        audit_log(
+        Audit::log(
             $CURUSER['id'] ?? null,
             'config.update',
             [

@@ -1,10 +1,10 @@
 <?php
 declare(strict_types=1);
 require_once dirname(__DIR__) . '/bootstrap_web.php';
-require_once dirname(__DIR__) . '/include/helpers/audit.php';
 
 use Pu239\Config\ConfigRepository;
 use Pu239\Database;
+use PU239\Support\Audit;
 
 
 global $container, $CURUSER;
@@ -37,7 +37,7 @@ if ((int) $CURUSER['class'] >= (int) UC_STAFF) {
     if ($effected > 0) {
         // Remove peer rows (tracker ghosts) for this user
         $db->run('DELETE FROM peers WHERE userid = :id', [':id' => $id]);
-        audit_log(
+        Audit::log(
             $CURUSER['id'] ?? null,
             'torrent.moderate',
             [

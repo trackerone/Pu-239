@@ -1,13 +1,13 @@
 <?php
 declare(strict_types=1);
 require_once dirname(__DIR__) . '/bootstrap_web.php';
-require_once dirname(__DIR__) . '/include/helpers/audit.php';
 
 use DI\DependencyException;
 use DI\NotFoundException;
 use Pu239\Database;
 use Pu239\Session;
 use Pu239\Config\ConfigRepository;
+use PU239\Support\Audit;
 
 
 global $container, $CURUSER;
@@ -81,7 +81,7 @@ function resettimer(): void
 
     $timestamp = (int) strtotime('today midnight');
     $db->run('UPDATE cleanup SET clean_time = :ts', [':ts' => $timestamp]);
-    audit_log($CURUSER['id'] ?? null, 'config.update', ['keys' => ['cleanup.reset']]);
+    Audit::log($CURUSER['id'] ?? null, 'config.update', ['keys' => ['cleanup.reset']]);
 
     $session->set('is-success', 'Cleanup Time Set to ' . get_date($timestamp, 'LONG'));
     cleanup_show_main();
@@ -139,7 +139,7 @@ function manualclean(array $params): void
     // Bump next run time by increment (seconds)
     $next = TIME_NOW + (int) $row['clean_increment'];
     $db->run('UPDATE cleanup SET clean_time = :next WHERE clean_id = :cid', [':next' => $next, ':cid' => (int) $cid]);
-    audit_log($CURUSER['id'] ?? null, 'config.update', ['keys' => ['cleanup.clean_time'], 'task' => (int) $cid]);
+    Audit::log($CURUSER['id'] ?? null, 'config.update', ['keys' => ['cleanup.clean_time'], 'task' => (int) $cid]);
 
     stderr(_('Info'), _('Cleanup executed. Next run set to: ') . get_date($next, 'LONG'));
 }
@@ -325,7 +325,7 @@ function cleanup_take_edit(array $params): void
             ':cid' => (int) $params['cid'],
         ]
     );
-    audit_log($CURUSER['id'] ?? null, 'config.update', ['keys' => [$params['clean_title']]]);
+    Audit::log($CURUSER['id'] ?? null, 'config.update', ['keys' => [$params['clean_title']]]);
 
     cleanup_show_main();
     app_halt('Exit called');
@@ -448,7 +448,7 @@ function cleanup_take_new(array $params): void
             ':ctime' => (int) ($params['clean_time'] ?? TIME_NOW),
         ]
     );
-    audit_log($CURUSER['id'] ?? null, 'config.update', ['keys' => [$params['clean_title']]]);
+    Audit::log($CURUSER['id'] ?? null, 'config.update', ['keys' => [$params['clean_title']]]);
 
     stderr(_('Info'), _('Success, new cleanup task added!'));
 }
@@ -473,7 +473,7 @@ function cleanup_take_delete(array $params): void
     }
 
     $db->run('DELETE FROM cleanup WHERE clean_id = :cid', [':cid' => (int) $cid]);
-    audit_log($CURUSER['id'] ?? null, 'config.update', ['keys' => [(int) $cid]]);
+    Audit::log($CURUSER['id'] ?? null, 'config.update', ['keys' => [(int) $cid]]);
     stderr(_('Info'), _('Success, cleanup task deleted!'));
     app_halt('Exit called');
 }
@@ -499,7 +499,7 @@ function cleanup_take_unlock(array $params): void
     }
 
     $db->run('UPDATE cleanup SET clean_on = CASE WHEN clean_on = 1 THEN 0 ELSE 1 END WHERE clean_id = :cid', [':cid' => (int) $cid]);
-    audit_log($CURUSER['id'] ?? null, 'config.update', ['keys' => ['cleanup.toggle'], 'task' => (int) $cid]);
+    Audit::log($CURUSER['id'] ?? null, 'config.update', ['keys' => ['cleanup.toggle'], 'task' => (int) $cid]);
 
     cleanup_show_main();
     app_halt('Exit called');

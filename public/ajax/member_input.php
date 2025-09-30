@@ -8,9 +8,9 @@ use Pu239\Peer;
 use Pu239\Session;
 use Pu239\Snatched;
 use Pu239\User;
+use PU239\Support\Audit;
 
 require_once dirname(__DIR__) . '/bootstrap_web.php';
-require_once dirname(__DIR__) . '/include/helpers/audit.php';
 
 global $container;
 /** @var ConfigRepository $config */
@@ -69,7 +69,7 @@ switch ($action) {
                 'txt' => $values['txt'],
             ]
         );
-        audit_log(
+        Audit::log(
             $curuser['id'] ?? null,
             'torrent.moderate',
             [
@@ -120,7 +120,7 @@ switch ($action) {
             if (!empty($update)) {
                 $users_class->update($update, $id);
                 if ($watchedAction === 'add') {
-                    audit_log(
+                    Audit::log(
                         $curuser['id'] ?? null,
                         'user.ban',
                         [
@@ -129,7 +129,7 @@ switch ($action) {
                         ],
                     );
                 } elseif ($watchedAction === 'remove') {
-                    audit_log(
+                    Audit::log(
                         $curuser['id'] ?? null,
                         'user.unban',
                         [

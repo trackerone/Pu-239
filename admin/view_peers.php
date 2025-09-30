@@ -1,12 +1,12 @@
 <?php
 declare(strict_types=1);
 require_once dirname(__DIR__) . '/bootstrap_web.php';
-require_once dirname(__DIR__) . '/include/helpers/audit.php';
 
 use PU239\Config\ConfigRepository;
 use Pu239\Database;
 use Pu239\Peer;
 use Pu239\Session;
+use PU239\Support\Audit;
 
 
 global $container, $CURUSER;
@@ -54,7 +54,7 @@ if (isset($_GET['delete']) && is_valid_id((int) $_GET['delete'])) {
            ->execute();
     $session = $container->get(Session::class);
     $session->set('is-success', 'Peer ' . $_GET['delete'] . ' has been deleted.');
-    audit_log(
+    Audit::log(
         $CURUSER['id'] ?? null,
         'torrent.moderate',
         [

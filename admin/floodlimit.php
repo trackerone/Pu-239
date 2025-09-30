@@ -1,11 +1,11 @@
 <?php
 declare(strict_types=1);
 require_once dirname(__DIR__) . '/bootstrap_web.php';
-require_once dirname(__DIR__) . '/include/helpers/audit.php';
 
 use Pu239\Config\ConfigRepository;
 use Pu239\Database;
 use Pu239\Session;
+use PU239\Support\Audit;
 
 
 global $container, $CURUSER;
@@ -32,7 +32,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
     $session = $container->get(Session::class);
     if (file_put_contents($file, json_encode($limits))) {
-        audit_log($CURUSER['id'] ?? null, 'config.update', ['keys' => array_keys($limits)]);
+        Audit::log($CURUSER['id'] ?? null, 'config.update', ['keys' => array_keys($limits)]);
         $session->set('is-success', _('Flood Limits saved!'));
     } else {
         $session->set('is-error', _fe('Something went wrong make sure {0} exists and it is chmoded 0774', $file));

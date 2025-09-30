@@ -1,11 +1,11 @@
 <?php
 declare(strict_types=1);
 require_once dirname(__DIR__) . '/bootstrap_web.php';
-require_once dirname(__DIR__) . '/include/helpers/audit.php';
 
 use PU239\Config\ConfigRepository;
 use Pu239\Database;
 use Pu239\Session;
+use PU239\Support\Audit;
 
 
 global $container, $CURUSER;
@@ -114,7 +114,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         'chat_users_list_',
     ]);
     if (!empty($changedKeys)) {
-        audit_log($CURUSER['id'] ?? null, 'config.update', [
+        Audit::log($CURUSER['id'] ?? null, 'config.update', [
             'keys' => array_values(array_unique($changedKeys)),
         ]);
     }

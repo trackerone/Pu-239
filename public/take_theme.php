@@ -6,6 +6,7 @@ require_once dirname(__DIR__) . '/bootstrap_web.php';
 use Pu239\Config\ConfigRepository;
 use Pu239\Database;
 use Pu239\User;
+use PU239\Support\Audit;
 
 global $container;
 /** @var ConfigRepository $config */
@@ -24,6 +25,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
         ];
         $users_class = $container->get(User::class);
         $users_class->update($set, $user['id']);
+        Audit::log(
+            $user['id'] ?? null,
+            'config.update',
+            [
+                'keys' => ['stylesheet'],
+                'target' => $user['id'] ?? null,
+            ]
+        );
     }
 }
 

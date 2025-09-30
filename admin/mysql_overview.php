@@ -1,10 +1,10 @@
 <?php
 declare(strict_types=1);
 require_once dirname(__DIR__) . '/bootstrap_web.php';
-require_once dirname(__DIR__) . '/include/helpers/audit.php';
 
 use PU239\Config\ConfigRepository;
 use Pu239\Database;
+use PU239\Support\Audit;
 
 global $container, $CURUSER;
 /** @var ConfigRepository $config */
@@ -25,7 +25,7 @@ if (isset($_GET['Do']) && $_GET['Do'] === 'optimize' && isset($_GET['table'])) {
         $query = $fluent->getPdo()
                         ->prepare($sql);
         $query->execute();
-        audit_log($CURUSER['id'] ?? null, 'config.update', [
+        Audit::log($CURUSER['id'] ?? null, 'config.update', [
             'keys' => ['mysql.optimize'],
             'table' => $table,
         ]);

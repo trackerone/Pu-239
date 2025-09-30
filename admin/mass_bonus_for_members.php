@@ -1,12 +1,12 @@
 <?php
 declare(strict_types=1);
 require_once dirname(__DIR__) . '/bootstrap_web.php';
-require_once dirname(__DIR__) . '/include/helpers/audit.php';
 
 use PU239\Config\ConfigRepository;
 use Pu239\Database;
 use Pu239\Message;
 use Pu239\User;
+use PU239\Support\Audit;
 
 
 global $container, $CURUSER;
@@ -136,7 +136,7 @@ switch ($action) {
         $body = _fe('You have been awarded {0} GB upload credit by staff.', (int) $gb_amount);
         mass_pm($messages_class, $ids, $subject, $body, $dt);
 
-        audit_log(
+        Audit::log(
             $CURUSER['id'] ?? null,
             'config.update',
             [
@@ -172,7 +172,7 @@ switch ($action) {
         $body = _fe('You have been awarded {0} Karma Bonus Points by staff.', $karma_points);
         mass_pm($messages_class, $ids, $subject, $body, $dt);
 
-        audit_log(
+        Audit::log(
             $CURUSER['id'] ?? null,
             'config.update',
             [
@@ -207,7 +207,7 @@ switch ($action) {
         $body = _fe('You have been awarded {0} freeleech slot(s) by staff.', $freeslots);
         mass_pm($messages_class, $ids, $subject, $body, $dt);
 
-        audit_log(
+        Audit::log(
             $CURUSER['id'] ?? null,
             'config.update',
             [
@@ -242,7 +242,7 @@ switch ($action) {
         $body = _fe('You have been awarded {0} invite(s) by staff.', $invites);
         mass_pm($messages_class, $ids, $subject, $body, $dt);
 
-        audit_log(
+        Audit::log(
             $CURUSER['id'] ?? null,
             'config.update',
             [
@@ -274,7 +274,7 @@ switch ($action) {
 
         mass_pm($messages_class, $ids, $subject, $body, $dt);
 
-        audit_log(
+        Audit::log(
             $CURUSER['id'] ?? null,
             'config.update',
             [

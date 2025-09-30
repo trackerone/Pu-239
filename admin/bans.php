@@ -1,11 +1,11 @@
 <?php
 declare(strict_types=1);
 require_once dirname(__DIR__) . '/bootstrap_web.php';
-require_once dirname(__DIR__) . '/include/helpers/audit.php';
 
 use Pu239\Config\ConfigRepository;
 use Pu239\Database;
 use Pu239\Session;
+use PU239\Support\Audit;
 
 
 global $container, $CURUSER;
@@ -42,13 +42,14 @@ if ($remove > 0) {
         $sql = "DELETE FROM bans WHERE id = :id";
         $db->perform($sql, ['id' => $remove]);
         write_log(_fe('Ban {0} was removed by {1}', $remove, $CURUSER['username']));
-        audit_log($CURUSER['id'] ?? null, 'user.unban', [
+        Audit::log($CURUSER['id'] ?? null, 'user.unban', [
             'target' => $remove,
             'range' => [
                 'first' => $res['first'],
                 'last' => $res['last'],
             ],
         ]);
+        // >>>>>> PU239:audit-hook-4
         $session->set('is-success', _fe('IPS: {0} to {1} were removed', $res['first'], $res['last']));
         unset($_GET);
     }
@@ -79,7 +80,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $CURUSER['class'] >= UC_MAX) {
 
     $sql = "INSERT INTO bans (/* columns */) VALUES (/* values */)";
     $db->perform($sql, $values);
-    audit_log($CURUSER['id'] ?? null, 'user.ban', [
+    Audit::log($CURUSER['id'] ?? null, 'user.ban', [
         'target' => [
             'first' => $first,
             'last' => $last,

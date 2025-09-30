@@ -1,11 +1,11 @@
 <?php
 declare(strict_types=1);
 require_once dirname(__DIR__) . '/bootstrap_web.php';
-require_once dirname(__DIR__) . '/include/helpers/audit.php';
 
 use Pu239\Config\ConfigRepository;
 use Pu239\Database;
 use Pu239\Session;
+use PU239\Support\Audit;
 
 
 global $container, $CURUSER;
@@ -53,7 +53,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         $username = (string) $u['username'];
                         if (account_delete($userid)) {
                             write_log("User: " . htmlsafechars($username) . " was deleted by {$CURUSER['username']}");
-                            audit_log(
+                            Audit::log(
                                 $CURUSER['id'] ?? null,
                                 'user.ban',
                                 [
@@ -73,7 +73,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $params = array_merge([$reason], $ids);
                 $db->run("UPDATE users SET status = 2, disable_reason = ? WHERE id IN ($placeholders)", $params);
                 foreach ($ids as $targetId) {
-                    audit_log(
+                    Audit::log(
                         $CURUSER['id'] ?? null,
                         'user.ban',
                         [

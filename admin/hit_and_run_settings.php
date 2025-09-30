@@ -1,12 +1,12 @@
 <?php
 declare(strict_types=1);
 require_once dirname(__DIR__) . '/bootstrap_web.php';
-require_once dirname(__DIR__) . '/include/helpers/audit.php';
 
 use PU239\Config\ConfigRepository;
 use Pu239\Cache;
 use Pu239\Database;
 use Pu239\Session;
+use PU239\Support\Audit;
 
 
 global $container, $CURUSER;
@@ -43,7 +43,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     } else {
         $cache = $container->get(Cache::class);
         $cache->delete('hnr_settings_');
-        audit_log($CURUSER['id'] ?? null, 'config.update', ['keys' => $changedKeys]);
+        Audit::log($CURUSER['id'] ?? null, 'config.update', ['keys' => $changedKeys]);
         $session->set('is-success', 'Update Successful');
     }
 }

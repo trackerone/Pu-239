@@ -1,11 +1,11 @@
 <?php
 declare(strict_types=1);
 require_once dirname(__DIR__) . '/bootstrap_web.php';
-require_once dirname(__DIR__) . '/include/helpers/audit.php';
 
 use PU239\Config\ConfigRepository;
 use Pu239\Database;
 use Pu239\Forum;
+use PU239\Support\Audit;
 
 
 global $container, $CURUSER;
@@ -68,7 +68,7 @@ switch ($action) {
             app_halt('Exit called');
         }
         $forum_class->delete($id);
-        audit_log($CURUSER['id'] ?? null, 'config.update', ['keys' => ['forum_delete'], 'target' => $id]);
+        Audit::log($CURUSER['id'] ?? null, 'config.update', ['keys' => ['forum_delete'], 'target' => $id]);
         header('Location: ' . $selfRaw . '?tool=forum_manage&action=forum_manage');
         app_halt('Exit called');
         break;
@@ -89,7 +89,7 @@ switch ($action) {
             'min_class_create' => $min_class_create,
         ];
         $forum_class->update($set, $id);
-        audit_log($CURUSER['id'] ?? null, 'config.update', ['keys' => array_keys($set), 'target' => $id]);
+        Audit::log($CURUSER['id'] ?? null, 'config.update', ['keys' => array_keys($set), 'target' => $id]);
         header('Location: ' . $selfRaw . '?tool=forum_manage&action=forum_manage');
         app_halt('Exit called');
         break;
@@ -110,7 +110,7 @@ switch ($action) {
             'forum_id' => $over_forums,
         ];
         $forum_class->add($values);
-        audit_log($CURUSER['id'] ?? null, 'config.update', ['keys' => array_keys($values), 'target' => null]);
+        Audit::log($CURUSER['id'] ?? null, 'config.update', ['keys' => array_keys($values), 'target' => null]);
         header('Location: ' . $selfRaw . '?tool=forum_manage&action=forum_manage');
         app_halt('Exit called');
         break;

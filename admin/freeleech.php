@@ -1,10 +1,10 @@
 <?php
 declare(strict_types=1);
 require_once dirname(__DIR__) . '/bootstrap_web.php';
-require_once dirname(__DIR__) . '/include/helpers/audit.php';
 
 use Pu239\Config\ConfigRepository;
 use Pu239\Database;
+use PU239\Support\Audit;
 
 
 global $container, $CURUSER;
@@ -28,7 +28,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // TODO(2025): csrf
     if (isset($_POST['remove'])) {
         update_event((int) $_POST['expires'], TIME_NOW);
-        audit_log(
+        Audit::log(
             $CURUSER['id'] ?? null,
             'config.update',
             [
@@ -59,7 +59,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         ++$i;
     }
     set_event($fl['modifier'], TIME_NOW, $fl['expires'], (int) $fl['setby'], $fl['title']);
-    audit_log(
+    Audit::log(
         $CURUSER['id'] ?? null,
         'config.update',
         [

@@ -1,7 +1,6 @@
 <?php
 declare(strict_types=1);
 require_once dirname(__DIR__) . '/bootstrap_web.php';
-require_once dirname(__DIR__) . '/include/helpers/audit.php';
 
 $db = $container->get(Database::class);
 
@@ -16,6 +15,7 @@ use Pu239\Session;
 use Pu239\Snatched;
 use Pu239\Torrent;
 use Pu239\User;
+use PU239\Support\Audit;
 
 require_once __DIR__ . '/../include/bittorrent.php';
 require_once CLASS_DIR . 'class.bencdec.php';
@@ -122,8 +122,7 @@ if (isset($_GET['slot'])) {
         $fluent->insertInto('freeslots', $values)
                ->onDuplicateKeyUpdate($update)
                ->execute();
-        audit_log($user['id'] ?? null, 'torrent.moderate', ['id' => $id, 'op' => 'slot.free']);
-        // >>>>>> PU239:audit-hook-5
+        Audit::log($user['id'] ?? null, 'torrent.moderate', ['id' => $id, 'op' => 'slot.free']);
     } elseif ($_GET['slot'] === 'double') {
         if ($used_slot && $slot['doubleup'] === 'yes') {
             show_error(_('Error'), _('Doubleseed slot already in use.'));
@@ -148,7 +147,7 @@ if (isset($_GET['slot'])) {
         $fluent->insertInto('freeslots', $values)
                ->onDuplicateKeyUpdate($update)
                ->execute();
-        audit_log($user['id'] ?? null, 'torrent.moderate', ['id' => $id, 'op' => 'slot.double']);
+        Audit::log($user['id'] ?? null, 'torrent.moderate', ['id' => $id, 'op' => 'slot.double']);
     } else {
         show_error(_('Error'), _('An unknown error has occurred.'));
     }
