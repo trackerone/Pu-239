@@ -1,6 +1,7 @@
 <?php
 declare(strict_types=1);
 require_once dirname(__DIR__) . '/bootstrap_web.php';
+require_once dirname(__DIR__) . '/include/helpers/audit.php';
 
 use Delight\Auth\Auth;
 use Pu239\Config\ConfigRepository;
@@ -51,6 +52,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $user_class = $container->get(User::class);
     if ($user_class->login($post['email'], $post['password'], (int) isset($post['remember']) ? 1 : 0)) {
         $userid = $auth->getUserId();
+        audit_log($userid ?? null, 'login.success', []);
+        // >>>>>> PU239:audit-hook-2
         $user = $user_class->getUserFromId($userid);
         if ($ipLogging || !($user['perms'] & PERMS_NO_IP)) {
             insert_update_ip('login', $userid);

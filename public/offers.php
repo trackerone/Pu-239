@@ -1,6 +1,7 @@
 <?php
 declare(strict_types=1);
 require_once dirname(__DIR__) . '/bootstrap_web.php';
+require_once dirname(__DIR__) . '/include/helpers/audit.php';
 
 
 
@@ -63,6 +64,15 @@ if (isset($data['action'])) {
                         'comments' => new Literal('comments - 1'),
                     ];
                     $offer_class->update($update, $tid);
+                    audit_log(
+                        $user['id'] ?? null,
+                        'torrent.moderate',
+                        [
+                            'id' => $cid,
+                            'op' => 'offer.comment.delete',
+                        ],
+                    );
+                    // >>>>>> PU239:audit-hook-6
                     $session->set('is-success', _('Comment Deleted'));
                 } else {
                     $session->set('is-warning', _('Comment Not Deleted'));
@@ -313,6 +323,15 @@ if ($has_access) {
         $update = main_div($update, 'has-text-centered w-75 min-350', 'padding20');
     } elseif ($delete && is_valid_id($id)) {
         if ($offer_class->delete($id, $user['class'] >= UC_STAFF, $user['id']) === 1) {
+            audit_log(
+                $user['id'] ?? null,
+                'torrent.moderate',
+                [
+                    'id' => $id,
+                    'op' => 'offer.delete',
+                ],
+            );
+            // >>>>>> PU239:audit-hook-4
             $session->set('is-success', _('Offer Deleted'));
         } else {
             $session->set('is-warning', _('Offer was NOT Deleted'));
