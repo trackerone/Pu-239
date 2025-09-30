@@ -186,6 +186,32 @@ public/search.php,false,false,6,true,
 public/signup.php,false,false,0,true,no JSON responses to refactor
 public/takeupload.php,false,false,0,true,no JSON responses to refactor
 public/upload.php,false,false,0,true,no JSON responses to refactor
+<<<<<< codex/add-centralized-audit-logging-95hh7k
+=======
+=======
+=======
+=======
+>>>>>> master
+>>>>>> master
+>>>>>> master
+>>>>>> master
+<<<<<< codex/add-centralized-audit-logging-95hh7k
+
+file,audit_hooks,hook_types,helper_defined,notes
+classes/Support/Audit.php,0,[],true,defined central audit logger
+public/ajax/take_upload.php,0,[],false,no applicable critical actions
+public/ajax/take_url_upload.php,0,[],false,no applicable critical actions
+public/ajax/thanks.php,0,[],false,no applicable critical actions
+public/ajax/torrents_lookup.php,0,[],false,no applicable critical actions
+public/ajax/trivia_answers.php,0,[],false,no applicable critical actions
+public/ajax/trivia_lookup.php,0,[],false,no applicable critical actions
+public/ajax/tvmaze_lookup.php,0,[],false,no applicable critical actions
+public/ajax/usersearch.php,0,[],false,no applicable critical actions
+public/ajax/view_sql.php,0,[],false,no applicable critical actions
+public/ajaxchat.php,0,[],false,no applicable critical actions
+=======
+=======
+>>>>>> master
 include/helpers/audit.php,0,,false,added audit helper
 admin/acpmanage.php,2,user.unban|user.ban,true,enabled/unban/delete actions logged
 admin/backup.php,2,config.update|config.update,true,backup create/delete logged
@@ -317,6 +343,9 @@ public/media/flash_games/yeti10.swf,0,[],false,non-PHP asset skipped in batch of
 >>>>>> master
 >>>>>> master
 >>>>>> master
+<<<<<< codex/add-centralized-audit-logging-95hh7k
+=======
 include/helpers/audit.php,0,[],false,helper markers adjusted
 public/login.php,1,[login.success],true,added audit log for login success
+>>>>>> master
 >>>>>> master

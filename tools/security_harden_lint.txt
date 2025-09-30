@@ -191,6 +191,20 @@ No syntax errors detected in public/ajax/usersearch.php
 No syntax errors detected in public/search.php
 No syntax errors detected in include/helpers/cookies.php
 No syntax errors detected in include/session_bootstrap.php
+<<<<<< codex/add-centralized-audit-logging-95hh7k
+=======
+=======
+=======
+=======
+>>>>>> master
+>>>>>> master
+>>>>>> master
+>>>>>> master
+<<<<<< codex/add-centralized-audit-logging-95hh7k
+classes/Support/Audit.php: OK
+=======
+=======
+>>>>>> master
 No syntax errors detected in include/helpers/audit.php
 No syntax errors detected in admin/acpmanage.php
 No syntax errors detected in admin/backup.php
@@ -305,4 +319,5 @@ offset 120: no PHP files to lint
 >>>>>> master
 No syntax errors detected in include/helpers/audit.php
 No syntax errors detected in public/login.php
+>>>>>> master
 >>>>>> master
