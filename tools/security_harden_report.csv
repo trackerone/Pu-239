@@ -9,19 +9,10 @@ admin/class_config.php,false,true,6,false,
 admin/cloudview.php,false,true,6,false,
 admin/datareset.php,false,true,6,false,
 admin/deathrow.php,false,true,7,false,
-<<<<<< codex/enforce-csrf-and-output-escaping-9ffaz0
 ======
-<<<<<< codex/enforce-csrf-and-output-escaping-y3qyza
 ======
-<<<<<< codex/enforce-csrf-and-output-escaping-ism9l3
 ======
-<<<<<< codex/enforce-csrf-and-output-escaping-m17p9q
 ======
-<<<<<< codex/enforce-csrf-and-output-escaping-hb2amy
->>>>>> master
->>>>>> master
->>>>>> master
->>>>>> master
 admin/delacct.php,false,true,3,false,
 admin/editlog.php,false,true,4,false,
 admin/findnotconnectable.php,false,true,7,false,
@@ -32,80 +23,36 @@ admin/freeleech.php,false,true,6,false,
 admin/grouppm.php,false,true,3,false,
 admin/hit_and_run_settings.php,false,true,3,false,
 admin/hnrwarn.php,false,true,4,false,
-<<<<<< codex/enforce-csrf-and-output-escaping-9ffaz0
 ======
-<<<<<< codex/enforce-csrf-and-output-escaping-y3qyza
 ======
-<<<<<< codex/enforce-csrf-and-output-escaping-ism9l3
 ======
-<<<<<< codex/enforce-csrf-and-output-escaping-m17p9q
->>>>>> master
->>>>>> master
->>>>>> master
 admin/hit_and_run_settings.php,false,true,0,false,reviewed in batch offset 20 - existing TODO retained
 admin/hnrwarn.php,false,true,0,false,reviewed in batch offset 20 - existing TODO retained
 admin/inactive.php,false,true,3,false,added escaping helpers and csrf TODO marker
 admin/invite_tree.php,false,true,5,false,normalized escaping for staff panel outputs
 admin/leechwarn.php,false,true,4,false,added escaping helpers and csrf TODO marker
-<<<<<< codex/enforce-csrf-and-output-escaping-9ffaz0
 admin/bonusmanage.php,false,true,2,false,normalized self/base URLs and retained csrf TODO
 admin/categories.php,false,true,14,false,added helper + sanitized forms/lists (batch offset 25)
 admin/bonusmanage.php,false,true,6,false,escaped form attribute values for batch offset 25 slice
 admin/bonusmanage.php,false,true,3,false,switched display strings to shared $s() helper (batch offset 28)
 admin/categories.php,false,true,12,false,escaped category forms and selectors via $s() helper (batch offset 28)
 ======
-<<<<<< codex/enforce-csrf-and-output-escaping-y3qyza
 admin/bonusmanage.php,false,true,2,false,normalized self/base URLs and retained csrf TODO
 admin/categories.php,false,true,14,false,added helper + sanitized forms/lists (batch offset 25)
 admin/bonusmanage.php,false,true,6,false,escaped form attribute values for batch offset 25 slice
 ======
-<<<<<< codex/enforce-csrf-and-output-escaping-ism9l3
 admin/bonusmanage.php,false,true,2,false,normalized self/base URLs and retained csrf TODO
 admin/categories.php,false,true,14,false,added helper + sanitized forms/lists (batch offset 25)
 ======
 ======
 ======
->>>>>> master
->>>>>> master
->>>>>> master
->>>>>> master
->>>>>> master
 public/ajax/tvmaze_lookup.php,false,true,0,true,json response hardened
 public/ajax/checkport.php,false,true,0,true,json response hardened
-<<<<<< codex/enforce-csrf-and-escape-output-hay3lv
-=======
-<<<<<< codex/enforce-csrf-and-escape-output-dxtuor
-=======
-<<<<<< codex/enforce-csrf-and-escape-output-ysog5w
-=======
-<<<<<< codex/enforce-csrf-and-escape-output-1ejsd3
-=======
-<<<<<< codex/enforce-csrf-and-escape-output-ls3ug3
-=======
-<<<<<< codex/enforce-csrf-and-escape-output-bbpkil
->>>>>> master
->>>>>> master
->>>>>> master
->>>>>> master
->>>>>> master
 public/bugs.php,false,true,4,false,added helper for self links and noted csrf gap in view/add handlers (batch offset 36)
 admin/reputation_settings.php,false,true,2,false,normalized form/breadcrumb escaping with csrf TODO (batch offset 36)
 public/subtitles.php,false,true,12,false,escaped form fields, filters, and language badges plus csrf TODO (batch offset 36)
 admin/delacct.php,false,true,0,false,documented csrf follow-up for deletion flow (batch offset 41)
 admin/editlog.php,false,true,3,false,escaped coder log file names and logged csrf TODO (batch offset 41)
-<<<<<< codex/enforce-csrf-and-escape-output-hay3lv
-=======
-<<<<<< codex/enforce-csrf-and-escape-output-dxtuor
-=======
-<<<<<< codex/enforce-csrf-and-escape-output-ysog5w
-=======
-<<<<<< codex/enforce-csrf-and-escape-output-1ejsd3
-=======
-<<<<<< codex/enforce-csrf-and-escape-output-ls3ug3
->>>>>> master
->>>>>> master
->>>>>> master
->>>>>> master
 public/ajax/autocomplete.php,false,true,3,false,
 public/ajax/bookmarks.php,false,true,0,true,
 public/ajax/checkports.php,false,true,3,true,
@@ -113,16 +60,6 @@ public/ajax/cooker_notify.php,false,true,0,true,
 public/ajax/descr_format.php,false,true,0,true,
 public/achievementlist.php,false,true,4,false,
 admin/watched_users.php,false,true,5,false,
-<<<<<< codex/enforce-csrf-and-escape-output-hay3lv
-=======
-<<<<<< codex/enforce-csrf-and-escape-output-dxtuor
-=======
-<<<<<< codex/enforce-csrf-and-escape-output-ysog5w
-=======
-<<<<<< codex/enforce-csrf-and-escape-output-1ejsd3
->>>>>> master
->>>>>> master
->>>>>> master
 public/ajax/ebook_lookup.php,false,true,0,true,json headers + JSON_THROW_ON_ERROR responses (batch offset 56)
 public/ajax/imdb_lookup.php,false,true,0,true,json headers + JSON_THROW_ON_ERROR responses (batch offset 56)
 public/ajax/isbn_lookup.php,false,true,0,true,json headers + JSON_THROW_ON_ERROR responses (batch offset 56)
@@ -133,13 +70,6 @@ public/ajax/offer_status.php,false,true,0,true,json responses normalized (batch 
 public/ajax/offer_vote.php,false,true,0,true,json responses normalized (batch offset 56)
 public/ajax/rating.php,false,true,2,false,added $s helper for rating tooltip/style escapes and noted csrf gap (batch offset 56)
 public/ajax/request_notify.php,false,true,0,true,reworked notification toggles with bound params + JSON_THROW_ON_ERROR (batch offset 56)
-<<<<<< codex/enforce-csrf-and-escape-output-hay3lv
-=======
-<<<<<< codex/enforce-csrf-and-escape-output-dxtuor
-=======
-<<<<<< codex/enforce-csrf-and-escape-output-ysog5w
->>>>>> master
->>>>>> master
 public/ajax/request_vote.php,false,true,0,true,"toggle vote flow uses bound params"
 public/ajax/show_in_navbar.php,false,true,0,true,"staff navbar toggle via bound update"
 public/ajax/staff_picks.php,false,true,0,true,"staff pick timestamp toggle sanitized"
@@ -150,10 +80,6 @@ public/ajax/torrents_lookup.php,false,true,0,true,"batch responses normalized to
 public/ajax/trivia_answers.php,false,true,0,true,"records answer correctness with bound params"
 public/ajax/tvmaze_lookup.php,false,true,0,true,"tvmaze data fetch sanitized"
 public/ajax/usersearch.php,false,true,0,true,"user lookup returns JSON_THROW"
-<<<<<< codex/enforce-csrf-and-escape-output-hay3lv
-=======
-<<<<<< codex/enforce-csrf-and-escape-output-dxtuor
->>>>>> master
 public/ajax/request_vote.php,false,true,0,true,"header normalized; JSON_THROW maintained"
 public/ajax/show_in_navbar.php,false,true,0,true,"header normalized; navbar toggle JSON"
 public/ajax/staff_picks.php,false,true,0,true,"header normalized; staff pick JSON"
@@ -164,7 +90,6 @@ public/ajax/torrents_lookup.php,false,true,0,true,"header normalized; JSON_THROW
 public/ajax/trivia_answers.php,false,true,0,true,"header normalized; answer flow JSON"
 public/ajax/tvmaze_lookup.php,false,true,0,true,"header normalized; tvmaze JSON"
 public/ajax/usersearch.php,false,true,0,true,"header normalized; user search JSON"
-<<<<<< codex/enforce-csrf-and-escape-output-hay3lv
 public/bitbucket.php,false,true,0,false,"bootstrap order normalized; TODO marker for avatar POST"
 public/blackjack.php,false,true,0,false,"helper added; TODO for gameplay POST"
 public/bot_triggers.php,false,true,7,false,"escaped form fields via $s helper; TODO marker"
@@ -174,24 +99,10 @@ public/contactstaff.php,false,true,3,false,"form action + links escaped with $s;
 public/delete.php,false,true,0,false,"header normalized; TODO for delete flow"
 public/details.php,false,true,0,false,"moderator POST guarded with TODO"
 public/downloadsub.php,false,true,0,false,"subtitle POST TODO noted"
-=======
-=======
-=======
-=======
-=======
-=======
-<<<<<< codex/enforce-csrf-and-escape-output-o8hj4w
 public/bugs.php,false,true,4,false,added helper for self links and noted csrf gap in view/add handlers (batch offset 36)
 admin/reputation_settings.php,false,true,2,false,normalized form/breadcrumb escaping with csrf TODO (batch offset 36)
 public/subtitles.php,false,true,12,false,escaped form fields, filters, and language badges plus csrf TODO (batch offset 36)
 ======
->>>>>> master
->>>>>> master
->>>>>> master
->>>>>> master
->>>>>> master
->>>>>> master
->>>>>> master
 public/bitbucket.php,false,true,0,false,"standardized CSRF TODO marker (batch offset=76)"
 public/blackjack.php,false,true,0,false,"standardized CSRF TODO marker (batch offset=76)"
 public/bot_triggers.php,false,true,0,false,"standardized CSRF TODO marker (batch offset=76)"
@@ -202,169 +113,51 @@ public/contactstaff.php,false,true,0,false,"standardized CSRF TODO marker (batch
 public/delete.php,false,true,0,false,"standardized CSRF TODO marker (batch offset=76)"
 public/details.php,false,true,0,false,"standardized CSRF TODO marker (batch offset=76)"
 public/downloadsub.php,false,true,0,false,"standardized CSRF TODO marker (batch offset=76)"
-<<<<<< codex/enforce-csrf-and-standardize-output-escaping-qlbcfm
-=======
-<<<<<< codex/enforce-csrf-and-standardize-output-escaping-z1upk7
-=======
-<<<<<< codex/enforce-csrf-and-standardize-output-escaping-xgz5rh
-=======
-<<<<<< codex/enforce-csrf-and-standardize-output-escaping-lh777z
-=======
-<<<<<< codex/enforce-csrf-and-standardize-output-escaping-ijmfmb
-=======
-<<<<<< codex/enforce-csrf-and-standardize-output-escaping-27th0z
-=======
-<<<<<< codex/enforce-csrf-and-standardize-output-escaping-9pvety
-=======
-<<<<<< codex/enforce-csrf-and-standardize-output-escaping-i6u0i6
->>>>>> master
->>>>>> master
->>>>>> master
->>>>>> master
->>>>>> master
->>>>>> master
->>>>>> master
 public/ajax/torrents_lookup.php,false,true,0,true,"cleaned merge artifacts; normalized CSRF TODO (batch offset=86)"
 public/ajax/trivia_answers.php,false,true,0,true,"cleaned merge artifacts; normalized CSRF TODO (batch offset=86)"
 public/ajax/tvmaze_lookup.php,false,true,0,true,"recreated handler; JSON responses hardened (batch offset=86)"
 public/ajax/usersearch.php,false,true,0,true,"recreated handler; JSON responses hardened (batch offset=86)"
-<<<<<< codex/enforce-csrf-and-standardize-output-escaping-qlbcfm
-=======
-<<<<<< codex/enforce-csrf-and-standardize-output-escaping-z1upk7
-=======
-<<<<<< codex/enforce-csrf-and-standardize-output-escaping-xgz5rh
-=======
-<<<<<< codex/enforce-csrf-and-standardize-output-escaping-lh777z
-=======
-<<<<<< codex/enforce-csrf-and-standardize-output-escaping-ijmfmb
-=======
-<<<<<< codex/enforce-csrf-and-standardize-output-escaping-27th0z
-=======
-<<<<<< codex/enforce-csrf-and-standardize-output-escaping-9pvety
->>>>>> master
->>>>>> master
->>>>>> master
->>>>>> master
->>>>>> master
->>>>>> master
 public/polls_take_vote.php,false,true,0,false,"added CSRF TODO marker for poll voting entry"
 public/recover.php,false,true,4,true,"sanitized reset forms and upgraded JSON logging"
 public/report.php,false,true,4,false,"escaped report form targets and marked CSRF follow-up"
 public/requests.php,false,true,3,false,"introduced escaping helper and CSRF TODO for request workflows"
 public/signup.php,false,true,5,true,"hardened signup form escaping and JSON logging"
-<<<<<< codex/enforce-csrf-and-standardize-output-escaping-qlbcfm
-=======
-<<<<<< codex/enforce-csrf-and-standardize-output-escaping-z1upk7
-=======
-<<<<<< codex/enforce-csrf-and-standardize-output-escaping-xgz5rh
-=======
-<<<<<< codex/enforce-csrf-and-standardize-output-escaping-lh777z
-=======
-<<<<<< codex/enforce-csrf-and-standardize-output-escaping-ijmfmb
-=======
-<<<<<< codex/enforce-csrf-and-standardize-output-escaping-27th0z
->>>>>> master
->>>>>> master
->>>>>> master
->>>>>> master
->>>>>> master
 public/subtitles.php,false,true,0,false,"normalized CSRF TODO wording for upload/edit handlers (batch offset=95)"
 public/tags.php,false,true,1,false,"added escaping helper plus breadcrumbs sanitization with CSRF TODO (batch offset=95)"
 public/takereseed.php,false,true,0,false,"recorded CSRF TODO for reseed request notifications (batch offset=95)"
 public/takethankyou.php,false,true,0,false,"logged CSRF TODO for thank you handler (batch offset=95)"
 public/tenpercent.php,false,true,1,false,"added escaping helper, breadcrumbs sanitization, and CSRF TODO (batch offset=95)"
-<<<<<< codex/enforce-csrf-and-standardize-output-escaping-qlbcfm
-=======
-<<<<<< codex/enforce-csrf-and-standardize-output-escaping-z1upk7
-=======
-<<<<<< codex/enforce-csrf-and-standardize-output-escaping-xgz5rh
-=======
-<<<<<< codex/enforce-csrf-and-standardize-output-escaping-lh777z
-=======
-<<<<<< codex/enforce-csrf-and-standardize-output-escaping-ijmfmb
->>>>>> master
->>>>>> master
->>>>>> master
->>>>>> master
 public/subtitles.php,false,true,0,false,"revalidated CSRF TODO coverage for upload/edit workflows (batch offset=95 rerun)"
 public/tags.php,false,true,1,false,"reconfirmed escaping helper and CSRF TODO at tags guide (batch offset=95 rerun)"
 public/takereseed.php,false,true,0,false,"relogged CSRF TODO for reseed notifications (batch offset=95 rerun)"
 public/takethankyou.php,false,true,0,false,"reaffirmed CSRF TODO for thank-you handler (batch offset=95 rerun)"
 public/tenpercent.php,false,true,1,false,"rechecked breadcrumbs escaping and CSRF TODO for 10 percent bonus (batch offset=95 rerun)"
-<<<<<< codex/enforce-csrf-and-standardize-output-escaping-qlbcfm
-=======
-<<<<<< codex/enforce-csrf-and-standardize-output-escaping-z1upk7
-=======
-<<<<<< codex/enforce-csrf-and-standardize-output-escaping-xgz5rh
-=======
-<<<<<< codex/enforce-csrf-and-standardize-output-escaping-lh777z
->>>>>> master
->>>>>> master
->>>>>> master
 public/signup.php,false,true,0,true,"revalidated signup CSRF TODO coverage for offset 95 follow-up"
 public/subtitles.php,false,true,0,false,"verified upload/edit POST handling still pending CSRF work (offset 95 follow-up)"
 public/tags.php,false,true,0,false,"confirmed tags guide escaping helper and CSRF TODO remain in place (offset 95 follow-up)"
 public/takereseed.php,false,true,0,false,"added POST guard wrapper and retained CSRF TODO for reseed requests (offset 95 follow-up)"
 public/takethankyou.php,false,true,0,false,"checked thank-you handler CSRF TODO stays queued (offset 95 follow-up)"
-<<<<<< codex/enforce-csrf-and-standardize-output-escaping-qlbcfm
-=======
-<<<<<< codex/enforce-csrf-and-standardize-output-escaping-z1upk7
-=======
-<<<<<< codex/enforce-csrf-and-standardize-output-escaping-xgz5rh
->>>>>> master
->>>>>> master
 public/upcoming.php,false,true,2,false,"added offset 100 CSRF TODO and sanitized cooker breadcrumbs"
 public/uploadapp.php,false,true,1,false,"normalized uploader app bootstrap and logged CSRF TODO"
 public/user_blocks.php,false,true,1,false,"added CSRF TODO for blocks form and escaped breadcrumb link"
 public/user_unlocks.php,false,true,1,false,"marked unlock settings CSRF TODO and escaped breadcrumb"
 public/usercomment.php,false,true,3,false,"seeded helper + CSRF TODOs across user comment actions"
-<<<<<< codex/enforce-csrf-and-standardize-output-escaping-qlbcfm
-=======
-<<<<<< codex/enforce-csrf-and-standardize-output-escaping-z1upk7
->>>>>> master
 public/takethankyou.php,false,true,0,false,"seeded $s helper during offset 105 sweep; CSRF TODO remains queued"
 public/takeupload.php,false,true,0,false,"added offset 105 CSRF TODO guard and initialized escaping helper"
 public/tenpercent.php,false,true,0,false,"revalidated tenpercent handler still awaiting CSRF verify in offset 105 batch"
 public/upcoming.php,false,true,0,false,"confirmed upcoming entry retains helper + CSRF TODO for offset 105 check"
 public/uploadapp.php,false,true,0,false,"offset 105 audit confirms uploader app CSRF TODO and helper intact"
-<<<<<< codex/enforce-csrf-and-standardize-output-escaping-qlbcfm
 public/user_blocks.php,false,true,0,false,"offset 110 audit confirms CSRF TODO coverage remains pending"
 public/user_unlocks.php,false,true,0,false,"offset 110 pass-through retains CSRF TODO awaiting verification"
 public/usercomment.php,false,true,0,false,"offset 110 review notes comment flows still queued for CSRF enforcement"
 public/verify.php,false,true,3,false,"offset 110 hardened hidden redirect and breadcrumb via $s helper; CSRF TODO logged"
 public/wiki.php,false,true,2,false,"offset 110 run added wiki nav input escaping and CSRF TODO marker"
-=======
-=======
-=======
-=======
-=======
-=======
-=======
-=======
->>>>>> master
->>>>>> master
->>>>>> master
->>>>>> master
->>>>>> master
->>>>>> master
->>>>>> master
->>>>>> master
 bootstrap_web.php,0,false,0,Added cookie helper bootstrap include
 include/session_bootstrap.php,0,true,0,Forced session cookie ini defaults
 include/helpers/cookies.php,1,false,0,Created secure cookie helper
 bootstrap_web.php,true,false,0,true,centralized security headers
 include/helpers/http.php,false,true,0,true,added json_out helper
 public/ajax/ajax_tooltips.php,false,false,3,true,replaced echo json_encode with json_out
-<<<<<< codex/add-security-headers-and-json-helper-r4pmvi
-=======
-<<<<<< codex/add-security-headers-and-json-helper-bpb2k8
-=======
-<<<<<< codex/add-security-headers-and-json-helper-ykgca0
-=======
-<<<<<< codex/add-security-headers-and-json-helper-huxuqp
->>>>>> master
->>>>>> master
->>>>>> master
 public/ajax/bookmarks.php,false,false,6,true,
 public/ajax/checkport.php,false,false,1,true,
 public/ajax/checkports.php,false,false,1,true,
@@ -375,13 +168,6 @@ public/ajax/imdb_lookup.php,false,false,2,true,
 public/ajax/isbn_lookup.php,false,false,3,true,
 public/ajax/like.php,false,false,3,true,
 public/ajax/offer_notify.php,false,false,4,true,
-<<<<<< codex/add-security-headers-and-json-helper-r4pmvi
-=======
-<<<<<< codex/add-security-headers-and-json-helper-bpb2k8
-=======
-<<<<<< codex/add-security-headers-and-json-helper-ykgca0
->>>>>> master
->>>>>> master
 public/ajax/offer_status.php,false,false,3,true,
 public/ajax/offer_vote.php,false,false,5,true,
 public/ajax/request_notify.php,false,false,4,true,
@@ -392,55 +178,20 @@ public/ajax/take_upload.php,false,false,8,true,
 public/ajax/take_url_upload.php,false,false,9,true,
 public/ajax/thanks.php,false,false,2,true,preserved HTML response for non-AJAX callers
 public/ajax/torrents_lookup.php,false,false,18,true,consolidated branch handling with json_out
-<<<<<< codex/add-security-headers-and-json-helper-r4pmvi
-=======
-<<<<<< codex/add-security-headers-and-json-helper-bpb2k8
->>>>>> master
 public/ajax/trivia_answers.php,false,false,4,true,
 public/ajax/trivia_lookup.php,false,false,5,true,replaced fluent query with Database::row
 public/ajax/tvmaze_lookup.php,false,false,3,true,
 public/ajax/usersearch.php,false,false,3,true,
 public/search.php,false,false,6,true,
-<<<<<< codex/add-security-headers-and-json-helper-r4pmvi
 public/signup.php,false,false,0,true,no JSON responses to refactor
 public/takeupload.php,false,false,0,true,no JSON responses to refactor
 public/upload.php,false,false,0,true,no JSON responses to refactor
-=======
-=======
-=======
-=======
->>>>>> master
->>>>>> master
->>>>>> master
->>>>>> master
 include/helpers/audit.php,0,,false,added audit helper
 admin/acpmanage.php,2,user.unban|user.ban,true,enabled/unban/delete actions logged
 admin/backup.php,2,config.update|config.update,true,backup create/delete logged
 admin/bannedemails.php,2,user.unban|user.ban,true,email ban management logged
 admin/bans.php,2,user.unban|user.ban,true,ip bans/unbans logged
 admin/block.settings.php,1,config.update,true,block settings updates logged
-<<<<<< codex/add-centralized-audit-logging-jhw01y
-=======
-<<<<<< codex/add-centralized-audit-logging-ld3avv
-=======
-<<<<<< codex/add-centralized-audit-logging-d0fkuv
-=======
-<<<<<< codex/add-centralized-audit-logging-7f19gd
-=======
-<<<<<< codex/add-centralized-audit-logging-9kmcga
-=======
-<<<<<< codex/add-centralized-audit-logging-rufye2
-=======
-<<<<<< codex/add-centralized-audit-logging-4v67d4
-=======
-<<<<<< codex/add-centralized-audit-logging-2v4fcs
->>>>>> master
->>>>>> master
->>>>>> master
->>>>>> master
->>>>>> master
->>>>>> master
->>>>>> master
 admin/class_config.php,3,config.update,true,logged add/edit/delete config changes
 admin/cleanup_manager.php,6,config.update,true,tracked cleanup task lifecycle updates
 admin/cloudview.php,1,config.update,true,recorded search cloud deletions
@@ -450,25 +201,6 @@ admin/delacct.php,1,user.ban,true,audited manual account deletions
 admin/doubleusers.php,1,role.change,true,logged double-seed revocations
 admin/edit_moods.php,2,config.update,true,captured mood add/edit changes
 admin/editlog.php,1,config.update,true,tracked coder log refreshes
-<<<<<< codex/add-centralized-audit-logging-jhw01y
-=======
-<<<<<< codex/add-centralized-audit-logging-ld3avv
-=======
-<<<<<< codex/add-centralized-audit-logging-d0fkuv
-=======
-<<<<<< codex/add-centralized-audit-logging-7f19gd
-=======
-<<<<<< codex/add-centralized-audit-logging-9kmcga
-=======
-<<<<<< codex/add-centralized-audit-logging-rufye2
-=======
-<<<<<< codex/add-centralized-audit-logging-4v67d4
->>>>>> master
->>>>>> master
->>>>>> master
->>>>>> master
->>>>>> master
->>>>>> master
 admin/floodlimit.php,1,config.update,true,captured staff flood limit adjustments
 admin/flush.php,1,torrent.moderate,true,logged tracker ghost flush operations
 admin/forum_config.php,1,config.update,true,recorded forum configuration saves
@@ -485,22 +217,6 @@ admin/manage_images.php,1,config.update,true,recorded proxy image removals
 admin/mass_bonus_for_members.php,5,config.update,true,documented mass bonus awards and messages
 admin/memcache.php,2,config.update,true,logged cache key removals and flushes
 admin/modtask.php,6,role.change|user.ban|user.unban,true,tracked role edits and account status changes
-<<<<<< codex/add-centralized-audit-logging-jhw01y
-=======
-<<<<<< codex/add-centralized-audit-logging-ld3avv
-=======
-<<<<<< codex/add-centralized-audit-logging-d0fkuv
-=======
-<<<<<< codex/add-centralized-audit-logging-7f19gd
-=======
-<<<<<< codex/add-centralized-audit-logging-9kmcga
-=======
-<<<<<< codex/add-centralized-audit-logging-rufye2
->>>>>> master
->>>>>> master
->>>>>> master
->>>>>> master
->>>>>> master
 admin/mysql_overview.php,1,config.update,true,logged MySQL table optimize actions
 admin/news.php,3,config.update,true,audited news add edit and delete operations
 admin/over_forums.php,3,config.update,true,tracked over forum add edit and deletes
@@ -511,19 +227,6 @@ admin/site_settings.php,1,config.update,true,aggregated site config add update a
 admin/sysoplog.php,1,config.update,true,noted sysop log pruning activity
 admin/themes.php,4,config.update,true,recorded theme update delete and insert flows
 admin/trivia_config.php,3,config.update,true,audited trivia question insert update and delete actions
-<<<<<< codex/add-centralized-audit-logging-jhw01y
-=======
-<<<<<< codex/add-centralized-audit-logging-ld3avv
-=======
-<<<<<< codex/add-centralized-audit-logging-d0fkuv
-=======
-<<<<<< codex/add-centralized-audit-logging-7f19gd
-=======
-<<<<<< codex/add-centralized-audit-logging-9kmcga
->>>>>> master
->>>>>> master
->>>>>> master
->>>>>> master
 admin/upgrade_database.php,2,config.update,true,logged database upgrade run and ignore actions
 admin/uploadapps.php,1,role.change,true,audited uploader promotion approvals
 admin/usersearch.php,0,,true,added audit helper include for search entrypoint
@@ -532,16 +235,6 @@ admin/watched_users.php,2,user.ban|user.unban,true,captured watched user add and
 public/achievementbonus.php,0,,true,bootstrapped audit helper for bonus redemption flow
 public/achievementhistory.php,0,,true,bootstrapped audit helper for achievement history view
 public/ajax/cooker_notify.php,0,,true,bootstrapped audit helper for cooker notify endpoint
-<<<<<< codex/add-centralized-audit-logging-jhw01y
-=======
-<<<<<< codex/add-centralized-audit-logging-ld3avv
-=======
-<<<<<< codex/add-centralized-audit-logging-d0fkuv
-=======
-<<<<<< codex/add-centralized-audit-logging-7f19gd
->>>>>> master
->>>>>> master
->>>>>> master
 public/ajax/imdb_lookup.php,0,,true,bootstrapped audit helper for imdb lookup endpoint
 public/ajax/like.php,0,,true,bootstrapped audit helper for like/unlike endpoint
 public/ajax/member_input.php,3,torrent.moderate|user.ban|user.unban,true,tracked flush and watched user moderation updates
@@ -552,13 +245,7 @@ public/ajax/rating.php,0,,true,bootstrapped audit helper for rating submission e
 public/ajax/request_notify.php,0,,true,bootstrapped audit helper for request notify toggle
 public/ajax/request_vote.php,0,,true,bootstrapped audit helper for request voting endpoint
 public/ajax/show_in_navbar.php,1,config.update,true,recorded staffpanel navbar visibility toggles
-<<<<<< codex/add-centralized-audit-logging-jhw01y
-=======
-<<<<<< codex/add-centralized-audit-logging-ld3avv
-=======
 <<<<< codex/add-centralized-audit-logging-d0fkuv
->>>>>> master
->>>>>> master
 public/ajax/staff_picks.php,1,torrent.moderate,true,logged staff picks feature toggle moderation
 public/ajax/take_upload.php,0,,true,bootstrapped audit helper for image upload handler
 public/ajax/take_url_upload.php,0,,true,bootstrapped audit helper for remote image upload handler
@@ -569,10 +256,6 @@ public/anatomy.php,0,,true,bootstrapped audit helper for anatomy article page
 public/announce.php,0,,true,bootstrapped audit helper for tracker announce endpoint
 public/announcement.php,0,,true,bootstrapped audit helper for announcement workflow
 public/bitbucket.php,0,,true,bootstrapped audit helper for bitbucket management page
-<<<<<< codex/add-centralized-audit-logging-jhw01y
-=======
-<<<<<< codex/add-centralized-audit-logging-ld3avv
->>>>>> master
 public/bitbucket.php,1,bucket.delete,true,logged user image deletions
 public/blackjack.php,0,,true,bootstrapped audit helper for blackjack game interface
 public/bookmarks.php,0,,true,bootstrapped audit helper for bookmarks listing
@@ -583,7 +266,6 @@ public/casino.php,0,,true,bootstrapped audit helper for casino games hub
 public/clear_announcement.php,1,announcement.clear,true,logged announcement dismissals
 public/contactstaff.php,1,contactstaff.send,true,recorded staff contact messages
 public/delete.php,1,torrent.moderate,true,logged torrent deletions with reason metadata
-<<<<<< codex/add-centralized-audit-logging-jhw01y
 public/details.php,3,torrent.moderate,true,logged check/recheck/uncheck moderation events
 public/download.php,2,torrent.moderate,true,tracked free/double slot selections
 public/edit.php,1,torrent.moderate,true,audited staff unlock of editing lock
@@ -595,6 +277,30 @@ public/hnrs.php,0,,true,bootstrapped audit helper for hnrs view
 admin/acpmanage.php,2,user.unban|user.ban,true,retained audit hooks while relocating review markers
 admin/backup.php,2,config.update,true,retained audit hooks while relocating review markers
 admin/bannedemails.php,2,user.unban|user.ban,true,retained audit hooks while relocating review markers
+<<<<<< codex/add-centralized-audit-logging-and-hooks-izpa7d
+include/helpers/audit.php,0,[],false,helper markers adjusted
+public/login.php,1,[login.success],true,added audit log for login success
+public/media/flash_games/SuperFlashMarioBrosSte.swf,0,[],false,non-PHP asset skipped in batch offset 110
+public/media/flash_games/alloyarena.swf,0,[],false,non-PHP asset skipped in batch offset 110
+public/media/flash_games/assin.swf,0,[],false,non-PHP asset skipped in batch offset 110
+public/media/flash_games/blackknight.swf,0,[],false,non-PHP asset skipped in batch offset 110
+public/media/flash_games/chainreactionGS.swf,0,[],false,non-PHP asset skipped in batch offset 110
+public/media/flash_games/demonicdefense.swf,0,[],false,non-PHP asset skipped in batch offset 110
+public/media/flash_games/galaga.swf,0,[],false,non-PHP asset skipped in batch offset 110
+public/media/flash_games/ghosts-and-goblins.swf,0,[],false,non-PHP asset skipped in batch offset 110
+public/media/flash_games/mario-cart.swf,0,[],false,non-PHP asset skipped in batch offset 110
+public/media/flash_games/mice_vs_hammers.swf,0,[],false,non-PHP asset skipped in batch offset 110
+public/media/flash_games/monster_mash.swf,0,[],false,non-PHP asset skipped in batch offset 120
+public/media/flash_games/monstermash.swf,0,[],false,non-PHP asset skipped in batch offset 120
+public/media/flash_games/psol.swf,0,[],false,non-PHP asset skipped in batch offset 120
+public/media/flash_games/sonicblox.swf,0,[],false,non-PHP asset skipped in batch offset 120
+public/media/flash_games/starcraft.swf,0,[],false,non-PHP asset skipped in batch offset 120
+public/media/flash_games/starcraftfa3.swf,0,[],false,non-PHP asset skipped in batch offset 120
+public/media/flash_games/summergames04.swf,0,[],false,non-PHP asset skipped in batch offset 120
+public/media/flash_games/supersplashBH.swf,0,[],false,non-PHP asset skipped in batch offset 120
+public/media/flash_games/trappedinawell.swf,0,[],false,non-PHP asset skipped in batch offset 120
+public/media/flash_games/yeti10.swf,0,[],false,non-PHP asset skipped in batch offset 120
+=======
 =======
 =======
 =======
@@ -613,3 +319,4 @@ admin/bannedemails.php,2,user.unban|user.ban,true,retained audit hooks while rel
 >>>>>> master
 include/helpers/audit.php,0,[],false,helper markers adjusted
 public/login.php,1,[login.success],true,added audit log for login success
+>>>>>> master

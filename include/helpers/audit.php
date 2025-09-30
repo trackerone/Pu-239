@@ -30,6 +30,10 @@ function audit_log(?int $actorId, string $action, array $meta = []): void
 }
 
 // >>>>>> PU239:audit-helper-1
+<<<<<< codex/add-centralized-audit-logging-and-hooks-izpa7d
+// >>>>>> PU239:audit-hook-2
+=======
+>>>>>> master
 // >>>>>> PU239:audit-hook-3
 // >>>>>> PU239:audit-hook-4
 // >>>>>> PU239:audit-hook-5
