@@ -186,6 +186,38 @@ public/search.php,false,false,6,true,
 public/signup.php,false,false,0,true,no JSON responses to refactor
 public/takeupload.php,false,false,0,true,no JSON responses to refactor
 public/upload.php,false,false,0,true,no JSON responses to refactor
+<<<<<< codex/add-centralized-audit-logging-and-hooks-hq1f7m
+=======
+<<<<<< codex/add-centralized-audit-logging-and-hooks-oqz2ac
+=======
+<<<<<< codex/add-centralized-audit-logging-95hh7k
+=======
+=======
+=======
+=======
+>>>>>> master
+>>>>>> master
+>>>>>> master
+>>>>>> master
+<<<<<< codex/add-centralized-audit-logging-95hh7k
+
+file,audit_hooks,hook_types,helper_defined,notes
+classes/Support/Audit.php,0,[],true,defined central audit logger
+public/ajax/take_upload.php,0,[],false,no applicable critical actions
+public/ajax/take_url_upload.php,0,[],false,no applicable critical actions
+public/ajax/thanks.php,0,[],false,no applicable critical actions
+public/ajax/torrents_lookup.php,0,[],false,no applicable critical actions
+public/ajax/trivia_answers.php,0,[],false,no applicable critical actions
+public/ajax/trivia_lookup.php,0,[],false,no applicable critical actions
+public/ajax/tvmaze_lookup.php,0,[],false,no applicable critical actions
+public/ajax/usersearch.php,0,[],false,no applicable critical actions
+public/ajax/view_sql.php,0,[],false,no applicable critical actions
+public/ajaxchat.php,0,[],false,no applicable critical actions
+=======
+=======
+>>>>>> master
+>>>>>> master
+>>>>>> master
 include/helpers/audit.php,0,,false,added audit helper
 admin/acpmanage.php,2,user.unban|user.ban,true,enabled/unban/delete actions logged
 admin/backup.php,2,config.update|config.update,true,backup create/delete logged
@@ -277,6 +309,13 @@ public/hnrs.php,0,,true,bootstrapped audit helper for hnrs view
 admin/acpmanage.php,2,user.unban|user.ban,true,retained audit hooks while relocating review markers
 admin/backup.php,2,config.update,true,retained audit hooks while relocating review markers
 admin/bannedemails.php,2,user.unban|user.ban,true,retained audit hooks while relocating review markers
+<<<<<< codex/add-centralized-audit-logging-and-hooks-hq1f7m
+=======
+<<<<<< codex/add-centralized-audit-logging-and-hooks-oqz2ac
+=======
+<<<<<< codex/add-centralized-audit-logging-and-hooks-izpa7d
+>>>>>> master
+>>>>>> master
 include/helpers/audit.php,0,[],false,helper markers adjusted
 public/login.php,1,[login.success],true,added audit log for login success
 public/media/flash_games/SuperFlashMarioBrosSte.swf,0,[],false,non-PHP asset skipped in batch offset 110
@@ -289,6 +328,10 @@ public/media/flash_games/galaga.swf,0,[],false,non-PHP asset skipped in batch of
 public/media/flash_games/ghosts-and-goblins.swf,0,[],false,non-PHP asset skipped in batch offset 110
 public/media/flash_games/mario-cart.swf,0,[],false,non-PHP asset skipped in batch offset 110
 public/media/flash_games/mice_vs_hammers.swf,0,[],false,non-PHP asset skipped in batch offset 110
+<<<<<< codex/add-centralized-audit-logging-and-hooks-hq1f7m
+=======
+<<<<<< codex/add-centralized-audit-logging-and-hooks-oqz2ac
+>>>>>> master
 public/media/flash_games/monster_mash.swf,0,[],false,non-PHP asset (static media) rechecked in batch offset 120
 public/media/flash_games/monstermash.swf,0,[],false,non-PHP asset (static media) rechecked in batch offset 120
 public/media/flash_games/psol.swf,0,[],false,non-PHP asset (static media) rechecked in batch offset 120
@@ -299,6 +342,7 @@ public/media/flash_games/summergames04.swf,0,[],false,non-PHP asset (static medi
 public/media/flash_games/supersplashBH.swf,0,[],false,non-PHP asset (static media) rechecked in batch offset 120
 public/media/flash_games/trappedinawell.swf,0,[],false,non-PHP asset (static media) rechecked in batch offset 120
 public/media/flash_games/yeti10.swf,0,[],false,non-PHP asset (static media) rechecked in batch offset 120
+<<<<<< codex/add-centralized-audit-logging-and-hooks-hq1f7m
 public/media/flash_games/yeti10.swf,0,[],false,static media skipped in batch offset 130
 public/media/flash_games/yeti5pro.swf,0,[],false,static media skipped in batch offset 130
 public/media/flash_games/yeti6.swf,0,[],false,static media skipped in batch offset 130
@@ -309,3 +353,40 @@ public/media/flash_games/yeti_sports_10.swf,0,[],false,static media skipped in b
 public/media/sounds/sound_2.mp3,0,[],false,static media skipped in batch offset 130
 public/media/sounds/sound_3.wav,0,[],false,static media skipped in batch offset 130
 public/media/sounds/sound_7.wav,0,[],false,static media skipped in batch offset 130
+=======
+=======
+public/media/flash_games/monster_mash.swf,0,[],false,non-PHP asset skipped in batch offset 120
+public/media/flash_games/monstermash.swf,0,[],false,non-PHP asset skipped in batch offset 120
+public/media/flash_games/psol.swf,0,[],false,non-PHP asset skipped in batch offset 120
+public/media/flash_games/sonicblox.swf,0,[],false,non-PHP asset skipped in batch offset 120
+public/media/flash_games/starcraft.swf,0,[],false,non-PHP asset skipped in batch offset 120
+public/media/flash_games/starcraftfa3.swf,0,[],false,non-PHP asset skipped in batch offset 120
+public/media/flash_games/summergames04.swf,0,[],false,non-PHP asset skipped in batch offset 120
+public/media/flash_games/supersplashBH.swf,0,[],false,non-PHP asset skipped in batch offset 120
+public/media/flash_games/trappedinawell.swf,0,[],false,non-PHP asset skipped in batch offset 120
+public/media/flash_games/yeti10.swf,0,[],false,non-PHP asset skipped in batch offset 120
+=======
+=======
+=======
+=======
+=======
+=======
+=======
+=======
+=======
+>>>>>> master
+>>>>>> master
+>>>>>> master
+>>>>>> master
+>>>>>> master
+>>>>>> master
+>>>>>> master
+>>>>>> master
+<<<<<< codex/add-centralized-audit-logging-95hh7k
+=======
+include/helpers/audit.php,0,[],false,helper markers adjusted
+public/login.php,1,[login.success],true,added audit log for login success
+>>>>>> master
+>>>>>> master
+>>>>>> master
+>>>>>> master
