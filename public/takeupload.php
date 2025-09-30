@@ -2,6 +2,7 @@
 declare(strict_types=1);
 
 require_once dirname(__DIR__) . '/bootstrap_web.php';
+require_once dirname(__DIR__) . '/include/helpers/audit.php';
 
 use Envms\FluentPDO\Literal;
 use Pu239\Cache;
@@ -413,6 +414,16 @@ if (!$id) {
     $session->set('is-warning', _('Upload failed!'));
     why_die(_('Upload failed!'));
 }
+
+audit_log(
+    $owner_id ?? null,
+    'torrent.moderate',
+    [
+        'id' => $id,
+        'op' => 'upload',
+        'anonymous' => $anonymous === 1,
+    ]
+);
 
 $torrents_class->remove_torrent($infohash);
 $torrents_class->get_torrent_from_hash($infohash);

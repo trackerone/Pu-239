@@ -186,6 +186,8 @@ public/search.php,false,false,6,true,
 public/signup.php,false,false,0,true,no JSON responses to refactor
 public/takeupload.php,false,false,0,true,no JSON responses to refactor
 public/upload.php,false,false,0,true,no JSON responses to refactor
+<<<<<< codex/add-centralized-audit-logging-and-hooks-1ar1fd
+=======
 <<<<<< codex/add-centralized-audit-logging-and-hooks-6k7flq
 =======
 <<<<<< codex/add-centralized-audit-logging-and-hooks-hq1f7m
@@ -217,6 +219,7 @@ public/ajax/view_sql.php,0,[],false,no applicable critical actions
 public/ajaxchat.php,0,[],false,no applicable critical actions
 =======
 =======
+>>>>>> master
 >>>>>> master
 >>>>>> master
 >>>>>> master
@@ -312,6 +315,8 @@ public/hnrs.php,0,,true,bootstrapped audit helper for hnrs view
 admin/acpmanage.php,2,user.unban|user.ban,true,retained audit hooks while relocating review markers
 admin/backup.php,2,config.update,true,retained audit hooks while relocating review markers
 admin/bannedemails.php,2,user.unban|user.ban,true,retained audit hooks while relocating review markers
+<<<<<< codex/add-centralized-audit-logging-and-hooks-1ar1fd
+=======
 <<<<<< codex/add-centralized-audit-logging-and-hooks-6k7flq
 =======
 <<<<<< codex/add-centralized-audit-logging-and-hooks-hq1f7m
@@ -319,6 +324,7 @@ admin/bannedemails.php,2,user.unban|user.ban,true,retained audit hooks while rel
 <<<<<< codex/add-centralized-audit-logging-and-hooks-oqz2ac
 =======
 <<<<<< codex/add-centralized-audit-logging-and-hooks-izpa7d
+>>>>>> master
 >>>>>> master
 >>>>>> master
 >>>>>> master
@@ -334,11 +340,14 @@ public/media/flash_games/galaga.swf,0,[],false,non-PHP asset skipped in batch of
 public/media/flash_games/ghosts-and-goblins.swf,0,[],false,non-PHP asset skipped in batch offset 110
 public/media/flash_games/mario-cart.swf,0,[],false,non-PHP asset skipped in batch offset 110
 public/media/flash_games/mice_vs_hammers.swf,0,[],false,non-PHP asset skipped in batch offset 110
+<<<<<< codex/add-centralized-audit-logging-and-hooks-1ar1fd
+=======
 <<<<<< codex/add-centralized-audit-logging-and-hooks-6k7flq
 =======
 <<<<<< codex/add-centralized-audit-logging-and-hooks-hq1f7m
 =======
 <<<<<< codex/add-centralized-audit-logging-and-hooks-oqz2ac
+>>>>>> master
 >>>>>> master
 >>>>>> master
 public/media/flash_games/monster_mash.swf,0,[],false,non-PHP asset (static media) rechecked in batch offset 120
@@ -351,9 +360,12 @@ public/media/flash_games/summergames04.swf,0,[],false,non-PHP asset (static medi
 public/media/flash_games/supersplashBH.swf,0,[],false,non-PHP asset (static media) rechecked in batch offset 120
 public/media/flash_games/trappedinawell.swf,0,[],false,non-PHP asset (static media) rechecked in batch offset 120
 public/media/flash_games/yeti10.swf,0,[],false,non-PHP asset (static media) rechecked in batch offset 120
+<<<<<< codex/add-centralized-audit-logging-and-hooks-1ar1fd
+=======
 <<<<<< codex/add-centralized-audit-logging-and-hooks-6k7flq
 =======
 <<<<<< codex/add-centralized-audit-logging-and-hooks-hq1f7m
+>>>>>> master
 >>>>>> master
 public/media/flash_games/yeti10.swf,0,[],false,static media skipped in batch offset 130
 public/media/flash_games/yeti5pro.swf,0,[],false,static media skipped in batch offset 130
@@ -365,7 +377,10 @@ public/media/flash_games/yeti_sports_10.swf,0,[],false,static media skipped in b
 public/media/sounds/sound_2.mp3,0,[],false,static media skipped in batch offset 130
 public/media/sounds/sound_3.wav,0,[],false,static media skipped in batch offset 130
 public/media/sounds/sound_7.wav,0,[],false,static media skipped in batch offset 130
+<<<<<< codex/add-centralized-audit-logging-and-hooks-1ar1fd
+=======
 <<<<<< codex/add-centralized-audit-logging-and-hooks-6k7flq
+>>>>>> master
 public/mybonus.php,0,[],false,offset 140 review - no critical audit hook added this batch
 public/mytorrents.php,0,[],false,offset 140 review - display-only entrypoint
 public/offers.php,2,["torrent.moderate:offer.delete","torrent.moderate:offer.comment.delete"],true,offset 140 - added audit logging for offer moderation paths
@@ -376,6 +391,11 @@ public/restoreclass.php,1,["role.change"],true,offset 140 - restore override cla
 public/rss.php,0,[],false,offset 140 review - read-only feed generator
 public/rules.php,0,[],false,offset 140 review - static rules page
 public/search.php,0,[],false,offset 140 review - search form only
+<<<<<< codex/add-centralized-audit-logging-and-hooks-1ar1fd
+public/takereseed.php,1,["torrent.moderate:reseed.request"],true,offset 150 - reseed notifications audited
+public/take_theme.php,1,["config.update:stylesheet"],true,offset 150 - stylesheet preference changes logged
+public/takeupload.php,1,["torrent.moderate:upload"],true,offset 150 - uploads tracked in audit log
+=======
 =======
 =======
 =======
@@ -410,6 +430,7 @@ public/media/flash_games/yeti10.swf,0,[],false,non-PHP asset skipped in batch of
 =======
 include/helpers/audit.php,0,[],false,helper markers adjusted
 public/login.php,1,[login.success],true,added audit log for login success
+>>>>>> master
 >>>>>> master
 >>>>>> master
 >>>>>> master
