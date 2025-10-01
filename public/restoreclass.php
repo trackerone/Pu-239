@@ -1,13 +1,13 @@
 <?php
 declare(strict_types=1);
 
+use PU239\Support\Audit;
 use Pu239\Cache;
 use Pu239\Config\ConfigRepository;
 use Pu239\Database;
 use Pu239\User;
 
 require_once dirname(__DIR__) . '/bootstrap_web.php';
-require_once dirname(__DIR__) . '/include/helpers/audit.php';
 
 global $container;
 /** @var ConfigRepository $config */
@@ -25,7 +25,7 @@ $set = [
 $previousOverride = $user['override_class'] ?? null;
 $users_class = $container->get(User::class);
 $users_class->update($set, $user['id']);
-audit_log(
+Audit::log(
     $user['id'] ?? null,
     'role.change',
     [
