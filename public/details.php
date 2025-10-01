@@ -104,7 +104,6 @@ if ($moderator) {
         $torrent['checked_when'] = $dt;
         write_log(_fe('Torrent {0}({1}){2} was checked by {3}', "[url={$site_config['paths']['baseurl']}details.php?id=$id]", htmlsafechars((string) $torrent['name']), '[/url]', $user['username']));
         audit_log($user['id'] ?? null, 'torrent.moderate', ['id' => $id, 'op' => 'checked']);
-        // >>>>>> PU239:audit-hook-2
         if (!empty($_GET['returnto'])) {
             $returnto = str_replace('&amp;', '&', $_GET['returnto']);
             header("Location: {$site_config['paths']['baseurl']}" . urldecode($returnto));
@@ -121,7 +120,6 @@ if ($moderator) {
         $torrent['checked_when'] = $dt;
         write_log("Torrent [url={$site_config['paths']['baseurl']}details.php?id=$id](" . htmlsafechars((string) $torrent['name']) . ")[/url] was re-checked by {$user['username']}");
         audit_log($user['id'] ?? null, 'torrent.moderate', ['id' => $id, 'op' => 'rechecked']);
-        // >>>>>> PU239:audit-hook-3
         $session->set('is-success', "Torrents has been 'Re-Checked'");
     } elseif (isset($_POST['clearchecked']) && $_POST['clearchecked'] == $id) {
         $set = [
@@ -133,7 +131,6 @@ if ($moderator) {
         $torrent['checked_when'] = 0;
         write_log("Torrent [url={$site_config['paths']['baseurl']}details.php?id=$id](" . htmlsafechars((string) $torrent['name']) . ")[/url] was un-checked by {$user['username']}");
         audit_log($user['id'] ?? null, 'torrent.moderate', ['id' => $id, 'op' => 'unchecked']);
-        // >>>>>> PU239:audit-hook-4
         $session->set('is-success', "Torrents has been 'Un-Checked'");
     } elseif (isset($_POST['clear_cache']) && $_POST['clear_cache'] == $id) {
         $cache->deleteMulti([

@@ -381,3 +381,59 @@ No syntax errors detected in public/login.php
 >>>>>> master
 >>>>>> master
 >>>>>> master
+No syntax errors detected in classes/Support/Audit.php
+No syntax errors detected in public/recover.php
+No syntax errors detected in public/restoreclass.php
+No syntax errors detected in public/requests.php
+No syntax errors detected in classes/Support/Audit.php
+No syntax errors detected in public/setclass.php
+No syntax errors detected in public/take_theme.php
+No syntax errors detected in public/takereseed.php
+No syntax errors detected in classes/Support/Audit.php
+No syntax errors detected in public/takeupload.php
+
+Parse error: syntax error, unexpected token "<<" in admin/acpmanage.php on line 51
+Errors parsing admin/acpmanage.php
+
+Parse error: syntax error, unexpected token "<<" in admin/backup.php on line 174
+Errors parsing admin/backup.php
+
+Parse error: syntax error, unexpected token "<<" in admin/bannedemails.php on line 29
+Errors parsing admin/bannedemails.php
+No syntax errors detected in classes/Support/Audit.php
+No syntax errors detected in public/details.php
+No syntax errors detected in public/download.php
+No syntax errors detected in public/edit.php
+
+Parse error: syntax error, unexpected token "<<" in public/login.php on line 54
+Errors parsing public/login.php
+No syntax errors detected in public/offers.php
+No syntax errors detected in public/recover.php
+No syntax errors detected in public/requests.php
+No syntax errors detected in public/restoreclass.php
+No syntax errors detected in public/setclass.php
+No syntax errors detected in public/take_theme.php
+No syntax errors detected in public/takereseed.php
+No syntax errors detected in public/takeupload.php
+No syntax errors detected in public/user_blocks.php
+No syntax errors detected in public/user_unlocks.php
+No syntax errors detected in public/verify_email.php
+No syntax errors detected in admin/acpmanage.php
+No syntax errors detected in admin/backup.php
+No syntax errors detected in admin/bannedemails.php
+No syntax errors detected in classes/Support/Audit.php
+No syntax errors detected in public/details.php
+No syntax errors detected in public/download.php
+No syntax errors detected in public/edit.php
+No syntax errors detected in public/login.php
+No syntax errors detected in public/offers.php
+No syntax errors detected in public/recover.php
+No syntax errors detected in public/requests.php
+No syntax errors detected in public/restoreclass.php
+No syntax errors detected in public/setclass.php
+No syntax errors detected in public/take_theme.php
+No syntax errors detected in public/takereseed.php
+No syntax errors detected in public/takeupload.php
+No syntax errors detected in public/user_blocks.php
+No syntax errors detected in public/user_unlocks.php
+No syntax errors detected in public/verify_email.php
