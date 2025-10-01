@@ -1,6 +1,7 @@
 <?php
 declare(strict_types=1);
 
+use PU239\Support\Audit;
 use Pu239\Bounty;
 use Pu239\Comment;
 use Pu239\Config\ConfigRepository;
@@ -12,7 +13,6 @@ use Pu239\User;
 use Rakit\Validation\Validator;
 
 require_once dirname(__DIR__) . '/bootstrap_web.php';
-require_once dirname(__DIR__) . '/include/helpers/audit.php';
 
 global $container;
 /** @var ConfigRepository $config */
@@ -383,7 +383,7 @@ if ($has_access) {
         $update = main_div($update, 'has-text-centered w-75 min-350', 'padding20');
     } elseif ($delete && is_valid_id($id)) {
         if ($request_class->delete($id, $user['class'] >= UC_STAFF, $user['id']) === 1) {
-            audit_log(
+            Audit::log(
                 $user['id'] ?? null,
                 'torrent.moderate',
                 [
