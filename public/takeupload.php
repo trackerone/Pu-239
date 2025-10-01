@@ -2,8 +2,6 @@
 declare(strict_types=1);
 
 require_once dirname(__DIR__) . '/bootstrap_web.php';
-require_once dirname(__DIR__) . '/include/helpers/audit.php';
-
 use Envms\FluentPDO\Literal;
 use Pu239\Cache;
 use Pu239\Config\ConfigRepository;
@@ -16,6 +14,7 @@ use Pu239\Session;
 use Pu239\Torrent;
 use Pu239\User;
 use Pu239\Usersachiev;
+use PU239\Support\Audit;
 
 require_once __DIR__ . '/../include/bittorrent.php';
 require_once CLASS_DIR . 'class.bencdec.php';
@@ -415,7 +414,8 @@ if (!$id) {
     why_die(_('Upload failed!'));
 }
 
-audit_log(
+// >>>>>> PU239:audit-hook-2
+Audit::log(
     $owner_id ?? null,
     'torrent.moderate',
     [
