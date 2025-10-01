@@ -391,7 +391,6 @@ if ($has_access) {
                     'op' => 'request.delete',
                 ],
             );
-            // >>>>>> PU239:audit-hook-5
             $session->set('is-success', _('Request Deleted'));
         } else {
             $session->set('is-warning', _('Request was NOT Deleted'));

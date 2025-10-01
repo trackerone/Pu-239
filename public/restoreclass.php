@@ -34,7 +34,6 @@ Audit::log(
         'to' => $set['override_class'],
     ],
 );
-// >>>>>> PU239:audit-hook-3
 // $fluent removed — use $this->db (ExtendedPdo)
 $sql = "DELETE FROM ajax_chat_online WHERE userID = :userID";
 $db->perform($sql, ['userID' => $user['id']]);

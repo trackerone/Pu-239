@@ -4,6 +4,7 @@ declare(strict_types=1);
 require_once dirname(__DIR__) . '/bootstrap_web.php';
 
 use Delight\Auth\Auth;
+use PU239\Support\Audit;
 use Pu239\Cache;
 use Pu239\Config\ConfigRepository;
 use Pu239\Database;
@@ -421,6 +422,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if ($clrbits_userdetails_page) {
         $removeset['userdetails_page'] = new Literal('userdetails_page & ~' . $clrbits_userdetails_page);
     }
+    $changedKeys = [];
+    if ($setbits_index_page || $clrbits_index_page) {
+        $changedKeys[] = 'index_page';
+    }
+    if ($setbits_global_stdhead || $clrbits_global_stdhead) {
+        $changedKeys[] = 'global_stdhead';
+    }
+    if ($setbits_userdetails_page || $clrbits_userdetails_page) {
+        $changedKeys[] = 'userdetails_page';
+    }
     if (!empty($addset) || !empty($removeset)) {
         // $fluent removed — use $this->db (ExtendedPdo)
         if (!empty($addset)) {
@@ -441,6 +452,8 @@ $db->perform($sql, array_merge($removeset, ['userid' => $id]));
 
         $update['blocks'] = $blocks;
         $cache->update_row('user_' . $id, $update);
+        Audit::log($curuser['id'] ?? null, 'config.update', ['target' => $id, 'keys' => $changedKeys]);
+        // >>>>>> PU239:audit-hook-2
         $session->set('is-success', 'User Blocks Successfully Updated');
         unset($_POST);
         header('Location: ' . $_SERVER['PHP_SELF']);

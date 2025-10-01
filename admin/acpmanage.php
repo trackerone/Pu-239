@@ -1,9 +1,8 @@
 <?php
 declare(strict_types=1);
 require_once dirname(__DIR__) . '/bootstrap_web.php';
-require_once dirname(__DIR__) . '/include/helpers/audit.php';
-
 use PU239\Config\ConfigRepository;
+use PU239\Support\Audit;
 use Pu239\Database;
 
 
@@ -47,11 +46,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['ids'])) {
             $cache->update_row('user_' . $id, [
                 'status' => 0,
             ], $config->get('expires.user_cache'));
-            audit_log($CURUSER['id'] ?? null, 'user.unban', ['target' => (int) $id]);
-<<<<<< codex/add-centralized-audit-logging-jhw01y
-=======
-            // >>>>>> PU239:audit-hook-2
->>>>>> master
+            Audit::log($CURUSER['id'] ?? null, 'user.unban', ['target' => (int) $id]);
         }
     } elseif ($do == 'confirm') {
         $placeholders = [];
@@ -72,11 +67,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['ids'])) {
             if ($username) {
                 write_log(_fe('User: {0} was deleted by {1}', $username, $CURUSER['username']));
                 $session->set('is-success', _('The account was deleted.'));
-                audit_log($CURUSER['id'] ?? null, 'user.ban', ['target' => (int) $id, 'reason' => 'account_delete']);
-<<<<<< codex/add-centralized-audit-logging-jhw01y
-=======
-                // >>>>>> PU239:audit-hook-3
->>>>>> master
+                Audit::log($CURUSER['id'] ?? null, 'user.ban', ['target' => (int) $id, 'reason' => 'account_delete']);
             } else {
                 stderr(_('Error'), _('Unable to delete the account.'));
             }
