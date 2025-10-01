@@ -440,7 +440,10 @@ classes/Support/Audit.php,0,"[]",true,"batch offset=160"
 public/recover.php,1,"['password.change']",false,"password reset flow"
 public/restoreclass.php,1,"['role.change']",false,"override reset"
 public/requests.php,1,"['torrent.moderate']",false,"request deletion"
+<<<<<< codex/add-centralized-audit-logging-system-07xxlh
 classes/Support/Audit.php,0,"[]",true,"batch offset=170"
 public/setclass.php,1,"['role.change']",false,"override class edit"
 public/take_theme.php,1,"['config.update']",false,"stylesheet preference"
 public/takereseed.php,1,"['torrent.moderate']",false,"reseed request"
+=======
+>>>>>> master
