@@ -42,6 +42,10 @@ if (isset($_GET['action']) && htmlsafechars($_GET['action']) === 'editclass') {
             'to' => $newclass,
         ]
     );
+<<<<<< codex/add-centralized-audit-logging-system-rznzq6
+=======
+    // >>>>>> PU239:audit-hook-2
+>>>>>> master
     // $fluent removed — use $this->db (ExtendedPdo)
     $sql = "DELETE FROM ajax_chat_online WHERE userID = :userID";
     $db->perform($sql, ['userID' => $user['id']]);

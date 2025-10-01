@@ -414,6 +414,10 @@ if (!$id) {
     why_die(_('Upload failed!'));
 }
 
+<<<<<< codex/add-centralized-audit-logging-system-rznzq6
+=======
+// >>>>>> PU239:audit-hook-2
+>>>>>> master
 Audit::log(
     $owner_id ?? null,
     'torrent.moderate',
