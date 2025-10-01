@@ -43,7 +43,6 @@ final class Audit
 }
 
 // >>>>>> PU239:audit-helper-1
-// >>>>>> PU239:audit-hook-2
 // >>>>>> PU239:audit-hook-3
 // >>>>>> PU239:audit-hook-4
 // >>>>>> PU239:audit-hook-5

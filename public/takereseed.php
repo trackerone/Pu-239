@@ -1,8 +1,8 @@
 <?php
 declare(strict_types=1);
 require_once dirname(__DIR__) . '/bootstrap_web.php';
-require_once dirname(__DIR__) . '/include/helpers/audit.php';
 
+use PU239\Support\Audit;
 use Pu239\Cache;
 use Pu239\Config\ConfigRepository;
 use Pu239\Database;
@@ -94,7 +94,7 @@ if ($bonusEnabled) {
     );
 }
 
-audit_log(
+Audit::log(
     $user['id'] ?? null,
     'torrent.moderate',
     [
@@ -103,5 +103,6 @@ audit_log(
         'pm_scope' => $pm_what,
     ]
 );
+// >>>>>> PU239:audit-hook-4
 
 header("Refresh: 0; url={$baseUrl}/details.php?id=$reseedid");
