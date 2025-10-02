@@ -502,3 +502,49 @@ No syntax errors detected in public/takeupload.php
 >>>>>> master
 >>>>>> master
 >>>>>> master
+No syntax errors detected in classes/Security/AuthZ.php
+No syntax errors detected in admin/acpmanage.php
+No syntax errors detected in admin/adduser.php
+No syntax errors detected in admin/allagents.php
+No syntax errors detected in admin/backup.php
+No syntax errors detected in admin/banclient.php
+No syntax errors detected in admin/bannedemails.php
+No syntax errors detected in admin/bans.php
+No syntax errors detected in admin/block.settings.php
+
+Parse error: syntax error, unexpected token "<<", expecting end of file in admin/bonusmanage.php on line 25
+Errors parsing admin/bonusmanage.php
+
+Parse error: syntax error, unexpected token "<<" in admin/categories.php on line 156
+Errors parsing admin/categories.php
+No syntax errors detected in admin/changelog.php
+No syntax errors detected in admin/cheaters.php
+No syntax errors detected in admin/class_config.php
+No syntax errors detected in admin/class_promo.php
+No syntax errors detected in admin/cleanup_manager.php
+No syntax errors detected in admin/cloudview.php
+No syntax errors detected in admin/comments.php
+No syntax errors detected in admin/datareset.php
+No syntax errors detected in admin/deathrow.php
+No syntax errors detected in admin/delacct.php
+No syntax errors detected in admin/donations.php
+No syntax errors detected in admin/doubleusers.php
+No syntax errors detected in admin/edit_moods.php
+No syntax errors detected in admin/editlog.php
+No syntax errors detected in admin/findnotconnectable.php
+No syntax errors detected in admin/floodlimit.php
+No syntax errors detected in admin/flush.php
+No syntax errors detected in admin/forum_config.php
+No syntax errors detected in admin/forum_manage.php
+No syntax errors detected in admin/freeleech.php
+No syntax errors detected in admin/freeusers.php
+No syntax errors detected in admin/goaccess.php
+No syntax errors detected in admin/grouppm.php
+No syntax errors detected in admin/hit_and_run.php
+No syntax errors detected in admin/hit_and_run_settings.php
+No syntax errors detected in admin/hnrwarn.php
+No syntax errors detected in admin/inactive.php
+No syntax errors detected in admin/invite_tree.php
+No syntax errors detected in admin/ipcheck.php
+No syntax errors detected in admin/iphistory.php
+No syntax errors detected in admin/iphistory.php
