@@ -123,7 +123,6 @@ if (isset($_GET['slot'])) {
                ->onDuplicateKeyUpdate($update)
                ->execute();
         audit_log($user['id'] ?? null, 'torrent.moderate', ['id' => $id, 'op' => 'slot.free']);
-        // >>>>>> PU239:audit-hook-5
     } elseif ($_GET['slot'] === 'double') {
         if ($used_slot && $slot['doubleup'] === 'yes') {
             show_error(_('Error'), _('Doubleseed slot already in use.'));

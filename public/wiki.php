@@ -7,6 +7,7 @@ use DI\NotFoundException;
 use Pu239\Config\ConfigRepository;
 use Pu239\Session;
 use Pu239\Wiki;
+use PU239\Support\Audit;
 use Rakit\Validation\Validator;
 use Spatie\Image\Exceptions\InvalidManipulation;
 
@@ -131,6 +132,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 'time' => TIME_NOW,
             ];
             $wiki->add($values);
+            Audit::log(
+                $user['id'] ?? ($CURUSER['id'] ?? null),
+                'config.update',
+                [
+                    'keys' => ['wiki.article'],
+                    'op' => 'add',
+                    'name' => $values['name'] ?? null,
+                ],
+            );
+            // >>>>>> PU239:audit-hook-2
             $session->set('is-success', 'Wiki article added');
         }
     } elseif (isset($_POST['article-edit'])) {
@@ -142,6 +153,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             'lastedituser' => $user['id'],
         ];
         $wiki->update($update, $id);
+        Audit::log(
+            $user['id'] ?? ($CURUSER['id'] ?? null),
+            'config.update',
+            [
+                'keys' => ['wiki.article'],
+                'op' => 'edit',
+                'id' => $id,
+            ],
+        );
+        // >>>>>> PU239:audit-hook-3
         $session->set('is-success', 'Wiki article edited');
     } elseif (isset($_POST['wiki'])) {
         $name = htmlsafechars(urldecode($_POST['article']));
