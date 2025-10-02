@@ -2,6 +2,7 @@
 declare(strict_types=1);
 require_once dirname(__DIR__) . '/bootstrap_web.php';
 
+use PU239\Support\Audit;
 use Pu239\Cache;
 use Pu239\Config\ConfigRepository;
 use Pu239\Database;
@@ -31,16 +32,23 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // TODO(2025): add CSRF verification
     $updateset = [];
     $setbits = $clrbits = 0;
+    $changedKeys = [];
     if (isset($_POST['unlock_user_moods'])) {
         $setbits |= UNLOCK_MORE_MOODS; // Unlock bonus moods
     } else {
         $clrbits |= UNLOCK_MORE_MOODS; // lock bonus moods
+    }
+    if (($setbits & UNLOCK_MORE_MOODS) === UNLOCK_MORE_MOODS || ($clrbits & UNLOCK_MORE_MOODS) === UNLOCK_MORE_MOODS) {
+        $changedKeys[] = 'unlock_user_moods';
     }
 
     if (isset($_POST['perms_stealth'])) {
         $setbits |= PERMS_STEALTH; // stealth on
     } else {
         $clrbits |= PERMS_STEALTH; // stealth off
+    }
+    if (($setbits & PERMS_STEALTH) === PERMS_STEALTH || ($clrbits & PERMS_STEALTH) === PERMS_STEALTH) {
+        $changedKeys[] = 'perms_stealth';
     }
 
     if ($setbits || $clrbits) {
@@ -55,6 +63,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $cache->update_row('user_' . $id, [
         'perms' => $row['perms'],
     ], $userCacheTtl);
+    if (!empty($changedKeys)) {
+        Audit::log($user['id'] ?? null, 'config.update', ['target' => (int) $id, 'keys' => $changedKeys]);
+    }
     header('Location: ' . $_SERVER['PHP_SELF']);
     app_halt('Exit called');
 }

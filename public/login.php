@@ -1,9 +1,8 @@
 <?php
 declare(strict_types=1);
 require_once dirname(__DIR__) . '/bootstrap_web.php';
-require_once dirname(__DIR__) . '/include/helpers/audit.php';
-
 use Delight\Auth\Auth;
+use PU239\Support\Audit;
 use Pu239\Config\ConfigRepository;
 use Pu239\Database;
 use Pu239\Ban;
@@ -51,54 +50,30 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
     $user_class = $container->get(User::class);
     if ($user_class->login($post['email'], $post['password'], (int) isset($post['remember']) ? 1 : 0)) {
-<<<<<< codex/add-centralized-audit-logging-and-hooks-oqz2ac
         $userid = $auth->getUserId();
-        audit_log($userid ?? null, 'login.success', []);
-        // >>>>>> PU239:audit-hook-2
         $user = $user_class->getUserFromId($userid);
+
         if ($ipLogging || !($user['perms'] & PERMS_NO_IP)) {
             insert_update_ip('login', $userid);
         }
+
         if ($limitIps) {
             $ips_class = $container->get(IP::class);
             $count = $ips_class->get_ip_count($userid, 3, 'login');
             if ($count > $limitIpsCount) {
+                Audit::log($userid ?? null, 'login.blocked.ip_limit', [
+                    'limit' => $limitIpsCount,
+                    'count' => $count,
+                    'window_days' => 3,
+                    'context' => 'login',
+                ]);
                 $user_class->logout($userid, false);
                 $session->set('is-danger', _('You have exceeded the maximum number of IPs allowed'));
                 stderr(_('Error'), _fe('You are allowed {0} in the previous 3 days. You have used {1} different IPs', $limitIpsCount, $count));
             }
-=======
-    $userid = $auth->getUserId();
-    // >>>>>> PU239:audit-hook-2
-    $user = $user_class->getUserFromId($userid);
-
-    if ($ipLogging || !($user['perms'] & PERMS_NO_IP)) {
-        insert_update_ip('login', $userid);
-    }
-
-    if ($limitIps) {
-        $ips_class = $container->get(IP::class);
-        $count = $ips_class->get_ip_count($userid, 3, 'login');
-        if ($count > $limitIpsCount) {
-            audit_log($userid ?? null, 'login.blocked.ip_limit', [
-                'limit'       => $limitIpsCount,
-                'count'       => $count,
-                'window_days' => 3,
-                'context'     => 'login',
-            ]);
-            $user_class->logout($userid, false);
-            $session->set('is-danger', _('You have exceeded the maximum number of IPs allowed'));
-            stderr(_('Error'), _fe('You are allowed {0} in the previous 3 days. You have used {1} different IPs', $limitIpsCount, $count));
->>>>>> master
         }
-    }
 
-    audit_log($userid ?? null, 'login.success', [
-        'context' => 'login',
-    ]);
-
-    // ... redirect/continue
-}
+        Audit::log($userid ?? null, 'login.success', ['context' => 'login']);
         if (!empty($post['returnto'])) {
             $returnto = get_return_to($post['returnto']);
             if (!empty($returnto)) {

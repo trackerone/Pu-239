@@ -13,6 +13,7 @@ use Delight\Auth\InvalidSelectorTokenPairException;
 use Delight\Auth\TokenExpiredException;
 use Delight\Auth\TooManyRequestsException;
 use Delight\Auth\UserAlreadyExistsException;
+use PU239\Support\Audit;
 use Pu239\Cache;
 use Pu239\Session;
 use Pu239\User;
@@ -49,4 +50,5 @@ if (empty($emails[0])) {
 $cache = $container->get(Cache::class);
 $userid = $auth->getUserId();
 $user_class = $container->get(User::class);
+Audit::log($userid, 'config.update', ['target' => $userid, 'keys' => ['email']]);
 header("Location: {$site_config['paths']['baseurl']}/usercp.php?action=security");
