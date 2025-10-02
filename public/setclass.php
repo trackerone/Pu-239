@@ -42,6 +42,8 @@ if (isset($_GET['action']) && htmlsafechars($_GET['action']) === 'editclass') {
             'to' => $newclass,
         ]
     );
+<<<<<< codex/add-centralized-audit-logging-system-nt62d3
+=======
 <<<<<< codex/add-centralized-audit-logging-system-5cqmq4
 =======
 <<<<<< codex/add-centralized-audit-logging-system-zg4mx8
@@ -49,6 +51,7 @@ if (isset($_GET['action']) && htmlsafechars($_GET['action']) === 'editclass') {
 <<<<<< codex/add-centralized-audit-logging-system-rznzq6
 =======
     // >>>>>> PU239:audit-hook-2
+>>>>>> master
 >>>>>> master
 >>>>>> master
 >>>>>> master
