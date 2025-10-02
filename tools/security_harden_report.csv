@@ -527,6 +527,7 @@ admin/deathrow.php,true,admin,true,
 admin/delacct.php,true,admin,true,
 admin/categories.php,false,admin,true,LINT_FAIL
 classes/Security/AuthZ.php,false,admin,true,
+<<<<<< codex/enforce-centralized-authorization-checks-zd3ly3
 admin/donations.php,true,admin,true,
 admin/doubleusers.php,true,admin,true,
 admin/edit_moods.php,true,admin,true,
@@ -547,3 +548,5 @@ admin/inactive.php,true,admin,true,
 admin/invite_tree.php,true,admin,true,
 admin/ipcheck.php,true,admin,true,
 admin/iphistory.php,true,admin,true,
+=======
+>>>>>> master

@@ -527,6 +527,7 @@ No syntax errors detected in admin/comments.php
 No syntax errors detected in admin/datareset.php
 No syntax errors detected in admin/deathrow.php
 No syntax errors detected in admin/delacct.php
+<<<<<< codex/enforce-centralized-authorization-checks-zd3ly3
 No syntax errors detected in admin/donations.php
 No syntax errors detected in admin/doubleusers.php
 No syntax errors detected in admin/edit_moods.php
@@ -548,3 +549,5 @@ No syntax errors detected in admin/invite_tree.php
 No syntax errors detected in admin/ipcheck.php
 No syntax errors detected in admin/iphistory.php
 No syntax errors detected in admin/iphistory.php
+=======
+>>>>>> master
