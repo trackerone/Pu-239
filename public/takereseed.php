@@ -103,5 +103,6 @@ Audit::log(
         'pm_scope' => $pm_what,
     ]
 );
+// >>>>>> PU239:audit-hook-4
 
 header("Refresh: 0; url={$baseUrl}/details.php?id=$reseedid");
