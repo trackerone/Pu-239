@@ -71,6 +71,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && !isset($_POST['selector'])) {
     }
     $user->reset_password($post, false);
     Audit::log($CURUSER['id'] ?? null, 'password.change', ['target' => $CURUSER['id'] ?? null]);
+<<<<<< codex/add-centralized-audit-logging-system-zg4mx8
+=======
+<<<<<< codex/add-centralized-audit-logging-system-rznzq6
+=======
+    // >>>>>> PU239:audit-hook-2
+>>>>>> master
+>>>>>> master
 } elseif ($_SERVER['REQUEST_METHOD'] === 'GET' && !empty($_GET)) {
     $get = $_GET;
     unset($_POST, $_GET, $_FILES);

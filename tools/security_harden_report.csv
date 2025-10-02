@@ -440,19 +440,45 @@ classes/Support/Audit.php,0,"[]",true,"batch offset=160"
 public/recover.php,1,"['password.change']",false,"password reset flow"
 public/restoreclass.php,1,"['role.change']",false,"override reset"
 public/requests.php,1,"['torrent.moderate']",false,"request deletion"
+<<<<<< codex/add-centralized-audit-logging-system-zg4mx8
+=======
+<<<<<< codex/add-centralized-audit-logging-system-rznzq6
+=======
+<<<<<< codex/add-centralized-audit-logging-system-ygkfmu
+=======
+<<<<<< codex/add-centralized-audit-logging-system-07xxlh
+>>>>>> master
+>>>>>> master
+>>>>>> master
 classes/Support/Audit.php,0,"[]",true,"batch offset=170"
 public/setclass.php,1,"['role.change']",false,"override class edit"
 public/take_theme.php,1,"['config.update']",false,"stylesheet preference"
 public/takereseed.php,1,"['torrent.moderate']",false,"reseed request"
+<<<<<< codex/add-centralized-audit-logging-system-zg4mx8
+=======
+<<<<<< codex/add-centralized-audit-logging-system-rznzq6
+>>>>>> master
 classes/Support/Audit.php,0,"[]",true,"batch offset=180"
 public/takeupload.php,1,"['torrent.moderate']",false,"upload handler"
 classes/Support/Audit.php,0,"[]",true,"marker cleanup batch offset=190"
 public/user_blocks.php,1,"['config.update']",false,"user block preferences"
 public/user_unlocks.php,1,"['config.update']",false,"unlock/stealth toggles"
 public/verify_email.php,1,"['config.update']",false,"email confirmation"
+<<<<<< codex/add-centralized-audit-logging-system-zg4mx8
 classes/Support/Audit.php,0,"[]",true,"batch offset=200 marker redistribution"
 public/wiki.php,2,"['config.update']",false,"wiki article add/edit"
 staffpanel/index.php,3,"['config.update']",false,"staff panel page lifecycle"
 public/user_blocks.php,0,"[]",false,"marker reassigned for offset 200"
 public/user_unlocks.php,0,"[]",false,"marker reassigned for offset 200"
 public/verify_email.php,0,"[]",false,"marker reassigned for offset 200"
+=======
+=======
+<<<<<< codex/add-centralized-audit-logging-system-ygkfmu
+classes/Support/Audit.php,0,"[]",true,"batch offset=180"
+public/takeupload.php,1,"['torrent.moderate']",false,"upload handler"
+=======
+=======
+>>>>>> master
+>>>>>> master
+>>>>>> master
+>>>>>> master

@@ -453,6 +453,10 @@ $db->perform($sql, array_merge($removeset, ['userid' => $id]));
         $update['blocks'] = $blocks;
         $cache->update_row('user_' . $id, $update);
         Audit::log($curuser['id'] ?? null, 'config.update', ['target' => $id, 'keys' => $changedKeys]);
+<<<<<< codex/add-centralized-audit-logging-system-zg4mx8
+=======
+        // >>>>>> PU239:audit-hook-2
+>>>>>> master
         $session->set('is-success', 'User Blocks Successfully Updated');
         unset($_POST);
         header('Location: ' . $_SERVER['PHP_SELF']);

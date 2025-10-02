@@ -51,4 +51,8 @@ $cache = $container->get(Cache::class);
 $userid = $auth->getUserId();
 $user_class = $container->get(User::class);
 Audit::log($userid, 'config.update', ['target' => $userid, 'keys' => ['email']]);
+<<<<<< codex/add-centralized-audit-logging-system-zg4mx8
+=======
+// >>>>>> PU239:audit-hook-4
+>>>>>> master
 header("Location: {$site_config['paths']['baseurl']}/usercp.php?action=security");
