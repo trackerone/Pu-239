@@ -527,3 +527,27 @@ No syntax errors detected in admin/comments.php
 No syntax errors detected in admin/datareset.php
 No syntax errors detected in admin/deathrow.php
 No syntax errors detected in admin/delacct.php
+<<<<<< codex/enforce-centralized-authorization-checks-zd3ly3
+No syntax errors detected in admin/donations.php
+No syntax errors detected in admin/doubleusers.php
+No syntax errors detected in admin/edit_moods.php
+No syntax errors detected in admin/editlog.php
+No syntax errors detected in admin/findnotconnectable.php
+No syntax errors detected in admin/floodlimit.php
+No syntax errors detected in admin/flush.php
+No syntax errors detected in admin/forum_config.php
+No syntax errors detected in admin/forum_manage.php
+No syntax errors detected in admin/freeleech.php
+No syntax errors detected in admin/freeusers.php
+No syntax errors detected in admin/goaccess.php
+No syntax errors detected in admin/grouppm.php
+No syntax errors detected in admin/hit_and_run.php
+No syntax errors detected in admin/hit_and_run_settings.php
+No syntax errors detected in admin/hnrwarn.php
+No syntax errors detected in admin/inactive.php
+No syntax errors detected in admin/invite_tree.php
+No syntax errors detected in admin/ipcheck.php
+No syntax errors detected in admin/iphistory.php
+No syntax errors detected in admin/iphistory.php
+=======
+>>>>>> master
