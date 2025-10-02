@@ -506,3 +506,24 @@ public/takeupload.php,1,"['torrent.moderate']",false,"upload handler"
 >>>>>> master
 >>>>>> master
 >>>>>> master
+admin/acpmanage.php,true,admin,true,
+admin/adduser.php,true,admin,true,
+admin/allagents.php,true,admin,true,
+admin/backup.php,true,admin,true,
+admin/banclient.php,true,admin,true,
+admin/bannedemails.php,true,admin,true,
+admin/bans.php,true,admin,true,
+admin/block.settings.php,true,admin,true,
+admin/bonusmanage.php,false,admin,true,LINT_FAIL
+admin/changelog.php,true,admin,true,
+admin/cheaters.php,true,admin,true,
+admin/class_config.php,true,admin,true,
+admin/class_promo.php,true,admin,true,
+admin/cleanup_manager.php,true,admin,true,
+admin/cloudview.php,true,admin,true,
+admin/comments.php,true,admin,true,
+admin/datareset.php,true,admin,true,
+admin/deathrow.php,true,admin,true,
+admin/delacct.php,true,admin,true,
+admin/categories.php,false,admin,true,LINT_FAIL
+classes/Security/AuthZ.php,false,admin,true,
