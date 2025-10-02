@@ -502,3 +502,28 @@ No syntax errors detected in public/takeupload.php
 >>>>>> master
 >>>>>> master
 >>>>>> master
+No syntax errors detected in classes/Security/AuthZ.php
+No syntax errors detected in admin/acpmanage.php
+No syntax errors detected in admin/adduser.php
+No syntax errors detected in admin/allagents.php
+No syntax errors detected in admin/backup.php
+No syntax errors detected in admin/banclient.php
+No syntax errors detected in admin/bannedemails.php
+No syntax errors detected in admin/bans.php
+No syntax errors detected in admin/block.settings.php
+
+Parse error: syntax error, unexpected token "<<", expecting end of file in admin/bonusmanage.php on line 25
+Errors parsing admin/bonusmanage.php
+
+Parse error: syntax error, unexpected token "<<" in admin/categories.php on line 156
+Errors parsing admin/categories.php
+No syntax errors detected in admin/changelog.php
+No syntax errors detected in admin/cheaters.php
+No syntax errors detected in admin/class_config.php
+No syntax errors detected in admin/class_promo.php
+No syntax errors detected in admin/cleanup_manager.php
+No syntax errors detected in admin/cloudview.php
+No syntax errors detected in admin/comments.php
+No syntax errors detected in admin/datareset.php
+No syntax errors detected in admin/deathrow.php
+No syntax errors detected in admin/delacct.php
