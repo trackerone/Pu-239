@@ -8,6 +8,7 @@ use Delight\Auth\InvalidSelectorTokenPairException;
 use Delight\Auth\ResetDisabledException;
 use Delight\Auth\TokenExpiredException;
 use Delight\Auth\TooManyRequestsException;
+use PU239\Support\Audit;
 use Pu239\Config\ConfigRepository;
 use Pu239\User;
 use Rakit\Validation\Validator;
@@ -69,6 +70,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && !isset($_POST['selector'])) {
         app_halt('Exit called');
     }
     $user->reset_password($post, false);
+    Audit::log($CURUSER['id'] ?? null, 'password.change', ['target' => $CURUSER['id'] ?? null]);
 } elseif ($_SERVER['REQUEST_METHOD'] === 'GET' && !empty($_GET)) {
     $get = $_GET;
     unset($_POST, $_GET, $_FILES);

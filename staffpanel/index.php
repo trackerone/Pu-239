@@ -10,6 +10,7 @@ use Pu239\Radiance;
 use Pu239\Session;
 use Pu239\Uglify\UglifyService;
 use PU239\Config\ConfigRepository;
+use PU239\Support\Audit;
 
 global $container;
 
@@ -164,6 +165,16 @@ if (in_array($tool, $staff_tools, true) && file_exists(ADMIN_DIR . $staff_tools[
         $cache->delete('staff_panels_4');
 
         if ($result >= 1) {
+            Audit::log(
+                $user['id'] ?? ($CURUSER['id'] ?? null),
+                'config.update',
+                [
+                    'keys' => ['staffpanel.page'],
+                    'op' => 'delete',
+                    'id' => $id,
+                ],
+            );
+            // >>>>>> PU239:audit-hook-4
             if ($user['class'] <= UC_MAX) {
                 $page = _('Page') . " '[color=#" . get_user_class_color((int) $arr['av_class']) . "]{$arr['page_name']}[/color]'";
                 $user_bbcode = "[url={$baseUrl}/userdetails.php?id={$user['id']}][color=#" . get_user_class_color($user['class']) . "]{$user['username']}[/color][/url]";
@@ -360,6 +371,30 @@ if (in_array($tool, $staff_tools, true) && file_exists(ADMIN_DIR . $staff_tools[
                 }
 
                 if (empty($errors)) {
+                    if ($action === 'add') {
+                        Audit::log(
+                            $user['id'] ?? ($CURUSER['id'] ?? null),
+                            'config.update',
+                            [
+                                'keys' => ['staffpanel.page'],
+                                'op' => 'add',
+                                'name' => $page_name,
+                            ],
+                        );
+                        // >>>>>> PU239:audit-hook-5
+                    } else {
+                        Audit::log(
+                            $user['id'] ?? ($CURUSER['id'] ?? null),
+                            'config.update',
+                            [
+                                'keys' => ['staffpanel.page'],
+                                'op' => 'edit',
+                                'id' => $id,
+                                'name' => $page_name,
+                            ],
+                        );
+                        // >>>>>> PU239:audit-hook-6
+                    }
                     if ($user['class'] <= UC_MAX) {
                         $page = _('Page') . " '[color=#" . get_user_class_color((int) $_POST['av_class']) . "]{$page_name}[/color]'";
                         $what = $action === 'add' ? 'added' : 'edited';

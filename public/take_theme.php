@@ -2,8 +2,7 @@
 declare(strict_types=1);
 
 require_once dirname(__DIR__) . '/bootstrap_web.php';
-require_once dirname(__DIR__) . '/include/helpers/audit.php';
-
+use PU239\Support\Audit;
 use Pu239\Config\ConfigRepository;
 use Pu239\Database;
 use Pu239\User;
@@ -25,7 +24,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
         ];
         $users_class = $container->get(User::class);
         $users_class->update($set, $user['id']);
-        audit_log(
+        Audit::log(
             $user['id'] ?? null,
             'config.update',
             [

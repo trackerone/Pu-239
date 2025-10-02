@@ -72,7 +72,6 @@ if (isset($data['action'])) {
                             'op' => 'offer.comment.delete',
                         ],
                     );
-                    // >>>>>> PU239:audit-hook-6
                     $session->set('is-success', _('Comment Deleted'));
                 } else {
                     $session->set('is-warning', _('Comment Not Deleted'));
@@ -331,7 +330,6 @@ if ($has_access) {
                     'op' => 'offer.delete',
                 ],
             );
-            // >>>>>> PU239:audit-hook-4
             $session->set('is-success', _('Offer Deleted'));
         } else {
             $session->set('is-warning', _('Offer was NOT Deleted'));

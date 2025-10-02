@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 require_once dirname(__DIR__) . '/bootstrap_web.php';
 
+use PU239\Support\Audit;
 use Pu239\Cache;
 use Pu239\Config\ConfigRepository;
 use Pu239\Database;
@@ -27,10 +28,20 @@ if ($user['class'] < UC_STAFF || $user['override_class'] != 255) {
 if (isset($_GET['action']) && htmlsafechars($_GET['action']) === 'editclass') {
     $newclass = (int) $_GET['class'];
     $returnto = htmlsafechars($_GET['returnto']);
+    $oldRole = $user['override_class'] ?? null;
     $set = [
         'override_class' => $newclass,
     ];
     $users_class->update($set, $user['id']);
+    Audit::log(
+        $user['id'] ?? null,
+        'role.change',
+        [
+            'target' => $user['id'] ?? null,
+            'from' => $oldRole,
+            'to' => $newclass,
+        ]
+    );
     // $fluent removed — use $this->db (ExtendedPdo)
     $sql = "DELETE FROM ajax_chat_online WHERE userID = :userID";
     $db->perform($sql, ['userID' => $user['id']]);
