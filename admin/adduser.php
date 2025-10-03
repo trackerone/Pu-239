@@ -4,6 +4,7 @@ require_once dirname(__DIR__) . '/bootstrap_web.php';
 
 use PU239\Config\ConfigRepository;
 use PU239\Security\AuthZ;
+use PU239\Security\PasswordHasher;
 use Pu239\Cache;
 use Pu239\Database;
 use Pu239\Session;
@@ -15,13 +16,7 @@ if (strpos(__FILE__, '/admin/') !== false) {
 } else {
     AuthZ::requireAnyRole(['staff', 'admin']);
 }
-<<<<<< codex/enforce-centralized-authorization-checks-s6jwwl
-=======
-<<<<<< codex/enforce-centralized-authorization-checks-vacoay
-=======
 
->>>>>> master
->>>>>> master
 
 global $container;
 /** @var ConfigRepository $config */
@@ -53,11 +48,30 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         header("Location: {$_SERVER['PHP_SELF']}");
         app_halt('Exit called');
     } else {
-        $password = bin2hex(random_bytes(12));
+        $password = (static function (): string {
+            while (true) {
+                $candidate = substr(strtr(base64_encode(random_bytes(12)), '+/=', '!*@'), 0, 16);
+                try {
+                    PasswordHasher::assertPolicy($candidate);
+
+                    return $candidate;
+                } catch (\InvalidArgumentException $e) {
+                    continue;
+                }
+            }
+        })();
+        $argonHash = null;
+        try {
+            $argonHash = PasswordHasher::hash($password);
+            // >>>>>> PU239:pwdlight-rewrite-2
+        } catch (\InvalidArgumentException | \RuntimeException $e) {
+            stderr(_('Error'), $e->getMessage());
+        }
         $data = [
             'email' => $post['email'],
             'password' => $password,
             'username' => $post['username'],
+            'argon_hash' => $argonHash ?? null,
             'send_email' => false,
         ];
         $user = $container->get(User::class);
