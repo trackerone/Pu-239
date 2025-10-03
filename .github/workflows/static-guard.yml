@@ -4,6 +4,7 @@ on:
     branches: ["**"]
   pull_request:
     branches: ["**"]
+
 jobs:
   static-guard:
     runs-on: ubuntu-latest
@@ -28,8 +29,7 @@ jobs:
         run: |
           set -euo pipefail
           echo "== echo-var guard ==" >> tools/static_guard_report.txt
-          hits=$(grep -RIn --include="*.php" \
-            -- "echo " public admin staffpanel 2>/dev/null \
+          hits=$(grep -RIn --include="*.php" public admin staffpanel 2>/dev/null \
             | grep -E "echo\s+\$[A-Za-z_][A-Za-z0-9_]*" \
             | grep -Ev "\$s\s*\(" \
             | grep -Ev "//\s*noescape" || true)
@@ -49,14 +49,10 @@ jobs:
           hits=$(grep -RIn --include="*.php" --exclude-dir vendor --exclude-dir .git --exclude-dir _quarantine "setcookie\(" . 2>/dev/null \
             | grep -Ev "set_app_cookie\s*\(" \
             | while IFS=: read -r f l line; do
-                echo "$line" | grep -Eq "\[\s*'expires'|\"expires\"" || true
-                has_array=$?
-                # quick heuristic: if no array syntax, flag
-                if [ $has_array -ne 0 ]; then
-                  echo "$f:$l:$line"
-                  continue
-                fi
-                echo "$line" | grep -Eq "'secure'|\"secure\"" && echo "$line" | grep -Eq "'httponly'|\"httponly\"" && echo "$line" | grep -Eq "'samesite'|\"samesite\"" || echo "$f:$l:$line"
+                echo "$line" | grep -Eq "\[\s*'expires'|\"expires\"" || { echo "$f:$l:$line"; continue; }
+                echo "$line" | grep -Eq "'secure'|\"secure\""   || { echo "$f:$l:$line"; continue; }
+                echo "$line" | grep -Eq "'httponly'|\"httponly\"" || { echo "$f:$l:$line"; continue; }
+                echo "$line" | grep -Eq "'samesite'|\"samesite\"" || { echo "$f:$l:$line"; continue; }
               done || true)
           if [ -n "$hits" ]; then
             echo "$hits" | tee -a tools/static_guard_report.txt
@@ -71,10 +67,10 @@ jobs:
         run: |
           set -euo pipefail
           echo "== csrf heuristic ==" >> tools/static_guard_report.txt
-          files=$(grep -RIl --include="*.php" --exclude-dir vendor --exclude-dir .git --exclude-dir _quarantine -E "\$_POST\\b|filter_input\(INPUT_POST" . || true)
+          files=$(grep -RIl --include="*.php" --exclude-dir vendor --exclude-dir .git --exclude-dir _quarantine -E "\$_POST\b|filter_input\(INPUT_POST" . || true)
           bad=""
           for f in $files; do
-            grep -q "Csrf::verify" "$f" || bad="$bad"$'\n'"$f"
+            grep -q "Csrf::verify" "$f" || bad="$bad"$'\n'$"$f"
           done
           if [ -n "$bad" ]; then
             echo "$bad" | sed '/^$/d' | tee -a tools/static_guard_report.txt
