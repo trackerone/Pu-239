@@ -1,0 +1,30 @@
+classes/Http/Router.php,router,introduced minimal GET/POST dispatcher table
+classes/Http/MiddlewarePipeline.php,pipeline,stacked middlewares with per-route authz hook
+classes/Http/Middlewares/SecurityHeaders.php,mw,added default security response headers
+classes/Http/Middlewares/CsrfGate.php,mw,verified POST CSRF tokens
+classes/Http/Middlewares/RateLimitPost.php,mw,rate limited POST endpoints per IP/path
+classes/Http/Middlewares/JsonOut.php,mw,json-encode array responses
+classes/Http/Middlewares/AuthZGate.php,mw,route-aware authorization guard
+classes/Http/Handlers/HomeHandler.php,handler,routed homepage through legacy script
+classes/Http/Handlers/PublicSite/CoinsHandler.php,handler,delegated coins stub via router
+classes/Http/Handlers/PublicSite/CreditsHandler.php,handler,delegated credits stub via router
+classes/Http/Handlers/PublicSite/FriendsHandler.php,handler,delegated friends stub via router
+classes/Http/Handlers/PublicSite/GiftHandler.php,handler,delegated gift stub via router
+classes/Http/Handlers/PublicSite/InviteHandler.php,handler,delegated invite stub via router
+classes/Http/Handlers/PublicSite/MessagesHandler.php,handler,delegated messages stub via router
+classes/Http/Handlers/PublicSite/ReputationHandler.php,handler,delegated reputation stub via router
+classes/Http/Handlers/Admin/NamechangerHandler.php,handler,routed admin namechanger stub
+classes/Http/Handlers/Admin/ReportsHandler.php,handler,routed admin reports stub
+classes/Http/Handlers/Staffpanel/IndexHandler.php,handler,routed staffpanel index through pipeline
+public/index.php,wired_route,front controller registering initial routes
+public/coins.php,wired_route,guarded legacy entry to route dispatcher
+public/credits.php,wired_route,guarded legacy entry to route dispatcher
+public/friends.php,wired_route,guarded legacy entry to route dispatcher
+public/gift.php,wired_route,guarded legacy entry to route dispatcher
+public/invite.php,wired_route,guarded legacy entry to route dispatcher
+public/messages.php,wired_route,guarded legacy entry to route dispatcher
+public/reputation.php,wired_route,guarded legacy entry to route dispatcher
+public/staffpanel.php,wired_route,guarded staffpanel entry to router
+admin/namechanger.php,wired_route,guarded admin stub to router
+admin/reports.php,wired_route,guarded admin stub to router
+staffpanel/index.php,wired_route,guarded staffpanel index to router

@@ -1,0 +1,12 @@
+public/index.php
+public/coins.php
+public/credits.php
+public/friends.php
+public/gift.php
+public/invite.php
+public/messages.php
+public/reputation.php
+public/staffpanel.php
+admin/namechanger.php
+admin/reports.php
+staffpanel/index.php
