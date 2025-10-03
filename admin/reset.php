@@ -41,7 +41,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             try {
                 PasswordHasher::assertPolicy($candidate);
 
+<<<<<< codex/implement-argon2id-password-hashing-cd7k30
                 // >>>>>> PU239:pwdlight-rewrite-3
+=======
+>>>>>> master
                 return $candidate;
             } catch (\InvalidArgumentException $e) {
                 continue;
