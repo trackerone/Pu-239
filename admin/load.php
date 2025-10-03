@@ -1,13 +1,17 @@
 <?php
 declare(strict_types=1);
-use PU239\Config\ConfigRepository;
 
-global $container;
-/** @var ConfigRepository $config */
-$config = $container->get(ConfigRepository::class);
 require_once dirname(__DIR__) . '/bootstrap_web.php';
 
+use PU239\Config\ConfigRepository;
+use PU239\Security\AuthZ;
+use Pu239\Database;
 
+global $container;
+// >>>>>> PU239:authz-gate-4
+AuthZ::requireRole('admin');
+/** @var ConfigRepository $config */
+$config = $container->get(ConfigRepository::class);
 $db = $container->get(Database::class);
 
 $class = get_access(basename($_SERVER['REQUEST_URI']));

@@ -8,7 +8,13 @@ use DI\NotFoundException;
 use Pu239\Database;
 use Pu239\Session;
 use Pu239\Config\ConfigRepository;
+use PU239\Security\AuthZ;
 
+if (strpos(__FILE__, '/admin/') !== false) {
+    AuthZ::requireRole('admin');
+} else {
+    AuthZ::requireAnyRole(['staff', 'admin']);
+}
 
 global $container, $CURUSER;
 /** @var ConfigRepository $config */
