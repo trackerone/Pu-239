@@ -25,6 +25,7 @@ use PDOStatement;
 use Psr\Container\ContainerInterface;
 use Spatie\Image\Exceptions\InvalidManipulation;
 use PU239\Config\ConfigRepository;
+use PU239\Security\PasswordHasher;
 use function urlencode;
 
 require_once __DIR__ . '/../include/runtime_safe.php';
@@ -260,13 +261,24 @@ class User
     public function add(array $values)
     {
         $userid = false;
+        $passwordPlain = isset($values['password']) ? strip_tags(trim((string) $values['password'])) : '';
+        $argonHash = isset($values['argon_hash']) && $values['argon_hash'] !== '' ? (string) $values['argon_hash'] : null;
+        if ($argonHash === null) {
+            try {
+                $argonHash = PasswordHasher::hash($passwordPlain);
+                // >>>>>> PU239:pwdlight-rewrite-6
+
+            } catch (\InvalidArgumentException | \RuntimeException $e) {
+                stderr(_('Error'), $e->getMessage());
+            }
+        }
         try {
             $mailEnabled = (bool) $this->config->get('mail.smtp_enable');
             $emailConfirm = (bool) $this->config->get('signup.email_confirm');
             $siteName = (string) $this->config->get('site.name');
             $baseUrl = (string) $this->config->get('paths.baseurl');
             if ($mailEnabled && $emailConfirm && !isset($values['send_email'])) {
-                $userid = $this->auth->registerWithUniqueUsername(strip_tags(trim($values['email'])), strip_tags(trim($values['password'])), strip_tags(trim($values['username'])), function ($selector, $token) use ($values, $siteName, $baseUrl) {
+                $userid = $this->auth->registerWithUniqueUsername(strip_tags(trim($values['email'])), $passwordPlain, strip_tags(trim($values['username'])), function ($selector, $token) use ($values, $siteName, $baseUrl) {
                     $body = doc_head(_fe('{0} Registration', $siteName, false));
                     $body .= _fe('
 </head>
@@ -282,7 +294,7 @@ class User
                     $this->session->set('is-success', 'We will send a confirmation email to ' . strip_tags($values['email']));
                 });
             } else {
-                $userid = $this->auth->registerWithUniqueUsername(strip_tags($values['email']), strip_tags($values['password']), strip_tags($values['username']));
+                $userid = $this->auth->registerWithUniqueUsername(strip_tags($values['email']), $passwordPlain, strip_tags($values['username']));
             }
         } catch (DuplicateUsernameException $e) {
             stderr(_('Error'), _('Username already exists'));
@@ -298,6 +310,14 @@ class User
             stderr(_('Error'), _('Unknown Error'));
         }
         if ($userid !== false) {
+            if (isset($argonHash)) {
+                $this->fluent->update('users')
+                             ->set([
+                                 'password' => $argonHash,
+                             ])
+                             ->where('id = ?', $userid)
+                             ->execute();
+            }
             $dt = TIME_NOW;
             $stylesheet = $this->config->get('site.stylesheet');
             $uploadCredit = (int) $this->config->get('signup.upload_credit');
@@ -555,8 +575,18 @@ $this->db->perform($sql, ['userID' => $userid]);
      */
     public function reset_password(array $post, bool $return)
     {
+        $passwordPlain = (string) ($post['password'] ?? '');
+        $argonHash = isset($post['argon_hash']) && $post['argon_hash'] !== '' ? (string) $post['argon_hash'] : null;
+        if ($argonHash === null) {
+            try {
+                $argonHash = PasswordHasher::hash($passwordPlain);
+            } catch (\InvalidArgumentException | \RuntimeException $e) {
+                stderr(_('Error'), $e->getMessage());
+            }
+        }
+        $result = null;
         try {
-            $this->auth->resetPassword($post['selector'], $post['token'], $post['password']);
+            $result = $this->auth->resetPassword($post['selector'], $post['token'], $passwordPlain);
         } catch (InvalidSelectorTokenPairException $e) {
             stderr(_('Error'), _('Invalid token'));
         } catch (TokenExpiredException $e) {
@@ -567,6 +597,14 @@ $this->db->perform($sql, ['userID' => $userid]);
             stderr(_('Error'), _('Invalid password'));
         } catch (TooManyRequestsException $e) {
             stderr(_('Error'), _('Too many requests from your IP'));
+        }
+        if (isset($result['id'], $argonHash)) {
+            $this->fluent->update('users')
+                         ->set([
+                             'password' => $argonHash,
+                         ])
+                         ->where('id = ?', (int) $result['id'])
+                         ->execute();
         }
         if ($return) {
             return true;

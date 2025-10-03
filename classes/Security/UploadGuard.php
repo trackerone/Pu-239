@@ -78,8 +78,6 @@ final class UploadGuard
             throw new \RuntimeException('Failed to move uploaded file.');
         }
         @chmod($destAbs, 0640);
-
-        // >>>>>> PU239:upload-helper-1
         return [
             'path' => $destRel,
             'mime' => $mime,

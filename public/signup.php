@@ -4,6 +4,7 @@ declare(strict_types=1);
 require_once dirname(__DIR__) . '/bootstrap_web.php';
 
 use Delight\Auth\Auth;
+use PU239\Security\PasswordHasher;
 use Pu239\Config\ConfigRepository;
 use Pu239\Database;
 use Pu239\Message;
@@ -58,10 +59,28 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         header("Location: {$_SERVER['PHP_SELF']}");
         app_halt('Exit called');
     } else {
+        try {
+            PasswordHasher::assertPolicy($post['password']);
+
+        } catch (\InvalidArgumentException $e) {
+            $session->set('is-warning', $e->getMessage());
+            header("Location: {$_SERVER['PHP_SELF']}");
+            app_halt('Exit called');
+        }
+        $argonHash = null;
+        try {
+            $argonHash = PasswordHasher::hash($post['password']);
+            // >>>>>> PU239:pwdlight-rewrite-4
+        } catch (\InvalidArgumentException | \RuntimeException $e) {
+            $session->set('is-warning', $e->getMessage());
+            header("Location: {$_SERVER['PHP_SELF']}");
+            app_halt('Exit called');
+        }
         $data = [
             'email' => $post['email'],
             'password' => $post['password'],
             'username' => $post['username'],
+            'argon_hash' => $argonHash,
         ];
         $user = $container->get(User::class);
         $userid = $user->add($data);

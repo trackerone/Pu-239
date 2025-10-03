@@ -101,7 +101,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             ];
             $sql = "INSERT INTO subtitles (/* columns */) VALUES (/* values */)";
             $id = $db->perform($sql, $values);
-            // >>>>>> PU239:upload-rewrite-3
             header("Refresh: 0; url=subtitles.php?mode=details&id=$id");
         }
         if ($action === 'edit') {

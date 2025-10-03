@@ -160,7 +160,6 @@ if (!empty($_FILES['nfo']) && !empty($_FILES['nfo']['name'])) {
         why_die('Upload rejected: ' . $e->getMessage());
     }
     $nfofilename = $storageRoot . '/' . $nfoUpload['path'];
-    // >>>>>> PU239:upload-rewrite-5
     $nfo_content = str_ireplace([
         "\xEF\xBB\xBF",
         "\x0d\x0d\x0a",
@@ -276,7 +275,6 @@ try {
     why_die('Upload rejected: ' . $e->getMessage());
 }
 $tmpname = $storageRoot . '/' . $torrentUpload['path'];
-// >>>>>> PU239:upload-rewrite-4
 if (!is_file($tmpname) || !filesize($tmpname)) {
     $session->set('is-warning', _('Empty file!'));
     why_die(_('Empty file!'));
@@ -507,7 +505,6 @@ try {
 } catch (Exception $e) {
     //TODO
 }
-// >>>>>> PU239:upload-rewrite-6
 if ($bonusEnabled) {
     $seedbonus = $user['seedbonus'];
     $update = [
