@@ -4,6 +4,7 @@ require_once dirname(__DIR__) . '/bootstrap_web.php';
 require_once dirname(__DIR__) . '/include/helpers/audit.php';
 
 use PU239\Config\ConfigRepository;
+use PU239\Security\AuthZ;
 use Delight\Auth\AuthError;
 use Delight\Auth\NotLoggedInException;
 use DI\DependencyException;
@@ -14,6 +15,11 @@ use Pu239\Message;
 use Pu239\Session;
 use Spatie\Image\Exceptions\InvalidManipulation;
 
+if (strpos(__FILE__, '/admin/') !== false) {
+    AuthZ::requireRole('admin');
+} else {
+    AuthZ::requireAnyRole(['staff', 'admin']);
+}
 
 global $container, $CURUSER;
 /** @var ConfigRepository $config */
