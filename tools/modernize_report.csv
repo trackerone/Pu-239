@@ -16,6 +16,7 @@ classes/Http/Handlers/PublicSite/ReputationHandler.php,handler,delegated reputat
 classes/Http/Handlers/Admin/NamechangerHandler.php,handler,routed admin namechanger stub
 classes/Http/Handlers/Admin/ReportsHandler.php,handler,routed admin reports stub
 classes/Http/Handlers/Staffpanel/IndexHandler.php,handler,routed staffpanel index through pipeline
+public/index.php,wired_route,front controller routing expanded batch (offset=10)
 public/index.php,wired_route,front controller registering initial routes
 public/coins.php,wired_route,guarded legacy entry to route dispatcher
 public/credits.php,wired_route,guarded legacy entry to route dispatcher
@@ -28,3 +29,19 @@ public/staffpanel.php,wired_route,guarded staffpanel entry to router
 admin/namechanger.php,wired_route,guarded admin stub to router
 admin/reports.php,wired_route,guarded admin stub to router
 staffpanel/index.php,wired_route,guarded staffpanel index to router
+classes/Http/Handlers/Admin/WarnHandler.php,handler,routed admin warn stub via front controller
+classes/Http/Handlers/Admin/ClassPromoHandler.php,handler,routed admin class promo stub via front controller
+classes/Http/Handlers/Admin/SitelogHandler.php,handler,routed admin sitelog stub via front controller
+classes/Http/Handlers/Admin/CommentsHandler.php,handler,routed admin comments stub via front controller
+classes/Http/Handlers/Admin/ReputationAdHandler.php,handler,routed admin reputation stub via front controller
+classes/Http/Handlers/Admin/ShitListHandler.php,handler,routed admin shit list stub via front controller
+classes/Http/Handlers/Admin/SystemViewHandler.php,handler,routed admin system view stub via front controller
+classes/Http/Handlers/PublicSite/CommentHandler.php,handler,routed public comment stub via front controller
+admin/warn.php,wired_route,guarded legacy admin warn entry to router
+admin/class_promo.php,wired_route,guarded admin class promo entry to router
+admin/sitelog.php,wired_route,guarded admin sitelog entry to router
+admin/comments.php,wired_route,guarded admin comments entry to router
+admin/reputation_ad.php,wired_route,guarded admin reputation entry to router
+admin/shit_list.php,wired_route,guarded admin shit list entry to router
+admin/system_view.php,wired_route,guarded admin system view entry to router
+public/comment.php,wired_route,guarded public comment entry to router
