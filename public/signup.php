@@ -62,7 +62,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         try {
             PasswordHasher::assertPolicy($post['password']);
 
+<<<<<< codex/implement-argon2id-password-hashing-pu7kfq
+=======
 <<<<<< codex/implement-argon2id-password-hashing-8zqt1j
+>>>>>> master
         } catch (\InvalidArgumentException $e) {
             $session->set('is-warning', $e->getMessage());
             header("Location: {$_SERVER['PHP_SELF']}");
@@ -73,9 +76,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $argonHash = PasswordHasher::hash($post['password']);
             // >>>>>> PU239:pwdlight-rewrite-4
         } catch (\InvalidArgumentException | \RuntimeException $e) {
+<<<<<< codex/implement-argon2id-password-hashing-pu7kfq
+=======
 =======
             // >>>>>> PU239:pwdlight-rewrite-4
         } catch (\InvalidArgumentException $e) {
+>>>>>> master
 >>>>>> master
             $session->set('is-warning', $e->getMessage());
             header("Location: {$_SERVER['PHP_SELF']}");

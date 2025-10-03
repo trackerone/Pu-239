@@ -712,9 +712,12 @@ No syntax errors detected in admin/adduser.php
 No syntax errors detected in admin/reset.php
 No syntax errors detected in classes/Security/PasswordHasher.php
 No syntax errors detected in src/User.php
+<<<<<< codex/implement-argon2id-password-hashing-pu7kfq
+=======
 <<<<<< codex/implement-argon2id-password-hashing-8zqt1j
 =======
 <<<<<< codex/implement-argon2id-password-hashing-cd7k30
+>>>>>> master
 >>>>>> master
 No syntax errors detected in admin/adduser.php
 
@@ -725,14 +728,20 @@ No syntax errors detected in public/signup.php
 No syntax errors detected in public/recover.php
 No syntax errors detected in src/User.php
 No syntax errors detected in admin/reset.php
+<<<<<< codex/implement-argon2id-password-hashing-pu7kfq
+=======
 <<<<<< codex/implement-argon2id-password-hashing-8zqt1j
+>>>>>> master
 No syntax errors detected in classes/Security/PasswordHasher.php
 No syntax errors detected in admin/adduser.php
 No syntax errors detected in admin/reset.php
 No syntax errors detected in public/signup.php
 No syntax errors detected in public/recover.php
 No syntax errors detected in src/User.php
+<<<<<< codex/implement-argon2id-password-hashing-pu7kfq
 =======
 =======
+=======
+>>>>>> master
 >>>>>> master
 >>>>>> master

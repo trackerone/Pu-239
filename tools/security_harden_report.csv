@@ -656,3 +656,4 @@ admin/reset.php,false,true,false,true,"Staff resets supply Argon digests alongsi
 public/signup.php,true,false,false,true,"Signup flow now forwards Argon hash to core user service (batch offset=20)"
 public/recover.php,false,true,false,true,"Recover flow forwards precomputed Argon hash to user reset (batch offset=20)"
 src/User.php,true,true,false,true,"User service reuses provided Argon digests for add/reset (batch offset=20)"
+offset30-none,false,false,false,false,No candidates for batch at 2025-10-03T21:09:35Z

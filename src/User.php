@@ -272,6 +272,8 @@ class User
             } catch (\InvalidArgumentException | \RuntimeException $e) {
                 stderr(_('Error'), $e->getMessage());
             }
+<<<<<< codex/implement-argon2id-password-hashing-pu7kfq
+=======
 =======
         try {
 <<<<<< codex/implement-argon2id-password-hashing-cd7k30
@@ -284,6 +286,7 @@ class User
 >>>>>> master
         } catch (\InvalidArgumentException $e) {
             stderr(_('Error'), $e->getMessage());
+>>>>>> master
 >>>>>> master
         }
         try {
@@ -332,11 +335,14 @@ class User
                              ->where('id = ?', $userid)
                              ->execute();
             }
+<<<<<< codex/implement-argon2id-password-hashing-pu7kfq
+=======
 <<<<<< codex/implement-argon2id-password-hashing-8zqt1j
 =======
 <<<<<< codex/implement-argon2id-password-hashing-cd7k30
 =======
             // >>>>>> PU239:pwdlight-rewrite-3
+>>>>>> master
 >>>>>> master
 >>>>>> master
             $dt = TIME_NOW;
@@ -597,7 +603,10 @@ $this->db->perform($sql, ['userID' => $userid]);
     public function reset_password(array $post, bool $return)
     {
         $passwordPlain = (string) ($post['password'] ?? '');
+<<<<<< codex/implement-argon2id-password-hashing-pu7kfq
+=======
 <<<<<< codex/implement-argon2id-password-hashing-8zqt1j
+>>>>>> master
         $argonHash = isset($post['argon_hash']) && $post['argon_hash'] !== '' ? (string) $post['argon_hash'] : null;
         if ($argonHash === null) {
             try {
@@ -608,6 +617,8 @@ $this->db->perform($sql, ['userID' => $userid]);
         }
         $result = null;
         try {
+<<<<<< codex/implement-argon2id-password-hashing-pu7kfq
+=======
 =======
         try {
 <<<<<< codex/implement-argon2id-password-hashing-cd7k30
@@ -620,6 +631,7 @@ $this->db->perform($sql, ['userID' => $userid]);
         }
         $result = null;
         try {
+>>>>>> master
 >>>>>> master
             $result = $this->auth->resetPassword($post['selector'], $post['token'], $passwordPlain);
         } catch (InvalidSelectorTokenPairException $e) {
@@ -640,11 +652,14 @@ $this->db->perform($sql, ['userID' => $userid]);
                          ])
                          ->where('id = ?', (int) $result['id'])
                          ->execute();
+<<<<<< codex/implement-argon2id-password-hashing-pu7kfq
+=======
 <<<<<< codex/implement-argon2id-password-hashing-8zqt1j
 =======
 <<<<<< codex/implement-argon2id-password-hashing-cd7k30
 =======
             // >>>>>> PU239:pwdlight-rewrite-5
+>>>>>> master
 >>>>>> master
 >>>>>> master
         }
