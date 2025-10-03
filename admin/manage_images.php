@@ -10,6 +10,13 @@ use Pu239\Image;
 use Pu239\Session;
 
 global $container, $CURUSER;
+<<<<<< codex/enforce-centralized-authorization-checks-s6jwwl
+=======
+<<<<<< codex/enforce-centralized-authorization-checks-vacoay
+=======
+// >>>>>> PU239:authz-gate-6
+>>>>>> master
+>>>>>> master
 AuthZ::requireRole('admin');
 /** @var ConfigRepository $config */
 $config = $container->get(ConfigRepository::class);

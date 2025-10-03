@@ -8,6 +8,13 @@ use PU239\Security\AuthZ;
 use Pu239\Database;
 
 global $container;
+<<<<<< codex/enforce-centralized-authorization-checks-s6jwwl
+=======
+<<<<<< codex/enforce-centralized-authorization-checks-vacoay
+=======
+// >>>>>> PU239:authz-gate-4
+>>>>>> master
+>>>>>> master
 AuthZ::requireRole('admin');
 /** @var ConfigRepository $config */
 $config = $container->get(ConfigRepository::class);
