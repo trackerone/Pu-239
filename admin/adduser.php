@@ -49,18 +49,24 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         app_halt('Exit called');
     } else {
         $password = (static function (): string {
+<<<<<< codex/implement-argon2id-password-hashing-8zqt1j
+=======
 <<<<<< codex/implement-argon2id-password-hashing-cd7k30
 =======
             // >>>>>> PU239:pwdlight-rewrite-6
+>>>>>> master
 >>>>>> master
             while (true) {
                 $candidate = substr(strtr(base64_encode(random_bytes(12)), '+/=', '!*@'), 0, 16);
                 try {
                     PasswordHasher::assertPolicy($candidate);
 
+<<<<<< codex/implement-argon2id-password-hashing-8zqt1j
+=======
 <<<<<< codex/implement-argon2id-password-hashing-cd7k30
                     // >>>>>> PU239:pwdlight-rewrite-2
 =======
+>>>>>> master
 >>>>>> master
                     return $candidate;
                 } catch (\InvalidArgumentException $e) {
@@ -68,10 +74,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 }
             }
         })();
+<<<<<< codex/implement-argon2id-password-hashing-8zqt1j
+        $argonHash = null;
+        try {
+            $argonHash = PasswordHasher::hash($password);
+            // >>>>>> PU239:pwdlight-rewrite-2
+        } catch (\InvalidArgumentException | \RuntimeException $e) {
+            stderr(_('Error'), $e->getMessage());
+        }
+=======
+>>>>>> master
         $data = [
             'email' => $post['email'],
             'password' => $password,
             'username' => $post['username'],
+            'argon_hash' => $argonHash ?? null,
             'send_email' => false,
         ];
         $user = $container->get(User::class);

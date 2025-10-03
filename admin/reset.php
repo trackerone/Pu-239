@@ -41,9 +41,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             try {
                 PasswordHasher::assertPolicy($candidate);
 
+<<<<<< codex/implement-argon2id-password-hashing-8zqt1j
+=======
 <<<<<< codex/implement-argon2id-password-hashing-cd7k30
                 // >>>>>> PU239:pwdlight-rewrite-3
 =======
+>>>>>> master
 >>>>>> master
                 return $candidate;
             } catch (\InvalidArgumentException $e) {
@@ -53,10 +56,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     })();
     $auth = $container->get(Auth::class);
     $auth->forgotPassword($user['email'], function ($selector, $token) use ($password, $CURUSER, $username, $user_class) {
+        $argonHash = null;
+        try {
+            $argonHash = PasswordHasher::hash($password);
+            // >>>>>> PU239:pwdlight-rewrite-3
+        } catch (\InvalidArgumentException | \RuntimeException $e) {
+            stderr(_('Error'), $e->getMessage());
+        }
         $details = [
             'selector' => $selector,
             'token' => $token,
             'password' => $password,
+            'argon_hash' => $argonHash,
         ];
         if ($user_class->reset_password($details, true)) {
             write_log(_fe('Password reset for {0} by {1}', $username, htmlsafechars($CURUSER['username'])));

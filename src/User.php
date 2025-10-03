@@ -262,6 +262,17 @@ class User
     {
         $userid = false;
         $passwordPlain = isset($values['password']) ? strip_tags(trim((string) $values['password'])) : '';
+<<<<<< codex/implement-argon2id-password-hashing-8zqt1j
+        $argonHash = isset($values['argon_hash']) && $values['argon_hash'] !== '' ? (string) $values['argon_hash'] : null;
+        if ($argonHash === null) {
+            try {
+                $argonHash = PasswordHasher::hash($passwordPlain);
+                // >>>>>> PU239:pwdlight-rewrite-6
+
+            } catch (\InvalidArgumentException | \RuntimeException $e) {
+                stderr(_('Error'), $e->getMessage());
+            }
+=======
         try {
 <<<<<< codex/implement-argon2id-password-hashing-cd7k30
             $argonHash = PasswordHasher::hash($passwordPlain);
@@ -273,6 +284,7 @@ class User
 >>>>>> master
         } catch (\InvalidArgumentException $e) {
             stderr(_('Error'), $e->getMessage());
+>>>>>> master
         }
         try {
             $mailEnabled = (bool) $this->config->get('mail.smtp_enable');
@@ -320,9 +332,12 @@ class User
                              ->where('id = ?', $userid)
                              ->execute();
             }
+<<<<<< codex/implement-argon2id-password-hashing-8zqt1j
+=======
 <<<<<< codex/implement-argon2id-password-hashing-cd7k30
 =======
             // >>>>>> PU239:pwdlight-rewrite-3
+>>>>>> master
 >>>>>> master
             $dt = TIME_NOW;
             $stylesheet = $this->config->get('site.stylesheet');
@@ -582,6 +597,18 @@ $this->db->perform($sql, ['userID' => $userid]);
     public function reset_password(array $post, bool $return)
     {
         $passwordPlain = (string) ($post['password'] ?? '');
+<<<<<< codex/implement-argon2id-password-hashing-8zqt1j
+        $argonHash = isset($post['argon_hash']) && $post['argon_hash'] !== '' ? (string) $post['argon_hash'] : null;
+        if ($argonHash === null) {
+            try {
+                $argonHash = PasswordHasher::hash($passwordPlain);
+            } catch (\InvalidArgumentException | \RuntimeException $e) {
+                stderr(_('Error'), $e->getMessage());
+            }
+        }
+        $result = null;
+        try {
+=======
         try {
 <<<<<< codex/implement-argon2id-password-hashing-cd7k30
 =======
@@ -593,6 +620,7 @@ $this->db->perform($sql, ['userID' => $userid]);
         }
         $result = null;
         try {
+>>>>>> master
             $result = $this->auth->resetPassword($post['selector'], $post['token'], $passwordPlain);
         } catch (InvalidSelectorTokenPairException $e) {
             stderr(_('Error'), _('Invalid token'));
@@ -612,9 +640,12 @@ $this->db->perform($sql, ['userID' => $userid]);
                          ])
                          ->where('id = ?', (int) $result['id'])
                          ->execute();
+<<<<<< codex/implement-argon2id-password-hashing-8zqt1j
+=======
 <<<<<< codex/implement-argon2id-password-hashing-cd7k30
 =======
             // >>>>>> PU239:pwdlight-rewrite-5
+>>>>>> master
 >>>>>> master
         }
         if ($return) {
