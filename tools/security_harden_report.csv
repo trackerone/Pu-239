@@ -527,7 +527,10 @@ admin/deathrow.php,true,admin,true,
 admin/delacct.php,true,admin,true,
 admin/categories.php,false,admin,true,LINT_FAIL
 classes/Security/AuthZ.php,false,admin,true,
+<<<<<< codex/enforce-centralized-authorization-checks-idp1qa
+=======
 <<<<<< codex/enforce-centralized-authorization-checks-zd3ly3
+>>>>>> master
 admin/donations.php,true,admin,true,
 admin/doubleusers.php,true,admin,true,
 admin/edit_moods.php,true,admin,true,
@@ -548,5 +551,28 @@ admin/inactive.php,true,admin,true,
 admin/invite_tree.php,true,admin,true,
 admin/ipcheck.php,true,admin,true,
 admin/iphistory.php,true,admin,true,
+<<<<<< codex/enforce-centralized-authorization-checks-idp1qa
+admin/ipsearch.php,true,admin,true,
+admin/leechwarn.php,true,admin,true,
+admin/load.php,true,admin,true,
+admin/log_viewer.php,true,admin,true,
+admin/manage_images.php,true,admin,true,
+admin/mass_bonus_for_members.php,true,admin,true,
+admin/mega_search.php,true,admin,true,
+admin/memcache.php,true,admin,true,
+admin/modded_torrents.php,true,admin,true,
+admin/modtask.php,true,admin,true,
+admin/mysql_overview.php,true,admin,true,
+admin/mysql_stats.php,true,admin,true,
+admin/namechanger.php,true,admin,true,
+admin/news.php,true,admin,true,
+admin/op.php,true,admin,true,
+admin/over_forums.php,true,admin,true,
+admin/polls_manager.php,true,admin,true,
+admin/promo.php,true,admin,true,
+admin/referrers.php,true,admin,true,
+admin/reports.php,true,admin,true,
 =======
+=======
+>>>>>> master
 >>>>>> master
