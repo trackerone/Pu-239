@@ -73,6 +73,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && !isset($_POST['selector'])) {
     try {
         PasswordHasher::assertPolicy($post['password']);
 
+<<<<<< codex/implement-argon2id-password-hashing-8zqt1j
+>>>>>> master
     } catch (\InvalidArgumentException $e) {
         write_log(_fe('{0} has tried to reset password using invalid data. ', getip(0)) . $e->getMessage());
         header("Location: {$_SERVER['PHP_SELF']}");
@@ -83,11 +85,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && !isset($_POST['selector'])) {
         $argonHash = PasswordHasher::hash($post['password']);
         // >>>>>> PU239:pwdlight-rewrite-5
     } catch (\InvalidArgumentException | \RuntimeException $e) {
+        // >>>>>> PU239:pwdlight-rewrite-5
+    } catch (\InvalidArgumentException $e) {
+>>>>>> master
         write_log(_fe('{0} has tried to reset password using invalid data. ', getip(0)) . $e->getMessage());
         header("Location: {$_SERVER['PHP_SELF']}");
         app_halt('Exit called');
     }
+<<<<<< codex/implement-argon2id-password-hashing-pu7kfq
     $post['argon_hash'] = $argonHash;
+=======
+<<<<<< codex/implement-argon2id-password-hashing-8zqt1j
+    $post['argon_hash'] = $argonHash;
+=======
+>>>>>> master
+>>>>>> master
     $user->reset_password($post, false);
     Audit::log($CURUSER['id'] ?? null, 'password.change', ['target' => $CURUSER['id'] ?? null]);
 } elseif ($_SERVER['REQUEST_METHOD'] === 'GET' && !empty($_GET)) {
