@@ -267,7 +267,6 @@ class User
         if ($argonHash === null) {
             try {
                 $argonHash = PasswordHasher::hash($passwordPlain);
-                // >>>>>> PU239:pwdlight-rewrite-6
 
             } catch (\InvalidArgumentException | \RuntimeException $e) {
                 stderr(_('Error'), $e->getMessage());
@@ -279,9 +278,7 @@ class User
 <<<<<< codex/implement-argon2id-password-hashing-cd7k30
             $argonHash = PasswordHasher::hash($passwordPlain);
 
-            // >>>>>> PU239:pwdlight-rewrite-6
 =======
-            // >>>>>> PU239:pwdlight-rewrite-2
             $argonHash = PasswordHasher::hash($passwordPlain);
 >>>>>> master
         } catch (\InvalidArgumentException $e) {
@@ -341,7 +338,6 @@ class User
 =======
 <<<<<< codex/implement-argon2id-password-hashing-cd7k30
 =======
-            // >>>>>> PU239:pwdlight-rewrite-3
 >>>>>> master
 >>>>>> master
 >>>>>> master
@@ -623,7 +619,6 @@ $this->db->perform($sql, ['userID' => $userid]);
         try {
 <<<<<< codex/implement-argon2id-password-hashing-cd7k30
 =======
-            // >>>>>> PU239:pwdlight-rewrite-4
 >>>>>> master
             $argonHash = PasswordHasher::hash($passwordPlain);
         } catch (\InvalidArgumentException $e) {
@@ -658,7 +653,6 @@ $this->db->perform($sql, ['userID' => $userid]);
 =======
 <<<<<< codex/implement-argon2id-password-hashing-cd7k30
 =======
-            // >>>>>> PU239:pwdlight-rewrite-5
 >>>>>> master
 >>>>>> master
 >>>>>> master
