@@ -15,9 +15,12 @@ if (strpos(__FILE__, '/admin/') !== false) {
 } else {
     AuthZ::requireAnyRole(['staff', 'admin']);
 }
+<<<<<< codex/enforce-centralized-authorization-checks-s6jwwl
+=======
 <<<<<< codex/enforce-centralized-authorization-checks-vacoay
 =======
 // >>>>>> PU239:authz-gate-3
+>>>>>> master
 >>>>>> master
 
 global $container;

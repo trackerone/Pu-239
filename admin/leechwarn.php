@@ -10,9 +10,12 @@ use Pu239\Database;
 use Pu239\Message;
 
 global $container, $CURUSER;
+<<<<<< codex/enforce-centralized-authorization-checks-s6jwwl
+=======
 <<<<<< codex/enforce-centralized-authorization-checks-vacoay
 =======
 // >>>>>> PU239:authz-gate-3
+>>>>>> master
 >>>>>> master
 AuthZ::requireRole('admin');
 /** @var ConfigRepository $config */

@@ -527,6 +527,8 @@ admin/deathrow.php,true,admin,true,
 admin/delacct.php,true,admin,true,
 admin/categories.php,false,admin,true,LINT_FAIL
 classes/Security/AuthZ.php,false,admin,true,
+<<<<<< codex/enforce-centralized-authorization-checks-s6jwwl
+=======
 <<<<<< codex/enforce-centralized-authorization-checks-vacoay
 =======
 <<<<<< codex/enforce-centralized-authorization-checks-cezl8a
@@ -534,6 +536,7 @@ classes/Security/AuthZ.php,false,admin,true,
 <<<<<< codex/enforce-centralized-authorization-checks-idp1qa
 =======
 <<<<<< codex/enforce-centralized-authorization-checks-zd3ly3
+>>>>>> master
 >>>>>> master
 >>>>>> master
 >>>>>> master
@@ -557,11 +560,14 @@ admin/inactive.php,true,admin,true,
 admin/invite_tree.php,true,admin,true,
 admin/ipcheck.php,true,admin,true,
 admin/iphistory.php,true,admin,true,
+<<<<<< codex/enforce-centralized-authorization-checks-s6jwwl
+=======
 <<<<<< codex/enforce-centralized-authorization-checks-vacoay
 =======
 <<<<<< codex/enforce-centralized-authorization-checks-cezl8a
 =======
 <<<<<< codex/enforce-centralized-authorization-checks-idp1qa
+>>>>>> master
 >>>>>> master
 >>>>>> master
 admin/ipsearch.php,true,admin,true,
@@ -584,9 +590,12 @@ admin/polls_manager.php,true,admin,true,
 admin/promo.php,true,admin,true,
 admin/referrers.php,true,admin,true,
 admin/reports.php,true,admin,true,
+<<<<<< codex/enforce-centralized-authorization-checks-s6jwwl
+=======
 <<<<<< codex/enforce-centralized-authorization-checks-vacoay
 =======
 <<<<<< codex/enforce-centralized-authorization-checks-cezl8a
+>>>>>> master
 >>>>>> master
 admin/reputation_ad.php,true,admin,true,
 admin/reputation_settings.php,true,admin,true,
@@ -608,15 +617,21 @@ admin/uploadapps.php,true,admin,true,
 admin/uploader_info.php,true,admin,true,
 admin/user_hits.php,true,admin,true,
 admin/usersearch.php,true,admin,true,
+<<<<<< codex/enforce-centralized-authorization-checks-s6jwwl
+=======
 <<<<<< codex/enforce-centralized-authorization-checks-vacoay
+>>>>>> master
 admin/view_peers.php,true,admin,true,
 admin/warn.php,true,admin,true,
 admin/watched_users.php,true,admin,true,
 staffpanel/index.php,true,staff_any,true,
+<<<<<< codex/enforce-centralized-authorization-checks-s6jwwl
 =======
 =======
 =======
 =======
+=======
+>>>>>> master
 >>>>>> master
 >>>>>> master
 >>>>>> master
