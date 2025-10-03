@@ -45,3 +45,15 @@ admin/reputation_ad.php,wired_route,guarded admin reputation entry to router
 admin/shit_list.php,wired_route,guarded admin shit list entry to router
 admin/system_view.php,wired_route,guarded admin system view entry to router
 public/comment.php,wired_route,guarded public comment entry to router
+classes/Http/Handlers/PublicSite/StaffboxHandler.php,handler,routed public staffbox stub via front controller
+classes/Http/Handlers/PublicSite/UsersHandler.php,handler,routed public users stub via front controller
+classes/Http/Handlers/PublicSite/UsercpHandler.php,handler,routed public usercp stub via front controller
+classes/Http/Handlers/PublicSite/UsermoodHandler.php,handler,routed public usermood stub via front controller
+classes/Http/Handlers/PublicSite/TakeeditHandler.php,handler,routed public takeedit stub via front controller
+classes/Http/Handlers/PublicSite/TakeeditcpHandler.php,handler,routed public takeeditcp stub via front controller
+public/staffbox.php,wired_route,guarded public staffbox entry to router
+public/users.php,wired_route,guarded public users entry to router
+public/usercp.php,wired_route,guarded public usercp entry to router
+public/usermood.php,wired_route,guarded public usermood entry to router
+public/takeedit.php,wired_route,guarded public takeedit entry to router
+public/takeeditcp.php,wired_route,guarded public takeeditcp entry to router

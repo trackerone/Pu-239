@@ -57,6 +57,17 @@ $router->get('/admin/reputation_ad.php', \PU239\Http\Handlers\Admin\ReputationAd
 $router->get('/admin/shit_list.php', \PU239\Http\Handlers\Admin\ShitListHandler::class, ['authz' => new AuthZGate('admin')]);
 $router->get('/admin/system_view.php', \PU239\Http\Handlers\Admin\SystemViewHandler::class, ['authz' => new AuthZGate('admin')]);
 $router->get('/comment.php', \PU239\Http\Handlers\PublicSite\CommentHandler::class);
+$router->get('/staffbox.php', \PU239\Http\Handlers\PublicSite\StaffboxHandler::class);
+$router->get('/users.php', \PU239\Http\Handlers\PublicSite\UsersHandler::class);
+$router->get('/usercp.php', \PU239\Http\Handlers\PublicSite\UsercpHandler::class);
+$router->get('/usermood.php', \PU239\Http\Handlers\PublicSite\UsermoodHandler::class);
+$router->get('/takeedit.php', \PU239\Http\Handlers\PublicSite\TakeeditHandler::class);
+$router->get('/takeeditcp.php', \PU239\Http\Handlers\PublicSite\TakeeditcpHandler::class);
+
+$pipe->handle($router);
+
+// >>>>>> PU239:http-front-1
+
 
 $pipe->handle($router);
 $router->get('/', HomeHandler::class);
