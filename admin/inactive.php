@@ -27,7 +27,6 @@ $class = get_access(basename($_SERVER['REQUEST_URI']));
 class_check($class);
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    // >>>>>> PU239:ratelimiter-tune-5
     rate_limit_or_fail();
 }
 

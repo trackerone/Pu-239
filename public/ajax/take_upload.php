@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 use PU239\Config\ConfigRepository;
+use PU239\Security\UploadGuard;
 use Pu239\ImageProxy;
 
 require_once dirname(__DIR__) . '/bootstrap_web.php';
@@ -26,12 +27,7 @@ if ($fileCount <= 0) {
     json_out(['msg' => _('No files selected')]);
 }
 
-$SaLty = (string) $config->get('salt.two');
 $maxsize = (int) $config->get('bucket.maxsize');
-$folders = date('Y/m');
-$bucketdir = BITBUCKET_DIR . $folders . '/';
-$bucketlink = $folders . '/';
-$USERSALT = substr(md5($SaLty . $user['id']), 0, 6);
 
 make_year(BITBUCKET_DIR);
 make_month(BITBUCKET_DIR);
@@ -40,9 +36,14 @@ $imageProxy = $container->get(ImageProxy::class);
 $images = [];
 
 for ($i = 0; $i < $fileCount; ++$i) {
-    $fileName = $_FILES['file_' . $i]['name'] ?? '';
-    $tmpName = $_FILES['file_' . $i]['tmp_name'] ?? '';
-    $fileSize = (int) ($_FILES['file_' . $i]['size'] ?? 0);
+    $file = $_FILES['file_' . $i] ?? null;
+    if (!is_array($file)) {
+        continue;
+    }
+
+    $fileName = (string) ($file['name'] ?? '');
+    $tmpName = (string) ($file['tmp_name'] ?? '');
+    $fileSize = (int) ($file['size'] ?? 0);
 
     if ($fileName === '' || $tmpName === '') {
         continue;
@@ -52,28 +53,37 @@ for ($i = 0; $i < $fileCount; ++$i) {
         json_out(['msg' => _('File exceeds the maximum allowed size.')]);
     }
 
-    $cleanName = preg_replace('`[^a-z0-9\-_.]`i', '', $fileName);
     $type = @exif_imagetype($tmpName);
 
     if ($type === false || !in_array($type, (array) $config->get('images.exif'), true)) {
         json_out(['msg' => _('Invalid file extension. jpg, gif, png and webp only.')]);
     }
 
-    $cleanName = strtolower($cleanName ?? '');
-    $random = make_password();
-    $path = $bucketdir . $USERSALT . '_' . $random . $cleanName;
-    $pathlink = $bucketlink . $USERSALT . '_' . $random . $cleanName;
-
-    if (!move_uploaded_file($tmpName, $path)) {
-        json_out(['msg' => _('Upload failed to save image.')]);
+    $options = [
+        'allow_ext' => 'jpg,jpeg,png,webp,gif',
+        'storage' => rtrim(BITBUCKET_DIR, '/\\'),
+    ];
+    if ($maxsize > 0) {
+        $options['max_bytes'] = $maxsize;
     }
 
-    if (!file_exists($path)) {
-        json_out(['msg' => _('Upload failed to save image.')]);
+    try {
+        $upload = UploadGuard::store($file, $options);
+    } catch (\Throwable $e) {
+        if (!headers_sent()) {
+            header('Content-Type: application/json; charset=utf-8');
+        }
+        $code = http_response_code();
+        if (!in_array($code, [400, 413, 415], true)) {
+            http_response_code(500);
+        }
+        exit(json_encode(['msg' => 'Upload rejected: ' . $e->getMessage()], JSON_UNESCAPED_UNICODE));
     }
 
+    $path = rtrim(BITBUCKET_DIR, '/\\') . '/' . $upload['path'];
     $imageProxy->optimize_image($path, '', false);
-    $images[] = (string) $config->get('paths.baseurl') . '/img.php?' . $pathlink;
+    // >>>>>> PU239:upload-rewrite-2
+    $images[] = (string) $config->get('paths.baseurl') . '/img.php?' . $upload['path'];
 }
 
 if ($images !== []) {

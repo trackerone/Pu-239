@@ -41,7 +41,6 @@ if (!function_exists('http_too_many_requests')) {
 if (!function_exists('rate_limit_or_fail')) {
     function rate_limit_or_fail(?int $limit = null, ?int $window = null): void
     {
-        // >>>>>> PU239:ratelimiter-tune-1
         [$allowed, $retryAfter] = RateLimiter::check($limit, $window);
         if (!$allowed) {
             http_too_many_requests($retryAfter);

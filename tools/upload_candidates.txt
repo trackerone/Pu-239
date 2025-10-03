@@ -1,0 +1,7 @@
+admin/adduser.php
+public/ajax/take_upload.php
+public/login.php
+public/recover.php
+public/signup.php
+public/subtitles.php
+public/takeupload.php

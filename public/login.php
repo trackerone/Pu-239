@@ -30,7 +30,6 @@ if ($auth->isLoggedIn()) {
 }
 get_template();
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    // >>>>>> PU239:ratelimiter-tune-2
     [$loginLimit, $loginWindow] = \PU239\Security\RateLimiter::loginDefaults();
     rate_limit_or_fail($loginLimit, $loginWindow);
 }

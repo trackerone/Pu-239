@@ -669,3 +669,26 @@ No syntax errors detected in admin/inactive.php
 No syntax errors detected in classes/Security/RateLimiter.php
 No syntax errors detected in classes/Security/RateLimiter.php
 No syntax errors detected in classes/Security/RateLimiter.php
+No syntax errors detected in classes/Security/UploadGuard.php
+No syntax errors detected in include/helpers/http.php
+No syntax errors detected in public/ajax/take_upload.php
+No syntax errors detected in public/login.php
+No syntax errors detected in public/signup.php
+No syntax errors detected in public/subtitles.php
+
+Parse error: syntax error, unexpected token "<<", expecting end of file in public/takeupload.php on line 459
+Errors parsing public/takeupload.php
+No syntax errors detected in admin/bans.php
+No syntax errors detected in admin/inactive.php
+No syntax errors detected in staffpanel/index.php
+No syntax errors detected in classes/Security/UploadGuard.php
+No syntax errors detected in include/helpers/http.php
+No syntax errors detected in public/ajax/take_upload.php
+No syntax errors detected in public/login.php
+No syntax errors detected in public/signup.php
+No syntax errors detected in public/subtitles.php
+No syntax errors detected in public/takeupload.php
+No syntax errors detected in admin/bans.php
+No syntax errors detected in admin/inactive.php
+No syntax errors detected in staffpanel/index.php
+No syntax errors detected in public/takeupload.php
