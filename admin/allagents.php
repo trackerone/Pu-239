@@ -4,7 +4,14 @@ require_once dirname(__DIR__) . '/bootstrap_web.php';
 
 use Pu239\Config\ConfigRepository;
 use Pu239\Database;
+use PU239\Security\AuthZ;
 
+if (strpos(__FILE__, '/admin/') !== false) {
+    AuthZ::requireRole('admin');
+} else {
+    AuthZ::requireAnyRole(['staff', 'admin']);
+}
+// >>>>>> PU239:authz-gate-4
 
 global $container;
 /** @var ConfigRepository $config */
