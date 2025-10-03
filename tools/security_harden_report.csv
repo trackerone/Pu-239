@@ -649,3 +649,8 @@ public/takeupload.php,true,false,0,"torrent","UploadGuard quarantines torrent pa
 admin/adduser.php,true,false,false,true,"Argon2 policy enforced for admin-created passwords (batch offset=0)"
 admin/reset.php,false,true,false,true,"Admin reset passwords now policy-compliant Argon2 hashes (batch offset=0)"
 src/User.php,true,true,false,true,"Core user flows hash with PasswordHasher::hash (batch offset=0)"
+<<<<<< codex/implement-argon2id-password-hashing-cd7k30
+public/signup.php,true,false,false,true,"Signup enforces PasswordHasher policy before user creation (batch offset=10)"
+public/recover.php,false,true,false,true,"Recover flow asserts PasswordHasher policy before reset (batch offset=10)"
+=======
+>>>>>> master

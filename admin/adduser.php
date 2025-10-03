@@ -49,12 +49,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         app_halt('Exit called');
     } else {
         $password = (static function (): string {
+<<<<<< codex/implement-argon2id-password-hashing-cd7k30
+=======
             // >>>>>> PU239:pwdlight-rewrite-6
+>>>>>> master
             while (true) {
                 $candidate = substr(strtr(base64_encode(random_bytes(12)), '+/=', '!*@'), 0, 16);
                 try {
                     PasswordHasher::assertPolicy($candidate);
 
+<<<<<< codex/implement-argon2id-password-hashing-cd7k30
+                    // >>>>>> PU239:pwdlight-rewrite-2
+=======
+>>>>>> master
                     return $candidate;
                 } catch (\InvalidArgumentException $e) {
                     continue;

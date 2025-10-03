@@ -8,6 +8,7 @@ use Delight\Auth\InvalidSelectorTokenPairException;
 use Delight\Auth\ResetDisabledException;
 use Delight\Auth\TokenExpiredException;
 use Delight\Auth\TooManyRequestsException;
+use PU239\Security\PasswordHasher;
 use PU239\Support\Audit;
 use Pu239\Config\ConfigRepository;
 use Pu239\User;
@@ -69,21 +70,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && !isset($_POST['selector'])) {
         header("Location: {$_SERVER['PHP_SELF']}");
         app_halt('Exit called');
     }
+    try {
+        PasswordHasher::assertPolicy($post['password']);
+
+        // >>>>>> PU239:pwdlight-rewrite-5
+    } catch (\InvalidArgumentException $e) {
+        write_log(_fe('{0} has tried to reset password using invalid data. ', getip(0)) . $e->getMessage());
+        header("Location: {$_SERVER['PHP_SELF']}");
+        app_halt('Exit called');
+    }
     $user->reset_password($post, false);
     Audit::log($CURUSER['id'] ?? null, 'password.change', ['target' => $CURUSER['id'] ?? null]);
-<<<<<< codex/add-centralized-audit-logging-system-nt62d3
-=======
-<<<<<< codex/add-centralized-audit-logging-system-5cqmq4
-=======
-<<<<<< codex/add-centralized-audit-logging-system-zg4mx8
-=======
-<<<<<< codex/add-centralized-audit-logging-system-rznzq6
-=======
-
->>>>>> master
->>>>>> master
->>>>>> master
->>>>>> master
 } elseif ($_SERVER['REQUEST_METHOD'] === 'GET' && !empty($_GET)) {
     $get = $_GET;
     unset($_POST, $_GET, $_FILES);

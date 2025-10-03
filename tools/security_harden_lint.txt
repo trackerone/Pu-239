@@ -712,3 +712,15 @@ No syntax errors detected in admin/adduser.php
 No syntax errors detected in admin/reset.php
 No syntax errors detected in classes/Security/PasswordHasher.php
 No syntax errors detected in src/User.php
+<<<<<< codex/implement-argon2id-password-hashing-cd7k30
+No syntax errors detected in admin/adduser.php
+
+Parse error: syntax error, unexpected token "<", expecting end of file in admin/reset.php on line 2
+Errors parsing admin/reset.php
+No syntax errors detected in classes/Security/PasswordHasher.php
+No syntax errors detected in public/signup.php
+No syntax errors detected in public/recover.php
+No syntax errors detected in src/User.php
+No syntax errors detected in admin/reset.php
+=======
+>>>>>> master

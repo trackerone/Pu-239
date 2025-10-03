@@ -263,8 +263,14 @@ class User
         $userid = false;
         $passwordPlain = isset($values['password']) ? strip_tags(trim((string) $values['password'])) : '';
         try {
+<<<<<< codex/implement-argon2id-password-hashing-cd7k30
+            $argonHash = PasswordHasher::hash($passwordPlain);
+
+            // >>>>>> PU239:pwdlight-rewrite-6
+=======
             // >>>>>> PU239:pwdlight-rewrite-2
             $argonHash = PasswordHasher::hash($passwordPlain);
+>>>>>> master
         } catch (\InvalidArgumentException $e) {
             stderr(_('Error'), $e->getMessage());
         }
@@ -314,7 +320,10 @@ class User
                              ->where('id = ?', $userid)
                              ->execute();
             }
+<<<<<< codex/implement-argon2id-password-hashing-cd7k30
+=======
             // >>>>>> PU239:pwdlight-rewrite-3
+>>>>>> master
             $dt = TIME_NOW;
             $stylesheet = $this->config->get('site.stylesheet');
             $uploadCredit = (int) $this->config->get('signup.upload_credit');
@@ -574,7 +583,10 @@ $this->db->perform($sql, ['userID' => $userid]);
     {
         $passwordPlain = (string) ($post['password'] ?? '');
         try {
+<<<<<< codex/implement-argon2id-password-hashing-cd7k30
+=======
             // >>>>>> PU239:pwdlight-rewrite-4
+>>>>>> master
             $argonHash = PasswordHasher::hash($passwordPlain);
         } catch (\InvalidArgumentException $e) {
             stderr(_('Error'), $e->getMessage());
@@ -600,7 +612,10 @@ $this->db->perform($sql, ['userID' => $userid]);
                          ])
                          ->where('id = ?', (int) $result['id'])
                          ->execute();
+<<<<<< codex/implement-argon2id-password-hashing-cd7k30
+=======
             // >>>>>> PU239:pwdlight-rewrite-5
+>>>>>> master
         }
         if ($return) {
             return true;
