@@ -32,7 +32,6 @@ if ($auth->isLoggedIn()) {
 }
 get_template();
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    // >>>>>> PU239:ratelimiter-tune-3
     rate_limit_or_fail();
     // TODO(2025): add CSRF verification
     $user = $container->get(User::class);

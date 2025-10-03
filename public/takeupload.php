@@ -14,6 +14,7 @@ use Pu239\Session;
 use Pu239\Torrent;
 use Pu239\User;
 use Pu239\Usersachiev;
+use PU239\Security\UploadGuard;
 use PU239\Support\Audit;
 
 require_once __DIR__ . '/../include/bittorrent.php';
@@ -90,7 +91,7 @@ if (!$user['roles_mask'] & Roles::UPLOADER || $user['uploadpos'] != 1 || $user['
     $session->set('is-warning', _('You do not have permission to upload torrents'));
     why_die(_('You do not have permission to upload torrents'));
 }
-if (empty($descr) || empty($catid) || empty($name) || empty($_FILES['file'])) {
+if (empty($descr) || empty($catid) || empty($name) || !isset($_FILES['file']) || !is_array($_FILES['file'])) {
     $session->set('is-warning', _('Missing form data'));
     why_die(_('Missing form data'));
 }
@@ -99,7 +100,7 @@ if (!empty($url)) {
     $imdb = !empty($imdb[1]) ? $imdb[1] : '';
 }
 $f = $_FILES['file'];
-$fname = unesc($f['name']);
+$fname = unesc((string) ($f['name'] ?? ''));
 if (empty($fname)) {
     $session->set('is-warning', _('Empty filename!'));
     why_die(_('Empty filename!'));
@@ -126,22 +127,40 @@ $nfo = $nfofilename = '';
 
 if (!empty($_FILES['nfo']) && !empty($_FILES['nfo']['name'])) {
     $nfofile = $_FILES['nfo'];
-    if ($nfofile['name'] == '') {
+    if (($nfofile['name'] ?? '') === '') {
         $session->set('is-warning', _('No NFO!'));
         why_die(_('No NFO!'));
-    } elseif ($nfofile['size'] == 0) {
+    }
+    if (($nfofile['size'] ?? 0) === 0) {
         $session->set('is-warning', _('0-byte NFO'));
         why_die(_('0-byte NFO'));
-    } elseif ($nfofile['size'] > $maxNfoSize) {
+    }
+    if ($maxNfoSize > 0 && ($nfofile['size'] ?? 0) > $maxNfoSize) {
         $session->set('is-warning', _('NFO is too big! Max 65,535 bytes.'));
         why_die(_('NFO is too big! Max 65,535 bytes.'));
-    } else {
-        $nfofilename = $nfofile['tmp_name'];
     }
-    if (@!is_uploaded_file($nfofilename)) {
-        $session->set('is-warning', _('NFO upload failed'));
-        why_die(_('NFO upload failed'));
+    $nfoOptions = [
+        'allow_ext' => 'nfo,txt',
+        'storage' => $storageRoot,
+    ];
+    if ($maxNfoSize > 0) {
+        $nfoOptions['max_bytes'] = $maxNfoSize;
     }
+    try {
+        $nfoUpload = UploadGuard::store($nfofile, $nfoOptions);
+    } catch (\Throwable $e) {
+        if (!headers_sent()) {
+            header('Content-Type: text/html; charset=utf-8');
+        }
+        $code = http_response_code();
+        if (!in_array($code, [400, 413, 415], true)) {
+            http_response_code(500);
+        }
+        $session->set('is-warning', 'Upload rejected: ' . $e->getMessage());
+        why_die('Upload rejected: ' . $e->getMessage());
+    }
+    $nfofilename = $storageRoot . '/' . $nfoUpload['path'];
+    // >>>>>> PU239:upload-rewrite-5
     $nfo_content = str_ireplace([
         "\xEF\xBB\xBF",
         "\x0d\x0d\x0a",
@@ -155,6 +174,11 @@ if (!empty($_FILES['nfo']) && !empty($_FILES['nfo']['name'])) {
     if ($strip) {
         $nfo = preg_replace('`/[^\\x20-\\x7e\\x0a\\x0d]`', ' ', $nfo);
         $nfo = preg_replace('`[\x00-\x08\x0b-\x0c\x0e-\x1f\x7f-\xff]`', '', $nfo);
+    }
+    try {
+        unlink($nfofilename);
+    } catch (\Throwable $e) {
+        // ignore cleanup failure
     }
 }
 
@@ -230,12 +254,30 @@ $shortfname = $torrent = $matches[1];
 if (!empty($name)) {
     $torrent = unesc($name);
 }
-$tmpname = $f['tmp_name'];
-if (!is_uploaded_file($tmpname)) {
-    $session->set('is-warning', _('eek'));
-    why_die(_('eek'));
+$storageRoot = rtrim((string) (getenv('UPLOAD_STORAGE') ?: dirname(__DIR__) . '/storage/uploads'), '/');
+$torrentOptions = [
+    'allow_ext' => 'torrent',
+    'storage' => $storageRoot,
+];
+if ($maxTorrentSize > 0) {
+    $torrentOptions['max_bytes'] = $maxTorrentSize;
 }
-if (!filesize($tmpname)) {
+try {
+    $torrentUpload = UploadGuard::store($f, $torrentOptions);
+} catch (\Throwable $e) {
+    if (!headers_sent()) {
+        header('Content-Type: text/html; charset=utf-8');
+    }
+    $code = http_response_code();
+    if (!in_array($code, [400, 413, 415], true)) {
+        http_response_code(500);
+    }
+    $session->set('is-warning', 'Upload rejected: ' . $e->getMessage());
+    why_die('Upload rejected: ' . $e->getMessage());
+}
+$tmpname = $storageRoot . '/' . $torrentUpload['path'];
+// >>>>>> PU239:upload-rewrite-4
+if (!is_file($tmpname) || !filesize($tmpname)) {
     $session->set('is-warning', _('Empty file!'));
     why_die(_('Empty file!'));
 }
@@ -414,19 +456,6 @@ if (!$id) {
     why_die(_('Upload failed!'));
 }
 
-<<<<<< codex/add-centralized-audit-logging-system-nt62d3
-=======
-<<<<<< codex/add-centralized-audit-logging-system-5cqmq4
-=======
-<<<<<< codex/add-centralized-audit-logging-system-zg4mx8
-=======
-<<<<<< codex/add-centralized-audit-logging-system-rznzq6
-=======
-
->>>>>> master
->>>>>> master
->>>>>> master
->>>>>> master
 Audit::log(
     $owner_id ?? null,
     'torrent.moderate',
@@ -478,6 +507,7 @@ try {
 } catch (Exception $e) {
     //TODO
 }
+// >>>>>> PU239:upload-rewrite-6
 if ($bonusEnabled) {
     $seedbonus = $user['seedbonus'];
     $update = [

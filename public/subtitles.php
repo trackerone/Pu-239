@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 require_once dirname(__DIR__) . '/bootstrap_web.php';
 
+use PU239\Security\UploadGuard;
 use Pu239\Config\ConfigRepository;
 use Pu239\Database;
 
@@ -52,32 +53,43 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $fps = isset($_POST['fps']) ? htmlsafechars($_POST['fps']) : '';
         $cd = isset($_POST['cd']) ? (int) $_POST['cd'] : '';
         if ($action === 'upload') {
-            $file = $_FILES['sub'];
-            if (!isset($file)) {
+            $file = $_FILES['sub'] ?? null;
+            if (!is_array($file)) {
                 stderr(_('Error'), _("The file can't be empty!"));
             }
-            if ($file['size'] > $subtitlesMaxSize) {
+            if (isset($file['size']) && $subtitlesMaxSize > 0 && $file['size'] > $subtitlesMaxSize) {
                 stderr(_('Error'), _('Your file is too big.'));
             }
-            $fname = $file['name'];
-            $temp_name = $file['tmp_name'];
-            $ext = pathinfo($fname, PATHINFO_EXTENSION);
-            $allowed = [
-                'srt',
-                'sub',
-                'txt',
-                'vtt',
-            ];
-            if (!in_array($ext, $allowed)) {
+            $allowed = ['srt', 'sub', 'txt', 'vtt'];
+            $fname = (string) ($file['name'] ?? '');
+            $ext = strtolower(pathinfo($fname, PATHINFO_EXTENSION) ?: '');
+            if ($ext === '' || !in_array($ext, $allowed, true)) {
                 stderr(_('Error'), _('File not allowed only .srt , .sub , .vtt or .txt files'));
             }
-            $new_name = md5((string) TIME_NOW);
-            $filename = "$new_name.$ext";
+            $options = [
+                'allow_ext' => implode(',', $allowed),
+                'storage' => rtrim(UPLOADSUB_DIR, '/\\'),
+            ];
+            if ($subtitlesMaxSize > 0) {
+                $options['max_bytes'] = $subtitlesMaxSize;
+            }
+            try {
+                $upload = UploadGuard::store($file, $options);
+            } catch (\Throwable $e) {
+                if (!headers_sent()) {
+                    header('Content-Type: text/html; charset=utf-8');
+                }
+                $code = http_response_code();
+                if (!in_array($code, [400, 413, 415], true)) {
+                    http_response_code(500);
+                }
+                stderr(_('Error'), 'Upload rejected: ' . $e->getMessage());
+            }
             $date = TIME_NOW;
             $owner = $user['id'];
             $values = [
                 'name' => $releasename,
-                'filename' => $filename,
+                'filename' => $upload['path'],
                 'imdb' => $imdb,
                 'comment' => $comment,
                 'lang' => $langs,
@@ -88,8 +100,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 'owner' => $owner,
             ];
             $sql = "INSERT INTO subtitles (/* columns */) VALUES (/* values */)";
-$id = $db->perform($sql, $values);
-            move_uploaded_file($temp_name, UPLOADSUB_DIR . $filename);
+            $id = $db->perform($sql, $values);
+            // >>>>>> PU239:upload-rewrite-3
             header("Refresh: 0; url=subtitles.php?mode=details&id=$id");
         }
         if ($action === 'edit') {

@@ -59,7 +59,6 @@ $sanitize = static fn(mixed $value): string => htmlspecialchars((string) $value,
 class_check(UC_STAFF);
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    // >>>>>> PU239:ratelimiter-tune-6
     rate_limit_or_fail();
 }
 
