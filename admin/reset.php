@@ -4,6 +4,7 @@ require_once dirname(__DIR__) . '/bootstrap_web.php';
 
 use PU239\Config\ConfigRepository;
 use PU239\Security\AuthZ;
+use PU239\Security\PasswordHasher;
 use Delight\Auth\Auth;
 use Pu239\Database;
 use Pu239\User;
@@ -14,12 +15,7 @@ if (strpos(__FILE__, '/admin/') !== false) {
 } else {
     AuthZ::requireAnyRole(['staff', 'admin']);
 }
-<<<<<< codex/enforce-centralized-authorization-checks-s6jwwl
-=======
-<<<<<< codex/enforce-centralized-authorization-checks-vacoay
-=======
->>>>>> master
->>>>>> master
+
 
 global $container, $CURUSER;
 /** @var ConfigRepository $config */
@@ -39,7 +35,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $username = htmlsafechars($_POST['username']);
     $uid = (int) $_POST['uid'];
     $user = $user_class->getUserFromId($uid);
-    $password = bin2hex(random_bytes(12));
+    $password = (static function (): string {
+        while (true) {
+            $candidate = substr(strtr(base64_encode(random_bytes(12)), '+/=', '!*@'), 0, 16);
+            try {
+                PasswordHasher::assertPolicy($candidate);
+
+                return $candidate;
+            } catch (\InvalidArgumentException $e) {
+                continue;
+            }
+        }
+    })();
     $auth = $container->get(Auth::class);
     $auth->forgotPassword($user['email'], function ($selector, $token) use ($password, $CURUSER, $username, $user_class) {
         $details = [
