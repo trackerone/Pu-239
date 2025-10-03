@@ -82,7 +82,6 @@ for ($i = 0; $i < $fileCount; ++$i) {
 
     $path = rtrim(BITBUCKET_DIR, '/\\') . '/' . $upload['path'];
     $imageProxy->optimize_image($path, '', false);
-    // >>>>>> PU239:upload-rewrite-2
     $images[] = (string) $config->get('paths.baseurl') . '/img.php?' . $upload['path'];
 }
 
