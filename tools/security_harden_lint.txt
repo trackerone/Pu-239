@@ -527,6 +527,10 @@ No syntax errors detected in admin/comments.php
 No syntax errors detected in admin/datareset.php
 No syntax errors detected in admin/deathrow.php
 No syntax errors detected in admin/delacct.php
+<<<<<< codex/enforce-centralized-authorization-checks-idp1qa
+=======
+<<<<<< codex/enforce-centralized-authorization-checks-zd3ly3
+>>>>>> master
 No syntax errors detected in admin/donations.php
 No syntax errors detected in admin/doubleusers.php
 No syntax errors detected in admin/edit_moods.php
@@ -548,6 +552,7 @@ No syntax errors detected in admin/invite_tree.php
 No syntax errors detected in admin/ipcheck.php
 No syntax errors detected in admin/iphistory.php
 No syntax errors detected in admin/iphistory.php
+<<<<<< codex/enforce-centralized-authorization-checks-idp1qa
 No syntax errors detected in admin/ipsearch.php
 No syntax errors detected in admin/leechwarn.php
 No syntax errors detected in admin/load.php
@@ -568,3 +573,7 @@ No syntax errors detected in admin/polls_manager.php
 No syntax errors detected in admin/promo.php
 No syntax errors detected in admin/referrers.php
 No syntax errors detected in admin/reports.php
+=======
+=======
+>>>>>> master
+>>>>>> master
