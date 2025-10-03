@@ -21,18 +21,21 @@ final class AuthZ
 <<<<<< codex/enforce-centralized-authorization-checks-s6jwwl
                 0 => 'user',
                 1 => 'poweruser',
-                2 => 'moderator',
-                3 => 'staff',
-                4 => 'admin',
+                2 => 'superuser',
+                3 => 'vip',
+                4 => 'moderator',
+                5 => 'staff', 
+                6 => 'admin', 
+                7 => 'sysop', 
 =======
                 'USER' => 0,
                 'POWER_USER' => 1,
                 'SUPER_USER' => 2,
                 'VIP' => 3,
                 'MODERATOR' => 4,
-                'STAFF' => 4,
-                'ADMINISTRATOR' => 5,
-                'SYSOP' => 6,
+                'STAFF' => 5,
+                'ADMINISTRATOR' => 6,
+                'SYSOP' => 7,
 >>>>>> master
             ];
             $role = $map[(int) $GLOBALS['CURUSER']['class']] ?? 'user';
@@ -66,11 +69,14 @@ final class AuthZ
         // Simple hierarchy: user < poweruser < moderator < staff < admin
         $rank = [
 <<<<<< codex/enforce-centralized-authorization-checks-s6jwwl
-            'user' => 1,
-            'poweruser' => 2,
-            'moderator' => 3,
-            'staff' => 4,
-            'admin' => 5,
+            0 => 'user',
+            1 => 'poweruser',
+            2 => 'superuser',
+            3 => 'vip',
+            4 => 'moderator',
+            5 => 'staff', 
+            6 => 'admin', 
+            7 => 'sysop', 
 =======
             'USER' => 0,
             'POWER_USER' => 1,
