@@ -4,9 +4,18 @@ require_once dirname(__DIR__) . '/bootstrap_web.php';
 require_once dirname(__DIR__) . '/include/helpers/audit.php';
 
 use PU239\Config\ConfigRepository;
+use PU239\Security\AuthZ;
 use Pu239\Database;
 use Pu239\Peer;
 use Pu239\Session;
+
+// Staffpanel defaults to staff or higher; admin requires admin
+if (strpos(__FILE__, '/admin/') !== false) {
+    AuthZ::requireRole('admin');
+} else {
+    AuthZ::requireAnyRole(['staff', 'admin']);
+}
+// >>>>>> PU239:authz-gate-2
 
 
 global $container, $CURUSER;

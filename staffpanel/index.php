@@ -10,7 +10,16 @@ use Pu239\Radiance;
 use Pu239\Session;
 use Pu239\Uglify\UglifyService;
 use PU239\Config\ConfigRepository;
+use PU239\Security\AuthZ;
 use PU239\Support\Audit;
+
+// Staffpanel defaults to staff or higher; admin requires admin
+if (strpos(__FILE__, '/admin/') !== false) {
+    AuthZ::requireRole('admin');
+} else {
+    AuthZ::requireAnyRole(['staff', 'admin']);
+}
+// >>>>>> PU239:authz-gate-5
 
 global $container;
 

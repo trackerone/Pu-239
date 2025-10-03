@@ -9,14 +9,16 @@ use DI\DependencyException;
 use DI\NotFoundException;
 use MatthiasMullie\Scrapbook\Exception\UnbegunTransaction;
 use PU239\Config\ConfigRepository;
+use PU239\Security\AuthZ;
 use Pu239\Database;
 use Pu239\Poll;
 use Pu239\PollVoter;
 use Pu239\Session;
 use Spatie\Image\Exceptions\InvalidManipulation;
 
-
 global $container;
+
+AuthZ::requireRole('admin');
 /** @var ConfigRepository $config */
 $config = $container->get(ConfigRepository::class);
 

@@ -4,11 +4,13 @@ require_once dirname(__DIR__) . '/bootstrap_web.php';
 
 use DI\DependencyException;
 use DI\NotFoundException;
+use PU239\Security\AuthZ;
 use Pu239\Config\ConfigRepository;
 use Pu239\Database;
 
-
 global $container;
+
+AuthZ::requireRole('admin');
 /** @var ConfigRepository $config */
 $config = $container->get(ConfigRepository::class);
 

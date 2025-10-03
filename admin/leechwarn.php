@@ -3,13 +3,14 @@ declare(strict_types=1);
 require_once dirname(__DIR__) . '/bootstrap_web.php';
 require_once dirname(__DIR__) . '/include/helpers/audit.php';
 
+use PU239\Security\AuthZ;
 use Pu239\Cache;
 use Pu239\Config\ConfigRepository;
 use Pu239\Database;
 use Pu239\Message;
 
-
 global $container, $CURUSER;
+AuthZ::requireRole('admin');
 /** @var ConfigRepository $config */
 $config = $container->get(ConfigRepository::class);
 
