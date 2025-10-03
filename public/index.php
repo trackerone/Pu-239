@@ -77,6 +77,19 @@ $router->get('/topmoods.php', \PU239\Http\Handlers\PublicSite\TopmoodsHandler::c
 $router->get('/topten.php', \PU239\Http\Handlers\PublicSite\ToptenHandler::class);
 $router->get('/trivia_results.php', \PU239\Http\Handlers\PublicSite\TriviaResultsHandler::class);
 $router->get('/tvshows.php', \PU239\Http\Handlers\PublicSite\TvshowsHandler::class);
+$router->get('/user_unlocks.php', \PU239\Http\Handlers\PublicSite\UserUnlocksHandler::class);
+$router->post('/user_unlocks.php', \PU239\Http\Handlers\PublicSite\UserUnlocksHandler::class);
+$router->get('/useragreement.php', \PU239\Http\Handlers\PublicSite\UseragreementHandler::class);
+$router->get('/usercomment.php', \PU239\Http\Handlers\PublicSite\UsercommentHandler::class);
+$router->post('/usercomment.php', \PU239\Http\Handlers\PublicSite\UsercommentHandler::class);
+$router->get('/userdetails.php', \PU239\Http\Handlers\PublicSite\UserdetailsHandler::class);
+$router->get('/userhistory.php', \PU239\Http\Handlers\PublicSite\UserhistoryHandler::class);
+$router->get('/verify.php', \PU239\Http\Handlers\PublicSite\VerifyHandler::class);
+$router->post('/verify.php', \PU239\Http\Handlers\PublicSite\VerifyHandler::class);
+$router->get('/verify_email.php', \PU239\Http\Handlers\PublicSite\VerifyEmailHandler::class);
+$router->get('/videoformats.php', \PU239\Http\Handlers\PublicSite\VideoformatsHandler::class);
+$router->get('/view_announce_history.php', \PU239\Http\Handlers\PublicSite\ViewAnnounceHistoryHandler::class);
+$router->get('/view_sql.php', \PU239\Http\Handlers\PublicSite\ViewSqlHandler::class);
 
 $pipe->handle($router);
 

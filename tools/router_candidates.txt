@@ -38,3 +38,13 @@ public/topmoods.php
 public/topten.php
 public/trivia_results.php
 public/tvshows.php
+public/user_unlocks.php
+public/useragreement.php
+public/usercomment.php
+public/userdetails.php
+public/userhistory.php
+public/verify.php
+public/verify_email.php
+public/videoformats.php
+public/view_announce_history.php
+public/view_sql.php

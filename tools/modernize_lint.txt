@@ -110,3 +110,31 @@ No syntax errors detected in public/topmoods.php
 No syntax errors detected in public/topten.php
 No syntax errors detected in public/trivia_results.php
 No syntax errors detected in public/tvshows.php
+No syntax errors detected in public/index.php
+No syntax errors detected in classes/Http/Router.php
+No syntax errors detected in classes/Http/MiddlewarePipeline.php
+No syntax errors detected in classes/Http/Middlewares/SecurityHeaders.php
+No syntax errors detected in classes/Http/Middlewares/RateLimitPost.php
+No syntax errors detected in classes/Http/Handlers/PublicSite/UserUnlocksHandler.php
+No syntax errors detected in classes/Http/Handlers/PublicSite/UseragreementHandler.php
+No syntax errors detected in classes/Http/Handlers/PublicSite/UsercommentHandler.php
+No syntax errors detected in classes/Http/Handlers/PublicSite/UserdetailsHandler.php
+No syntax errors detected in classes/Http/Handlers/PublicSite/UserhistoryHandler.php
+No syntax errors detected in classes/Http/Handlers/PublicSite/VerifyHandler.php
+No syntax errors detected in classes/Http/Handlers/PublicSite/VerifyEmailHandler.php
+No syntax errors detected in classes/Http/Handlers/PublicSite/VideoformatsHandler.php
+No syntax errors detected in classes/Http/Handlers/PublicSite/ViewAnnounceHistoryHandler.php
+No syntax errors detected in classes/Http/Handlers/PublicSite/ViewSqlHandler.php
+No syntax errors detected in classes/Http/Handlers/PublicSite/TakeThemeHandler.php
+
+No syntax errors detected in public/useragreement.php
+No syntax errors detected in public/usercomment.php
+No syntax errors detected in public/userdetails.php
+No syntax errors detected in public/userhistory.php
+No syntax errors detected in public/verify.php
+
+No syntax errors detected in public/videoformats.php
+No syntax errors detected in public/view_announce_history.php
+No syntax errors detected in public/view_sql.php
+No syntax errors detected in public/user_unlocks.php
+No syntax errors detected in public/verify_email.php
