@@ -18,11 +18,14 @@ final class AuthZ
         } elseif (isset($GLOBALS['CURUSER']['class'])) {
             // Map legacy numeric class to role names (adjust as needed)
             $map = [
-                0 => 'user',
-                1 => 'poweruser',
-                2 => 'moderator',
-                3 => 'staff',
-                4 => 'admin',
+                'USER' => 0,
+                'POWER_USER' => 1,
+                'SUPER_USER' => 2,
+                'VIP' => 3,
+                'MODERATOR' => 4,
+                'STAFF' => 4,
+                'ADMINISTRATOR' => 5,
+                'SYSOP' => 6,
             ];
             $role = $map[(int) $GLOBALS['CURUSER']['class']] ?? 'user';
         }
@@ -54,11 +57,14 @@ final class AuthZ
         }
         // Simple hierarchy: user < poweruser < moderator < staff < admin
         $rank = [
-            'user' => 1,
-            'poweruser' => 2,
-            'moderator' => 3,
-            'staff' => 4,
-            'admin' => 5,
+            'USER' => 0,
+            'POWER_USER' => 1,
+            'SUPER_USER' => 2,
+            'VIP' => 3,
+            'MODERATOR' => 4,
+            'STAFF' => 4,
+            'ADMINISTRATOR' => 5,
+            'SYSOP' => 6,
         ];
         $r = $rank[$role] ?? 0;
         // Allow if role matches any exact required OR outranks minimal required (if required given as single string)
