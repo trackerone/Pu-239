@@ -17,6 +17,7 @@ classes/Http/Handlers/Admin/NamechangerHandler.php,handler,routed admin namechan
 classes/Http/Handlers/Admin/ReportsHandler.php,handler,routed admin reports stub
 classes/Http/Handlers/Staffpanel/IndexHandler.php,handler,routed staffpanel index through pipeline
 public/index.php,wired_route,front controller routing expanded batch (offset=10)
+public/index.php,wired_route,front controller registering initial routes
 public/coins.php,wired_route,guarded legacy entry to route dispatcher
 public/credits.php,wired_route,guarded legacy entry to route dispatcher
 public/friends.php,wired_route,guarded legacy entry to route dispatcher
