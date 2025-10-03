@@ -24,3 +24,17 @@ public/usercp.php
 public/usermood.php
 public/takeedit.php
 public/takeeditcp.php
+public/upcoming.php
+public/upload.php
+public/uploadapp.php
+public/user_blocks.php
+public/take_theme.php
+public/takereseed.php
+public/takethankyou.php
+public/takeupload.php
+public/tenpercent.php
+public/tmovies.php
+public/topmoods.php
+public/topten.php
+public/trivia_results.php
+public/tvshows.php

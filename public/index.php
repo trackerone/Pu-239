@@ -63,6 +63,20 @@ $router->get('/usercp.php', \PU239\Http\Handlers\PublicSite\UsercpHandler::class
 $router->get('/usermood.php', \PU239\Http\Handlers\PublicSite\UsermoodHandler::class);
 $router->get('/takeedit.php', \PU239\Http\Handlers\PublicSite\TakeeditHandler::class);
 $router->get('/takeeditcp.php', \PU239\Http\Handlers\PublicSite\TakeeditcpHandler::class);
+$router->get('/take_theme.php', \PU239\Http\Handlers\PublicSite\TakeThemeHandler::class);
+$router->get('/takereseed.php', \PU239\Http\Handlers\PublicSite\TakereseedHandler::class);
+$router->post('/takereseed.php', \PU239\Http\Handlers\PublicSite\TakereseedHandler::class);
+$router->get('/takethankyou.php', \PU239\Http\Handlers\PublicSite\TakethankyouHandler::class);
+$router->post('/takethankyou.php', \PU239\Http\Handlers\PublicSite\TakethankyouHandler::class);
+$router->get('/takeupload.php', \PU239\Http\Handlers\PublicSite\TakeuploadHandler::class);
+$router->post('/takeupload.php', \PU239\Http\Handlers\PublicSite\TakeuploadHandler::class);
+$router->get('/tenpercent.php', \PU239\Http\Handlers\PublicSite\TenpercentHandler::class);
+$router->post('/tenpercent.php', \PU239\Http\Handlers\PublicSite\TenpercentHandler::class);
+$router->get('/tmovies.php', \PU239\Http\Handlers\PublicSite\TmoviesHandler::class);
+$router->get('/topmoods.php', \PU239\Http\Handlers\PublicSite\TopmoodsHandler::class);
+$router->get('/topten.php', \PU239\Http\Handlers\PublicSite\ToptenHandler::class);
+$router->get('/trivia_results.php', \PU239\Http\Handlers\PublicSite\TriviaResultsHandler::class);
+$router->get('/tvshows.php', \PU239\Http\Handlers\PublicSite\TvshowsHandler::class);
 
 $pipe->handle($router);
 

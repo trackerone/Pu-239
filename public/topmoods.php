@@ -7,6 +7,12 @@ use Pu239\Cache;
 use Pu239\Config\ConfigRepository;
 use Pu239\Database;
 
+if (!defined('PU239_ROUTED')) {
+    require_once __DIR__ . '/index.php';
+
+    return;
+}
+
 require_once __DIR__ . '/../include/bittorrent.php';
 
 check_user_status();

@@ -57,3 +57,24 @@ public/usercp.php,wired_route,guarded public usercp entry to router
 public/usermood.php,wired_route,guarded public usermood entry to router
 public/takeedit.php,wired_route,guarded public takeedit entry to router
 public/takeeditcp.php,wired_route,guarded public takeeditcp entry to router
+public/index.php,wired_route,front controller registered offset=30 batch routes and post endpoints
+classes/Http/Handlers/PublicSite/TakeThemeHandler.php,handler,routed public take_theme action through handler shim
+classes/Http/Handlers/PublicSite/TakereseedHandler.php,handler,routed public takereseed action through handler shim
+classes/Http/Handlers/PublicSite/TakethankyouHandler.php,handler,routed public takethankyou action through handler shim
+classes/Http/Handlers/PublicSite/TakeuploadHandler.php,handler,routed public takeupload action through handler shim
+classes/Http/Handlers/PublicSite/TenpercentHandler.php,handler,routed public tenpercent page through handler shim
+classes/Http/Handlers/PublicSite/TmoviesHandler.php,handler,routed public tmovies listing through handler shim
+classes/Http/Handlers/PublicSite/TopmoodsHandler.php,handler,routed public topmoods listing through handler shim
+classes/Http/Handlers/PublicSite/ToptenHandler.php,handler,routed public topten listing through handler shim
+classes/Http/Handlers/PublicSite/TriviaResultsHandler.php,handler,routed public trivia results through handler shim
+classes/Http/Handlers/PublicSite/TvshowsHandler.php,handler,routed public tvshows listing through handler shim
+public/take_theme.php,wired_route,guarded take_theme entrypoint to bootstrap via router
+public/takereseed.php,wired_route,guarded takereseed entrypoint to bootstrap via router
+public/takethankyou.php,wired_route,guarded takethankyou entrypoint to bootstrap via router
+public/takeupload.php,wired_route,guarded takeupload entrypoint to bootstrap via router
+public/tenpercent.php,wired_route,guarded tenpercent entrypoint to bootstrap via router
+public/tmovies.php,wired_route,guarded tmovies entrypoint to bootstrap via router
+public/topmoods.php,wired_route,guarded topmoods entrypoint to bootstrap via router
+public/topten.php,wired_route,guarded topten entrypoint to bootstrap via router
+public/trivia_results.php,wired_route,guarded trivia_results entrypoint to bootstrap via router
+public/tvshows.php,wired_route,guarded tvshows entrypoint to bootstrap via router
