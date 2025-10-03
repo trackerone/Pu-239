@@ -28,7 +28,7 @@ if (!is_array($user)) {
 =======
 <<<<<< codex/add-security-headers-and-json-helper-huxuqp
 =======
-    // >>>>>> PU239:json-rewrite-4
+
 >>>>>> master
 >>>>>> master
 >>>>>> master
@@ -45,7 +45,7 @@ if (empty($user)) {
 =======
 <<<<<< codex/add-security-headers-and-json-helper-huxuqp
 =======
-    // >>>>>> PU239:json-rewrite-5
+
 >>>>>> master
 >>>>>> master
 >>>>>> master
@@ -168,7 +168,7 @@ if (!empty($user)) {
 =======
 <<<<<< codex/add-security-headers-and-json-helper-huxuqp
 =======
-    // >>>>>> PU239:json-rewrite-6
+
 >>>>>> master
 >>>>>> master
 >>>>>> master

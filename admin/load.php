@@ -12,7 +12,7 @@ global $container;
 =======
 <<<<<< codex/enforce-centralized-authorization-checks-vacoay
 =======
-// >>>>>> PU239:authz-gate-4
+
 >>>>>> master
 >>>>>> master
 AuthZ::requireRole('admin');

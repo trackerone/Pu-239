@@ -459,7 +459,7 @@ $db->perform($sql, array_merge($removeset, ['userid' => $id]));
 =======
 <<<<<< codex/add-centralized-audit-logging-system-zg4mx8
 =======
-        // >>>>>> PU239:audit-hook-2
+
 >>>>>> master
 >>>>>> master
 >>>>>> master

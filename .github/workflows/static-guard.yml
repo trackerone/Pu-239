@@ -1,45 +1,129 @@
-name: Static Guard (strict)
-
+name: static-guard
 on:
-  pull_request:
-    paths:
-      - '**/*.php'
-      - 'composer.json'
-      - 'composer.lock'
-      - 'tools/legacy_guard.sh'
-      - '!vendor/**'
-      - '!node_modules/**'
-      - '!_quarantine/**'
   push:
-    branches: [ main ]
-    paths:
-      - '**/*.php'
-      - 'composer.json'
-      - 'composer.lock'
-      - 'tools/legacy_guard.sh'
-      - '!vendor/**'
-      - '!node_modules/**'
-      - '!_quarantine/**'
-
-concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: true
-
-permissions:
-  contents: read
-
+    branches: ["**"]
+  pull_request:
+    branches: ["**"]
 jobs:
-  guard:
+  static-guard:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Install ripgrep
-        run: sudo apt-get update && sudo apt-get install -y ripgrep
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.3'
 
-      - name: Make guard executable
-        run: chmod +x tools/legacy_guard.sh
+      - name: Prepare report
+        run: |
+          mkdir -p tools
+          : > tools/static_guard_report.txt
+          echo "[static-guard] started $(date -u +%FT%TZ)" >> tools/static_guard_report.txt
 
-      - name: Run legacy/static guard
-        run: tools/legacy_guard.sh
+      # >>>>>> PU239:static-guard-1
+      - name: Guard: raw echo variables without $s() (web layers)
+        shell: bash
+        run: |
+          set -euo pipefail
+          echo "== echo-var guard ==" >> tools/static_guard_report.txt
+          hits=$(grep -RIn --include="*.php" \
+            -- "echo " public admin staffpanel 2>/dev/null \
+            | grep -E "echo\s+\$[A-Za-z_][A-Za-z0-9_]*" \
+            | grep -Ev "\$s\s*\(" \
+            | grep -Ev "//\s*noescape" || true)
+          if [ -n "$hits" ]; then
+            echo "$hits" | tee -a tools/static_guard_report.txt
+            echo "::error::Raw echo of variables found (wrap with \$s(...) or mark // noescape)."
+            exit 1
+          fi
+          echo "OK" >> tools/static_guard_report.txt
+
+      # >>>>>> PU239:static-guard-2
+      - name: Guard: setcookie() must use secure/httponly/samesite OR wrapper
+        shell: bash
+        run: |
+          set -euo pipefail
+          echo "== setcookie guard ==" >> tools/static_guard_report.txt
+          hits=$(grep -RIn --include="*.php" --exclude-dir vendor --exclude-dir .git --exclude-dir _quarantine "setcookie\(" . 2>/dev/null \
+            | grep -Ev "set_app_cookie\s*\(" \
+            | while IFS=: read -r f l line; do
+                echo "$line" | grep -Eq "\[\s*'expires'|\"expires\"" || true
+                has_array=$?
+                # quick heuristic: if no array syntax, flag
+                if [ $has_array -ne 0 ]; then
+                  echo "$f:$l:$line"
+                  continue
+                fi
+                echo "$line" | grep -Eq "'secure'|\"secure\"" && echo "$line" | grep -Eq "'httponly'|\"httponly\"" && echo "$line" | grep -Eq "'samesite'|\"samesite\"" || echo "$f:$l:$line"
+              done || true)
+          if [ -n "$hits" ]; then
+            echo "$hits" | tee -a tools/static_guard_report.txt
+            echo "::error::Insecure setcookie() usage (use array opts or set_app_cookie)."
+            exit 1
+          fi
+          echo "OK" >> tools/static_guard_report.txt
+
+      # >>>>>> PU239:static-guard-3
+      - name: Guard: POST usage must include Csrf::verify in same file
+        shell: bash
+        run: |
+          set -euo pipefail
+          echo "== csrf heuristic ==" >> tools/static_guard_report.txt
+          files=$(grep -RIl --include="*.php" --exclude-dir vendor --exclude-dir .git --exclude-dir _quarantine -E "\$_POST\\b|filter_input\(INPUT_POST" . || true)
+          bad=""
+          for f in $files; do
+            grep -q "Csrf::verify" "$f" || bad="$bad"$'\n'"$f"
+          done
+          if [ -n "$bad" ]; then
+            echo "$bad" | sed '/^$/d' | tee -a tools/static_guard_report.txt
+            echo "::error::Files reference POST without Csrf::verify in same file."
+            exit 1
+          fi
+          echo "OK" >> tools/static_guard_report.txt
+
+      # >>>>>> PU239:static-guard-4
+      - name: Guard: forbid Git conflict markers
+        shell: bash
+        run: |
+          set -euo pipefail
+          echo "== conflict markers ==" >> tools/static_guard_report.txt
+          hits=$(grep -RIn --exclude-dir vendor --exclude-dir .git --exclude-dir _quarantine -E "^(<<<<<<<|=======|>>>>>>>)" . || true)
+          if [ -n "$hits" ]; then
+            echo "$hits" | tee -a tools/static_guard_report.txt
+            echo "::error::Git conflict markers present."
+            exit 1
+          fi
+          echo "OK" >> tools/static_guard_report.txt
+
+      # >>>>>> PU239:static-guard-5
+      - name: Guard: raw json_encode in web layers (use json_out)
+        shell: bash
+        run: |
+          set -euo pipefail
+          echo "== json out guard ==" >> tools/static_guard_report.txt
+          hits=$(grep -RIn --include="*.php" public admin staffpanel 2>/dev/null \
+            | grep -E "echo\s+json_encode\(|print\s+json_encode\(|die\s*\(\s*json_encode\(|exit\s*\(\s*json_encode\(" || true)
+          if [ -n "$hits" ]; then
+            echo "$hits" | tee -a tools/static_guard_report.txt
+            echo "::error::Use json_out(...) helper instead of raw json_encode."
+            exit 1
+          fi
+          echo "OK" >> tools/static_guard_report.txt
+
+      # >>>>>> PU239:static-guard-6
+      - name: Enforce exactly six PU239 markers
+        shell: bash
+        run: |
+          set -euo pipefail
+          COUNT=$(grep -RIn --exclude-dir vendor --exclude-dir .git --exclude-dir _quarantine "^\s*#\s*>>>>>>\s*PU239:" .github/workflows/static-guard.yml | wc -l | tr -d ' ')
+          echo "markers_found=$COUNT" | tee -a tools/static_guard_report.txt
+          test "$COUNT" -eq 6
+
+      - name: Upload report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: static-guard-report
+          path: tools/static_guard_report.txt

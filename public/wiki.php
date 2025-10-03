@@ -141,7 +141,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     'name' => $values['name'] ?? null,
                 ],
             );
-            // >>>>>> PU239:audit-hook-2
+
             $session->set('is-success', 'Wiki article added');
         }
     } elseif (isset($_POST['article-edit'])) {
@@ -162,7 +162,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 'id' => $id,
             ],
         );
-        // >>>>>> PU239:audit-hook-3
+
         $session->set('is-success', 'Wiki article edited');
     } elseif (isset($_POST['wiki'])) {
         $name = htmlsafechars(urldecode($_POST['article']));

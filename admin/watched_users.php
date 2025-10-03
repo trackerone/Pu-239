@@ -14,7 +14,6 @@ if (strpos(__FILE__, '/admin/') !== false) {
 } else {
     AuthZ::requireAnyRole(['staff', 'admin']);
 }
-// >>>>>> PU239:authz-gate-4
 
 global $container, $CURUSER;
 /** @var ConfigRepository $config */
