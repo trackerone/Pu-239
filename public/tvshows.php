@@ -2,7 +2,6 @@
 declare(strict_types=1);
 require_once dirname(__DIR__) . '/bootstrap_web.php';
 
-$db = $container->get(Database::class);
 
 
 
@@ -11,6 +10,14 @@ $db = $container->get(Database::class);
 use PU239\Config\ConfigRepository;
 use Pu239\Database;
 use Pu239\Image;
+
+if (!defined('PU239_ROUTED')) {
+    require_once __DIR__ . '/index.php';
+
+    return;
+}
+
+$db = $container->get(Database::class);
 
 require_once __DIR__ . '/../include/bittorrent.php';
 $user = check_user_status();

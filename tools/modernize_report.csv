@@ -1,0 +1,99 @@
+classes/Http/Router.php,router,introduced minimal GET/POST dispatcher table
+classes/Http/MiddlewarePipeline.php,pipeline,stacked middlewares with per-route authz hook
+classes/Http/Middlewares/SecurityHeaders.php,mw,added default security response headers
+classes/Http/Middlewares/CsrfGate.php,mw,verified POST CSRF tokens
+classes/Http/Middlewares/RateLimitPost.php,mw,rate limited POST endpoints per IP/path
+classes/Http/Middlewares/JsonOut.php,mw,json-encode array responses
+classes/Http/Middlewares/AuthZGate.php,mw,route-aware authorization guard
+classes/Http/Handlers/HomeHandler.php,handler,routed homepage through legacy script
+classes/Http/Handlers/PublicSite/CoinsHandler.php,handler,delegated coins stub via router
+classes/Http/Handlers/PublicSite/CreditsHandler.php,handler,delegated credits stub via router
+classes/Http/Handlers/PublicSite/FriendsHandler.php,handler,delegated friends stub via router
+classes/Http/Handlers/PublicSite/GiftHandler.php,handler,delegated gift stub via router
+classes/Http/Handlers/PublicSite/InviteHandler.php,handler,delegated invite stub via router
+classes/Http/Handlers/PublicSite/MessagesHandler.php,handler,delegated messages stub via router
+classes/Http/Handlers/PublicSite/ReputationHandler.php,handler,delegated reputation stub via router
+classes/Http/Handlers/Admin/NamechangerHandler.php,handler,routed admin namechanger stub
+classes/Http/Handlers/Admin/ReportsHandler.php,handler,routed admin reports stub
+classes/Http/Handlers/Staffpanel/IndexHandler.php,handler,routed staffpanel index through pipeline
+public/index.php,wired_route,front controller routing expanded batch (offset=10)
+public/coins.php,wired_route,guarded legacy entry to route dispatcher
+public/credits.php,wired_route,guarded legacy entry to route dispatcher
+public/friends.php,wired_route,guarded legacy entry to route dispatcher
+public/gift.php,wired_route,guarded legacy entry to route dispatcher
+public/invite.php,wired_route,guarded legacy entry to route dispatcher
+public/messages.php,wired_route,guarded legacy entry to route dispatcher
+public/reputation.php,wired_route,guarded legacy entry to route dispatcher
+public/staffpanel.php,wired_route,guarded staffpanel entry to router
+admin/namechanger.php,wired_route,guarded admin stub to router
+admin/reports.php,wired_route,guarded admin stub to router
+staffpanel/index.php,wired_route,guarded staffpanel index to router
+classes/Http/Handlers/Admin/WarnHandler.php,handler,routed admin warn stub via front controller
+classes/Http/Handlers/Admin/ClassPromoHandler.php,handler,routed admin class promo stub via front controller
+classes/Http/Handlers/Admin/SitelogHandler.php,handler,routed admin sitelog stub via front controller
+classes/Http/Handlers/Admin/CommentsHandler.php,handler,routed admin comments stub via front controller
+classes/Http/Handlers/Admin/ReputationAdHandler.php,handler,routed admin reputation stub via front controller
+classes/Http/Handlers/Admin/ShitListHandler.php,handler,routed admin shit list stub via front controller
+classes/Http/Handlers/Admin/SystemViewHandler.php,handler,routed admin system view stub via front controller
+classes/Http/Handlers/PublicSite/CommentHandler.php,handler,routed public comment stub via front controller
+admin/warn.php,wired_route,guarded legacy admin warn entry to router
+admin/class_promo.php,wired_route,guarded admin class promo entry to router
+admin/sitelog.php,wired_route,guarded admin sitelog entry to router
+admin/comments.php,wired_route,guarded admin comments entry to router
+admin/reputation_ad.php,wired_route,guarded admin reputation entry to router
+admin/shit_list.php,wired_route,guarded admin shit list entry to router
+admin/system_view.php,wired_route,guarded admin system view entry to router
+public/comment.php,wired_route,guarded public comment entry to router
+classes/Http/Handlers/PublicSite/StaffboxHandler.php,handler,routed public staffbox stub via front controller
+classes/Http/Handlers/PublicSite/UsersHandler.php,handler,routed public users stub via front controller
+classes/Http/Handlers/PublicSite/UsercpHandler.php,handler,routed public usercp stub via front controller
+classes/Http/Handlers/PublicSite/UsermoodHandler.php,handler,routed public usermood stub via front controller
+classes/Http/Handlers/PublicSite/TakeeditHandler.php,handler,routed public takeedit stub via front controller
+classes/Http/Handlers/PublicSite/TakeeditcpHandler.php,handler,routed public takeeditcp stub via front controller
+public/staffbox.php,wired_route,guarded public staffbox entry to router
+public/users.php,wired_route,guarded public users entry to router
+public/usercp.php,wired_route,guarded public usercp entry to router
+public/usermood.php,wired_route,guarded public usermood entry to router
+public/takeedit.php,wired_route,guarded public takeedit entry to router
+public/takeeditcp.php,wired_route,guarded public takeeditcp entry to router
+public/index.php,wired_route,front controller registered offset=30 batch routes and post endpoints
+classes/Http/Handlers/PublicSite/TakeThemeHandler.php,handler,routed public take_theme action through handler shim
+classes/Http/Handlers/PublicSite/TakereseedHandler.php,handler,routed public takereseed action through handler shim
+classes/Http/Handlers/PublicSite/TakethankyouHandler.php,handler,routed public takethankyou action through handler shim
+classes/Http/Handlers/PublicSite/TakeuploadHandler.php,handler,routed public takeupload action through handler shim
+classes/Http/Handlers/PublicSite/TenpercentHandler.php,handler,routed public tenpercent page through handler shim
+classes/Http/Handlers/PublicSite/TmoviesHandler.php,handler,routed public tmovies listing through handler shim
+classes/Http/Handlers/PublicSite/TopmoodsHandler.php,handler,routed public topmoods listing through handler shim
+classes/Http/Handlers/PublicSite/ToptenHandler.php,handler,routed public topten listing through handler shim
+classes/Http/Handlers/PublicSite/TriviaResultsHandler.php,handler,routed public trivia results through handler shim
+classes/Http/Handlers/PublicSite/TvshowsHandler.php,handler,routed public tvshows listing through handler shim
+public/take_theme.php,wired_route,guarded take_theme entrypoint to bootstrap via router
+public/takereseed.php,wired_route,guarded takereseed entrypoint to bootstrap via router
+public/takethankyou.php,wired_route,guarded takethankyou entrypoint to bootstrap via router
+public/takeupload.php,wired_route,guarded takeupload entrypoint to bootstrap via router
+public/tenpercent.php,wired_route,guarded tenpercent entrypoint to bootstrap via router
+public/tmovies.php,wired_route,guarded tmovies entrypoint to bootstrap via router
+public/topmoods.php,wired_route,guarded topmoods entrypoint to bootstrap via router
+public/topten.php,wired_route,guarded topten entrypoint to bootstrap via router
+public/trivia_results.php,wired_route,guarded trivia_results entrypoint to bootstrap via router
+public/tvshows.php,wired_route,guarded tvshows entrypoint to bootstrap via router
+classes/Http/Handlers/PublicSite/UserUnlocksHandler.php,handler,routed public user_unlocks entry through handler shim
+classes/Http/Handlers/PublicSite/UseragreementHandler.php,handler,routed public useragreement entry through handler shim
+classes/Http/Handlers/PublicSite/UsercommentHandler.php,handler,routed public usercomment entry through handler shim
+classes/Http/Handlers/PublicSite/UserdetailsHandler.php,handler,routed public userdetails entry through handler shim
+classes/Http/Handlers/PublicSite/UserhistoryHandler.php,handler,routed public userhistory entry through handler shim
+classes/Http/Handlers/PublicSite/VerifyHandler.php,handler,routed public verify entry through handler shim
+classes/Http/Handlers/PublicSite/VerifyEmailHandler.php,handler,routed public verify_email entry through handler shim
+classes/Http/Handlers/PublicSite/VideoformatsHandler.php,handler,routed public videoformats entry through handler shim
+classes/Http/Handlers/PublicSite/ViewAnnounceHistoryHandler.php,handler,routed public view_announce_history entry through handler shim
+classes/Http/Handlers/PublicSite/ViewSqlHandler.php,handler,routed public view_sql entry through handler shim
+public/user_unlocks.php,wired_route,guarded user_unlocks entrypoint to bootstrap via router
+public/useragreement.php,wired_route,guarded useragreement entrypoint to bootstrap via router
+public/usercomment.php,wired_route,guarded usercomment entrypoint to bootstrap via router
+public/userdetails.php,wired_route,guarded userdetails entrypoint to bootstrap via router
+public/userhistory.php,wired_route,guarded userhistory entrypoint to bootstrap via router
+public/verify.php,wired_route,guarded verify entrypoint to bootstrap via router
+public/verify_email.php,wired_route,guarded verify_email entrypoint to bootstrap via router
+public/videoformats.php,wired_route,guarded videoformats entrypoint to bootstrap via router
+public/view_announce_history.php,wired_route,guarded view_announce_history entrypoint to bootstrap via router
+public/view_sql.php,wired_route,guarded view_sql entrypoint to bootstrap via router
