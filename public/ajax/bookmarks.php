@@ -14,7 +14,7 @@ require_once __DIR__ . '/../../include/bittorrent.php';
 $user = check_user_status();
 
 if ($user === false) {
-    // >>>>>> PU239:json-rewrite-4
+
     json_out(['fail' => 'csrf']);
 }
 
@@ -24,7 +24,7 @@ $togglePrivate = ($_POST['private'] ?? '') === 'true';
 $remove = $_POST['remove'] ?? 'false';
 
 if ($torrentId <= 0) {
-    // >>>>>> PU239:json-rewrite-5
+
     json_out(['fail' => 'invalid']);
 }
 
@@ -40,7 +40,7 @@ if ($togglePrivate) {
     );
 
     if ($bookmark === null) {
-        // >>>>>> PU239:json-rewrite-6
+
         json_out(['fail' => 'missing']);
     }
 

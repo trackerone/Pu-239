@@ -19,7 +19,6 @@ if (strpos(__FILE__, '/admin/') !== false) {
 } else {
     AuthZ::requireAnyRole(['staff', 'admin']);
 }
-// >>>>>> PU239:authz-gate-5
 
 global $container;
 
@@ -183,7 +182,6 @@ if (in_array($tool, $staff_tools, true) && file_exists(ADMIN_DIR . $staff_tools[
                     'id' => $id,
                 ],
             );
-            // >>>>>> PU239:audit-hook-4
             if ($user['class'] <= UC_MAX) {
                 $page = _('Page') . " '[color=#" . get_user_class_color((int) $arr['av_class']) . "]{$arr['page_name']}[/color]'";
                 $user_bbcode = "[url={$baseUrl}/userdetails.php?id={$user['id']}][color=#" . get_user_class_color($user['class']) . "]{$user['username']}[/color][/url]";
@@ -390,7 +388,6 @@ if (in_array($tool, $staff_tools, true) && file_exists(ADMIN_DIR . $staff_tools[
                                 'name' => $page_name,
                             ],
                         );
-                        // >>>>>> PU239:audit-hook-5
                     } else {
                         Audit::log(
                             $user['id'] ?? ($CURUSER['id'] ?? null),
@@ -402,7 +399,6 @@ if (in_array($tool, $staff_tools, true) && file_exists(ADMIN_DIR . $staff_tools[
                                 'name' => $page_name,
                             ],
                         );
-                        // >>>>>> PU239:audit-hook-6
                     }
                     if ($user['class'] <= UC_MAX) {
                         $page = _('Page') . " '[color=#" . get_user_class_color((int) $_POST['av_class']) . "]{$page_name}[/color]'";

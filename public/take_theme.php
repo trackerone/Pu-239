@@ -32,7 +32,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
                 'target' => $user['id'] ?? null,
             ]
         );
-        // >>>>>> PU239:audit-hook-3
+
     }
 }
 

@@ -15,7 +15,7 @@ if (strpos(__FILE__, '/admin/') !== false) {
 =======
 <<<<<< codex/enforce-centralized-authorization-checks-vacoay
 =======
-// >>>>>> PU239:authz-gate-2
+
 >>>>>> master
 >>>>>> master
 

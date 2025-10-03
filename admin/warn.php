@@ -11,6 +11,6 @@ if (strpos(__FILE__, '/admin/') !== false) {
 } else {
     AuthZ::requireAnyRole(['staff', 'admin']);
 }
-// >>>>>> PU239:authz-gate-3
+
 
 throw new RuntimeException('Stubbed: missing SQL; see tools/rehydrate_v3_manifest.csv');

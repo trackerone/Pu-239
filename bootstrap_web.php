@@ -16,14 +16,12 @@ require_once __DIR__ . '/include/helpers/http.php';
 require_once __DIR__ . '/include/session_bootstrap.php';
 
 if (!function_exists('pu239_send_security_headers')) {
-    // >>>>>> PU239:headers-2
     function pu239_send_security_headers(): void
     {
         static $sent = false;
         if ($sent || headers_sent()) {
             return;
         }
-        // >>>>>> PU239:headers-1
         header('X-Content-Type-Options: nosniff');
         header('Referrer-Policy: no-referrer-when-downgrade');
         header('X-Frame-Options: DENY');
