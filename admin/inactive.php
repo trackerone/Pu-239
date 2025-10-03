@@ -26,6 +26,11 @@ $session = $container->get(Session::class);
 $class = get_access(basename($_SERVER['REQUEST_URI']));
 class_check($class);
 
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    // >>>>>> PU239:ratelimiter-tune-5
+    rate_limit_or_fail();
+}
+
 $s = $s ?? static fn($v) => htmlspecialchars((string) $v, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
 $self = $s($_SERVER['PHP_SELF'] ?? '');
 $baseurlRaw = (string) $config->get('paths.baseurl');
