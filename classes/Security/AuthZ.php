@@ -83,9 +83,9 @@ final class AuthZ
             'SUPER_USER' => 2,
             'VIP' => 3,
             'MODERATOR' => 4,
-            'STAFF' => 4,
-            'ADMINISTRATOR' => 5,
-            'SYSOP' => 6,
+            'STAFF' => 5,
+            'ADMINISTRATOR' => 6,
+            'SYSOP' => 7,
 >>>>>> master
         ];
         $r = $rank[$role] ?? 0;
