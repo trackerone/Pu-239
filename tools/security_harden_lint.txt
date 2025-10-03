@@ -653,3 +653,19 @@ No syntax errors detected in staffpanel/index.php
 >>>>>> master
 >>>>>> master
 >>>>>> master
+No syntax errors detected in classes/Security/RateLimiter.php
+No syntax errors detected in include/helpers/http.php
+No syntax errors detected in public/login.php
+No syntax errors detected in public/signup.php
+
+Parse error: syntax error, unexpected token "<<", expecting end of file in admin/acpmanage.php on line 14
+Errors parsing admin/acpmanage.php
+
+Parse error: syntax error, unexpected token "<<", expecting end of file in admin/adduser.php on line 18
+Errors parsing admin/adduser.php
+No syntax errors detected in staffpanel/index.php
+No syntax errors detected in admin/bans.php
+No syntax errors detected in admin/inactive.php
+No syntax errors detected in classes/Security/RateLimiter.php
+No syntax errors detected in classes/Security/RateLimiter.php
+No syntax errors detected in classes/Security/RateLimiter.php

@@ -29,6 +29,11 @@ if ($auth->isLoggedIn()) {
     app_halt('Exit called');
 }
 get_template();
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    // >>>>>> PU239:ratelimiter-tune-2
+    [$loginLimit, $loginWindow] = \PU239\Security\RateLimiter::loginDefaults();
+    rate_limit_or_fail($loginLimit, $loginWindow);
+}
 $bans_class = $container->get(Ban::class);
 if ($bans_class->get_count($ip = getip(0)) > 0) {
     stderr(_('Error'), _fe('This IP ({0}) address has been banned.', $ip));

@@ -28,6 +28,11 @@ $db = $container->get(Database::class);
 $fluent = $db;
 $s = $s ?? static fn($v) => htmlspecialchars((string) $v, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
 $self = $s($_SERVER['PHP_SELF'] ?? '');
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    // >>>>>> PU239:ratelimiter-tune-4
+    rate_limit_or_fail();
+}
 $baseurl = $s($config->get('paths.baseurl'));
 $remove = isset($_GET['remove']) ? (int) $_GET['remove'] : 0;
 if ($remove > 0) {

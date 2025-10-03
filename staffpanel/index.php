@@ -58,6 +58,11 @@ $sanitize = static fn(mixed $value): string => htmlspecialchars((string) $value,
 
 class_check(UC_STAFF);
 
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    // >>>>>> PU239:ratelimiter-tune-6
+    rate_limit_or_fail();
+}
+
 // TODO(2025): map legacy key "site.staffpanel_online" to appropriate config path
 if (!$config->bool('site.staffpanel_online', true)) {
     stderr(_('Information'), _('The staffpanel is currently offline for maintenance work'));

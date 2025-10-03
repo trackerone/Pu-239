@@ -636,3 +636,10 @@ staffpanel/index.php,true,staff_any,true,
 >>>>>> master
 >>>>>> master
 >>>>>> master
+file,driver,limit,window,allowlist_hit,notes
+classes/Security/RateLimiter.php,redis,0,0,false,"Added Redis/apcu/fs support with allowlists"
+public/login.php,redis,5,60,false,"Login attempts limited"
+public/signup.php,redis,10,60,false,"Signup POST limited"
+admin/bans.php,redis,10,60,false,"Admin actions limited"
+admin/inactive.php,redis,10,60,false,"Inactive cleanup limited"
+staffpanel/index.php,redis,10,60,false,"Staffpanel POST limited"
