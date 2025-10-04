@@ -1,9 +1,11 @@
 
+Parse error: syntax error, unexpected token "<<" in admin/adduser.php on line 52
 Errors parsing admin/adduser.php
 LINT_FAIL admin/adduser.php
 No syntax errors detected in admin/namechanger.php
 No syntax errors detected in admin/reports.php
 
+Parse error: syntax error, unexpected token "<<" in admin/reset.php on line 44
 Errors parsing admin/reset.php
 LINT_FAIL admin/reset.php
 No syntax errors detected in classes/Security/PasswordHasher.php
@@ -15,14 +17,17 @@ No syntax errors detected in public/index.php
 No syntax errors detected in public/invite.php
 No syntax errors detected in public/messages.php
 
+Parse error: syntax error, unexpected token "<<" in public/recover.php on line 76
 Errors parsing public/recover.php
 LINT_FAIL public/recover.php
 No syntax errors detected in public/reputation.php
 
+Parse error: syntax error, unexpected token "<<" in public/signup.php on line 65
 Errors parsing public/signup.php
 LINT_FAIL public/signup.php
 No syntax errors detected in public/staffpanel.php
 
+Parse error: syntax error, unexpected token "<<" in src/User.php on line 265
 Errors parsing src/User.php
 LINT_FAIL src/User.php
 No syntax errors detected in staffpanel/index.php
