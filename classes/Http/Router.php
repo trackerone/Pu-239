@@ -8,6 +8,7 @@ final class Router
     /** @var array<string, array<int, array{handler: string, meta: array, path: string}>> */
     private array $routes = ['GET' => [], 'POST' => []];
 
+    // >>>>>> PU239:http-router-2
 
     public function get(string $path, string $handler, array $meta = []): void
     {
@@ -31,6 +32,7 @@ final class Router
                 return [$route['handler'], $route['meta']];
             }
         }
+        // >>>>>> PU239:http-router-2
         http_response_code(404);
         exit('Not Found');
     }

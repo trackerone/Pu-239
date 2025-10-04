@@ -10,6 +10,7 @@ final class MiddlewarePipeline
     /** @var array<int, object> */
     private array $stack;
 
+    // >>>>>> PU239:http-pipeline-3
 
     public function __construct(array $stack)
     {
@@ -55,6 +56,7 @@ final class MiddlewarePipeline
         }
 
         $response = $next();
+        // >>>>>> PU239:http-pipeline-3
 
         if ($response instanceof \Stringable) {
             echo (string) $response;
