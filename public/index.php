@@ -90,6 +90,18 @@ $router->get('/verify_email.php', \PU239\Http\Handlers\PublicSite\VerifyEmailHan
 $router->get('/videoformats.php', \PU239\Http\Handlers\PublicSite\VideoformatsHandler::class);
 $router->get('/view_announce_history.php', \PU239\Http\Handlers\PublicSite\ViewAnnounceHistoryHandler::class);
 $router->get('/view_sql.php', \PU239\Http\Handlers\PublicSite\ViewSqlHandler::class);
+$router->get('/viewnfo.php', \PU239\Http\Handlers\PublicSite\ViewnfoHandler::class);
+$router->get('/wiki.php', \PU239\Http\Handlers\PublicSite\WikiHandler::class);
+$router->post('/wiki.php', \PU239\Http\Handlers\PublicSite\WikiHandler::class);
+$router->get('/achievementbonus.php', \PU239\Http\Handlers\PublicSite\AchievementbonusHandler::class);
+$router->get('/achievementhistory.php', \PU239\Http\Handlers\PublicSite\AchievementhistoryHandler::class);
+$router->get('/achievementlist.php', \PU239\Http\Handlers\PublicSite\AchievementlistHandler::class);
+$router->post('/achievementlist.php', \PU239\Http\Handlers\PublicSite\AchievementlistHandler::class);
+$router->get('/ajaxchat.php', \PU239\Http\Handlers\PublicSite\AjaxchatHandler::class);
+$router->get('/allsmiles.php', \PU239\Http\Handlers\PublicSite\AllsmilesHandler::class);
+$router->get('/anatomy.php', \PU239\Http\Handlers\PublicSite\AnatomyHandler::class);
+$router->get('/announcement.php', \PU239\Http\Handlers\PublicSite\AnnouncementHandler::class);
+$router->get('/arcade.php', \PU239\Http\Handlers\PublicSite\ArcadeHandler::class);
 
 $pipe->handle($router);
 

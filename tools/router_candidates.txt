@@ -48,3 +48,13 @@ public/verify_email.php
 public/videoformats.php
 public/view_announce_history.php
 public/view_sql.php
+public/viewnfo.php
+public/wiki.php
+public/achievementbonus.php
+public/achievementhistory.php
+public/achievementlist.php
+public/ajaxchat.php
+public/allsmiles.php
+public/anatomy.php
+public/announcement.php
+public/arcade.php
