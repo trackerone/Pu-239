@@ -16,6 +16,21 @@ final class HomeHandler
         }
 
         echo 'OK';
+    public function handle(array $meta = []): mixed
+    {
+        if (!defined('PU239_ROUTED')) {
+            define('PU239_ROUTED', true);
+        }
+
+        if (isset($meta['legacy']) && is_string($meta['legacy'])) {
+            require $meta['legacy'];
+            return;
+        }
+
+        echo 'OK';
+        require \dirname(__DIR__, 3) . '/public/index.legacy.php';
+
+        return null;
     }
 }
 
