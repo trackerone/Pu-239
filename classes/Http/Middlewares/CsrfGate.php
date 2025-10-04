@@ -9,6 +9,8 @@ use function http_response_code;
 final class CsrfGate
 {
     public function process(callable $next): mixed
+    public function process(callable $next): void {
+    public function process(callable $next): void
     {
         $method = $_SERVER['REQUEST_METHOD'] ?? 'GET';
         if ($method === 'POST') {
@@ -19,5 +21,6 @@ final class CsrfGate
         }
 
         return $next();
+        $next();
     }
 }

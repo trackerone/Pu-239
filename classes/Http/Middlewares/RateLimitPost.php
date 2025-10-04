@@ -10,6 +10,9 @@ use function parse_url;
 
 final class RateLimitPost
 {
+    public function __construct(private int $limit, private int $window) {}
+
+    public function process(callable $next): void {
     public function __construct(private int $limit, private int $window)
     {
     }
@@ -19,7 +22,9 @@ final class RateLimitPost
         $method = $_SERVER['REQUEST_METHOD'] ?? 'GET';
         if ($method === 'POST') {
             $ip = $_SERVER['REMOTE_ADDR'] ?? 'unknown';
-            $path = parse_url($_SERVER['REQUEST_URI'] ?? '/', PHP_URL_PATH) ?: '/';
+            $uri = parse_url($_SERVER['REQUEST_URI'] ?? '/', PHP_URL_PATH);
+            $path = is_string($uri) ? $uri : '/';
+
             if (!RateLimiter::check($ip . ':' . $path, $this->limit, $this->window)) {
                 http_response_code(429);
                 header('Retry-After: ' . $this->window);
@@ -28,6 +33,7 @@ final class RateLimitPost
         }
 
         return $next();
+        $next();
     }
 }
 

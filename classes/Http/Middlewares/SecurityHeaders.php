@@ -9,6 +9,8 @@ use function header;
 final class SecurityHeaders
 {
     public function process(callable $next): mixed
+    public function process(callable $next): void {
+    public function process(callable $next): void
     {
         if (!headers_sent()) {
             header('X-Content-Type-Options: nosniff');
@@ -17,6 +19,7 @@ final class SecurityHeaders
         }
 
         return $next();
+        $next();
     }
 }
 
