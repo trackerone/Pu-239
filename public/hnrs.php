@@ -3,17 +3,18 @@ declare(strict_types=1);
 require_once dirname(__DIR__) . '/bootstrap_web.php';
 require_once dirname(__DIR__) . '/include/helpers/audit.php';
 
-$db = $container->get(Database::class);
-
-
-
-
 use PU239\Config\ConfigRepository;
 use Pu239\Database;
 use Pu239\Session;
 use Pu239\Snatched;
 use Pu239\Torrent;
 use Pu239\User;
+
+if (!defined('PU239_ROUTED')) {
+    require_once __DIR__ . '/index.php';
+
+    return;
+}
 
 require_once __DIR__ . '/../include/bittorrent.php';
 require_once CLASS_DIR . 'class_user_options.php';
@@ -23,6 +24,8 @@ $HTMLOUT = '';
 global $container;
 /** @var ConfigRepository $config */
 $config = $container->get(ConfigRepository::class);
+/** @var Database $db */
+$db = $container->get(Database::class);
 if (isset($_GET['id']) && $user['class'] >= UC_STAFF) {
     $userid = (int) $_GET['id'];
     $users_class = $container->get(User::class);

@@ -78,3 +78,13 @@ public/download.php
 public/download_multi.php
 public/downloadsub.php
 public/edit.php
+public/faq.php
+public/fastdelete.php
+public/filelist.php
+public/flash.php
+public/forums.php
+public/games.php
+public/getrss.php
+public/happylog.php
+public/hnrs.php
+public/img.php

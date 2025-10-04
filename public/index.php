@@ -113,10 +113,38 @@ $router->get('/bugs.php', \PU239\Http\Handlers\PublicSite\BugsHandler::class);
 $router->post('/bugs.php', \PU239\Http\Handlers\PublicSite\BugsHandler::class);
 $router->get('/casino.php', \PU239\Http\Handlers\PublicSite\CasinoHandler::class);
 $router->get('/catalog.php', \PU239\Http\Handlers\PublicSite\CatalogHandler::class);
+$router->get('/categoryids.php', \PU239\Http\Handlers\PublicSite\CategoryidsHandler::class);
+$router->get('/chat.php', \PU239\Http\Handlers\PublicSite\ChatHandler::class);
+$router->get('/clear_announcement.php', \PU239\Http\Handlers\PublicSite\ClearAnnouncementHandler::class);
+$router->get('/contactstaff.php', \PU239\Http\Handlers\PublicSite\ContactstaffHandler::class);
+$router->post('/contactstaff.php', \PU239\Http\Handlers\PublicSite\ContactstaffHandler::class);
+$router->get('/delete.php', \PU239\Http\Handlers\PublicSite\DeleteHandler::class);
+$router->post('/delete.php', \PU239\Http\Handlers\PublicSite\DeleteHandler::class);
+$router->get('/details.php', \PU239\Http\Handlers\PublicSite\DetailsHandler::class);
+$router->post('/details.php', \PU239\Http\Handlers\PublicSite\DetailsHandler::class);
+$router->get('/download.php', \PU239\Http\Handlers\PublicSite\DownloadHandler::class);
+$router->get('/download_multi.php', \PU239\Http\Handlers\PublicSite\DownloadMultiHandler::class);
+$router->get('/downloadsub.php', \PU239\Http\Handlers\PublicSite\DownloadsubHandler::class);
+$router->post('/downloadsub.php', \PU239\Http\Handlers\PublicSite\DownloadsubHandler::class);
+$router->get('/edit.php', \PU239\Http\Handlers\PublicSite\EditHandler::class);
+$router->post('/edit.php', \PU239\Http\Handlers\PublicSite\EditHandler::class);
+
+$router->get('/faq.php', \PU239\Http\Handlers\PublicSite\FaqHandler::class);
+$router->get('/fastdelete.php', \PU239\Http\Handlers\PublicSite\FastdeleteHandler::class);
+$router->get('/filelist.php', \PU239\Http\Handlers\PublicSite\FilelistHandler::class);
+$router->get('/flash.php', \PU239\Http\Handlers\PublicSite\FlashHandler::class);
+$router->get('/forums.php', \PU239\Http\Handlers\PublicSite\ForumsHandler::class);
+$router->get('/games.php', \PU239\Http\Handlers\PublicSite\GamesHandler::class);
+$router->get('/getrss.php', \PU239\Http\Handlers\PublicSite\GetrssHandler::class);
+$router->get('/happylog.php', \PU239\Http\Handlers\PublicSite\HappylogHandler::class);
+$router->get('/hnrs.php', \PU239\Http\Handlers\PublicSite\HnrsHandler::class);
+$router->get('/img.php', \PU239\Http\Handlers\PublicSite\ImgHandler::class);
 
 $pipe->handle($router);
 
 // >>>>>> PU239:http-front-1
+
+
 
 
 $pipe->handle($router);
