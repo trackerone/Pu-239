@@ -22,6 +22,30 @@ final class MiddlewarePipeline
                 else { $prev(); }
             };
         }
+    public function __construct(array $stack)
+    {
+        $this->stack = $stack;
+    }
+
+    public function handle(Router $router): void
+    {
+        $next = static function () use ($router): void {
+            [$handler, $meta] = $router->dispatch();
+            (new $handler())->handle($meta);
+        };
+
+        foreach (array_reverse($this->stack) as $middleware) {
+            $previous = $next;
+            $next = static function () use ($middleware, $previous): void {
+                if (method_exists($middleware, 'process')) {
+                    $middleware->process($previous);
+                    return;
+                }
+
+                $previous();
+            };
+        }
+
         $next();
     }
 }
