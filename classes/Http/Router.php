@@ -27,7 +27,6 @@ final class Router
         $uri = parse_url($_SERVER['REQUEST_URI'] ?? '/', PHP_URL_PATH) ?: '/';
         foreach ($this->routes[$method] ?? [] as $route) {
             if ($route['path'] === $uri) {
-                // >>>>>> PU239:http-router-2
                 return [$route['handler'], $route['meta']];
             }
         }
@@ -36,6 +35,7 @@ final class Router
     }
 }
 
+// >>>>>> PU239:http-router-2
 
 
 

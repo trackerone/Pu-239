@@ -17,6 +17,7 @@ classes/Http/Handlers/Admin/NamechangerHandler.php,handler,routed admin namechan
 classes/Http/Handlers/Admin/ReportsHandler.php,handler,routed admin reports stub
 classes/Http/Handlers/Staffpanel/IndexHandler.php,handler,routed staffpanel index through pipeline
 public/index.php,wired_route,front controller routing expanded batch (offset=10)
+public/index.php,wired_route,front controller registering initial routes
 public/coins.php,wired_route,guarded legacy entry to route dispatcher
 public/credits.php,wired_route,guarded legacy entry to route dispatcher
 public/friends.php,wired_route,guarded legacy entry to route dispatcher
@@ -137,24 +138,3 @@ public/browse.php,wired_route,guarded browse entrypoint to bootstrap via router
 public/bugs.php,wired_route,guarded bugs entrypoint to bootstrap via router
 public/casino.php,wired_route,guarded casino entrypoint to bootstrap via router
 public/catalog.php,wired_route,guarded catalog entrypoint to bootstrap via router
-classes/Http/Handlers/PublicSite/CategoryidsHandler.php,handler,routed public categoryids entry through handler shim
-classes/Http/Handlers/PublicSite/ChatHandler.php,handler,routed public chat entry through handler shim
-classes/Http/Handlers/PublicSite/ClearAnnouncementHandler.php,handler,routed public clear_announcement entry through handler shim
-classes/Http/Handlers/PublicSite/ContactstaffHandler.php,handler,routed public contactstaff entry through handler shim
-classes/Http/Handlers/PublicSite/DeleteHandler.php,handler,routed public delete entry through handler shim
-classes/Http/Handlers/PublicSite/DetailsHandler.php,handler,routed public details entry through handler shim
-classes/Http/Handlers/PublicSite/DownloadHandler.php,handler,routed public download entry through handler shim
-classes/Http/Handlers/PublicSite/DownloadMultiHandler.php,handler,routed public download_multi entry through handler shim
-classes/Http/Handlers/PublicSite/DownloadsubHandler.php,handler,routed public downloadsub entry through handler shim
-classes/Http/Handlers/PublicSite/EditHandler.php,handler,routed public edit entry through handler shim
-public/categoryids.php,wired_route,guarded categoryids entrypoint to bootstrap via router
-public/chat.php,wired_route,guarded chat entrypoint to bootstrap via router
-public/clear_announcement.php,wired_route,guarded clear_announcement entrypoint to bootstrap via router
-public/contactstaff.php,wired_route,guarded contactstaff entrypoint to bootstrap via router
-public/delete.php,wired_route,guarded delete entrypoint to bootstrap via router
-public/details.php,wired_route,guarded details entrypoint to bootstrap via router
-public/download.php,wired_route,guarded download entrypoint to bootstrap via router
-public/download_multi.php,wired_route,guarded download_multi entrypoint to bootstrap via router
-public/downloadsub.php,wired_route,guarded downloadsub entrypoint to bootstrap via router
-public/edit.php,wired_route,guarded edit entrypoint to bootstrap via router
-public/index.php,wired_route,front controller registered offset=70 batch routes

@@ -5,6 +5,18 @@ require_once __DIR__ . '/../bootstrap_web.php';
 
 use PU239\Http\MiddlewarePipeline;
 use PU239\Http\Middlewares\AuthZGate;
+use PU239\Http\Handlers\Admin\NamechangerHandler;
+use PU239\Http\Handlers\Admin\ReportsHandler;
+use PU239\Http\Handlers\HomeHandler;
+use PU239\Http\Handlers\PublicSite\CoinsHandler;
+use PU239\Http\Handlers\PublicSite\CreditsHandler;
+use PU239\Http\Handlers\PublicSite\FriendsHandler;
+use PU239\Http\Handlers\PublicSite\GiftHandler;
+use PU239\Http\Handlers\PublicSite\InviteHandler;
+use PU239\Http\Handlers\PublicSite\MessagesHandler;
+use PU239\Http\Handlers\PublicSite\ReputationHandler;
+use PU239\Http\Handlers\Staffpanel\IndexHandler;
+use PU239\Http\MiddlewarePipeline;
 use PU239\Http\Middlewares\CsrfGate;
 use PU239\Http\Middlewares\JsonOut;
 use PU239\Http\Middlewares\RateLimitPost;
@@ -17,6 +29,7 @@ if (!defined('PU239_ROUTED')) {
 
 $router = new Router();
 $pipe   = new MiddlewarePipeline([
+$pipeline = new MiddlewarePipeline([
     new SecurityHeaders(),
     new RateLimitPost(10, 60),
     new CsrfGate(),
@@ -100,25 +113,27 @@ $router->get('/bugs.php', \PU239\Http\Handlers\PublicSite\BugsHandler::class);
 $router->post('/bugs.php', \PU239\Http\Handlers\PublicSite\BugsHandler::class);
 $router->get('/casino.php', \PU239\Http\Handlers\PublicSite\CasinoHandler::class);
 $router->get('/catalog.php', \PU239\Http\Handlers\PublicSite\CatalogHandler::class);
-$router->get('/categoryids.php', \PU239\Http\Handlers\PublicSite\CategoryidsHandler::class);
-$router->get('/chat.php', \PU239\Http\Handlers\PublicSite\ChatHandler::class);
-$router->get('/clear_announcement.php', \PU239\Http\Handlers\PublicSite\ClearAnnouncementHandler::class);
-$router->get('/contactstaff.php', \PU239\Http\Handlers\PublicSite\ContactstaffHandler::class);
-$router->post('/contactstaff.php', \PU239\Http\Handlers\PublicSite\ContactstaffHandler::class);
-$router->get('/delete.php', \PU239\Http\Handlers\PublicSite\DeleteHandler::class);
-$router->post('/delete.php', \PU239\Http\Handlers\PublicSite\DeleteHandler::class);
-$router->get('/details.php', \PU239\Http\Handlers\PublicSite\DetailsHandler::class);
-$router->post('/details.php', \PU239\Http\Handlers\PublicSite\DetailsHandler::class);
-$router->get('/download.php', \PU239\Http\Handlers\PublicSite\DownloadHandler::class);
-$router->get('/download_multi.php', \PU239\Http\Handlers\PublicSite\DownloadMultiHandler::class);
-$router->get('/downloadsub.php', \PU239\Http\Handlers\PublicSite\DownloadsubHandler::class);
-$router->post('/downloadsub.php', \PU239\Http\Handlers\PublicSite\DownloadsubHandler::class);
-$router->get('/edit.php', \PU239\Http\Handlers\PublicSite\EditHandler::class);
-$router->post('/edit.php', \PU239\Http\Handlers\PublicSite\EditHandler::class);
 
 $pipe->handle($router);
 
 // >>>>>> PU239:http-front-1
 
 
+$pipe->handle($router);
+$router->get('/', HomeHandler::class);
+$router->get('/index.php', HomeHandler::class);
+$router->get('/coins.php', CoinsHandler::class);
+$router->get('/credits.php', CreditsHandler::class);
+$router->get('/friends.php', FriendsHandler::class);
+$router->get('/gift.php', GiftHandler::class);
+$router->get('/invite.php', InviteHandler::class);
+$router->get('/messages.php', MessagesHandler::class);
+$router->get('/reputation.php', ReputationHandler::class);
+$router->get('/admin/namechanger.php', NamechangerHandler::class, ['authz' => 'admin']);
+$router->get('/admin/reports.php', ReportsHandler::class, ['authz' => 'admin']);
+$router->get('/staffpanel.php', IndexHandler::class, ['authz' => ['any' => ['staff', 'admin']]]);
+$router->get('/staffpanel/index.php', IndexHandler::class, ['authz' => ['any' => ['staff', 'admin']]]);
 
+$pipeline->handle($router);
+
+// >>>>>> PU239:http-front-1

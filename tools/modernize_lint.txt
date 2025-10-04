@@ -1,9 +1,11 @@
 
+Parse error: syntax error, unexpected token "<<" in admin/adduser.php on line 52
 Errors parsing admin/adduser.php
 LINT_FAIL admin/adduser.php
 No syntax errors detected in admin/namechanger.php
 No syntax errors detected in admin/reports.php
 
+Parse error: syntax error, unexpected token "<<" in admin/reset.php on line 44
 Errors parsing admin/reset.php
 LINT_FAIL admin/reset.php
 No syntax errors detected in classes/Security/PasswordHasher.php
@@ -15,14 +17,17 @@ No syntax errors detected in public/index.php
 No syntax errors detected in public/invite.php
 No syntax errors detected in public/messages.php
 
+Parse error: syntax error, unexpected token "<<" in public/recover.php on line 76
 Errors parsing public/recover.php
 LINT_FAIL public/recover.php
 No syntax errors detected in public/reputation.php
 
+Parse error: syntax error, unexpected token "<<" in public/signup.php on line 65
 Errors parsing public/signup.php
 LINT_FAIL public/signup.php
 No syntax errors detected in public/staffpanel.php
 
+Parse error: syntax error, unexpected token "<<" in src/User.php on line 265
 Errors parsing src/User.php
 LINT_FAIL src/User.php
 No syntax errors detected in staffpanel/index.php
@@ -186,29 +191,3 @@ No syntax errors detected in public/bugs.php
 No syntax errors detected in public/casino.php
 No syntax errors detected in public/catalog.php
 No syntax errors detected in classes/Http/Handlers/PublicSite/ArcadeHandler.php
-No syntax errors detected in public/index.php
-No syntax errors detected in classes/Http/Router.php
-No syntax errors detected in classes/Http/MiddlewarePipeline.php
-No syntax errors detected in classes/Http/Middlewares/SecurityHeaders.php
-No syntax errors detected in classes/Http/Middlewares/RateLimitPost.php
-No syntax errors detected in classes/Http/Handlers/PublicSite/BugsHandler.php
-No syntax errors detected in classes/Http/Handlers/PublicSite/CategoryidsHandler.php
-No syntax errors detected in classes/Http/Handlers/PublicSite/ChatHandler.php
-No syntax errors detected in classes/Http/Handlers/PublicSite/ClearAnnouncementHandler.php
-No syntax errors detected in classes/Http/Handlers/PublicSite/ContactstaffHandler.php
-No syntax errors detected in classes/Http/Handlers/PublicSite/DeleteHandler.php
-No syntax errors detected in classes/Http/Handlers/PublicSite/DetailsHandler.php
-No syntax errors detected in classes/Http/Handlers/PublicSite/DownloadHandler.php
-No syntax errors detected in classes/Http/Handlers/PublicSite/DownloadMultiHandler.php
-No syntax errors detected in classes/Http/Handlers/PublicSite/DownloadsubHandler.php
-No syntax errors detected in classes/Http/Handlers/PublicSite/EditHandler.php
-No syntax errors detected in public/categoryids.php
-No syntax errors detected in public/chat.php
-No syntax errors detected in public/clear_announcement.php
-No syntax errors detected in public/contactstaff.php
-No syntax errors detected in public/delete.php
-No syntax errors detected in public/details.php
-No syntax errors detected in public/download.php
-No syntax errors detected in public/download_multi.php
-No syntax errors detected in public/downloadsub.php
-No syntax errors detected in public/edit.php

@@ -53,7 +53,6 @@ final class MiddlewarePipeline
             };
         }
 
-        // >>>>>> PU239:http-pipeline-3
         $response = $next();
 
         if ($response instanceof \Stringable) {
@@ -74,6 +73,7 @@ final class MiddlewarePipeline
     }
 }
 
+// >>>>>> PU239:http-pipeline-3
 
 
 
