@@ -39,6 +39,12 @@ $pipeline = new MiddlewarePipeline([
     new CsrfGate(),
 ]);
 
+// Register a SMALL set of routes in this batch (mikro-batch; no DB logic here)
+$router->get('/', HomeHandler::class, ['legacy' => __DIR__ . '/index.legacy.php']);
+$router->get('/index.php', HomeHandler::class, ['legacy' => __DIR__ . '/index.legacy.php']);
+$router->get('/coins.php', HomeHandler::class, ['legacy' => __DIR__ . '/coins.php']);
+$router->get('/credits.php', HomeHandler::class, ['legacy' => __DIR__ . '/credits.php']);
+$router->get('/friends.php', HomeHandler::class, ['legacy' => __DIR__ . '/friends.php']);
 $router->get('/', HomeHandler::class, ['legacy' => __DIR__ . '/index.legacy.php']);
 $router->get('/index.php', HomeHandler::class, ['legacy' => __DIR__ . '/index.legacy.php']);
     new JsonOut(),

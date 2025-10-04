@@ -7,6 +7,15 @@ final class HomeHandler
 {
     public function handle(array $meta = []): void
     {
+        if (isset($meta['legacy']) && is_string($meta['legacy'])) {
+            $legacy = $meta['legacy'];
+            if (is_file($legacy)) {
+                require $legacy;
+                return;
+            }
+        }
+
+        echo 'OK';
     public function handle(array $meta = []): mixed
     {
         if (!defined('PU239_ROUTED')) {
