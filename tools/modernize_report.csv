@@ -235,3 +235,10 @@ classes/Http/Middlewares/CsrfGate.php,mw,reapplied CSRF verification middleware 
 classes/Http/Middlewares/RateLimitPost.php,mw,reapplied placeholder POST rate limiting middleware
 classes/Http/Handlers/HomeHandler.php,handler,reduced home handler to placeholder output
 public/index.php,wired_route,front controller registers offset=150 mikro-batch routes
+classes/Http/Router.php,router,validated handlers and added HEAD fallback for offset=160
+classes/Http/MiddlewarePipeline.php,pipeline,propagates middleware return values in offset=160 batch
+classes/Http/Middlewares/SecurityHeaders.php,mw,returns downstream result after setting headers
+classes/Http/Middlewares/CsrfGate.php,mw,ensures middleware passes response through on success
+classes/Http/Middlewares/RateLimitPost.php,mw,returns downstream result after rate limiting
+classes/Http/Handlers/HomeHandler.php,handler,delegates to legacy homepage script with meta guard
+public/index.php,wired_route,routed legacy home endpoints for offset=160 batch

@@ -4,6 +4,9 @@ declare(strict_types=1);
 namespace PU239\Http\Middlewares;
 
 use PU239\Security\RateLimiter;
+use function header;
+use function http_response_code;
+use function parse_url;
 
 final class RateLimitPost
 {
@@ -14,7 +17,7 @@ final class RateLimitPost
     {
     }
 
-    public function process(callable $next): void
+    public function process(callable $next): mixed
     {
         $method = $_SERVER['REQUEST_METHOD'] ?? 'GET';
         if ($method === 'POST') {
@@ -29,6 +32,7 @@ final class RateLimitPost
             }
         }
 
+        return $next();
         $next();
     }
 }

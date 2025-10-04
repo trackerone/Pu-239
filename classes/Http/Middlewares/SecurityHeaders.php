@@ -3,8 +3,12 @@ declare(strict_types=1);
 
 namespace PU239\Http\Middlewares;
 
+use function headers_sent;
+use function header;
+
 final class SecurityHeaders
 {
+    public function process(callable $next): mixed
     public function process(callable $next): void {
     public function process(callable $next): void
     {
@@ -14,6 +18,7 @@ final class SecurityHeaders
             header('X-Frame-Options: DENY');
         }
 
+        return $next();
         $next();
     }
 }
