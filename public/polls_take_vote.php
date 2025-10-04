@@ -8,6 +8,12 @@ use Pu239\Config\ConfigRepository;
 use Pu239\Database;
 use Pu239\PollVoter;
 
+if (!defined('PU239_ROUTED')) {
+    require_once __DIR__ . '/index.php';
+
+    return;
+}
+
 global $container;
 /** @var ConfigRepository $config */
 $config = $container->get(ConfigRepository::class);

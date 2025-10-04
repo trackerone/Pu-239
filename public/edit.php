@@ -3,19 +3,21 @@ declare(strict_types=1);
 require_once dirname(__DIR__) . '/bootstrap_web.php';
 require_once dirname(__DIR__) . '/include/helpers/audit.php';
 
-$db = $container->get(Database::class);
-
-
-
-
 use Delight\Auth\Auth;
 use Pu239\Cache;
 use Pu239\Database;
 use Pu239\Roles;
 
+if (!defined('PU239_ROUTED')) {
+    require_once __DIR__ . '/index.php';
+
+    return;
+}
+
 require_once __DIR__ . '/../include/bittorrent.php';
 $user = check_user_status();
 global $container, $site_config;
+$db = $container->get(Database::class);
 
 $stdhead = [
     'css' => [

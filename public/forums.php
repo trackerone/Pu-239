@@ -10,6 +10,12 @@ use Pu239\Config\ConfigRepository;
 use Pu239\Database;
 use Spatie\Image\Exceptions\InvalidManipulation;
 
+if (!defined('PU239_ROUTED')) {
+    require_once __DIR__ . '/index.php';
+
+    return;
+}
+
 require_once __DIR__ . '/../include/bittorrent.php';
 require_once CLASS_DIR . 'class_user_options.php';
 $user = check_user_status();

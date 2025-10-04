@@ -83,9 +83,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && !isset($_POST['selector'])) {
     $argonHash = null;
     try {
         $argonHash = PasswordHasher::hash($post['password']);
-        // >>>>>> PU239:pwdlight-rewrite-5
     } catch (\InvalidArgumentException | \RuntimeException $e) {
-        // >>>>>> PU239:pwdlight-rewrite-5
     } catch (\InvalidArgumentException $e) {
 >>>>>> master
         write_log(_fe('{0} has tried to reset password using invalid data. ', getip(0)) . $e->getMessage());
