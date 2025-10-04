@@ -6,6 +6,12 @@ use Pu239\Database;
 
 require_once dirname(__DIR__) . '/bootstrap_web.php';
 
+if (!defined('PU239_ROUTED')) {
+    require_once __DIR__ . '/index.php';
+
+    return;
+}
+
 global $container;
 /** @var ConfigRepository $config */
 $config = $container->get(ConfigRepository::class);

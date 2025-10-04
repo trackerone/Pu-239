@@ -11,6 +11,12 @@ $db = $container->get(Database::class);
 use PU239\Config\ConfigRepository;
 use Delight\Auth\Auth;
 
+if (!defined('PU239_ROUTED')) {
+    require_once __DIR__ . '/index.php';
+
+    return;
+}
+
 require_once __DIR__ . '/../include/bittorrent.php';
 global $container;
 /** @var ConfigRepository $config */

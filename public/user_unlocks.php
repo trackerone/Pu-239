@@ -7,6 +7,12 @@ use Pu239\Cache;
 use Pu239\Config\ConfigRepository;
 use Pu239\Database;
 
+if (!defined('PU239_ROUTED')) {
+    require_once __DIR__ . '/index.php';
+
+    return;
+}
+
 require_once __DIR__ . '/../include/bittorrent.php';
 require_once CLASS_DIR . 'class_user_options_2.php';
 $user = check_user_status();
@@ -65,16 +71,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     ], $userCacheTtl);
     if (!empty($changedKeys)) {
         Audit::log($user['id'] ?? null, 'config.update', ['target' => (int) $id, 'keys' => $changedKeys]);
-<<<<<< codex/add-centralized-audit-logging-system-nt62d3
-=======
-<<<<<< codex/add-centralized-audit-logging-system-5cqmq4
-=======
-<<<<<< codex/add-centralized-audit-logging-system-zg4mx8
-=======
-
->>>>>> master
->>>>>> master
->>>>>> master
     }
     header('Location: ' . $_SERVER['PHP_SELF']);
     app_halt('Exit called');

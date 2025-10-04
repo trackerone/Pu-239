@@ -17,6 +17,12 @@ use Pu239\Usersachiev;
 use PU239\Security\UploadGuard;
 use PU239\Support\Audit;
 
+if (!defined('PU239_ROUTED')) {
+    require_once __DIR__ . '/index.php';
+
+    return;
+}
+
 require_once __DIR__ . '/../include/bittorrent.php';
 require_once CLASS_DIR . 'class.bencdec.php';
 
