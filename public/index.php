@@ -102,6 +102,17 @@ $router->get('/allsmiles.php', \PU239\Http\Handlers\PublicSite\AllsmilesHandler:
 $router->get('/anatomy.php', \PU239\Http\Handlers\PublicSite\AnatomyHandler::class);
 $router->get('/announcement.php', \PU239\Http\Handlers\PublicSite\AnnouncementHandler::class);
 $router->get('/arcade.php', \PU239\Http\Handlers\PublicSite\ArcadeHandler::class);
+$router->get('/arcade_top_scores.php', \PU239\Http\Handlers\PublicSite\ArcadeTopScoresHandler::class);
+$router->get('/bitbucket.php', \PU239\Http\Handlers\PublicSite\BitbucketHandler::class);
+$router->get('/bjstats.php', \PU239\Http\Handlers\PublicSite\BjstatsHandler::class);
+$router->get('/blackjack.php', \PU239\Http\Handlers\PublicSite\BlackjackHandler::class);
+$router->get('/bookmarks.php', \PU239\Http\Handlers\PublicSite\BookmarksHandler::class);
+$router->get('/bot_triggers.php', \PU239\Http\Handlers\PublicSite\BotTriggersHandler::class);
+$router->get('/browse.php', \PU239\Http\Handlers\PublicSite\BrowseHandler::class);
+$router->get('/bugs.php', \PU239\Http\Handlers\PublicSite\BugsHandler::class);
+$router->post('/bugs.php', \PU239\Http\Handlers\PublicSite\BugsHandler::class);
+$router->get('/casino.php', \PU239\Http\Handlers\PublicSite\CasinoHandler::class);
+$router->get('/catalog.php', \PU239\Http\Handlers\PublicSite\CatalogHandler::class);
 
 $pipe->handle($router);
 

@@ -58,3 +58,13 @@ public/allsmiles.php
 public/anatomy.php
 public/announcement.php
 public/arcade.php
+public/arcade_top_scores.php
+public/bitbucket.php
+public/bjstats.php
+public/blackjack.php
+public/bookmarks.php
+public/bot_triggers.php
+public/browse.php
+public/bugs.php
+public/casino.php
+public/catalog.php
