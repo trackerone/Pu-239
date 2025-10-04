@@ -17,6 +17,8 @@ $pipeline = new MiddlewarePipeline([
     new CsrfGate(),
 ]);
 
+$router->get('/', \PU239\Http\Handlers\HomeHandler::class);
+$router->get('/index.php', \PU239\Http\Handlers\HomeHandler::class);
 $legacyIndex = __DIR__ . '/index.legacy.php';
 $router->get('/', HomeHandler::class, ['legacy' => $legacyIndex]);
 $router->get('/index.php', HomeHandler::class, ['legacy' => $legacyIndex]);

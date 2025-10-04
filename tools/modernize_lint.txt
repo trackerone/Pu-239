@@ -300,3 +300,10 @@ No syntax errors detected in classes/Http/Middlewares/SecurityHeaders.php
 No syntax errors detected in classes/Http/Middlewares/CsrfGate.php
 No syntax errors detected in classes/Http/Middlewares/RateLimitPost.php
 No syntax errors detected in classes/Http/Handlers/HomeHandler.php
+No syntax errors detected in public/index.php
+No syntax errors detected in classes/Http/Router.php
+No syntax errors detected in classes/Http/MiddlewarePipeline.php
+No syntax errors detected in classes/Http/Middlewares/SecurityHeaders.php
+No syntax errors detected in classes/Http/Middlewares/CsrfGate.php
+No syntax errors detected in classes/Http/Middlewares/RateLimitPost.php
+No syntax errors detected in classes/Http/Handlers/HomeHandler.php

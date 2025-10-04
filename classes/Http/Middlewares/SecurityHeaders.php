@@ -5,6 +5,7 @@ namespace PU239\Http\Middlewares;
 
 final class SecurityHeaders
 {
+    public function process(callable $next): void {
     public function process(callable $next): void
     {
         if (!headers_sent()) {

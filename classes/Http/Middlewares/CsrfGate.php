@@ -7,6 +7,7 @@ use PU239\Support\Csrf;
 
 final class CsrfGate
 {
+    public function process(callable $next): void {
     public function process(callable $next): void
     {
         $method = $_SERVER['REQUEST_METHOD'] ?? 'GET';
@@ -16,7 +17,6 @@ final class CsrfGate
                 exit('CSRF verification failed.');
             }
         }
-
         $next();
     }
 }

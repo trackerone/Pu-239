@@ -5,6 +5,7 @@ namespace PU239\Http\Handlers;
 
 final class HomeHandler
 {
+    public function handle(array $meta = []): void {
     public function handle(array $meta = []): void
     {
         if (!defined('PU239_ROUTED')) {

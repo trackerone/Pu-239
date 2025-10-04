@@ -7,6 +7,9 @@ use PU239\Security\RateLimiter;
 
 final class RateLimitPost
 {
+    public function __construct(private int $limit, private int $window) {}
+
+    public function process(callable $next): void {
     public function __construct(private int $limit, private int $window)
     {
     }
