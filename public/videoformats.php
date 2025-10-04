@@ -4,9 +4,11 @@ require_once dirname(__DIR__) . '/bootstrap_web.php';
 
 $db = $container->get(Database::class);
 
+if (!defined('PU239_ROUTED')) {
+    require_once __DIR__ . '/index.php';
 
-
-
+    return;
+}
 
 require_once __DIR__ . '/../include/bittorrent.php';
 check_user_status();
