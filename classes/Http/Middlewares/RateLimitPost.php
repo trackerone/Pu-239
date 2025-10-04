@@ -13,6 +13,9 @@ final class RateLimitPost
 
     public function process(callable $next): void
     {
+    public function process(callable $next)
+    {
+        // >>>>>> PU239:http-mw-5
         $method = $_SERVER['REQUEST_METHOD'] ?? 'GET';
         if ($method === 'POST') {
             $ip = $_SERVER['REMOTE_ADDR'] ?? 'unknown';
@@ -25,7 +28,14 @@ final class RateLimitPost
         }
 
         $next();
+        // >>>>>> PU239:http-mw-5
+        return $next();
     }
 }
 
 // >>>>>> PU239:http-mw-5
+
+
+
+
+

@@ -6,6 +6,7 @@ namespace PU239\Http\Handlers;
 final class HomeHandler
 {
     public function handle(array $meta = []): void
+    public function handle(array $meta = []): mixed
     {
         if (!defined('PU239_ROUTED')) {
             define('PU239_ROUTED', true);
@@ -17,6 +18,9 @@ final class HomeHandler
         }
 
         echo 'OK';
+        require \dirname(__DIR__, 3) . '/public/index.legacy.php';
+
+        return null;
     }
 }
 
