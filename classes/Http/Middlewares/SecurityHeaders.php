@@ -5,6 +5,8 @@ namespace PU239\Http\Middlewares;
 
 final class SecurityHeaders
 {
+    public function process(callable $next): void
+    {
     public function process(callable $next)
     {
         // >>>>>> PU239:http-mw-4
@@ -14,6 +16,7 @@ final class SecurityHeaders
             header('X-Frame-Options: DENY');
         }
 
+        $next();
         // >>>>>> PU239:http-mw-4
         return $next();
     }

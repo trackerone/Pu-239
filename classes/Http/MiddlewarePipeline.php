@@ -19,6 +19,24 @@ final class MiddlewarePipeline
 
     public function handle(Router $router): void
     {
+        $next = static function () use ($router): void {
+            [$handler, $meta] = $router->dispatch();
+            (new $handler())->handle($meta);
+        };
+
+        foreach (array_reverse($this->stack) as $middleware) {
+            $previous = $next;
+            $next = static function () use ($middleware, $previous): void {
+                if (method_exists($middleware, 'process')) {
+                    $middleware->process($previous);
+                    return;
+                }
+
+                $previous();
+            };
+        }
+
+        $next();
         $next = static function () use ($router) {
             [$handler, $meta] = $router->dispatch();
             $runner = static function () use ($handler, $meta) {

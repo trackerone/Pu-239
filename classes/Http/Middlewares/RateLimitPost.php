@@ -11,6 +11,8 @@ final class RateLimitPost
     {
     }
 
+    public function process(callable $next): void
+    {
     public function process(callable $next)
     {
         // >>>>>> PU239:http-mw-5
@@ -25,6 +27,7 @@ final class RateLimitPost
             }
         }
 
+        $next();
         // >>>>>> PU239:http-mw-5
         return $next();
     }
