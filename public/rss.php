@@ -12,6 +12,14 @@ use Pu239\User;
 use Rakit\Validation\Validator;
 use Spatie\Image\Exceptions\InvalidManipulation;
 
+require_once dirname(__DIR__) . '/bootstrap_web.php';
+
+if (!defined('PU239_ROUTED')) {
+    require_once __DIR__ . '/index.php';
+
+    return;
+}
+
 require_once __DIR__ . '/../include/bittorrent.php';
 require_once INCL_DIR . 'function_bbcode.php';
 global $container;
