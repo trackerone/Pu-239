@@ -11,6 +11,12 @@ use Pu239\Session;
 use Pu239\User;
 use Rakit\Validation\Validator;
 
+if (!defined('PU239_ROUTED')) {
+    require_once __DIR__ . '/index.php';
+
+    return;
+}
+
 require_once __DIR__ . '/../include/bittorrent.php';
 global $container;
 /** @var ConfigRepository $config */

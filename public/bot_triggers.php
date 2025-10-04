@@ -11,6 +11,12 @@ use Pu239\Database;
 use Pu239\Session;
 use Rakit\Validation\Validator;
 
+if (!defined('PU239_ROUTED')) {
+    require_once __DIR__ . '/index.php';
+
+    return;
+}
+
 global $container;
 /** @var ConfigRepository $config */
 $config = $container->get(ConfigRepository::class);

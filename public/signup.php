@@ -74,12 +74,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $argonHash = null;
         try {
             $argonHash = PasswordHasher::hash($post['password']);
-            // >>>>>> PU239:pwdlight-rewrite-4
         } catch (\InvalidArgumentException | \RuntimeException $e) {
 <<<<<< codex/implement-argon2id-password-hashing-pu7kfq
 =======
 =======
-            // >>>>>> PU239:pwdlight-rewrite-4
         } catch (\InvalidArgumentException $e) {
 >>>>>> master
 >>>>>> master
