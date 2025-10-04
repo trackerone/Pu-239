@@ -18,6 +18,12 @@ use Pu239\Cache;
 use Pu239\Session;
 use Pu239\User;
 
+if (!defined('PU239_ROUTED')) {
+    require_once __DIR__ . '/index.php';
+
+    return;
+}
+
 require_once __DIR__ . '/../include/bittorrent.php';
 global $container, $site_config;
 
@@ -51,14 +57,4 @@ $cache = $container->get(Cache::class);
 $userid = $auth->getUserId();
 $user_class = $container->get(User::class);
 Audit::log($userid, 'config.update', ['target' => $userid, 'keys' => ['email']]);
-<<<<<< codex/add-centralized-audit-logging-system-nt62d3
-=======
-<<<<<< codex/add-centralized-audit-logging-system-5cqmq4
-=======
-<<<<<< codex/add-centralized-audit-logging-system-zg4mx8
-=======
-
->>>>>> master
->>>>>> master
->>>>>> master
 header("Location: {$site_config['paths']['baseurl']}/usercp.php?action=security");
