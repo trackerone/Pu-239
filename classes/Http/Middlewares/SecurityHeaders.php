@@ -15,6 +15,7 @@ final class SecurityHeaders
             header('Referrer-Policy: no-referrer-when-downgrade');
             header('X-Frame-Options: DENY');
         }
+        $next();
 
         $next();
         // >>>>>> PU239:http-mw-4
