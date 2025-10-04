@@ -1,9 +1,9 @@
 <?php
 declare(strict_types=1);
 
-namespace PU239\Http\Handlers\Admin;
+namespace PU239\Http\Handlers\PublicSite;
 
-final class WarnHandler
+final class ContactstaffHandler
 {
     public function handle(array $meta = []): mixed
     {
@@ -11,9 +11,9 @@ final class WarnHandler
             define('PU239_ROUTED', true);
         }
 
-        require \dirname(__DIR__, 4) . '/admin/warn.php';
+        require \dirname(__DIR__, 4) . '/public/contactstaff.php';
 
+        // >>>>>> PU239:http-handler-6
         return null;
     }
 }
-

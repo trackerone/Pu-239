@@ -1,9 +1,9 @@
 <?php
 declare(strict_types=1);
 
-namespace PU239\Http\Handlers\Admin;
+namespace PU239\Http\Handlers\PublicSite;
 
-final class WarnHandler
+final class ChatHandler
 {
     public function handle(array $meta = []): mixed
     {
@@ -11,9 +11,8 @@ final class WarnHandler
             define('PU239_ROUTED', true);
         }
 
-        require \dirname(__DIR__, 4) . '/admin/warn.php';
+        require \dirname(__DIR__, 4) . '/public/chat.php';
 
         return null;
     }
 }
-

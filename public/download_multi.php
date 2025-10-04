@@ -2,22 +2,23 @@
 declare(strict_types=1);
 require_once dirname(__DIR__) . '/bootstrap_web.php';
 
-$db = $container->get(Database::class);
-
-
-
-
-
 use PU239\Config\ConfigRepository;
 use Pu239\Phpzip;
 use Pu239\Session;
 use Pu239\Torrent;
 use Pu239\User;
 
+if (!defined('PU239_ROUTED')) {
+    require_once __DIR__ . '/index.php';
+
+    return;
+}
+
 require_once __DIR__ . '/../include/bittorrent.php';
 require_once CLASS_DIR . 'class.bencdec.php';
 $curuser = check_user_status();
 global $container;
+$db = $container->get(Database::class);
 /** @var ConfigRepository $config */
 $config = $container->get(ConfigRepository::class);
 $userid = isset($_GET['userid']) ? (int) $_GET['userid'] : $curuser['id'];

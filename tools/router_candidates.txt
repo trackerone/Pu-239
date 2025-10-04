@@ -68,3 +68,13 @@ public/browse.php
 public/bugs.php
 public/casino.php
 public/catalog.php
+public/categoryids.php
+public/chat.php
+public/clear_announcement.php
+public/contactstaff.php
+public/delete.php
+public/details.php
+public/download.php
+public/download_multi.php
+public/downloadsub.php
+public/edit.php
