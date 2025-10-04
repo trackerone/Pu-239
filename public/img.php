@@ -2,10 +2,13 @@
 declare(strict_types=1);
 require_once dirname(__DIR__) . '/bootstrap_web.php';
 
+if (!defined('PU239_ROUTED')) {
+    require_once __DIR__ . '/index.php';
+
+    return;
+}
+
 $db = $container->get(Database::class);
-
-
-
 
 require_once __DIR__ . '/../include/bittorrent.php';
 

@@ -3,6 +3,12 @@ declare(strict_types=1);
 require_once dirname(__DIR__) . '/bootstrap_web.php';
 require_once dirname(__DIR__) . '/include/helpers/audit.php';
 
+if (!defined('PU239_ROUTED')) {
+    require_once __DIR__ . '/index.php';
+
+    return;
+}
+
 $db = $container->get(Database::class);
 $s = $s ?? static fn($v) => htmlspecialchars((string) $v, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
 $self = $_SERVER['PHP_SELF'] ?? '';
