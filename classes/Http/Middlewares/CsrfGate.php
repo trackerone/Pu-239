@@ -8,7 +8,6 @@ use PU239\Support\Csrf;
 final class CsrfGate
 {
     public function process(callable $next): void
-    public function process(callable $next)
     {
         $method = $_SERVER['REQUEST_METHOD'] ?? 'GET';
         if ($method === 'POST') {
@@ -19,6 +18,5 @@ final class CsrfGate
         }
 
         $next();
-        return $next();
     }
 }

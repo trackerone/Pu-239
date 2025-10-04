@@ -221,3 +221,10 @@ public/rss_pdo_demo.php,wired_route,guarded rss_pdo_demo script to require front
 public/rsstfreak.php,wired_route,guarded rsstfreak script to require front controller bootstrap
 public/rules.php,wired_route,guarded rules script to require front controller bootstrap
 public/index.php,wired_route,front controller registered offset=100 batch routes
+classes/Http/Router.php,router,refreshed lightweight router for front controller offset=140
+classes/Http/MiddlewarePipeline.php,pipeline,rebuilt middleware runner for centralized entry point
+classes/Http/Middlewares/SecurityHeaders.php,mw,security headers middleware registered in pipeline
+classes/Http/Middlewares/CsrfGate.php,mw,csrf middleware guarding POST requests
+classes/Http/Middlewares/RateLimitPost.php,mw,rate limit middleware for POST actions
+classes/Http/Handlers/HomeHandler.php,handler,legacy delegator handler for home routes
+public/index.php,wired_route,routed home endpoints to middleware pipeline offset=140

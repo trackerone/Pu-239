@@ -11,22 +11,11 @@ final class Router
     public function get(string $path, string $handler, array $meta = []): void
     {
         $this->routes['GET'][] = ['path' => $path, 'handler' => $handler, 'meta' => $meta];
-    /** @var array<string, array<int, array{handler: string, meta: array, path: string}>> */
-    private array $routes = ['GET' => [], 'POST' => []];
-
-    // >>>>>> PU239:http-router-2
-
-    public function get(string $path, string $handler, array $meta = []): void
-    {
-        $this->routes['GET'][] = ['handler' => $handler, 'meta' => $meta, 'path' => $path];
     }
 
     public function post(string $path, string $handler, array $meta = []): void
     {
         $this->routes['POST'][] = ['path' => $path, 'handler' => $handler, 'meta' => $meta];
-    }
-
-        $this->routes['POST'][] = ['handler' => $handler, 'meta' => $meta, 'path' => $path];
     }
 
     /**
@@ -35,23 +24,18 @@ final class Router
     public function dispatch(): array
     {
         $method = $_SERVER['REQUEST_METHOD'] ?? 'GET';
-        $uri = parse_url($_SERVER['REQUEST_URI'] ?? '/', PHP_URL_PATH) ?: '/';
+        $uri = parse_url($_SERVER['REQUEST_URI'] ?? '/', PHP_URL_PATH);
+        $path = is_string($uri) ? $uri : '/';
+
         foreach ($this->routes[$method] ?? [] as $route) {
-            if ($route['path'] === $uri) {
+            if ($route['path'] === $path) {
                 return [$route['handler'], $route['meta']];
             }
         }
 
-        // >>>>>> PU239:http-router-2
         http_response_code(404);
         exit('Not Found');
     }
 }
 
 // >>>>>> PU239:http-router-2
-
-
-
-
-
-
