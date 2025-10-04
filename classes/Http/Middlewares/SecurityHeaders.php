@@ -14,10 +14,12 @@ final class SecurityHeaders
             header('X-Frame-Options: DENY');
         }
 
+        // >>>>>> PU239:http-mw-4
         return $next();
     }
 }
 
+// >>>>>> PU239:http-mw-4
 
 
 
