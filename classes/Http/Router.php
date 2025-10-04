@@ -8,6 +8,8 @@ final class Router
     /** @var array<string, array<int, array{handler: string, meta: array, path: string}>> */
     private array $routes = ['GET' => [], 'POST' => []];
 
+    // >>>>>> PU239:http-router-2
+
     public function get(string $path, string $handler, array $meta = []): void
     {
         $this->routes['GET'][] = ['handler' => $handler, 'meta' => $meta, 'path' => $path];

@@ -9,6 +9,12 @@ require_once dirname(__DIR__) . '/bootstrap_web.php';
 use Pu239\Cache;
 use Pu239\Config\ConfigRepository;
 
+if (!defined('PU239_ROUTED')) {
+    require_once __DIR__ . '/index.php';
+
+    return;
+}
+
 require_once __DIR__ . '/../include/bittorrent.php';
 $user = check_user_status();
 $image = placeholder_image();

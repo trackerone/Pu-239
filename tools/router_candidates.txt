@@ -88,3 +88,13 @@ public/getrss.php
 public/happylog.php
 public/hnrs.php
 public/img.php
+public/login.php
+public/logout.php
+public/lottery.php
+public/movies.php
+public/mybonus.php
+public/mytorrents.php
+public/needseed.php
+public/new_announcement.php
+public/offers.php
+public/peerlist.php

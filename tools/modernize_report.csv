@@ -180,3 +180,24 @@ public/happylog.php,wired_route,guarded happylog entrypoint to bootstrap via rou
 public/hnrs.php,wired_route,guarded hnrs entrypoint to bootstrap via router
 public/img.php,wired_route,guarded img entrypoint to bootstrap via router
 public/index.php,wired_route,front controller registered offset=80 batch routes
+classes/Http/Handlers/PublicSite/LoginHandler.php,handler,routed login endpoint via handler shim
+classes/Http/Handlers/PublicSite/LogoutHandler.php,handler,routed logout endpoint via handler shim
+classes/Http/Handlers/PublicSite/LotteryHandler.php,handler,routed lottery endpoint via handler shim
+classes/Http/Handlers/PublicSite/MoviesHandler.php,handler,routed movies endpoint via handler shim
+classes/Http/Handlers/PublicSite/MybonusHandler.php,handler,routed mybonus endpoint via handler shim
+classes/Http/Handlers/PublicSite/MytorrentsHandler.php,handler,routed mytorrents endpoint via handler shim
+classes/Http/Handlers/PublicSite/NeedseedHandler.php,handler,routed needseed endpoint via handler shim
+classes/Http/Handlers/PublicSite/NewAnnouncementHandler.php,handler,routed new announcement endpoint via handler shim
+classes/Http/Handlers/PublicSite/OffersHandler.php,handler,routed offers endpoint via handler shim
+classes/Http/Handlers/PublicSite/PeerlistHandler.php,handler,routed peerlist endpoint via handler shim
+public/login.php,wired_route,guarded login script to require front controller bootstrap
+public/logout.php,wired_route,guarded logout script to require front controller bootstrap
+public/lottery.php,wired_route,guarded lottery script to require front controller bootstrap
+public/movies.php,wired_route,guarded movies script to require front controller bootstrap
+public/mybonus.php,wired_route,guarded mybonus script to require front controller bootstrap
+public/mytorrents.php,wired_route,guarded mytorrents script to require front controller bootstrap
+public/needseed.php,wired_route,guarded needseed script to require front controller bootstrap
+public/new_announcement.php,wired_route,guarded new announcement script to require front controller bootstrap
+public/offers.php,wired_route,guarded offers script to require front controller bootstrap
+public/peerlist.php,wired_route,guarded peerlist script to require front controller bootstrap
+public/index.php,wired_route,front controller registered offset=90 batch routes

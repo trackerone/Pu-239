@@ -7,6 +7,7 @@ final class SecurityHeaders
 {
     public function process(callable $next)
     {
+        // >>>>>> PU239:http-mw-4
         if (!headers_sent()) {
             header('X-Content-Type-Options: nosniff');
             header('Referrer-Policy: no-referrer-when-downgrade');

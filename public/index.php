@@ -139,10 +139,25 @@ $router->get('/getrss.php', \PU239\Http\Handlers\PublicSite\GetrssHandler::class
 $router->get('/happylog.php', \PU239\Http\Handlers\PublicSite\HappylogHandler::class);
 $router->get('/hnrs.php', \PU239\Http\Handlers\PublicSite\HnrsHandler::class);
 $router->get('/img.php', \PU239\Http\Handlers\PublicSite\ImgHandler::class);
+$router->get('/login.php', \PU239\Http\Handlers\PublicSite\LoginHandler::class);
+$router->post('/login.php', \PU239\Http\Handlers\PublicSite\LoginHandler::class);
+$router->get('/logout.php', \PU239\Http\Handlers\PublicSite\LogoutHandler::class);
+$router->get('/lottery.php', \PU239\Http\Handlers\PublicSite\LotteryHandler::class);
+$router->get('/movies.php', \PU239\Http\Handlers\PublicSite\MoviesHandler::class);
+$router->get('/mybonus.php', \PU239\Http\Handlers\PublicSite\MybonusHandler::class);
+$router->post('/mybonus.php', \PU239\Http\Handlers\PublicSite\MybonusHandler::class);
+$router->get('/mytorrents.php', \PU239\Http\Handlers\PublicSite\MytorrentsHandler::class);
+$router->get('/needseed.php', \PU239\Http\Handlers\PublicSite\NeedseedHandler::class);
+$router->get('/new_announcement.php', \PU239\Http\Handlers\PublicSite\NewAnnouncementHandler::class);
+$router->post('/new_announcement.php', \PU239\Http\Handlers\PublicSite\NewAnnouncementHandler::class);
+$router->get('/offers.php', \PU239\Http\Handlers\PublicSite\OffersHandler::class);
+$router->post('/offers.php', \PU239\Http\Handlers\PublicSite\OffersHandler::class);
+$router->get('/peerlist.php', \PU239\Http\Handlers\PublicSite\PeerlistHandler::class);
 
 $pipe->handle($router);
 
 // >>>>>> PU239:http-front-1
+
 
 
 

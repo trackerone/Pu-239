@@ -10,6 +10,8 @@ final class MiddlewarePipeline
     /** @var array<int, object> */
     private array $stack;
 
+    // >>>>>> PU239:http-pipeline-3
+
     public function __construct(array $stack)
     {
         $this->stack = $stack;
