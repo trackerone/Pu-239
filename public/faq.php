@@ -3,20 +3,22 @@ declare(strict_types=1);
 require_once dirname(__DIR__) . '/bootstrap_web.php';
 require_once dirname(__DIR__) . '/include/helpers/audit.php';
 
-$db = $container->get(Database::class);
-
-
-
-
-
 use PU239\Config\ConfigRepository;
 use Pu239\Database;
 use Delight\Auth\Auth;
+
+if (!defined('PU239_ROUTED')) {
+    require_once __DIR__ . '/index.php';
+
+    return;
+}
 
 require_once __DIR__ . '/../include/bittorrent.php';
 global $container;
 /** @var ConfigRepository $config */
 $config = $container->get(ConfigRepository::class);
+/** @var Database $db */
+$db = $container->get(Database::class);
 $auth = $container->get(Auth::class);
 if (!$auth->isLoggedIn()) {
     get_template();

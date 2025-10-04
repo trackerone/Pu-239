@@ -8,6 +8,12 @@ use Pu239\Config\ConfigRepository;
 use Pu239\Database;
 use Pu239\Session;
 
+if (!defined('PU239_ROUTED')) {
+    require_once __DIR__ . '/index.php';
+
+    return;
+}
+
 require_once __DIR__ . '/../include/bittorrent.php';
 $user = check_user_status();
 global $container;
