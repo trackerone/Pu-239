@@ -11,6 +11,14 @@ final class Router
     public function get(string $path, string $handler, array $meta = []): void
     {
         $this->routes['GET'][] = ['path' => $path, 'handler' => $handler, 'meta' => $meta];
+    /** @var array<string, array<int, array{handler: string, meta: array, path: string}>> */
+    private array $routes = ['GET' => [], 'POST' => []];
+
+    // >>>>>> PU239:http-router-2
+
+    public function get(string $path, string $handler, array $meta = []): void
+    {
+        $this->routes['GET'][] = ['handler' => $handler, 'meta' => $meta, 'path' => $path];
     }
 
     public function post(string $path, string $handler, array $meta = []): void
@@ -18,6 +26,12 @@ final class Router
         $this->routes['POST'][] = ['path' => $path, 'handler' => $handler, 'meta' => $meta];
     }
 
+        $this->routes['POST'][] = ['handler' => $handler, 'meta' => $meta, 'path' => $path];
+    }
+
+    /**
+     * @return array{0: string, 1: array}
+     */
     public function dispatch(): array
     {
         $method = $_SERVER['REQUEST_METHOD'] ?? 'GET';
@@ -28,9 +42,16 @@ final class Router
             }
         }
 
+        // >>>>>> PU239:http-router-2
         http_response_code(404);
         exit('Not Found');
     }
 }
 
 // >>>>>> PU239:http-router-2
+
+
+
+
+
+
