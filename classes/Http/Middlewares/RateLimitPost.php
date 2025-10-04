@@ -9,17 +9,7 @@ final class RateLimitPost
 {
     public function __construct(private int $limit, private int $window) {}
 
-    public function process(callable $next): void
-    {
-    public function __construct(private int $limit, private int $window)
-    {
-    }
-
-    public function process(callable $next): void
-    {
-    public function process(callable $next)
-    {
-        // >>>>>> PU239:http-mw-5
+    public function process(callable $next): void {
         $method = $_SERVER['REQUEST_METHOD'] ?? 'GET';
         if ($method === 'POST') {
             $ip = $_SERVER['REMOTE_ADDR'] ?? 'unknown';
@@ -31,16 +21,7 @@ final class RateLimitPost
             }
         }
         $next();
-
-        $next();
-        // >>>>>> PU239:http-mw-5
-        return $next();
     }
 }
 
 // >>>>>> PU239:http-mw-5
-
-
-
-
-
