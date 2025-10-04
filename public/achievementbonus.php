@@ -11,6 +11,12 @@ use Pu239\Usersachiev;
 require_once dirname(__DIR__) . '/bootstrap_web.php';
 require_once dirname(__DIR__) . '/include/helpers/audit.php';
 
+if (!defined('PU239_ROUTED')) {
+    require_once __DIR__ . '/index.php';
+
+    return;
+}
+
 $baseurl = '';
 global $container;
 /** @var ConfigRepository $config */

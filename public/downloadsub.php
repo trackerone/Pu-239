@@ -4,6 +4,12 @@ require_once dirname(__DIR__) . '/bootstrap_web.php';
 
 use Pu239\Database;
 
+if (!defined('PU239_ROUTED')) {
+    require_once __DIR__ . '/index.php';
+
+    return;
+}
+
 require_once __DIR__ . '/../include/bittorrent.php';
 check_user_status();
 global $container;
