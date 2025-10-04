@@ -154,9 +154,25 @@ $router->get('/offers.php', \PU239\Http\Handlers\PublicSite\OffersHandler::class
 $router->post('/offers.php', \PU239\Http\Handlers\PublicSite\OffersHandler::class);
 $router->get('/peerlist.php', \PU239\Http\Handlers\PublicSite\PeerlistHandler::class);
 
+$router->get('/polls_take_vote.php', \PU239\Http\Handlers\PublicSite\PollsTakeVoteHandler::class);
+$router->post('/polls_take_vote.php', \PU239\Http\Handlers\PublicSite\PollsTakeVoteHandler::class);
+$router->get('/port_check.php', \PU239\Http\Handlers\PublicSite\PortCheckHandler::class);
+$router->get('/recover.php', \PU239\Http\Handlers\PublicSite\RecoverHandler::class);
+$router->post('/recover.php', \PU239\Http\Handlers\PublicSite\RecoverHandler::class);
+$router->get('/report.php', \PU239\Http\Handlers\PublicSite\ReportHandler::class);
+$router->post('/report.php', \PU239\Http\Handlers\PublicSite\ReportHandler::class);
+$router->get('/requests.php', \PU239\Http\Handlers\PublicSite\RequestsHandler::class);
+$router->post('/requests.php', \PU239\Http\Handlers\PublicSite\RequestsHandler::class);
+$router->get('/restoreclass.php', \PU239\Http\Handlers\PublicSite\RestoreclassHandler::class);
+$router->get('/rss.php', \PU239\Http\Handlers\PublicSite\RssHandler::class);
+$router->get('/rss_pdo_demo.php', \PU239\Http\Handlers\PublicSite\RssPdoDemoHandler::class);
+$router->get('/rsstfreak.php', \PU239\Http\Handlers\PublicSite\RsstfreakHandler::class);
+$router->get('/rules.php', \PU239\Http\Handlers\PublicSite\RulesHandler::class);
+
 $pipe->handle($router);
 
 // >>>>>> PU239:http-front-1
+
 
 
 

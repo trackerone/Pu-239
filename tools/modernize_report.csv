@@ -201,3 +201,23 @@ public/new_announcement.php,wired_route,guarded new announcement script to requi
 public/offers.php,wired_route,guarded offers script to require front controller bootstrap
 public/peerlist.php,wired_route,guarded peerlist script to require front controller bootstrap
 public/index.php,wired_route,front controller registered offset=90 batch routes
+classes/Http/Handlers/PublicSite/PollsTakeVoteHandler.php,handler,routed polls_take_vote endpoint via handler shim
+classes/Http/Handlers/PublicSite/PortCheckHandler.php,handler,routed port_check endpoint via handler shim
+classes/Http/Handlers/PublicSite/RecoverHandler.php,handler,routed recover endpoint via handler shim
+classes/Http/Handlers/PublicSite/ReportHandler.php,handler,routed report endpoint via handler shim
+classes/Http/Handlers/PublicSite/RequestsHandler.php,handler,routed requests endpoint via handler shim
+classes/Http/Handlers/PublicSite/RestoreclassHandler.php,handler,routed restoreclass endpoint via handler shim
+classes/Http/Handlers/PublicSite/RssHandler.php,handler,routed rss endpoint via handler shim
+classes/Http/Handlers/PublicSite/RssPdoDemoHandler.php,handler,routed rss_pdo_demo endpoint via handler shim
+classes/Http/Handlers/PublicSite/RsstfreakHandler.php,handler,routed rsstfreak endpoint via handler shim
+classes/Http/Handlers/PublicSite/RulesHandler.php,handler,routed rules endpoint via handler shim
+public/polls_take_vote.php,wired_route,guarded polls_take_vote script to require front controller bootstrap
+public/port_check.php,wired_route,guarded port_check script to require front controller bootstrap
+public/report.php,wired_route,guarded report script to require front controller bootstrap
+public/requests.php,wired_route,guarded requests script to require front controller bootstrap
+public/restoreclass.php,wired_route,guarded restoreclass script to require front controller bootstrap
+public/rss.php,wired_route,guarded rss script to require front controller bootstrap
+public/rss_pdo_demo.php,wired_route,guarded rss_pdo_demo script to require front controller bootstrap
+public/rsstfreak.php,wired_route,guarded rsstfreak script to require front controller bootstrap
+public/rules.php,wired_route,guarded rules script to require front controller bootstrap
+public/index.php,wired_route,front controller registered offset=100 batch routes

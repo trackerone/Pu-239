@@ -3,6 +3,13 @@ declare(strict_types=1);
 require_once dirname(__DIR__) . '/bootstrap_web.php';
 
 $db = $container->get(Database::class);
+
+if (!defined('PU239_ROUTED')) {
+    require_once __DIR__ . '/index.php';
+
+    return;
+}
+
 header('Content-Type: application/rss+xml; charset=UTF-8');
 
 // Konstruer XML-deklaration uden short open tag

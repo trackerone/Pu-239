@@ -98,3 +98,13 @@ public/needseed.php
 public/new_announcement.php
 public/offers.php
 public/peerlist.php
+public/polls_take_vote.php
+public/port_check.php
+public/recover.php
+public/report.php
+public/requests.php
+public/restoreclass.php
+public/rss.php
+public/rss_pdo_demo.php
+public/rsstfreak.php
+public/rules.php

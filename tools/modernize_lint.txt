@@ -265,3 +265,31 @@ No syntax errors detected in public/needseed.php
 No syntax errors detected in public/new_announcement.php
 No syntax errors detected in public/offers.php
 No syntax errors detected in public/peerlist.php
+No syntax errors detected in classes/Http/Handlers/PublicSite/LoginHandler.php
+No syntax errors detected in classes/Http/Handlers/PublicSite/PollsTakeVoteHandler.php
+No syntax errors detected in classes/Http/Handlers/PublicSite/PortCheckHandler.php
+No syntax errors detected in classes/Http/Handlers/PublicSite/RecoverHandler.php
+No syntax errors detected in classes/Http/Handlers/PublicSite/ReportHandler.php
+No syntax errors detected in classes/Http/Handlers/PublicSite/RequestsHandler.php
+No syntax errors detected in classes/Http/Handlers/PublicSite/RestoreclassHandler.php
+No syntax errors detected in classes/Http/Handlers/PublicSite/RssHandler.php
+No syntax errors detected in classes/Http/Handlers/PublicSite/RssPdoDemoHandler.php
+No syntax errors detected in classes/Http/Handlers/PublicSite/RsstfreakHandler.php
+No syntax errors detected in classes/Http/Handlers/PublicSite/RulesHandler.php
+No syntax errors detected in classes/Http/MiddlewarePipeline.php
+No syntax errors detected in classes/Http/Middlewares/RateLimitPost.php
+No syntax errors detected in classes/Http/Middlewares/SecurityHeaders.php
+No syntax errors detected in classes/Http/Router.php
+No syntax errors detected in public/index.php
+No syntax errors detected in public/polls_take_vote.php
+No syntax errors detected in public/port_check.php
+
+Parse error: syntax error, unexpected token "<<" in public/recover.php on line 82
+Errors parsing public/recover.php
+No syntax errors detected in public/report.php
+No syntax errors detected in public/requests.php
+No syntax errors detected in public/restoreclass.php
+No syntax errors detected in public/rss.php
+No syntax errors detected in public/rss_pdo_demo.php
+No syntax errors detected in public/rsstfreak.php
+No syntax errors detected in public/rules.php

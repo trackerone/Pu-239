@@ -16,6 +16,12 @@ $config = $container->get(ConfigRepository::class);
 $db = $container->get(Database::class);
 $baseUrl = (string) $config->get('paths.baseurl');
 
+if (!defined('PU239_ROUTED')) {
+    require_once __DIR__ . '/index.php';
+
+    return;
+}
+
 require_once __DIR__ . '/../include/bittorrent.php';
 $user = check_user_status();
 

@@ -28,6 +28,12 @@ $requestsBase = $baseUrl . '/requests.php';
 $requestsAction = $s($requestsBase);
 $requestsUrl = static fn(string $suffix = '') => $s($requestsBase . $suffix);
 
+if (!defined('PU239_ROUTED')) {
+    require_once __DIR__ . '/index.php';
+
+    return;
+}
+
 require_once __DIR__ . '/../include/bittorrent.php';
 $user = check_user_status();
 
