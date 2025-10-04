@@ -3,32 +3,24 @@ declare(strict_types=1);
 
 namespace PU239\Http\Handlers;
 
+use function dirname;
+use function file_exists;
+use function is_string;
+
 final class HomeHandler
 {
-    public function handle(array $meta = []): void
-    {
-        if (isset($meta['legacy']) && is_string($meta['legacy'])) {
-            $legacy = $meta['legacy'];
-            if (is_file($legacy)) {
-                require $legacy;
-                return;
-            }
-        }
-
-        echo 'OK';
     public function handle(array $meta = []): mixed
     {
         if (!defined('PU239_ROUTED')) {
             define('PU239_ROUTED', true);
         }
 
-        if (isset($meta['legacy']) && is_string($meta['legacy'])) {
-            require $meta['legacy'];
-            return;
+        $legacy = $meta['legacy'] ?? dirname(__DIR__, 3) . '/public/index.legacy.php';
+        if (!is_string($legacy) || $legacy === '' || !file_exists($legacy)) {
+            $legacy = dirname(__DIR__, 3) . '/public/index.legacy.php';
         }
 
-        echo 'OK';
-        require \dirname(__DIR__, 3) . '/public/index.legacy.php';
+        require $legacy;
 
         return null;
     }

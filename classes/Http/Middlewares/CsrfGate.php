@@ -4,11 +4,11 @@ declare(strict_types=1);
 namespace PU239\Http\Middlewares;
 
 use PU239\Support\Csrf;
+use function http_response_code;
 
 final class CsrfGate
 {
-    public function process(callable $next): void
-    public function process(callable $next)
+    public function process(callable $next): mixed
     {
         $method = $_SERVER['REQUEST_METHOD'] ?? 'GET';
         if ($method === 'POST') {
@@ -18,7 +18,6 @@ final class CsrfGate
             }
         }
 
-        $next();
         return $next();
     }
 }

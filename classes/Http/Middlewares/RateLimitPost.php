@@ -4,22 +4,18 @@ declare(strict_types=1);
 namespace PU239\Http\Middlewares;
 
 use PU239\Security\RateLimiter;
+use function header;
+use function http_response_code;
+use function parse_url;
 
 final class RateLimitPost
 {
-    public function __construct(private int $limit, private int $window) {}
-
-    public function process(callable $next): void
-    {
     public function __construct(private int $limit, private int $window)
     {
     }
 
-    public function process(callable $next): void
+    public function process(callable $next): mixed
     {
-    public function process(callable $next)
-    {
-        // >>>>>> PU239:http-mw-5
         $method = $_SERVER['REQUEST_METHOD'] ?? 'GET';
         if ($method === 'POST') {
             $ip = $_SERVER['REMOTE_ADDR'] ?? 'unknown';
@@ -30,17 +26,9 @@ final class RateLimitPost
                 exit('Too Many Requests');
             }
         }
-        $next();
 
-        $next();
-        // >>>>>> PU239:http-mw-5
         return $next();
     }
 }
 
 // >>>>>> PU239:http-mw-5
-
-
-
-
-

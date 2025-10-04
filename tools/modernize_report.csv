@@ -221,3 +221,24 @@ public/rss_pdo_demo.php,wired_route,guarded rss_pdo_demo script to require front
 public/rsstfreak.php,wired_route,guarded rsstfreak script to require front controller bootstrap
 public/rules.php,wired_route,guarded rules script to require front controller bootstrap
 public/index.php,wired_route,front controller registered offset=100 batch routes
+classes/Http/Router.php,router,refreshed lightweight router for front controller offset=140
+classes/Http/MiddlewarePipeline.php,pipeline,rebuilt middleware runner for centralized entry point
+classes/Http/Middlewares/SecurityHeaders.php,mw,security headers middleware registered in pipeline
+classes/Http/Middlewares/CsrfGate.php,mw,csrf middleware guarding POST requests
+classes/Http/Middlewares/RateLimitPost.php,mw,rate limit middleware for POST actions
+classes/Http/Handlers/HomeHandler.php,handler,legacy delegator handler for home routes
+public/index.php,wired_route,routed home endpoints to middleware pipeline offset=140
+classes/Http/Router.php,router,restored minimal dispatcher skeleton for offset 150
+classes/Http/MiddlewarePipeline.php,pipeline,reapplied baseline middleware runner for offset 150
+classes/Http/Middlewares/SecurityHeaders.php,mw,reapplied default security headers middleware
+classes/Http/Middlewares/CsrfGate.php,mw,reapplied CSRF verification middleware stub
+classes/Http/Middlewares/RateLimitPost.php,mw,reapplied placeholder POST rate limiting middleware
+classes/Http/Handlers/HomeHandler.php,handler,reduced home handler to placeholder output
+public/index.php,wired_route,front controller registers offset=150 mikro-batch routes
+classes/Http/Router.php,router,validated handlers and added HEAD fallback for offset=160
+classes/Http/MiddlewarePipeline.php,pipeline,propagates middleware return values in offset=160 batch
+classes/Http/Middlewares/SecurityHeaders.php,mw,returns downstream result after setting headers
+classes/Http/Middlewares/CsrfGate.php,mw,ensures middleware passes response through on success
+classes/Http/Middlewares/RateLimitPost.php,mw,returns downstream result after rate limiting
+classes/Http/Handlers/HomeHandler.php,handler,delegates to legacy homepage script with meta guard
+public/index.php,wired_route,routed legacy home endpoints for offset=160 batch
