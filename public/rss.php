@@ -1,7 +1,6 @@
 <?php
 declare(strict_types=1);
 
-declare(strict_types = 1);
 
 use PU239\Config\ConfigRepository;
 use DI\DependencyException;
@@ -216,6 +215,7 @@ function format_rss($data, ?string $torrent_pass)
 </rss>';
 
     header('Content-Type: application/xml');
+    // TODO(2025): review escaping strategy for $rss output
     echo $rss;
     die();
 }

@@ -10,8 +10,6 @@ use PU239\Http\Middlewares\Hsts;
 use PU239\Http\Middlewares\SecurityHeaders;
 use PU239\Http\Middlewares\RateLimitPost;
 use PU239\Http\Middlewares\CsrfGate;
-use PU239\Http\Middlewares\ForceHttps;
-use PU239\Http\Middlewares\Hsts;
 use PU239\Http\Middlewares\JsonOut;
 use PU239\Http\Middlewares\AuthZGate;
 
