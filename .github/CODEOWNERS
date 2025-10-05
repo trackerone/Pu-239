@@ -1,0 +1,3 @@
+# Require reviewers for front controller and HTTP layer
+public/index.php     @your-org/security @your-org/web
+classes/Http/*       @your-org/security @your-org/web

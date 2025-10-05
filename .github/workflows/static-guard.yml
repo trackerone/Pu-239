@@ -117,6 +117,35 @@ jobs:
           echo "markers_found=$COUNT" | tee -a tools/static_guard_report.txt
           test "$COUNT" -eq 6
 
+      - name: Guard: prevent deletions in public/index.php
+        if: always()
+        shell: bash
+        run: |
+          set -euo pipefail
+          if git rev-parse --verify HEAD^ >/dev/null 2>&1; then
+            DELETES=$(git diff --unified=0 HEAD^ -- public/index.php | grep -E '^\-' | grep -vE '^---' || true)
+            if [ -n "$DELETES" ]; then
+              echo "::error::Deletions detected in public/index.php. Use reconcile (no-overwrite) prompts instead."
+              echo "$DELETES"
+              exit 1
+            fi
+          fi
+
+      - name: Guard: block mass-overwrite in classes/Http/**
+        if: always()
+        shell: bash
+        run: |
+          set -euo pipefail
+          if git rev-parse --verify HEAD^ >/dev/null 2>&1; then
+            CHANGED=$(git diff --name-only HEAD^ -- classes/Http | wc -l | tr -d ' ')
+            BIGPATCH=$(git diff --shortstat HEAD^ -- classes/Http | awk '{print $4}' || echo 0)
+            # trip if more than 8 files or >400 added/removed lines in this dir (heuristic)
+            if [ "${CHANGED:-0}" -gt 8 ] || [ "${BIGPATCH:-0}" -gt 400 ]; then
+              echo "::error::Potential mass-overwrite in classes/Http/**. Split into micro-batches or use reconcile mode."
+              exit 1
+            fi
+          fi
+
       - name: Upload report
         if: always()
         uses: actions/upload-artifact@v4
