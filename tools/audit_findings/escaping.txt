@@ -1,0 +1,6 @@
+admin/reputation_settings.php - Echo of admin HTML layout
+public/ajax/autocomplete.php - Echo of HTML template built with helper escaping
+public/ajax/thanks.php - Echo of $payload response (HTML string)
+public/allsmiles.php - Direct echo of variable output; verify escaping context
+public/download.php - Direct echo of $tor payload (binary response)
+public/rss.php - Direct echo of $rss feed output

@@ -1,0 +1,1 @@
+All upload entry points rely on UploadGuard::store; no raw move_uploaded_file/is_uploaded_file usage detected.

@@ -1,0 +1,1 @@
+admin/adduser.php contains non-standard merge marker strings (<<<<<< codex/...) requiring manual review
