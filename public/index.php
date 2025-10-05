@@ -6,19 +6,25 @@ require_once __DIR__ . '/../bootstrap_web.php';
 use PU239\Http\Handlers\HomeHandler;
 use PU239\Http\MiddlewarePipeline;
 use PU239\Http\Middlewares\AuthZGate;
+use PU239\Http\Router;
+use PU239\Http\MiddlewarePipeline;
+use PU239\Http\Middlewares\ForceHttps;
+use PU239\Http\Middlewares\Hsts;
+use PU239\Http\Middlewares\SecurityHeaders;
+use PU239\Http\Middlewares\RateLimitPost;
 use PU239\Http\Middlewares\CsrfGate;
 use PU239\Http\Middlewares\ForceHttps;
 use PU239\Http\Middlewares\Hsts;
 use PU239\Http\Middlewares\JsonOut;
-use PU239\Http\Middlewares\RateLimitPost;
-use PU239\Http\Middlewares\SecurityHeaders;
-use PU239\Http\Router;
+use PU239\Http\Middlewares\AuthZGate;
 
 $router = new Router();
 
 if (!defined('PU239_ROUTED')) {
     define('PU239_ROUTED', true);
 }
+
+$router = new Router();
 
 $pipeline = new MiddlewarePipeline([
     new ForceHttps(),
@@ -32,8 +38,11 @@ $pipeline = new MiddlewarePipeline([
 $router->get('/', HomeHandler::class, ['legacy' => __DIR__ . '/index.legacy.php']);
 $router->get('/index.php', HomeHandler::class, ['legacy' => __DIR__ . '/index.legacy.php']);
 
-$router->get('/', \PU239\Http\Handlers\HomeHandler::class);
-$router->get('/index.php', \PU239\Http\Handlers\HomeHandler::class);
+// Optional legacy home mapping
+$router->get('/', \PU239\Http\Handlers\HomeHandler::class, ['legacy' => __DIR__ . '/index.legacy.php']);
+$router->get('/index.php', \PU239\Http\Handlers\HomeHandler::class, ['legacy' => __DIR__ . '/index.legacy.php']);
+
+// Public routes
 $router->get('/coins.php', \PU239\Http\Handlers\PublicSite\CoinsHandler::class);
 $router->get('/credits.php', \PU239\Http\Handlers\PublicSite\CreditsHandler::class);
 $router->get('/friends.php', \PU239\Http\Handlers\PublicSite\FriendsHandler::class);
@@ -41,17 +50,6 @@ $router->get('/gift.php', \PU239\Http\Handlers\PublicSite\GiftHandler::class);
 $router->get('/invite.php', \PU239\Http\Handlers\PublicSite\InviteHandler::class);
 $router->get('/messages.php', \PU239\Http\Handlers\PublicSite\MessagesHandler::class);
 $router->get('/reputation.php', \PU239\Http\Handlers\PublicSite\ReputationHandler::class);
-$router->get('/admin/namechanger.php', \PU239\Http\Handlers\Admin\NamechangerHandler::class, ['authz' => new AuthZGate('admin')]);
-$router->get('/admin/reports.php', \PU239\Http\Handlers\Admin\ReportsHandler::class, ['authz' => new AuthZGate('admin')]);
-$router->get('/staffpanel.php', \PU239\Http\Handlers\Staffpanel\IndexHandler::class, ['authz' => new AuthZGate(['any' => ['staff', 'admin']])]);
-$router->get('/staffpanel/index.php', \PU239\Http\Handlers\Staffpanel\IndexHandler::class, ['authz' => new AuthZGate(['any' => ['staff', 'admin']])]);
-$router->get('/admin/warn.php', \PU239\Http\Handlers\Admin\WarnHandler::class, ['authz' => new AuthZGate('admin')]);
-$router->get('/admin/class_promo.php', \PU239\Http\Handlers\Admin\ClassPromoHandler::class, ['authz' => new AuthZGate('admin')]);
-$router->get('/admin/sitelog.php', \PU239\Http\Handlers\Admin\SitelogHandler::class, ['authz' => new AuthZGate('admin')]);
-$router->get('/admin/comments.php', \PU239\Http\Handlers\Admin\CommentsHandler::class, ['authz' => new AuthZGate('admin')]);
-$router->get('/admin/reputation_ad.php', \PU239\Http\Handlers\Admin\ReputationAdHandler::class, ['authz' => new AuthZGate('admin')]);
-$router->get('/admin/shit_list.php', \PU239\Http\Handlers\Admin\ShitListHandler::class, ['authz' => new AuthZGate('admin')]);
-$router->get('/admin/system_view.php', \PU239\Http\Handlers\Admin\SystemViewHandler::class, ['authz' => new AuthZGate('admin')]);
 $router->get('/comment.php', \PU239\Http\Handlers\PublicSite\CommentHandler::class);
 $router->get('/staffbox.php', \PU239\Http\Handlers\PublicSite\StaffboxHandler::class);
 $router->get('/users.php', \PU239\Http\Handlers\PublicSite\UsersHandler::class);
@@ -162,6 +160,28 @@ $router->get('/rss.php', \PU239\Http\Handlers\PublicSite\RssHandler::class);
 $router->get('/rss_pdo_demo.php', \PU239\Http\Handlers\PublicSite\RssPdoDemoHandler::class);
 $router->get('/rsstfreak.php', \PU239\Http\Handlers\PublicSite\RsstfreakHandler::class);
 $router->get('/rules.php', \PU239\Http\Handlers\PublicSite\RulesHandler::class);
+
+$pipe->handle($router);
+
+// Legacy HTTP front controller marker
+
+
+
+
+
+// Admin/staff (with AuthZGate metadata)
+$router->get('/admin/namechanger.php', \PU239\Http\Handlers\Admin\NamechangerHandler::class, ['authz' => new AuthZGate('admin')]);
+$router->get('/admin/reports.php', \PU239\Http\Handlers\Admin\ReportsHandler::class, ['authz' => new AuthZGate('admin')]);
+$router->get('/admin/warn.php', \PU239\Http\Handlers\Admin\WarnHandler::class, ['authz' => new AuthZGate('admin')]);
+$router->get('/admin/class_promo.php', \PU239\Http\Handlers\Admin\ClassPromoHandler::class, ['authz' => new AuthZGate('admin')]);
+$router->get('/admin/sitelog.php', \PU239\Http\Handlers\Admin\SitelogHandler::class, ['authz' => new AuthZGate('admin')]);
+$router->get('/admin/comments.php', \PU239\Http\Handlers\Admin\CommentsHandler::class, ['authz' => new AuthZGate('admin')]);
+$router->get('/admin/reputation_ad.php', \PU239\Http\Handlers\Admin\ReputationAdHandler::class, ['authz' => new AuthZGate('admin')]);
+$router->get('/admin/shit_list.php', \PU239\Http\Handlers\Admin\ShitListHandler::class, ['authz' => new AuthZGate('admin')]);
+$router->get('/admin/system_view.php', \PU239\Http\Handlers\Admin\SystemViewHandler::class, ['authz' => new AuthZGate('admin')]);
+
+$router->get('/staffpanel.php', \PU239\Http\Handlers\Staffpanel\IndexHandler::class, ['authz' => new AuthZGate(['any' => ['staff', 'admin']])]);
+$router->get('/staffpanel/index.php', \PU239\Http\Handlers\Staffpanel\IndexHandler::class, ['authz' => new AuthZGate(['any' => ['staff', ' admin']])]);
 
 $pipeline->handle($router);
 
