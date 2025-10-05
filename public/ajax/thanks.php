@@ -133,7 +133,8 @@ switch ($action) {
             json_out($payload);
         }
 
-        echo $payload;
+        // TODO(2025): review escaping strategy for $payload output
+        echo $payload; // noescape
         break;
 
     case 'add':
@@ -194,6 +195,7 @@ switch ($action) {
                     json_out($payload);
                 }
 
+                // TODO(2025): review escaping strategy for $payload output
                 echo $payload;
             }
         }

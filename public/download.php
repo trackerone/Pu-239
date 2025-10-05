@@ -190,10 +190,12 @@ if ($zipuse) {
     if ($text) {
         header('Content-Disposition: attachment; filename="[' . $site_config['site']['name'] . ']' . $row['name'] . '.txt"');
         header('Content-Type: text/plain');
+        // TODO(2025): binary output; ensure proper handling if escaping is reconsidered
         echo $tor;
     } else {
         header('Content-Disposition: attachment; filename="[' . $site_config['site']['name'] . ']' . $row['filename'] . '"');
         header('Content-Type: application/x-bittorrent');
+        // TODO(2025): binary output; ensure proper handling if escaping is reconsidered
         echo $tor;
     }
 }
