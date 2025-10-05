@@ -139,3 +139,4 @@ classes/Http/Handlers/Public/Ajax/TakeUrlUploadHandler.php changed
 classes/Http/Handlers/Public/Ajax/OfferVoteHandler.php changed
 classes/Http/Handlers/Public/Ajax/TriviaAnswersHandler.php changed
 classes/Http/Handlers/Public/Ajax/OfferNotifyHandler.php changed
+Summary: changed=141 skipped=0 lint_fail=0
