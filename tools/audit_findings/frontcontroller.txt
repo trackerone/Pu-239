@@ -1,1 +1,3 @@
 public/index.php: multiple handle() calls (2)
+public/index.php assigns middleware to $pipeline but invokes $pipe->handle($router); variable mismatch leaves pipeline unused
+Duplicate use statements for ForceHttps and Hsts in public/index.php

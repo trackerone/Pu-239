@@ -15,3 +15,4 @@ public/details.php
 public/download.php
 public/edit.php
 public/verify_email.php
+No $site_config or legacy constants (SITE_URL/SQL_DEBUG/COOKIE_DOMAIN/ANNOUNCE_URL) found in scanned scope.

@@ -338,3 +338,184 @@ legacy_config,public/details.php,legacy site_config usage
 legacy_config,public/download.php,legacy site_config usage
 legacy_config,public/edit.php,legacy site_config usage
 legacy_config,public/verify_email.php,legacy site_config usage
+csrf,admin/acpmanage.php,Missing Csrf::verify/PU239_ROUTED coverage
+csrf,admin/adduser.php,Missing Csrf::verify/PU239_ROUTED coverage
+csrf,admin/backup.php,Missing Csrf::verify/PU239_ROUTED coverage
+csrf,admin/bannedemails.php,Missing Csrf::verify/PU239_ROUTED coverage
+csrf,admin/bans.php,Missing Csrf::verify/PU239_ROUTED coverage
+csrf,admin/block.settings.php,Missing Csrf::verify/PU239_ROUTED coverage
+csrf,admin/bonusmanage.php,Missing Csrf::verify/PU239_ROUTED coverage
+csrf,admin/categories.php,Missing Csrf::verify/PU239_ROUTED coverage
+csrf,admin/cheaters.php,Missing Csrf::verify/PU239_ROUTED coverage
+csrf,admin/class_config.php,Missing Csrf::verify/PU239_ROUTED coverage
+csrf,admin/cleanup_manager.php,Missing Csrf::verify/PU239_ROUTED coverage
+csrf,admin/cloudview.php,Missing Csrf::verify/PU239_ROUTED coverage
+csrf,admin/datareset.php,Missing Csrf::verify/PU239_ROUTED coverage
+csrf,admin/deathrow.php,Missing Csrf::verify/PU239_ROUTED coverage
+csrf,admin/delacct.php,Missing Csrf::verify/PU239_ROUTED coverage
+csrf,admin/edit_moods.php,Missing Csrf::verify/PU239_ROUTED coverage
+csrf,admin/editlog.php,Missing Csrf::verify/PU239_ROUTED coverage
+csrf,admin/findnotconnectable.php,Missing Csrf::verify/PU239_ROUTED coverage
+csrf,admin/floodlimit.php,Missing Csrf::verify/PU239_ROUTED coverage
+csrf,admin/forum_config.php,Missing Csrf::verify/PU239_ROUTED coverage
+csrf,admin/forum_manage.php,Missing Csrf::verify/PU239_ROUTED coverage
+csrf,admin/freeleech.php,Missing Csrf::verify/PU239_ROUTED coverage
+csrf,admin/grouppm.php,Missing Csrf::verify/PU239_ROUTED coverage
+csrf,admin/hit_and_run_settings.php,Missing Csrf::verify/PU239_ROUTED coverage
+csrf,admin/hnrwarn.php,Missing Csrf::verify/PU239_ROUTED coverage
+csrf,admin/inactive.php,Missing Csrf::verify/PU239_ROUTED coverage
+csrf,admin/invite_tree.php,Missing Csrf::verify/PU239_ROUTED coverage
+csrf,admin/leechwarn.php,Missing Csrf::verify/PU239_ROUTED coverage
+csrf,admin/log_viewer.php,Missing Csrf::verify/PU239_ROUTED coverage
+csrf,admin/manage_images.php,Missing Csrf::verify/PU239_ROUTED coverage
+csrf,admin/mass_bonus_for_members.php,Missing Csrf::verify/PU239_ROUTED coverage
+csrf,admin/mega_search.php,Missing Csrf::verify/PU239_ROUTED coverage
+csrf,admin/modded_torrents.php,Missing Csrf::verify/PU239_ROUTED coverage
+csrf,admin/modtask.php,Missing Csrf::verify/PU239_ROUTED coverage
+csrf,admin/news.php,Missing Csrf::verify/PU239_ROUTED coverage
+csrf,admin/over_forums.php,Missing Csrf::verify/PU239_ROUTED coverage
+csrf,admin/polls_manager.php,Missing Csrf::verify/PU239_ROUTED coverage
+csrf,admin/promo.php,Missing Csrf::verify/PU239_ROUTED coverage
+csrf,admin/reputation_settings.php,Missing Csrf::verify/PU239_ROUTED coverage
+csrf,admin/reset.php,Missing Csrf::verify/PU239_ROUTED coverage
+csrf,admin/site_settings.php,Missing Csrf::verify/PU239_ROUTED coverage
+csrf,admin/sysoplog.php,Missing Csrf::verify/PU239_ROUTED coverage
+csrf,admin/themes.php,Missing Csrf::verify/PU239_ROUTED coverage
+csrf,admin/traceroute.php,Missing Csrf::verify/PU239_ROUTED coverage
+csrf,admin/trivia_config.php,Missing Csrf::verify/PU239_ROUTED coverage
+csrf,admin/upgrade_database.php,Missing Csrf::verify/PU239_ROUTED coverage
+csrf,admin/uploadapps.php,Missing Csrf::verify/PU239_ROUTED coverage
+csrf,admin/usersearch.php,Missing Csrf::verify/PU239_ROUTED coverage
+csrf,admin/watched_users.php,Missing Csrf::verify/PU239_ROUTED coverage
+csrf,public/ajax/autocomplete.php,Missing Csrf::verify/PU239_ROUTED coverage
+csrf,public/ajax/bookmarks.php,Missing Csrf::verify/PU239_ROUTED coverage
+csrf,public/ajax/checkport.php,Missing Csrf::verify/PU239_ROUTED coverage
+csrf,public/ajax/checkports.php,Missing Csrf::verify/PU239_ROUTED coverage
+csrf,public/ajax/cooker_notify.php,Missing Csrf::verify/PU239_ROUTED coverage
+csrf,public/ajax/descr_format.php,Missing Csrf::verify/PU239_ROUTED coverage
+csrf,public/ajax/ebook_lookup.php,Missing Csrf::verify/PU239_ROUTED coverage
+csrf,public/ajax/imdb_lookup.php,Missing Csrf::verify/PU239_ROUTED coverage
+csrf,public/ajax/isbn_lookup.php,Missing Csrf::verify/PU239_ROUTED coverage
+csrf,public/ajax/like.php,Missing Csrf::verify/PU239_ROUTED coverage
+csrf,public/ajax/member_input.php,Missing Csrf::verify/PU239_ROUTED coverage
+csrf,public/ajax/offer_notify.php,Missing Csrf::verify/PU239_ROUTED coverage
+csrf,public/ajax/offer_status.php,Missing Csrf::verify/PU239_ROUTED coverage
+csrf,public/ajax/offer_vote.php,Missing Csrf::verify/PU239_ROUTED coverage
+csrf,public/ajax/rating.php,Missing Csrf::verify/PU239_ROUTED coverage
+csrf,public/ajax/request_notify.php,Missing Csrf::verify/PU239_ROUTED coverage
+csrf,public/ajax/request_vote.php,Missing Csrf::verify/PU239_ROUTED coverage
+csrf,public/ajax/show_in_navbar.php,Missing Csrf::verify/PU239_ROUTED coverage
+csrf,public/ajax/staff_picks.php,Missing Csrf::verify/PU239_ROUTED coverage
+csrf,public/ajax/take_upload.php,Missing Csrf::verify/PU239_ROUTED coverage
+csrf,public/ajax/take_url_upload.php,Missing Csrf::verify/PU239_ROUTED coverage
+csrf,public/ajax/thanks.php,Missing Csrf::verify/PU239_ROUTED coverage
+csrf,public/ajax/torrents_lookup.php,Missing Csrf::verify/PU239_ROUTED coverage
+csrf,public/ajax/trivia_answers.php,Missing Csrf::verify/PU239_ROUTED coverage
+csrf,public/ajax/tvmaze_lookup.php,Missing Csrf::verify/PU239_ROUTED coverage
+csrf,public/ajax/usersearch.php,Missing Csrf::verify/PU239_ROUTED coverage
+csrf,public/index.legacy.php,Missing Csrf::verify/PU239_ROUTED coverage
+csrf,public/recover.php,Missing Csrf::verify/PU239_ROUTED coverage
+csrf,public/search.php,Missing Csrf::verify/PU239_ROUTED coverage
+csrf,public/signup.php,Missing Csrf::verify/PU239_ROUTED coverage
+csrf,public/subtitles.php,Missing Csrf::verify/PU239_ROUTED coverage
+csrf,public/tags.php,Missing Csrf::verify/PU239_ROUTED coverage
+csrf,public/upcoming.php,Missing Csrf::verify/PU239_ROUTED coverage
+csrf,public/uploadapp.php,Missing Csrf::verify/PU239_ROUTED coverage
+csrf,public/user_blocks.php,Missing Csrf::verify/PU239_ROUTED coverage
+escaping,admin/reputation_settings.php,Echo of admin HTML layout
+escaping,public/ajax/autocomplete.php,Echo of HTML template built with helper escaping
+escaping,public/ajax/thanks.php,Echo of $payload response (HTML string)
+escaping,public/allsmiles.php,Direct echo of variable output; verify escaping context
+escaping,public/download.php,Direct echo of $tor payload (binary response)
+escaping,public/rss.php,Direct echo of $rss feed output
+json,public/ajax/take_upload.php,exit(json_encode(...)) bypasses JsonOut middleware/error handler
+cookies,,No direct setcookie() usage detected
+ratelimit,admin/acpmanage.php,No rate limiter hook detected
+ratelimit,admin/adduser.php,No rate limiter hook detected
+ratelimit,admin/backup.php,No rate limiter hook detected
+ratelimit,admin/bannedemails.php,No rate limiter hook detected
+ratelimit,admin/block.settings.php,No rate limiter hook detected
+ratelimit,admin/bonusmanage.php,No rate limiter hook detected
+ratelimit,admin/categories.php,No rate limiter hook detected
+ratelimit,admin/cheaters.php,No rate limiter hook detected
+ratelimit,admin/class_config.php,No rate limiter hook detected
+ratelimit,admin/cleanup_manager.php,No rate limiter hook detected
+ratelimit,admin/cloudview.php,No rate limiter hook detected
+ratelimit,admin/datareset.php,No rate limiter hook detected
+ratelimit,admin/deathrow.php,No rate limiter hook detected
+ratelimit,admin/delacct.php,No rate limiter hook detected
+ratelimit,admin/edit_moods.php,No rate limiter hook detected
+ratelimit,admin/editlog.php,No rate limiter hook detected
+ratelimit,admin/findnotconnectable.php,No rate limiter hook detected
+ratelimit,admin/floodlimit.php,No rate limiter hook detected
+ratelimit,admin/forum_config.php,No rate limiter hook detected
+ratelimit,admin/forum_manage.php,No rate limiter hook detected
+ratelimit,admin/freeleech.php,No rate limiter hook detected
+ratelimit,admin/grouppm.php,No rate limiter hook detected
+ratelimit,admin/hit_and_run_settings.php,No rate limiter hook detected
+ratelimit,admin/hnrwarn.php,No rate limiter hook detected
+ratelimit,admin/invite_tree.php,No rate limiter hook detected
+ratelimit,admin/leechwarn.php,No rate limiter hook detected
+ratelimit,admin/log_viewer.php,No rate limiter hook detected
+ratelimit,admin/manage_images.php,No rate limiter hook detected
+ratelimit,admin/mass_bonus_for_members.php,No rate limiter hook detected
+ratelimit,admin/mega_search.php,No rate limiter hook detected
+ratelimit,admin/modded_torrents.php,No rate limiter hook detected
+ratelimit,admin/modtask.php,No rate limiter hook detected
+ratelimit,admin/news.php,No rate limiter hook detected
+ratelimit,admin/over_forums.php,No rate limiter hook detected
+ratelimit,admin/polls_manager.php,No rate limiter hook detected
+ratelimit,admin/promo.php,No rate limiter hook detected
+ratelimit,admin/reputation_settings.php,No rate limiter hook detected
+ratelimit,admin/reset.php,No rate limiter hook detected
+ratelimit,admin/site_settings.php,No rate limiter hook detected
+ratelimit,admin/sysoplog.php,No rate limiter hook detected
+ratelimit,admin/themes.php,No rate limiter hook detected
+ratelimit,admin/traceroute.php,No rate limiter hook detected
+ratelimit,admin/trivia_config.php,No rate limiter hook detected
+ratelimit,admin/upgrade_database.php,No rate limiter hook detected
+ratelimit,admin/uploadapps.php,No rate limiter hook detected
+ratelimit,admin/usersearch.php,No rate limiter hook detected
+ratelimit,admin/watched_users.php,No rate limiter hook detected
+ratelimit,public/ajax/autocomplete.php,No rate limiter hook detected
+ratelimit,public/ajax/bookmarks.php,No rate limiter hook detected
+ratelimit,public/ajax/checkport.php,No rate limiter hook detected
+ratelimit,public/ajax/checkports.php,No rate limiter hook detected
+ratelimit,public/ajax/cooker_notify.php,No rate limiter hook detected
+ratelimit,public/ajax/descr_format.php,No rate limiter hook detected
+ratelimit,public/ajax/ebook_lookup.php,No rate limiter hook detected
+ratelimit,public/ajax/imdb_lookup.php,No rate limiter hook detected
+ratelimit,public/ajax/isbn_lookup.php,No rate limiter hook detected
+ratelimit,public/ajax/like.php,No rate limiter hook detected
+ratelimit,public/ajax/member_input.php,No rate limiter hook detected
+ratelimit,public/ajax/offer_notify.php,No rate limiter hook detected
+ratelimit,public/ajax/offer_status.php,No rate limiter hook detected
+ratelimit,public/ajax/offer_vote.php,No rate limiter hook detected
+ratelimit,public/ajax/rating.php,No rate limiter hook detected
+ratelimit,public/ajax/request_notify.php,No rate limiter hook detected
+ratelimit,public/ajax/request_vote.php,No rate limiter hook detected
+ratelimit,public/ajax/show_in_navbar.php,No rate limiter hook detected
+ratelimit,public/ajax/staff_picks.php,No rate limiter hook detected
+ratelimit,public/ajax/take_upload.php,No rate limiter hook detected
+ratelimit,public/ajax/take_url_upload.php,No rate limiter hook detected
+ratelimit,public/ajax/thanks.php,No rate limiter hook detected
+ratelimit,public/ajax/torrents_lookup.php,No rate limiter hook detected
+ratelimit,public/ajax/trivia_answers.php,No rate limiter hook detected
+ratelimit,public/ajax/tvmaze_lookup.php,No rate limiter hook detected
+ratelimit,public/ajax/usersearch.php,No rate limiter hook detected
+ratelimit,public/index.legacy.php,No rate limiter hook detected
+ratelimit,public/recover.php,No rate limiter hook detected
+ratelimit,public/search.php,No rate limiter hook detected
+ratelimit,public/subtitles.php,No rate limiter hook detected
+ratelimit,public/tags.php,No rate limiter hook detected
+ratelimit,public/upcoming.php,No rate limiter hook detected
+ratelimit,public/uploadapp.php,No rate limiter hook detected
+ratelimit,public/user_blocks.php,No rate limiter hook detected
+upload,,All upload entry points use UploadGuard::store
+https,public/index.php,public/index.php pipeline includes ForceHttps and Hsts middleware (duplicate use statements observed)
+frontcontroller,public/index.php,public/index.php assigns middleware to $pipeline but invokes $pipe->handle($router); variable mismatch leaves pipeline unused
+frontcontroller,public/index.php,Duplicate use statements for ForceHttps and Hsts in public/index.php
+passwords,,"Argon2id hashing via PasswordHasher::hash used in admin/adduser.php, admin/reset.php, public/signup.php, public/recover.php"
+passwords,,Legacy md5 token usage remains in public/bitbucket.php and public/ajax/take_url_upload.php (non-password context)
+conflicts,admin/adduser.php,admin/adduser.php contains non-standard merge marker strings (<<<<<< codex/...) requiring manual review
+legacy_config,,No legacy site_config constants detected

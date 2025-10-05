@@ -1,1 +1,2 @@
 public/index.php: ForceHttps and Hsts middleware wired
+public/index.php pipeline includes ForceHttps and Hsts middleware (duplicate use statements observed)

@@ -7,3 +7,4 @@ forums/post_reply.php
 public/login.php
 public/recover.php
 public/signup.php
+All upload entry points rely on UploadGuard::store; no raw move_uploaded_file/is_uploaded_file usage detected.

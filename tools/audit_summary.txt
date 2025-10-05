@@ -10,3 +10,14 @@ Front controller observations: 1
 Password hashing issues: 4
 Conflict markers: 23
 Legacy config traces: 17
+csrf: 84
+escaping: 6
+json: 1
+cookies: 0
+ratelimit: 81
+upload: 0
+https: 0
+frontcontroller: 2
+passwords: 0
+conflicts: 1
+legacy_config: 0

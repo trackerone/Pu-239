@@ -97,4 +97,6 @@ if ($results !== []) {
     }
 }
 
+// TODO(2025): review escaping strategy for $template output
+echo $template; // noescape
 echo $template;

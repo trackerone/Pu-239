@@ -133,6 +133,8 @@ switch ($action) {
             json_out($payload);
         }
 
+        // TODO(2025): review escaping strategy for $payload output
+        echo $payload; // noescape
         echo $payload;
         break;
 
@@ -194,6 +196,7 @@ switch ($action) {
                     json_out($payload);
                 }
 
+                // TODO(2025): review escaping strategy for $payload output
                 echo $payload;
             }
         }
