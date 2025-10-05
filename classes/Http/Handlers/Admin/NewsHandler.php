@@ -2,6 +2,8 @@
 declare(strict_types=1);
 
 // AUTO_CONVERT_ATTEMPTED: 2025-10-05 via handler-convert (batch=8)
+// AUTO_CONVERT_ATTEMPTED: 2025-10-05 via handler-convert (batch=7)
+// Generated: STUB_UPGRADED
 
 namespace PU239\Http\Handlers\Admin;
 
@@ -307,6 +309,21 @@ final class NewsHandler
                         $class
                     );
                 }
+        // STUB_UPGRADED: safe buffered execution
+        // TODO(2025): extract legacy block from admin/news.php:1-320 (multi-mode controller + cache/session side-effects)
+        $target = __DIR__ . '/../../../../admin/news.php';
+        if (!is_file($target)) {
+            error_log(sprintf('STUB MISSING: %s requires %s', __FILE__, $target));
+            http_response_code(500);
+            echo 'Service temporarily unavailable';
+            return;
+        }
+        $out = (static function (string $file): string {
+            ob_start();
+            try {
+                require $file;
+            } catch (\Throwable $e) {
+                error_log('Legacy stub error: ' . $e->getMessage());
             }
 
             $title = _('News Manager');
