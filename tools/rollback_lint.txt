@@ -1,0 +1,125 @@
+
+Parse error: syntax error, unexpected token ";", expecting "]" in public/index.php on line 40
+Errors parsing public/index.php
+
+Parse error: syntax error, unexpected token "private" in classes/Http/Router.php on line 15
+Errors parsing classes/Http/Router.php
+No syntax errors detected in classes/Http/MiddlewarePipeline.php
+No syntax errors detected in classes/Http/Middlewares/AuthZGate.php
+
+Parse error: syntax error, unexpected token "public", expecting ";" or "{" in classes/Http/Middlewares/CsrfGate.php on line 11
+Errors parsing classes/Http/Middlewares/CsrfGate.php
+No syntax errors detected in classes/Http/Middlewares/JsonOut.php
+
+Parse error: syntax error, unexpected token "public" in classes/Http/Middlewares/RateLimitPost.php on line 16
+Errors parsing classes/Http/Middlewares/RateLimitPost.php
+
+Parse error: syntax error, unexpected token "public" in classes/Http/Middlewares/SecurityHeaders.php on line 10
+Errors parsing classes/Http/Middlewares/SecurityHeaders.php
+No syntax errors detected in classes/Http/Handlers/Admin/ClassPromoHandler.php
+No syntax errors detected in classes/Http/Handlers/Admin/CommentsHandler.php
+No syntax errors detected in classes/Http/Handlers/Admin/NamechangerHandler.php
+No syntax errors detected in classes/Http/Handlers/Admin/ReportsHandler.php
+No syntax errors detected in classes/Http/Handlers/Admin/ReputationAdHandler.php
+No syntax errors detected in classes/Http/Handlers/Admin/ShitListHandler.php
+No syntax errors detected in classes/Http/Handlers/Admin/SitelogHandler.php
+No syntax errors detected in classes/Http/Handlers/Admin/SystemViewHandler.php
+No syntax errors detected in classes/Http/Handlers/Admin/WarnHandler.php
+
+Parse error: syntax error, unexpected token "public", expecting ";" or "{" in classes/Http/Handlers/HomeHandler.php on line 9
+Errors parsing classes/Http/Handlers/HomeHandler.php
+No syntax errors detected in classes/Http/Handlers/PublicSite/AchievementbonusHandler.php
+No syntax errors detected in classes/Http/Handlers/PublicSite/AchievementhistoryHandler.php
+No syntax errors detected in classes/Http/Handlers/PublicSite/AchievementlistHandler.php
+No syntax errors detected in classes/Http/Handlers/PublicSite/AjaxchatHandler.php
+No syntax errors detected in classes/Http/Handlers/PublicSite/AllsmilesHandler.php
+No syntax errors detected in classes/Http/Handlers/PublicSite/AnatomyHandler.php
+No syntax errors detected in classes/Http/Handlers/PublicSite/AnnouncementHandler.php
+No syntax errors detected in classes/Http/Handlers/PublicSite/ArcadeHandler.php
+No syntax errors detected in classes/Http/Handlers/PublicSite/ArcadeTopScoresHandler.php
+No syntax errors detected in classes/Http/Handlers/PublicSite/BitbucketHandler.php
+No syntax errors detected in classes/Http/Handlers/PublicSite/BjstatsHandler.php
+No syntax errors detected in classes/Http/Handlers/PublicSite/BlackjackHandler.php
+No syntax errors detected in classes/Http/Handlers/PublicSite/BookmarksHandler.php
+No syntax errors detected in classes/Http/Handlers/PublicSite/BotTriggersHandler.php
+No syntax errors detected in classes/Http/Handlers/PublicSite/BrowseHandler.php
+No syntax errors detected in classes/Http/Handlers/PublicSite/BugsHandler.php
+No syntax errors detected in classes/Http/Handlers/PublicSite/CasinoHandler.php
+No syntax errors detected in classes/Http/Handlers/PublicSite/CatalogHandler.php
+No syntax errors detected in classes/Http/Handlers/PublicSite/CategoryidsHandler.php
+No syntax errors detected in classes/Http/Handlers/PublicSite/ChatHandler.php
+No syntax errors detected in classes/Http/Handlers/PublicSite/ClearAnnouncementHandler.php
+No syntax errors detected in classes/Http/Handlers/PublicSite/CoinsHandler.php
+No syntax errors detected in classes/Http/Handlers/PublicSite/CommentHandler.php
+No syntax errors detected in classes/Http/Handlers/PublicSite/ContactstaffHandler.php
+No syntax errors detected in classes/Http/Handlers/PublicSite/CreditsHandler.php
+No syntax errors detected in classes/Http/Handlers/PublicSite/DeleteHandler.php
+No syntax errors detected in classes/Http/Handlers/PublicSite/DetailsHandler.php
+No syntax errors detected in classes/Http/Handlers/PublicSite/DownloadHandler.php
+No syntax errors detected in classes/Http/Handlers/PublicSite/DownloadMultiHandler.php
+No syntax errors detected in classes/Http/Handlers/PublicSite/DownloadsubHandler.php
+No syntax errors detected in classes/Http/Handlers/PublicSite/EditHandler.php
+No syntax errors detected in classes/Http/Handlers/PublicSite/FaqHandler.php
+No syntax errors detected in classes/Http/Handlers/PublicSite/FastdeleteHandler.php
+No syntax errors detected in classes/Http/Handlers/PublicSite/FilelistHandler.php
+No syntax errors detected in classes/Http/Handlers/PublicSite/FlashHandler.php
+No syntax errors detected in classes/Http/Handlers/PublicSite/ForumsHandler.php
+No syntax errors detected in classes/Http/Handlers/PublicSite/FriendsHandler.php
+No syntax errors detected in classes/Http/Handlers/PublicSite/GamesHandler.php
+No syntax errors detected in classes/Http/Handlers/PublicSite/GetrssHandler.php
+No syntax errors detected in classes/Http/Handlers/PublicSite/GiftHandler.php
+No syntax errors detected in classes/Http/Handlers/PublicSite/HappylogHandler.php
+No syntax errors detected in classes/Http/Handlers/PublicSite/HnrsHandler.php
+No syntax errors detected in classes/Http/Handlers/PublicSite/ImgHandler.php
+No syntax errors detected in classes/Http/Handlers/PublicSite/InviteHandler.php
+No syntax errors detected in classes/Http/Handlers/PublicSite/LoginHandler.php
+No syntax errors detected in classes/Http/Handlers/PublicSite/LogoutHandler.php
+No syntax errors detected in classes/Http/Handlers/PublicSite/LotteryHandler.php
+No syntax errors detected in classes/Http/Handlers/PublicSite/MessagesHandler.php
+No syntax errors detected in classes/Http/Handlers/PublicSite/MoviesHandler.php
+No syntax errors detected in classes/Http/Handlers/PublicSite/MybonusHandler.php
+No syntax errors detected in classes/Http/Handlers/PublicSite/MytorrentsHandler.php
+No syntax errors detected in classes/Http/Handlers/PublicSite/NeedseedHandler.php
+No syntax errors detected in classes/Http/Handlers/PublicSite/NewAnnouncementHandler.php
+No syntax errors detected in classes/Http/Handlers/PublicSite/OffersHandler.php
+No syntax errors detected in classes/Http/Handlers/PublicSite/PeerlistHandler.php
+No syntax errors detected in classes/Http/Handlers/PublicSite/PollsTakeVoteHandler.php
+No syntax errors detected in classes/Http/Handlers/PublicSite/PortCheckHandler.php
+No syntax errors detected in classes/Http/Handlers/PublicSite/RecoverHandler.php
+No syntax errors detected in classes/Http/Handlers/PublicSite/ReportHandler.php
+No syntax errors detected in classes/Http/Handlers/PublicSite/ReputationHandler.php
+No syntax errors detected in classes/Http/Handlers/PublicSite/RequestsHandler.php
+No syntax errors detected in classes/Http/Handlers/PublicSite/RestoreclassHandler.php
+No syntax errors detected in classes/Http/Handlers/PublicSite/RssHandler.php
+No syntax errors detected in classes/Http/Handlers/PublicSite/RssPdoDemoHandler.php
+No syntax errors detected in classes/Http/Handlers/PublicSite/RsstfreakHandler.php
+No syntax errors detected in classes/Http/Handlers/PublicSite/RulesHandler.php
+No syntax errors detected in classes/Http/Handlers/PublicSite/StaffboxHandler.php
+No syntax errors detected in classes/Http/Handlers/PublicSite/TakeThemeHandler.php
+No syntax errors detected in classes/Http/Handlers/PublicSite/TakeeditHandler.php
+No syntax errors detected in classes/Http/Handlers/PublicSite/TakeeditcpHandler.php
+No syntax errors detected in classes/Http/Handlers/PublicSite/TakereseedHandler.php
+No syntax errors detected in classes/Http/Handlers/PublicSite/TakethankyouHandler.php
+No syntax errors detected in classes/Http/Handlers/PublicSite/TakeuploadHandler.php
+No syntax errors detected in classes/Http/Handlers/PublicSite/TenpercentHandler.php
+No syntax errors detected in classes/Http/Handlers/PublicSite/TmoviesHandler.php
+No syntax errors detected in classes/Http/Handlers/PublicSite/TopmoodsHandler.php
+No syntax errors detected in classes/Http/Handlers/PublicSite/ToptenHandler.php
+No syntax errors detected in classes/Http/Handlers/PublicSite/TriviaResultsHandler.php
+No syntax errors detected in classes/Http/Handlers/PublicSite/TvshowsHandler.php
+No syntax errors detected in classes/Http/Handlers/PublicSite/UserUnlocksHandler.php
+No syntax errors detected in classes/Http/Handlers/PublicSite/UseragreementHandler.php
+No syntax errors detected in classes/Http/Handlers/PublicSite/UsercommentHandler.php
+No syntax errors detected in classes/Http/Handlers/PublicSite/UsercpHandler.php
+No syntax errors detected in classes/Http/Handlers/PublicSite/UserdetailsHandler.php
+No syntax errors detected in classes/Http/Handlers/PublicSite/UserhistoryHandler.php
+No syntax errors detected in classes/Http/Handlers/PublicSite/UsermoodHandler.php
+No syntax errors detected in classes/Http/Handlers/PublicSite/UsersHandler.php
+No syntax errors detected in classes/Http/Handlers/PublicSite/VerifyEmailHandler.php
+No syntax errors detected in classes/Http/Handlers/PublicSite/VerifyHandler.php
+No syntax errors detected in classes/Http/Handlers/PublicSite/VideoformatsHandler.php
+No syntax errors detected in classes/Http/Handlers/PublicSite/ViewAnnounceHistoryHandler.php
+No syntax errors detected in classes/Http/Handlers/PublicSite/ViewSqlHandler.php
+No syntax errors detected in classes/Http/Handlers/PublicSite/ViewnfoHandler.php
+No syntax errors detected in classes/Http/Handlers/PublicSite/WikiHandler.php
+No syntax errors detected in classes/Http/Handlers/Staffpanel/IndexHandler.php
