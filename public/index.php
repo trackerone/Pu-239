@@ -6,6 +6,8 @@ require_once __DIR__ . '/../bootstrap_web.php';
 use PU239\Http\Handlers\HomeHandler;
 use PU239\Http\MiddlewarePipeline;
 use PU239\Http\Middlewares\CsrfGate;
+use PU239\Http\Middlewares\ForceHttps;
+use PU239\Http\Middlewares\Hsts;
 use PU239\Http\MiddlewarePipeline;
 use PU239\Http\Middlewares\AuthZGate;
 use PU239\Http\Handlers\Admin\NamechangerHandler;
@@ -33,7 +35,16 @@ if (!defined('PU239_ROUTED')) {
 
 $router = new Router();
 $pipe   = new MiddlewarePipeline([
+    new ForceHttps(),
+    new Hsts(),
+    new SecurityHeaders(),
+    new RateLimitPost(10, 60),
+    new CsrfGate(),
+]);
+
 $pipeline = new MiddlewarePipeline([
+    new ForceHttps(),
+    new Hsts(),
     new SecurityHeaders(),
     new RateLimitPost(10, 60),
     new CsrfGate(),
