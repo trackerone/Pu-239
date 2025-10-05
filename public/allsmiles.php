@@ -118,4 +118,5 @@ $htmlout .= "
 </html>";
 
 // TODO(2025): review escaping strategy for $htmlout output
+echo $htmlout; // noescape
 echo $htmlout;

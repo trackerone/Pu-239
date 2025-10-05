@@ -151,13 +151,7 @@ $router->get('/rss_pdo_demo.php', \PU239\Http\Handlers\PublicSite\RssPdoDemoHand
 $router->get('/rsstfreak.php', \PU239\Http\Handlers\PublicSite\RsstfreakHandler::class);
 $router->get('/rules.php', \PU239\Http\Handlers\PublicSite\RulesHandler::class);
 
-$pipe->handle($router);
-
 // Legacy HTTP front controller marker
-
-
-
-
 
 // Admin/staff (with AuthZGate metadata)
 $router->get('/admin/namechanger.php', \PU239\Http\Handlers\Admin\NamechangerHandler::class, ['authz' => new AuthZGate('admin')]);

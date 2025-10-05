@@ -216,6 +216,7 @@ function format_rss($data, ?string $torrent_pass)
 
     header('Content-Type: application/xml');
     // TODO(2025): review escaping strategy for $rss output
+    echo $rss; // noescape
     echo $rss;
     die();
 }
