@@ -35,7 +35,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         'keys' => $changedKeys,
     ]);
     rep_cache();
-app_halt('Exit called');
+    app_halt('Exit called');
 }
 
 function rep_cache()
