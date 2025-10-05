@@ -19,3 +19,8 @@ classes/Http/Handlers/Admin/DonationsHandler.php,true,0,Extracted from admin/don
 classes/Http/Handlers/Admin/DoubleusersHandler.php,true,0,Extracted from admin/doubleusers.php
 classes/Http/Handlers/Admin/EditMoodsHandler.php,true,0,Extracted from admin/edit_moods.php
 classes/Http/Handlers/Admin/EditlogHandler.php,true,1,Extracted from admin/editlog.php
+classes/Http/Handlers/Admin/FreeleechHandler.php,true,1,Extracted from admin/freeleech.php
+classes/Http/Handlers/Admin/FreeusersHandler.php,true,0,Extracted from admin/freeusers.php
+classes/Http/Handlers/Admin/GrouppmHandler.php,true,1,Extracted from admin/grouppm.php
+classes/Http/Handlers/Admin/HitAndRunHandler.php,true,0,Extracted from admin/hit_and_run.php
+classes/Http/Handlers/Admin/HitAndRunSettingsHandler.php,true,1,Extracted from admin/hit_and_run_settings.php
