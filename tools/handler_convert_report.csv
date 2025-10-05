@@ -1,0 +1,6 @@
+file,converted,todos,notes
+classes/Http/Handlers/Admin/OpHandler.php,true,0,Extracted from admin/op.php
+classes/Http/Handlers/Admin/BannedemailsHandler.php,true,1,Extracted from admin/bannedemails.php
+classes/Http/Handlers/Admin/UserHitsHandler.php,true,0,Extracted from admin/user_hits.php
+classes/Http/Handlers/Admin/GoaccessHandler.php,true,0,Extracted from admin/goaccess.php
+classes/Http/Handlers/Admin/TracerouteHandler.php,true,0,Extracted from admin/traceroute.php
