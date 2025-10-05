@@ -10,6 +10,7 @@ final class Hsts
     }
 
     public function process(callable $next)
+    public function process(callable $next): void
     {
         if (!headers_sent()) {
             $header = 'Strict-Transport-Security: max-age=' . $this->maxAge;
@@ -21,5 +22,6 @@ final class Hsts
         }
 
         return $next();
+        $next();
     }
 }
