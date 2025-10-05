@@ -23,7 +23,7 @@ final class AchievementlistHandler
             try {
                 require $file;
             } catch (\Throwable $e) {
-                error_log('Legacy stub error: ' . $e->getMessage());
+                error_log(sprintf('Legacy stub error (%s): %s', $file, $e->getMessage()));
             }
             return (string) ob_get_clean();
         })($target);
