@@ -1,0 +1,1 @@
+public/ajax/take_upload.php - exit(json_encode(...)) bypasses JsonOut middleware/error handler
