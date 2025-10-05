@@ -32,5 +32,3 @@ final class AuthZGate
         return $next();
     }
 }
-
-// >>>>>> PU239:http-mw-5

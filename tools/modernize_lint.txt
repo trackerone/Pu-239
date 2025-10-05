@@ -293,3 +293,43 @@ No syntax errors detected in public/rss.php
 No syntax errors detected in public/rss_pdo_demo.php
 No syntax errors detected in public/rsstfreak.php
 No syntax errors detected in public/rules.php
+No syntax errors detected in public/index.php
+No syntax errors detected in classes/Http/Router.php
+No syntax errors detected in classes/Http/MiddlewarePipeline.php
+No syntax errors detected in classes/Http/Middlewares/SecurityHeaders.php
+No syntax errors detected in classes/Http/Middlewares/CsrfGate.php
+No syntax errors detected in classes/Http/Middlewares/RateLimitPost.php
+No syntax errors detected in classes/Http/Handlers/HomeHandler.php
+No syntax errors detected in public/index.php
+No syntax errors detected in classes/Http/Router.php
+No syntax errors detected in classes/Http/MiddlewarePipeline.php
+No syntax errors detected in classes/Http/Middlewares/SecurityHeaders.php
+No syntax errors detected in classes/Http/Middlewares/CsrfGate.php
+No syntax errors detected in classes/Http/Middlewares/RateLimitPost.php
+No syntax errors detected in classes/Http/Handlers/HomeHandler.php
+No syntax errors detected in public/index.php
+No syntax errors detected in classes/Http/Router.php
+No syntax errors detected in classes/Http/MiddlewarePipeline.php
+No syntax errors detected in classes/Http/Middlewares/SecurityHeaders.php
+No syntax errors detected in classes/Http/Middlewares/CsrfGate.php
+No syntax errors detected in classes/Http/Middlewares/RateLimitPost.php
+
+Parse error: syntax error, unexpected token "require", expecting identifier or fully qualified name or namespaced name in classes/Http/Handlers/HomeHandler.php on line 11
+Errors parsing classes/Http/Handlers/HomeHandler.php
+No syntax errors detected in classes/Http/Handlers/HomeHandler.php
+No syntax errors detected in public/index.php
+No syntax errors detected in classes/Http/Router.php
+No syntax errors detected in classes/Http/MiddlewarePipeline.php
+No syntax errors detected in classes/Http/Middlewares/SecurityHeaders.php
+No syntax errors detected in classes/Http/Middlewares/CsrfGate.php
+No syntax errors detected in classes/Http/Middlewares/RateLimitPost.php
+No syntax errors detected in classes/Http/Middlewares/AuthZGate.php
+No syntax errors detected in classes/Http/Handlers/HomeHandler.php
+No syntax errors detected in classes/Http/Handlers/PublicSite/ArcadeHandler.php
+No syntax errors detected in classes/Http/Handlers/PublicSite/BugsHandler.php
+No syntax errors detected in classes/Http/Handlers/PublicSite/ContactstaffHandler.php
+No syntax errors detected in classes/Http/Handlers/PublicSite/LoginHandler.php
+No syntax errors detected in classes/Http/Handlers/PublicSite/PollsTakeVoteHandler.php
+No syntax errors detected in classes/Http/Handlers/PublicSite/StaffboxHandler.php
+No syntax errors detected in classes/Http/Handlers/PublicSite/TakeThemeHandler.php
+No syntax errors detected in classes/Http/Handlers/PublicSite/UserUnlocksHandler.php
