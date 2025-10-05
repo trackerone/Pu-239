@@ -22,6 +22,8 @@ require_once CLASS_DIR . 'class.bencdec.php';
 global $container, $site_config;
 $db = $container->get(Database::class);
 
+$s = $s ?? static fn($v) => htmlspecialchars((string) $v, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
+
 $users_class = $container->get(User::class);
 // $fluent removed — use $this->db (ExtendedPdo)
 $torrent_class = $container->get(Torrent::class);

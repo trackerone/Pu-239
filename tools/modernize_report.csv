@@ -258,3 +258,6 @@ classes/Http/Handlers/PublicSite/PollsTakeVoteHandler.php,handler,scrubbed revie
 classes/Http/Handlers/PublicSite/StaffboxHandler.php,handler,scrubbed review marker while keeping legacy require
 classes/Http/Handlers/PublicSite/TakeThemeHandler.php,handler,scrubbed review marker while keeping legacy require
 classes/Http/Handlers/PublicSite/UserUnlocksHandler.php,handler,scrubbed review marker while keeping legacy require
+public/allsmiles.php,true,0,0,helper injected
+public/download.php,true,0,0,helper injected
+public/rss.php,true,0,0,helper injected
