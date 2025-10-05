@@ -1,1 +1,24 @@
+admin/acpmanage.php
+admin/adduser.php
+admin/allagents.php
+admin/backup.php
+admin/banclient.php
+admin/bonusmanage.php
+admin/categories.php
+admin/ipsearch.php
+admin/leechwarn.php
+admin/load.php
+admin/log_viewer.php
+admin/manage_images.php
+admin/reset.php
+admin/site_settings.php
+bin/update_db.php
+classes/Security/AuthZ.php
+classes/Support/Audit.php
+forums/poll.php
+public/ajax/ajax_tooltips.php
+public/recover.php
+public/setclass.php
+public/signup.php
+public/user_blocks.php
 admin/adduser.php contains non-standard merge marker strings (<<<<<< codex/...) requiring manual review

@@ -1,1 +1,10 @@
+admin/adduser.php
+classes/Security/UploadGuard.php
+forums/attachment.php
+forums/edit_post.php
+forums/new_topic.php
+forums/post_reply.php
+public/login.php
+public/recover.php
+public/signup.php
 All upload entry points rely on UploadGuard::store; no raw move_uploaded_file/is_uploaded_file usage detected.
