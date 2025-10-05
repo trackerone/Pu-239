@@ -254,6 +254,7 @@ function redirect($url, $text, $time = 2)
     </div>
 </body>
 </html>';
+    // TODO(2025): review escaping strategy for $html output
     echo $html;
 app_halt('Exit called');
 }
