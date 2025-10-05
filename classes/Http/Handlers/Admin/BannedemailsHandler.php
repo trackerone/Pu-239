@@ -1,35 +1,152 @@
 <?php
 declare(strict_types=1);
 
-// Generated: STUB_UPGRADED
-
 namespace PU239\Http\Handlers\Admin;
+
+use PU239\Config\ConfigRepository;
+use PU239\Security\AuthZ;
+use PU239\Support\Audit;
+use Pu239\Database;
 
 final class BannedemailsHandler
 {
-    /** @param array<string,mixed> $meta */
+    /**
+     * @param array<string, mixed> $meta
+     */
     public function handle(array $meta = []): void
     {
-        // STUB_UPGRADED: safe buffered execution
-        $target = __DIR__ . '/../../../../admin/bannedemails.php';
-        if (!is_file($target)) {
-            error_log(sprintf('STUB MISSING: %s requires %s', __FILE__, $target));
-            http_response_code(500);
-            echo 'Service temporarily unavailable';
-            return;
-        }
-        $out = (static function (string $file): string {
-            ob_start();
-            try {
-                require $file;
-            } catch (\Throwable $e) {
-                error_log('Legacy stub error: ' . $e->getMessage());
-            }
-            return (string) ob_get_clean();
-        })($target);
+        // AUTO_CONVERT_ATTEMPTED: 2025-10-05T17:02:40Z via codex handler conversion
+        try {
+            global $container, $CURUSER;
 
-        // Optional: allow middleware or further processing here
-        echo $out;
-    
+            if (strpos(ADMIN_DIR, '/admin/') !== false) {
+                AuthZ::requireRole('admin');
+            } else {
+                AuthZ::requireAnyRole(['staff', 'admin']);
+            }
+
+            /** @var ConfigRepository $config */
+            $config = $container->get(ConfigRepository::class);
+
+            /** @var Database $db */
+            $db = $container->get(Database::class);
+            $fluent = $db;
+            $s = static fn(mixed $v): string => htmlspecialchars((string) $v, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
+            $self = $s($_SERVER['PHP_SELF'] ?? '');
+            $baseurl = $s((string) $config->get('paths.baseurl'));
+
+            $class = get_access(basename($_SERVER['REQUEST_URI'] ?? ''));
+            class_check($class);
+
+            $HTMLOUT = '';
+            $remove = isset($_GET['remove']) ? (int) $_GET['remove'] : 0;
+            if (is_valid_id($remove)) {
+                $db->run('DELETE FROM bannedemails WHERE id = :id', [':id' => $remove]);
+                write_log(_fe('Email ban {0} was removed by {1}', $remove, $CURUSER['username']));
+                Audit::log($CURUSER['id'] ?? null, 'user.unban', ['target' => $remove, 'type' => 'email']);
+            }
+
+            if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+                // TODO(2025): csrf
+                $email = htmlsafechars($_POST['email'] ?? '');
+                $comment = htmlsafechars($_POST['comment'] ?? '');
+                if ($email === '' || $comment === '') {
+                    stderr(_('Error'), _('Missing Form Data.'));
+                }
+
+                $db->run(
+                    'INSERT INTO bannedemails (added, addedby, comment, email) VALUES (:added, :addedby, :comment, :email)',
+                    [
+                        ':added' => TIME_NOW,
+                        ':addedby' => $CURUSER['id'],
+                        ':comment' => $comment,
+                        ':email' => $email,
+                    ],
+                );
+                Audit::log($CURUSER['id'] ?? null, 'user.ban', ['target' => $email, 'type' => 'email']);
+                header('Location: ' . ($_SERVER['PHP_SELF'] ?? '') . '?tool=bannedemails');
+                app_halt('Exit called');
+            }
+
+            $HTMLOUT .= "
+                <h1 class='has-text-centered'>" . _('Add Ban') . "</h1>
+                <form method='post' action='staffpanel.php?tool=bannedemails' enctype='multipart/form-data' accept-charset='utf-8'>";
+            $body = "
+                    <tr>
+                        <td class='rowhead'>" . _('Email') . "</td>
+                        <td><input type='text' name='email' size='40'></td></tr>
+                        <tr><td class='rowhead has-text-left'>" . _('Comment') . "</td>
+                        <td><input type='text' name='comment' size='40'></td>
+                    </tr>
+                    <tr>
+                        <td colspan='2'>" . _('Use *@email.com as wildcard for domain.') . "</td>
+                    </tr>
+                    <tr>
+                        <td colspan='2' class='has-text-centered'>
+                            <input type='submit' value='" . _('Ok') . "' class='button is-small'>
+                        </td>
+                    </tr>";
+            $HTMLOUT .= main_table($body) . '
+                </form>';
+
+            $count1 = $fluent->from('bannedemails')
+                             ->select(null)
+                             ->select('COUNT(id) AS count')
+                             ->fetch('count');
+            $perpage = 15;
+            $pager = pager($perpage, $count1, 'staffpanel.php?tool=bannedemails&amp;');
+            $rows = $db->fetchAll(
+                'SELECT b.id, b.added, b.addedby, b.comment, b.email, u.username FROM bannedemails AS b LEFT JOIN users AS u ON b.addedby = u.id ORDER BY added DESC ' . $pager['limit'],
+            );
+
+            $HTMLOUT .= "<h1 class='has-text-centered'>" . _('Current Banned Emails') . '</h1>';
+            if ($count1 > $perpage) {
+                $HTMLOUT .= $pager['pagertop'];
+            }
+
+            if (empty($rows)) {
+                $HTMLOUT .= stdmsg('Sorry', '<p><b>' . _('Nothing Found!') . '</b></p>');
+            } else {
+                $heading = '
+                        <tr>
+                            <th>' . _('Added') . '</th>
+                            <th>' . _('Email') . '</th>
+                            <th>' . _('By') . '</th>
+                            <th>' . _('Comment') . '</th>
+                            <th>' . _('Remove?') . '</th>
+                        </tr>';
+                $body = '';
+                foreach ($rows as $arr) {
+                    $addedOn = $s(get_date((int) $arr['added'], ''));
+                    $emailText = $s($arr['email']);
+                    $commentText = $s($arr['comment']);
+                    $idText = $s((string) $arr['id']);
+                    $body .= "
+                        <tr>
+                            <td>{$addedOn}</td>
+                            <td>{$emailText}</td>
+                            <td>" . format_username((int) $arr['addedby']) . "</td>
+                            <td>{$commentText}</td>
+                            <td><a href='staffpanel.php?tool=bannedemails&amp;remove={$idText}'>" . _('Remove it') . "</a></td>
+                        </tr>";
+                }
+                $HTMLOUT .= main_table($body, $heading);
+            }
+
+            if ($count1 > $perpage) {
+                $HTMLOUT .= $pager['pagerbottom'];
+            }
+
+            $title = _('Banned Emails');
+            $breadcrumbs = [
+                "<a href='{$baseurl}/staffpanel.php'>" . _('Staff Panel') . '</a>',
+                "<a href='{$self}'>" . $s($title) . '</a>',
+            ];
+            echo stdhead($title, [], 'page-wrapper', $breadcrumbs) . wrapper($HTMLOUT) . stdfoot();
+        } catch (\Throwable $e) {
+            error_log('Converted handler error: ' . $e->getMessage());
+            http_response_code(500);
+            echo 'Internal error';
+        }
     }
 }

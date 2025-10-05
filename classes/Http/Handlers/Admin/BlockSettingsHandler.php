@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-// Generated: STUB_UPGRADED
+// AUTO_CONVERT_ATTEMPTED: 2025-10-05T17:02:40Z via codex handler conversion
 
 namespace PU239\Http\Handlers\Admin;
 
@@ -21,6 +21,7 @@ final class BlockSettingsHandler
         $out = (static function (string $file): string {
             ob_start();
             try {
+                // TODO(2025): extract legacy block for manual conversion from admin/block.settings.php:1-200
                 require $file;
             } catch (\Throwable $e) {
                 error_log('Legacy stub error: ' . $e->getMessage());
