@@ -32,5 +32,8 @@ classes/Http/Handlers/Admin/IphistoryHandler.php,true,0,Extracted from admin/iph
 classes/Http/Handlers/Admin/MysqlOverviewHandler.php,false,1,TODO(2025) manual extraction required admin/mysql_overview.php:1-200
 classes/Http/Handlers/Admin/MysqlStatsHandler.php,false,1,TODO(2025) manual extraction required admin/mysql_stats.php:1-400
 classes/Http/Handlers/Admin/NamechangerHandler.php,false,1,TODO(2025) manual extraction required admin/namechanger.php:1-40
+classes/Http/Handlers/Admin/NewsHandler.php,true,0,Extracted from admin/news.php
+classes/Http/Handlers/Admin/OverForumsHandler.php,true,0,Extracted from admin/over_forums.php
+classes/Http/Handlers/Admin/ReferrersHandler.php,true,0,Extracted from admin/referrers.php
 classes/Http/Handlers/Admin/NewsHandler.php,false,1,TODO(2025) manual extraction required admin/news.php:1-320
 classes/Http/Handlers/Admin/OverForumsHandler.php,false,1,TODO(2025) manual extraction required admin/over_forums.php:1-260

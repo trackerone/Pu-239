@@ -733,6 +733,19 @@ No matches.
 - Legacy patterns detected: `mysqli`, `sql_query`, `sqlesc`, and Fluent placeholders captured in the manifest for future remediation.
 - Verification: `find cleanup -name '*.php'` → no active PHP scripts; `_quarantine/cleanup` holds the full backlog awaiting manual rebuild.
 
+## classes/Http/Handlers/Admin (batch 35-37)
+- Files changed: 3 (`classes/Http/Handlers/Admin/NewsHandler.php`, `classes/Http/Handlers/Admin/OverForumsHandler.php`, `classes/Http/Handlers/Admin/ReferrersHandler.php`).
+- Legacy patterns removed: replaced legacy stub `require` wrappers with inline handlers using `Pu239\Database`; ensured no `mysqli_`, `sql_query()`, or `sqlesc()` usage remains.
+- Transactions added: none (all operations are single-statement writes).
+- `SELECT COUNT(*)` replacements: pagination and uniqueness checks now rely on explicit `COUNT(*)`/`COUNT(id)` queries via the database wrapper.
+- IN/LIKE/LIMIT binding: all SQL interactions now use named placeholders through the `Database` helper.
+
+### Verification
+```
+$ rg -n "mysqli_|sql_query\(|sqlesc\(" classes/Http/Handlers/Admin/NewsHandler.php classes/Http/Handlers/Admin/OverForumsHandler.php classes/Http/Handlers/Admin/ReferrersHandler.php
+```
+No matches.
+
 ## public (batch 0-19)
 - Files changed: 20 (`public/achievementbonus.php`, `public/achievementhistory.php`, `public/achievementlist.php`, `public/ajax/ajax_tooltips.php`, `public/ajax/autocomplete.php`, `public/ajax/bookmarks.php`, `public/ajax/checkport.php`, `public/ajax/checkports.php`, `public/ajax/cooker_notify.php`, `public/ajax/descr_format.php`, `public/ajax/ebook_lookup.php`, `public/ajax/emailcheck.php`, `public/ajax/imdb_lookup.php`, `public/ajax/isbn_lookup.php`, `public/ajax/like.php`, `public/ajax/member_input.php`, `public/ajax/namecheck.php`, `public/ajax/offer_notify.php`, `public/ajax/offer_status.php`, `public/ajax/offer_vote.php`).
 - Legacy patterns removed: migrated remaining Fluent placeholders to `Pu239\Database`; no `mysqli_`, `sql_query()`, or `sqlesc()` usages remain in this slice.
