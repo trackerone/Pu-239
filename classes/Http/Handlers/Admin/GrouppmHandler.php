@@ -1,35 +1,260 @@
 <?php
 declare(strict_types=1);
 
-// Generated: STUB_UPGRADED
+// AUTO_CONVERT_ATTEMPTED: 2025-10-05T19:32:40Z via codex handler conversion
 
 namespace PU239\Http\Handlers\Admin;
 
+use PU239\Security\AuthZ;
+use PU239\Config\ConfigRepository;
+use Pu239\Database;
+use Pu239\Message;
+use Pu239\Session;
+
 final class GrouppmHandler
 {
-    /** @param array<string,mixed> $meta */
+    /**
+     * @param array<string, mixed> $meta
+     */
     public function handle(array $meta = []): void
     {
-        // STUB_UPGRADED: safe buffered execution
-        $target = __DIR__ . '/../../../../admin/grouppm.php';
-        if (!is_file($target)) {
-            error_log(sprintf('STUB MISSING: %s requires %s', __FILE__, $target));
-            http_response_code(500);
-            echo 'Service temporarily unavailable';
-            return;
-        }
-        $out = (static function (string $file): string {
-            ob_start();
-            try {
-                require $file;
-            } catch (\Throwable $e) {
-                error_log('Legacy stub error: ' . $e->getMessage());
+        // AUTO_CONVERT_ATTEMPTED: 2025-10-05T19:32:40Z via codex handler conversion
+        try {
+            $container = $GLOBALS['container'] ?? null;
+            if ($container === null) {
+                throw new \RuntimeException('Global container not initialized');
             }
-            return (string) ob_get_clean();
-        })($target);
+            $currentUser = $GLOBALS['CURUSER'] ?? null;
 
-        // Optional: allow middleware or further processing here
-        echo $out;
-    
+            if (defined('ADMIN_DIR') && strpos((string) ADMIN_DIR, '/admin/') !== false) {
+                AuthZ::requireRole('admin');
+            } else {
+                AuthZ::requireAnyRole(['staff', 'admin']);
+            }
+
+            /** @var ConfigRepository $config */
+            $config = $container->get(ConfigRepository::class);
+            /** @var Database $db */
+            $db = $container->get(Database::class);
+            /** @var Session $session */
+            $session = $container->get(Session::class);
+
+            $class = get_access(basename($_SERVER['REQUEST_URI'] ?? ''));
+            class_check($class);
+
+            $escaper = static fn($v) => htmlspecialchars((string) $v, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
+            $self = $escaper($_SERVER['PHP_SELF'] ?? '');
+            $baseurl = $escaper($config->get('paths.baseurl'));
+
+            $stdhead = [
+                'css' => [get_file_name('sceditor_css')],
+            ];
+            $stdfoot = [
+                'js' => [get_file_name('sceditor_js')],
+            ];
+
+            $HTMLOUT = '';
+            $errors = [];
+            $last_user_class = UC_STAFF - 1;
+            $dt = TIME_NOW;
+            $sentToClasses = [];
+
+            $classesToName = static function (int $min, int $max) use (&$sentToClasses): void {
+                for ($i = $min; $i <= $max; ++$i) {
+                    $sentToClasses[] = get_user_class_name($i);
+                }
+            };
+
+            if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+                // TODO(2025): csrf
+                $groups = isset($_POST['groups']) && is_array($_POST['groups']) ? $_POST['groups'] : [];
+                $subject = isset($_POST['subject']) ? trim((string) $_POST['subject']) : '';
+                $msg_raw = isset($_POST['body']) ? (string) $_POST['body'] : '';
+                $msg = str_replace('&amp', '&', $msg_raw);
+
+                $sender = (isset($_POST['system']) && $_POST['system'] === 'yes') ? 2 : (int) ($currentUser['id'] ?? 0);
+
+                if ($subject === '') {
+                    $errors[] = _("Your message doesn't have a subject");
+                }
+                if ($msg === '') {
+                    $errors[] = _('There is not any text in your message!');
+                }
+                if (empty($groups)) {
+                    $errors[] = _('You have to select a group to send your message');
+                }
+
+                if (empty($errors)) {
+                    $where = [];
+                    $params = [];
+                    $recipient_ids = [];
+
+                    foreach ($groups as $g) {
+                        if (is_string($g)) {
+                            switch ($g) {
+                                case 'all_staff':
+                                    $where[] = '(u.class BETWEEN :staff_min AND :staff_max)';
+                                    $params[':staff_min'] = (int) UC_STAFF;
+                                    $params[':staff_max'] = (int) UC_MAX;
+                                    $classesToName(UC_STAFF, UC_MAX);
+                                    break;
+                                case 'all_users':
+                                    $where[] = '(u.class BETWEEN :user_min AND :user_max)';
+                                    $params[':user_min'] = (int) UC_MIN;
+                                    $params[':user_max'] = (int) UC_MAX;
+                                    $classesToName(UC_MIN, UC_MAX);
+                                    break;
+                                case 'fls':
+                                    $where[] = "(u.support = 'yes')";
+                                    $sentToClasses[] = _('First line support');
+                                    break;
+                                case 'donor':
+                                    $where[] = "(u.donor = 'yes')";
+                                    $sentToClasses[] = _('Donors');
+                                    break;
+                                case 'all_friends':
+                                    $friendRows = $db->fetchAll(
+                                        "SELECT f.friendid AS id
+                                           FROM friends AS f
+                                          WHERE f.userid = :uid AND f.confirmed = 'yes'",
+                                        [':uid' => (int) ($currentUser['id'] ?? 0)]
+                                    );
+                                    foreach ($friendRows as $fr) {
+                                        $recipient_ids[] = (int) $fr['id'];
+                                    }
+                                    break;
+                            }
+                        }
+
+                        if (is_numeric($g)) {
+                            $key = ':c' . (int) $g;
+                            $where[] = "(u.class = $key)";
+                            $params[$key] = (int) $g;
+                            $sentToClasses[] = get_user_class_name((int) $g);
+                        }
+                    }
+
+                    if (!empty($where)) {
+                        $ids = $db->fetchAll('SELECT u.id FROM users AS u WHERE ' . implode(' OR ', $where), $params);
+                        foreach ($ids as $r) {
+                            $recipient_ids[] = (int) $r['id'];
+                        }
+                    }
+
+                    $recipient_ids = array_values(array_unique(array_diff($recipient_ids, [$sender])));
+
+                    if (empty($recipient_ids)) {
+                        $errors[] = _('There are not any users in the groups you selected!');
+                    } else {
+                        /** @var Message $messages_class */
+                        $messages_class = $container->get(Message::class);
+                        $buffer = [];
+                        foreach ($recipient_ids as $rid) {
+                            $buffer[] = [
+                                'receiver' => (int) $rid,
+                                'added'    => $dt,
+                                'msg'      => $msg,
+                                'subject'  => $subject,
+                            ];
+                        }
+
+                        if (!empty($buffer)) {
+                            $messages_class->insert($buffer);
+                        }
+
+                        $session->set('is-success', _fe('Message sent to {0} recipient(s)!', count($recipient_ids)));
+                    }
+                }
+            }
+
+            $groups = [];
+            $groups['staff'] = [
+                'opname'   => _('Site Staff'),
+                'minclass' => UC_MIN,
+                'ops'      => [],
+            ];
+            for ($i = UC_STAFF; $i <= UC_MAX; ++$i) {
+                $groups['staff']['ops'][$i] = get_user_class_name((int) $i);
+            }
+            $groups['staff']['ops']['fls'] = _('First line support');
+            $groups['staff']['ops']['all_staff'] = _('All staff');
+
+            $groups['members'] = [
+                'opname'   => _('Members Groups'),
+                'minclass' => UC_STAFF,
+                'ops'      => [],
+            ];
+            for ($i = UC_MIN; $i <= $last_user_class; ++$i) {
+                $groups['members']['ops'][$i] = get_user_class_name((int) $i);
+            }
+            $groups['members']['ops']['donor'] = _('Donors');
+            $groups['members']['ops']['all_users'] = _('All users');
+
+            $groups['friends'] = [
+                'opname'   => _('Related to you'),
+                'minclass' => UC_MIN,
+                'ops'      => ['all_friends' => _('Your friends')],
+            ];
+
+            $dropdown = static function (array $groupsDef, array $currentUserData): string {
+                $currentClass = (int) ($currentUserData['class'] ?? 0);
+                $r = '<select multiple="multiple" name="groups[]" size="16">';
+                foreach ($groupsDef as $group) {
+                    if (($group['minclass'] ?? 0) >= $currentClass) {
+                        continue;
+                    }
+                    $r .= '<optgroup label="' . (string) $group['opname'] . '">';
+                    foreach ($group['ops'] as $k => $v) {
+                        $r .= '<option value="' . (string) $k . '">' . (string) $v . '</option>';
+                    }
+                    $r .= '</optgroup>';
+                }
+                $r .= '</select>';
+
+                return $r;
+            };
+
+            if (!empty($errors)) {
+                foreach ($errors as $error) {
+                    $session->set('is-warning', $error);
+                }
+            }
+
+            $HTMLOUT .= "
+    <h1 class='has-text-centered'>" . _('Group message') . "</h1>
+    <form action='{$self}?tool=grouppm&amp;action=grouppm' method='post' enctype='multipart/form-data' accept-charset='utf-8'>
+      <table class='table table-bordered table-striped'>
+        <tr>
+          <td colspan='2'>" . _('Subject') . "
+            <input type='text' name='subject' class='w-100'></td>
+        </tr>
+        <tr>
+          <td>" . _('Body') . "</td>
+          <td>" . _('Groups') . "</td>
+        </tr>
+        <tr>
+          <td class='is-paddingless'>" . BBcode() . "</td>
+          <td>" . $dropdown($groups, $currentUser ?? []) . "</td>
+        </tr>
+      </table>
+        <div class='has-text-centered margin20'>
+            <label for='sys'>" . _('Send as System') . "</label>
+            <input id='sys' type='checkbox' name='system' value='yes' class=''>
+            <input type='submit' value='" . _('Send!') . "' class='button is-small left20'>
+        </div>
+    </form>";
+
+            $title = _('Group PM');
+            $breadcrumbs = [
+                "<a href='{$baseurl}/staffpanel.php'>" . _('Staff Panel') . '</a>',
+                "<a href='{$self}'>" . $escaper($title) . '</a>',
+            ];
+
+            echo stdhead($title, $stdhead, 'page-wrapper', $breadcrumbs) . wrapper($HTMLOUT) . stdfoot($stdfoot);
+        } catch (\Throwable $e) {
+            error_log('Converted handler error: ' . $e->getMessage());
+            http_response_code(500);
+            echo 'Internal error';
+        }
     }
 }
