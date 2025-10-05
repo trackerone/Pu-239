@@ -24,3 +24,8 @@ classes/Http/Handlers/Admin/FreeusersHandler.php,true,0,Extracted from admin/fre
 classes/Http/Handlers/Admin/GrouppmHandler.php,true,1,Extracted from admin/grouppm.php
 classes/Http/Handlers/Admin/HitAndRunHandler.php,true,0,Extracted from admin/hit_and_run.php
 classes/Http/Handlers/Admin/HitAndRunSettingsHandler.php,true,1,Extracted from admin/hit_and_run_settings.php
+classes/Http/Handlers/Admin/HnrwarnHandler.php,true,1,Extracted from admin/hnrwarn.php
+classes/Http/Handlers/Admin/InactiveHandler.php,true,1,Extracted from admin/inactive.php
+classes/Http/Handlers/Admin/InviteTreeHandler.php,true,0,Extracted from admin/invite_tree.php
+classes/Http/Handlers/Admin/IpcheckHandler.php,true,0,Extracted from admin/ipcheck.php
+classes/Http/Handlers/Admin/IphistoryHandler.php,true,0,Extracted from admin/iphistory.php
