@@ -23,6 +23,8 @@ use PU239\Http\Handlers\PublicSite\ReputationHandler;
 use PU239\Http\Handlers\Staffpanel\IndexHandler;
 use PU239\Http\MiddlewarePipeline;
 use PU239\Http\Middlewares\CsrfGate;
+use PU239\Http\Middlewares\ForceHttps;
+use PU239\Http\Middlewares\Hsts;
 use PU239\Http\Middlewares\JsonOut;
 use PU239\Http\Middlewares\RateLimitPost;
 use PU239\Http\Middlewares\SecurityHeaders;
@@ -190,7 +192,7 @@ $router->get('/rules.php', \PU239\Http\Handlers\PublicSite\RulesHandler::class);
 
 $pipe->handle($router);
 
-// >>>>>> PU239:http-front-1
+// Legacy HTTP front controller marker
 
 
 
@@ -214,4 +216,4 @@ $router->get('/staffpanel/index.php', IndexHandler::class, ['authz' => ['any' =>
 
 $pipeline->handle($router);
 
-// >>>>>> PU239:http-front-1
+// Legacy HTTP front controller marker
