@@ -24,3 +24,4 @@
 changed=8, skipped=0, todos=8, markers=6
 changed=5, skipped=0, todos=0, markers=6
 2025-10-05T10:48:37Z, routes_added=166, files_scanned=84, markers=6
+2025-10-05T11:32:34Z, cutover_routes_added=49, handlers_created=215, htaccess_updated=yes, markers=6

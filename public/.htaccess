@@ -1,0 +1,16 @@
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  # Allow index.php direct, everything else .php is blocked
+  RewriteCond %{REQUEST_URI} !^/index\.php$
+  RewriteRule \.php$ - [R=404,L]
+  # Route non-file/dir to front controller
+  RewriteCond %{REQUEST_FILENAME} !-f
+  RewriteCond %{REQUEST_FILENAME} !-d
+  RewriteRule . /index.php [L]
+</IfModule>
+# Security headers as fallback (app also sets these)
+<IfModule mod_headers.c>
+  Header set X-Content-Type-Options "nosniff"
+  Header set X-Frame-Options "DENY"
+  Header set Referrer-Policy "no-referrer-when-downgrade"
+</IfModule>
