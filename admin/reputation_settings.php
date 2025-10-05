@@ -13,13 +13,6 @@ if (strpos(__FILE__, '/admin/') !== false) {
 } else {
     AuthZ::requireAnyRole(['staff', 'admin']);
 }
-<<<<<< codex/enforce-centralized-authorization-checks-s6jwwl
-=======
-<<<<<< codex/enforce-centralized-authorization-checks-vacoay
-=======
-
->>>>>> master
->>>>>> master
 
 global $container, $CURUSER;
 /** @var ConfigRepository $config */
