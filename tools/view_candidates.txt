@@ -1,0 +1,6 @@
+admin/reputation_settings.php
+public/ajax/autocomplete.php
+public/ajax/thanks.php
+public/allsmiles.php
+public/download.php
+public/rss.php

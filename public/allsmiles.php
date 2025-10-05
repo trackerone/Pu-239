@@ -17,6 +17,8 @@ global $container;
 $config = $container->get(ConfigRepository::class);
 $db = $container->get(Database::class);
 
+$s = $s ?? static fn($v) => htmlspecialchars((string) $v, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
+
 
 
 
