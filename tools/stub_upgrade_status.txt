@@ -535,3 +535,4 @@ classes/Http/Handlers/PublicSite/ViewnfoHandler.php changed
 classes/Http/Handlers/PublicSite/WikiHandler.php changed
 classes/Http/Handlers/Staffpanel/IndexHandler.php changed
 Summary: changed=104 skipped=215 lint_fail=0
+Summary: changed=0 skipped=0 lint_fail=0
