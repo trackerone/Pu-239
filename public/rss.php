@@ -34,6 +34,8 @@ $validation = $validator->validate($_GET, [
     'cats' => 'regex:/^(\d+,?)*$/',
 ]);
 
+$s = $s ?? static fn($v) => htmlspecialchars((string) $v, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
+
 if ($validation->fails()) {
     if (!isset($_GET['torrent_pass'])) {
         format_rss(_("Your link doesn't have a torrent pass"), null);

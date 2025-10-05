@@ -333,3 +333,17 @@ No syntax errors detected in classes/Http/Handlers/PublicSite/PollsTakeVoteHandl
 No syntax errors detected in classes/Http/Handlers/PublicSite/StaffboxHandler.php
 No syntax errors detected in classes/Http/Handlers/PublicSite/TakeThemeHandler.php
 No syntax errors detected in classes/Http/Handlers/PublicSite/UserUnlocksHandler.php
+No syntax errors detected in classes/View/View.php
+No syntax errors detected in public/allsmiles.php
+No syntax errors detected in public/download.php
+No syntax errors detected in public/rss.php
+No syntax errors detected in tools/_review_markers.php
+
+Parse error: syntax error, unexpected token "<<", expecting end of file in admin/reputation_settings.php on line 16
+Errors parsing admin/reputation_settings.php
+No syntax errors detected in public/ajax/autocomplete.php
+No syntax errors detected in public/ajax/thanks.php
+No syntax errors detected in public/allsmiles.php
+No syntax errors detected in public/download.php
+No syntax errors detected in public/rss.php
+No syntax errors detected in admin/reputation_settings.php

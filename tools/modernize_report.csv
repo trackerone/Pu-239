@@ -258,3 +258,18 @@ classes/Http/Handlers/PublicSite/PollsTakeVoteHandler.php,handler,scrubbed revie
 classes/Http/Handlers/PublicSite/StaffboxHandler.php,handler,scrubbed review marker while keeping legacy require
 classes/Http/Handlers/PublicSite/TakeThemeHandler.php,handler,scrubbed review marker while keeping legacy require
 classes/Http/Handlers/PublicSite/UserUnlocksHandler.php,handler,scrubbed review marker while keeping legacy require
+public/allsmiles.php,true,0,0,helper injected
+public/download.php,true,0,0,helper injected
+public/rss.php,true,0,0,helper injected
+admin/reputation_settings.php,false,0,0,skipped due to existing merge markers
+public/ajax/autocomplete.php,false,0,0,template output uses escaped data
+public/ajax/thanks.php,false,0,0,ajax/html payload left raw intentionally
+public/allsmiles.php,false,0,0,helper previously seeded
+public/download.php,false,0,0,helper previously seeded
+public/rss.php,false,0,0,helper previously seeded
+admin/reputation_settings.php,false,0,0,removed legacy merge markers to restore lint + kept helper
+public/ajax/autocomplete.php,false,0,0,html template remains raw (pre-escaped fragments)
+public/ajax/thanks.php,false,0,0,ajax payload intentionally left raw html/json hybrid
+public/allsmiles.php,false,0,0,legacy template variable output left untouched
+public/download.php,false,0,0,binary torrent payload echoed verbatim
+public/rss.php,false,0,0,rss xml string printed directly

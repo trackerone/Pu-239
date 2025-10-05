@@ -13,13 +13,6 @@ if (strpos(__FILE__, '/admin/') !== false) {
 } else {
     AuthZ::requireAnyRole(['staff', 'admin']);
 }
-<<<<<< codex/enforce-centralized-authorization-checks-s6jwwl
-=======
-<<<<<< codex/enforce-centralized-authorization-checks-vacoay
-=======
-
->>>>>> master
->>>>>> master
 
 global $container, $CURUSER;
 /** @var ConfigRepository $config */
@@ -42,7 +35,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         'keys' => $changedKeys,
     ]);
     rep_cache();
-app_halt('Exit called');
+    app_halt('Exit called');
 }
 
 function rep_cache()
