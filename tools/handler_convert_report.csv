@@ -4,3 +4,8 @@ classes/Http/Handlers/Admin/BannedemailsHandler.php,true,1,Extracted from admin/
 classes/Http/Handlers/Admin/UserHitsHandler.php,true,0,Extracted from admin/user_hits.php
 classes/Http/Handlers/Admin/GoaccessHandler.php,true,0,Extracted from admin/goaccess.php
 classes/Http/Handlers/Admin/TracerouteHandler.php,true,0,Extracted from admin/traceroute.php
+classes/Http/Handlers/Admin/BansHandler.php,false,1,TODO(2025) legacy script complex admin/bans.php:1-200
+classes/Http/Handlers/Admin/BlockSettingsHandler.php,false,1,TODO(2025) manual extraction required admin/block.settings.php:1-200
+classes/Http/Handlers/Admin/BonusmanageHandler.php,false,1,TODO(2025) manual extraction required admin/bonusmanage.php:1-200
+classes/Http/Handlers/Admin/CategoriesHandler.php,false,1,TODO(2025) manual extraction required admin/categories.php:1-200
+classes/Http/Handlers/Admin/ChangelogHandler.php,true,0,Extracted from admin/changelog.php
