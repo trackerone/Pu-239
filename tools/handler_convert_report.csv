@@ -29,3 +29,9 @@ classes/Http/Handlers/Admin/InactiveHandler.php,true,1,Extracted from admin/inac
 classes/Http/Handlers/Admin/InviteTreeHandler.php,true,0,Extracted from admin/invite_tree.php
 classes/Http/Handlers/Admin/IpcheckHandler.php,true,0,Extracted from admin/ipcheck.php
 classes/Http/Handlers/Admin/IphistoryHandler.php,true,0,Extracted from admin/iphistory.php
+classes/Http/Handlers/Admin/MysqlOverviewHandler.php,false,1,TODO(2025) manual extraction required admin/mysql_overview.php:1-200
+classes/Http/Handlers/Admin/MysqlStatsHandler.php,false,1,TODO(2025) manual extraction required admin/mysql_stats.php:1-400
+classes/Http/Handlers/Admin/NamechangerHandler.php,false,1,TODO(2025) manual extraction required admin/namechanger.php:1-40
+classes/Http/Handlers/Admin/NewsHandler.php,true,0,Extracted from admin/news.php
+classes/Http/Handlers/Admin/OverForumsHandler.php,true,0,Extracted from admin/over_forums.php
+classes/Http/Handlers/Admin/ReferrersHandler.php,true,0,Extracted from admin/referrers.php
