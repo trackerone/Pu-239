@@ -15,3 +15,4 @@
 2025-10-05T06:46:09Z, offset=170, size=0, changed=16, skipped=0, lint_fail=0, markers_used=6
 2025-10-05T08:02:18Z - Added ForceHttps/Hsts middleware classes and updated index.php imports/pipeline.
 2025-10-05T08:09:24Z - Inserted ForceHttps/Hsts imports and pipeline entries in public/index.php.
+2025-10-05T08:44:22Z - Adjusted ForceHttps/Hsts middleware process methods to return downstream responses.

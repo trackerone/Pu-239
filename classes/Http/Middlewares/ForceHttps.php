@@ -5,6 +5,7 @@ namespace PU239\Http\Middlewares;
 
 final class ForceHttps
 {
+    public function process(callable $next)
     public function process(callable $next): void
     {
         $https = $_SERVER['HTTPS'] ?? '';
@@ -14,6 +15,7 @@ final class ForceHttps
         $isForwardedHttps = strcasecmp($forwardedProto, 'https') === 0;
 
         if ($isHttps || $isForwardedHttps) {
+            return $next();
             $next();
 
             return;

@@ -10,6 +10,8 @@ use PU239\Http\Middlewares\Hsts;
 use PU239\Http\Middlewares\SecurityHeaders;
 use PU239\Http\Middlewares\RateLimitPost;
 use PU239\Http\Middlewares\CsrfGate;
+use PU239\Http\Middlewares\ForceHttps;
+use PU239\Http\Middlewares\Hsts;
 use PU239\Http\Middlewares\JsonOut;
 use PU239\Http\Middlewares\AuthZGate;
 
@@ -151,6 +153,14 @@ $router->get('/rss_pdo_demo.php', \PU239\Http\Handlers\PublicSite\RssPdoDemoHand
 $router->get('/rsstfreak.php', \PU239\Http\Handlers\PublicSite\RsstfreakHandler::class);
 $router->get('/rules.php', \PU239\Http\Handlers\PublicSite\RulesHandler::class);
 
+$pipe->handle($router);
+
+// Legacy HTTP front controller marker
+
+
+
+
+
 // Admin/staff (with AuthZGate metadata)
 $router->get('/admin/namechanger.php', \PU239\Http\Handlers\Admin\NamechangerHandler::class, ['authz' => new AuthZGate('admin')]);
 $router->get('/admin/reports.php', \PU239\Http\Handlers\Admin\ReportsHandler::class, ['authz' => new AuthZGate('admin')]);
@@ -167,4 +177,4 @@ $router->get('/staffpanel/index.php', \PU239\Http\Handlers\Staffpanel\IndexHandl
 
 $pipeline->handle($router);
 
-// >>>>>> PU239:http-front-1
+// Legacy HTTP front controller marker

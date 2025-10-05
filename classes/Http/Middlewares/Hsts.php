@@ -9,6 +9,7 @@ final class Hsts
     {
     }
 
+    public function process(callable $next)
     public function process(callable $next): void
     {
         if (!headers_sent()) {
@@ -20,6 +21,7 @@ final class Hsts
             header($header);
         }
 
+        return $next();
         $next();
     }
 }
