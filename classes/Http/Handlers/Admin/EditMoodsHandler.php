@@ -1,35 +1,169 @@
 <?php
 declare(strict_types=1);
 
-// Generated: STUB_UPGRADED
+// AUTO_CONVERT_ATTEMPTED: 2025-10-05T18:36:06Z via codex handler conversion
 
 namespace PU239\Http\Handlers\Admin;
 
+use Pu239\Cache;
+use PU239\Config\ConfigRepository;
+use Pu239\Database;
+use PU239\Security\AuthZ;
+
 final class EditMoodsHandler
 {
-    /** @param array<string,mixed> $meta */
+    /**
+     * @param array<string, mixed> $meta
+     */
     public function handle(array $meta = []): void
     {
-        // STUB_UPGRADED: safe buffered execution
-        $target = __DIR__ . '/../../../../admin/edit_moods.php';
-        if (!is_file($target)) {
-            error_log(sprintf('STUB MISSING: %s requires %s', __FILE__, $target));
-            http_response_code(500);
-            echo 'Service temporarily unavailable';
-            return;
-        }
-        $out = (static function (string $file): string {
-            ob_start();
-            try {
-                require $file;
-            } catch (\Throwable $e) {
-                error_log('Legacy stub error: ' . $e->getMessage());
-            }
-            return (string) ob_get_clean();
-        })($target);
+        // AUTO_CONVERT_ATTEMPTED: 2025-10-05T18:36:06Z via codex handler conversion
+        try {
+            global $container, $CURUSER;
 
-        // Optional: allow middleware or further processing here
-        echo $out;
-    
+            if (strpos(ADMIN_DIR, '/admin/') !== false) {
+                AuthZ::requireRole('admin');
+            } else {
+                AuthZ::requireAnyRole(['staff', 'admin']);
+            }
+
+            /** @var ConfigRepository $config */
+            $config = $container->get(ConfigRepository::class);
+            /** @var Database $db */
+            $db = $container->get(Database::class);
+            /** @var Cache $cache */
+            $cache = $container->get(Cache::class);
+
+            $class = get_access(basename($_SERVER['REQUEST_URI'] ?? ''));
+            class_check($class);
+
+            $escaper = static fn($v) => htmlspecialchars((string) $v, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
+            $self = $escaper($_SERVER['PHP_SELF'] ?? '');
+            $baseurl = (string) $config->get('paths.baseurl');
+
+            $HTMLOUT = '';
+
+            $edit_params = array_merge($_GET, $_POST);
+            $action = isset($edit_params['action']) ? (string) $edit_params['action'] : '';
+            $id = isset($edit_params['id']) ? (int) $edit_params['id'] : 0;
+            $name = isset($edit_params['name']) ? (string) $edit_params['name'] : '';
+            $image = isset($edit_params['image']) ? (string) $edit_params['image'] : '';
+            $bonus = isset($edit_params['bonus']) ? 1 : 0;
+
+            if ($action === 'added') {
+                if ($name !== 'is example mood' && $image !== 'smiley1.gif') {
+                    $db->run(
+                        'INSERT INTO moods (name, image, bonus) VALUES (:name, :image, :bonus)',
+                        [':name' => $name, ':image' => $image, ':bonus' => (int) $bonus]
+                    );
+                    $cache->delete('topmoods');
+                    audit_log($CURUSER['id'] ?? null, 'config.update', ['keys' => [$name]]);
+                    if (function_exists('write_log')) {
+                        write_log('<b>' . _('Mood Added') . '</b> ' . htmlsafechars($CURUSER['username']) . ' - ' . htmlsafechars($name) . '<img src="' . (string) $config->get('paths.images_baseurl') . 'smilies/' . htmlsafechars($image) . '" alt="">');
+                    }
+                }
+            } elseif ($action === 'edited') {
+                if ($id > 0) {
+                    $db->run(
+                        'UPDATE moods SET name = :name, image = :image, bonus = :bonus WHERE id = :id',
+                        [':name' => $name, ':image' => $image, ':bonus' => (int) $bonus, ':id' => (int) $id]
+                    );
+                    $cache->delete('topmoods');
+                    audit_log($CURUSER['id'] ?? null, 'config.update', ['keys' => [$name]]);
+                    if (function_exists('write_log')) {
+                        write_log('<b>' . _('Mood Edited') . '</b> ' . htmlsafechars($CURUSER['username']) . ' - ' . htmlsafechars($name) . '<img src="' . (string) $config->get('paths.images_baseurl') . 'smilies/' . htmlsafechars($image) . '" alt="">');
+                    }
+                }
+            }
+
+            if ($action === 'edit' && $id > 0) {
+                $row = $db->fetch('SELECT * FROM moods WHERE id = :id', [':id' => (int) $id]);
+                if ($row) {
+                    $HTMLOUT .= "<h1 class='has-text-centered'>" . _('Edit Mood') . "</h1>
+            <form method='post' action='staffpanel.php?tool=edit_moods&amp;action=edited' enctype='multipart/form-data' accept-charset='utf-8'>
+            <table class='table table-bordered table-striped'>
+                <tr>
+                    <td class='colhead'>" . _('Name') . "</td>
+                    <td><input type='text' name='name' size='40' value='" . htmlsafechars((string) $row['name']) . "'></td>
+                </tr>
+                <tr>
+                    <td class='colhead'>" . _('Image') . "</td>
+                    <td><input type='text' name='image' size='40' value='" . htmlsafechars((string) $row['image']) . "'></td>
+                </tr>
+                <tr>
+                    <td class='colhead'>" . _('Bonus') . "</td>
+                    <td><input type='checkbox' name='bonus' " . ((int) $row['bonus'] === 1 ? 'checked' : '') . "></td>
+                </tr>
+                <tr>
+                    <td colspan='2' class='has-text-centered'>
+                        <input type='hidden' name='id' value='" . (int) $id . "'>
+                        <input type='submit' name='okay' value='" . _('Save') . "' class='button is-small'>
+                    </td>
+                </tr>
+            </table>
+            </form>";
+                }
+            } else {
+                $HTMLOUT .= "<h1 class='has-text-centered'>" . _('Add New Mood') . "</h1>
+         <form method='post' action='staffpanel.php?tool=edit_moods&amp;action=added' enctype='multipart/form-data' accept-charset='utf-8'>
+         <table class='table table-bordered table-striped'>
+            <tr>
+                <td class='colhead'>" . _('Name') . "</td>
+                <td><input type='text' name='name' size='40' value='is example mood'></td>
+            </tr>
+            <tr>
+                <td class='colhead'>" . _('Image') . "</td>
+                <td><input type='text' name='image' size='40' value='smiley1.gif'></td>
+            </tr>
+            <tr>
+                <td class='colhead'>" . _('Bonus') . "</td>
+                <td><input type='checkbox' name='bonus'></td>
+            </tr>
+            <tr>
+                <td colspan='2' class='has-text-centered'>
+                    <input type='submit' name='okay' value='" . _('Add') . "' class='button is-small'>
+                </td>
+            </tr>
+         </table>
+         </form>";
+            }
+
+            $HTMLOUT .= '<h1 class="has-text-centered">' . _('Current Moods') . '</h1>';
+            $HTMLOUT .= "<table class='table table-bordered table-striped'>
+      <tr>
+        <td class='colhead'>" . _('Added') . "</td>
+        <td class='colhead'>" . _('Name') . "</td>
+        <td class='colhead'>" . _('Image') . "</td>
+        <td class='colhead'>" . _('Bonus') . "</td>
+        <td class='colhead'>" . _('Edit') . "</td>
+      </tr>";
+
+            $rows = $db->fetchAll('SELECT * FROM moods ORDER BY id');
+            if (!empty($rows)) {
+                $color = true;
+                foreach ($rows as $arr) {
+                    $HTMLOUT .= '<tr ' . (($color = !$color) ? ' style="background-color:#000000;"' : 'style="background-color:#0f0f0f;"') . '>
+            <td><img src="' . (string) $config->get('paths.images_baseurl') . 'smilies/' . htmlsafechars((string) $arr['image']) . '" alt=""></td>
+            <td>' . htmlsafechars((string) $arr['name']) . '</td>
+            <td>' . htmlsafechars((string) $arr['image']) . '</td>
+            <td>' . ((int) $arr['bonus'] !== 0 ? _('Yes') : _('No')) . '</td>
+            <td><a style="color:#FF0000" href="' . $baseurl . '/staffpanel.php?tool=edit_moods&amp;id=' . (int) $arr['id'] . '&amp;action=edit">' . _('Edit') . '</a></td>
+        </tr>';
+                }
+            }
+            $HTMLOUT .= '</table>';
+
+            $title = _('Edit Moods');
+            $breadcrumbs = [
+                "<a href='" . $baseurl . "/staffpanel.php'>" . _('Staff Panel') . '</a>',
+                "<a href='{$self}'>$title</a>",
+            ];
+
+            echo stdhead($title, [], 'page-wrapper', $breadcrumbs) . wrapper($HTMLOUT) . stdfoot();
+        } catch (\Throwable $e) {
+            error_log('Converted handler error: ' . $e->getMessage());
+            http_response_code(500);
+            echo 'Internal error';
+        }
     }
 }
