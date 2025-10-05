@@ -18,6 +18,7 @@ final class HomeHandler
         }
 
         $legacy = $meta['legacy'] ?? dirname(__DIR__, 3) . '/public/index.legacy.php';
+        require $legacy;
         if (!is_string($legacy) || $legacy === '' || !file_exists($legacy)) {
             $legacy = dirname(__DIR__, 3) . '/public/index.legacy.php';
         }

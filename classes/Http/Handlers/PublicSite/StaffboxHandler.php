@@ -16,5 +16,3 @@ final class StaffboxHandler
         return null;
     }
 }
-
-// >>>>>> PU239:http-handler-6

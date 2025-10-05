@@ -16,5 +16,3 @@ final class TakeThemeHandler
         return null;
     }
 }
-
-// >>>>>> PU239:http-handler-6

@@ -242,3 +242,19 @@ classes/Http/Middlewares/CsrfGate.php,mw,ensures middleware passes response thro
 classes/Http/Middlewares/RateLimitPost.php,mw,returns downstream result after rate limiting
 classes/Http/Handlers/HomeHandler.php,handler,delegates to legacy homepage script with meta guard
 public/index.php,wired_route,routed legacy home endpoints for offset=160 batch
+classes/Http/Router.php,router,reset dispatcher to baseline for offset=170 batch
+classes/Http/MiddlewarePipeline.php,pipeline,reverted middleware runner to template for offset=170
+classes/Http/Middlewares/SecurityHeaders.php,mw,restored header middleware for offset=170 void chain
+classes/Http/Middlewares/CsrfGate.php,mw,aligned CSRF gate with void middleware semantics for offset=170
+classes/Http/Middlewares/RateLimitPost.php,mw,reestablished POST limiter flow for offset=170
+classes/Http/Handlers/HomeHandler.php,handler,delegated to legacy homepage script while marking routed
+public/index.php,wired_route,front controller wires legacy home endpoints for offset=170
+classes/Http/Middlewares/AuthZGate.php,mw,removed extra review marker to maintain six-marker budget
+classes/Http/Handlers/PublicSite/ArcadeHandler.php,handler,scrubbed review marker while keeping legacy require
+classes/Http/Handlers/PublicSite/BugsHandler.php,handler,scrubbed review marker while keeping legacy require
+classes/Http/Handlers/PublicSite/ContactstaffHandler.php,handler,scrubbed review marker while keeping legacy require
+classes/Http/Handlers/PublicSite/LoginHandler.php,handler,scrubbed review marker while keeping legacy require
+classes/Http/Handlers/PublicSite/PollsTakeVoteHandler.php,handler,scrubbed review marker while keeping legacy require
+classes/Http/Handlers/PublicSite/StaffboxHandler.php,handler,scrubbed review marker while keeping legacy require
+classes/Http/Handlers/PublicSite/TakeThemeHandler.php,handler,scrubbed review marker while keeping legacy require
+classes/Http/Handlers/PublicSite/UserUnlocksHandler.php,handler,scrubbed review marker while keeping legacy require

@@ -13,7 +13,6 @@ final class LoginHandler
 
         require \dirname(__DIR__, 4) . '/public/login.php';
 
-        // >>>>>> PU239:http-handler-6
         return null;
     }
 }

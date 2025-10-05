@@ -17,6 +17,7 @@ final class RateLimitPost
     {
     }
 
+    public function process(callable $next): void
     public function process(callable $next): mixed
     {
         $method = $_SERVER['REQUEST_METHOD'] ?? 'GET';

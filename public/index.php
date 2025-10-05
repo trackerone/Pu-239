@@ -3,7 +3,6 @@ declare(strict_types=1);
 
 require_once __DIR__ . '/../bootstrap_web.php';
 
-use PU239\Http\Handlers\HomeHandler;
 use PU239\Http\MiddlewarePipeline;
 use PU239\Http\Middlewares\CsrfGate;
 use PU239\Http\Middlewares\RateLimitPost;
@@ -23,6 +22,13 @@ $pipeline = new MiddlewarePipeline([
     new CsrfGate(),
 ]);
 
+// Register a SMALL set of routes in this batch (mikro-batch; no DB logic here)
+$router->get('/', \PU239\Http\Handlers\HomeHandler::class, [
+    'legacy' => __DIR__ . '/index.legacy.php',
+]);
+$router->get('/index.php', \PU239\Http\Handlers\HomeHandler::class, [
+    'legacy' => __DIR__ . '/index.legacy.php',
+]);
 $router->get('/', HomeHandler::class, [
     'legacy' => __DIR__ . '/index.legacy.php',
 ]);
