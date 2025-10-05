@@ -5,44 +5,32 @@ require_once __DIR__ . '/../bootstrap_web.php';
 
 use PU239\Http\Handlers\HomeHandler;
 use PU239\Http\MiddlewarePipeline;
-use PU239\Http\Middlewares\CsrfGate;
-use PU239\Http\MiddlewarePipeline;
 use PU239\Http\Middlewares\AuthZGate;
-use PU239\Http\Handlers\Admin\NamechangerHandler;
-use PU239\Http\Handlers\Admin\ReportsHandler;
-use PU239\Http\Handlers\HomeHandler;
-use PU239\Http\Handlers\PublicSite\CoinsHandler;
-use PU239\Http\Handlers\PublicSite\CreditsHandler;
-use PU239\Http\Handlers\PublicSite\FriendsHandler;
-use PU239\Http\Handlers\PublicSite\GiftHandler;
-use PU239\Http\Handlers\PublicSite\InviteHandler;
-use PU239\Http\Handlers\PublicSite\MessagesHandler;
-use PU239\Http\Handlers\PublicSite\ReputationHandler;
-use PU239\Http\Handlers\Staffpanel\IndexHandler;
-use PU239\Http\MiddlewarePipeline;
 use PU239\Http\Middlewares\CsrfGate;
+use PU239\Http\Middlewares\ForceHttps;
+use PU239\Http\Middlewares\Hsts;
 use PU239\Http\Middlewares\JsonOut;
 use PU239\Http\Middlewares\RateLimitPost;
 use PU239\Http\Middlewares\SecurityHeaders;
 use PU239\Http\Router;
 
 $router = new Router();
+
 if (!defined('PU239_ROUTED')) {
     define('PU239_ROUTED', true);
 }
 
-$router = new Router();
-$pipe   = new MiddlewarePipeline([
 $pipeline = new MiddlewarePipeline([
+    new ForceHttps(),
+    new Hsts(),
     new SecurityHeaders(),
     new RateLimitPost(10, 60),
     new CsrfGate(),
+    new JsonOut(),
 ]);
 
 $router->get('/', HomeHandler::class, ['legacy' => __DIR__ . '/index.legacy.php']);
 $router->get('/index.php', HomeHandler::class, ['legacy' => __DIR__ . '/index.legacy.php']);
-    new JsonOut(),
-]);
 
 $router->get('/', \PU239\Http\Handlers\HomeHandler::class);
 $router->get('/index.php', \PU239\Http\Handlers\HomeHandler::class);
@@ -136,7 +124,6 @@ $router->get('/downloadsub.php', \PU239\Http\Handlers\PublicSite\DownloadsubHand
 $router->post('/downloadsub.php', \PU239\Http\Handlers\PublicSite\DownloadsubHandler::class);
 $router->get('/edit.php', \PU239\Http\Handlers\PublicSite\EditHandler::class);
 $router->post('/edit.php', \PU239\Http\Handlers\PublicSite\EditHandler::class);
-
 $router->get('/faq.php', \PU239\Http\Handlers\PublicSite\FaqHandler::class);
 $router->get('/fastdelete.php', \PU239\Http\Handlers\PublicSite\FastdeleteHandler::class);
 $router->get('/filelist.php', \PU239\Http\Handlers\PublicSite\FilelistHandler::class);
@@ -161,7 +148,6 @@ $router->post('/new_announcement.php', \PU239\Http\Handlers\PublicSite\NewAnnoun
 $router->get('/offers.php', \PU239\Http\Handlers\PublicSite\OffersHandler::class);
 $router->post('/offers.php', \PU239\Http\Handlers\PublicSite\OffersHandler::class);
 $router->get('/peerlist.php', \PU239\Http\Handlers\PublicSite\PeerlistHandler::class);
-
 $router->get('/polls_take_vote.php', \PU239\Http\Handlers\PublicSite\PollsTakeVoteHandler::class);
 $router->post('/polls_take_vote.php', \PU239\Http\Handlers\PublicSite\PollsTakeVoteHandler::class);
 $router->get('/port_check.php', \PU239\Http\Handlers\PublicSite\PortCheckHandler::class);
@@ -177,30 +163,6 @@ $router->get('/rss_pdo_demo.php', \PU239\Http\Handlers\PublicSite\RssPdoDemoHand
 $router->get('/rsstfreak.php', \PU239\Http\Handlers\PublicSite\RsstfreakHandler::class);
 $router->get('/rules.php', \PU239\Http\Handlers\PublicSite\RulesHandler::class);
 
-$pipe->handle($router);
-
-// >>>>>> PU239:http-front-1
-
-
-
-
-
-
-$pipe->handle($router);
-$router->get('/', HomeHandler::class);
-$router->get('/index.php', HomeHandler::class);
-$router->get('/coins.php', CoinsHandler::class);
-$router->get('/credits.php', CreditsHandler::class);
-$router->get('/friends.php', FriendsHandler::class);
-$router->get('/gift.php', GiftHandler::class);
-$router->get('/invite.php', InviteHandler::class);
-$router->get('/messages.php', MessagesHandler::class);
-$router->get('/reputation.php', ReputationHandler::class);
-$router->get('/admin/namechanger.php', NamechangerHandler::class, ['authz' => 'admin']);
-$router->get('/admin/reports.php', ReportsHandler::class, ['authz' => 'admin']);
-$router->get('/staffpanel.php', IndexHandler::class, ['authz' => ['any' => ['staff', 'admin']]]);
-$router->get('/staffpanel/index.php', IndexHandler::class, ['authz' => ['any' => ['staff', 'admin']]]);
-
 $pipeline->handle($router);
 
-// >>>>>> PU239:http-front-1
+// Legacy HTTP front controller marker
