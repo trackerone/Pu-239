@@ -1,0 +1,340 @@
+check,file,detail
+csrf,admin/acpmanage.php,missing Csrf::verify or CsrfGate
+csrf,admin/adduser.php,missing Csrf::verify or CsrfGate
+csrf,admin/backup.php,missing Csrf::verify or CsrfGate
+csrf,admin/bannedemails.php,missing Csrf::verify or CsrfGate
+csrf,admin/bans.php,missing Csrf::verify or CsrfGate
+csrf,admin/block.settings.php,missing Csrf::verify or CsrfGate
+csrf,admin/bonusmanage.php,missing Csrf::verify or CsrfGate
+csrf,admin/categories.php,missing Csrf::verify or CsrfGate
+csrf,admin/cheaters.php,missing Csrf::verify or CsrfGate
+csrf,admin/class_config.php,missing Csrf::verify or CsrfGate
+csrf,admin/cleanup_manager.php,missing Csrf::verify or CsrfGate
+csrf,admin/cloudview.php,missing Csrf::verify or CsrfGate
+csrf,admin/datareset.php,missing Csrf::verify or CsrfGate
+csrf,admin/deathrow.php,missing Csrf::verify or CsrfGate
+csrf,admin/delacct.php,missing Csrf::verify or CsrfGate
+csrf,admin/edit_moods.php,missing Csrf::verify or CsrfGate
+csrf,admin/editlog.php,missing Csrf::verify or CsrfGate
+csrf,admin/findnotconnectable.php,missing Csrf::verify or CsrfGate
+csrf,admin/floodlimit.php,missing Csrf::verify or CsrfGate
+csrf,admin/forum_config.php,missing Csrf::verify or CsrfGate
+csrf,admin/forum_manage.php,missing Csrf::verify or CsrfGate
+csrf,admin/freeleech.php,missing Csrf::verify or CsrfGate
+csrf,admin/grouppm.php,missing Csrf::verify or CsrfGate
+csrf,admin/hit_and_run_settings.php,missing Csrf::verify or CsrfGate
+csrf,admin/hnrwarn.php,missing Csrf::verify or CsrfGate
+csrf,admin/inactive.php,missing Csrf::verify or CsrfGate
+csrf,admin/invite_tree.php,missing Csrf::verify or CsrfGate
+csrf,admin/leechwarn.php,missing Csrf::verify or CsrfGate
+csrf,admin/log_viewer.php,missing Csrf::verify or CsrfGate
+csrf,admin/manage_images.php,missing Csrf::verify or CsrfGate
+csrf,admin/mass_bonus_for_members.php,missing Csrf::verify or CsrfGate
+csrf,admin/mega_search.php,missing Csrf::verify or CsrfGate
+csrf,admin/modded_torrents.php,missing Csrf::verify or CsrfGate
+csrf,admin/modtask.php,missing Csrf::verify or CsrfGate
+csrf,admin/news.php,missing Csrf::verify or CsrfGate
+csrf,admin/over_forums.php,missing Csrf::verify or CsrfGate
+csrf,admin/polls_manager.php,missing Csrf::verify or CsrfGate
+csrf,admin/promo.php,missing Csrf::verify or CsrfGate
+csrf,admin/reputation_settings.php,missing Csrf::verify or CsrfGate
+csrf,admin/reset.php,missing Csrf::verify or CsrfGate
+csrf,admin/site_settings.php,missing Csrf::verify or CsrfGate
+csrf,admin/sysoplog.php,missing Csrf::verify or CsrfGate
+csrf,admin/themes.php,missing Csrf::verify or CsrfGate
+csrf,admin/traceroute.php,missing Csrf::verify or CsrfGate
+csrf,admin/trivia_config.php,missing Csrf::verify or CsrfGate
+csrf,admin/upgrade_database.php,missing Csrf::verify or CsrfGate
+csrf,admin/uploadapps.php,missing Csrf::verify or CsrfGate
+csrf,admin/usersearch.php,missing Csrf::verify or CsrfGate
+csrf,admin/watched_users.php,missing Csrf::verify or CsrfGate
+csrf,forums/_scaffold/__template.php,missing Csrf::verify or CsrfGate
+csrf,forums/add_subscription.php,missing Csrf::verify or CsrfGate
+csrf,forums/clear_unread_post.php,missing Csrf::verify or CsrfGate
+csrf,forums/delete_post.php,missing Csrf::verify or CsrfGate
+csrf,forums/delete_subscription.php,missing Csrf::verify or CsrfGate
+csrf,forums/download_attachment.php,missing Csrf::verify or CsrfGate
+csrf,forums/edit_post.php,missing Csrf::verify or CsrfGate
+csrf,forums/member_post_history.php,missing Csrf::verify or CsrfGate
+csrf,forums/new_topic.php,missing Csrf::verify or CsrfGate
+csrf,forums/poll.php,missing Csrf::verify or CsrfGate
+csrf,forums/post_reply.php,missing Csrf::verify or CsrfGate
+csrf,forums/section_view.php,missing Csrf::verify or CsrfGate
+csrf,forums/staff_actions.php,missing Csrf::verify or CsrfGate
+csrf,forums/stafflock_post.php,missing Csrf::verify or CsrfGate
+csrf,forums/undelete_post.php,missing Csrf::verify or CsrfGate
+csrf,forums/view_forum.php,missing Csrf::verify or CsrfGate
+csrf,forums/view_post_history.php,missing Csrf::verify or CsrfGate
+csrf,forums/view_topic.php,missing Csrf::verify or CsrfGate
+csrf,public/achievementlist.php,missing Csrf::verify or CsrfGate
+csrf,public/ajax/autocomplete.php,missing Csrf::verify or CsrfGate
+csrf,public/ajax/bookmarks.php,missing Csrf::verify or CsrfGate
+csrf,public/ajax/checkport.php,missing Csrf::verify or CsrfGate
+csrf,public/ajax/checkports.php,missing Csrf::verify or CsrfGate
+csrf,public/ajax/cooker_notify.php,missing Csrf::verify or CsrfGate
+csrf,public/ajax/descr_format.php,missing Csrf::verify or CsrfGate
+csrf,public/ajax/ebook_lookup.php,missing Csrf::verify or CsrfGate
+csrf,public/ajax/imdb_lookup.php,missing Csrf::verify or CsrfGate
+csrf,public/ajax/isbn_lookup.php,missing Csrf::verify or CsrfGate
+csrf,public/ajax/like.php,missing Csrf::verify or CsrfGate
+csrf,public/ajax/member_input.php,missing Csrf::verify or CsrfGate
+csrf,public/ajax/offer_notify.php,missing Csrf::verify or CsrfGate
+csrf,public/ajax/offer_status.php,missing Csrf::verify or CsrfGate
+csrf,public/ajax/offer_vote.php,missing Csrf::verify or CsrfGate
+csrf,public/ajax/rating.php,missing Csrf::verify or CsrfGate
+csrf,public/ajax/request_notify.php,missing Csrf::verify or CsrfGate
+csrf,public/ajax/request_vote.php,missing Csrf::verify or CsrfGate
+csrf,public/ajax/show_in_navbar.php,missing Csrf::verify or CsrfGate
+csrf,public/ajax/staff_picks.php,missing Csrf::verify or CsrfGate
+csrf,public/ajax/take_upload.php,missing Csrf::verify or CsrfGate
+csrf,public/ajax/take_url_upload.php,missing Csrf::verify or CsrfGate
+csrf,public/ajax/thanks.php,missing Csrf::verify or CsrfGate
+csrf,public/ajax/torrents_lookup.php,missing Csrf::verify or CsrfGate
+csrf,public/ajax/trivia_answers.php,missing Csrf::verify or CsrfGate
+csrf,public/ajax/tvmaze_lookup.php,missing Csrf::verify or CsrfGate
+csrf,public/ajax/usersearch.php,missing Csrf::verify or CsrfGate
+csrf,public/bitbucket.php,missing Csrf::verify or CsrfGate
+csrf,public/blackjack.php,missing Csrf::verify or CsrfGate
+csrf,public/bot_triggers.php,missing Csrf::verify or CsrfGate
+csrf,public/browse.php,missing Csrf::verify or CsrfGate
+csrf,public/bugs.php,missing Csrf::verify or CsrfGate
+csrf,public/casino.php,missing Csrf::verify or CsrfGate
+csrf,public/contactstaff.php,missing Csrf::verify or CsrfGate
+csrf,public/delete.php,missing Csrf::verify or CsrfGate
+csrf,public/details.php,missing Csrf::verify or CsrfGate
+csrf,public/downloadsub.php,missing Csrf::verify or CsrfGate
+csrf,public/edit.php,missing Csrf::verify or CsrfGate
+csrf,public/forums.php,missing Csrf::verify or CsrfGate
+csrf,public/getrss.php,missing Csrf::verify or CsrfGate
+csrf,public/hnrs.php,missing Csrf::verify or CsrfGate
+csrf,public/index.legacy.php,missing Csrf::verify or CsrfGate
+csrf,public/login.php,missing Csrf::verify or CsrfGate
+csrf,public/mybonus.php,missing Csrf::verify or CsrfGate
+csrf,public/new_announcement.php,missing Csrf::verify or CsrfGate
+csrf,public/offers.php,missing Csrf::verify or CsrfGate
+csrf,public/polls_take_vote.php,missing Csrf::verify or CsrfGate
+csrf,public/recover.php,missing Csrf::verify or CsrfGate
+csrf,public/report.php,missing Csrf::verify or CsrfGate
+csrf,public/requests.php,missing Csrf::verify or CsrfGate
+csrf,public/rss.php,missing Csrf::verify or CsrfGate
+csrf,public/search.php,missing Csrf::verify or CsrfGate
+csrf,public/signup.php,missing Csrf::verify or CsrfGate
+csrf,public/subtitles.php,missing Csrf::verify or CsrfGate
+csrf,public/tags.php,missing Csrf::verify or CsrfGate
+csrf,public/takereseed.php,missing Csrf::verify or CsrfGate
+csrf,public/takethankyou.php,missing Csrf::verify or CsrfGate
+csrf,public/takeupload.php,missing Csrf::verify or CsrfGate
+csrf,public/tenpercent.php,missing Csrf::verify or CsrfGate
+csrf,public/upcoming.php,missing Csrf::verify or CsrfGate
+csrf,public/uploadapp.php,missing Csrf::verify or CsrfGate
+csrf,public/user_blocks.php,missing Csrf::verify or CsrfGate
+csrf,public/user_unlocks.php,missing Csrf::verify or CsrfGate
+csrf,public/usercomment.php,missing Csrf::verify or CsrfGate
+csrf,public/verify.php,missing Csrf::verify or CsrfGate
+csrf,public/wiki.php,missing Csrf::verify or CsrfGate
+csrf,staffpanel/index.php,missing Csrf::verify or CsrfGate
+escaping,admin/reputation_settings.php,line 257: echo $html;
+escaping,bin/mysql_drop_fks.php,"line 20: echo $sql . ""\n"";"
+escaping,bin/optimize_resize_images.php,"line 154: echo $count . "" optimized and resized\n"";"
+escaping,classes/Http/MiddlewarePipeline.php,line 86: echo $response;
+escaping,cleanup/announcement_update.php,"line 29: echo $text . ""\n"";"
+escaping,cleanup/cheatclean_update.php,"line 26: echo $text . ""\n"";"
+escaping,cleanup/funds_table_update.php,"line 34: echo $text . ""\n"";"
+escaping,cleanup/hitrun_update.php,"line 112: echo $text . ""\n"";"
+escaping,cleanup/tvmaze_schedule_update.php,"line 71: echo $text . ""\n"";"
+escaping,public/ajax/autocomplete.php,line 100: echo $template;
+escaping,public/ajax/thanks.php,line 136: echo $payload;
+escaping,public/ajax/thanks.php,line 197: echo $payload;
+escaping,public/allsmiles.php,line 120: echo $htmlout;
+escaping,public/download.php,line 193: echo $tor;
+escaping,public/download.php,line 197: echo $tor;
+escaping,public/rss.php,line 219: echo $rss;
+ratelimit,admin/acpmanage.php,no RateLimiter or RateLimitPost
+ratelimit,admin/adduser.php,no RateLimiter or RateLimitPost
+ratelimit,admin/backup.php,no RateLimiter or RateLimitPost
+ratelimit,admin/bannedemails.php,no RateLimiter or RateLimitPost
+ratelimit,admin/bans.php,no RateLimiter or RateLimitPost
+ratelimit,admin/block.settings.php,no RateLimiter or RateLimitPost
+ratelimit,admin/bonusmanage.php,no RateLimiter or RateLimitPost
+ratelimit,admin/categories.php,no RateLimiter or RateLimitPost
+ratelimit,admin/cheaters.php,no RateLimiter or RateLimitPost
+ratelimit,admin/class_config.php,no RateLimiter or RateLimitPost
+ratelimit,admin/cleanup_manager.php,no RateLimiter or RateLimitPost
+ratelimit,admin/cloudview.php,no RateLimiter or RateLimitPost
+ratelimit,admin/datareset.php,no RateLimiter or RateLimitPost
+ratelimit,admin/deathrow.php,no RateLimiter or RateLimitPost
+ratelimit,admin/delacct.php,no RateLimiter or RateLimitPost
+ratelimit,admin/edit_moods.php,no RateLimiter or RateLimitPost
+ratelimit,admin/editlog.php,no RateLimiter or RateLimitPost
+ratelimit,admin/findnotconnectable.php,no RateLimiter or RateLimitPost
+ratelimit,admin/floodlimit.php,no RateLimiter or RateLimitPost
+ratelimit,admin/forum_config.php,no RateLimiter or RateLimitPost
+ratelimit,admin/forum_manage.php,no RateLimiter or RateLimitPost
+ratelimit,admin/freeleech.php,no RateLimiter or RateLimitPost
+ratelimit,admin/grouppm.php,no RateLimiter or RateLimitPost
+ratelimit,admin/hit_and_run_settings.php,no RateLimiter or RateLimitPost
+ratelimit,admin/hnrwarn.php,no RateLimiter or RateLimitPost
+ratelimit,admin/inactive.php,no RateLimiter or RateLimitPost
+ratelimit,admin/invite_tree.php,no RateLimiter or RateLimitPost
+ratelimit,admin/leechwarn.php,no RateLimiter or RateLimitPost
+ratelimit,admin/log_viewer.php,no RateLimiter or RateLimitPost
+ratelimit,admin/manage_images.php,no RateLimiter or RateLimitPost
+ratelimit,admin/mass_bonus_for_members.php,no RateLimiter or RateLimitPost
+ratelimit,admin/mega_search.php,no RateLimiter or RateLimitPost
+ratelimit,admin/modded_torrents.php,no RateLimiter or RateLimitPost
+ratelimit,admin/modtask.php,no RateLimiter or RateLimitPost
+ratelimit,admin/news.php,no RateLimiter or RateLimitPost
+ratelimit,admin/over_forums.php,no RateLimiter or RateLimitPost
+ratelimit,admin/polls_manager.php,no RateLimiter or RateLimitPost
+ratelimit,admin/promo.php,no RateLimiter or RateLimitPost
+ratelimit,admin/reputation_settings.php,no RateLimiter or RateLimitPost
+ratelimit,admin/reset.php,no RateLimiter or RateLimitPost
+ratelimit,admin/site_settings.php,no RateLimiter or RateLimitPost
+ratelimit,admin/sysoplog.php,no RateLimiter or RateLimitPost
+ratelimit,admin/themes.php,no RateLimiter or RateLimitPost
+ratelimit,admin/traceroute.php,no RateLimiter or RateLimitPost
+ratelimit,admin/trivia_config.php,no RateLimiter or RateLimitPost
+ratelimit,admin/upgrade_database.php,no RateLimiter or RateLimitPost
+ratelimit,admin/uploadapps.php,no RateLimiter or RateLimitPost
+ratelimit,admin/usersearch.php,no RateLimiter or RateLimitPost
+ratelimit,admin/watched_users.php,no RateLimiter or RateLimitPost
+ratelimit,classes/Http/Middlewares/CsrfGate.php,no RateLimiter or RateLimitPost
+ratelimit,forums/_scaffold/__template.php,no RateLimiter or RateLimitPost
+ratelimit,forums/add_subscription.php,no RateLimiter or RateLimitPost
+ratelimit,forums/clear_unread_post.php,no RateLimiter or RateLimitPost
+ratelimit,forums/delete_post.php,no RateLimiter or RateLimitPost
+ratelimit,forums/delete_subscription.php,no RateLimiter or RateLimitPost
+ratelimit,forums/download_attachment.php,no RateLimiter or RateLimitPost
+ratelimit,forums/edit_post.php,no RateLimiter or RateLimitPost
+ratelimit,forums/member_post_history.php,no RateLimiter or RateLimitPost
+ratelimit,forums/new_topic.php,no RateLimiter or RateLimitPost
+ratelimit,forums/poll.php,no RateLimiter or RateLimitPost
+ratelimit,forums/post_reply.php,no RateLimiter or RateLimitPost
+ratelimit,forums/section_view.php,no RateLimiter or RateLimitPost
+ratelimit,forums/staff_actions.php,no RateLimiter or RateLimitPost
+ratelimit,forums/stafflock_post.php,no RateLimiter or RateLimitPost
+ratelimit,forums/undelete_post.php,no RateLimiter or RateLimitPost
+ratelimit,forums/view_forum.php,no RateLimiter or RateLimitPost
+ratelimit,forums/view_post_history.php,no RateLimiter or RateLimitPost
+ratelimit,forums/view_topic.php,no RateLimiter or RateLimitPost
+ratelimit,public/achievementlist.php,no RateLimiter or RateLimitPost
+ratelimit,public/ajax/autocomplete.php,no RateLimiter or RateLimitPost
+ratelimit,public/ajax/bookmarks.php,no RateLimiter or RateLimitPost
+ratelimit,public/ajax/checkport.php,no RateLimiter or RateLimitPost
+ratelimit,public/ajax/checkports.php,no RateLimiter or RateLimitPost
+ratelimit,public/ajax/cooker_notify.php,no RateLimiter or RateLimitPost
+ratelimit,public/ajax/descr_format.php,no RateLimiter or RateLimitPost
+ratelimit,public/ajax/ebook_lookup.php,no RateLimiter or RateLimitPost
+ratelimit,public/ajax/imdb_lookup.php,no RateLimiter or RateLimitPost
+ratelimit,public/ajax/isbn_lookup.php,no RateLimiter or RateLimitPost
+ratelimit,public/ajax/like.php,no RateLimiter or RateLimitPost
+ratelimit,public/ajax/member_input.php,no RateLimiter or RateLimitPost
+ratelimit,public/ajax/offer_notify.php,no RateLimiter or RateLimitPost
+ratelimit,public/ajax/offer_status.php,no RateLimiter or RateLimitPost
+ratelimit,public/ajax/offer_vote.php,no RateLimiter or RateLimitPost
+ratelimit,public/ajax/rating.php,no RateLimiter or RateLimitPost
+ratelimit,public/ajax/request_notify.php,no RateLimiter or RateLimitPost
+ratelimit,public/ajax/request_vote.php,no RateLimiter or RateLimitPost
+ratelimit,public/ajax/show_in_navbar.php,no RateLimiter or RateLimitPost
+ratelimit,public/ajax/staff_picks.php,no RateLimiter or RateLimitPost
+ratelimit,public/ajax/take_upload.php,no RateLimiter or RateLimitPost
+ratelimit,public/ajax/take_url_upload.php,no RateLimiter or RateLimitPost
+ratelimit,public/ajax/thanks.php,no RateLimiter or RateLimitPost
+ratelimit,public/ajax/torrents_lookup.php,no RateLimiter or RateLimitPost
+ratelimit,public/ajax/trivia_answers.php,no RateLimiter or RateLimitPost
+ratelimit,public/ajax/tvmaze_lookup.php,no RateLimiter or RateLimitPost
+ratelimit,public/ajax/usersearch.php,no RateLimiter or RateLimitPost
+ratelimit,public/bitbucket.php,no RateLimiter or RateLimitPost
+ratelimit,public/blackjack.php,no RateLimiter or RateLimitPost
+ratelimit,public/bot_triggers.php,no RateLimiter or RateLimitPost
+ratelimit,public/browse.php,no RateLimiter or RateLimitPost
+ratelimit,public/bugs.php,no RateLimiter or RateLimitPost
+ratelimit,public/casino.php,no RateLimiter or RateLimitPost
+ratelimit,public/contactstaff.php,no RateLimiter or RateLimitPost
+ratelimit,public/delete.php,no RateLimiter or RateLimitPost
+ratelimit,public/details.php,no RateLimiter or RateLimitPost
+ratelimit,public/downloadsub.php,no RateLimiter or RateLimitPost
+ratelimit,public/edit.php,no RateLimiter or RateLimitPost
+ratelimit,public/forums.php,no RateLimiter or RateLimitPost
+ratelimit,public/getrss.php,no RateLimiter or RateLimitPost
+ratelimit,public/hnrs.php,no RateLimiter or RateLimitPost
+ratelimit,public/index.legacy.php,no RateLimiter or RateLimitPost
+ratelimit,public/mybonus.php,no RateLimiter or RateLimitPost
+ratelimit,public/new_announcement.php,no RateLimiter or RateLimitPost
+ratelimit,public/offers.php,no RateLimiter or RateLimitPost
+ratelimit,public/polls_take_vote.php,no RateLimiter or RateLimitPost
+ratelimit,public/recover.php,no RateLimiter or RateLimitPost
+ratelimit,public/report.php,no RateLimiter or RateLimitPost
+ratelimit,public/requests.php,no RateLimiter or RateLimitPost
+ratelimit,public/rss.php,no RateLimiter or RateLimitPost
+ratelimit,public/search.php,no RateLimiter or RateLimitPost
+ratelimit,public/signup.php,no RateLimiter or RateLimitPost
+ratelimit,public/subtitles.php,no RateLimiter or RateLimitPost
+ratelimit,public/tags.php,no RateLimiter or RateLimitPost
+ratelimit,public/takereseed.php,no RateLimiter or RateLimitPost
+ratelimit,public/takethankyou.php,no RateLimiter or RateLimitPost
+ratelimit,public/takeupload.php,no RateLimiter or RateLimitPost
+ratelimit,public/tenpercent.php,no RateLimiter or RateLimitPost
+ratelimit,public/upcoming.php,no RateLimiter or RateLimitPost
+ratelimit,public/uploadapp.php,no RateLimiter or RateLimitPost
+ratelimit,public/user_blocks.php,no RateLimiter or RateLimitPost
+ratelimit,public/user_unlocks.php,no RateLimiter or RateLimitPost
+ratelimit,public/usercomment.php,no RateLimiter or RateLimitPost
+ratelimit,public/verify.php,no RateLimiter or RateLimitPost
+ratelimit,public/wiki.php,no RateLimiter or RateLimitPost
+ratelimit,staffpanel/index.php,no RateLimiter or RateLimitPost
+upload,admin/adduser.php,UploadGuard::store not used
+upload,classes/Security/UploadGuard.php,UploadGuard::store not used
+upload,forums/attachment.php,UploadGuard::store not used
+upload,forums/edit_post.php,UploadGuard::store not used
+upload,forums/new_topic.php,UploadGuard::store not used
+upload,forums/post_reply.php,UploadGuard::store not used
+upload,public/login.php,UploadGuard::store not used
+upload,public/recover.php,UploadGuard::store not used
+upload,public/signup.php,UploadGuard::store not used
+https,public/index.php,ForceHttps and Hsts middleware wired
+frontcontroller,public/index.php,multiple handle() calls (2)
+passwords,public/ajax/take_url_upload.php,legacy password hashing usage
+passwords,public/bitbucket.php,legacy password hashing usage
+passwords,public/bot_triggers.php,legacy password hashing usage
+passwords,public/takeupload.php,legacy password hashing usage
+conflicts,admin/acpmanage.php,git conflict markers present
+conflicts,admin/adduser.php,git conflict markers present
+conflicts,admin/allagents.php,git conflict markers present
+conflicts,admin/backup.php,git conflict markers present
+conflicts,admin/banclient.php,git conflict markers present
+conflicts,admin/bonusmanage.php,git conflict markers present
+conflicts,admin/categories.php,git conflict markers present
+conflicts,admin/ipsearch.php,git conflict markers present
+conflicts,admin/leechwarn.php,git conflict markers present
+conflicts,admin/load.php,git conflict markers present
+conflicts,admin/log_viewer.php,git conflict markers present
+conflicts,admin/manage_images.php,git conflict markers present
+conflicts,admin/reset.php,git conflict markers present
+conflicts,admin/site_settings.php,git conflict markers present
+conflicts,bin/update_db.php,git conflict markers present
+conflicts,classes/Security/AuthZ.php,git conflict markers present
+conflicts,classes/Support/Audit.php,git conflict markers present
+conflicts,forums/poll.php,git conflict markers present
+conflicts,public/ajax/ajax_tooltips.php,git conflict markers present
+conflicts,public/recover.php,git conflict markers present
+conflicts,public/setclass.php,git conflict markers present
+conflicts,public/signup.php,git conflict markers present
+conflicts,public/user_blocks.php,git conflict markers present
+legacy_config,bin/clear_cache.php,legacy site_config usage
+legacy_config,bin/functions.php,legacy site_config usage
+legacy_config,bin/install.php,legacy site_config usage
+legacy_config,bin/jobby.php,legacy site_config usage
+legacy_config,bin/mysql_drop_fks.php,legacy site_config usage
+legacy_config,bin/set_perms.php,legacy site_config usage
+legacy_config,bin/update_db.php,legacy site_config usage
+legacy_config,bin/validate_images.php,legacy site_config usage
+legacy_config,forums/add_subscription.php,legacy site_config usage
+legacy_config,forums/clear_unread_post.php,legacy site_config usage
+legacy_config,forums/delete_post.php,legacy site_config usage
+legacy_config,forums/delete_subscription.php,legacy site_config usage
+legacy_config,forums/edit_post.php,legacy site_config usage
+legacy_config,public/details.php,legacy site_config usage
+legacy_config,public/download.php,legacy site_config usage
+legacy_config,public/edit.php,legacy site_config usage
+legacy_config,public/verify_email.php,legacy site_config usage

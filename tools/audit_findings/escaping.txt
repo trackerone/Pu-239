@@ -1,0 +1,16 @@
+admin/reputation_settings.php:257: echo $html;
+bin/mysql_drop_fks.php:20: echo $sql . "\n";
+bin/optimize_resize_images.php:154: echo $count . " optimized and resized\n";
+classes/Http/MiddlewarePipeline.php:86: echo $response;
+cleanup/announcement_update.php:29: echo $text . "\n";
+cleanup/cheatclean_update.php:26: echo $text . "\n";
+cleanup/funds_table_update.php:34: echo $text . "\n";
+cleanup/hitrun_update.php:112: echo $text . "\n";
+cleanup/tvmaze_schedule_update.php:71: echo $text . "\n";
+public/ajax/autocomplete.php:100: echo $template;
+public/ajax/thanks.php:136: echo $payload;
+public/ajax/thanks.php:197: echo $payload;
+public/allsmiles.php:120: echo $htmlout;
+public/download.php:193: echo $tor;
+public/download.php:197: echo $tor;
+public/rss.php:219: echo $rss;

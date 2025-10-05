@@ -1,0 +1,17 @@
+bin/clear_cache.php
+bin/functions.php
+bin/install.php
+bin/jobby.php
+bin/mysql_drop_fks.php
+bin/set_perms.php
+bin/update_db.php
+bin/validate_images.php
+forums/add_subscription.php
+forums/clear_unread_post.php
+forums/delete_post.php
+forums/delete_subscription.php
+forums/edit_post.php
+public/details.php
+public/download.php
+public/edit.php
+public/verify_email.php
