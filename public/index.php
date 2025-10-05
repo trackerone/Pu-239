@@ -8,6 +8,12 @@ use PU239\Http\Middlewares\CsrfGate;
 use PU239\Http\Middlewares\RateLimitPost;
 use PU239\Http\Middlewares\SecurityHeaders;
 use PU239\Http\Router;
+use PU239\Http\Router;
+use PU239\Http\MiddlewarePipeline;
+use PU239\Http\Middlewares\SecurityHeaders;
+use PU239\Http\Middlewares\CsrfGate;
+use PU239\Http\Middlewares\RateLimitPost;
+use PU239\Http\Handlers\HomeHandler;
 
 $router = new Router();
 $pipeline = new MiddlewarePipeline([
@@ -23,6 +29,17 @@ $router->get('/', \PU239\Http\Handlers\HomeHandler::class, [
 $router->get('/index.php', \PU239\Http\Handlers\HomeHandler::class, [
     'legacy' => __DIR__ . '/index.legacy.php',
 ]);
+$router->get('/', HomeHandler::class, [
+    'legacy' => __DIR__ . '/index.legacy.php',
+]);
+$router->get('/index.php', HomeHandler::class, [
+    'legacy' => __DIR__ . '/index.legacy.php',
+]);
+$router->get('/', \PU239\Http\Handlers\HomeHandler::class);
+$router->get('/index.php', \PU239\Http\Handlers\HomeHandler::class);
+$legacyIndex = __DIR__ . '/index.legacy.php';
+$router->get('/', HomeHandler::class, ['legacy' => $legacyIndex]);
+$router->get('/index.php', HomeHandler::class, ['legacy' => $legacyIndex]);
 
 $pipeline->handle($router);
 
