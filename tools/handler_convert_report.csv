@@ -49,3 +49,13 @@ classes/Http/Handlers/Admin/AllagentsHandler.php,false,1,TODO(2025) merge marker
 classes/Http/Handlers/Admin/BanclientHandler.php,false,1,TODO(2025) merge markers require manual extraction admin/banclient.php:1-80
 classes/Http/Handlers/Admin/BackupHandler.php,false,1,TODO(2025) merge markers require manual extraction admin/backup.php:1-320
 classes/Http/Handlers/Admin/ManageImagesHandler.php,false,1,TODO(2025) merge markers require manual extraction admin/manage_images.php:1-200
+classes/Http/Handlers/Public/LogoutHandler.php,true,0,Converted from public/logout.php
+classes/Http/Handlers/Public/ClearAnnouncementHandler.php,true,0,Converted from public/clear_announcement.php
+classes/Http/Handlers/Public/VerifyHandler.php,true,1,Converted from public/verify.php; TODO(2025) CSRF verification pending
+classes/Http/Handlers/Public/HappylogHandler.php,true,0,Converted from public/happylog.php
+classes/Http/Handlers/Public/VerifyEmailHandler.php,true,0,Converted from public/verify_email.php
+classes/Http/Handlers/Public/Ajax/CheckportsHandler.php,true,1,Converted from public/ajax/checkports.php; retains fsockopen probe
+classes/Http/Handlers/Public/Ajax/CookerNotifyHandler.php,true,1,Converted from public/ajax/cooker_notify.php; includes audit helper
+classes/Http/Handlers/Public/Ajax/DescrFormatHandler.php,true,1,Converted from public/ajax/descr_format.php; Torrent formatting inline
+classes/Http/Handlers/Public/Ajax/EbookLookupHandler.php,true,1,Converted from public/ajax/ebook_lookup.php; validator rules preserved
+classes/Http/Handlers/Public/Ajax/EmailcheckHandler.php,true,0,Converted from public/ajax/emailcheck.php; echoes availability messages

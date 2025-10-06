@@ -1,34 +1,67 @@
 <?php
 declare(strict_types=1);
 
-// Generated: STUB_UPGRADED
+// AUTO_CONVERT_ATTEMPTED: 2025-10-06 via handler-convert batch=55-5
 
 namespace PU239\Http\Handlers\Public\Ajax;
+
+use Pu239\Database;
 
 final class CookerNotifyHandler
 {
     /** @param array<string,mixed> $meta */
     public function handle(array $meta = []): void
     {
-        // STUB_UPGRADED: safe buffered execution
-        $target = __DIR__ . '/../../../../../public/ajax/cooker_notify.php';
-        if (!is_file($target)) {
-            error_log(sprintf('STUB MISSING: %s requires %s', __FILE__, $target));
-            http_response_code(500);
-            echo 'Service temporarily unavailable';
-            return;
-        }
-        $out = (static function (string $file): string {
-            ob_start();
-            try {
-                require $file;
-            } catch (\Throwable $e) {
-                error_log('Legacy stub error: ' . $e->getMessage());
-            }
-            return (string) ob_get_clean();
-        })($target);
+        // AUTO_CONVERT_ATTEMPTED: 2025-10-06 via handler-convert batch=55-5
+        try {
+            require_once \dirname(__DIR__, 5) . '/bootstrap_web.php';
+            require_once \dirname(__DIR__, 5) . '/include/helpers/audit.php';
+            require_once \dirname(__DIR__, 5) . '/include/bittorrent.php';
 
-        // Optional: allow middleware or further processing here
-        echo $out;
+            global $container;
+            /** @var Database $db */
+            $db = $container->get(Database::class);
+
+            $user = check_user_status();
+
+            if ($user === false) {
+                json_out(['notify' => 'invalid']);
+            }
+
+            // TODO(2025): csrf
+            $upcomingId = (int) ($_POST['id'] ?? 0);
+            $notified = filter_var($_POST['notified'] ?? false, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE);
+
+            if ($upcomingId <= 0 || $notified === null) {
+                json_out(['notify' => 'invalid']);
+            }
+
+            $params = [
+                'userid' => (int) $user['id'],
+                'upcomingid' => $upcomingId,
+            ];
+
+            if ($notified) {
+                $db->run(
+                    'DELETE FROM upcoming_notify WHERE userid = :userid AND upcomingid = :upcomingid',
+                    $params
+                );
+
+                json_out(['notify' => 0]);
+            }
+
+            $db->run(
+                'INSERT INTO upcoming_notify (userid, upcomingid, added) VALUES (:userid, :upcomingid, :added)',
+                $params + ['added' => [TIME_NOW, \PDO::PARAM_INT]]
+            );
+
+            $insertId = (int) $db->fetchValue('SELECT LAST_INSERT_ID()');
+
+            json_out(['notify' => $insertId]);
+        } catch (\Throwable $e) {
+            error_log('Converted handler error: ' . $e->getMessage());
+            http_response_code(500);
+            echo 'Internal error';
+        }
     }
 }
