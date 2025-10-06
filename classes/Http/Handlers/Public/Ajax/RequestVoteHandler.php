@@ -1,34 +1,81 @@
 <?php
 declare(strict_types=1);
 
-// Generated: STUB_UPGRADED
+// AUTO_CONVERT_ATTEMPTED: 2025-10-06 via handler-convert batch=60-5
 
 namespace PU239\Http\Handlers\Public\Ajax;
+
+use Pu239\Database;
 
 final class RequestVoteHandler
 {
     /** @param array<string,mixed> $meta */
     public function handle(array $meta = []): void
     {
-        // STUB_UPGRADED: safe buffered execution
-        $target = __DIR__ . '/../../../../../public/ajax/request_vote.php';
-        if (!is_file($target)) {
-            error_log(sprintf('STUB MISSING: %s requires %s', __FILE__, $target));
-            http_response_code(500);
-            echo 'Service temporarily unavailable';
-            return;
-        }
-        $out = (static function (string $file): string {
-            ob_start();
-            try {
-                require $file;
-            } catch (\Throwable $e) {
-                error_log('Legacy stub error: ' . $e->getMessage());
-            }
-            return (string) ob_get_clean();
-        })($target);
+        // AUTO_CONVERT_ATTEMPTED: 2025-10-06 via handler-convert batch=60-5
+        try {
+            require_once \dirname(__DIR__, 5) . '/bootstrap_web.php';
+            require_once \dirname(__DIR__, 5) . '/include/helpers/audit.php';
+            require_once \dirname(__DIR__, 5) . '/include/bittorrent.php';
 
-        // Optional: allow middleware or further processing here
-        echo $out;
+            global $container;
+            /** @var Database $db */
+            $db = $container->get(Database::class);
+
+            $user = check_user_status();
+            if ($user === false) {
+                json_out(['voted' => 'invalid']);
+
+                return;
+            }
+
+            // TODO(2025): csrf
+            $requestId = (int) ($_POST['id'] ?? 0);
+            $voted = $_POST['voted'] ?? null;
+
+            if ($requestId <= 0 || $voted === null) {
+                json_out(['voted' => 'invalid']);
+
+                return;
+            }
+
+            $params = [
+                'user_id' => (int) $user['id'],
+                'request_id' => $requestId,
+            ];
+
+            if ($voted === 'yes') {
+                $db->run(
+                    'UPDATE request_votes SET vote = :vote WHERE user_id = :user_id AND request_id = :request_id',
+                    $params + ['vote' => 'no'],
+                );
+
+                json_out(['voted' => 'no']);
+
+                return;
+            }
+
+            if ($voted === 'no') {
+                $db->run(
+                    'DELETE FROM request_votes WHERE user_id = :user_id AND request_id = :request_id',
+                    $params,
+                );
+
+                json_out(['voted' => 0]);
+
+                return;
+            }
+
+            $db->run(
+                'INSERT INTO request_votes (user_id, request_id, vote) VALUES (:user_id, :request_id, :vote)',
+                $params + ['vote' => 'yes'],
+            );
+
+            json_out(['voted' => 'yes']);
+        } catch (\Throwable $e) {
+            error_log('Converted handler error: ' . $e->getMessage());
+            http_response_code(500);
+            echo 'Internal error';
+        }
     }
 }

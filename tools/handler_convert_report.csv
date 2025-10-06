@@ -59,3 +59,8 @@ classes/Http/Handlers/Public/Ajax/CookerNotifyHandler.php,true,1,Converted from 
 classes/Http/Handlers/Public/Ajax/DescrFormatHandler.php,true,1,Converted from public/ajax/descr_format.php; Torrent formatting inline
 classes/Http/Handlers/Public/Ajax/EbookLookupHandler.php,true,1,Converted from public/ajax/ebook_lookup.php; validator rules preserved
 classes/Http/Handlers/Public/Ajax/EmailcheckHandler.php,true,0,Converted from public/ajax/emailcheck.php; echoes availability messages
+classes/Http/Handlers/Public/Ajax/OfferStatusHandler.php,true,1,Converted from public/ajax/offer_status.php
+classes/Http/Handlers/Public/Ajax/OfferVoteHandler.php,true,1,Converted from public/ajax/offer_vote.php
+classes/Http/Handlers/Public/Ajax/RatingHandler.php,true,1,Converted from public/ajax/rating.php
+classes/Http/Handlers/Public/Ajax/RequestNotifyHandler.php,true,1,Converted from public/ajax/request_notify.php
+classes/Http/Handlers/Public/Ajax/RequestVoteHandler.php,true,1,Converted from public/ajax/request_vote.php
