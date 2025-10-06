@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-// Generated: STUB_UPGRADED
+// AUTO_CONVERT_ATTEMPTED: 2025-10-06, tools/handler_convert batch=45
 
 namespace PU239\Http\Handlers\Admin;
 
@@ -10,7 +10,7 @@ final class AllagentsHandler
     /** @param array<string,mixed> $meta */
     public function handle(array $meta = []): void
     {
-        // STUB_UPGRADED: safe buffered execution
+        // TODO(2025): extract legacy block from admin/allagents.php:1-120 (merge markers present)
         $target = __DIR__ . '/../../../../admin/allagents.php';
         if (!is_file($target)) {
             error_log(sprintf('STUB MISSING: %s requires %s', __FILE__, $target));
@@ -28,8 +28,6 @@ final class AllagentsHandler
             return (string) ob_get_clean();
         })($target);
 
-        // Optional: allow middleware or further processing here
         echo $out;
-    
     }
 }

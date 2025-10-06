@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-// Generated: STUB_UPGRADED
+// AUTO_CONVERT_ATTEMPTED: 2025-03-19 via tools/handler-convert batch=offset40
 
 namespace PU239\Http\Handlers\Admin;
 
@@ -10,7 +10,8 @@ final class SiteSettingsHandler
     /** @param array<string,mixed> $meta */
     public function handle(array $meta = []): void
     {
-        // STUB_UPGRADED: safe buffered execution
+        // AUTO_CONVERT_ATTEMPTED: 2025-03-19
+        // TODO(2025): extract legacy block from admin/site_settings.php:1-400 (complex $fluent usage and unresolved merge markers).
         $target = __DIR__ . '/../../../../admin/site_settings.php';
         if (!is_file($target)) {
             error_log(sprintf('STUB MISSING: %s requires %s', __FILE__, $target));
