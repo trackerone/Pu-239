@@ -39,3 +39,8 @@ classes/Http/Handlers/Admin/SysoplogHandler.php,true,0,Extracted from admin/syso
 classes/Http/Handlers/Admin/TodoHandler.php,true,0,Extracted from admin/todo.php
 classes/Http/Handlers/Admin/NewsHandler.php,false,1,TODO(2025) manual extraction required admin/news.php:1-320
 classes/Http/Handlers/Admin/OverForumsHandler.php,false,1,TODO(2025) manual extraction required admin/over_forums.php:1-260
+classes/Http/Handlers/Admin/ResetHandler.php,true,1,Extracted from admin/reset.php; TODO merge markers around password policy
+classes/Http/Handlers/Admin/ShitListHandler.php,true,0,Extracted from admin/shit_list.php; throws until SQL restored
+classes/Http/Handlers/Admin/SiteSettingsHandler.php,false,1,TODO(2025) legacy script complex admin/site_settings.php:1-400
+classes/Http/Handlers/Admin/SitelogHandler.php,true,0,Extracted from admin/sitelog.php; throws until SQL restored
+classes/Http/Handlers/Admin/SnatchedTorrentsHandler.php,false,1,TODO(2025) heavy legacy admin/snatched_torrents.php:1-220
