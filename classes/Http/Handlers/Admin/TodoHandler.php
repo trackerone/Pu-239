@@ -1,35 +1,55 @@
 <?php
 declare(strict_types=1);
 
-// Generated: STUB_UPGRADED
-
 namespace PU239\Http\Handlers\Admin;
+
+use Parsedown;
+use PU239\Config\ConfigRepository;
+use PU239\Security\AuthZ;
 
 final class TodoHandler
 {
     /** @param array<string,mixed> $meta */
     public function handle(array $meta = []): void
     {
-        // STUB_UPGRADED: safe buffered execution
-        $target = __DIR__ . '/../../../../admin/todo.php';
-        if (!is_file($target)) {
-            error_log(sprintf('STUB MISSING: %s requires %s', __FILE__, $target));
-            http_response_code(500);
-            echo 'Service temporarily unavailable';
-            return;
-        }
-        $out = (static function (string $file): string {
-            ob_start();
-            try {
-                require $file;
-            } catch (\Throwable $e) {
-                error_log('Legacy stub error: ' . $e->getMessage());
+        // AUTO_CONVERT_ATTEMPTED: 2025-10-05 via tools/handler_convert_report.csv
+        try {
+            if (strpos(__FILE__, '/admin/') !== false) {
+                AuthZ::requireRole('admin');
+            } else {
+                AuthZ::requireAnyRole(['staff', 'admin']);
             }
-            return (string) ob_get_clean();
-        })($target);
 
-        // Optional: allow middleware or further processing here
-        echo $out;
-    
+            global $container;
+            /** @var ConfigRepository $config */
+            $config = $container->get(ConfigRepository::class);
+
+            $class = get_access(basename($_SERVER['REQUEST_URI'] ?? ''));
+            class_check($class);
+
+            /** @var Parsedown $parsedown */
+            $parsedown = $container->get(Parsedown::class);
+            $markdown = file_get_contents(ROOT_DIR . 'TODO.md') ?: '';
+
+            $htmlOut = '';
+            if ($markdown !== '') {
+                $content = "
+    <h1 class='has-text-centered'>TODO</h1><div class='padding20 round10 bg-00'>" . $parsedown->parse($markdown) . '</div>';
+                $htmlOut .= main_div($content, null, 'padding20');
+            } else {
+                stderr(_('Error'), _('No content'));
+            }
+
+            $title = _('TODO Reader');
+            $breadcrumbs = [
+                "<a href='{$config->get('paths.baseurl')}/staffpanel.php'>" . _('Staff Panel') . '</a>',
+                "<a href='" . ($_SERVER['PHP_SELF'] ?? '') . "'>$title</a>",
+            ];
+            echo stdhead($title, [], 'page-wrapper', $breadcrumbs) . wrapper($htmlOut) . stdfoot();
+        } catch (\Throwable $e) {
+            error_log('Converted handler error: ' . $e->getMessage());
+            http_response_code(500);
+            echo 'Internal error';
+        }
     }
 }

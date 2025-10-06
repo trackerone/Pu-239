@@ -758,3 +758,16 @@ No matches.
 $ rg -n "mysqli_|sql_query\(|sqlesc\(|->from\(" public/achievementbonus.php public/achievementhistory.php public/achievementlist.php public/ajax/ajax_tooltips.php public/ajax/autocomplete.php public/ajax/bookmarks.php public/ajax/checkport.php public/ajax/checkports.php public/ajax/cooker_notify.php public/ajax/descr_format.php public/ajax/ebook_lookup.php public/ajax/emailcheck.php public/ajax/imdb_lookup.php public/ajax/isbn_lookup.php public/ajax/like.php public/ajax/member_input.php public/ajax/namecheck.php public/ajax/offer_notify.php public/ajax/offer_status.php public/ajax/offer_vote.php
 ```
 No matches.
+
+## classes/Http/Handlers/Admin (batch 38)
+- Files changed: 2 (`classes/Http/Handlers/Admin/SysoplogHandler.php`, `classes/Http/Handlers/Admin/TodoHandler.php`).
+- Legacy patterns removed: replaced the legacy `require` stubs with inline handlers that pull config/services from the container; no direct `mysqli_`, `sql_query()`, or `sqlesc()` usages remained.
+- Transactions added: none (all writes are single statements safeguarded by the database helper).
+- `SELECT COUNT(*)` replacements: retained the existing counted pagination for the sysop log via `COUNT(id)`.
+- IN/LIKE/LIMIT binding: search filtering continues to use named placeholders through `Database::run()`/`fetchAll()`.
+
+### Verification
+```
+$ rg -n "mysqli_|sql_query\(|sqlesc\(" classes/Http/Handlers/Admin/SysoplogHandler.php classes/Http/Handlers/Admin/TodoHandler.php
+```
+No matches.
