@@ -37,3 +37,5 @@ classes/Http/Handlers/Admin/OverForumsHandler.php,true,0,Extracted from admin/ov
 classes/Http/Handlers/Admin/ReferrersHandler.php,true,0,Extracted from admin/referrers.php
 classes/Http/Handlers/Admin/SysoplogHandler.php,true,0,Extracted from admin/sysoplog.php
 classes/Http/Handlers/Admin/TodoHandler.php,true,0,Extracted from admin/todo.php
+classes/Http/Handlers/Admin/NewsHandler.php,false,1,TODO(2025) manual extraction required admin/news.php:1-320
+classes/Http/Handlers/Admin/OverForumsHandler.php,false,1,TODO(2025) manual extraction required admin/over_forums.php:1-260
