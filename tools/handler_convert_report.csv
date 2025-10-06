@@ -44,3 +44,8 @@ classes/Http/Handlers/Admin/ShitListHandler.php,true,0,Extracted from admin/shit
 classes/Http/Handlers/Admin/SiteSettingsHandler.php,false,1,TODO(2025) legacy script complex admin/site_settings.php:1-400
 classes/Http/Handlers/Admin/SitelogHandler.php,true,0,Extracted from admin/sitelog.php; throws until SQL restored
 classes/Http/Handlers/Admin/SnatchedTorrentsHandler.php,false,1,TODO(2025) heavy legacy admin/snatched_torrents.php:1-220
+classes/Http/Handlers/Admin/AcpmanageHandler.php,false,1,TODO(2025) merge markers require manual extraction admin/acpmanage.php:1-200
+classes/Http/Handlers/Admin/AllagentsHandler.php,false,1,TODO(2025) merge markers require manual extraction admin/allagents.php:1-120
+classes/Http/Handlers/Admin/BanclientHandler.php,false,1,TODO(2025) merge markers require manual extraction admin/banclient.php:1-80
+classes/Http/Handlers/Admin/BackupHandler.php,false,1,TODO(2025) merge markers require manual extraction admin/backup.php:1-320
+classes/Http/Handlers/Admin/ManageImagesHandler.php,false,1,TODO(2025) merge markers require manual extraction admin/manage_images.php:1-200
