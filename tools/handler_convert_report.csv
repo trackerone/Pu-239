@@ -69,3 +69,8 @@ classes/Http/Handlers/Public/BitbucketHandler.php,false,1,TODO(2025) legacy scri
 classes/Http/Handlers/Public/BjstatsHandler.php,true,0,Extracted from public/bjstats.php
 classes/Http/Handlers/Public/BlackjackHandler.php,false,1,TODO(2025) legacy script complex public/blackjack.php:1-420
 classes/Http/Handlers/Public/BookmarksHandler.php,true,0,Extracted from public/bookmarks.php
+classes/Http/Handlers/Public/LotteryHandler.php,false,1,TODO(2025) legacy script dispatch and sql_query usage require manual extraction
+classes/Http/Handlers/Public/MoviesHandler.php,false,1,TODO(2025) multi-source cache workflow requires curated port
+classes/Http/Handlers/Public/MybonusHandler.php,false,1,TODO(2025) complex bonus catalogue with fluent chains
+classes/Http/Handlers/Public/MytorrentsHandler.php,false,1,TODO(2025) torrent pager relies on fluent sorting helpers
+classes/Http/Handlers/Public/NeedseedHandler.php,false,1,TODO(2025) dual-mode needseed queries pending repository rewrite
