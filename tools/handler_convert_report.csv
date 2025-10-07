@@ -68,3 +68,13 @@ classes/Http/Handlers/Public/Ajax/AjaxTooltipsHandler.php,true,0,Converted from 
 classes/Http/Handlers/Public/Ajax/AutocompleteHandler.php,true,2,Converted from public/ajax/autocomplete.php
 classes/Http/Handlers/Public/Ajax/BookmarksHandler.php,true,1,Converted from public/ajax/bookmarks.php
 classes/Http/Handlers/Public/Ajax/CheckportHandler.php,true,1,Converted from public/ajax/checkport.php
+classes/Http/Handlers/Public/ArcadeTopScoresHandler.php,true,0,Extracted from public/arcade_top_scores.php
+classes/Http/Handlers/Public/BitbucketHandler.php,false,1,TODO(2025) legacy script complex public/bitbucket.php:1-400
+classes/Http/Handlers/Public/BjstatsHandler.php,true,0,Extracted from public/bjstats.php
+classes/Http/Handlers/Public/BlackjackHandler.php,false,1,TODO(2025) legacy script complex public/blackjack.php:1-420
+classes/Http/Handlers/Public/BookmarksHandler.php,true,0,Extracted from public/bookmarks.php
+classes/Http/Handlers/Public/LotteryHandler.php,false,1,TODO(2025) legacy script dispatch and sql_query usage require manual extraction
+classes/Http/Handlers/Public/MoviesHandler.php,false,1,TODO(2025) multi-source cache workflow requires curated port
+classes/Http/Handlers/Public/MybonusHandler.php,false,1,TODO(2025) complex bonus catalogue with fluent chains
+classes/Http/Handlers/Public/MytorrentsHandler.php,false,1,TODO(2025) torrent pager relies on fluent sorting helpers
+classes/Http/Handlers/Public/NeedseedHandler.php,false,1,TODO(2025) dual-mode needseed queries pending repository rewrite
