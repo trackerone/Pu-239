@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-// AUTO_CONVERT_ATTEMPTED: 2025-10-06 via handler-convert batch=55-5
+// AUTO_CONVERT_ATTEMPTED: 2025-10-06 via handler-convert batch=65-5
 
 namespace PU239\Http\Handlers\Public\Ajax;
 
@@ -12,7 +12,7 @@ final class CheckportsHandler
     /** @param array<string,mixed> $meta */
     public function handle(array $meta = []): void
     {
-        // AUTO_CONVERT_ATTEMPTED: 2025-10-06 via handler-convert batch=55-5
+        // AUTO_CONVERT_ATTEMPTED: 2025-10-06 via handler-convert batch=65-5
         try {
             require_once \dirname(__DIR__, 5) . '/bootstrap_web.php';
             require_once \dirname(__DIR__, 5) . '/include/bittorrent.php';
@@ -21,7 +21,7 @@ final class CheckportsHandler
             /** @var Database $db */
             $db = $container->get(Database::class);
 
-            $s = static fn(mixed $value): string => htmlspecialchars((string) $value, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
+            $s = static fn($v): string => htmlspecialchars((string) $v, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
 
             $user = check_user_status();
 
@@ -52,6 +52,8 @@ final class CheckportsHandler
                 }
                 $used[] = $ip . $port;
 
+                $errno = 0;
+                $errstr = '';
                 $connection = @fsockopen($ip, $port, $errno, $errstr, 10.0);
                 $ipDisplay = $s($ip);
                 if (is_resource($connection)) {
@@ -62,12 +64,12 @@ final class CheckportsHandler
                 }
 
                 $out .= "
-                <div class='columns is-multiline is-gapless padding10'>
-                    <span class='column is-2 padding5'>{$ipDisplay}</span>
-                    <span class='column is-1 padding5'>{$port}</span>
-                    <span class='column is-2 padding5'>{$agent}</span>
-                    <span class='column padding5 has-text-left'>{$message}</span>
-                </div>";
+    <div class='columns is-multiline is-gapless padding10'>
+        <span class='column is-2 padding5'>{$ipDisplay}</span>
+        <span class='column is-1 padding5'>{$port}</span>
+        <span class='column is-2 padding5'>{$agent}</span>
+        <span class='column padding5 has-text-left'>{$message}</span>
+    </div>";
             }
 
             json_out(['data' => $out]);
