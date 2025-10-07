@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-// Generated: STUB_UPGRADED
+// AUTO_CONVERT_ATTEMPTED: 2025-10-07 via handler-convert batch=75-5
 
 namespace PU239\Http\Handlers\Public;
 
@@ -10,14 +10,17 @@ final class NeedseedHandler
     /** @param array<string,mixed> $meta */
     public function handle(array $meta = []): void
     {
-        // STUB_UPGRADED: safe buffered execution
+        // AUTO_CONVERT_ATTEMPTED: 2025-10-07 via handler-convert batch=75-5
+        // TODO(2025): extract legacy block from public/needseed.php:1-200 (dual-mode $fluent queries and genre hydration)
         $target = __DIR__ . '/../../../../public/needseed.php';
         if (!is_file($target)) {
             error_log(sprintf('STUB MISSING: %s requires %s', __FILE__, $target));
             http_response_code(500);
             echo 'Service temporarily unavailable';
+
             return;
         }
+
         $out = (static function (string $file): string {
             ob_start();
             try {
@@ -25,10 +28,10 @@ final class NeedseedHandler
             } catch (\Throwable $e) {
                 error_log('Legacy stub error: ' . $e->getMessage());
             }
+
             return (string) ob_get_clean();
         })($target);
 
-        // Optional: allow middleware or further processing here
         echo $out;
     }
 }
