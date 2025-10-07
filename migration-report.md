@@ -771,3 +771,16 @@ No matches.
 $ rg -n "mysqli_|sql_query\(|sqlesc\(" classes/Http/Handlers/Admin/SysoplogHandler.php classes/Http/Handlers/Admin/TodoHandler.php
 ```
 No matches.
+
+## classes/Http/Handlers/Public/Ajax (batch 65)
+- Files changed: 5 (`classes/Http/Handlers/Public/Ajax/AjaxTooltipsHandler.php`, `classes/Http/Handlers/Public/Ajax/AutocompleteHandler.php`, `classes/Http/Handlers/Public/Ajax/BookmarksHandler.php`, `classes/Http/Handlers/Public/Ajax/CheckportHandler.php`, `classes/Http/Handlers/Public/Ajax/CheckportsHandler.php`).
+- Legacy patterns removed: replaced `STUB_UPGRADED` require wrappers with inline handlers that access container-provided services (ConfigRepository, Cache, Database, Peer) and mirror the modernized public ajax workflows.
+- Transactions added: none (all handlers perform single-statement operations or external socket checks).
+- `SELECT COUNT(*)` replacements: none required for these flows.
+- IN/LIKE/LIMIT binding: preserved prepared statements via `$db->toArray()`/`run()` exactly as in the migrated public scripts.
+
+### Verification
+```
+$ rg -n "mysqli_|sql_query\(|sqlesc\(" classes/Http/Handlers/Public/Ajax/AjaxTooltipsHandler.php classes/Http/Handlers/Public/Ajax/AutocompleteHandler.php classes/Http/Handlers/Public/Ajax/BookmarksHandler.php classes/Http/Handlers/Public/Ajax/CheckportHandler.php classes/Http/Handlers/Public/Ajax/CheckportsHandler.php
+```
+No matches.
