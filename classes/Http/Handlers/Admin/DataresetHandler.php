@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-// Generated: STUB_UPGRADED
+// AUTO_CONVERT_ATTEMPTED: 2025-10-07 via handler-convert batch=85-5
 
 namespace PU239\Http\Handlers\Admin;
 
@@ -10,7 +10,8 @@ final class DataresetHandler
     /** @param array<string,mixed> $meta */
     public function handle(array $meta = []): void
     {
-        // STUB_UPGRADED: safe buffered execution
+        // AUTO_CONVERT_ATTEMPTED: 2025-10-07 via handler-convert batch=85-5
+        // TODO(2025): extract legacy block from admin/datareset.php:1-200 (requires fluent query rewrite and service wiring)
         $target = __DIR__ . '/../../../../admin/datareset.php';
         if (!is_file($target)) {
             error_log(sprintf('STUB MISSING: %s requires %s', __FILE__, $target));

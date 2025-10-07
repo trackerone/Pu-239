@@ -83,3 +83,8 @@ classes/Http/Handlers/Public/AnnouncementHandler.php,false,1,TODO(2025) dynamic 
 classes/Http/Handlers/Public/RssPdoDemoHandler.php,true,0,Converted from public/rss_pdo_demo.php
 classes/Http/Handlers/Public/AjaxchatHandler.php,true,0,Extracted from public/ajaxchat.php; ensures AJAX_CHAT_PATH guard
 classes/Http/Handlers/Public/UsercommentHandler.php,false,1,TODO(2025) multi-branch comment controller retains legacy require
+classes/Http/Handlers/Admin/AdduserHandler.php,false,1,TODO(2025) admin/adduser.php merge conflicts block manual extraction
+classes/Http/Handlers/Admin/CheatersHandler.php,true,1,Converted admin/cheaters.php with Database::inClause bindings; TODO csrf hardening
+classes/Http/Handlers/Admin/DataresetHandler.php,false,1,TODO(2025) admin/datareset.php depends on removed $fluent queries
+classes/Http/Handlers/Admin/DeathrowHandler.php,false,1,TODO(2025) admin/deathrow.php requires bespoke notifier workflow port
+classes/Http/Handlers/Admin/FindnotconnectableHandler.php,false,1,TODO(2025) admin/findnotconnectable.php legacy mysqli/sql_query flow
