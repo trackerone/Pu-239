@@ -93,3 +93,8 @@ classes/Http/Handlers/Public/UpcomingHandler.php,true,1,Extracted from public/up
 classes/Http/Handlers/Public/UploadHandler.php,false,1,TODO(2025) legacy script complex public/upload.php:1-400
 classes/Http/Handlers/Public/UploadappHandler.php,false,1,TODO(2025) legacy script complex public/uploadapp.php:1-320
 classes/Http/Handlers/Public/UserBlocksHandler.php,false,1,TODO(2025) legacy script complex public/user_blocks.php:1-320
+classes/Http/Handlers/Public/AchievementbonusHandler.php,true,0,Converted from public/achievementbonus.php
+classes/Http/Handlers/Public/AchievementhistoryHandler.php,true,0,Converted from public/achievementhistory.php
+classes/Http/Handlers/Public/AchievementlistHandler.php,true,1,Converted from public/achievementlist.php; TODO csrf follow-up
+classes/Http/Handlers/Public/AllsmilesHandler.php,true,1,Converted from public/allsmiles.php; TODO escape review
+classes/Http/Handlers/Public/AnatomyHandler.php,true,0,Converted from public/anatomy.php
