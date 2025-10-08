@@ -1,34 +1,71 @@
 <?php
 declare(strict_types=1);
 
-// Generated: STUB_UPGRADED
-
 namespace PU239\Http\Handlers\Public\Ajax;
+
+use PU239\Config\ConfigRepository;
+use Pu239\Database;
 
 final class OfferNotifyHandler
 {
-    /** @param array<string,mixed> $meta */
+    /**
+     * @param array<string, mixed> $meta
+     */
     public function handle(array $meta = []): void
     {
-        // STUB_UPGRADED: safe buffered execution
-        $target = __DIR__ . '/../../../../../public/ajax/offer_notify.php';
-        if (!is_file($target)) {
-            error_log(sprintf('STUB MISSING: %s requires %s', __FILE__, $target));
-            http_response_code(500);
-            echo 'Service temporarily unavailable';
-            return;
-        }
-        $out = (static function (string $file): string {
-            ob_start();
-            try {
-                require $file;
-            } catch (\Throwable $e) {
-                error_log('Legacy stub error: ' . $e->getMessage());
-            }
-            return (string) ob_get_clean();
-        })($target);
+        // AUTO_CONVERT_ATTEMPTED: 2025-10-08T04:13:01Z via codex handler conversion
+        try {
+            global $container;
 
-        // Optional: allow middleware or further processing here
-        echo $out;
+            /** @var ConfigRepository $config */
+            $config = $container->get(ConfigRepository::class);
+            unset($config);
+
+            /** @var Database $db */
+            $db = $container->get(Database::class);
+
+            $user = \check_user_status();
+            if ($user === false) {
+                \json_out(['notify' => 'invalid']);
+                return;
+            }
+
+            // TODO(2025): csrf on POST where missing
+            $offerId = (int) ($_POST['id'] ?? 0);
+            $notified = \filter_var($_POST['notified'] ?? false, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE);
+
+            if ($offerId <= 0 || $notified === null) {
+                \json_out(['notify' => 'invalid']);
+                return;
+            }
+
+            $params = [
+                'userid' => (int) $user['id'],
+                'offerid' => $offerId,
+            ];
+
+            if ($notified) {
+                $db->run(
+                    'DELETE FROM offer_notify WHERE userid = :userid AND offerid = :offerid',
+                    $params,
+                );
+
+                \json_out(['notify' => 0]);
+                return;
+            }
+
+            $db->run(
+                'INSERT INTO offer_notify (userid, offerid, added) VALUES (:userid, :offerid, :added)',
+                $params + ['added' => [TIME_NOW, \PDO::PARAM_INT]],
+            );
+
+            $insertId = (int) $db->fetchValue('SELECT LAST_INSERT_ID()');
+
+            \json_out(['notify' => $insertId]);
+        } catch (\Throwable $e) {
+            error_log('Converted handler error: ' . $e->getMessage());
+            http_response_code(500);
+            echo 'Internal error';
+        }
     }
 }

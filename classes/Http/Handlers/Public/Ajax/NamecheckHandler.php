@@ -1,34 +1,40 @@
 <?php
 declare(strict_types=1);
 
-// Generated: STUB_UPGRADED
-
 namespace PU239\Http\Handlers\Public\Ajax;
+
+use PU239\Config\ConfigRepository;
+use Pu239\Database;
 
 final class NamecheckHandler
 {
-    /** @param array<string,mixed> $meta */
+    /**
+     * @param array<string, mixed> $meta
+     */
     public function handle(array $meta = []): void
     {
-        // STUB_UPGRADED: safe buffered execution
-        $target = __DIR__ . '/../../../../../public/ajax/namecheck.php';
-        if (!is_file($target)) {
-            error_log(sprintf('STUB MISSING: %s requires %s', __FILE__, $target));
-            http_response_code(500);
-            echo 'Service temporarily unavailable';
-            return;
-        }
-        $out = (static function (string $file): string {
-            ob_start();
-            try {
-                require $file;
-            } catch (\Throwable $e) {
-                error_log('Legacy stub error: ' . $e->getMessage());
-            }
-            return (string) ob_get_clean();
-        })($target);
+        // AUTO_CONVERT_ATTEMPTED: 2025-10-08T04:13:01Z via codex handler conversion
+        try {
+            global $container;
 
-        // Optional: allow middleware or further processing here
-        echo $out;
+            /** @var ConfigRepository $config */
+            $config = $container->get(ConfigRepository::class);
+            unset($config);
+
+            /** @var Database $db */
+            $db = $container->get(Database::class);
+            unset($db);
+
+            $wantUsername = (string) ($_GET['wantusername'] ?? '');
+            if ($wantUsername === '') {
+                \app_halt('<div class="margin10 has-text-info">' . \_('You must enter a username!') . '</div>');
+            }
+
+            \valid_username($wantUsername, true, true);
+        } catch (\Throwable $e) {
+            error_log('Converted handler error: ' . $e->getMessage());
+            http_response_code(500);
+            echo 'Internal error';
+        }
     }
 }
