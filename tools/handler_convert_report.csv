@@ -88,3 +88,8 @@ classes/Http/Handlers/Admin/CheatersHandler.php,true,1,Converted admin/cheaters.
 classes/Http/Handlers/Admin/DataresetHandler.php,false,1,TODO(2025) admin/datareset.php depends on removed $fluent queries
 classes/Http/Handlers/Admin/DeathrowHandler.php,false,1,TODO(2025) admin/deathrow.php requires bespoke notifier workflow port
 classes/Http/Handlers/Admin/FindnotconnectableHandler.php,false,1,TODO(2025) admin/findnotconnectable.php legacy mysqli/sql_query flow
+classes/Http/Handlers/Public/TvshowsHandler.php,true,2,Extracted from public/tvshows.php; verify rating query params
+classes/Http/Handlers/Public/UpcomingHandler.php,true,1,Extracted from public/upcoming.php; CSRF handling pending
+classes/Http/Handlers/Public/UploadHandler.php,false,1,TODO(2025) legacy script complex public/upload.php:1-400
+classes/Http/Handlers/Public/UploadappHandler.php,false,1,TODO(2025) legacy script complex public/uploadapp.php:1-320
+classes/Http/Handlers/Public/UserBlocksHandler.php,false,1,TODO(2025) legacy script complex public/user_blocks.php:1-320
