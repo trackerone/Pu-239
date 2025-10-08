@@ -103,3 +103,8 @@ classes/Http/Handlers/Public/Ajax/MemberInputHandler.php,true,1,Extracted from p
 classes/Http/Handlers/Public/Ajax/NamecheckHandler.php,true,0,Extracted from public/ajax/namecheck.php
 classes/Http/Handlers/Public/Ajax/OfferNotifyHandler.php,true,1,Extracted from public/ajax/offer_notify.php
 classes/Http/Handlers/Public/Ajax/OfferStatusHandler.php,true,1,Extracted from public/ajax/offer_status.php
+classes/Http/Handlers/Public/Ajax/ShowInNavbarHandler.php,true,1,Converted public/ajax/show_in_navbar.php; TODO csrf review
+classes/Http/Handlers/Public/Ajax/StaffPicksHandler.php,true,1,Converted public/ajax/staff_picks.php; TODO csrf review
+classes/Http/Handlers/Public/Ajax/TvmazeLookupHandler.php,true,1,Converted public/ajax/tvmaze_lookup.php; TODO csrf review
+classes/Http/Handlers/Public/Ajax/TriviaAnswersHandler.php,true,1,Converted public/ajax/trivia_answers.php; TODO csrf review
+classes/Http/Handlers/Public/Ajax/TriviaLookupHandler.php,true,0,Converted public/ajax/trivia_lookup.php
