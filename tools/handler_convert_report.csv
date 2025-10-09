@@ -108,3 +108,8 @@ classes/Http/Handlers/Public/Ajax/StaffPicksHandler.php,true,1,Converted public/
 classes/Http/Handlers/Public/Ajax/TvmazeLookupHandler.php,true,1,Converted public/ajax/tvmaze_lookup.php; TODO csrf review
 classes/Http/Handlers/Public/Ajax/TriviaAnswersHandler.php,true,1,Converted public/ajax/trivia_answers.php; TODO csrf review
 classes/Http/Handlers/Public/Ajax/TriviaLookupHandler.php,true,0,Converted public/ajax/trivia_lookup.php
+classes/Http/Handlers/Public/Ajax/ThanksHandler.php,true,3,Converted public/ajax/thanks.php into handler with Database+Cache usage
+classes/Http/Handlers/Public/Ajax/TakeUploadHandler.php,true,1,Converted public/ajax/take_upload.php handling UploadGuard
+classes/Http/Handlers/Public/Ajax/TakeUrlUploadHandler.php,true,1,Converted public/ajax/take_url_upload.php with ImageProxy integration
+classes/Http/Handlers/Public/Ajax/UsersearchHandler.php,true,1,Converted public/ajax/usersearch.php to container-backed search
+classes/Http/Handlers/Public/Ajax/ViewSqlHandler.php,true,0,Converted public/ajax/view_sql.php preserving Adminer bootstrap
