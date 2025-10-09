@@ -1,6 +1,8 @@
 <?php
 declare(strict_types=1);
 
+// Generated: STUB_UPGRADED
+
 namespace PU239\Http\Handlers\Public\Ajax;
 
 final class ThanksHandler
@@ -8,9 +10,25 @@ final class ThanksHandler
     /** @param array<string,mixed> $meta */
     public function handle(array $meta = []): void
     {
-        // Temporary: execute legacy script inside isolated scope
-        (static function (): void {
-            require __DIR__ . '/../../../../../public/ajax/thanks.php';
-        })();
+        // STUB_UPGRADED: safe buffered execution
+        $target = __DIR__ . '/../../../../../public/ajax/thanks.php';
+        if (!is_file($target)) {
+            error_log(sprintf('STUB MISSING: %s requires %s', __FILE__, $target));
+            http_response_code(500);
+            echo 'Service temporarily unavailable';
+            return;
+        }
+        $out = (static function (string $file): string {
+            ob_start();
+            try {
+                require $file;
+            } catch (\Throwable $e) {
+                error_log('Legacy stub error: ' . $e->getMessage());
+            }
+            return (string) ob_get_clean();
+        })($target);
+
+        // Optional: allow middleware or further processing here
+        echo $out;
     }
 }
