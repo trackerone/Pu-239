@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-// Generated: STUB_UPGRADED
+// AUTO_CONVERT_ATTEMPTED: 2025-10-11 via handler-convert (batch=125-5)
 
 namespace PU239\Http\Handlers\Admin;
 
@@ -10,6 +10,7 @@ final class LogViewerHandler
     /** @param array<string,mixed> $meta */
     public function handle(array $meta = []): void
     {
+        // TODO(2025): extract legacy block from admin/log_viewer.php:1-200 (complex parsing)
         // STUB_UPGRADED: safe buffered execution
         $target = __DIR__ . '/../../../../admin/log_viewer.php';
         if (!is_file($target)) {

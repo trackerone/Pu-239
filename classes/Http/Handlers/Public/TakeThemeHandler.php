@@ -1,34 +1,63 @@
 <?php
 declare(strict_types=1);
 
-// Generated: STUB_UPGRADED
+// AUTO_CONVERT_ATTEMPTED: 2025-10-10 via handler-convert (batch=120-5)
 
 namespace PU239\Http\Handlers\Public;
 
+use PU239\Support\Audit;
+use Pu239\Config\ConfigRepository;
+use Pu239\User;
+
 final class TakeThemeHandler
 {
-    /** @param array<string,mixed> $meta */
+    /**
+     * @param array<string, mixed> $meta
+     */
     public function handle(array $meta = []): void
     {
-        // STUB_UPGRADED: safe buffered execution
-        $target = __DIR__ . '/../../../../public/take_theme.php';
-        if (!is_file($target)) {
-            error_log(sprintf('STUB MISSING: %s requires %s', __FILE__, $target));
-            http_response_code(500);
-            echo 'Service temporarily unavailable';
-            return;
-        }
-        $out = (static function (string $file): string {
-            ob_start();
-            try {
-                require $file;
-            } catch (\Throwable $e) {
-                error_log('Legacy stub error: ' . $e->getMessage());
-            }
-            return (string) ob_get_clean();
-        })($target);
+        // AUTO_CONVERT_ATTEMPTED: 2025-10-10 via handler-convert (batch=120-5)
+        try {
+            global $container;
 
-        // Optional: allow middleware or further processing here
-        echo $out;
+            if (!defined('PU239_ROUTED')) {
+                require_once \dirname(__DIR__, 4) . '/public/index.php';
+
+                return;
+            }
+
+            /** @var ConfigRepository $config */
+            $config = $container->get(ConfigRepository::class);
+
+            require_once \dirname(__DIR__, 4) . '/include/bittorrent.php';
+            $user = check_user_status();
+
+            if ($_SERVER['REQUEST_METHOD'] === 'GET') {
+                $sid = isset($_GET['id']) ? (int) $_GET['id'] : 1;
+                if ($sid > 0 && $sid !== (int) ($user['stylesheet'] ?? 0)) {
+                    $set = [
+                        'stylesheet' => $sid,
+                    ];
+                    $users = $container->get(User::class);
+                    $users->update($set, (int) ($user['id'] ?? 0));
+                    Audit::log(
+                        $user['id'] ?? null,
+                        'config.update',
+                        [
+                            'keys' => ['stylesheet'],
+                            'target' => $user['id'] ?? null,
+                        ]
+                    );
+                }
+            }
+
+            $baseUrl = (string) $config->get('paths.baseurl');
+            $returnTo = $_SERVER['HTTP_REFERER'] ?? $baseUrl;
+            header("Location: $returnTo");
+        } catch (\Throwable $e) {
+            error_log('Converted handler error: ' . $e->getMessage());
+            http_response_code(500);
+            echo 'Internal error';
+        }
     }
 }
