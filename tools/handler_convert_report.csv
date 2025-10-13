@@ -118,3 +118,8 @@ classes/Http/Handlers/Public/TakeThemeHandler.php,true,0,Converted from public/t
 classes/Http/Handlers/Public/TakeeditHandler.php,true,1,Stub preserved; see public/takeedit.php and tools/rehydrate_v3_manifest.csv
 classes/Http/Handlers/Public/TakeeditcpHandler.php,true,1,Stub preserved; see public/takeeditcp.php and tools/rehydrate_v3_manifest.csv
 classes/Http/Handlers/Public/TakereseedHandler.php,true,1,Converted from public/takereseed.php; TODO csrf follow-up
+classes/Http/Handlers/Admin/BanclientHandler.php,true,0,Inlined admin/banclient.php placeholder output
+classes/Http/Handlers/Admin/FlushHandler.php,true,0,Converted admin/flush.php ghost cleanup flow
+classes/Http/Handlers/Admin/ViewPeersHandler.php,true,1,Ported admin/view_peers.php; TODO csrf for delete link
+classes/Http/Handlers/Admin/LeechwarnHandler.php,true,1,Inlined admin/leechwarn.php bulk actions; TODO csrf
+classes/Http/Handlers/Admin/LogViewerHandler.php,true,1,Stub preserved; manual extraction needed from admin/log_viewer.php
