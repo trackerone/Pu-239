@@ -1,34 +1,133 @@
 <?php
 declare(strict_types=1);
 
-// Generated: STUB_UPGRADED
+// AUTO_CONVERT_ATTEMPTED: 2025-10-10 via handler-convert (batch=120-5)
 
 namespace PU239\Http\Handlers\Public;
 
+use DI\DependencyException;
+use DI\NotFoundException;
+use Spatie\Image\Exceptions\InvalidManipulation;
+
 final class TagsHandler
 {
-    /** @param array<string,mixed> $meta */
+    /**
+     * @param array<string, mixed> $meta
+     */
     public function handle(array $meta = []): void
     {
-        // STUB_UPGRADED: safe buffered execution
-        $target = __DIR__ . '/../../../../public/tags.php';
-        if (!is_file($target)) {
-            error_log(sprintf('STUB MISSING: %s requires %s', __FILE__, $target));
-            http_response_code(500);
-            echo 'Service temporarily unavailable';
-            return;
-        }
-        $out = (static function (string $file): string {
-            ob_start();
-            try {
-                require $file;
-            } catch (\Throwable $e) {
-                error_log('Legacy stub error: ' . $e->getMessage());
-            }
-            return (string) ob_get_clean();
-        })($target);
+        // AUTO_CONVERT_ATTEMPTED: 2025-10-10 via handler-convert (batch=120-5)
+        try {
+            $sanitize = static fn($value): string => htmlspecialchars((string) $value, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
 
-        // Optional: allow middleware or further processing here
-        echo $out;
+            if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+                // TODO(2025): add CSRF verification
+            }
+
+            $stdhead = [
+                'css' => [
+                    get_file_name('sceditor_css'),
+                ],
+            ];
+            $stdfoot = [
+                'js' => [
+                    get_file_name('sceditor_js'),
+                ],
+            ];
+
+            $test = $_POST['test'] ?? '';
+            $HTMLOUT = "<h1 class='has-text-centered'>BBcode Tags</h1>";
+            $HTMLOUT .= main_div(
+                "
+    <div class='has-text-centered'>
+        <div class='padding20'>" . _('The Crafty forums supports a number of <i>BBcode tags</i> which you can embed to modify how your posts are displayed. The last button, from the left, will display your content.') . "</div>
+        <div class='is-paddingless'>" . BBcode() . '</div>
+    </div>',
+                '',
+                'padding20'
+            );
+
+            $HTMLOUT .= $this->insertTag(_('Bold'), _('Makes the enclosed text bold.'), '[b]<i>Text</i>[/b]', '[b]This is bold text.[/b]', '');
+            $HTMLOUT .= $this->insertTag(_('Italic'), _('Makes the enclosed text italic.'), '[i]<i>Text</i>[/i]', '[i]This is italic text.[/i]', '');
+            $HTMLOUT .= $this->insertTag(_('Underline'), _('Makes the enclosed text underlined.'), '[u]<i>Text</i>[/u]', '[u]This is underlined text.[/u]', '');
+            $HTMLOUT .= $this->insertTag(_('Strikethrough'), _('Makes the enclosed text strikethrough.'), '[s]<i>Text</i>[/s]', '[s]This is text is strikethrough.[/s]', '');
+            $HTMLOUT .= $this->insertTag(_('Subscript'), _('Makes the enclosed text subscript.'), '[sub]<i>Text</i>[/sub]', 'This is text is [sub]subscript.[/sub]', '');
+            $HTMLOUT .= $this->insertTag(_('Superscript'), _('Makes the enclosed text superscript.'), '[sup]<i>Text</i>[/sup]', 'This is text is [sup]superscript.[/sup]', '');
+            $HTMLOUT .= $this->insertTag(_('Align Right'), _('Makes the enclosed text align to the right.'), '[right]<i>Text</i>[/right]', '[right]This is text is right aligned.[/right]', '');
+            $HTMLOUT .= $this->insertTag(_('Align Left'), _('Makes the enclosed text align to the left.'), '[left]<i>Text</i>[/left]', '[left]This is text is left aligned.[/left]', '');
+            $HTMLOUT .= $this->insertTag(_('Centered'), _('Makes the enclosed text centered.'), '[center]<i>Text</i>[/center]', '[center]This is text is centered.[/center]', '');
+            $HTMLOUT .= $this->insertTag(_('Justified'), _('Makes the enclosed text justified.'), '[justify]<i>Text</i>[/justify]', '[justify]This is text is justified. This is text is justified. This is text is justified. This is text is justified. This is text is justified. This is text is justified. This is text is justified. This is text is justified. This is text is justified. This is text is justified. This is text is justified. This is text is justified. This is text is justified. This is text is justified. This is text is justified. This is text is justified. This is text is justified. This is text is justified. This is text is justified. This is text is justified. This is text is justified. This is text is justified. This is text is justified. This is text is justified.[/justify]', '');
+            $HTMLOUT .= $this->insertTag(_('Color (alt. 1)'), _('Changes the color of the enclosed text.'), '[color=<i>Color</i>]<i>Text</i>[/color]', '[color=blue]This is blue text.[/color]', _('What colors are valid depends on the browser. If you use the basic colors (red, green, blue, yellow, pink etc) you should be safe.'));
+            $HTMLOUT .= $this->insertTag(_('Color (alt. 2)'), _('Changes the color of the enclosed text.'), '[color=#<i>RGB</i>]<i>Text</i>[/color]', '[color=#0000ff]This is blue text.[/color]', _('<i>RGB</i> must be a six digit hexadecimal number.'));
+            $HTMLOUT .= $this->insertTag(_('Size'), _('Sets the size of the enclosed text.'), '[size=<i>n</i>]<i>text</i>[/size]', '[size=4]This is size 4.[/size]', _('<i>n</i> must be an integer in the range 1 (smallest) to 7 (biggest). The default size is 2.'));
+            $HTMLOUT .= $this->insertTag(_('Font'), _('Sets the type-face (font) for the enclosed text.'), '[font=<i>Font</i>]<i>Text</i>[/font]', '[font=Impact]Hello world![/font]', _('You specify alternative fonts by separating them with a comma.'));
+            $HTMLOUT .= $this->insertTag(_('Hyperlink (alt. 1)'), _('Inserts a hyperlink.'), '[url]<i>URL</i>[/url]', '[url]http://Pu239.silly/[/url]', _('This tag is superfluous; all URLs are automatically hyperlinked.'));
+            $HTMLOUT .= $this->insertTag(_('Hyperlink (alt. 2)'), _('Inserts a hyperlink.'), '[url=<i>URL</i>]<i>Link text</i>[/url]', '[url=http://Pu239.silly/]Crafty[/url]', _('You do not have to use this tag unless you want to set the link text; all URLs are automatically hyperlinked.'));
+            $HTMLOUT .= $this->insertTag(_('Image (alt. 1)'), _('Inserts a picture.'), '[img=<i>URL</i>]', '[img=http://Pu239.silly/images/logo.png]', _('The URL must be an image of type gif, jpeg or png.'));
+            $HTMLOUT .= $this->insertTag(_('Image (alt. 2)'), _('Inserts a picture.'), '[img]<i>URL</i>[/img]<br>[img width=161 height=50]<i>URL</i>[/img]<br>[img width=150]<i>URL</i>[/img]<br>[img height=25]<i>URL</i>[/img]', '[img]http://Pu239.silly/images/logo.png[/img]<br>[br][img width=161 height=50]http://Pu239.silly/images/logo1.png[/img]<br>[br][img width=150]http://Pu239.silly/images/logo2.png[/img]<br>[br][img height=25]http://Pu239.silly/images/logo3.png[/img]', _('The URL must be an image of type gif, jpeg or png.'));
+            $HTMLOUT .= $this->insertTag(_('Quote (alt. 1)'), _('Inserts a quote.'), '[quote]<i>Quoted text</i>[/quote]', '[quote]The quick brown fox jumps over the lazy dog.[/quote]', '');
+            $HTMLOUT .= $this->insertTag(_('Quote (alt. 2)'), _('Inserts a quote.'), '[quote=<i>Author</i>]<i>Quoted text</i>[/quote]', '[quote=John Doe]The quick brown fox jumps over the lazy dog.[/quote]', '');
+            $HTMLOUT .= $this->insertTag(_('List'), _('Inserts a list item.'), '[*]<i>Text</i>', '[*] This is item 1
+[*] This is item 2', '');
+            $HTMLOUT .= $this->insertTag(_('Table'), _('Inserts a formatted table.'), '[table][tr][td]<i>Text</i>[/td][[td]<i>Text</i>[/td][td]<i>Text</i>[/td][/tr][tr][td]<i>Text</i>[/td][[td]<i>Text</i>[/td][td]<i>Text</i>[/td][/tr][tr][td]<i>Text</i>[/td][[td]<i>Text</i>[/td][td]<i>Text</i>[/td][/tr][/table]', '[table][tr][td]Text[/td][td]Text[/td][td]Text[/td][/tr][tr][td]Text[/td][td]Text[/td][td]Text[/td][/tr][tr][td]Text[/td][td]Text[/td][td]Text[/td][/tr][/table]', '');
+            $HTMLOUT .= $this->insertTag(_('Preformat'), _('Preformatted (monospace) text. Does not wrap automatically.'), '[pre]<i>Text</i>[/pre]', '[pre]This is preformatted text.[/pre]', '');
+            $HTMLOUT .= $this->insertTag(_('Format Code'), _('Formatted text. Does wrap automatically.'), '[code]<i>Text</i>[/code]', '[code]This is code formatted text.[/code]', '');
+            $HTMLOUT .= $this->insertTag(_('Youtube (alt. 1)'), _('Display youtube video.'), '[youtube]<i>https://www.youtube.com/watch?v=u22BXhMu4tI</i>[/youtube]', '[youtube=https://www.youtube.com/watch?v=u22BXhMu4tI]', _('This format only works when using the bbcode editor as it strips all but the video id.'));
+            $HTMLOUT .= $this->insertTag(_('Youtube (alt. 2)'), _('Display youtube video.'), '[youtube]<i>https://www.youtube.com/watch?v=u22BXhMu4tI</i>[/youtube]', '[youtube=https://www.youtube.com/watch?v=u22BXhMu4tI]', _('This format works everywhere, but does not display correctly in BBcode editor.'));
+
+            $title = _('Tags');
+            $self = $sanitize($_SERVER['PHP_SELF'] ?? '');
+            $breadcrumbs = [
+                "<a href='{$self}'>$title</a>",
+            ];
+            echo stdhead($title, $stdhead, 'page-wrapper', $breadcrumbs) . wrapper($HTMLOUT) . stdfoot($stdfoot);
+        } catch (\Throwable $e) {
+            error_log('Converted handler error: ' . $e->getMessage());
+            http_response_code(500);
+            echo 'Internal error';
+        }
+    }
+
+    /**
+     * @throws DependencyException
+     * @throws InvalidManipulation
+     * @throws NotFoundException
+     */
+    private function insertTag(string $name, string $description, string $syntax, string $example, string $remarks): string
+    {
+        $result = format_comment($example);
+        $exampleWithoutBreaks = str_replace('[br]', '', $example);
+        $remarksRow = '';
+        if ($remarks !== '') {
+            $remarksRow = "
+        <tr class='no_hover'>
+            <td>" . _('Remarks') . ":</td>
+            <td>$remarks</td>
+        </tr>";
+        }
+
+        $htmlout = "
+     <h2 class='top20 has-text-centered'>{$name}</h2>";
+        $body = "
+        <tr class='no_hover'>
+            <td class='w-25'>" . _('Description') . "</td>
+            <td>{$description}</td>
+        </tr>
+        <tr class='no_hover'>
+            <td class='w-25'>" . _('Syntax') . ":</td>
+            <td>{$syntax}</td>
+        </tr>
+        <tr class='no_hover'>
+            <td class='w-25'>" . _('Example') . ":</td>
+            <td>{$exampleWithoutBreaks}</td>
+        </tr>
+        <tr class='no_hover'>
+            <td class='w-25'>" . _('Result') . ":</td>
+            <td>{$result}</td>
+        </tr>{$remarksRow}";
+
+        $htmlout .= main_table($body);
+
+        return $htmlout;
     }
 }

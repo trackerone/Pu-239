@@ -113,3 +113,8 @@ classes/Http/Handlers/Public/Ajax/TakeUploadHandler.php,true,1,Converted public/
 classes/Http/Handlers/Public/Ajax/TakeUrlUploadHandler.php,true,1,Converted public/ajax/take_url_upload.php with ImageProxy integration
 classes/Http/Handlers/Public/Ajax/UsersearchHandler.php,true,1,Converted public/ajax/usersearch.php to container-backed search
 classes/Http/Handlers/Public/Ajax/ViewSqlHandler.php,true,0,Converted public/ajax/view_sql.php preserving Adminer bootstrap
+classes/Http/Handlers/Public/TagsHandler.php,true,1,Converted from public/tags.php; TODO csrf follow-up
+classes/Http/Handlers/Public/TakeThemeHandler.php,true,0,Converted from public/take_theme.php
+classes/Http/Handlers/Public/TakeeditHandler.php,true,1,Stub preserved; see public/takeedit.php and tools/rehydrate_v3_manifest.csv
+classes/Http/Handlers/Public/TakeeditcpHandler.php,true,1,Stub preserved; see public/takeeditcp.php and tools/rehydrate_v3_manifest.csv
+classes/Http/Handlers/Public/TakereseedHandler.php,true,1,Converted from public/takereseed.php; TODO csrf follow-up
