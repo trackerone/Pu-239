@@ -128,3 +128,8 @@ classes/Http/Handlers/Public/UsermoodHandler.php,true,1,Legacy stub preserved; T
 classes/Http/Handlers/Public/InviteHandler.php,true,1,Legacy stub preserved; TODO rehydrate public/invite.php
 classes/Http/Handlers/Public/CoinsHandler.php,true,1,Legacy stub preserved; TODO rehydrate public/coins.php
 classes/Http/Handlers/Public/GiftHandler.php,true,1,Legacy stub preserved; TODO rehydrate public/gift.php
+classes/Http/Handlers/Public/CommentHandler.php,true,1,Stub preserved; TODO rehydrate comment workflow
+classes/Http/Handlers/Public/CreditsHandler.php,true,1,Stub preserved; TODO rehydrate credits workflow
+classes/Http/Handlers/Public/MessagesHandler.php,true,1,Stub preserved; TODO rehydrate messages workflow
+classes/Http/Handlers/Public/ReputationHandler.php,true,1,Stub preserved; TODO rehydrate reputation workflow
+classes/Http/Handlers/Public/UsersHandler.php,true,1,Stub preserved; TODO rehydrate users workflow
