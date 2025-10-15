@@ -138,3 +138,8 @@ classes/Http/Handlers/Public/ArcadeHandler.php,true,0,Converted from public/arca
 classes/Http/Handlers/Public/EditHandler.php,true,1,Converted from public/edit.php; TODO map site_config['expires']['ismoddin']
 classes/Http/Handlers/Public/UserUnlocksHandler.php,true,1,Converted from public/user_unlocks.php; TODO add CSRF to unlock form
 classes/Http/Handlers/Public/Ajax/IsbnLookupHandler.php,true,1,Converted from public/ajax/isbn_lookup.php; TODO CSRF validation
+classes/Http/Handlers/Public/SharemarksHandler.php,true,1,Legacy stub preserved; TODO extract public/sharemarks.php manually
+classes/Http/Handlers/Public/BotTriggersHandler.php,true,1,Legacy stub preserved; TODO extract public/bot_triggers.php manually
+classes/Http/Handlers/Public/FastdeleteHandler.php,true,1,Legacy stub preserved; TODO extract public/fastdelete.php manually
+classes/Http/Handlers/Public/RequestsHandler.php,true,1,Legacy stub preserved; TODO extract public/requests.php manually
+classes/Http/Handlers/Public/BugsHandler.php,true,1,Legacy stub preserved; TODO extract public/bugs.php manually

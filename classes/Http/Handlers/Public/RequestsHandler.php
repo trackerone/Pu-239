@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-// Generated: STUB_UPGRADED
+// AUTO_CONVERT_ATTEMPTED: 2025-10-15 via handler-convert offset=145 batch=5
 
 namespace PU239\Http\Handlers\Public;
 
@@ -10,7 +10,8 @@ final class RequestsHandler
     /** @param array<string,mixed> $meta */
     public function handle(array $meta = []): void
     {
-        // STUB_UPGRADED: safe buffered execution
+        // AUTO_CONVERT_ATTEMPTED: 2025-10-15 via handler-convert offset=145 batch=5
+        // TODO(2025): extract legacy block from public/requests.php:1-520; multi-action request system too complex for auto port.
         $target = __DIR__ . '/../../../../public/requests.php';
         if (!is_file($target)) {
             error_log(sprintf('STUB MISSING: %s requires %s', __FILE__, $target));
