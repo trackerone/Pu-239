@@ -123,3 +123,8 @@ classes/Http/Handlers/Admin/FlushHandler.php,true,0,Converted admin/flush.php gh
 classes/Http/Handlers/Admin/ViewPeersHandler.php,true,1,Ported admin/view_peers.php; TODO csrf for delete link
 classes/Http/Handlers/Admin/LeechwarnHandler.php,true,1,Inlined admin/leechwarn.php bulk actions; TODO csrf
 classes/Http/Handlers/Admin/LogViewerHandler.php,true,1,Stub preserved; manual extraction needed from admin/log_viewer.php
+classes/Http/Handlers/Public/ChatHandler.php,true,0,Converted from public/chat.php
+classes/Http/Handlers/Public/UsermoodHandler.php,true,1,Legacy stub preserved; TODO rehydrate public/usermood.php
+classes/Http/Handlers/Public/InviteHandler.php,true,1,Legacy stub preserved; TODO rehydrate public/invite.php
+classes/Http/Handlers/Public/CoinsHandler.php,true,1,Legacy stub preserved; TODO rehydrate public/coins.php
+classes/Http/Handlers/Public/GiftHandler.php,true,1,Legacy stub preserved; TODO rehydrate public/gift.php
