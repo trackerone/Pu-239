@@ -148,3 +148,8 @@ classes/Http/Handlers/Public/DownloadsubHandler.php,true,4,Retained legacy zip w
 classes/Http/Handlers/Public/FaqHandler.php,true,0,Embedded FAQ content with container-provided configuration and auth gating
 classes/Http/Handlers/Public/FilelistHandler.php,true,0,Replaced fluent file list queries with Database pagination helpers
 classes/Http/Handlers/Public/FlashHandler.php,true,1,Rewrote arcade scoreboard queries using Database; TODO for legacy member level selection
+classes/Http/Handlers/Public/ViewSqlHandler.php,true,0,Converted Adminer iframe bootstrap from public/view_sql.php
+classes/Http/Handlers/Public/RestoreclassHandler.php,true,0,Wrapped restoreclass workflow with audit and cache cleanup
+classes/Http/Handlers/Public/PortCheckHandler.php,true,0,Embedded port status UI with legacy helper usage
+classes/Http/Handlers/Public/GetrssHandler.php,true,0,Inlined RSS builder form and permalink generation
+classes/Http/Handlers/Public/VideoformatsHandler.php,true,0,Ported static video format reference content
