@@ -11,6 +11,7 @@ final class TorrentsLookupHandler
     public function handle(array $meta = []): void
     {
         // STUB_UPGRADED: safe buffered execution
+        // TODO(2025): extract legacy block from public/ajax/torrents_lookup.php:1-640 (complex multi-query flow, cache + tables)
         $target = __DIR__ . '/../../../../../public/ajax/torrents_lookup.php';
         if (!is_file($target)) {
             error_log(sprintf('STUB MISSING: %s requires %s', __FILE__, $target));

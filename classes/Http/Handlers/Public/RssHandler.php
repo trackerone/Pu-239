@@ -11,6 +11,7 @@ final class RssHandler
     public function handle(array $meta = []): void
     {
         // STUB_UPGRADED: safe buffered execution
+        // TODO(2025): extract legacy block from public/rss.php:1-220 (validation + RSS builder + cache hydration)
         $target = __DIR__ . '/../../../../public/rss.php';
         if (!is_file($target)) {
             error_log(sprintf('STUB MISSING: %s requires %s', __FILE__, $target));
