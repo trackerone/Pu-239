@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-// AUTO_CONVERT_ATTEMPTED: 2025-10-07 via handler-convert batch=75-5
+// AUTO_CONVERT_ATTEMPTED: 2025-10-17T03:42:40Z via handler-convert offset=165 size=5
 
 namespace PU239\Http\Handlers\Public;
 
@@ -10,8 +10,8 @@ final class NeedseedHandler
     /** @param array<string,mixed> $meta */
     public function handle(array $meta = []): void
     {
-        // AUTO_CONVERT_ATTEMPTED: 2025-10-07 via handler-convert batch=75-5
-        // TODO(2025): extract legacy block from public/needseed.php:1-200 (dual-mode $fluent queries and genre hydration)
+        // AUTO_CONVERT_ATTEMPTED: 2025-10-17T03:42:40Z via handler-convert offset=165 size=5
+        // TODO(2025): extract legacy block from public/needseed.php:1-260 (dual-mode peer/torrent listings w/ genre hydration)
         $target = __DIR__ . '/../../../../public/needseed.php';
         if (!is_file($target)) {
             error_log(sprintf('STUB MISSING: %s requires %s', __FILE__, $target));

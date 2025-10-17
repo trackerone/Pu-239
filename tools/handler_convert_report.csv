@@ -158,3 +158,8 @@ classes/Http/Handlers/Public/Ajax/TorrentsLookupHandler.php,false,1,TODO added f
 classes/Http/Handlers/Public/RssHandler.php,false,1,TODO added for rss feed builder and validation
 classes/Http/Handlers/Public/ImgHandler.php,true,0,Embedded image proxy output with caching controls
 classes/Http/Handlers/Public/RsstfreakHandler.php,true,0,Ported TorrentFreak feed rendering into handler
+classes/Http/Handlers/Public/TakethankyouHandler.php,false,1,TODO(2025) manual extraction required public/takethankyou.php:1-120
+classes/Http/Handlers/Public/HnrsHandler.php,false,1,TODO(2025) manual extraction required public/hnrs.php:1-200
+classes/Http/Handlers/Public/NeedseedHandler.php,false,1,TODO(2025) manual extraction required public/needseed.php:1-260
+classes/Http/Handlers/Public/FastdeleteHandler.php,true,0,Extracted from public/fastdelete.php with bonus rollback
+classes/Http/Handlers/Public/PeerlistHandler.php,false,1,TODO(2025) manual extraction required public/peerlist.php:1-220

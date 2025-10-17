@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-// Generated: STUB_UPGRADED
+// AUTO_CONVERT_ATTEMPTED: 2025-10-17T03:42:40Z via handler-convert offset=165 size=5
 
 namespace PU239\Http\Handlers\Public;
 
@@ -10,7 +10,8 @@ final class HnrsHandler
     /** @param array<string,mixed> $meta */
     public function handle(array $meta = []): void
     {
-        // STUB_UPGRADED: safe buffered execution
+        // AUTO_CONVERT_ATTEMPTED: 2025-10-17T03:42:40Z via handler-convert offset=165 size=5
+        // TODO(2025): extract legacy block from public/hnrs.php:1-200 (seedtime fixes + bonus accounting)
         $target = __DIR__ . '/../../../../public/hnrs.php';
         if (!is_file($target)) {
             error_log(sprintf('STUB MISSING: %s requires %s', __FILE__, $target));
