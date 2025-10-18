@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-// Generated: STUB_UPGRADED
+// AUTO_CONVERT_ATTEMPTED: 2025-10-18T16:11:03Z via handler-convert offset=175 size=5
 
 namespace PU239\Http\Handlers\Public;
 
@@ -10,6 +10,7 @@ final class RulesHandler
     /** @param array<string,mixed> $meta */
     public function handle(array $meta = []): void
     {
+        // TODO(2025): extract public/rules.php static accordion safely (extensive inline translations + role checks)
         // STUB_UPGRADED: safe buffered execution
         $target = __DIR__ . '/../../../../public/rules.php';
         if (!is_file($target)) {
