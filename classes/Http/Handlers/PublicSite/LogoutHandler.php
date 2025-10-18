@@ -1,34 +1,54 @@
 <?php
 declare(strict_types=1);
 
-// Generated: STUB_UPGRADED
+// AUTO_CONVERT_ATTEMPTED: 2025-10-18 via handler-convert (offset=193 batch=2)
 
 namespace PU239\Http\Handlers\PublicSite;
+
+use Delight\Auth\Auth;
+use Pu239\Config\ConfigRepository;
+use Pu239\User;
 
 final class LogoutHandler
 {
     /** @param array<string,mixed> $meta */
     public function handle(array $meta = []): void
     {
-        // STUB_UPGRADED: safe buffered execution
-        $target = __DIR__ . '/../../../../public/logout.php';
-        if (!is_file($target)) {
-            error_log(sprintf('STUB MISSING: %s requires %s', __FILE__, $target));
-            http_response_code(500);
-            echo 'Service temporarily unavailable';
-            return;
-        }
-        $out = (static function (string $file): string {
-            ob_start();
-            try {
-                require $file;
-            } catch (\Throwable $e) {
-                error_log('Legacy stub error: ' . $e->getMessage());
-            }
-            return (string) ob_get_clean();
-        })($target);
+        // AUTO_CONVERT_ATTEMPTED: 2025-10-18 via handler-convert (offset=193 batch=2)
+        try {
+            require_once \dirname(__DIR__, 4) . '/bootstrap_web.php';
 
-        // Optional: allow middleware or further processing here
-        echo $out;
+            if (!defined('PU239_ROUTED')) {
+                require_once \dirname(__DIR__, 4) . '/public/index.php';
+
+                return;
+            }
+
+            require_once \dirname(__DIR__, 4) . '/include/bittorrent.php';
+
+            global $container;
+
+            /** @var ConfigRepository $config */
+            $config = $container->get(ConfigRepository::class);
+            $baseUrl = (string) $config->get('paths.baseurl');
+
+            /** @var Auth $auth */
+            $auth = $container->get(Auth::class);
+            if ($auth->isLoggedIn()) {
+                $userId = $auth->getUserId();
+                if (!empty($userId)) {
+                    /** @var User $user */
+                    $user = $container->get(User::class);
+                    $user->logout((int) $userId, true);
+                }
+            }
+
+            header("Location: {$baseUrl}/login.php");
+            app_halt('Exit called');
+        } catch (\Throwable $e) {
+            error_log('Converted handler error: ' . $e->getMessage());
+            http_response_code(500);
+            echo 'Internal error';
+        }
     }
 }

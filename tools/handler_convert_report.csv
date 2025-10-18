@@ -184,3 +184,5 @@ classes/Http/Handlers/PublicSite/BjstatsHandler.php,true,0,Recreated public/bjst
 classes/Http/Handlers/PublicSite/TenpercentHandler.php,true,1,Implemented public/tenpercent.php 10% upload boost flow with cache + messaging updates
 classes/Http/Handlers/Public/ReportHandler.php,true,1,Ported public/report.php with Config + Database wiring (retained CSRF TODO)
 classes/Http/Handlers/Public/ViewAnnounceHistoryHandler.php,true,0,Converted public/view_announce_history.php announcement archive rendering to handler
+classes/Http/Handlers/PublicSite/LogoutHandler.php,true,0,Converted public/logout.php to handler with Auth/User logout + redirect via Config
+classes/Http/Handlers/PublicSite/VerifyHandler.php,true,1,Ported public/verify.php identity confirmation flow with Auth + Session
