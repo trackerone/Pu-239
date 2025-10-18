@@ -10,6 +10,8 @@ final class UsercpHandler
     /** @param array<string,mixed> $meta */
     public function handle(array $meta = []): void
     {
+        // AUTO_CONVERT_ATTEMPTED: 2025-10-18T19:16:37Z via handler_convert (batch=220-224)
+        // TODO(2025): extract legacy block from public/usercp.php:1-20 – routed entrypoint replaced with RuntimeException placeholder.
         // STUB_UPGRADED: safe buffered execution
         $target = __DIR__ . '/../../../../public/usercp.php';
         if (!is_file($target)) {

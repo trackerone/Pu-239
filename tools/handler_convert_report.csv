@@ -203,3 +203,8 @@ classes/Http/Handlers/Public/OffersHandler.php,true,0,Extracted from public/offe
 classes/Http/Handlers/Public/NewAnnouncementHandler.php,true,1,Ported announcement composer; legacy CSRF TODO remains (offset=215 batch=5)
 classes/Http/Handlers/Public/SubtitlesHandler.php,false,1,TODO(2025) manual extraction required public/subtitles.php:1-520 (offset=215 batch=5)
 classes/Http/Handlers/Public/CatalogHandler.php,false,1,TODO(2025) manual extraction required public/catalog.php:1-400 (offset=215 batch=5)
+classes/Http/Handlers/Public/UsercpHandler.php,false,1,Legacy script replaced by RuntimeException placeholder; deferred.
+classes/Http/Handlers/Public/UserdetailsHandler.php,false,1,Complex multi-include legacy workflow requires manual extraction.
+classes/Http/Handlers/Public/WikiHandler.php,false,1,Embedded helper functions and validator/image stack too risky for auto-convert.
+classes/Http/Handlers/PublicSite/AjaxchatHandler.php,true,0,Imported AJAX Chat bootstrap and instantiation into handler.
+classes/Http/Handlers/PublicSite/AnatomyHandler.php,true,0,Static content page lifted into handler with config-aware breadcrumbs.

@@ -10,6 +10,8 @@ final class WikiHandler
     /** @param array<string,mixed> $meta */
     public function handle(array $meta = []): void
     {
+        // AUTO_CONVERT_ATTEMPTED: 2025-10-18T19:16:37Z via handler_convert (batch=220-224)
+        // TODO(2025): extract legacy block from public/wiki.php:1-360 – embedded helpers, validator usage, and image pipelines exceed safe auto-conversion heuristics.
         // STUB_UPGRADED: safe buffered execution
         $target = __DIR__ . '/../../../../public/wiki.php';
         if (!is_file($target)) {

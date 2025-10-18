@@ -10,8 +10,6 @@ final class UserdetailsHandler
     /** @param array<string,mixed> $meta */
     public function handle(array $meta = []): void
     {
-        // AUTO_CONVERT_ATTEMPTED: 2025-10-18T19:16:37Z via handler_convert (batch=220-224)
-        // TODO(2025): extract legacy block from public/userdetails.php:1-400 – complex includes, session state, and helper functions require manual port.
         // STUB_UPGRADED: safe buffered execution
         $target = __DIR__ . '/../../../../public/userdetails.php';
         if (!is_file($target)) {
