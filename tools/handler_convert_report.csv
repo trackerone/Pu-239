@@ -13,7 +13,7 @@ classes/Http/Handlers/Admin/ClassConfigHandler.php,true,2,Extracted from admin/c
 classes/Http/Handlers/Admin/ClassPromoHandler.php,false,1,TODO(2025) manual extraction required admin/class_promo.php:1-20
 classes/Http/Handlers/Admin/CleanupManagerHandler.php,false,1,TODO(2025) manual extraction required admin/cleanup_manager.php:1-200
 classes/Http/Handlers/Admin/CloudviewHandler.php,true,1,Extracted from admin/cloudview.php
-classes/Http/Handlers/Admin/CommentsHandler.php,false,1,TODO(2025) manual extraction required admin/comments.php:1-20
+classes/Http/Handlers/Admin/CommentsHandler.php,true,1,Embedded legacy stub guard; handler now mirrors admin/comments.php placeholder.
 classes/Http/Handlers/Admin/DelacctHandler.php,true,1,Extracted from admin/delacct.php
 classes/Http/Handlers/Admin/DonationsHandler.php,true,0,Extracted from admin/donations.php
 classes/Http/Handlers/Admin/DoubleusersHandler.php,true,0,Extracted from admin/doubleusers.php
@@ -31,7 +31,7 @@ classes/Http/Handlers/Admin/IpcheckHandler.php,true,0,Extracted from admin/ipche
 classes/Http/Handlers/Admin/IphistoryHandler.php,true,0,Extracted from admin/iphistory.php
 classes/Http/Handlers/Admin/MysqlOverviewHandler.php,false,1,TODO(2025) manual extraction required admin/mysql_overview.php:1-200
 classes/Http/Handlers/Admin/MysqlStatsHandler.php,false,1,TODO(2025) manual extraction required admin/mysql_stats.php:1-400
-classes/Http/Handlers/Admin/NamechangerHandler.php,false,1,TODO(2025) manual extraction required admin/namechanger.php:1-40
+classes/Http/Handlers/Admin/NamechangerHandler.php,true,1,Inlined admin/namechanger.php guard flow; still awaiting restored SQL.
 classes/Http/Handlers/Admin/NewsHandler.php,true,0,Extracted from admin/news.php
 classes/Http/Handlers/Admin/OverForumsHandler.php,true,0,Extracted from admin/over_forums.php
 classes/Http/Handlers/Admin/ReferrersHandler.php,true,0,Extracted from admin/referrers.php
@@ -42,13 +42,13 @@ classes/Http/Handlers/Admin/OverForumsHandler.php,false,1,TODO(2025) manual extr
 classes/Http/Handlers/Admin/ResetHandler.php,true,1,Extracted from admin/reset.php; TODO merge markers around password policy
 classes/Http/Handlers/Admin/ShitListHandler.php,true,0,Extracted from admin/shit_list.php; throws until SQL restored
 classes/Http/Handlers/Admin/SiteSettingsHandler.php,false,1,TODO(2025) legacy script complex admin/site_settings.php:1-400
-classes/Http/Handlers/Admin/SitelogHandler.php,true,0,Extracted from admin/sitelog.php; throws until SQL restored
+classes/Http/Handlers/Admin/SitelogHandler.php,true,1,Inlined admin/sitelog.php access guard; site log viewer pending data restore.
 classes/Http/Handlers/Admin/SnatchedTorrentsHandler.php,false,1,TODO(2025) heavy legacy admin/snatched_torrents.php:1-220
 classes/Http/Handlers/Admin/AcpmanageHandler.php,false,1,TODO(2025) merge markers require manual extraction admin/acpmanage.php:1-200
-classes/Http/Handlers/Admin/AllagentsHandler.php,false,1,TODO(2025) merge markers require manual extraction admin/allagents.php:1-120
+classes/Http/Handlers/Admin/AllagentsHandler.php,true,1,Converted admin/allagents.php; TODO reconcile legacy AuthZ markers
 classes/Http/Handlers/Admin/BanclientHandler.php,false,1,TODO(2025) merge markers require manual extraction admin/banclient.php:1-80
 classes/Http/Handlers/Admin/BackupHandler.php,false,1,TODO(2025) merge markers require manual extraction admin/backup.php:1-320
-classes/Http/Handlers/Admin/ManageImagesHandler.php,false,1,TODO(2025) merge markers require manual extraction admin/manage_images.php:1-200
+classes/Http/Handlers/Admin/ManageImagesHandler.php,true,2,Converted admin/manage_images.php; TODO AuthZ merge + add CSRF for deletes
 classes/Http/Handlers/Public/LogoutHandler.php,true,0,Converted from public/logout.php
 classes/Http/Handlers/Public/ClearAnnouncementHandler.php,true,0,Converted from public/clear_announcement.php
 classes/Http/Handlers/Public/VerifyHandler.php,true,1,Converted from public/verify.php; TODO(2025) CSRF verification pending
@@ -83,7 +83,7 @@ classes/Http/Handlers/Public/AnnouncementHandler.php,false,1,TODO(2025) dynamic 
 classes/Http/Handlers/Public/RssPdoDemoHandler.php,true,0,Converted from public/rss_pdo_demo.php
 classes/Http/Handlers/Public/AjaxchatHandler.php,true,0,Extracted from public/ajaxchat.php; ensures AJAX_CHAT_PATH guard
 classes/Http/Handlers/Public/UsercommentHandler.php,false,1,TODO(2025) multi-branch comment controller retains legacy require
-classes/Http/Handlers/Admin/AdduserHandler.php,false,1,TODO(2025) admin/adduser.php merge conflicts block manual extraction
+classes/Http/Handlers/Admin/AdduserHandler.php,true,0,Converted admin/adduser.php; retains validator + password policy
 classes/Http/Handlers/Admin/CheatersHandler.php,true,1,Converted admin/cheaters.php with Database::inClause bindings; TODO csrf hardening
 classes/Http/Handlers/Admin/DataresetHandler.php,false,1,TODO(2025) admin/datareset.php depends on removed $fluent queries
 classes/Http/Handlers/Admin/DeathrowHandler.php,false,1,TODO(2025) admin/deathrow.php requires bespoke notifier workflow port
@@ -122,7 +122,8 @@ classes/Http/Handlers/Admin/BanclientHandler.php,true,0,Inlined admin/banclient.
 classes/Http/Handlers/Admin/FlushHandler.php,true,0,Converted admin/flush.php ghost cleanup flow
 classes/Http/Handlers/Admin/ViewPeersHandler.php,true,1,Ported admin/view_peers.php; TODO csrf for delete link
 classes/Http/Handlers/Admin/LeechwarnHandler.php,true,1,Inlined admin/leechwarn.php bulk actions; TODO csrf
-classes/Http/Handlers/Admin/LogViewerHandler.php,true,1,Stub preserved; manual extraction needed from admin/log_viewer.php
+classes/Http/Handlers/Admin/LogViewerHandler.php,true,1,Converted admin/log_viewer.php; TODO add CSRF to deletions
+classes/Http/Handlers/Admin/ReputationSettingsHandler.php,true,2,Converted admin/reputation_settings.php; TODO add CSRF + escape audit
 classes/Http/Handlers/Public/ChatHandler.php,true,0,Converted from public/chat.php
 classes/Http/Handlers/Public/UsermoodHandler.php,true,1,Legacy stub preserved; TODO rehydrate public/usermood.php
 classes/Http/Handlers/Public/InviteHandler.php,true,1,Legacy stub preserved; TODO rehydrate public/invite.php
@@ -223,3 +224,5 @@ classes/Http/Handlers/PublicSite/CoinsHandler.php,true,1,Legacy stub replaced wi
 classes/Http/Handlers/PublicSite/CreditsHandler.php,true,1,Legacy stub replaced with 503 placeholder pending public/credits.php SQL.
 classes/Http/Handlers/PublicSite/FriendsHandler.php,true,1,Legacy stub replaced with 503 placeholder pending public/friends.php SQL.
 classes/Http/Handlers/PublicSite/MessagesHandler.php,true,1,Legacy stub replaced with 503 placeholder pending public/messages.php SQL.
+classes/Http/Handlers/Admin/ReportsHandler.php,true,1,Inlined admin/reports.php bootstrap + AuthZ guard; runtime still throws until rebuilt.
+classes/Http/Handlers/Admin/WarnHandler.php,true,1,Inlined admin/warn.php guard; staff warning workflow remains TODO.

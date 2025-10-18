@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-// Generated: STUB_UPGRADED
+// AUTO_CONVERT_ATTEMPTED: 2025-10-05T18:11:32Z via codex handler conversion
 
 namespace PU239\Http\Handlers\Admin;
 
@@ -10,6 +10,7 @@ final class CommentsHandler
     /** @param array<string,mixed> $meta */
     public function handle(array $meta = []): void
     {
+        // TODO(2025): extract legacy block for manual conversion admin/comments.php:1-20
         // STUB_UPGRADED: safe buffered execution
         $target = __DIR__ . '/../../../../admin/comments.php';
         if (!is_file($target)) {

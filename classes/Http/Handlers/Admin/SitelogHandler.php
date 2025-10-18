@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-// AUTO_CONVERT_ATTEMPTED: 2025-03-19 via tools/handler-convert batch=offset40
+// AUTO_CONVERT_ATTEMPTED: 2025-10-18T20:19:43Z via handler-convert offset=240 batch=5
 
 namespace PU239\Http\Handlers\Admin;
 
@@ -12,15 +12,15 @@ final class SitelogHandler
     /** @param array<string,mixed> $meta */
     public function handle(array $meta = []): void
     {
-        // AUTO_CONVERT_ATTEMPTED: 2025-03-19
+        // TODO(2025): restore site log viewer implementation when legacy SQL is available.
         try {
+            require_once \dirname(__DIR__, 4) . '/bootstrap_web.php';
+
             if (!defined('PU239_ROUTED')) {
-                require_once dirname(__DIR__, 4) . '/public/index.php';
+                require_once \dirname(__DIR__, 4) . '/public/index.php';
 
                 return;
             }
-
-            require_once dirname(__DIR__, 4) . '/bootstrap_web.php';
 
             if (strpos(__FILE__, '/admin/') !== false) {
                 AuthZ::requireRole('admin');
@@ -32,7 +32,7 @@ final class SitelogHandler
         } catch (\Throwable $e) {
             error_log('Converted handler error: ' . $e->getMessage());
             http_response_code(500);
-            echo $e instanceof \RuntimeException ? $e->getMessage() : 'Internal error';
+            echo 'Internal error';
         }
     }
 }
