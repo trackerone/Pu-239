@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-// Generated: STUB_UPGRADED
+// AUTO_CONVERT_ATTEMPTED: 2025-10-18T16:25:00Z via handler-convert offset=180 size=5
 
 namespace PU239\Http\Handlers\Public;
 
@@ -10,6 +10,7 @@ final class SetclassHandler
     /** @param array<string,mixed> $meta */
     public function handle(array $meta = []): void
     {
+        // TODO(2025): manual extraction required due to merge conflict markers in public/setclass.php:23-60
         // STUB_UPGRADED: safe buffered execution
         $target = __DIR__ . '/../../../../public/setclass.php';
         if (!is_file($target)) {

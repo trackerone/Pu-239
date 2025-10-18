@@ -173,3 +173,13 @@ classes/Http/Handlers/Public/RulesHandler.php,false,1,TODO(2025) manual extracti
 classes/Http/Handlers/Public/ForumsHandler.php,false,1,TODO(2025) manual extraction required public/forums.php:1-400
 classes/Http/Handlers/Public/StaffpanelHandler.php,false,1,TODO(2025) manual extraction required public/staffpanel.php delegates staffpanel/index.php
 classes/Http/Handlers/Public/StaffboxHandler.php,false,1,TODO(2025) legacy content missing per tools/rehydrate_v3_manifest.csv
+classes/Http/Handlers/Public/SearchHandler.php,true,0,Converted from public/search.php; implements bot-only torrent lookup
+classes/Http/Handlers/Public/SetclassHandler.php,false,1,TODO(2025) merge conflict markers require manual extraction public/setclass.php:23-60
+classes/Http/Handlers/Public/SharemarksHandler.php,false,2,TODO(2025) sharetable rendering + Fluent joins pending; re-reviewed offset=180
+classes/Http/Handlers/Public/SignupHandler.php,false,1,TODO(2025) promo/signup flow blocked by conflicting password hashing merges
+classes/Http/Handlers/Public/SnatchesHandler.php,true,0,Converted from public/snatches.php; renders snatch history with Database pagination
+classes/Http/Handlers/PublicSite/AllsmilesHandler.php,true,1,Converted public/allsmiles.php popup rendering with smilie datasets from container
+classes/Http/Handlers/PublicSite/ImgHandler.php,true,0,Ported public/img.php image proxy with conditional caching headers
+classes/Http/Handlers/PublicSite/TopmoodsHandler.php,true,0,Rebuilt public/topmoods.php leaderboard with Database + Cache services
+classes/Http/Handlers/PublicSite/BjstatsHandler.php,true,0,Recreated public/bjstats.php blackjack leaderboards using parameterised queries
+classes/Http/Handlers/PublicSite/TenpercentHandler.php,true,1,Implemented public/tenpercent.php 10% upload boost flow with cache + messaging updates
