@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-// Generated: STUB_UPGRADED
+// AUTO_CONVERT_ATTEMPTED: 2025-10-18T20:00:53Z via handler_convert (offset=235 batch=5)
 
 namespace PU239\Http\Handlers\PublicSite;
 
@@ -10,25 +10,15 @@ final class CreditsHandler
     /** @param array<string,mixed> $meta */
     public function handle(array $meta = []): void
     {
-        // STUB_UPGRADED: safe buffered execution
-        $target = __DIR__ . '/../../../../public/credits.php';
-        if (!is_file($target)) {
-            error_log(sprintf('STUB MISSING: %s requires %s', __FILE__, $target));
+        // AUTO_CONVERT_ATTEMPTED: 2025-10-18T20:00:53Z via handler_convert (offset=235 batch=5)
+        try {
+            http_response_code(503);
+            echo 'Legacy credits listing temporarily disabled until database mappings return.';
+            // TODO(2025): rehydrate credit ledger flow from public/credits.php:1-10 once schema is available.
+        } catch (\Throwable $e) {
+            error_log('Converted handler error: ' . $e->getMessage());
             http_response_code(500);
-            echo 'Service temporarily unavailable';
-            return;
+            echo 'Internal error';
         }
-        $out = (static function (string $file): string {
-            ob_start();
-            try {
-                require $file;
-            } catch (\Throwable $e) {
-                error_log('Legacy stub error: ' . $e->getMessage());
-            }
-            return (string) ob_get_clean();
-        })($target);
-
-        // Optional: allow middleware or further processing here
-        echo $out;
     }
 }
