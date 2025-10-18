@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-// Generated: STUB_UPGRADED
+// AUTO_CONVERT_ATTEMPTED: 2025-10-18T16:11:03Z via handler-convert offset=175 size=5
 
 namespace PU239\Http\Handlers\Public;
 
@@ -10,6 +10,7 @@ final class StaffboxHandler
     /** @param array<string,mixed> $meta */
     public function handle(array $meta = []): void
     {
+        // TODO(2025): legacy script public/staffbox.php missing SQL payload per tools/rehydrate_v3_manifest.csv
         // STUB_UPGRADED: safe buffered execution
         $target = __DIR__ . '/../../../../public/staffbox.php';
         if (!is_file($target)) {

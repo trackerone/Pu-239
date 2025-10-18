@@ -168,3 +168,8 @@ classes/Http/Handlers/Public/GamesHandler.php,true,0,Converted public/games.php 
 classes/Http/Handlers/Public/ScrapeHandler.php,true,1,TODO(2025) revisit manual query parsing for tracker scrape
 classes/Http/Handlers/Public/TenpercentHandler.php,true,2,TODO(2025) add CSRF + confirm bonus debit after 10% upload bump
 classes/Http/Handlers/Public/LoginHandler.php,true,1,TODO(2025) add CSRF guard to login POST flow
+classes/Http/Handlers/Public/StaffHandler.php,true,0,Inlined public/staff.php roster rendering with Database fetches
+classes/Http/Handlers/Public/RulesHandler.php,false,1,TODO(2025) manual extraction required public/rules.php localisation blocks
+classes/Http/Handlers/Public/ForumsHandler.php,false,1,TODO(2025) manual extraction required public/forums.php:1-400
+classes/Http/Handlers/Public/StaffpanelHandler.php,false,1,TODO(2025) manual extraction required public/staffpanel.php delegates staffpanel/index.php
+classes/Http/Handlers/Public/StaffboxHandler.php,false,1,TODO(2025) legacy content missing per tools/rehydrate_v3_manifest.csv
