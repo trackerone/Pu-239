@@ -83,7 +83,7 @@ classes/Http/Handlers/Public/AnnouncementHandler.php,false,1,TODO(2025) dynamic 
 classes/Http/Handlers/Public/RssPdoDemoHandler.php,true,0,Converted from public/rss_pdo_demo.php
 classes/Http/Handlers/Public/AjaxchatHandler.php,true,0,Extracted from public/ajaxchat.php; ensures AJAX_CHAT_PATH guard
 classes/Http/Handlers/Public/UsercommentHandler.php,false,1,TODO(2025) multi-branch comment controller retains legacy require
-classes/Http/Handlers/Admin/AdduserHandler.php,false,1,TODO(2025) admin/adduser.php merge conflicts block manual extraction
+classes/Http/Handlers/Admin/AdduserHandler.php,true,0,Converted admin/adduser.php; retains validator + password policy
 classes/Http/Handlers/Admin/CheatersHandler.php,true,1,Converted admin/cheaters.php with Database::inClause bindings; TODO csrf hardening
 classes/Http/Handlers/Admin/DataresetHandler.php,false,1,TODO(2025) admin/datareset.php depends on removed $fluent queries
 classes/Http/Handlers/Admin/DeathrowHandler.php,false,1,TODO(2025) admin/deathrow.php requires bespoke notifier workflow port
@@ -122,7 +122,8 @@ classes/Http/Handlers/Admin/BanclientHandler.php,true,0,Inlined admin/banclient.
 classes/Http/Handlers/Admin/FlushHandler.php,true,0,Converted admin/flush.php ghost cleanup flow
 classes/Http/Handlers/Admin/ViewPeersHandler.php,true,1,Ported admin/view_peers.php; TODO csrf for delete link
 classes/Http/Handlers/Admin/LeechwarnHandler.php,true,1,Inlined admin/leechwarn.php bulk actions; TODO csrf
-classes/Http/Handlers/Admin/LogViewerHandler.php,true,1,Stub preserved; manual extraction needed from admin/log_viewer.php
+classes/Http/Handlers/Admin/LogViewerHandler.php,true,1,Converted admin/log_viewer.php; TODO add CSRF to deletions
+classes/Http/Handlers/Admin/ReputationSettingsHandler.php,true,2,Converted admin/reputation_settings.php; TODO add CSRF + escape audit
 classes/Http/Handlers/Public/ChatHandler.php,true,0,Converted from public/chat.php
 classes/Http/Handlers/Public/UsermoodHandler.php,true,1,Legacy stub preserved; TODO rehydrate public/usermood.php
 classes/Http/Handlers/Public/InviteHandler.php,true,1,Legacy stub preserved; TODO rehydrate public/invite.php
