@@ -163,3 +163,8 @@ classes/Http/Handlers/Public/HnrsHandler.php,false,1,TODO(2025) manual extractio
 classes/Http/Handlers/Public/NeedseedHandler.php,false,1,TODO(2025) manual extraction required public/needseed.php:1-260
 classes/Http/Handlers/Public/FastdeleteHandler.php,true,0,Extracted from public/fastdelete.php with bonus rollback
 classes/Http/Handlers/Public/PeerlistHandler.php,false,1,TODO(2025) manual extraction required public/peerlist.php:1-220
+classes/Http/Handlers/Public/UseragreementHandler.php,true,0,Inlined public/useragreement.php with Auth + Config usage
+classes/Http/Handlers/Public/GamesHandler.php,true,0,Converted public/games.php queries to Database::fetchAll/fetchValue
+classes/Http/Handlers/Public/ScrapeHandler.php,true,1,TODO(2025) revisit manual query parsing for tracker scrape
+classes/Http/Handlers/Public/TenpercentHandler.php,true,2,TODO(2025) add CSRF + confirm bonus debit after 10% upload bump
+classes/Http/Handlers/Public/LoginHandler.php,true,1,TODO(2025) add CSRF guard to login POST flow
