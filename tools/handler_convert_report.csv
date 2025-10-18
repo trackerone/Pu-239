@@ -193,3 +193,8 @@ classes/Http/Handlers/PublicSite/CategoryidsHandler.php,true,0,Rebuilt category 
 classes/Http/Handlers/PublicSite/PortCheckHandler.php,true,0,Converted port status dashboard with staff overrides and JS assets
 classes/Http/Handlers/PublicSite/TakeThemeHandler.php,true,0,Ported stylesheet switcher with Audit logging and redirect handling
 classes/Http/Handlers/PublicSite/ClearAnnouncementHandler.php,true,0,Inlined announcement reset flow with Cache+Database updates
+classes/Http/Handlers/Public/ViewnfoHandler.php,true,0,Converted public/viewnfo.php into inline handler with Torrent + Nfo2Png services (offset=205 batch=5)
+classes/Http/Handlers/Public/TriviaResultsHandler.php,true,0,Rebuilt trivia results listing with PDO queries and ratio formatting (offset=205 batch=5)
+classes/Http/Handlers/Public/ContactstaffHandler.php,true,1,Modernised staff contact form with Database inserts and session flashes; CSRF TODO retained (offset=205 batch=5)
+classes/Http/Handlers/Public/PollsTakeVoteHandler.php,true,1,Ported poll voting workflow to Database+PollVoter with JSON tally updates; CSRF TODO kept (offset=205 batch=5)
+classes/Http/Handlers/Public/TopmoodsHandler.php,true,0,Refreshed top moods leaderboard with cached PDO fetch (offset=205 batch=5)

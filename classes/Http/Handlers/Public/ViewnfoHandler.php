@@ -1,34 +1,92 @@
 <?php
 declare(strict_types=1);
 
-// Generated: STUB_UPGRADED
+// AUTO_CONVERT_ATTEMPTED: 2025-10-18T18:24:28Z via handler-convert offset=205 size=5
 
 namespace PU239\Http\Handlers\Public;
+
+use Pu239\Config\ConfigRepository;
+use Pu239\Nfo2Png;
+use Pu239\Torrent;
+use RuntimeException;
 
 final class ViewnfoHandler
 {
     /** @param array<string,mixed> $meta */
     public function handle(array $meta = []): void
     {
-        // STUB_UPGRADED: safe buffered execution
-        $target = __DIR__ . '/../../../../public/viewnfo.php';
-        if (!is_file($target)) {
-            error_log(sprintf('STUB MISSING: %s requires %s', __FILE__, $target));
-            http_response_code(500);
-            echo 'Service temporarily unavailable';
-            return;
-        }
-        $out = (static function (string $file): string {
-            ob_start();
-            try {
-                require $file;
-            } catch (\Throwable $e) {
-                error_log('Legacy stub error: ' . $e->getMessage());
-            }
-            return (string) ob_get_clean();
-        })($target);
+        // AUTO_CONVERT_ATTEMPTED: 2025-10-18T18:24:28Z via handler-convert offset=205 size=5
+        try {
+            require_once \dirname(__DIR__, 4) . '/bootstrap_web.php';
+            require_once \dirname(__DIR__, 4) . '/include/bittorrent.php';
 
-        // Optional: allow middleware or further processing here
-        echo $out;
+            global $container;
+            if (!isset($container)) {
+                throw new RuntimeException('Global container not initialized');
+            }
+
+            /** @var ConfigRepository $config */
+            $config = $container->get(ConfigRepository::class);
+            /** @var Torrent $torrent */
+            $torrent = $container->get(Torrent::class);
+
+            $user = check_user_status();
+            $self = htmlsafechars($_SERVER['PHP_SELF'] ?? '');
+
+            $id = (int) ($_GET['id'] ?? 0);
+            if ($user['class'] === UC_MIN) {
+                stderr(_('Error'), 'Need to rank up');
+            }
+            if (!is_valid_id($id)) {
+                stderr(_('Error'), _('Invalid ID'));
+            }
+
+            $nfo = $torrent->get_items([
+                'name',
+                'nfo',
+                'id',
+            ], $id);
+            if (empty($nfo) || empty($nfo['nfo'])) {
+                app_halt(_('Puke'));
+            }
+
+            $htmlOut = "
+        <h1 class='has-text-centered'>" . _('NFO for') . " <a href='" . $config->get('paths.baseurl') . "/details.php?id=$id'>" . format_comment($nfo['name']) . '</a></h1>';
+
+            $imageMarkup = '';
+            if ((bool) $config->get('nfo.as_image')) {
+                /** @var Nfo2Png $nfo2png */
+                $nfo2png = $container->get(Nfo2Png::class);
+                $image = $nfo2png->nfo2png_ttf($nfo['nfo'], (int) $nfo['id'], '000', '0f0');
+                if (!empty($image)) {
+                    $imageMarkup = main_div("
+        <div class='has-text-centered w-50 min-600'>
+            <img src='" . $config->get('paths.nfos_baseurl') . $image . "' alt='" . $nfo['name'] . "' class='round10 w-100 top20 bottom20'>
+        </div>");
+                }
+            }
+
+            if ($imageMarkup === '') {
+                $div = "
+        <div class='size_5 has-text-centered w-50 min-600'>
+            <div class='bottom20'>
+                " . _('For best visual result, install the') . " <a href='" . url_proxy('https://www.fontpalace.com/font-download/MS+LineDraw/') . "' target='_blank'>" . _('MS Linedraw') . '</a> ' . _('font') . "
+            </div>
+            <pre class='pre round10 noselect has-text-white has-text-left bg-dark w-100 has-text-green top20 bottom20'>" . format_urls(strip_tags($nfo['nfo'])) . '</pre>
+        </div>';
+                $imageMarkup = main_div($div);
+            }
+
+            $htmlOut .= $imageMarkup;
+            $title = _('View NFO');
+            $breadcrumbs = [
+                sprintf("<a href='%s'>%s</a>", $self, $title),
+            ];
+            echo stdhead($title, [], 'page-wrapper', $breadcrumbs) . wrapper($htmlOut) . stdfoot();
+        } catch (\Throwable $e) {
+            error_log('Converted handler error: ' . $e->getMessage());
+            http_response_code(500);
+            echo 'Internal error';
+        }
     }
 }
