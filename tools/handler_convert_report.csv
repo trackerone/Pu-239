@@ -213,3 +213,8 @@ classes/Http/Handlers/PublicSite/DownloadMultiHandler.php,true,1,Extracted from 
 classes/Http/Handlers/PublicSite/TriviaResultsHandler.php,true,0,Extracted from public/trivia_results.php leaderboard rendering
 classes/Http/Handlers/PublicSite/UserUnlocksHandler.php,true,1,Extracted from public/user_unlocks.php; TODO add CSRF verification
 classes/Http/Handlers/PublicSite/ViewnfoHandler.php,true,0,Extracted from public/viewnfo.php with Nfo2Png integration
+classes/Http/Handlers/PublicSite/VideoformatsHandler.php,true,0,Converted public/videoformats.php static glossary into handler (offset=230 batch=5)
+classes/Http/Handlers/PublicSite/FaqHandler.php,true,0,Ported public/faq.php accordion layout with Auth-driven guest handling (offset=230 batch=5)
+classes/Http/Handlers/PublicSite/UseragreementHandler.php,true,0,Inlined public/useragreement.php legal copy with Auth template gating (offset=230 batch=5)
+classes/Http/Handlers/PublicSite/HappylogHandler.php,true,0,Mapped public/happylog.php history listing to HappyLog service and pager (offset=230 batch=5)
+classes/Http/Handlers/PublicSite/RulesHandler.php,true,0,Rebuilt public/rules.php guideline accordions with role-aware sections (offset=230 batch=5)
