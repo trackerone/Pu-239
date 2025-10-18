@@ -2,9 +2,8 @@
 
 - Legacy source: public/takethankyou.php
 - Container/bootstrap dependencies: bootstrap_web.php, include/bittorrent.php
-- Services injected: deferred (requires ConfigRepository, Database, Cache, Session)
-- Config mappings: none (manual review needed)
-- Database usage: deferred (thankyou/comments/torrents/users writes and cache invalidation)
-- TODOs introduced: 2 (manual extraction for thank-you bonus workflow; re-review offset=200)
-- Notes: Handler left as upgraded stub; legacy script mixes multiple inserts/updates with FluentPDO helpers that need manual porting.
-- Re-review: 2025-10-18T18:09:15Z (offset=200) — conversion deferred pending reconstruction of FluentPDO inserts and bonus cache updates.
+- Services injected: deferred
+- Config mappings: deferred
+- Database usage: deferred — legacy file still contains placeholder SQL (`/* columns */`) for thankyou/comments inserts.
+- TODOs introduced: 2
+- Notes: Offset=210 batch=5 review confirmed placeholders at lines 55-95 prevent safe automated extraction; retain buffered stub for manual mapping.
