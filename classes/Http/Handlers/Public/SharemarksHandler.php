@@ -12,6 +12,7 @@ final class SharemarksHandler
     {
         // AUTO_CONVERT_ATTEMPTED: 2025-10-15 via handler-convert offset=145 batch=5
         // TODO(2025): extract legacy block from public/sharemarks.php:1-400; complex sharetable rendering and nested helpers.
+        // TODO(2025): re-reviewed 2025-10-18 offset=180; retain stub until Fluent joins + bookmark AJAX helpers are ported.
         $target = __DIR__ . '/../../../../public/sharemarks.php';
         if (!is_file($target)) {
             error_log(sprintf('STUB MISSING: %s requires %s', __FILE__, $target));

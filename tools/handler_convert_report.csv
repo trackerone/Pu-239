@@ -173,3 +173,8 @@ classes/Http/Handlers/Public/RulesHandler.php,false,1,TODO(2025) manual extracti
 classes/Http/Handlers/Public/ForumsHandler.php,false,1,TODO(2025) manual extraction required public/forums.php:1-400
 classes/Http/Handlers/Public/StaffpanelHandler.php,false,1,TODO(2025) manual extraction required public/staffpanel.php delegates staffpanel/index.php
 classes/Http/Handlers/Public/StaffboxHandler.php,false,1,TODO(2025) legacy content missing per tools/rehydrate_v3_manifest.csv
+classes/Http/Handlers/Public/SearchHandler.php,true,0,Converted from public/search.php; implements bot-only torrent lookup
+classes/Http/Handlers/Public/SetclassHandler.php,false,1,TODO(2025) merge conflict markers require manual extraction public/setclass.php:23-60
+classes/Http/Handlers/Public/SharemarksHandler.php,false,2,TODO(2025) sharetable rendering + Fluent joins pending; re-reviewed offset=180
+classes/Http/Handlers/Public/SignupHandler.php,false,1,TODO(2025) promo/signup flow blocked by conflicting password hashing merges
+classes/Http/Handlers/Public/SnatchesHandler.php,true,0,Converted from public/snatches.php; renders snatch history with Database pagination
