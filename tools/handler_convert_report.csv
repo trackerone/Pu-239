@@ -76,7 +76,7 @@ classes/Http/Handlers/Public/BookmarksHandler.php,true,0,Extracted from public/b
 classes/Http/Handlers/Public/LotteryHandler.php,false,1,TODO(2025) legacy script dispatch and sql_query usage require manual extraction
 classes/Http/Handlers/Public/MoviesHandler.php,false,1,TODO(2025) multi-source cache workflow requires curated port
 classes/Http/Handlers/Public/MybonusHandler.php,false,1,TODO(2025) complex bonus catalogue with fluent chains
-classes/Http/Handlers/Public/MytorrentsHandler.php,false,1,TODO(2025) torrent pager relies on fluent sorting helpers
+classes/Http/Handlers/Public/MytorrentsHandler.php,true,0,Converted public/mytorrents.php torrent dashboard with Config+Database pager (offset=210 batch=5)
 classes/Http/Handlers/Public/NeedseedHandler.php,true,0,Converted public/needseed.php dual-mode seeder/leecher listings using Database queries
 classes/Http/Handlers/Public/CategoryidsHandler.php,true,0,Extracted from public/categoryids.php; replaced FluentPDO usage with Database::fetchAll
 classes/Http/Handlers/Public/AnnouncementHandler.php,false,1,TODO(2025) dynamic announcement workflow requires manual Database migration
@@ -158,10 +158,10 @@ classes/Http/Handlers/Public/Ajax/TorrentsLookupHandler.php,false,1,TODO added f
 classes/Http/Handlers/Public/RssHandler.php,false,1,TODO added for rss feed builder and validation
 classes/Http/Handlers/Public/ImgHandler.php,true,0,Embedded image proxy output with caching controls
 classes/Http/Handlers/Public/RsstfreakHandler.php,true,0,Ported TorrentFreak feed rendering into handler
-classes/Http/Handlers/Public/TakethankyouHandler.php,false,2,TODO(2025) manual extraction required public/takethankyou.php:1-120; re-reviewed 2025-10-18 offset=200
-classes/Http/Handlers/Public/HnrsHandler.php,false,2,TODO(2025) manual extraction required public/hnrs.php:1-200; re-reviewed 2025-10-18 offset=200
+classes/Http/Handlers/Public/TakethankyouHandler.php,false,2,TODO(2025) placeholder SQL blocks in public/takethankyou.php:55-95 require manual column mapping (offset=210 batch=5)
+classes/Http/Handlers/Public/HnrsHandler.php,false,2,TODO(2025) Snatched/User bonus adjustments span public/hnrs.php:70-210; needs manual orchestration (offset=210 batch=5)
 classes/Http/Handlers/Public/FastdeleteHandler.php,true,0,Extracted from public/fastdelete.php with bonus rollback
-classes/Http/Handlers/Public/PeerlistHandler.php,false,2,TODO(2025) manual extraction required public/peerlist.php:1-220; re-reviewed 2025-10-18 offset=200
+classes/Http/Handlers/Public/PeerlistHandler.php,true,0,Converted public/peerlist.php peer tables with Database lookups + anonymity handling (offset=210 batch=5)
 classes/Http/Handlers/Public/UserhistoryHandler.php,false,2,TODO(2025) manual extraction required public/userhistory.php:1-360; re-reviewed 2025-10-18 offset=200
 classes/Http/Handlers/Public/TakeuploadHandler.php,false,2,TODO(2025) manual extraction required public/takeupload.php:1-400; re-reviewed 2025-10-18 offset=200
 classes/Http/Handlers/Public/UseragreementHandler.php,true,0,Inlined public/useragreement.php with Auth + Config usage
@@ -177,7 +177,7 @@ classes/Http/Handlers/Public/StaffboxHandler.php,false,1,TODO(2025) legacy conte
 classes/Http/Handlers/Public/SearchHandler.php,true,0,Converted from public/search.php; implements bot-only torrent lookup
 classes/Http/Handlers/Public/SetclassHandler.php,false,1,TODO(2025) merge conflict markers require manual extraction public/setclass.php:23-60
 classes/Http/Handlers/Public/SharemarksHandler.php,false,2,TODO(2025) sharetable rendering + Fluent joins pending; re-reviewed offset=180
-classes/Http/Handlers/Public/SignupHandler.php,false,1,TODO(2025) promo/signup flow blocked by conflicting password hashing merges
+classes/Http/Handlers/Public/SignupHandler.php,false,1,TODO(2025) public/signup.php lines 35-150 contain merge markers + argon policy branches; manual reconciliation needed (offset=210 batch=5)
 classes/Http/Handlers/Public/SnatchesHandler.php,true,0,Converted from public/snatches.php; renders snatch history with Database pagination
 classes/Http/Handlers/PublicSite/AllsmilesHandler.php,true,1,Converted public/allsmiles.php popup rendering with smilie datasets from container
 classes/Http/Handlers/PublicSite/ImgHandler.php,true,0,Ported public/img.php image proxy with conditional caching headers
@@ -198,3 +198,8 @@ classes/Http/Handlers/Public/TriviaResultsHandler.php,true,0,Rebuilt trivia resu
 classes/Http/Handlers/Public/ContactstaffHandler.php,true,1,Modernised staff contact form with Database inserts and session flashes; CSRF TODO retained (offset=205 batch=5)
 classes/Http/Handlers/Public/PollsTakeVoteHandler.php,true,1,Ported poll voting workflow to Database+PollVoter with JSON tally updates; CSRF TODO kept (offset=205 batch=5)
 classes/Http/Handlers/Public/TopmoodsHandler.php,true,0,Refreshed top moods leaderboard with cached PDO fetch (offset=205 batch=5)
+classes/Http/Handlers/Public/BootstrapWebHandler.php,true,0,Inlined bootstrap_web require (offset=215 batch=5)
+classes/Http/Handlers/Public/OffersHandler.php,true,0,Extracted from public/offers.php (offset=215 batch=5)
+classes/Http/Handlers/Public/NewAnnouncementHandler.php,true,1,Ported announcement composer; legacy CSRF TODO remains (offset=215 batch=5)
+classes/Http/Handlers/Public/SubtitlesHandler.php,false,1,TODO(2025) manual extraction required public/subtitles.php:1-520 (offset=215 batch=5)
+classes/Http/Handlers/Public/CatalogHandler.php,false,1,TODO(2025) manual extraction required public/catalog.php:1-400 (offset=215 batch=5)

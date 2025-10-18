@@ -1,10 +1,9 @@
 # Conversion Report: classes/Http/Handlers/Public/HnrsHandler.php
 
 - Legacy source: public/hnrs.php
-- Container/bootstrap dependencies: bootstrap_web.php, include/helpers/audit.php, include/bittorrent.php
-- Services injected: deferred (User, Snatched, Torrent, Session, Database, Cache)
-- Config mappings: pending (bonus/ration free logic)
-- Database usage: deferred (multiple FluentPDO joins and transactional updates)
-- TODOs introduced: 2 (manual extraction for seedtime + bonus remediation flows; re-review offset=200)
-- Notes: Legacy script orchestrates complex hit-and-run remediation with class services; flagged for manual conversion.
-- Re-review: 2025-10-18T18:09:15Z (offset=200) — conversion postponed pending FluentPDO query + bonus accounting migration.
+- Container/bootstrap dependencies: bootstrap_web.php, include/bittorrent.php
+- Services injected: deferred (multiple Snatched/User/Cache dependencies in legacy script)
+- Config mappings: deferred — heavy reliance on `hnr_config` thresholds
+- Database usage: deferred — intertwined updates across snatched/users tables with bonus + cache side-effects
+- TODOs introduced: 2
+- Notes: Offset=210 batch=5 review highlights need for manual orchestration of seedtime fixes and ratio credit purchases before safe conversion.

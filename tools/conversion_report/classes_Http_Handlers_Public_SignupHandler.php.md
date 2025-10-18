@@ -1,8 +1,9 @@
 # Conversion Report: classes/Http/Handlers/Public/SignupHandler.php
 
 - Legacy source: public/signup.php
-- Conversion status: deferred (argon password hashing + promo workflow conflicts)
 - Container/bootstrap dependencies: bootstrap_web.php, include/bittorrent.php
-- Services needed: ConfigRepository, Database, Session, Auth, User, Message, Validator
+- Services injected: deferred
+- Config mappings: deferred
+- Database usage: deferred — promo/invite flow depends on Auth/User/Validator services and unresolved merge markers.
 - TODOs introduced: 1
-- Notes: Merge-conflicted password policy enforcement and promo/invite SQL updates need manual reconciliation before safe handler extraction.
+- Notes: Offset=210 batch=5 review blocked by conflicting Argon2 password policy branches and Git merge artifacts between lines 35-150.

@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-// AUTO_CONVERT_ATTEMPTED: 2025-10-18T16:25:00Z via handler-convert offset=180 size=5
+// AUTO_CONVERT_ATTEMPTED: 2025-10-18T18:40:29Z via handler-convert offset=210 size=5 (deferred)
 
 namespace PU239\Http\Handlers\Public;
 
@@ -10,7 +10,8 @@ final class SignupHandler
     /** @param array<string,mixed> $meta */
     public function handle(array $meta = []): void
     {
-        // TODO(2025): merge conflict blocks in public/signup.php:40-120 prevent safe extraction (argon hashing + promo flow)
+        // AUTO_CONVERT_ATTEMPTED: 2025-10-18T18:40:29Z via handler-convert offset=210 size=5 (deferred)
+        // TODO(2025): legacy public/signup.php lines 35-150 contain unresolved merge markers and Argon2 password policy branches; manual reconciliation required before extraction
         // STUB_UPGRADED: safe buffered execution
         $target = __DIR__ . '/../../../../public/signup.php';
         if (!is_file($target)) {
