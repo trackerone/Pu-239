@@ -208,3 +208,8 @@ classes/Http/Handlers/Public/UserdetailsHandler.php,false,1,Complex multi-includ
 classes/Http/Handlers/Public/WikiHandler.php,false,1,Embedded helper functions and validator/image stack too risky for auto-convert.
 classes/Http/Handlers/PublicSite/AjaxchatHandler.php,true,0,Imported AJAX Chat bootstrap and instantiation into handler.
 classes/Http/Handlers/PublicSite/AnatomyHandler.php,true,0,Static content page lifted into handler with config-aware breadcrumbs.
+classes/Http/Handlers/PublicSite/NeedseedHandler.php,true,0,Extracted from public/needseed.php with Database replacements
+classes/Http/Handlers/PublicSite/DownloadMultiHandler.php,true,1,Extracted from public/download_multi.php; TODO confirm row owner mapping
+classes/Http/Handlers/PublicSite/TriviaResultsHandler.php,true,0,Extracted from public/trivia_results.php leaderboard rendering
+classes/Http/Handlers/PublicSite/UserUnlocksHandler.php,true,1,Extracted from public/user_unlocks.php; TODO add CSRF verification
+classes/Http/Handlers/PublicSite/ViewnfoHandler.php,true,0,Extracted from public/viewnfo.php with Nfo2Png integration
