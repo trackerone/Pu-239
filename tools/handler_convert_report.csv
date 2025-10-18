@@ -158,10 +158,12 @@ classes/Http/Handlers/Public/Ajax/TorrentsLookupHandler.php,false,1,TODO added f
 classes/Http/Handlers/Public/RssHandler.php,false,1,TODO added for rss feed builder and validation
 classes/Http/Handlers/Public/ImgHandler.php,true,0,Embedded image proxy output with caching controls
 classes/Http/Handlers/Public/RsstfreakHandler.php,true,0,Ported TorrentFreak feed rendering into handler
-classes/Http/Handlers/Public/TakethankyouHandler.php,false,1,TODO(2025) manual extraction required public/takethankyou.php:1-120
-classes/Http/Handlers/Public/HnrsHandler.php,false,1,TODO(2025) manual extraction required public/hnrs.php:1-200
+classes/Http/Handlers/Public/TakethankyouHandler.php,false,2,TODO(2025) manual extraction required public/takethankyou.php:1-120; re-reviewed 2025-10-18 offset=200
+classes/Http/Handlers/Public/HnrsHandler.php,false,2,TODO(2025) manual extraction required public/hnrs.php:1-200; re-reviewed 2025-10-18 offset=200
 classes/Http/Handlers/Public/FastdeleteHandler.php,true,0,Extracted from public/fastdelete.php with bonus rollback
-classes/Http/Handlers/Public/PeerlistHandler.php,false,1,TODO(2025) manual extraction required public/peerlist.php:1-220
+classes/Http/Handlers/Public/PeerlistHandler.php,false,2,TODO(2025) manual extraction required public/peerlist.php:1-220; re-reviewed 2025-10-18 offset=200
+classes/Http/Handlers/Public/UserhistoryHandler.php,false,2,TODO(2025) manual extraction required public/userhistory.php:1-360; re-reviewed 2025-10-18 offset=200
+classes/Http/Handlers/Public/TakeuploadHandler.php,false,2,TODO(2025) manual extraction required public/takeupload.php:1-400; re-reviewed 2025-10-18 offset=200
 classes/Http/Handlers/Public/UseragreementHandler.php,true,0,Inlined public/useragreement.php with Auth + Config usage
 classes/Http/Handlers/Public/GamesHandler.php,true,0,Converted public/games.php queries to Database::fetchAll/fetchValue
 classes/Http/Handlers/Public/ScrapeHandler.php,true,1,TODO(2025) revisit manual query parsing for tracker scrape
@@ -191,3 +193,8 @@ classes/Http/Handlers/PublicSite/CategoryidsHandler.php,true,0,Rebuilt category 
 classes/Http/Handlers/PublicSite/PortCheckHandler.php,true,0,Converted port status dashboard with staff overrides and JS assets
 classes/Http/Handlers/PublicSite/TakeThemeHandler.php,true,0,Ported stylesheet switcher with Audit logging and redirect handling
 classes/Http/Handlers/PublicSite/ClearAnnouncementHandler.php,true,0,Inlined announcement reset flow with Cache+Database updates
+classes/Http/Handlers/Public/ViewnfoHandler.php,true,0,Converted public/viewnfo.php into inline handler with Torrent + Nfo2Png services (offset=205 batch=5)
+classes/Http/Handlers/Public/TriviaResultsHandler.php,true,0,Rebuilt trivia results listing with PDO queries and ratio formatting (offset=205 batch=5)
+classes/Http/Handlers/Public/ContactstaffHandler.php,true,1,Modernised staff contact form with Database inserts and session flashes; CSRF TODO retained (offset=205 batch=5)
+classes/Http/Handlers/Public/PollsTakeVoteHandler.php,true,1,Ported poll voting workflow to Database+PollVoter with JSON tally updates; CSRF TODO kept (offset=205 batch=5)
+classes/Http/Handlers/Public/TopmoodsHandler.php,true,0,Refreshed top moods leaderboard with cached PDO fetch (offset=205 batch=5)
