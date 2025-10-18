@@ -77,7 +77,7 @@ classes/Http/Handlers/Public/LotteryHandler.php,false,1,TODO(2025) legacy script
 classes/Http/Handlers/Public/MoviesHandler.php,false,1,TODO(2025) multi-source cache workflow requires curated port
 classes/Http/Handlers/Public/MybonusHandler.php,false,1,TODO(2025) complex bonus catalogue with fluent chains
 classes/Http/Handlers/Public/MytorrentsHandler.php,false,1,TODO(2025) torrent pager relies on fluent sorting helpers
-classes/Http/Handlers/Public/NeedseedHandler.php,false,1,TODO(2025) dual-mode needseed queries pending repository rewrite
+classes/Http/Handlers/Public/NeedseedHandler.php,true,0,Converted public/needseed.php dual-mode seeder/leecher listings using Database queries
 classes/Http/Handlers/Public/CategoryidsHandler.php,true,0,Extracted from public/categoryids.php; replaced FluentPDO usage with Database::fetchAll
 classes/Http/Handlers/Public/AnnouncementHandler.php,false,1,TODO(2025) dynamic announcement workflow requires manual Database migration
 classes/Http/Handlers/Public/RssPdoDemoHandler.php,true,0,Converted from public/rss_pdo_demo.php
@@ -160,7 +160,6 @@ classes/Http/Handlers/Public/ImgHandler.php,true,0,Embedded image proxy output w
 classes/Http/Handlers/Public/RsstfreakHandler.php,true,0,Ported TorrentFreak feed rendering into handler
 classes/Http/Handlers/Public/TakethankyouHandler.php,false,1,TODO(2025) manual extraction required public/takethankyou.php:1-120
 classes/Http/Handlers/Public/HnrsHandler.php,false,1,TODO(2025) manual extraction required public/hnrs.php:1-200
-classes/Http/Handlers/Public/NeedseedHandler.php,false,1,TODO(2025) manual extraction required public/needseed.php:1-260
 classes/Http/Handlers/Public/FastdeleteHandler.php,true,0,Extracted from public/fastdelete.php with bonus rollback
 classes/Http/Handlers/Public/PeerlistHandler.php,false,1,TODO(2025) manual extraction required public/peerlist.php:1-220
 classes/Http/Handlers/Public/UseragreementHandler.php,true,0,Inlined public/useragreement.php with Auth + Config usage
@@ -183,3 +182,12 @@ classes/Http/Handlers/PublicSite/ImgHandler.php,true,0,Ported public/img.php ima
 classes/Http/Handlers/PublicSite/TopmoodsHandler.php,true,0,Rebuilt public/topmoods.php leaderboard with Database + Cache services
 classes/Http/Handlers/PublicSite/BjstatsHandler.php,true,0,Recreated public/bjstats.php blackjack leaderboards using parameterised queries
 classes/Http/Handlers/PublicSite/TenpercentHandler.php,true,1,Implemented public/tenpercent.php 10% upload boost flow with cache + messaging updates
+classes/Http/Handlers/Public/ReportHandler.php,true,1,Ported public/report.php with Config + Database wiring (retained CSRF TODO)
+classes/Http/Handlers/Public/ViewAnnounceHistoryHandler.php,true,0,Converted public/view_announce_history.php announcement archive rendering to handler
+classes/Http/Handlers/PublicSite/LogoutHandler.php,true,0,Converted public/logout.php to handler with Auth/User logout + redirect via Config
+classes/Http/Handlers/PublicSite/VerifyHandler.php,true,1,Ported public/verify.php identity confirmation flow with Auth + Session
+classes/Http/Handlers/PublicSite/ChatHandler.php,true,0,Embedded public/chat.php IRC notice with Config-driven breadcrumbs
+classes/Http/Handlers/PublicSite/CategoryidsHandler.php,true,0,Rebuilt category id listing with Database counts and hidden filters
+classes/Http/Handlers/PublicSite/PortCheckHandler.php,true,0,Converted port status dashboard with staff overrides and JS assets
+classes/Http/Handlers/PublicSite/TakeThemeHandler.php,true,0,Ported stylesheet switcher with Audit logging and redirect handling
+classes/Http/Handlers/PublicSite/ClearAnnouncementHandler.php,true,0,Inlined announcement reset flow with Cache+Database updates
