@@ -5,5 +5,6 @@
 - Services injected: deferred (User, Snatched, Torrent, Session, Database, Cache)
 - Config mappings: pending (bonus/ration free logic)
 - Database usage: deferred (multiple FluentPDO joins and transactional updates)
-- TODOs introduced: 1 (manual extraction for seedtime + bonus remediation flows)
+- TODOs introduced: 2 (manual extraction for seedtime + bonus remediation flows; re-review offset=200)
 - Notes: Legacy script orchestrates complex hit-and-run remediation with class services; flagged for manual conversion.
+- Re-review: 2025-10-18T18:09:15Z (offset=200) — conversion postponed pending FluentPDO query + bonus accounting migration.

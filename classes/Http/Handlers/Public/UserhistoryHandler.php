@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-// Generated: STUB_UPGRADED
+// AUTO_CONVERT_ATTEMPTED: 2025-10-18T18:09:15Z via handler-convert offset=200 size=5 (deferred)
 
 namespace PU239\Http\Handlers\Public;
 
@@ -10,7 +10,9 @@ final class UserhistoryHandler
     /** @param array<string,mixed> $meta */
     public function handle(array $meta = []): void
     {
-        // STUB_UPGRADED: safe buffered execution
+        // AUTO_CONVERT_ATTEMPTED: 2025-10-18T18:09:15Z via handler-convert offset=200 size=5 (deferred)
+        // TODO(2025): extract legacy block from public/userhistory.php:1-360 (forum history + pager + legacy sql_query usage)
+        // TODO(2025): re-reviewed at offset=200; conversion blocked pending PDO pager + BBCode render parity
         $target = __DIR__ . '/../../../../public/userhistory.php';
         if (!is_file($target)) {
             error_log(sprintf('STUB MISSING: %s requires %s', __FILE__, $target));

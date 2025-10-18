@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-// AUTO_CONVERT_ATTEMPTED: 2025-10-17T03:42:40Z via handler-convert offset=165 size=5
+// AUTO_CONVERT_ATTEMPTED: 2025-10-18T18:09:15Z via handler-convert offset=200 size=5 (deferred)
 
 namespace PU239\Http\Handlers\Public;
 
@@ -10,8 +10,9 @@ final class PeerlistHandler
     /** @param array<string,mixed> $meta */
     public function handle(array $meta = []): void
     {
-        // AUTO_CONVERT_ATTEMPTED: 2025-10-17T03:42:40Z via handler-convert offset=165 size=5
+        // AUTO_CONVERT_ATTEMPTED: 2025-10-18T18:09:15Z via handler-convert offset=200 size=5 (deferred)
         // TODO(2025): extract legacy block from public/peerlist.php:1-220 (table rendering + sorting helpers)
+        // TODO(2025): re-reviewed at offset=200; conversion blocked by FluentPDO peer lookups + anonymisation logic
         $target = __DIR__ . '/../../../../public/peerlist.php';
         if (!is_file($target)) {
             error_log(sprintf('STUB MISSING: %s requires %s', __FILE__, $target));
