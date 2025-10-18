@@ -45,10 +45,10 @@ classes/Http/Handlers/Admin/SiteSettingsHandler.php,false,1,TODO(2025) legacy sc
 classes/Http/Handlers/Admin/SitelogHandler.php,true,1,Inlined admin/sitelog.php access guard; site log viewer pending data restore.
 classes/Http/Handlers/Admin/SnatchedTorrentsHandler.php,false,1,TODO(2025) heavy legacy admin/snatched_torrents.php:1-220
 classes/Http/Handlers/Admin/AcpmanageHandler.php,false,1,TODO(2025) merge markers require manual extraction admin/acpmanage.php:1-200
-classes/Http/Handlers/Admin/AllagentsHandler.php,false,1,TODO(2025) merge markers require manual extraction admin/allagents.php:1-120
+classes/Http/Handlers/Admin/AllagentsHandler.php,true,1,Converted admin/allagents.php; TODO reconcile legacy AuthZ markers
 classes/Http/Handlers/Admin/BanclientHandler.php,false,1,TODO(2025) merge markers require manual extraction admin/banclient.php:1-80
 classes/Http/Handlers/Admin/BackupHandler.php,false,1,TODO(2025) merge markers require manual extraction admin/backup.php:1-320
-classes/Http/Handlers/Admin/ManageImagesHandler.php,false,1,TODO(2025) merge markers require manual extraction admin/manage_images.php:1-200
+classes/Http/Handlers/Admin/ManageImagesHandler.php,true,2,Converted admin/manage_images.php; TODO AuthZ merge + add CSRF for deletes
 classes/Http/Handlers/Public/LogoutHandler.php,true,0,Converted from public/logout.php
 classes/Http/Handlers/Public/ClearAnnouncementHandler.php,true,0,Converted from public/clear_announcement.php
 classes/Http/Handlers/Public/VerifyHandler.php,true,1,Converted from public/verify.php; TODO(2025) CSRF verification pending
