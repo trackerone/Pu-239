@@ -270,3 +270,8 @@ classes/Http/Handlers/Admin/SystemViewHandler.php,true,0,Extracted from admin/sy
 classes/Http/Handlers/PublicSite/VerifyEmailHandler.php,true,0,Extracted from public/verify_email.php
 classes/Http/Handlers/PublicSite/DeleteHandler.php,true,1,Extracted from public/delete.php
 classes/Http/Handlers/PublicSite/FastdeleteHandler.php,true,0,Extracted from public/fastdelete.php
+classes/Http/Handlers/PublicSite/TakeeditcpHandler.php,false,1,TODO(2025) manual extraction required public/takeeditcp.php:1-20 (offset=295 batch=5)
+classes/Http/Handlers/PublicSite/TakethankyouHandler.php,false,1,TODO(2025) manual extraction required public/takethankyou.php:1-200 (offset=295 batch=5)
+classes/Http/Handlers/PublicSite/TakeuploadHandler.php,false,1,TODO(2025) manual extraction required public/takeupload.php:1-400 (offset=295 batch=5)
+classes/Http/Handlers/PublicSite/TmoviesHandler.php,false,1,TODO(2025) manual extraction required public/tmovies.php:1-400 (offset=295 batch=5)
+classes/Http/Handlers/PublicSite/ToptenHandler.php,false,1,TODO(2025) manual extraction required public/topten.php:1-420 (offset=295 batch=5)

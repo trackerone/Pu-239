@@ -1,6 +1,7 @@
 <?php
 declare(strict_types=1);
 
+// AUTO_CONVERT_ATTEMPTED: 2025-10-19T18:10:31Z via handler-convert offset=295 batch=5
 // Generated: STUB_UPGRADED
 
 namespace PU239\Http\Handlers\PublicSite;
@@ -11,6 +12,7 @@ final class TmoviesHandler
     public function handle(array $meta = []): void
     {
         // STUB_UPGRADED: safe buffered execution
+        // TODO(2025): extract legacy block from public/tmovies.php:1-400 (Fluent pagination + cached cast lookups)
         $target = __DIR__ . '/../../../../public/tmovies.php';
         if (!is_file($target)) {
             error_log(sprintf('STUB MISSING: %s requires %s', __FILE__, $target));
