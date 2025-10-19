@@ -1,8 +1,8 @@
-# ReputationHandler conversion (2025-10-15)
+# ReputationHandler conversion (2025-10-19)
 
-- Status: Converted
+- Status: Deferred
 - Notes:
-  - Shifted the reputation stub into the handler lifecycle with bootstrap initialization.
-  - Preserved the placeholder exception pending database workflow recreation.
+  - public/reputation.php currently throws a RuntimeException placeholder and lacks the historical SQL payload needed for conversion.
+  - Handler now tracks the attempt metadata while continuing to buffer the legacy include.
 - TODOs:
-  - TODO(2025): rebuild reputation tools from public/reputation.php:10
+  - TODO(2025): locate the original reputation workflow and rehydrate public/reputation.php before converting the handler.

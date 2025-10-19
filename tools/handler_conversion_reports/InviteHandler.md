@@ -1,8 +1,8 @@
-# InviteHandler conversion (2025-10-15)
+# InviteHandler conversion (2025-10-19)
 
-- Status: Converted
+- Status: Deferred
 - Notes:
-  - Collapsed public/invite.php stub into handler while preserving routed index guard.
-  - Highlighted outstanding rehydration requirement for missing SQL implementation.
+  - Legacy public/invite.php is currently a stub awaiting SQL/data rehydration; handler now responds with HTTP 503.
+  - No safe legacy logic available for embedding.
 - TODOs:
-  - TODO(2025): rehydrate invite workflow from public/invite.php legacy stub
+  - TODO(2025): restore invite issuance workflow from public/invite.php once legacy SQL is recovered.
