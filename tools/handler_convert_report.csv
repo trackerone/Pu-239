@@ -241,7 +241,7 @@ classes/Http/Handlers/PublicSite/ArcadeHandler.php,true,0,"Extracted from public
 classes/Http/Handlers/PublicSite/ArcadeTopScoresHandler.php,true,0,"Ported public/arcade_top_scores.php leaderboard queries to Database with PHP helpers."
 classes/Http/Handlers/PublicSite/DownloadsubHandler.php,true,0,"Rebuilt public/downloadsub.php workflow with Database lookups and ZipArchive packaging."
 classes/Http/Handlers/PublicSite/FlashHandler.php,false,1,"TODO(2025) manual conversion required public/flash.php:1-200 (mysqli/sql_query mix)."
-classes/Http/Handlers/PublicSite/ContactstaffHandler.php,false,1,"TODO(2025) manual conversion required public/contactstaff.php:1-200 (form + mail pipeline)."
+classes/Http/Handlers/PublicSite/ContactstaffHandler.php,true,1,"Converted from public/contactstaff.php (offset=280 batch=5); CSRF TODO preserved."
 classes/Http/Handlers/PublicSite/AnnouncementHandler.php,false,1,"TODO(2025) manual conversion required public/announcement.php:1-220 (mysqli/sql_query workflow)."
 classes/Http/Handlers/PublicSite/BitbucketHandler.php,false,1,"TODO(2025) manual conversion required public/bitbucket.php:1-420 (uploads + cache coupling)."
 classes/Http/Handlers/PublicSite/BlackjackHandler.php,false,1,"TODO(2025) manual conversion required public/blackjack.php:1-500 (gameplay engine + messaging)."
@@ -256,4 +256,7 @@ classes/Http/Handlers/PublicSite/NewAnnouncementHandler.php,false,1,"TODO(2025) 
 classes/Http/Handlers/PublicSite/OffersHandler.php,false,1,"TODO(2025) manual extraction required public/offers.php:1-420 (Offer CRUD + validators)."
 classes/Http/Handlers/PublicSite/RecoverHandler.php,false,1,"TODO(2025) resolve merge markers and convert public/recover.php:1-220 (password reset flow)."
 classes/Http/Handlers/PublicSite/ReportHandler.php,false,1,"TODO(2025) replace Fluent placeholder + insert pipeline public/report.php:1-180."
-classes/Http/Handlers/PublicSite/ReputationHandler.php,false,1,"TODO(2025) rehydrate reputation workflow; current legacy file throws RuntimeException."
+classes/Http/Handlers/PublicSite/RestoreclassHandler.php,true,0,Converted from public/restoreclass.php (offset=280 batch=5)
+classes/Http/Handlers/PublicSite/TakereseedHandler.php,true,1,Converted from public/takereseed.php (offset=280 batch=5); CSRF TODO preserved.
+classes/Http/Handlers/PublicSite/StaffboxHandler.php,true,0,Inline runtime exception from public/staffbox.php (offset=280 batch=5)
+classes/Http/Handlers/PublicSite/ReputationHandler.php,true,0,Inline runtime exception from public/reputation.php (offset=280 batch=5)
