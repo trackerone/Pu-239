@@ -1,45 +1,32 @@
 <?php
 declare(strict_types=1);
 
-// AUTO_CONVERT_ATTEMPTED: 2025-10-19T15:43:44Z via handler-convert offset=275 batch=5
+// AUTO_CONVERT_ATTEMPTED: 2025-10-19T15:55:00Z via handler-convert offset=280 batch=5
 
 namespace PU239\Http\Handlers\PublicSite;
 
-use function error_log;
-use function http_response_code;
-use function is_file;
-use function ob_get_clean;
-use function ob_start;
-use function sprintf;
+use RuntimeException;
+
+use function dirname;
 
 final class ReputationHandler
 {
     /** @param array<string,mixed> $meta */
     public function handle(array $meta = []): void
     {
-        // AUTO_CONVERT_ATTEMPTED: 2025-10-19T15:43:44Z via handler-convert offset=275 batch=5
+        // AUTO_CONVERT_ATTEMPTED: 2025-10-19T15:55:00Z via handler-convert offset=280 batch=5
         try {
-            $target = __DIR__ . '/../../../../public/reputation.php';
-            if (!is_file($target)) {
-                error_log(sprintf('STUB MISSING: %s requires %s', __FILE__, $target));
-                http_response_code(500);
-                echo 'Service temporarily unavailable';
+            require_once dirname(__DIR__, 4) . '/bootstrap_web.php';
+
+            if (!defined('PU239_ROUTED')) {
+                require_once dirname(__DIR__, 4) . '/public/index.php';
+
                 return;
             }
 
-            // TODO(2025): extract legacy block from public/reputation.php:1-20 (handler replaced by RuntimeException stub)
-            $out = (static function (string $file): string {
-                ob_start();
-                try {
-                    require $file;
-                } catch (\Throwable $e) {
-                    error_log('Legacy stub error: ' . $e->getMessage());
-                }
+            require_once dirname(__DIR__, 4) . '/include/bittorrent.php';
 
-                return (string) ob_get_clean();
-            })($target);
-
-            echo $out;
+            throw new RuntimeException('Stubbed: missing SQL; see tools/rehydrate_v3_manifest.csv');
         } catch (\Throwable $e) {
             error_log('Converted handler error: ' . $e->getMessage());
             http_response_code(500);
