@@ -1,6 +1,7 @@
 <?php
 declare(strict_types=1);
 
+// AUTO_CONVERT_ATTEMPTED: 2025-10-19T15:13:40Z via handler-convert offset=265 batch=5
 // Generated: STUB_UPGRADED
 
 namespace PU239\Http\Handlers\PublicSite;
@@ -11,6 +12,7 @@ final class BitbucketHandler
     public function handle(array $meta = []): void
     {
         // STUB_UPGRADED: safe buffered execution
+        // TODO(2025): extract legacy block from public/bitbucket.php:1-420 (file uploads + validator + complex cache writes)
         $target = __DIR__ . '/../../../../public/bitbucket.php';
         if (!is_file($target)) {
             error_log(sprintf('STUB MISSING: %s requires %s', __FILE__, $target));

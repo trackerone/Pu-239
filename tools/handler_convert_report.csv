@@ -242,3 +242,8 @@ classes/Http/Handlers/PublicSite/ArcadeTopScoresHandler.php,true,0,"Ported publi
 classes/Http/Handlers/PublicSite/DownloadsubHandler.php,true,0,"Rebuilt public/downloadsub.php workflow with Database lookups and ZipArchive packaging."
 classes/Http/Handlers/PublicSite/FlashHandler.php,false,1,"TODO(2025) manual conversion required public/flash.php:1-200 (mysqli/sql_query mix)."
 classes/Http/Handlers/PublicSite/ContactstaffHandler.php,false,1,"TODO(2025) manual conversion required public/contactstaff.php:1-200 (form + mail pipeline)."
+classes/Http/Handlers/PublicSite/AnnouncementHandler.php,false,1,"TODO(2025) manual conversion required public/announcement.php:1-220 (mysqli/sql_query workflow)."
+classes/Http/Handlers/PublicSite/BitbucketHandler.php,false,1,"TODO(2025) manual conversion required public/bitbucket.php:1-420 (uploads + cache coupling)."
+classes/Http/Handlers/PublicSite/BlackjackHandler.php,false,1,"TODO(2025) manual conversion required public/blackjack.php:1-500 (gameplay engine + messaging)."
+classes/Http/Handlers/PublicSite/BookmarksHandler.php,false,1,"TODO(2025) manual conversion required public/bookmarks.php:1-360 (helpers + Fluent remnants)."
+classes/Http/Handlers/PublicSite/BotTriggersHandler.php,false,1,"TODO(2025) manual conversion required public/bot_triggers.php:1-420 (validation + CRUD services)."
