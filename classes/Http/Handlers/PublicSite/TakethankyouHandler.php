@@ -1,36 +1,143 @@
 <?php
 declare(strict_types=1);
 
-// AUTO_CONVERT_ATTEMPTED: 2025-10-19T18:10:31Z via handler-convert offset=295 batch=5
-// Generated: STUB_UPGRADED
+// AUTO_CONVERT_ATTEMPTED: 2025-10-19T19:01:07Z via handler-convert offset=305 batch=5
 
 namespace PU239\Http\Handlers\PublicSite;
+
+use Pu239\Cache;
+use Pu239\Config\ConfigRepository;
+use Pu239\Database;
+use Pu239\Session;
+
+use function dirname;
+use function error_log;
+use function is_valid_id;
+use function sprintf;
 
 final class TakethankyouHandler
 {
     /** @param array<string,mixed> $meta */
     public function handle(array $meta = []): void
     {
-        // STUB_UPGRADED: safe buffered execution
-        // TODO(2025): extract legacy block from public/takethankyou.php:1-200 (placeholder SQL + bonus workflow)
-        $target = __DIR__ . '/../../../../public/takethankyou.php';
-        if (!is_file($target)) {
-            error_log(sprintf('STUB MISSING: %s requires %s', __FILE__, $target));
-            http_response_code(500);
-            echo 'Service temporarily unavailable';
-            return;
-        }
-        $out = (static function (string $file): string {
-            ob_start();
-            try {
-                require $file;
-            } catch (\Throwable $e) {
-                error_log('Legacy stub error: ' . $e->getMessage());
-            }
-            return (string) ob_get_clean();
-        })($target);
+        // AUTO_CONVERT_ATTEMPTED: 2025-10-19T19:01:07Z via handler-convert offset=305 batch=5
+        try {
+            require_once dirname(__DIR__, 4) . '/bootstrap_web.php';
 
-        // Optional: allow middleware or further processing here
-        echo $out;
+            if (!defined('PU239_ROUTED')) {
+                require_once dirname(__DIR__, 4) . '/public/index.php';
+
+                return;
+            }
+
+            require_once dirname(__DIR__, 4) . '/include/bittorrent.php';
+
+            global $container;
+
+            /** @var ConfigRepository $config */
+            $config = $container->get(ConfigRepository::class);
+            /** @var Database $db */
+            $db = $container->get(Database::class);
+            /** @var Cache $cache */
+            $cache = $container->get(Cache::class);
+
+            $user = check_user_status();
+
+            $bonusEnabled = (bool) $config->get('bonus.on');
+            $bonusPerComment = (float) $config->get('bonus.per_comment');
+
+            $requestId = (int) ($_GET['id'] ?? ($_POST['id'] ?? 0));
+            if ($requestId <= 0) {
+                app_halt('Exit called');
+            }
+
+            if (!is_valid_id($requestId)) {
+                stderr(_('Error'), _('Invalid ID'), 'bottom20');
+            }
+
+            if (($_SERVER['REQUEST_METHOD'] ?? 'GET') === 'POST') {
+                // TODO(2025): add CSRF verification for takethankyou submission
+            }
+
+            $torrent = $db->fetch(
+                'SELECT id, thanks, comments FROM torrents WHERE id = :id',
+                [
+                    ':id' => [$requestId, \PDO::PARAM_INT],
+                ],
+            );
+
+            if ($torrent === null) {
+                stderr(_('Error'), _('Torrent not found'), 'bottom20');
+            }
+
+            $alreadyThanked = $db->fetchValue(
+                'SELECT 1 FROM thankyou WHERE torid = :torid AND uid = :uid LIMIT 1',
+                [
+                    ':torid' => [$requestId, \PDO::PARAM_INT],
+                    ':uid' => [$user['id'], \PDO::PARAM_INT],
+                ],
+            );
+
+            if ($alreadyThanked !== null) {
+                stderr(_('Error'), 'You have already thanked.', 'bottom20');
+            }
+
+            $text = ':thankyou:';
+            $timestamp = TIME_NOW;
+
+            // TODO(2025): confirm thankyou insert column mapping matches legacy literal
+            $db->run(
+                'INSERT INTO thankyou (torid, uid, thank_date) VALUES (:torid, :uid, :thank_date)',
+                [
+                    ':torid' => [$requestId, \PDO::PARAM_INT],
+                    ':uid' => [$user['id'], \PDO::PARAM_INT],
+                    ':thank_date' => [$timestamp, \PDO::PARAM_INT],
+                ],
+            );
+
+            // TODO(2025): confirm comments insert column mapping matches legacy literal
+            $db->run(
+                'INSERT INTO comments (user, torrent, added, text, ori_text) VALUES (:user, :torrent, :added, :text, :ori_text)',
+                [
+                    ':user' => [$user['id'], \PDO::PARAM_INT],
+                    ':torrent' => [$requestId, \PDO::PARAM_INT],
+                    ':added' => [$timestamp, \PDO::PARAM_INT],
+                    ':text' => [$text, \PDO::PARAM_STR],
+                    ':ori_text' => [$text, \PDO::PARAM_STR],
+                ],
+            );
+
+            $db->run(
+                'UPDATE torrents SET thanks = thanks + 1, comments = comments + 1 WHERE id = :id',
+                [
+                    ':id' => [$requestId, \PDO::PARAM_INT],
+                ],
+            );
+
+            $cache->deleteMulti([
+                'latest_comments_',
+                'torrent_details_' . $requestId,
+            ]);
+
+            if ($bonusEnabled) {
+                $db->run(
+                    'UPDATE users SET seedbonus = seedbonus + :amount WHERE id = :id',
+                    [
+                        ':amount' => [$bonusPerComment, \PDO::PARAM_STR],
+                        ':id' => [$user['id'], \PDO::PARAM_INT],
+                    ],
+                );
+            }
+
+            /** @var Session $session */
+            $session = $container->get(Session::class);
+            $session->set('is-success', "Your 'Thank you' has been registered!");
+
+            header(sprintf('Refresh: 0; url=details.php?id=%d', $requestId));
+        } catch (\Throwable $e) {
+            error_log('Converted handler error: ' . $e->getMessage());
+            http_response_code(500);
+            echo 'Internal error';
+        }
     }
 }

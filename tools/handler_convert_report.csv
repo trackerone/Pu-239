@@ -275,3 +275,9 @@ classes/Http/Handlers/PublicSite/TakethankyouHandler.php,false,1,TODO(2025) manu
 classes/Http/Handlers/PublicSite/TakeuploadHandler.php,false,1,TODO(2025) manual extraction required public/takeupload.php:1-400 (offset=295 batch=5)
 classes/Http/Handlers/PublicSite/TmoviesHandler.php,false,1,TODO(2025) manual extraction required public/tmovies.php:1-400 (offset=295 batch=5)
 classes/Http/Handlers/PublicSite/ToptenHandler.php,false,1,TODO(2025) manual extraction required public/topten.php:1-420 (offset=295 batch=5)
+classes/Http/Handlers/Public/TmoviesHandler.php,false,1,TODO(2025) manual extraction required public/tmovies.php:1-260 (Fluent query builder + cached cast lookups)
+classes/Http/Handlers/Public/ToptenHandler.php,false,1,TODO(2025) manual extraction required public/topten.php:1-360 (legacy mysqli stats + charts)
+classes/Http/Handlers/Public/TmoviesHandler.php,true,0,"Converted from public/tmovies.php (offset=305 batch=5); rewrote movie browser with Database filters."
+classes/Http/Handlers/Public/ToptenHandler.php,true,0,"Converted from public/topten.php (offset=305 batch=5); migrated chart stats to Database."
+classes/Http/Handlers/PublicSite/TakeeditcpHandler.php,true,0,"Wrapped runtime placeholder from public/takeeditcp.php (offset=305 batch=5)."
+classes/Http/Handlers/PublicSite/TakethankyouHandler.php,true,2,"Converted thank-you workflow from public/takethankyou.php (offset=305 batch=5); TODO verify thankyou/comments inserts."
