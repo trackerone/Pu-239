@@ -247,3 +247,8 @@ classes/Http/Handlers/PublicSite/BitbucketHandler.php,false,1,"TODO(2025) manual
 classes/Http/Handlers/PublicSite/BlackjackHandler.php,false,1,"TODO(2025) manual conversion required public/blackjack.php:1-500 (gameplay engine + messaging)."
 classes/Http/Handlers/PublicSite/BookmarksHandler.php,false,1,"TODO(2025) manual conversion required public/bookmarks.php:1-360 (helpers + Fluent remnants)."
 classes/Http/Handlers/PublicSite/BotTriggersHandler.php,false,1,"TODO(2025) manual conversion required public/bot_triggers.php:1-420 (validation + CRUD services)."
+classes/Http/Handlers/PublicSite/GiftHandler.php,false,1,Legacy stub remains placeholder; TODO rehydrate public/gift.php SQL.
+classes/Http/Handlers/PublicSite/HnrsHandler.php,false,1,TODO(2025) manual extraction required public/hnrs.php:1-340.
+classes/Http/Handlers/PublicSite/InviteHandler.php,false,1,Legacy stub remains placeholder; TODO rehydrate public/invite.php SQL.
+classes/Http/Handlers/PublicSite/LotteryHandler.php,false,1,TODO(2025) nested includes + mysqli queries in public/lottery.php:1-200.
+classes/Http/Handlers/PublicSite/MoviesHandler.php,true,1,Extracted cached movie dashboard logic from public/movies.php (check TVMaze fallback).
