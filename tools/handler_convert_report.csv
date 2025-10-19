@@ -252,3 +252,8 @@ classes/Http/Handlers/PublicSite/HnrsHandler.php,false,1,TODO(2025) manual extra
 classes/Http/Handlers/PublicSite/InviteHandler.php,false,1,Legacy stub remains placeholder; TODO rehydrate public/invite.php SQL.
 classes/Http/Handlers/PublicSite/LotteryHandler.php,false,1,TODO(2025) nested includes + mysqli queries in public/lottery.php:1-200.
 classes/Http/Handlers/PublicSite/MoviesHandler.php,true,1,Extracted cached movie dashboard logic from public/movies.php (check TVMaze fallback).
+classes/Http/Handlers/PublicSite/NewAnnouncementHandler.php,false,1,"TODO(2025) manual extraction required public/new_announcement.php:1-200 (sql_query/sqlesc)."
+classes/Http/Handlers/PublicSite/OffersHandler.php,false,1,"TODO(2025) manual extraction required public/offers.php:1-420 (Offer CRUD + validators)."
+classes/Http/Handlers/PublicSite/RecoverHandler.php,false,1,"TODO(2025) resolve merge markers and convert public/recover.php:1-220 (password reset flow)."
+classes/Http/Handlers/PublicSite/ReportHandler.php,false,1,"TODO(2025) replace Fluent placeholder + insert pipeline public/report.php:1-180."
+classes/Http/Handlers/PublicSite/ReputationHandler.php,false,1,"TODO(2025) rehydrate reputation workflow; current legacy file throws RuntimeException."
