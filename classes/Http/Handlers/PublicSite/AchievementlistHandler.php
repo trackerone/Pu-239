@@ -1,34 +1,155 @@
 <?php
 declare(strict_types=1);
 
-// Generated: STUB_UPGRADED
+// AUTO_CONVERT_ATTEMPTED: 2025-10-19T15:05:00Z via handler-convert offset=255 batch=5
 
 namespace PU239\Http\Handlers\PublicSite;
+
+use PU239\Config\ConfigRepository;
+use Pu239\Achievementlist;
+use Pu239\Database;
+
+use function dirname;
+use function htmlspecialchars;
+use function trim;
+
+use const ENT_QUOTES;
+use const ENT_SUBSTITUTE;
 
 final class AchievementlistHandler
 {
     /** @param array<string,mixed> $meta */
     public function handle(array $meta = []): void
     {
-        // STUB_UPGRADED: safe buffered execution
-        $target = __DIR__ . '/../../../../public/achievementlist.php';
-        if (!is_file($target)) {
-            error_log(sprintf('STUB MISSING: %s requires %s', __FILE__, $target));
-            http_response_code(500);
-            echo 'Service temporarily unavailable';
-            return;
-        }
-        $out = (static function (string $file): string {
-            ob_start();
-            try {
-                require $file;
-            } catch (\Throwable $e) {
-                error_log('Legacy stub error: ' . $e->getMessage());
-            }
-            return (string) ob_get_clean();
-        })($target);
+        // AUTO_CONVERT_ATTEMPTED: 2025-10-19T15:05:00Z via handler-convert offset=255 batch=5
+        try {
+            require_once dirname(__DIR__, 4) . '/bootstrap_web.php';
 
-        // Optional: allow middleware or further processing here
-        echo $out;
+            if (!defined('PU239_ROUTED')) {
+                require_once dirname(__DIR__, 4) . '/public/index.php';
+
+                return;
+            }
+
+            $images_baseurl = '';
+            global $container;
+
+            /** @var ConfigRepository $config */
+            $config = $container->get(ConfigRepository::class);
+            /** @var Database $db */
+            $db = $container->get(Database::class);
+
+            $s = $s ?? static fn($v) => htmlspecialchars((string) $v, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
+
+            require_once dirname(__DIR__, 4) . '/include/bittorrent.php';
+
+            $HTMLOUT = '';
+            $user = check_user_status();
+            /** @var Achievementlist $achievementlist */
+            $achievementlist = $container->get(Achievementlist::class);
+
+            if ($_SERVER['REQUEST_METHOD'] === 'POST' && $user['class'] >= UC_MAX) {
+                // TODO(2025): csrf
+                $values = [
+                    'achievename' => $s(trim($_POST['achievename'] ?? '')),
+                    'notes' => $s(trim($_POST['notes'] ?? '')),
+                    'clienticon' => $s(trim($_POST['clienticon'] ?? '')),
+                ];
+                $achievementlist->add($values);
+                $message = _fe('A New achievment has been added. Achievement: [{0}]', $values['achievename']);
+            }
+
+            $sql = <<<SQL
+                SELECT
+                    a1.id,
+                    a1.achievename,
+                    a1.notes,
+                    a1.clienticon,
+                    (
+                        SELECT COUNT(a2.id)
+                        FROM achievements AS a2
+                        WHERE a2.achievement = a1.achievename
+                    ) AS count
+                FROM achievementlist AS a1
+                ORDER BY a1.id
+            SQL;
+            $rows = $db->toArray($sql);
+            $HTMLOUT .= '<h1>' . _('Achievements List') . '</h1>';
+
+            if ($rows === []) {
+                $HTMLOUT .= main_div(
+                    "<div class='has-text-centered padding20'>" .
+                    _('There are currently no achievements added to the list!<br>The staff has been slacking') .
+                    '!</div>',
+                    'bottom20'
+                );
+            } else {
+                $heading = '
+            <tr>
+                <th>' . _('Achievement Name') . '</th>
+                <th>' . _('Description') . '</th>
+                <th>' . _('Earned') . '</th>
+            </tr>';
+                $body = '';
+                $images_baseurl = (string) $config->get('paths.images_baseurl');
+                $imagesBaseUrlEscaped = $s($images_baseurl);
+                foreach ($rows as $arr) {
+                    $notes = $s($arr['notes']);
+                    $count = (int) $arr['count'];
+                    $clienticon = '';
+                    if ($arr['clienticon'] !== '') {
+                        $iconPath = $imagesBaseUrlEscaped . 'achievements/' . $s($arr['clienticon']);
+                        $title = $s($arr['achievename']);
+                        $clienticon = "<img src='{$iconPath}' class='tooltipper' title='{$title}' alt='{$title}'>";
+                    }
+                    $body .= "
+            <tr>
+                <td>{$clienticon}</td>
+                <td>{$notes}</td>
+                <td>" . _pfe('{0} time', '{0} times', $count) . '</td>
+            </tr>';
+                }
+                $HTMLOUT .= main_table($body, $heading);
+            }
+
+            if ($user['class'] >= UC_MAX) {
+                $formRows = "
+            <tr>
+                <td class='w-15'>" . _('Achievement Name') . "</td>
+                <td><input class='w-100' type='text' name='achievename'></td>
+            </tr>
+            <tr>
+                <td>" . _('Achievement Icon') . "</td>
+                <td><textarea class='w-100' rows='3' name='clienticon'></textarea></td>
+            </tr>
+            <tr>
+                <td>" . _('Description') . "</td>
+                <td><textarea class='w-100' rows='6' name='notes'></textarea></td>
+            </tr>
+            <tr>
+                <td colspan='2' class='has-text-centered'>
+                    <input type='submit' name='okay' value='" . _('Add Me') . "!' class='button is-small'>
+                </td>
+            </tr>";
+
+                $HTMLOUT .= "
+    <h2>" . _('Add an achievement to list.') . "</h2>
+    <form method='post' action='achievementlist.php' enctype='multipart/form-data' accept-charset='utf-8'>" .
+                    main_table($formRows) . '
+    </form>';
+            }
+
+            $title = _('Achievements List');
+            $self = $s($_SERVER['PHP_SELF'] ?? '');
+            $breadcrumbs = [
+                "<a href='{$self}'>$title</a>",
+            ];
+
+            echo stdhead($title, [], 'page-wrapper', $breadcrumbs) . wrapper($HTMLOUT, 'has-text-centered') . stdfoot();
+        } catch (\Throwable $e) {
+            error_log('Converted handler error: ' . $e->getMessage());
+            http_response_code(500);
+            echo 'Internal error';
+        }
     }
 }

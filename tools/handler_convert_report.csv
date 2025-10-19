@@ -226,3 +226,14 @@ classes/Http/Handlers/PublicSite/FriendsHandler.php,true,1,Legacy stub replaced 
 classes/Http/Handlers/PublicSite/MessagesHandler.php,true,1,Legacy stub replaced with 503 placeholder pending public/messages.php SQL.
 classes/Http/Handlers/Admin/ReportsHandler.php,true,1,Inlined admin/reports.php bootstrap + AuthZ guard; runtime still throws until rebuilt.
 classes/Http/Handlers/Admin/WarnHandler.php,true,1,Inlined admin/warn.php guard; staff warning workflow remains TODO.
+
+classes/Http/Handlers/PublicSite/GamesHandler.php,true,0,Extracted from public/games.php (batch offset=250).
+classes/Http/Handlers/PublicSite/GetrssHandler.php,true,0,Extracted from public/getrss.php (batch offset=250).
+classes/Http/Handlers/PublicSite/LoginHandler.php,true,1,Converted public/login.php; retains login rate limiter and IP checks.
+classes/Http/Handlers/PublicSite/MytorrentsHandler.php,true,0,Extracted from public/mytorrents.php with Fluent queries.
+classes/Http/Handlers/PublicSite/PeerlistHandler.php,true,0,Extracted from public/peerlist.php with peer table helpers.
+classes/Http/Handlers/PublicSite/AchievementbonusHandler.php,true,0,Extracted from public/achievementbonus.php (batch offset=255).
+classes/Http/Handlers/PublicSite/AchievementhistoryHandler.php,true,0,Extracted from public/achievementhistory.php (batch offset=255).
+classes/Http/Handlers/PublicSite/AchievementlistHandler.php,true,1,Converted public/achievementlist.php; admin add form still lacks CSRF guard.
+classes/Http/Handlers/PublicSite/HappylogHandler.php,true,0,Inlined public/happylog.php history listing (batch offset=255).
+classes/Http/Handlers/PublicSite/VideoformatsHandler.php,true,0,Embedded public/videoformats.php reference content (batch offset=255).

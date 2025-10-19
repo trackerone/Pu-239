@@ -1,24 +1,41 @@
 <?php
 declare(strict_types=1);
 
-// AUTO_CONVERT_ATTEMPTED: 2025-10-18T19:45:00Z via handler_convert (offset=230 batch=5)
+// AUTO_CONVERT_ATTEMPTED: 2025-10-19T15:05:00Z via handler-convert offset=255 batch=5
 
 namespace PU239\Http\Handlers\PublicSite;
+
+use Pu239\Database;
+
+use function dirname;
 
 final class VideoformatsHandler
 {
     /** @param array<string,mixed> $meta */
     public function handle(array $meta = []): void
     {
-        // AUTO_CONVERT_ATTEMPTED: 2025-10-18T19:45:00Z via handler_convert (offset=230 batch=5)
+        // AUTO_CONVERT_ATTEMPTED: 2025-10-19T15:05:00Z via handler-convert offset=255 batch=5
         try {
-            require_once __DIR__ . '/../../../../include/bittorrent.php';
+            require_once dirname(__DIR__, 4) . '/bootstrap_web.php';
 
+            global $container;
+            /** @var Database $db */
+            $db = $container->get(Database::class);
+
+            if (!defined('PU239_ROUTED')) {
+                require_once dirname(__DIR__, 4) . '/public/index.php';
+
+                return;
+            }
+
+            require_once dirname(__DIR__, 4) . '/include/bittorrent.php';
             check_user_status();
+            $HTMLOUT = <<<'HTML'
 
-            $HTMLOUT = "
 <h1 class='has-text-centered'>" . _("I've Downloaded a movie and I don't know what CAM/TS/TC/SCR means?") . '</h1>';
-            $HTMLOUT .= main_table("
+HTML;
+            $tableHtml = <<<'HTML'
+
         <tr>
             <td>
                 <div class='padding20'>
@@ -174,7 +191,7 @@ final class VideoformatsHandler
             <td>
                 <div class='padding20'>
                     <b>" . _('NUKED') . '</b><br>
-                    <br>' . _('A film can be nuked for various reasons. Individual sites will nuke for breaking their rules (such as "No Telesyncs") but if the film has something extremely wrong with it (no soundtrack for 20mins, CD2 is incorrect film/game etc) then a global nuke will occur, and people trading it across sites will lose their credits. Nuked films can still reach other sources such as p2p/usenet, but its a good idea to check why it was nuked first in case. If a group realise there is something wrong, they can request a nuke.') . "<br>
+                    <br>' . _('A film can be nuked for various reasons. Individual sites will nuke for breaking their rules (such as &quot;No Telesyncs&quot;) but if the film has something extremely wrong with it (no soundtrack for 20mins, CD2 is incorrect film/game etc) then a global nuke will occur, and people trading it across sites will lose their credits. Nuked films can still reach other sources such as p2p/usenet, but its a good idea to check why it was nuked first in case. If a group realise there is something wrong, they can request a nuke.') . "<br>
                 </div>
             </td>
         </tr>
@@ -195,13 +212,13 @@ final class VideoformatsHandler
                     <br>' . _('Dupe is quite simply, if something exists already, then theres no reason for it to exist again without proper reason.') . '<br>
                 </div>
             </td>
-        </tr>');
-
+        </tr>
+HTML;
+            $HTMLOUT .= main_table($tableHtml);
             $title = _('Video Formats');
             $breadcrumbs = [
                 "<a href='{$_SERVER['PHP_SELF']}'>$title</a>",
             ];
-
             echo stdhead($title, [], 'page-wrapper', $breadcrumbs) . wrapper($HTMLOUT) . stdfoot();
         } catch (\Throwable $e) {
             error_log('Converted handler error: ' . $e->getMessage());
