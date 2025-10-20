@@ -287,3 +287,8 @@ classes/Http/Handlers/PublicSite/UsercommentHandler.php,false,1,TODO(2025) manua
 classes/Http/Handlers/PublicSite/UsercpHandler.php,false,1,TODO(2025) target public/usercp.php:1-10 is placeholder RuntimeException; awaiting rehydrate
 classes/Http/Handlers/PublicSite/UserdetailsHandler.php,false,1,TODO(2025) manual extraction required public/userdetails.php:1-1106 (large profile renderer)
 classes/Http/Handlers/PublicSite/UserhistoryHandler.php,false,1,TODO(2025) manual extraction required public/userhistory.php:1-173 (forum/torrent history queries)
+classes/Http/Handlers/PublicSite/FilelistHandler.php,true,0,Extracted from public/filelist.php
+classes/Http/Handlers/PublicSite/ViewAnnounceHistoryHandler.php,true,0,Extracted from public/view_announce_history.php
+classes/Http/Handlers/PublicSite/UsersHandler.php,false,1,TODO(2025) legacy stub public/users.php:1-10 (runtime exception)
+classes/Http/Handlers/PublicSite/WikiHandler.php,false,1,TODO(2025) complex workflow public/wiki.php:1-400
+classes/Http/Handlers/Staffpanel/IndexHandler.php,false,1,TODO(2025) manual extraction required staffpanel/index.php:1-400

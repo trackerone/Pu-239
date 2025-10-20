@@ -1,8 +1,8 @@
-# UsersHandler conversion (2025-10-15)
+# UsersHandler conversion (2025-10-20)
 
-- Status: Converted
+- Status: Deferred
 - Notes:
-  - Replaced the legacy require shim with direct bootstrap and routing guards in the handler.
-  - Left the runtime exception in place until the user directory flow is rebuilt.
+  - public/users.php currently throws a RuntimeException placeholder referencing tools/rehydrate_v3_manifest.csv and lacks the legacy body to extract.
+  - Handler retains buffered require semantics and records the conversion attempt.
 - TODOs:
-  - TODO(2025): restore user list view from public/users.php:10
+  - TODO(2025): Restore legacy public/users.php implementation (lines 1-10) or supply modern equivalent before refactoring handler logic.
