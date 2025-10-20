@@ -1,8 +1,8 @@
-# MessagesHandler conversion (2025-10-15)
+# MessagesHandler conversion (2025-10-20)
 
 - Status: Converted
 - Notes:
-  - Inlined the public/messages.php guard directly into the handler entry point.
-  - Maintained the stubbed exception so routing still surfaces the missing workflow cleanly.
+  - Wrapped the public/messages.php stub logic inside the handler with routing and bootstrap guards.
+  - Preserved the RuntimeException signalling until the staff mailbox SQL can be rebuilt.
 - TODOs:
-  - TODO(2025): port staff message overview from public/messages.php:10
+  - TODO(2025): port staff message overview from public/messages.php when the data layer returns

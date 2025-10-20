@@ -1,8 +1,8 @@
-# CoinsHandler conversion (2025-10-15)
+# CoinsHandler conversion (2025-10-20)
 
 - Status: Converted
 - Notes:
-  - Embedded the legacy public/coins.php stub into the handler with minimal routing guard.
-  - Documented remaining dependency on future SQL restoration work.
+  - Embedded the public/coins.php stub directly into the handler with routing guard checks.
+  - The legacy workflow still raises the RuntimeException until SQL fragments are restored.
 - TODOs:
   - TODO(2025): rehydrate coin rewards workflow from public/coins.php legacy stub
