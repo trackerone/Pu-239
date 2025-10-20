@@ -281,3 +281,8 @@ classes/Http/Handlers/Public/TmoviesHandler.php,true,0,"Converted from public/tm
 classes/Http/Handlers/Public/ToptenHandler.php,true,0,"Converted from public/topten.php (offset=305 batch=5); migrated chart stats to Database."
 classes/Http/Handlers/PublicSite/TakeeditcpHandler.php,true,0,"Wrapped runtime placeholder from public/takeeditcp.php (offset=305 batch=5)."
 classes/Http/Handlers/PublicSite/TakethankyouHandler.php,true,2,"Converted thank-you workflow from public/takethankyou.php (offset=305 batch=5); TODO verify thankyou/comments inserts."
+classes/Http/Handlers/PublicSite/TvshowsHandler.php,false,1,TODO(2025) manual extraction required public/tvshows.php:1-225 (Fluent filtering, cached posters)
+classes/Http/Handlers/PublicSite/UsercommentHandler.php,false,1,TODO(2025) manual extraction required public/usercomment.php:1-247 (multi-action comment controller)
+classes/Http/Handlers/PublicSite/UsercpHandler.php,false,1,TODO(2025) target public/usercp.php:1-10 is placeholder RuntimeException; awaiting rehydrate
+classes/Http/Handlers/PublicSite/UserdetailsHandler.php,false,1,TODO(2025) manual extraction required public/userdetails.php:1-1106 (large profile renderer)
+classes/Http/Handlers/PublicSite/UserhistoryHandler.php,false,1,TODO(2025) manual extraction required public/userhistory.php:1-173 (forum/torrent history queries)
