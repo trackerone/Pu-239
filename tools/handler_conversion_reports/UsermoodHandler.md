@@ -1,8 +1,8 @@
-# UsermoodHandler conversion (2025-10-15)
+# UsermoodHandler conversion (2025-10-20)
 
 - Status: Converted
 - Notes:
-  - Embedded public/usermood.php stub behavior directly in the handler with routed index fallback.
-  - Added explicit TODO reference to track missing SQL rehydration.
+  - Inlined the public/usermood.php stub guard into the handler to keep routing consistent.
+  - Left the RuntimeException in place until the moods SQL workflow is rebuilt.
 - TODOs:
   - TODO(2025): rehydrate user mood workflow from public/usermood.php legacy stub

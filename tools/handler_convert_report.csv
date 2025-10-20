@@ -220,10 +220,11 @@ classes/Http/Handlers/PublicSite/UseragreementHandler.php,true,0,Inlined public/
 classes/Http/Handlers/PublicSite/HappylogHandler.php,true,0,Mapped public/happylog.php history listing to HappyLog service and pager (offset=230 batch=5)
 classes/Http/Handlers/PublicSite/RulesHandler.php,true,0,Rebuilt public/rules.php guideline accordions with role-aware sections (offset=230 batch=5)
 classes/Http/Handlers/PublicSite/CommentHandler.php,true,1,Legacy stub replaced with 503 placeholder pending public/comment.php SQL.
-classes/Http/Handlers/PublicSite/CoinsHandler.php,true,1,Legacy stub replaced with 503 placeholder pending public/coins.php SQL.
-classes/Http/Handlers/PublicSite/CreditsHandler.php,true,1,Legacy stub replaced with 503 placeholder pending public/credits.php SQL.
-classes/Http/Handlers/PublicSite/FriendsHandler.php,true,1,Legacy stub replaced with 503 placeholder pending public/friends.php SQL.
-classes/Http/Handlers/PublicSite/MessagesHandler.php,true,1,Legacy stub replaced with 503 placeholder pending public/messages.php SQL.
+classes/Http/Handlers/PublicSite/CoinsHandler.php,true,1,Embedded stub logic from public/coins.php; throws until legacy SQL returns.
+classes/Http/Handlers/PublicSite/CreditsHandler.php,true,1,Embedded stub logic from public/credits.php; throws until legacy SQL returns.
+classes/Http/Handlers/PublicSite/FriendsHandler.php,true,1,Embedded stub logic from public/friends.php; throws until legacy SQL returns.
+classes/Http/Handlers/PublicSite/MessagesHandler.php,true,1,Embedded stub logic from public/messages.php; throws until legacy SQL returns.
+classes/Http/Handlers/PublicSite/UsermoodHandler.php,true,1,Embedded stub logic from public/usermood.php; throws until legacy SQL returns.
 classes/Http/Handlers/Admin/ReportsHandler.php,true,1,Inlined admin/reports.php bootstrap + AuthZ guard; runtime still throws until rebuilt.
 classes/Http/Handlers/Admin/WarnHandler.php,true,1,Inlined admin/warn.php guard; staff warning workflow remains TODO.
 
