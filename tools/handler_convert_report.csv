@@ -287,3 +287,13 @@ classes/Http/Handlers/PublicSite/UsercommentHandler.php,false,1,TODO(2025) manua
 classes/Http/Handlers/PublicSite/UsercpHandler.php,false,1,TODO(2025) target public/usercp.php:1-10 is placeholder RuntimeException; awaiting rehydrate
 classes/Http/Handlers/PublicSite/UserdetailsHandler.php,false,1,TODO(2025) manual extraction required public/userdetails.php:1-1106 (large profile renderer)
 classes/Http/Handlers/PublicSite/UserhistoryHandler.php,false,1,TODO(2025) manual extraction required public/userhistory.php:1-173 (forum/torrent history queries)
+classes/Http/Handlers/PublicSite/FilelistHandler.php,true,0,Extracted from public/filelist.php
+classes/Http/Handlers/PublicSite/ViewAnnounceHistoryHandler.php,true,0,Extracted from public/view_announce_history.php
+classes/Http/Handlers/PublicSite/UsersHandler.php,false,1,TODO(2025) legacy stub public/users.php:1-10 (runtime exception)
+classes/Http/Handlers/PublicSite/WikiHandler.php,false,1,TODO(2025) complex workflow public/wiki.php:1-400
+classes/Http/Handlers/Staffpanel/IndexHandler.php,false,1,TODO(2025) manual extraction required staffpanel/index.php:1-400
+classes/Http/Handlers/PublicSite/BrowseHandler.php,false,1,TODO(2025) manual extraction required public/browse.php:1-570 (FluentPDO filters + cached facets) (offset=325 batch=5)
+classes/Http/Handlers/PublicSite/DownloadHandler.php,false,1,TODO(2025) manual extraction required public/download.php:1-201 (multi-branch torrent download flow) (offset=325 batch=5)
+classes/Http/Handlers/PublicSite/EditHandler.php,false,1,TODO(2025) manual extraction required public/edit.php:1-270 (multi-step torrent editor) (offset=325 batch=5)
+classes/Http/Handlers/PublicSite/MybonusHandler.php,false,1,TODO(2025) manual extraction required public/mybonus.php:1-841 (karma store w/ transactions) (offset=325 batch=5)
+classes/Http/Handlers/PublicSite/RequestsHandler.php,false,1,TODO(2025) manual extraction required public/requests.php:1-598 (multi-action request marketplace) (offset=325 batch=5)
