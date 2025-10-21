@@ -297,3 +297,13 @@ classes/Http/Handlers/PublicSite/DownloadHandler.php,false,1,TODO(2025) manual e
 classes/Http/Handlers/PublicSite/EditHandler.php,false,1,TODO(2025) manual extraction required public/edit.php:1-270 (multi-step torrent editor) (offset=325 batch=5)
 classes/Http/Handlers/PublicSite/MybonusHandler.php,false,1,TODO(2025) manual extraction required public/mybonus.php:1-841 (karma store w/ transactions) (offset=325 batch=5)
 classes/Http/Handlers/PublicSite/RequestsHandler.php,false,1,TODO(2025) manual extraction required public/requests.php:1-598 (multi-action request marketplace) (offset=325 batch=5)
+classes/Http/Handlers/Admin/ForumConfigHandler.php,true,1,"Converted from admin/forum_config.php (offset=330 batch=5); TODO add CSRF verification."
+classes/Http/Handlers/Admin/MysqlOverviewHandler.php,true,0,"Converted from admin/mysql_overview.php (offset=330 batch=5)."
+classes/Http/Handlers/Admin/LoadHandler.php,true,0,"Converted from admin/load.php (offset=330 batch=5)."
+classes/Http/Handlers/Admin/StatsHandler.php,true,0,"Converted from admin/stats.php (offset=330 batch=5)."
+classes/Http/Handlers/Admin/UploaderInfoHandler.php,true,0,"Converted from admin/uploader_info.php (offset=330 batch=5)."
+classes/Http/Handlers/Admin/MegaSearchHandler.php,false,1,TODO(2025) extract admin/mega_search.php legacy workflow (offset=335 batch=5)
+classes/Http/Handlers/Admin/MemcacheHandler.php,false,1,TODO(2025) extract admin/memcache.php legacy workflow (offset=335 batch=5)
+classes/Http/Handlers/Admin/MassBonusForMembersHandler.php,false,1,TODO(2025) extract admin/mass_bonus_for_members.php legacy workflow (offset=335 batch=5)
+classes/Http/Handlers/Admin/PromoHandler.php,false,1,TODO(2025) extract admin/promo.php legacy workflow (offset=335 batch=5)
+classes/Http/Handlers/Admin/UpgradeDatabaseHandler.php,false,1,TODO(2025) extract admin/upgrade_database.php legacy workflow (offset=335 batch=5)
