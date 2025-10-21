@@ -308,3 +308,8 @@ classes/Http/Handlers/Admin/MassBonusForMembersHandler.php,false,1,TODO(2025) ex
 classes/Http/Handlers/Admin/PromoHandler.php,false,1,TODO(2025) extract admin/promo.php legacy workflow (offset=335 batch=5)
 classes/Http/Handlers/Admin/UpgradeDatabaseHandler.php,false,1,TODO(2025) extract admin/upgrade_database.php legacy workflow (offset=335 batch=5)
 classes/Http/Handlers/HomeHandler.php,false,1,TODO(2025) manual extraction required public/index.legacy.php:1-400
+classes/Http/Handlers/PublicSite/BugsHandler.php,false,1,TODO(2025) extract legacy block from public/bugs.php:1-520 (offset=345 batch=5)
+classes/Http/Handlers/PublicSite/CasinoHandler.php,false,1,TODO(2025) extract legacy block from public/casino.php:1-420 (offset=345 batch=5)
+classes/Http/Handlers/PublicSite/CatalogHandler.php,false,1,TODO(2025) extract legacy block from public/catalog.php:1-420 (offset=345 batch=5)
+classes/Http/Handlers/PublicSite/DetailsHandler.php,false,1,TODO(2025) extract legacy block from public/details.php:1-1100 (offset=345 batch=5)
+classes/Http/Handlers/PublicSite/ForumsHandler.php,false,1,TODO(2025) extract legacy block from public/forums.php:1-800 (offset=345 batch=5)
