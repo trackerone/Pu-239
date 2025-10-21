@@ -3,24 +3,24 @@ declare(strict_types=1);
 
 namespace PU239\Http\Handlers;
 
-// AUTO_CONVERT_ATTEMPTED: 2025-10-21T04:19:05Z, tools handler batch
 final class HomeHandler
 {
     public function handle(array $meta = []): void
+    public function handle(array $meta = []): mixed
     {
         if (!defined('PU239_ROUTED')) {
             define('PU239_ROUTED', true);
         }
 
-        // TODO(2025): extract legacy block for manual conversion public/index.legacy.php:1-400
         if (isset($meta['legacy']) && is_string($meta['legacy'])) {
             require $meta['legacy'];
-            return; // legacy passthrough
+            return;
         }
 
         echo 'OK';
         require \dirname(__DIR__, 3) . '/public/index.legacy.php';
 
+        return null;
     }
 }
 

@@ -307,3 +307,4 @@ classes/Http/Handlers/Admin/MemcacheHandler.php,false,1,TODO(2025) extract admin
 classes/Http/Handlers/Admin/MassBonusForMembersHandler.php,false,1,TODO(2025) extract admin/mass_bonus_for_members.php legacy workflow (offset=335 batch=5)
 classes/Http/Handlers/Admin/PromoHandler.php,false,1,TODO(2025) extract admin/promo.php legacy workflow (offset=335 batch=5)
 classes/Http/Handlers/Admin/UpgradeDatabaseHandler.php,false,1,TODO(2025) extract admin/upgrade_database.php legacy workflow (offset=335 batch=5)
+classes/Http/Handlers/HomeHandler.php,false,1,TODO(2025) manual extraction required public/index.legacy.php:1-400
