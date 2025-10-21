@@ -302,3 +302,8 @@ classes/Http/Handlers/Admin/MysqlOverviewHandler.php,true,0,"Converted from admi
 classes/Http/Handlers/Admin/LoadHandler.php,true,0,"Converted from admin/load.php (offset=330 batch=5)."
 classes/Http/Handlers/Admin/StatsHandler.php,true,0,"Converted from admin/stats.php (offset=330 batch=5)."
 classes/Http/Handlers/Admin/UploaderInfoHandler.php,true,0,"Converted from admin/uploader_info.php (offset=330 batch=5)."
+classes/Http/Handlers/Admin/MegaSearchHandler.php,false,1,TODO(2025) extract admin/mega_search.php legacy workflow (offset=335 batch=5)
+classes/Http/Handlers/Admin/MemcacheHandler.php,false,1,TODO(2025) extract admin/memcache.php legacy workflow (offset=335 batch=5)
+classes/Http/Handlers/Admin/MassBonusForMembersHandler.php,false,1,TODO(2025) extract admin/mass_bonus_for_members.php legacy workflow (offset=335 batch=5)
+classes/Http/Handlers/Admin/PromoHandler.php,false,1,TODO(2025) extract admin/promo.php legacy workflow (offset=335 batch=5)
+classes/Http/Handlers/Admin/UpgradeDatabaseHandler.php,false,1,TODO(2025) extract admin/upgrade_database.php legacy workflow (offset=335 batch=5)
