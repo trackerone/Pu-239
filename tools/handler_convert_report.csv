@@ -313,3 +313,8 @@ classes/Http/Handlers/PublicSite/CasinoHandler.php,false,1,TODO(2025) extract le
 classes/Http/Handlers/PublicSite/CatalogHandler.php,false,1,TODO(2025) extract legacy block from public/catalog.php:1-420 (offset=345 batch=5)
 classes/Http/Handlers/PublicSite/DetailsHandler.php,false,1,TODO(2025) extract legacy block from public/details.php:1-1100 (offset=345 batch=5)
 classes/Http/Handlers/PublicSite/ForumsHandler.php,false,1,TODO(2025) extract legacy block from public/forums.php:1-800 (offset=345 batch=5)
+classes/Http/Handlers/Public/FriendsHandler.php,true,1,Converted public/friends.php stub guard into inline RuntimeException (offset=350 batch=5)
+classes/Http/Handlers/Public/StaffboxHandler.php,true,1,Converted public/staffbox.php stub guard into inline RuntimeException (offset=350 batch=5)
+classes/Http/Handlers/Public/UsercpHandler.php,true,1,Converted public/usercp.php stub guard into inline RuntimeException (offset=350 batch=5)
+classes/Http/Handlers/PublicSite/UsercpHandler.php,true,1,Converted public/usercp.php stub guard into inline RuntimeException (offset=350 batch=5)
+classes/Http/Handlers/PublicSite/UsersHandler.php,true,1,Converted public/users.php stub guard into inline RuntimeException (offset=350 batch=5)
