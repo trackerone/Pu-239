@@ -1,9 +1,9 @@
 # Conversion Report: classes/Http/Handlers/Public/FriendsHandler.php
 
-- Legacy source: public/friends.php
-- Container/bootstrap dependencies: public/index.php guard
+- Legacy source: public/friends.php (rehydrate candidate: _quarantine/rebroken/public/friends.php)
+- Container/bootstrap dependencies: delegated to legacy entry
 - Services injected: None
 - Config mappings: None
-- Database usage: None
-- TODOs introduced: 1 (legacy SQL stub remains pending rehydrate)
-- Notes: Inlined the stub guard and RuntimeException messaging so routing no longer buffers the legacy require wrapper.
+- Database usage: None (legacy file still contains $db->run('); placeholders)
+- TODOs introduced: 1 — TODO(2025) extract legacy block once rehydrate markers are resolved
+- Notes: Reinstated buffered require stub instead of RuntimeException so routing mirrors legacy behaviour while awaiting clean SQL.

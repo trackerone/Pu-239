@@ -1,9 +1,9 @@
 # Conversion Report: classes/Http/Handlers/PublicSite/UsersHandler.php
 
 - Legacy source: public/users.php
-- Container/bootstrap dependencies: bootstrap_web.php, public/index.php guard
+- Container/bootstrap dependencies: bootstrap_web.php guard retained
 - Services injected: None
 - Config mappings: None
-- Database usage: None
-- TODOs introduced: 1 (public user directory still stubbed pending SQL restore)
-- Notes: Removed the buffered require wrapper; handler now guards routing and raises the legacy RuntimeException directly.
+- Database usage: None (legacy entry still placeholder)
+- TODOs introduced: 1 — TODO(2025) rehydrate public/users.php before conversion
+- Notes: Restored buffered legacy include so the route mirrors historical behaviour pending rehydrated directory listing.

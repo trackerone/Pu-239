@@ -174,7 +174,7 @@ classes/Http/Handlers/Public/StaffHandler.php,true,0,Inlined public/staff.php ro
 classes/Http/Handlers/Public/RulesHandler.php,false,1,TODO(2025) manual extraction required public/rules.php localisation blocks
 classes/Http/Handlers/Public/ForumsHandler.php,false,1,TODO(2025) manual extraction required public/forums.php:1-400
 classes/Http/Handlers/Public/StaffpanelHandler.php,false,1,TODO(2025) manual extraction required public/staffpanel.php delegates staffpanel/index.php
-classes/Http/Handlers/Public/StaffboxHandler.php,false,1,TODO(2025) legacy content missing per tools/rehydrate_v3_manifest.csv
+classes/Http/Handlers/Public/StaffboxHandler.php,false,1,"Deferred: legacy public/staffbox.php contains $db->run markers; kept buffered require (offset=350 batch=5)"
 classes/Http/Handlers/Public/SearchHandler.php,true,0,Converted from public/search.php; implements bot-only torrent lookup
 classes/Http/Handlers/Public/SetclassHandler.php,false,1,TODO(2025) merge conflict markers require manual extraction public/setclass.php:23-60
 classes/Http/Handlers/Public/SharemarksHandler.php,false,2,TODO(2025) sharetable rendering + Fluent joins pending; re-reviewed offset=180
@@ -204,7 +204,7 @@ classes/Http/Handlers/Public/OffersHandler.php,true,0,Extracted from public/offe
 classes/Http/Handlers/Public/NewAnnouncementHandler.php,true,1,Ported announcement composer; legacy CSRF TODO remains (offset=215 batch=5)
 classes/Http/Handlers/Public/SubtitlesHandler.php,false,1,TODO(2025) manual extraction required public/subtitles.php:1-520 (offset=215 batch=5)
 classes/Http/Handlers/Public/CatalogHandler.php,false,1,TODO(2025) manual extraction required public/catalog.php:1-400 (offset=215 batch=5)
-classes/Http/Handlers/Public/UsercpHandler.php,false,1,Legacy script replaced by RuntimeException placeholder; deferred.
+classes/Http/Handlers/Public/UsercpHandler.php,false,1,"Deferred: public/usercp.php remains runtime placeholder; preserved stub bridge (offset=350 batch=5)"
 classes/Http/Handlers/Public/UserdetailsHandler.php,false,1,Complex multi-include legacy workflow requires manual extraction.
 classes/Http/Handlers/Public/WikiHandler.php,false,1,Embedded helper functions and validator/image stack too risky for auto-convert.
 classes/Http/Handlers/PublicSite/AjaxchatHandler.php,true,0,Imported AJAX Chat bootstrap and instantiation into handler.
@@ -284,12 +284,12 @@ classes/Http/Handlers/PublicSite/TakeeditcpHandler.php,true,0,"Wrapped runtime p
 classes/Http/Handlers/PublicSite/TakethankyouHandler.php,true,2,"Converted thank-you workflow from public/takethankyou.php (offset=305 batch=5); TODO verify thankyou/comments inserts."
 classes/Http/Handlers/PublicSite/TvshowsHandler.php,false,1,TODO(2025) manual extraction required public/tvshows.php:1-225 (Fluent filtering, cached posters)
 classes/Http/Handlers/PublicSite/UsercommentHandler.php,false,1,TODO(2025) manual extraction required public/usercomment.php:1-247 (multi-action comment controller)
-classes/Http/Handlers/PublicSite/UsercpHandler.php,false,1,TODO(2025) target public/usercp.php:1-10 is placeholder RuntimeException; awaiting rehydrate
+classes/Http/Handlers/PublicSite/UsercpHandler.php,false,1,"Deferred: public/usercp.php legacy entry still placeholder; kept buffered require (offset=350 batch=5)"
 classes/Http/Handlers/PublicSite/UserdetailsHandler.php,false,1,TODO(2025) manual extraction required public/userdetails.php:1-1106 (large profile renderer)
 classes/Http/Handlers/PublicSite/UserhistoryHandler.php,false,1,TODO(2025) manual extraction required public/userhistory.php:1-173 (forum/torrent history queries)
 classes/Http/Handlers/PublicSite/FilelistHandler.php,true,0,Extracted from public/filelist.php
 classes/Http/Handlers/PublicSite/ViewAnnounceHistoryHandler.php,true,0,Extracted from public/view_announce_history.php
-classes/Http/Handlers/PublicSite/UsersHandler.php,false,1,TODO(2025) legacy stub public/users.php:1-10 (runtime exception)
+classes/Http/Handlers/PublicSite/UsersHandler.php,false,1,"Deferred: public/users.php legacy entry still placeholder; kept buffered require (offset=350 batch=5)"
 classes/Http/Handlers/PublicSite/WikiHandler.php,false,1,TODO(2025) complex workflow public/wiki.php:1-400
 classes/Http/Handlers/Staffpanel/IndexHandler.php,false,1,TODO(2025) manual extraction required staffpanel/index.php:1-400
 classes/Http/Handlers/PublicSite/BrowseHandler.php,false,1,TODO(2025) manual extraction required public/browse.php:1-570 (FluentPDO filters + cached facets) (offset=325 batch=5)
@@ -313,8 +313,8 @@ classes/Http/Handlers/PublicSite/CasinoHandler.php,false,1,TODO(2025) extract le
 classes/Http/Handlers/PublicSite/CatalogHandler.php,false,1,TODO(2025) extract legacy block from public/catalog.php:1-420 (offset=345 batch=5)
 classes/Http/Handlers/PublicSite/DetailsHandler.php,false,1,TODO(2025) extract legacy block from public/details.php:1-1100 (offset=345 batch=5)
 classes/Http/Handlers/PublicSite/ForumsHandler.php,false,1,TODO(2025) extract legacy block from public/forums.php:1-800 (offset=345 batch=5)
-classes/Http/Handlers/Public/FriendsHandler.php,true,1,Converted public/friends.php stub guard into inline RuntimeException (offset=350 batch=5)
-classes/Http/Handlers/Public/StaffboxHandler.php,true,1,Converted public/staffbox.php stub guard into inline RuntimeException (offset=350 batch=5)
-classes/Http/Handlers/Public/UsercpHandler.php,true,1,Converted public/usercp.php stub guard into inline RuntimeException (offset=350 batch=5)
-classes/Http/Handlers/PublicSite/UsercpHandler.php,true,1,Converted public/usercp.php stub guard into inline RuntimeException (offset=350 batch=5)
-classes/Http/Handlers/PublicSite/UsersHandler.php,true,1,Converted public/users.php stub guard into inline RuntimeException (offset=350 batch=5)
+classes/Http/Handlers/Public/FriendsHandler.php,false,1,"Deferred: legacy public/friends.php contains rehydrate markers ($db->run';). Stub continues to buffer legacy include (offset=350 batch=5)"
+classes/Http/Handlers/Public/StaffboxHandler.php,false,1,"Deferred: legacy public/staffbox.php contains $db->run markers; kept buffered require (offset=350 batch=5)"
+classes/Http/Handlers/Public/UsercpHandler.php,false,1,"Deferred: public/usercp.php remains runtime placeholder; preserved stub bridge (offset=350 batch=5)"
+classes/Http/Handlers/PublicSite/UsercpHandler.php,false,1,"Deferred: public/usercp.php legacy entry still placeholder; kept buffered require (offset=350 batch=5)"
+classes/Http/Handlers/PublicSite/UsersHandler.php,false,1,"Deferred: public/users.php legacy entry still placeholder; kept buffered require (offset=350 batch=5)"
