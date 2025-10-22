@@ -1,36 +1,44 @@
 <?php
 declare(strict_types=1);
 
-// AUTO_CONVERT_ATTEMPTED: 2025-10-19T19:16:53Z via handler-convert offset=310 batch=5
-// Generated: STUB_UPGRADED
-
 namespace PU239\Http\Handlers\PublicSite;
+
+use PU239\Config\ConfigRepository;
+use Psr\Container\ContainerInterface;
+
+global $container;
+/** @var ContainerInterface $container */
+/** @var ConfigRepository $config */
+$config = $container->get(ConfigRepository::class);
 
 final class UserdetailsHandler
 {
     /** @param array<string,mixed> $meta */
     public function handle(array $meta = []): void
     {
-        // STUB_UPGRADED: safe buffered execution
-        // TODO(2025): extract legacy block from public/userdetails.php:1-1106 (massive multi-include profile renderer)
-        $target = __DIR__ . '/../../../../public/userdetails.php';
-        if (!is_file($target)) {
-            error_log(sprintf('STUB MISSING: %s requires %s', __FILE__, $target));
-            http_response_code(500);
-            echo 'Service temporarily unavailable';
-            return;
-        }
-        $out = (static function (string $file): string {
+        // AUTO_CONVERT_ATTEMPTED: 2025-10-22T04:39:41Z; tool=codex-safe-handler-convert; rules=2025.10.22; commit=TO_BE_FILLED
+        try {
+            // TODO(2025): extract legacy block from public/userdetails.php:1-1106 (massive multi-include profile renderer)
+            $target = __DIR__ . '/../../../../public/userdetails.php';
+            if (!is_file($target)) {
+                error_log(sprintf('STUB MISSING: %s requires %s', __FILE__, $target));
+                http_response_code(500);
+                echo 'Service temporarily unavailable';
+                return;
+            }
+
             ob_start();
             try {
-                require $file;
-            } catch (\Throwable $e) {
-                error_log('Legacy stub error: ' . $e->getMessage());
+                // TODO(2025): extract legacy flow manually (nested includes/globals). Legacy: public/userdetails.php
+                require $target;
+            } catch (\Throwable $legacyException) {
+                error_log('Legacy stub error: ' . $legacyException->getMessage());
             }
-            return (string) ob_get_clean();
-        })($target);
-
-        // Optional: allow middleware or further processing here
-        echo $out;
+            echo (string) ob_get_clean();
+        } catch (\Throwable $e) {
+            error_log('Converted handler error: ' . $e->getMessage());
+            http_response_code(500);
+            echo 'Internal error';
+        }
     }
 }

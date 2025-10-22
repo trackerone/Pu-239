@@ -1,0 +1,32 @@
+{
+    "classes/Http/Handlers/PublicSite/UsercommentHandler.php": {
+        "status": "OK",
+        "rules_version": "2025.10.22",
+        "commit_sha": "TO_BE_FILLED",
+        "file_hash": "3744ebf1f159"
+    },
+    "classes/Http/Handlers/PublicSite/UsercpHandler.php": {
+        "status": "OK",
+        "rules_version": "2025.10.22",
+        "commit_sha": "TO_BE_FILLED",
+        "file_hash": "a9bf58c462e4"
+    },
+    "classes/Http/Handlers/PublicSite/UserdetailsHandler.php": {
+        "status": "OK",
+        "rules_version": "2025.10.22",
+        "commit_sha": "TO_BE_FILLED",
+        "file_hash": "0cbbaa944883"
+    },
+    "classes/Http/Handlers/PublicSite/UserhistoryHandler.php": {
+        "status": "OK",
+        "rules_version": "2025.10.22",
+        "commit_sha": "TO_BE_FILLED",
+        "file_hash": "fb8b178c16f4"
+    },
+    "classes/Http/Handlers/PublicSite/UsermoodHandler.php": {
+        "status": "OK",
+        "rules_version": "2025.10.22",
+        "commit_sha": "TO_BE_FILLED",
+        "file_hash": "ad06bfc120ac"
+    }
+}

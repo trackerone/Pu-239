@@ -313,3 +313,8 @@ classes/Http/Handlers/PublicSite/CasinoHandler.php,false,1,TODO(2025) extract le
 classes/Http/Handlers/PublicSite/CatalogHandler.php,false,1,TODO(2025) extract legacy block from public/catalog.php:1-420 (offset=345 batch=5)
 classes/Http/Handlers/PublicSite/DetailsHandler.php,false,1,TODO(2025) extract legacy block from public/details.php:1-1100 (offset=345 batch=5)
 classes/Http/Handlers/PublicSite/ForumsHandler.php,false,1,TODO(2025) extract legacy block from public/forums.php:1-800 (offset=345 batch=5)
+classes/Http/Handlers/PublicSite/UsercommentHandler.php,false,2,TODO(2025) extract legacy script public/usercomment.php,2025.10.22,TO_BE_FILLED,3744ebf1f159
+classes/Http/Handlers/PublicSite/UsercpHandler.php,false,2,TODO(2025) extract legacy script public/usercp.php,2025.10.22,TO_BE_FILLED,a9bf58c462e4
+classes/Http/Handlers/PublicSite/UserdetailsHandler.php,false,2,TODO(2025) extract legacy script public/userdetails.php,2025.10.22,TO_BE_FILLED,0cbbaa944883
+classes/Http/Handlers/PublicSite/UserhistoryHandler.php,false,2,TODO(2025) extract legacy script public/userhistory.php,2025.10.22,TO_BE_FILLED,fb8b178c16f4
+classes/Http/Handlers/PublicSite/UsermoodHandler.php,false,1,TODO(2025) extract legacy script public/index.php,2025.10.22,TO_BE_FILLED,ad06bfc120ac
