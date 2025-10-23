@@ -1,100 +1,109 @@
-# PU-239 (Original) – Development README
+# PU-239 (Original) — Modernization 2025
 
-> ⚡ **Modernizing the PU-239 codebase to 2025 standards**  
-> This document tracks the current progress and development guidelines for the ongoing refactoring of the legacy PU-239 tracker codebase.  
-> The goal is to transform the existing PHP 5.x/7.x era code into a clean, stable and secure PHP 8.3 platform with proper DI, CI/CD, and modern tooling — while preserving core functionality.
-
----
-
-## 🚧 Current Progress (October 2025)
-
-The modernization work is organized into **tracks** (“Spor”) and **batches**.  
-As of now, the following tracks have been completed:
-
-| Track | Status | Description |
-|-------|--------|-------------|
-| 1 | ✅ Done | Baseline, dependencies, PHP 8.3, Composer/NPM cleanup |
-| 2 | ✅ Done | Database layer (PDO via DI container), mysqli quarantined |
-| 3 | ✅ Done | Cleanup scripts, cron/bootstrap fixes, static guards |
-| 4 | ✅ Done | Practical database migration & quarantine cleanup |
-| 5 | ✅ Done | Admin refactor begins, auto-merge pipelines |
-| 6 | ✅ Done | “Admin green” – all critical admin features now use the new DB layer |
-| 7 | ✅ Done | Preparation for frontend modernization (Vite/esbuild, no jQuery) |
-
-> 🟡 **Next step:** Track 8 — Quarantine cleanup and module-by-module rebuilds.  
-> Focus shifts towards frontend and user-facing modules once admin is stable.
+> **Status:** Ongoing refactor of the legacy PU-239 codebase into a 2025-compliant, secure, and maintainable system.  
+> **Branch:** `modernization-2025`
 
 ---
 
-## 🧭 Modernization Doctrine (Hard Rules)
+## 🎯 Goal
 
-The project follows a strict migration strategy:
+This branch aims to modernize the *original* PU-239 tracker codebase — not to rebuild functionality, but to re-engineer it with clean, modern PHP 8.3 code while preserving all behavior and data.
 
-1. **Legacy → Quarantine**  
-   All `mysqli_*`, `sql_query`, `sqlesc`, `function_*.php`, manual `require_once` → moved to `_quarantine/`.
-
-2. **New Code Only**  
-   PHP 8.3, Aura/ExtendedPDO via DI container, PSR-12, strict types.  
-   No global `$db`. Only prepared statements.
-
-3. **Rebuild > Quickfix**  
-   Modules are rebuilt in a modern structure. Once green → legacy files are permanently removed.
-
-4. **Admin First**  
-   Admin is the testbed for DI container, permissions, and UI flow.
-
-5. **Frontend Modernization**  
-   Vite/esbuild bundling, no jQuery/CDN. Modular JS/CSS.
-
-6. **CI/CD Gates**  
-   - ❌ Forbidden: `mysqli_*`, `sql_query`, `sqlesc`, `function_*.php`  
-   - ✅ Required: PHPStan, Rector, linting, basic tests must pass before merge.
-
-7. **Workflow**  
-   Quarantine → Rebuild → Replace → Delete.  
-   The repo may look messy during migration — the end goal is a clean, unified 2025-ready release.
+The modernization is done **incrementally**, file by file, using deterministic conversion rules and automated tooling (Codex-safe handler converter, Rector, PHPStan, and lint gates).
 
 ---
 
-## 🛠️ Local Setup / Render Deployment
+## 🧩 Core Principles
 
-The project currently runs on Render (container, port 8000).  
-For local development:
+1. **Legacy quarantine**
+   - All procedural code using `mysqli_*`, `sql_query`, `sqlesc`, or manual `require_once` is isolated to `/quarantine/`.
+   - No legacy code is executed directly after conversion; it remains as historical reference only.
 
-\`\`\`bash
-composer install
-npm install
-npm run build
-cp .env.example .env   # Adjust DB credentials etc.
-php -S localhost:8000 -t public
-\`\`\`
+2. **Strict PHP 8.3 / PSR-12**
+   - All new code must declare `strict_types=1`.
+   - Namespaces follow PSR-4 with `PU239\…`.
+   - Dependency injection replaces globals.
 
-During deployment, the following scripts handle bootstrapping and caching:
+3. **Database layer**
+   - Rebuilt around `Aura\ExtendedPDO` (through DI container).
+   - No manual string concatenation — only prepared statements.
+   - Legacy `$db` and `$site_config` replaced with `ConfigRepository` and container services.
 
-- `detect-root.sh`  
-- `ensure-skeleton.php`  
-- `entrypoint.sh`  
+4. **Admin first**
+   - Admin area serves as testbed for the new container, permissions, and UI flow.
+   - “Admin green” milestone marks readiness for broader migration.
 
-They ensure `bootstrap/app.php`, `public/index.php`, and writable directories (`storage`, `bootstrap/cache`) are properly set up.
+5. **Handlers modernization**
+   - Every legacy handler stub (previously calling `require public/*.php`) is refactored into a class-based handler.
+   - Each handler now has:
+     ```php
+     public function handle(array $meta = []): void
+     ```
+     with structured config and error guards.
+   - Safe mappings are inserted; ambiguous logic remains TODO-flagged.
+
+6. **Frontend modernization**
+   - Bundling via **Vite / esbuild** only.
+   - jQuery, CDN assets, and inline scripts are being phased out.
+
+7. **CI/CD gates**
+   - Build fails if legacy functions appear outside quarantine.
+   - Rector + PHPStan enforce PSR-12 and strict typing.
+   - Automated PHP-lint and minimal unit test suite as final gate.
 
 ---
 
-## 📋 Notes
+## 🗂 Conversion tooling
 
-- All TODOs and issues are tracked in `todo.md` and GitHub PR comments.  
-- Codex is used for auto-merging and lint checks.  
-- **BBCode is being fully removed.** All user input fields will support secure Markdown instead.
+**Handler Converter (Codex Safe Mode)**
+- Converts verified stubs into modern handlers.
+- Runs in small batches (`batch_size=5`) to limit blast radius.
+- Creates `.bak` backups, performs self-lint, appends results to:
+  - `tools/handler_convert_report.csv`
+  - `tools/handler_convert_state.json`
+- Maintains exact markers in `tools/_handler_convert_markers.php`.
+
+All runs are **idempotent**: a file stamped with  
+`// AUTO_CONVERT_ATTEMPTED: … rules=2025.10.22`  
+will never be processed again in this rules version.
 
 ---
 
-## 🪄 Roadmap (Short)
+## 🧱 Roadmap Milestones
 
-- [x] Tracks 1–7: Foundation & Admin
-- [ ] Tracks 8–10: Module cleanup and frontend modernization
-- [ ] Tracks 11+: CI/CD gates, test coverage, release pipeline
-- [ ] Stable 2025 release: fully modernized PU-239 tracker
+| Phase | Focus | Status |
+|-------|--------|--------|
+| **1. Baseline & Dependencies** | PHP 8.3, Composer cleanup, container bootstrap | ✅ Done |
+| **2. Database Migration** | mysqli → ExtendedPDO, ConfigRepository injection | 🟡 In progress |
+| **3. Handlers Refactor** | Codex batch conversion of stubs | 🟢 Active |
+| **4. Quarantine Cleanup** | Remove legacy once replacements are verified | ⏳ Next |
+| **5. Frontend Modernization** | Replace jQuery/CDN, add Vite/esbuild | ⏳ Planned |
+| **6. CI/CD & Testing** | Rector/PHPStan/test gates | ⏳ Planned |
 
 ---
 
-## 📅 Last updated
-October 3, 2025
+## 🧰 Tech Stack
+
+- **Language:** PHP 8.3  
+- **Database:** MySQL 8 (strict mode)  
+- **ORM/DB:** Aura ExtendedPDO  
+- **Config:** PU239\Config\ConfigRepository  
+- **Frontend:** Vite + esbuild  
+- **Lint/Analysis:** PHPStan (high), Rector, PSR-12 style  
+- **Hosting:** Render.com (port 8000)
+
+---
+
+## ⚙️ Developer Notes
+
+- Always run conversions in small batches (`batch_size = 5`).
+- Never modify `.bak` files manually — they serve as rollback snapshots.
+- Only commit when `php -l` passes for all changed files.
+- When starting a new conversion rule set, bump the `rules_version` (e.g. `2025.11.05`) and set `REWORK_MODE=true`.
+
+---
+
+## 🧾 License
+
+This modernization work inherits the original PU-239 license.  
+All newly written code is © 2025 Thomas Højegaard / EL-TECH / PU-239 team.
