@@ -1,20 +1,25 @@
 <?php
 declare(strict_types=1);
 
-// AUTO_CONVERT_ATTEMPTED: 2025-10-19T15:05:00Z via handler-convert offset=255 batch=5
-
 namespace PU239\Http\Handlers\PublicSite;
 
+use PU239\Config\ConfigRepository;
+use Psr\Container\ContainerInterface;
 use Pu239\Database;
 
 use function dirname;
+
+global $container;
+/** @var ContainerInterface $container */
+/** @var ConfigRepository $config */
+$config = $container->get(ConfigRepository::class);
 
 final class VideoformatsHandler
 {
     /** @param array<string,mixed> $meta */
     public function handle(array $meta = []): void
     {
-        // AUTO_CONVERT_ATTEMPTED: 2025-10-19T15:05:00Z via handler-convert offset=255 batch=5
+        // AUTO_CONVERT_ATTEMPTED: 2025-10-22T04:56:01Z; tool=codex-safe-handler-convert; rules=2025.10.22; commit=TO_BE_FILLED
         try {
             require_once dirname(__DIR__, 4) . '/bootstrap_web.php';
 

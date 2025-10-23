@@ -1,8 +1,6 @@
 <?php
 declare(strict_types=1);
 
-// AUTO_CONVERT_ATTEMPTED: 2025-10-19T17:13:49Z via handler-convert offset=290 batch=5
-
 namespace PU239\Http\Handlers\PublicSite;
 
 use Delight\Auth\Auth;
@@ -11,18 +9,24 @@ use Delight\Auth\TokenExpiredException;
 use Delight\Auth\TooManyRequestsException;
 use Delight\Auth\UserAlreadyExistsException;
 use PU239\Config\ConfigRepository;
+use Psr\Container\ContainerInterface;
 use PU239\Support\Audit;
 use Pu239\Cache;
 use Pu239\Session;
 use Pu239\User;
 use function dirname;
 
+global $container;
+/** @var ContainerInterface $container */
+/** @var ConfigRepository $config */
+$config = $container->get(ConfigRepository::class);
+
 final class VerifyEmailHandler
 {
     /** @param array<string,mixed> $meta */
     public function handle(array $meta = []): void
     {
-        // AUTO_CONVERT_ATTEMPTED: 2025-10-19T17:13:49Z via handler-convert offset=290 batch=5
+        // AUTO_CONVERT_ATTEMPTED: 2025-10-22T04:56:01Z; tool=codex-safe-handler-convert; rules=2025.10.22; commit=TO_BE_FILLED
         try {
             require_once dirname(__DIR__, 4) . '/bootstrap_web.php';
 
