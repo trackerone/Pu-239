@@ -1,24 +1,28 @@
 <?php
 declare(strict_types=1);
 
-// AUTO_CONVERT_ATTEMPTED: 2025-10-18 via handler-convert (offset=193 batch=2)
-
 namespace PU239\Http\Handlers\PublicSite;
 
 use Delight\Auth\Auth;
 use Delight\Auth\NotLoggedInException;
 use Delight\Auth\TooManyRequestsException;
-use Pu239\Config\ConfigRepository;
+use PU239\Config\ConfigRepository;
+use Psr\Container\ContainerInterface;
 use Pu239\Session;
 
 use function htmlspecialchars;
+
+global $container;
+/** @var ContainerInterface $container */
+/** @var ConfigRepository $config */
+$config = $container->get(ConfigRepository::class);
 
 final class VerifyHandler
 {
     /** @param array<string,mixed> $meta */
     public function handle(array $meta = []): void
     {
-        // AUTO_CONVERT_ATTEMPTED: 2025-10-18 via handler-convert (offset=193 batch=2)
+        // AUTO_CONVERT_ATTEMPTED: 2025-10-22T04:56:01Z; tool=codex-safe-handler-convert; rules=2025.10.22; commit=TO_BE_FILLED
         try {
             require_once \dirname(__DIR__, 4) . '/bootstrap_web.php';
 
