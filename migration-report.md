@@ -85,10 +85,13 @@ No matches.
 - `admin/watched_users.php`: replaced legacy `sql_query`/`sqlesc`/`mysqli_*` calls with `$db->run`/`fetch` and bound parameters; standardized bootstrap and added strict typing.
 - `admin/mysql_stats.php`: removed `mysqli_*` access and used `$db->fetchAll` for status/variables lookups; standardized bootstrap and added strict typing.
 - `admin/cleanup_manager.php`: enforced inline LIMIT/OFFSET with int casting, replaced `SELECT *` with explicit columns, and added missing `bootstrap_pdo.php` include.
+- `admin/hit_and_run.php` / `classes/Admin/Controllers/HitAndRunController.php`: extracted the staff tool into a DI-aware controller and replaced legacy `sql_query`/`mysqli_*` usage with `$db->fetchValue`/`fetchAll` for the hit-and-run listings.
+- `admin/invite_tree.php` / `classes/Admin/Controllers/InviteTreeController.php`: migrated invite tree lookups to `$db->fetchAll`/`fetchValue` with bound parameters and introduced the DI controller wrapper.
+- `admin/ipsearch.php` / `classes/Admin/Controllers/IpSearchController.php`: resolved merge debris, moved the tool into a controller, and converted all queries to `$db->fetchValue`/`fetchAll` with named bindings.
 
 ### Verification
 ```
-$ rg "mysqli_|sql_query\(|sqlesc\(" admin/bannedemails.php admin/user_hits.php admin/acpmanage.php admin/sysoplog.php admin/watched_users.php admin/mysql_stats.php admin/cleanup_manager.php
+$ rg "mysqli_|sql_query\(|sqlesc\(" admin/bannedemails.php admin/user_hits.php admin/acpmanage.php admin/sysoplog.php admin/watched_users.php admin/mysql_stats.php admin/cleanup_manager.php admin/hit_and_run.php admin/invite_tree.php admin/ipsearch.php classes/Admin/Controllers/HitAndRunController.php classes/Admin/Controllers/InviteTreeController.php classes/Admin/Controllers/IpSearchController.php
 ```
 No matches in modified files.
 
