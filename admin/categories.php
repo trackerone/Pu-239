@@ -7,13 +7,16 @@ use DI\NotFoundException;
 use MatthiasMullie\Scrapbook\Exception\UnbegunTransaction;
 use Pu239\Cache;
 use Pu239\Config\ConfigRepository;
+use Psr\Container\ContainerInterface;
 use Pu239\Database;
 use Spatie\Image\Exceptions\InvalidManipulation;
 
 
 global $container;
+/** @var ContainerInterface $container */
 /** @var ConfigRepository $config */
 $config = $container->get(ConfigRepository::class);
+// AUTO_ADMIN_MEDIUM: 2025-10-23
 
 $db = $container->get(Database::class);
 

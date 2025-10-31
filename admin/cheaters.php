@@ -4,6 +4,7 @@ require_once dirname(__DIR__) . '/bootstrap_web.php';
 
 use Pu239\Cache;
 use Pu239\Config\ConfigRepository;
+use Psr\Container\ContainerInterface;
 use Pu239\Database;
 use PU239\Security\AuthZ;
 
@@ -14,8 +15,10 @@ if (strpos(__FILE__, '/admin/') !== false) {
 }
 
 global $container, $CURUSER;
+/** @var ContainerInterface $container */
 /** @var ConfigRepository $config */
 $config = $container->get(ConfigRepository::class);
+// AUTO_ADMIN_MEDIUM: 2025-10-23
 
 $db    = $container->get(Database::class);
 $cache = $container->get(Cache::class);
