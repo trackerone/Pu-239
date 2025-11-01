@@ -61,3 +61,9 @@ admin/sysoplog.php,true,0,MEDIUM_CONFIG_UPDATE,2025.10.23-admin-medium,PENDING
 admin/allagents.php,true,0,MEDIUM_CONFIG_UPDATE,2025.10.23-admin-medium,PENDING
 admin/trivia_config.php,true,0,MEDIUM_CONFIG_UPDATE,2025.10.23-admin-medium,PENDING
 admin/iphistory.php,true,0,MEDIUM_CONFIG_UPDATE,2025.10.23-admin-medium,PENDING
+admin/warn.php,true,0,MEDIUM_CONFIG_UPDATE,2025.10.23-admin-medium,PENDING
+admin/themes.php,true,0,MEDIUM_CONFIG_UPDATE,2025.10.23-admin-medium,PENDING
+admin/upgrade_database.php,true,0,MEDIUM_CONFIG_UPDATE,2025.10.23-admin-medium,PENDING
+admin/traceroute.php,true,0,MEDIUM_CONFIG_UPDATE,2025.10.23-admin-medium,PENDING
+admin/uploadapps.php,true,0,MEDIUM_CONFIG_UPDATE,2025.10.23-admin-medium,PENDING
+admin/uploader_info.php,true,0,MEDIUM_CONFIG_UPDATE,2025.10.23-admin-medium,PENDING

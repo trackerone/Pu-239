@@ -9,9 +9,17 @@ if (!defined('PU239_ROUTED')) {
 
 require_once dirname(__DIR__) . '/bootstrap_web.php';
 
+use PU239\Config\ConfigRepository;
 use PU239\Security\AuthZ;
+use Psr\Container\ContainerInterface;
 
 // Staffpanel defaults to staff or higher; admin requires admin
+global $container;
+/** @var ContainerInterface $container */
+/** @var ConfigRepository $config */
+$config = $container->get(ConfigRepository::class);
+// AUTO_ADMIN_MEDIUM: 2025-10-23; tool=codex-admin-medium-sweep; rules=2025.10.23-admin-medium
+
 if (strpos(__FILE__, '/admin/') !== false) {
     AuthZ::requireRole('admin');
 } else {
