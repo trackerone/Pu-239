@@ -8,18 +8,14 @@ use PU239\Security\AuthZ;
 use Pu239\Database;
 use Pu239\Image;
 use Pu239\Session;
+use Psr\Container\ContainerInterface;
 
 global $container, $CURUSER;
-<<<<<< codex/enforce-centralized-authorization-checks-s6jwwl
-=======
-<<<<<< codex/enforce-centralized-authorization-checks-vacoay
-=======
-
->>>>>> master
->>>>>> master
 AuthZ::requireRole('admin');
+/** @var ContainerInterface $container */
 /** @var ConfigRepository $config */
 $config = $container->get(ConfigRepository::class);
+// AUTO_ADMIN_MEDIUM: 2025-10-23; tool=codex-admin-medium-sweep; rules=2025.10.23-admin-medium
 $db = $container->get(Database::class);
 
 $class = get_access(basename($_SERVER['REQUEST_URI']));

@@ -2,11 +2,12 @@
 declare(strict_types=1);
 require_once dirname(__DIR__) . '/bootstrap_web.php';
 
+use PU239\Config\ConfigRepository;
 use PU239\Security\AuthZ;
-use Pu239\Config\ConfigRepository;
 use Pu239\Database;
 use Pu239\Message;
 use Pu239\Session;
+use Psr\Container\ContainerInterface;
 
 if (strpos(__FILE__, '/admin/') !== false) {
     AuthZ::requireRole('admin');
@@ -15,8 +16,10 @@ if (strpos(__FILE__, '/admin/') !== false) {
 }
 
 global $container, $CURUSER;
+/** @var ContainerInterface $container */
 /** @var ConfigRepository $config */
 $config = $container->get(ConfigRepository::class);
+// AUTO_ADMIN_MEDIUM: 2025-10-23; tool=codex-admin-medium-sweep; rules=2025.10.23-admin-medium
 
 /** @var Database $db */
 $db = $container->get(Database::class);

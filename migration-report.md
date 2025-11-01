@@ -88,6 +88,7 @@ No matches.
 - `admin/hit_and_run.php` / `classes/Admin/Controllers/HitAndRunController.php`: extracted the staff tool into a DI-aware controller and replaced legacy `sql_query`/`mysqli_*` usage with `$db->fetchValue`/`fetchAll` for the hit-and-run listings.
 - `admin/invite_tree.php` / `classes/Admin/Controllers/InviteTreeController.php`: migrated invite tree lookups to `$db->fetchAll`/`fetchValue` with bound parameters and introduced the DI controller wrapper.
 - `admin/ipsearch.php` / `classes/Admin/Controllers/IpSearchController.php`: resolved merge debris, moved the tool into a controller, and converted all queries to `$db->fetchValue`/`fetchAll` with named bindings.
+- Normalized config bootstrap for medium-scan admin tools (`admin/acpmanage.php`, `admin/adduser.php`, `admin/allagents.php`, `admin/backup.php`, `admin/banclient.php`, `admin/bannedemails.php`, `admin/bans.php`, `admin/block.settings.php`, `admin/categories.php`, `admin/changelog.php`, `admin/cheaters.php`, `admin/class_config.php`, `admin/cleanup_manager.php`, `admin/cloudview.php`, `admin/datareset.php`, `admin/delacct.php`, `admin/donations.php`, `admin/doubleusers.php`, `admin/edit_moods.php`) by adding typed container annotations and the `// AUTO_ADMIN_MEDIUM: 2025-10-23` marker.
 
 ### Verification
 ```

@@ -9,6 +9,7 @@ use Pu239\Cache;
 use Pu239\Database;
 use Pu239\Session;
 use Pu239\User;
+use Psr\Container\ContainerInterface;
 use Rakit\Validation\Validator;
 
 if (strpos(__FILE__, '/admin/') !== false) {
@@ -19,8 +20,10 @@ if (strpos(__FILE__, '/admin/') !== false) {
 
 
 global $container;
+/** @var ContainerInterface $container */
 /** @var ConfigRepository $config */
 $config = $container->get(ConfigRepository::class);
+// AUTO_ADMIN_MEDIUM: 2025-10-23; tool=codex-admin-medium-sweep; rules=2025.10.23-admin-medium
 $db    = $container->get(Database::class);
 $cache = $container->get(Cache::class);
 
@@ -49,50 +52,23 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         app_halt('Exit called');
     } else {
         $password = (static function (): string {
-<<<<<< codex/implement-argon2id-password-hashing-pu7kfq
-=======
-<<<<<< codex/implement-argon2id-password-hashing-8zqt1j
-=======
-<<<<<< codex/implement-argon2id-password-hashing-cd7k30
-=======
->>>>>> master
->>>>>> master
->>>>>> master
             while (true) {
                 $candidate = substr(strtr(base64_encode(random_bytes(12)), '+/=', '!*@'), 0, 16);
                 try {
                     PasswordHasher::assertPolicy($candidate);
 
-<<<<<< codex/implement-argon2id-password-hashing-pu7kfq
-=======
-<<<<<< codex/implement-argon2id-password-hashing-8zqt1j
-=======
-<<<<<< codex/implement-argon2id-password-hashing-cd7k30
-=======
->>>>>> master
->>>>>> master
->>>>>> master
                     return $candidate;
                 } catch (\InvalidArgumentException $e) {
                     continue;
                 }
             }
         })();
-<<<<<< codex/implement-argon2id-password-hashing-pu7kfq
-=======
-<<<<<< codex/implement-argon2id-password-hashing-8zqt1j
->>>>>> master
         $argonHash = null;
         try {
             $argonHash = PasswordHasher::hash($password);
         } catch (\InvalidArgumentException | \RuntimeException $e) {
             stderr(_('Error'), $e->getMessage());
         }
-<<<<<< codex/implement-argon2id-password-hashing-pu7kfq
-=======
-=======
->>>>>> master
->>>>>> master
         $data = [
             'email' => $post['email'],
             'password' => $password,

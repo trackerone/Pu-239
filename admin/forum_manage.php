@@ -7,6 +7,7 @@ use PU239\Config\ConfigRepository;
 use PU239\Security\AuthZ;
 use Pu239\Database;
 use Pu239\Forum;
+use Psr\Container\ContainerInterface;
 
 if (strpos(__FILE__, '/admin/') !== false) {
     AuthZ::requireRole('admin');
@@ -15,8 +16,10 @@ if (strpos(__FILE__, '/admin/') !== false) {
 }
 
 global $container, $CURUSER;
+/** @var ContainerInterface $container */
 /** @var ConfigRepository $config */
 $config = $container->get(ConfigRepository::class);
+// AUTO_ADMIN_MEDIUM: 2025-10-23; tool=codex-admin-medium-sweep; rules=2025.10.23-admin-medium
 $db = $container->get(Database::class);
 
 $class = get_access(basename($_SERVER['REQUEST_URI']));

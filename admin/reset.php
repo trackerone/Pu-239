@@ -6,6 +6,7 @@ use PU239\Config\ConfigRepository;
 use PU239\Security\AuthZ;
 use PU239\Security\PasswordHasher;
 use Delight\Auth\Auth;
+use Psr\Container\ContainerInterface;
 use Pu239\Database;
 use Pu239\User;
 
@@ -18,8 +19,10 @@ if (strpos(__FILE__, '/admin/') !== false) {
 
 
 global $container, $CURUSER;
+/** @var ContainerInterface $container */
 /** @var ConfigRepository $config */
 $config = $container->get(ConfigRepository::class);
+// AUTO_ADMIN_MEDIUM: 2025-10-23; tool=codex-admin-medium-sweep; rules=2025.10.23-admin-medium
 $db = $container->get(Database::class);
 
 $class = get_access(basename($_SERVER['REQUEST_URI']));
@@ -41,15 +44,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             try {
                 PasswordHasher::assertPolicy($candidate);
 
-<<<<<< codex/implement-argon2id-password-hashing-pu7kfq
-=======
-<<<<<< codex/implement-argon2id-password-hashing-8zqt1j
-=======
-<<<<<< codex/implement-argon2id-password-hashing-cd7k30
-=======
->>>>>> master
->>>>>> master
->>>>>> master
                 return $candidate;
             } catch (\InvalidArgumentException $e) {
                 continue;

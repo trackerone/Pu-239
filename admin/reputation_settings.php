@@ -5,6 +5,7 @@ require_once dirname(__DIR__) . '/include/helpers/audit.php';
 
 use PU239\Config\ConfigRepository;
 use PU239\Security\AuthZ;
+use Psr\Container\ContainerInterface;
 use Pu239\Database;
 
 
@@ -15,8 +16,10 @@ if (strpos(__FILE__, '/admin/') !== false) {
 }
 
 global $container, $CURUSER;
+/** @var ContainerInterface $container */
 /** @var ConfigRepository $config */
 $config = $container->get(ConfigRepository::class);
+// AUTO_ADMIN_MEDIUM: 2025-10-23; tool=codex-admin-medium-sweep; rules=2025.10.23-admin-medium
 $db = $container->get(Database::class);
 $s = $s ?? static fn($v) => htmlspecialchars((string) $v, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
 $self = $_SERVER['PHP_SELF'] ?? '';

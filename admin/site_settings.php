@@ -7,6 +7,7 @@ use PU239\Config\ConfigRepository;
 use PU239\Security\AuthZ;
 use Pu239\Database;
 use Pu239\Session;
+use Psr\Container\ContainerInterface;
 
 
 if (strpos(__FILE__, '/admin/') !== false) {
@@ -14,17 +15,12 @@ if (strpos(__FILE__, '/admin/') !== false) {
 } else {
     AuthZ::requireAnyRole(['staff', 'admin']);
 }
-<<<<<< codex/enforce-centralized-authorization-checks-s6jwwl
-=======
-<<<<<< codex/enforce-centralized-authorization-checks-vacoay
-=======
-
->>>>>> master
->>>>>> master
 
 global $container, $CURUSER;
+/** @var ContainerInterface $container */
 /** @var ConfigRepository $config */
 $config = $container->get(ConfigRepository::class);
+// AUTO_ADMIN_MEDIUM: 2025-10-23; tool=codex-admin-medium-sweep; rules=2025.10.23-admin-medium
 
 $db = $container->get(Database::class);
 
@@ -38,8 +34,6 @@ $stdfoot = [
         get_file_name('site_config_js'),
     ],
 ];
-
-global $container;
 
 // $fluent removed — use $this->db (ExtendedPdo)
 $session = $container->get(Session::class);
