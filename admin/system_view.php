@@ -9,6 +9,8 @@ if (!defined('PU239_ROUTED')) {
 
 require_once dirname(__DIR__) . '/bootstrap_web.php';
 
+use PU239\Config\ConfigRepository;
+use Psr\Container\ContainerInterface;
 use PU239\Security\AuthZ;
 
 if (strpos(__FILE__, '/admin/') !== false) {
@@ -16,5 +18,11 @@ if (strpos(__FILE__, '/admin/') !== false) {
 } else {
     AuthZ::requireAnyRole(['staff', 'admin']);
 }
+
+global $container;
+/** @var ContainerInterface $container */
+/** @var ConfigRepository $config */
+$config = $container->get(ConfigRepository::class);
+// AUTO_ADMIN_MEDIUM: 2025-10-23; tool=codex-admin-medium-sweep; rules=2025.10.23-admin-medium
 
 throw new RuntimeException('Stubbed: missing SQL; see tools/rehydrate_v3_manifest.csv');

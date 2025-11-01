@@ -24,7 +24,7 @@ global $container, $CURUSER;
 /** @var ContainerInterface $container */
 /** @var ConfigRepository $config */
 $config = $container->get(ConfigRepository::class);
-// AUTO_ADMIN_MEDIUM: 2025-10-23
+// AUTO_ADMIN_MEDIUM: 2025-10-23; tool=codex-admin-medium-sweep; rules=2025.10.23-admin-medium
 $db = $container->get(Database::class);
 $s = $s ?? static fn($v) => htmlspecialchars((string) $v, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
 $self = $s($_SERVER['PHP_SELF'] ?? '');
