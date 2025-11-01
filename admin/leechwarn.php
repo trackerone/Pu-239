@@ -4,8 +4,9 @@ require_once dirname(__DIR__) . '/bootstrap_web.php';
 require_once dirname(__DIR__) . '/include/helpers/audit.php';
 
 use PU239\Security\AuthZ;
+use Psr\Container\ContainerInterface;
 use Pu239\Cache;
-use Pu239\Config\ConfigRepository;
+use PU239\Config\ConfigRepository;
 use Pu239\Database;
 use Pu239\Message;
 
@@ -18,8 +19,10 @@ global $container, $CURUSER;
 >>>>>> master
 >>>>>> master
 AuthZ::requireRole('admin');
+/** @var ContainerInterface $container */
 /** @var ConfigRepository $config */
 $config = $container->get(ConfigRepository::class);
+// AUTO_ADMIN_MEDIUM: 2025-10-23
 
 /** @var Database $db */
 $db = $container->get(Database::class);

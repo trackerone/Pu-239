@@ -4,6 +4,7 @@ require_once dirname(__DIR__) . '/bootstrap_web.php';
 require_once dirname(__DIR__) . '/include/helpers/audit.php';
 
 use PU239\Config\ConfigRepository;
+use Psr\Container\ContainerInterface;
 use PU239\Security\AuthZ;
 use Pu239\Ban;
 use Pu239\Database;
@@ -21,8 +22,10 @@ require_once INCL_DIR . 'geoipcity.inc';
 require_once INCL_DIR . 'geoipregionvars.php';
 
 global $container, $CURUSER;
+/** @var ContainerInterface $container */
 /** @var ConfigRepository $config */
 $config = $container->get(ConfigRepository::class);
+// AUTO_ADMIN_MEDIUM: 2025-10-23
 $db = $container->get(Database::class);
 
 $class = get_access(basename($_SERVER['REQUEST_URI']));
