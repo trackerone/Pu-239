@@ -3,6 +3,7 @@ declare(strict_types=1);
 require_once dirname(__DIR__) . '/bootstrap_web.php';
 
 use PU239\Config\ConfigRepository;
+use Psr\Container\ContainerInterface;
 use PU239\Security\AuthZ;
 use DI\DependencyException;
 use DI\NotFoundException;
@@ -18,8 +19,10 @@ if (strpos(__FILE__, '/admin/') !== false) {
 }
 
 global $container;
+/** @var ContainerInterface $container */
 /** @var ConfigRepository $config */
 $config = $container->get(ConfigRepository::class);
+// AUTO_ADMIN_MEDIUM: 2025-10-23; tool=codex-admin-medium-sweep; rules=2025.10.23-admin-medium
 $db = $container->get(Database::class);
 
 $class = get_access(basename($_SERVER['REQUEST_URI']));
