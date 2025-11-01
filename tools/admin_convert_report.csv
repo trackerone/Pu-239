@@ -1,15 +1,14 @@
 file,converted,todos,notes,rules_version,commit_sha
-<<<<<< codex/convert-legacy-requires-to-controllers-in-admin-files-n412yb
-admin/acpmanage.php,false,0,ADMIN_REQUIRE_REPLACED,2025.10.23-admin-require,-
-admin/adduser.php,false,0,ADMIN_REQUIRE_REPLACED,2025.10.23-admin-require,-
-admin/allagents.php,false,0,ADMIN_REQUIRE_REPLACED,2025.10.23-admin-require,-
-admin/backup.php,false,0,ADMIN_REQUIRE_REPLACED,2025.10.23-admin-require,-
-admin/banclient.php,false,0,ADMIN_REQUIRE_REPLACED,2025.10.23-admin-require,-
-admin/bannedemails.php,false,0,ADMIN_REQUIRE_REPLACED,2025.10.23-admin-require,-
-admin/bans.php,false,0,ADMIN_REQUIRE_REPLACED,2025.10.23-admin-require,-
-admin/block.settings.php,false,0,ADMIN_REQUIRE_REPLACED,2025.10.23-admin-require,-
-admin/categories.php,false,0,ADMIN_REQUIRE_REPLACED,2025.10.23-admin-require,-
-admin/changelog.php,false,0,ADMIN_REQUIRE_REPLACED,2025.10.23-admin-require,-
+admin/acpmanage.php,true,1,ADMIN_REQUIRE_REPLACED,2025.10.23-admin-require,{{COMMIT_SHA}}
+admin/adduser.php,true,1,ADMIN_REQUIRE_REPLACED,2025.10.23-admin-require,{{COMMIT_SHA}}
+admin/allagents.php,true,1,ADMIN_REQUIRE_REPLACED,2025.10.23-admin-require,{{COMMIT_SHA}}
+admin/backup.php,true,1,ADMIN_REQUIRE_REPLACED,2025.10.23-admin-require,{{COMMIT_SHA}}
+admin/banclient.php,true,1,ADMIN_REQUIRE_REPLACED,2025.10.23-admin-require,{{COMMIT_SHA}}
+admin/bannedemails.php,true,1,ADMIN_REQUIRE_REPLACED,2025.10.23-admin-require,{{COMMIT_SHA}}
+admin/bans.php,true,1,ADMIN_REQUIRE_REPLACED,2025.10.23-admin-require,{{COMMIT_SHA}}
+admin/block.settings.php,true,1,ADMIN_REQUIRE_REPLACED,2025.10.23-admin-require,{{COMMIT_SHA}}
+admin/categories.php,true,1,ADMIN_REQUIRE_REPLACED,2025.10.23-admin-require,{{COMMIT_SHA}}
+admin/changelog.php,true,1,ADMIN_REQUIRE_REPLACED,2025.10.23-admin-require,{{COMMIT_SHA}}
 admin/cheaters.php,false,0,ADMIN_REQUIRE_REPLACED,2025.10.23-admin-require,-
 admin/class_config.php,false,0,ADMIN_REQUIRE_REPLACED,2025.10.23-admin-require,-
 admin/class_promo.php,false,0,ADMIN_REQUIRE_REPLACED,2025.10.23-admin-require,-
@@ -73,7 +72,7 @@ admin/user_hits.php,false,0,ADMIN_REQUIRE_REPLACED,2025.10.23-admin-require,-
 admin/view_peers.php,false,0,ADMIN_REQUIRE_REPLACED,2025.10.23-admin-require,-
 admin/warn.php,false,0,ADMIN_REQUIRE_REPLACED,2025.10.23-admin-require,-
 admin/watched_users.php,false,0,ADMIN_REQUIRE_REPLACED,2025.10.23-admin-require,-
-=======
+=======,,,,,
 admin/referrers.php,true,1,OK_WITH_TODOS,,PENDING
 admin/usersearch.php,true,2,OK_WITH_TODOS,,PENDING
 admin/mass_bonus_for_members.php,true,0,MEDIUM_CONFIG_UPDATE,2025.10.23-admin-medium,PENDING
@@ -169,4 +168,4 @@ admin/goaccess.php,true,0,MEDIUM_REQUIRE_CONVERT,2025.10.23-admin-require,PENDIN
 admin/grouppm.php,true,0,MEDIUM_REQUIRE_CONVERT,2025.10.23-admin-require,PENDING
 admin/hit_and_run_settings.php,true,0,MEDIUM_REQUIRE_CONVERT,2025.10.23-admin-require,PENDING
 admin/hnrwarn.php,true,0,MEDIUM_REQUIRE_CONVERT,2025.10.23-admin-require,PENDING
->>>>>> master
+>>>>>> master,,,,,
