@@ -84,3 +84,13 @@ admin/categories.php,true,0,MEDIUM_REQUIRE_CONVERT,2025.10.23-admin-require,PEND
 admin/changelog.php,true,0,MEDIUM_REQUIRE_CONVERT,2025.10.23-admin-require,PENDING
 admin/cheaters.php,true,0,MEDIUM_REQUIRE_CONVERT,2025.10.23-admin-require,PENDING
 admin/class_config.php,true,0,MEDIUM_REQUIRE_CONVERT,2025.10.23-admin-require,PENDING
+admin/editlog.php,true,0,MEDIUM_REQUIRE_CONVERT,2025.10.23-admin-require,PENDING
+admin/floodlimit.php,true,0,MEDIUM_REQUIRE_CONVERT,2025.10.23-admin-require,PENDING
+admin/flush.php,true,0,MEDIUM_REQUIRE_CONVERT,2025.10.23-admin-require,PENDING
+admin/forum_manage.php,true,0,MEDIUM_REQUIRE_CONVERT,2025.10.23-admin-require,PENDING
+admin/freeleech.php,true,0,MEDIUM_REQUIRE_CONVERT,2025.10.23-admin-require,PENDING
+admin/freeusers.php,true,0,MEDIUM_REQUIRE_CONVERT,2025.10.23-admin-require,PENDING
+admin/goaccess.php,true,0,MEDIUM_REQUIRE_CONVERT,2025.10.23-admin-require,PENDING
+admin/grouppm.php,true,0,MEDIUM_REQUIRE_CONVERT,2025.10.23-admin-require,PENDING
+admin/hit_and_run_settings.php,true,0,MEDIUM_REQUIRE_CONVERT,2025.10.23-admin-require,PENDING
+admin/hnrwarn.php,true,0,MEDIUM_REQUIRE_CONVERT,2025.10.23-admin-require,PENDING
