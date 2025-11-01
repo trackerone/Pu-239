@@ -5,7 +5,7 @@ namespace PU239\Admin\Controllers;
 
 use Psr\Container\ContainerInterface;
 
-final class FreeleechController
+final class EditMoodsController
 {
     public function __construct(
         private readonly ContainerInterface $container,
@@ -20,9 +20,9 @@ final class FreeleechController
             global $container;
             $container = $this->container;
 
-            require_once __DIR__ . '/../../../admin/freeleech.legacy.php';
+            require_once __DIR__ . '/../../../admin/edit_moods.legacy.php';
         } catch (\Throwable $e) {
-            error_log('Admin controller error (freeleech): ' . $e->getMessage());
+            error_log('Admin controller error (edit_moods): ' . $e->getMessage());
             http_response_code(500);
             echo 'Internal admin error';
         }

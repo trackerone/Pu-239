@@ -1,20 +1,14 @@
 <?php
 declare(strict_types=1);
 
-require_once dirname(__DIR__) . '/bootstrap_web.php';
-
 use PU239\Admin\Controllers\GrouppmController;
-use PU239\Config\ConfigRepository;
 use Psr\Container\ContainerInterface;
 
-global $container;
 /** @var ContainerInterface $container */
-if (!$container instanceof ContainerInterface) {
-    throw new \RuntimeException('Container not initialized');
+if (!isset($container)) {
+    // TODO(2025): remove fallback once admin bootstrap wires controllers
+    $container = require __DIR__ . '/../bootstrap/admin-container.php';
 }
 
-$controller = new GrouppmController(
-    $container,
-    $container->get(ConfigRepository::class),
-);
-$controller();
+$controller = $container->get(GrouppmController::class);
+$controller([]);
