@@ -4,10 +4,10 @@ require_once dirname(__DIR__) . '/bootstrap_web.php';
 require_once dirname(__DIR__) . '/include/helpers/audit.php';
 
 use PU239\Config\ConfigRepository;
-use Psr\Container\ContainerInterface;
 use PU239\Security\AuthZ;
 use Pu239\Database;
 use Pu239\Forum;
+use Psr\Container\ContainerInterface;
 
 if (strpos(__FILE__, '/admin/') !== false) {
     AuthZ::requireRole('admin');
@@ -19,7 +19,7 @@ global $container, $CURUSER;
 /** @var ContainerInterface $container */
 /** @var ConfigRepository $config */
 $config = $container->get(ConfigRepository::class);
-// AUTO_ADMIN_MEDIUM: 2025-10-23
+// AUTO_ADMIN_MEDIUM: 2025-10-23; tool=codex-admin-medium-sweep; rules=2025.10.23-admin-medium
 $db = $container->get(Database::class);
 
 $class = get_access(basename($_SERVER['REQUEST_URI']));

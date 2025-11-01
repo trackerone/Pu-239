@@ -4,20 +4,13 @@ require_once dirname(__DIR__) . '/bootstrap_web.php';
 require_once dirname(__DIR__) . '/include/helpers/audit.php';
 
 use PU239\Config\ConfigRepository;
-use Psr\Container\ContainerInterface;
 use PU239\Security\AuthZ;
 use Pu239\Database;
 use Pu239\Image;
 use Pu239\Session;
+use Psr\Container\ContainerInterface;
 
 global $container, $CURUSER;
-<<<<<< codex/enforce-centralized-authorization-checks-s6jwwl
-=======
-<<<<<< codex/enforce-centralized-authorization-checks-vacoay
-=======
-
->>>>>> master
->>>>>> master
 AuthZ::requireRole('admin');
 /** @var ContainerInterface $container */
 /** @var ConfigRepository $config */

@@ -44,15 +44,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             try {
                 PasswordHasher::assertPolicy($candidate);
 
-<<<<<< codex/implement-argon2id-password-hashing-pu7kfq
-=======
-<<<<<< codex/implement-argon2id-password-hashing-8zqt1j
-=======
-<<<<<< codex/implement-argon2id-password-hashing-cd7k30
-=======
->>>>>> master
->>>>>> master
->>>>>> master
                 return $candidate;
             } catch (\InvalidArgumentException $e) {
                 continue;

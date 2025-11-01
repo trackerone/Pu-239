@@ -5,9 +5,9 @@ require_once dirname(__DIR__) . '/include/helpers/audit.php';
 
 use PU239\Config\ConfigRepository;
 use PU239\Security\AuthZ;
-use Psr\Container\ContainerInterface;
 use Pu239\Database;
 use Pu239\Session;
+use Psr\Container\ContainerInterface;
 
 
 if (strpos(__FILE__, '/admin/') !== false) {
@@ -15,13 +15,6 @@ if (strpos(__FILE__, '/admin/') !== false) {
 } else {
     AuthZ::requireAnyRole(['staff', 'admin']);
 }
-<<<<<< codex/enforce-centralized-authorization-checks-s6jwwl
-=======
-<<<<<< codex/enforce-centralized-authorization-checks-vacoay
-=======
-
->>>>>> master
->>>>>> master
 
 global $container, $CURUSER;
 /** @var ContainerInterface $container */
@@ -41,8 +34,6 @@ $stdfoot = [
         get_file_name('site_config_js'),
     ],
 ];
-
-global $container;
 
 // $fluent removed — use $this->db (ExtendedPdo)
 $session = $container->get(Session::class);
