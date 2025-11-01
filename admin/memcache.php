@@ -5,14 +5,17 @@ require_once dirname(__DIR__) . '/include/helpers/audit.php';
 
 use PU239\Config\ConfigRepository;
 use PU239\Security\AuthZ;
+use Psr\Container\ContainerInterface;
 use Pu239\Database;
 use Pu239\Session;
 
 global $container, $CURUSER;
-
-AuthZ::requireRole('admin');
+/** @var ContainerInterface $container */
 /** @var ConfigRepository $config */
 $config = $container->get(ConfigRepository::class);
+// AUTO_ADMIN_MEDIUM: 2025-10-23; tool=codex-admin-medium-sweep; rules=2025.10.23-admin-medium
+
+AuthZ::requireRole('admin');
 $db = $container->get(Database::class);
 
 $class = get_access(basename($_SERVER['REQUEST_URI']));

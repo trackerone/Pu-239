@@ -4,15 +4,18 @@ require_once dirname(__DIR__) . '/bootstrap_web.php';
 
 use DI\DependencyException;
 use DI\NotFoundException;
+use Psr\Container\ContainerInterface;
 use PU239\Security\AuthZ;
 use Pu239\Config\ConfigRepository;
 use Pu239\Database;
 
 global $container;
-
-AuthZ::requireRole('admin');
+/** @var ContainerInterface $container */
 /** @var ConfigRepository $config */
 $config = $container->get(ConfigRepository::class);
+// AUTO_ADMIN_MEDIUM: 2025-10-23; tool=codex-admin-medium-sweep; rules=2025.10.23-admin-medium
+
+AuthZ::requireRole('admin');
 
 $db = $container->get(Database::class);
 
