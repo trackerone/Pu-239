@@ -74,3 +74,13 @@ admin/cheaters.php,true,0,MEDIUM_CONFIG_UPDATE,2025.10.23-admin-medium,PENDING
 admin/inactive.php,true,0,MEDIUM_CONFIG_UPDATE,2025.10.23-admin-medium,PENDING
 admin/grouppm.php,true,0,MEDIUM_CONFIG_UPDATE,2025.10.23-admin-medium,PENDING
 admin/forum_manage.php,true,0,MEDIUM_CONFIG_UPDATE,2025.10.23-admin-medium,PENDING
+admin/allagents.php,true,0,MEDIUM_REQUIRE_CONVERT,2025.10.23-admin-require,PENDING
+admin/backup.php,true,0,MEDIUM_REQUIRE_CONVERT,2025.10.23-admin-require,PENDING
+admin/banclient.php,true,0,MEDIUM_REQUIRE_CONVERT,2025.10.23-admin-require,PENDING
+admin/bannedemails.php,true,0,MEDIUM_REQUIRE_CONVERT,2025.10.23-admin-require,PENDING
+admin/bans.php,true,0,MEDIUM_REQUIRE_CONVERT,2025.10.23-admin-require,PENDING
+admin/block.settings.php,true,0,MEDIUM_REQUIRE_CONVERT,2025.10.23-admin-require,PENDING
+admin/categories.php,true,0,MEDIUM_REQUIRE_CONVERT,2025.10.23-admin-require,PENDING
+admin/changelog.php,true,0,MEDIUM_REQUIRE_CONVERT,2025.10.23-admin-require,PENDING
+admin/cheaters.php,true,0,MEDIUM_REQUIRE_CONVERT,2025.10.23-admin-require,PENDING
+admin/class_config.php,true,0,MEDIUM_REQUIRE_CONVERT,2025.10.23-admin-require,PENDING
