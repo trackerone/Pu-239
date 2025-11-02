@@ -39,7 +39,7 @@ if ($mailbox > 1) {
 
 $total_count = $message_class->get_total_count($user['id']);
 $filled = $total_count > 0 ? ($total_count / $maxbox) * 100 : 0;
-$mailbox_pic = get_percent_completed_image(round($filled), $maxpic);
+$mailbox_pic = get_percent_completed_image((int) round($filled));
 $num_messages = number_format($filled, 0);
 $link = $config->get('paths.baseurl') . '/messages.php?action=view_mailbox&amp;box=' . $mailbox . '&amp;order_by=' . $order_by . $desc_asc . '&amp;';
 $count = $message_class->get_count($user['id'], $mailbox, false);

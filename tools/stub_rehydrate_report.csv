@@ -15,7 +15,7 @@ public/credits.php,public,RuntimeException('Stubbed'),false,
 public/friends.php,public,RuntimeException('Stubbed'),false,
 public/gift.php,public,RuntimeException('Stubbed'),false,
 public/invite.php,public,RuntimeException('Stubbed'),false,
-public/messages.php,public,RuntimeException('Stubbed'),false,
+public/messages.php,public,RuntimeException('Stubbed'),true,Rehydrated via PublicSite\\MessagesHandler
 public/reputation.php,public,RuntimeException('Stubbed'),false,
 public/staffbox.php,public,RuntimeException('Stubbed'),false,
 public/takeedit.php,public,RuntimeException('Stubbed'),false,
@@ -60,7 +60,7 @@ classes/Http/Handlers/Public/CreditsHandler.php,handler-public,RuntimeException(
 classes/Http/Handlers/Public/GiftHandler.php,handler-public,RuntimeException('Stubbed'),false,
 classes/Http/Handlers/Public/HnrsHandler.php,handler-public,TODO(2025),false,
 classes/Http/Handlers/Public/InviteHandler.php,handler-public,RuntimeException('Stubbed'),false,
-classes/Http/Handlers/Public/MessagesHandler.php,handler-public,RuntimeException('Stubbed'),false,
+classes/Http/Handlers/Public/MessagesHandler.php,handler-public,RuntimeException('Stubbed'),true,Delegates to PublicSite implementation
 classes/Http/Handlers/Public/ReputationHandler.php,handler-public,RuntimeException('Stubbed'),false,
 classes/Http/Handlers/Public/RequestsHandler.php,handler-public,TODO(2025),false,
 classes/Http/Handlers/Public/RssHandler.php,handler-public,TODO(2025),false,
