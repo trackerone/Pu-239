@@ -7,4 +7,4 @@ if (!defined('PU239_ROUTED')) {
     return;
 }
 
-throw new RuntimeException('Stubbed: missing SQL; see tools/rehydrate_v3_manifest.csv');
+// Handled by \PU239\Http\Handlers\PublicSite\MessagesHandler via the front controller.
