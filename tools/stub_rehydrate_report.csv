@@ -22,7 +22,7 @@ public/takeedit.php,public,RuntimeException('Stubbed'),false,
 public/takeeditcp.php,public,RuntimeException('Stubbed'),false,
 public/usercp.php,public,RuntimeException('Stubbed'),false,
 public/usermood.php,public,RuntimeException('Stubbed'),false,
-public/users.php,public,RuntimeException('Stubbed'),false,
+public/users.php,public,RuntimeException('Stubbed'),true,Rehydrated via PublicSite\\UsersHandler
 
 classes/Http/Handlers/Admin/AcpmanageHandler.php,handler-admin,TODO(2025),false,
 classes/Http/Handlers/Admin/BackupHandler.php,handler-admin,TODO(2025),false,
@@ -71,5 +71,5 @@ classes/Http/Handlers/Public/UsercpHandler.php,handler-public,TODO(2025),false,
 classes/Http/Handlers/Public/UserdetailsHandler.php,handler-public,TODO(2025),false,
 classes/Http/Handlers/Public/UserhistoryHandler.php,handler-public,TODO(2025),false,
 classes/Http/Handlers/Public/UsermoodHandler.php,handler-public,RuntimeException('Stubbed'),false,
-classes/Http/Handlers/Public/UsersHandler.php,handler-public,RuntimeException('Stubbed'),false,
+classes/Http/Handlers/Public/UsersHandler.php,handler-public,RuntimeException('Stubbed'),true,Delegates to PublicSite implementation
 
