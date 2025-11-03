@@ -35,7 +35,7 @@ final class UsersHandler
             }
 
             require_once dirname(__DIR__, 4) . '/include/bittorrent.php';
-            require_once dirname(__DIR__, 4) . '/include/pager.php';
+            require_once dirname(__DIR__, 4) . '/include/function_pager.php';
 
             global $container, $site_config;
 
